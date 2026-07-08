@@ -35,6 +35,103 @@ BARRIO_COORDS = {
     "recreo": (10.9904, -74.7981),
 }
 
+# Constantes y Funciones del Ecosistema Catastral ARHIAX
+BLOQUEOS_FIDUCIARIOS = {
+    "hipoteca", "embargo", "afectacion", "patrimonio", "demanda", "usufructo", "medida cautelar"
+}
+
+SCOPE_DISCLAIMER_FULL = (
+    "NATURALEZA DE ESTE DOCUMENTO. Este es un analisis de base producido "
+    "automaticamente por el motor ARHIAX a partir de fuentes publicas (SNR, "
+    "geoportales municipales, catastro, OpenStreetMap y bases abiertas). No "
+    "constituye estudio de titulos, concepto juridico ni avaluo comercial en los "
+    "terminos de la Ley 1673 de 2013 ni de las normas de metodologia valuatoria "
+    "vigentes. Es un insumo preliminar sujeto a verificacion por profesional del "
+    "derecho con tarjeta profesional vigente y/o avaluador inscrito en el RAA. "
+    "Ninguna decision de credito, garantia o compraventa debe adoptarse con base "
+    "exclusiva en este documento."
+)
+
+def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
+    bloqueos = []
+    for h in hallazgos_list:
+        titulo = h[3].lower()
+        descripcion = h[5].lower()
+        implicacion = h[6].lower()
+        is_vigente = "vigente" in titulo or "vigente" in descripcion or "vigente" in implicacion
+        is_bloqueo = any(term in titulo or term in descripcion for term in BLOQUEOS_FIDUCIARIOS)
+        if is_vigente and is_bloqueo:
+            bloqueos.append(h[3])
+    if bloqueos:
+        return {
+            "semaforo": "ROJO",
+            "estructurable": False,
+            "condiciones_precedentes": bloqueos,
+        }
+    return {"semaforo": "VERDE", "estructurable": True, "condiciones_precedentes": []}
+
+def build_header_parche(s, folio, cert_num, fecha, hash_preview):
+    from reportlab.platypus import Table, TableStyle
+    left = [
+        Paragraph("<b>ARHIAX</b>", s["h1"]),
+        Paragraph("Motor Geo-Provenance · Informe Base LAI Estandar", s["h2"]),
+        Paragraph("Sinergia Consulting Group · Edicion Completa v1.0", 
+                  ParagraphStyle("sub2", fontName="Helvetica", fontSize=7.5,
+                                 textColor=colors.HexColor("#B0C4DE"), leading=10)),
+    ]
+    right_style = ParagraphStyle("hr_s", fontName="Helvetica", fontSize=8,
+                                  textColor=colors.HexColor("#B0C4DE"),
+                                  leading=12, alignment=TA_RIGHT)
+    right = [
+        Paragraph(f"<b>Referencia N°:</b> {cert_num}", right_style),
+        Paragraph(f"<b>Folio:</b> {folio}", right_style),
+        Paragraph(f"<b>Emitido:</b> {fecha}", right_style),
+        Paragraph(f"<b>DOC-ID:</b> {hash_preview}...", 
+                  ParagraphStyle("docid", fontName="Courier", fontSize=7,
+                                 textColor=colors.HexColor("#90A8C8"),
+                                 leading=10, alignment=TA_RIGHT)),
+    ]
+    tbl = Table([[left, right]], colWidths=["55%", "45%"])
+    tbl.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), C_AZUL_OSC),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+        ("TOPPADDING", (0,0), (-1,-1), 18),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 14),
+        ("LEFTPADDING", (0,0), (-1,-1), 20),
+        ("RIGHTPADDING", (0,0), (-1,-1), 20),
+        ("LINEBELOW", (0,0), (-1,-1), 4, C_DORADO),
+    ]))
+    return tbl
+
+def build_estado_banner_parche(hallazgos_list, s):
+    from reportlab.platypus import Table, TableStyle
+    n_alto = sum(1 for h in hallazgos_list if h[0] == "ALTO")
+    n_medio = sum(1 for h in hallazgos_list if h[0] == "MEDIO")
+    n_info = sum(1 for h in hallazgos_list if h[0] == "INFORMATIVO")
+    
+    res_fiel = evaluar_estructurabilidad_fiduciaria(hallazgos_list)
+    if not res_fiel["estructurable"]:
+        label = f"▪ INFORME BASE LAI — RESULTADO PRELIMINAR: {n_alto} ALTO · {n_medio} MEDIO · {n_info} INFORMATIVO (BLOQUEADO / semáforo ROJO)"
+        bg = C_RIESGO_BG
+        tc = C_ROJO
+    else:
+        label = f"▪ INFORME BASE LAI — RESULTADO PRELIMINAR: {n_alto} ALTO · {n_medio} MEDIO · {n_info} INFORMATIVO (sujeto a verificación profesional)"
+        bg = C_ALERTA_BG
+        tc = C_NARANJA
+        
+    p = Paragraph(f"<b>{label}</b>",
+                  ParagraphStyle("ban", fontName="Helvetica-Bold", fontSize=8.5,
+                                 textColor=tc, leading=12))
+    tbl = Table([[p]], colWidths=["100%"])
+    tbl.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), bg),
+        ("TOPPADDING", (0,0), (-1,-1), 9),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 9),
+        ("LEFTPADDING", (0,0), (-1,-1), 18),
+        ("LINEAFTER", (0,0), (0,-1), 5, tc),
+    ]))
+    return tbl
+
 def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     """
     Compila dinámicamente un Dictamen PDF completo de 6 páginas con el estilo
