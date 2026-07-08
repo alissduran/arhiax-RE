@@ -516,25 +516,25 @@
                 <div class="upload-card" id="card-certificado" onclick="triggerFileInput('file-certificado')">
                   <label>Certificado Tradición</label>
                   <span id="span-certificado">Pendiente (PDF)</span>
-                  <input type="file" id="file-certificado" accept="application/pdf" style="display: none;" onchange="subirInsumo('certificado', this)">
+                  <input type="file" id="file-certificado" name="certificado" form="form-dictamen-stateless" accept="application/pdf" style="display: none;" onchange="subirInsumo('certificado', this)">
                 </div>
                 <!-- Sombra 9:00 AM -->
                 <div class="upload-card" id="card-sombra-9am" onclick="triggerFileInput('file-sombra-9am')">
                   <label>Sombra 9:00 AM</label>
                   <span id="span-sombra-9am">Pendiente (PNG)</span>
-                  <input type="file" id="file-sombra-9am" accept="image/png" style="display: none;" onchange="subirInsumo('sombra_9am', this)">
+                  <input type="file" id="file-sombra-9am" name="sombra_9am" form="form-dictamen-stateless" accept="image/png" style="display: none;" onchange="subirInsumo('sombra_9am', this)">
                 </div>
                 <!-- Sombra 3:00 PM -->
                 <div class="upload-card" id="card-sombra-3pm" onclick="triggerFileInput('file-sombra-3pm')">
                   <label>Sombra 3:00 PM</label>
                   <span id="span-sombra-3pm">Pendiente (PNG)</span>
-                  <input type="file" id="file-sombra-3pm" accept="image/png" style="display: none;" onchange="subirInsumo('sombra_3pm', this)">
+                  <input type="file" id="file-sombra-3pm" name="sombra_3pm" form="form-dictamen-stateless" accept="image/png" style="display: none;" onchange="subirInsumo('sombra_3pm', this)">
                 </div>
                 <!-- Mapa Satelital -->
                 <div class="upload-card" id="card-mapa" onclick="triggerFileInput('file-mapa')">
                   <label>Mapa Satelital</label>
                   <span id="span-mapa">Pendiente (PNG)</span>
-                  <input type="file" id="file-mapa" accept="image/png" style="display: none;" onchange="subirInsumo('mapa_satelital', this)">
+                  <input type="file" id="file-mapa" name="mapa_satelital" form="form-dictamen-stateless" accept="image/png" style="display: none;" onchange="subirInsumo('mapa_satelital', this)">
                 </div>
               </div>
             </div>
@@ -812,7 +812,7 @@
       }
     }
 
-    async function descargarPDFDictamen() {
+    function descargarPDFDictamen() {
       const c = dictamenes.find(item => item.id === selectedCaseId);
       if (!c) return;
 
@@ -821,45 +821,23 @@
         return;
       }
 
-      const formData = new FormData();
-      formData.append("folio_matricula", c.folio_matricula);
-      formData.append("direccion", c.direccion);
-      formData.append("area", c.area);
-      formData.append("barrio", c.barrio);
+      // Rellenar campos ocultos del formulario nativo
+      document.getElementById('hidden-folio').value = c.folio_matricula;
+      document.getElementById('hidden-direccion').value = c.direccion;
+      document.getElementById('hidden-area').value = c.area;
+      document.getElementById('hidden-barrio').value = c.barrio;
 
-      // Enviar archivos de memoria local
-      if (selectedFiles.certificado) formData.append("certificado", selectedFiles.certificado);
-      if (selectedFiles.sombra_9am) formData.append("sombra_9am", selectedFiles.sombra_9am);
-      if (selectedFiles.sombra_3pm) formData.append("sombra_3pm", selectedFiles.sombra_3pm);
-      if (selectedFiles.mapa_satelital) formData.append("mapa_satelital", selectedFiles.mapa_satelital);
-
-      showLoading(true);
-      try {
-        const response = await fetch('/api/dictamenes/generar', {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response.ok) {
-          const errText = await response.text();
-          throw new Error(errText || "Fallo en compilación");
-        }
-
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `ARHIAX_Dictamen_${c.folio_matricula}_final.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-      } catch (err) {
-        alert("Error al compilar el reporte PDF: " + err.message);
-      } finally {
-        showLoading(false);
-      }
+      // Enviar el formulario. El navegador abrirá una pestaña temporal e iniciará la descarga nativa
+      // sin restricciones de blobs locales, previniendo bloqueos de seguridad del navegador o antivirus.
+      document.getElementById('form-dictamen-stateless').submit();
     }
   </script>
+  <!-- Formulario oculto nativo para descarga de PDF pericial en pestaña nueva -->
+  <form id="form-dictamen-stateless" action="/api/dictamenes/generar" method="POST" enctype="multipart/form-data" target="_blank" style="display: none;">
+    <input type="hidden" name="folio_matricula" id="hidden-folio">
+    <input type="hidden" name="direccion" id="hidden-direccion">
+    <input type="hidden" name="area" id="hidden-area">
+    <input type="hidden" name="barrio" id="hidden-barrio">
+  </form>
 </body>
 </html>
