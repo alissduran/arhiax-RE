@@ -132,6 +132,31 @@ def build_estado_banner_parche(hallazgos_list, s):
     ]))
     return tbl
 
+s_global = build_styles()
+
+def sec(title):
+    return Paragraph(f"<b>{title}</b>", ParagraphStyle("sh", fontName="Helvetica-Bold",
+        fontSize=11, textColor=C_AZUL_OSC, leading=14, spaceBefore=8, spaceAfter=4))
+
+def sub(title):
+    return Paragraph(f"<b>{title}</b>", ParagraphStyle("ss", fontName="Helvetica-Bold",
+        fontSize=9, textColor=C_AZUL_MED, leading=12, spaceBefore=6, spaceAfter=3))
+
+def body(text):
+    return Paragraph(text, s_global["body"])
+
+def alert_green(text):
+    return Paragraph(text, s_global["alert_verde"])
+
+def alert_orange(text):
+    return Paragraph(text, s_global["alert_naranja"])
+
+def dt(rows):
+    return data_table(rows, s_global)
+
+def fmt_cop(val):
+    return f"$ {val:,.0f}".replace(",", ".")
+
 def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     """
     Compila dinámicamente un Dictamen PDF completo de 6 páginas con el estilo
