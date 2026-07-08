@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A R H I A X — Portal de Tasación TMA</title>
+  <!-- Google Fonts: Crimson Pro para serif premium y Inter para sans-serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    /* VARIABLES DE DISEÑO: MIDNIGHT EXECUTIVE */
+    :root {
+      --color-navy: #0B1426;
+      --color-navy-soft: #1F2A44;
+      --color-gold: #8B6F47;
+      --color-gold-hover: #A08359;
+      --color-ink: #1A1A1A;
+      --color-gray: #555555;
+      --color-soft: #F4F1EC;
+      --color-white: #FFFFFF;
+      --color-border: #E5E0D8;
+      
+      /* Semáforo */
+      --color-green-text: #2E5F3E;
+      --color-green-bg: #E6EFE9;
+      --color-amber-text: #8C6B14;
+      --color-amber-bg: #F8EFD4;
+      --color-red-text: #8B2E2E;
+      --color-red-bg: #F7E8E8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--color-ink);
+      background-color: var(--color-soft);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    /* HEADER FIX */
+    .arhiax-header {
+      background-color: var(--color-navy);
+      color: var(--color-white);
+      padding: 20px 40px;
+      border-bottom: 3px solid var(--color-gold);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-logo-group h1 {
+      font-family: 'Crimson Pro', serif;
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: 0.15em;
+      color: var(--color-gold);
+    }
+
+    .header-logo-group p {
+      font-size: 11px;
+      color: var(--color-gray);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .header-meta {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: right;
+    }
+
+    /* CONTAINER LAYOUT */
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* PANEL STYLING */
+    .panel {
+      background-color: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(11, 20, 38, 0.04);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 18px 24px;
+      background-color: var(--color-navy-soft);
+      color: var(--color-white);
+      font-family: 'Crimson Pro', serif;
+      font-size: 18px;
+      font-weight: 600;
+      border-bottom: 2px solid var(--color-gold);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-body {
+      padding: 24px;
+      flex-grow: 1;
+    }
+
+    /* YAML EDITOR STYLING */
+    .editor-container {
+      position: relative;
+      height: 520px;
+      margin-bottom: 15px;
+    }
+
+    textarea.yaml-textarea {
+      width: 100%;
+      height: 100%;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      padding: 16px;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      resize: none;
+      line-height: 1.5;
+      outline: none;
+    }
+
+    textarea.yaml-textarea:focus {
+      border-color: var(--color-gold);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button.btn-primary {
+      background-color: var(--color-gold);
+      color: var(--color-white);
+    }
+
+    button.btn-primary:hover {
+      background-color: var(--color-gold-hover);
+      transform: translateY(-1px);
+    }
+
+    button.btn-secondary {
+      background-color: transparent;
+      color: var(--color-navy);
+      border: 1px solid var(--color-navy);
+    }
+
+    button.btn-secondary:hover {
+      background-color: rgba(11, 20, 38, 0.05);
+    }
+
+    /* RESULT VIEWER STYLING */
+    .hero-banner {
+      border-radius: 4px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+    }
+
+    .hero-banner.VERDE {
+      background-color: var(--color-green-bg);
+      border-left: 5px solid var(--color-green-text);
+    }
+
+    .hero-banner.AMARILLA {
+      background-color: var(--color-amber-bg);
+      border-left: 5px solid var(--color-amber-text);
+    }
+
+    .hero-banner.ROJA {
+      background-color: var(--color-red-bg);
+      border-left: 5px solid var(--color-red-text);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      border-radius: 20px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .badge.VERDE { background-color: var(--color-green-text); color: var(--color-white); }
+    .badge.AMARILLA { background-color: var(--color-amber-text); color: var(--color-white); }
+    .badge.ROJA { background-color: var(--color-red-text); color: var(--color-white); }
+
+    .consolidado-title {
+      font-size: 11px;
+      color: var(--color-gray);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .consolidado-value {
+      font-family: 'Crimson Pro', serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--color-navy);
+      margin: 5px 0;
+    }
+
+    .consolidado-banda {
+      font-size: 13px;
+      color: var(--color-ink);
+      font-weight: 500;
+    }
+
+    .consolidado-reason {
+      font-size: 12px;
+      color: var(--color-gray);
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* METHOD CARD */
+    .method-card {
+      background-color: var(--color-soft);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 16px;
+      margin-bottom: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .method-card.desestimado {
+      opacity: 0.65;
+      border-left: 4px solid var(--color-gray);
+    }
+
+    .method-card.efectivo {
+      border-left: 4px solid var(--color-gold);
+    }
+
+    .method-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .method-title-group .method-code {
+      font-size: 10px;
+      color: var(--color-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .method-title-group .method-name {
+      font-family: 'Crimson Pro', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-navy);
+    }
+
+    .method-status {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .method-status.efectivo {
+      color: var(--color-green-text);
+    }
+
+    .method-status.desestimado {
+      color: var(--color-red-text);
+    }
+
+    .method-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      background-color: var(--color-white);
+      padding: 12px;
+      border-radius: 3px;
+      border: 1px solid var(--color-border);
+    }
+
+    .stat-box {
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      color: var(--color-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-navy);
+    }
+
+    /* AUDIT TRAIL */
+    .audit-box {
+      background-color: var(--color-navy);
+      color: var(--color-white);
+      padding: 16px;
+      border-radius: 4px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      margin-top: 24px;
+      line-height: 1.6;
+    }
+
+    .audit-box h3 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 13px;
+      color: var(--color-gold);
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .audit-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 4px 0;
+    }
+
+    .audit-item:last-child {
+      border-bottom: none;
+    }
+
+    .audit-hash {
+      color: #A0B3D6;
+    }
+
+    /* LOADING SPINNER */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(139, 111, 71, 0.1);
+      border-left-color: var(--color-gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="arhiax-header">
+    <div class="header-logo-group">
+      <h1>A R H I A X</h1>
+      <p>Estándar agéntico de gobernanza & triangulación de avalúos</p>
+    </div>
+    <div class="header-meta">
+      <div>LONJA PROPIEDAD RAÍZ DE BARRANQUILLA</div>
+      <div>Vigencia Activa: 2026 · Estatus: Online</div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="dashboard-container">
+    
+    <!-- LEFT PANEL: EDITOR DE METODOLOGÍA -->
+    <section class="panel" style="position: relative;">
+      <div class="loading-overlay" id="editor-loading">
+        <div class="spinner"></div>
+      </div>
+      
+      <div class="panel-header">
+        <span>Declaración de Metodología (YAML)</span>
+        <span style="font-size: 11px; text-transform: uppercase; color: var(--color-gold);">lonja_baq_metodologia.yaml</span>
+      </div>
+      
+      <div class="panel-body" style="display: flex; flex-direction: column; height: 100%;">
+        <p style="font-size: 12px; color: var(--color-gray); margin-bottom: 12px;">
+          Edite los coeficientes, tolerancias y pesos de consolidación dictados por la Junta Técnica. El motor se recalculará dinámicamente.
+        </p>
+        <div class="editor-container">
+          <textarea class="yaml-textarea" id="yaml-input" spellcheck="false"></textarea>
+        </div>
+        
+        <div class="btn-group">
+          <button class="btn-primary" onclick="ejecutarMotor()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Calcular Recálculo
+          </button>
+          <button class="btn-secondary" onclick="restablecerConfig()">Restablecer</button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- RIGHT PANEL: RESULTADOS DEL MOTOR TMA -->
+    <section class="panel" style="position: relative;">
+      <div class="loading-overlay" id="results-loading">
+        <div class="spinner"></div>
+      </div>
+      
+      <div class="panel-header">
+        <span>Resultados TMA Consolidado</span>
+        <span id="txt-fecha" style="font-size: 11px; font-family: monospace;">-</span>
+      </div>
+      
+      <div class="panel-body">
+        
+        <!-- HERO BANNER DE RESULTADO CONSOLIDADO -->
+        <div class="hero-banner AMARILLA" id="hero-banner">
+          <span class="badge AMARILLA" id="lbl-estado">CARGANDO...</span>
+          <div class="consolidado-title">Valor Consolidado Recalculado</div>
+          <div class="consolidado-value" id="val-consolidado">$ 0</div>
+          <div class="consolidado-banda" id="val-banda">Banda 80%: -</div>
+          <div class="consolidado-reason" id="val-razon">-</div>
+        </div>
+
+        <!-- ACCIONES DE DICTAMEN -->
+        <div class="btn-group" style="margin-bottom: 24px;">
+          <button class="btn-primary" onclick="descargarHTML()">
+            Ver Bandeja de Revisión (HTML)
+          </button>
+          <button class="btn-secondary" id="btn-pdf" onclick="descargarPDF()">
+            Descargar Dictamen PDF
+          </button>
+        </div>
+
+        <!-- MÉTODOS APLICADOS -->
+        <h3 style="font-family: 'Crimson Pro', serif; font-size: 16px; margin-bottom: 12px; color: var(--color-navy);">
+          Desglose por Métodos Valuatorios
+        </h3>
+        
+        <div id="methods-container">
+          <!-- Dinámico -->
+        </div>
+
+        <!-- CADENA DE AUDITORÍA -->
+        <div class="audit-box">
+          <h3>Trazabilidad y Sello de Auditoría Criptográfica</h3>
+          <div class="audit-item">
+            <span>Hash de Transacción Avalúo:</span>
+            <span class="audit-hash" id="hash-transaccion">-</span>
+          </div>
+          <div class="audit-item">
+            <span>Regla de Consolidación:</span>
+            <span id="audit-regla">-</span>
+          </div>
+          <div class="audit-item">
+            <span>Integridad de Insumos:</span>
+            <span style="color: #69C87B;">✓ FIRMA ELECTRÓNICA ACTIVA (Ed25519)</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Variables globales
+    let defaultYaml = "";
+
+    // Cargar config al arrancar
+    window.addEventListener('DOMContentLoaded', async () => {
+      await cargarMetodologiaDefecto();
+      await ejecutarMotor();
+    });
+
+    async function cargarMetodologiaDefecto() {
+      showLoading(true);
+      try {
+        const response = await fetch('/api/config');
+        if (!response.ok) throw new Error("Error cargando configuración por defecto");
+        const data = await response.json();
+        defaultYaml = data.yaml;
+        document.getElementById('yaml-input').value = defaultYaml;
+      } catch (err) {
+        alert("Fallo al conectar con la API. Asegúrese de que el backend FastAPI esté corriendo.");
+        console.error(err);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function restablecerConfig() {
+      document.getElementById('yaml-input').value = defaultYaml;
+      await ejecutarMotor();
+    }
+
+    async function ejecutarMotor() {
+      showLoading(true);
+      const yamlContent = document.getElementById('yaml-input').value;
+      
+      try {
+        const response = await fetch('/api/calcular', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ yaml: yamlContent })
+        });
+        
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.detail || "Error en ejecución del motor");
+        }
+        
+        const data = await response.json();
+        renderResultados(data);
+      } catch (err) {
+        alert("Error de Cálculo:\n" + err.message);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    function renderResultados(data) {
+      // 1. Hero banner
+      const banner = document.getElementById('hero-banner');
+      const badge = document.getElementById('lbl-estado');
+      
+      banner.className = `hero-banner ${data.estado}`;
+      badge.className = `badge ${data.estado}`;
+      badge.textContent = data.estado === 'VERDE' ? '✓ LISTO PARA FIRMA' : (data.estado === 'AMARILLA' ? '⚠ REQUIERE VALIDACIÓN' : '✗ ELEVAR A VISITA');
+      
+      document.getElementById('val-consolidado').textContent = data.valor_consolidado_fmt;
+      document.getElementById('val-banda').textContent = `Banda 80%: ${data.banda_baja_fmt} — ${data.banda_alta_fmt}`;
+      document.getElementById('val-razon').textContent = data.razon_estado;
+      
+      // Fecha
+      document.getElementById('txt-fecha').textContent = data.fecha_calculo;
+
+      // 2. Métodos
+      const container = document.getElementById('methods-container');
+      container.innerHTML = "";
+      
+      data.metodos.forEach(m => {
+        const esEfectivo = data.metodos_efectivos.includes(m.metodo);
+        const peso = data.pesos_efectivos[m.metodo] || 0;
+        
+        const cardClass = esEfectivo ? 'method-card efectivo' : 'method-card desestimado';
+        const statusLabel = esEfectivo ? `EFECTIVO (${(peso * 100).toFixed(0)}%)` : 'DESESTIMADO';
+        const statusClass = esEfectivo ? 'method-status efectivo' : 'method-status desestimado';
+        
+        const cardHtml = `
+          <div class="${cardClass}">
+            <div class="method-header">
+              <div class="method-title-group">
+                <div class="method-code">${m.metodo}</div>
+                <div class="method-name">${m.nombre}</div>
+              </div>
+              <div class="${statusClass}">${statusLabel}</div>
+            </div>
+            <div class="method-stats">
+              <div class="stat-box">
+                <div class="stat-label">Valor Central</div>
+                <div class="stat-val">${m.valor_central_fmt}</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Valor / m²</div>
+                <div class="stat-val">${m.valor_por_m2_fmt}</div>
+              </div>
+            </div>
+          </div>
+        `;
+        container.innerHTML += cardHtml;
+      });
+
+      // 3. Auditoría
+      document.getElementById('hash-transaccion').textContent = data.hash_avaluo.substring(0, 32) + '...';
+      document.getElementById('audit-regla').textContent = `${data.regla.autor} (v. ${data.regla.version})`;
+    }
+
+    async function descargarHTML() {
+      const yamlContent = document.getElementById('yaml-input').value;
+      try {
+        const response = await fetch('/api/dictamen/html', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ yaml: yamlContent })
+        });
+        if (!response.ok) throw new Error("Fallo al generar HTML");
+        
+        const html = await response.text();
+        const win = window.open();
+        win.document.write(html);
+        win.document.close();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    async function descargarPDF() {
+      const yamlContent = document.getElementById('yaml-input').value;
+      const btn = document.getElementById('btn-pdf');
+      btn.disabled = true;
+      btn.textContent = "Generando PDF...";
+      
+      try {
+        const response = await fetch('/api/dictamen/pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ yaml: yamlContent })
+        });
+        
+        if (response.status === 501) {
+          // Servidor no compila Weasyprint
+          alert("Aviso: El servicio de PDF de Vercel no tiene precompiladas las librerías nativas de WeasyPrint. \n\nPara descargar el PDF:\n1. Abra la 'Bandeja de Revisión (HTML)'\n2. Use la combinación Ctrl+P (Imprimir) de su navegador y elija la opción 'Guardar como PDF'.");
+          return;
+        }
+        
+        if (!response.ok) throw new Error("Fallo al descargar PDF");
+        
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "dictamen_napoli_recalculado.pdf";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Descargar Dictamen PDF";
+      }
+    }
+
+    function showLoading(active) {
+      const editorLoading = document.getElementById('editor-loading');
+      const resultsLoading = document.getElementById('results-loading');
+      if (active) {
+        editorLoading.classList.add('active');
+        resultsLoading.classList.add('active');
+      } else {
+        editorLoading.classList.remove('active');
+        resultsLoading.classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>

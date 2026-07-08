@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ARHIAX - Mapa Interactivo de Equipamientos cercanos</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Helvetica Neue', Arial, sans-serif; }
+        #map { width: 100%; height: 100%; }
+        .legend {
+            background: white; padding: 10px; line-height: 18px; color: #333; border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2); font-size: 12px;
+        }
+        .legend i { width: 12px; height: 12px; float: left; margin-right: 8px; border-radius: 50%; opacity: 0.9; }
+        .header {
+            position: absolute; top: 10px; left: 50px; z-index: 1000; background: rgba(13, 44, 107, 0.9);
+            color: white; padding: 5px 15px; border-radius: 4px; box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            pointer-events: none; font-size: 14px; font-weight: bold; letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">A R H I A X — Mapa de Equipamiento Urbano (2.0 km)</div>
+    <div id="map"></div>
+
+    <script>
+        var map = L.map('map').setView([10.987, -74.8115], 15);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Añadir círculo de 2km de referencia
+        L.circle([10.987, -74.8115], {
+            color: '#1B4FAF',
+            fillColor: '#1B4FAF',
+            fillOpacity: 0.05,
+            radius: 2000,
+            dashArray: '5, 5',
+            weight: 1.5
+        }).addTo(map);
+
+        // Inyectar marcadores
+        
+        L.marker([10.987, -74.8115], {
+            icon: L.divIcon({
+                className: 'custom-div-icon',
+                html: "<div style='background-color:#C9A84C;width:15px;height:15px;border-radius:50%;border:2px solid #0D2C6B;box-shadow: 0 0 10px rgba(0,0,0,0.5);'></div>",
+                iconSize: [15, 15],
+                iconAnchor: [7.5, 7.5]
+            })
+        }).addTo(map).bindPopup("<b>Inmueble: Conjunto Residencial Napoli</b><br/>Tv 43 # 100-50").openPopup();
+    
+                L.circleMarker([11.001673491257536, -74.8035522883355], {
+                    radius: 7,
+                    fillColor: '#8B1A1A',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Clinica Portoazul Auna</b><br/>Categoria: Salud<br/>Distancia: 1850 m");
+            
+                L.circleMarker([10.99094048289589, -74.7941132012298], {
+                    radius: 7,
+                    fillColor: '#8B1A1A',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Clinica Iberoamerica</b><br/>Categoria: Salud<br/>Distancia: 1950 m");
+            
+                L.circleMarker([10.97971622610463, -74.82250026884347], {
+                    radius: 7,
+                    fillColor: '#1A6B3A',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Colegio Karl C. Parrish</b><br/>Categoria: Educacion<br/>Distancia: 1450 m");
+            
+                L.circleMarker([10.979393410947019, -74.81082208379165], {
+                    radius: 7,
+                    fillColor: '#1A6B3A',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Gimnasio Altair de Cartagena (Sede BAQ)</b><br/>Categoria: Educacion<br/>Distancia: 850 m");
+            
+                L.circleMarker([10.972249066612546, -74.80747369903182], {
+                    radius: 7,
+                    fillColor: '#1A6B3A',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Colegio Marymount</b><br/>Categoria: Educacion<br/>Distancia: 1700 m");
+            
+                L.circleMarker([10.989561283576538, -74.81017059341167], {
+                    radius: 7,
+                    fillColor: '#D97D24',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Centro Comercial Miramar</b><br/>Categoria: Comercio<br/>Distancia: 320 m");
+            
+                L.circleMarker([10.989825888575321, -74.81009598712794], {
+                    radius: 7,
+                    fillColor: '#D97D24',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Supermercado Olimpica Miramar</b><br/>Categoria: Comercio<br/>Distancia: 350 m");
+            
+                L.circleMarker([10.9783501254308, -74.79980689949083], {
+                    radius: 7,
+                    fillColor: '#D97D24',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Mall Plaza Buenavista</b><br/>Categoria: Comercio<br/>Distancia: 1600 m");
+            
+                L.circleMarker([10.98592386519487, -74.81067393282059], {
+                    radius: 7,
+                    fillColor: '#1B4FAF',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Parque Miramar</b><br/>Categoria: Recreacion<br/>Distancia: 150 m");
+            
+                L.circleMarker([10.983530082258635, -74.80062128943774], {
+                    radius: 7,
+                    fillColor: '#1B4FAF',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Parque Boulevard Buenavista</b><br/>Categoria: Recreacion<br/>Distancia: 1250 m");
+            
+
+        // Leyenda
+        var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend'),
+                categories = ['Inmueble', 'Salud', 'Educacion', 'Comercio', 'Recreacion'],
+                colors = ['#C9A84C', '#8B1A1A', '#1A6B3A', '#D97D24', '#1B4FAF'];
+
+            div.innerHTML = '<b>Referencia</b><br>';
+            for (var i = 0; i < categories.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + colors[i] + '"></i> ' +
+                    categories[i] + '<br>';
+            }
+            return div;
+        };
+        legend.addTo(map);
+    </script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# DECLARACIÓN METODOLÓGICA — LONJA DE PROPIEDAD RAÍZ DE BARRANQUILLA
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Este archivo declara la metodología que la Lonja BAQ aplica a sus avalúos
+# corporativos. El motor TMA es un EJECUTOR de lo declarado aquí, NO el que
+# define la metodología.
+#
+# Quien firma este archivo: Junta Técnica de Avalúos Corporativos de la Lonja BAQ
+# Periodicidad de revisión: trimestral
+# Versión: 0.1 — borrador para co-diseño con Sinergia (07-May-2026)
+#
+# Cualquier cambio aquí queda registrado en el control de versiones del motor
+# y se propaga automáticamente a todos los dictámenes posteriores a la fecha
+# de vigencia declarada.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+declaracion:
+  entidad: "Lonja de Propiedad Raíz de Barranquilla"
+  representante_legal: "[A declarar por la Lonja]"
+  presidente_comite_tecnico: "[A declarar por la Lonja]"
+  vigencia_desde: "2026-05-08"
+  vigencia_hasta: "2026-08-31"
+  marco_normativo:
+    - "Ley 1673 de 2013 — Régimen del avaluador"
+    - "Decreto 556 de 2014 — Categorías RAA"
+    - "Decreto 1420 de 1998 — Avalúos Ley 388/1997"
+    - "Resolución IGAC 620 de 2008 — Procedimientos avalúo"
+    - "Resolución IGAC 1040 de 2023, mod. 746 de 2024 — Métodos vigentes"
+    - "NTS S 01, NTS S 03, NTS I 01, NTS M 01 — Normas Técnicas Sectoriales"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 1. MÉTODOS A EJECUTAR
+# ─────────────────────────────────────────────────────────────────────────────
+# La Lonja decide qué métodos aplicar y en qué orden. El motor solo ejecuta
+# los que estén marcados como `activo: true`.
+metodos_activos:
+  M1_comparacion_mercado:
+    activo: true
+    fundamento: "Resolución IGAC 620/2008 Art. 1 — método de comparación"
+    nts_aplicable: "NTS M 01 numeral 4.1"
+    minimo_comparables: 4
+    ideal_comparables: 8
+  M2_costo_reposicion:
+    activo: true
+    fundamento: "Resolución IGAC 620/2008 Art. 3 — método de costo de reposición"
+    nts_aplicable: "NTS M 01 numeral 4.3"
+    metodo_depreciacion: "fitto_corvini"   # Exigido por Res. 620/2008
+  M3_capitalizacion_rentas:
+    activo: true
+    fundamento: "Resolución IGAC 620/2008 Art. 2 — método de capitalización"
+    nts_aplicable: "NTS M 01 numeral 4.2"
+  M4_residual:
+    activo: false  # La Lonja decide cuándo activarlo (típicamente solo para lotes)
+    fundamento: "Resolución IGAC 620/2008 Art. 4 — método residual"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 2. REGLA DE CONSOLIDACIÓN DECLARADA POR LA LONJA
+# ─────────────────────────────────────────────────────────────────────────────
+# La Lonja declara qué peso le da a cada método. El motor NO inventa pesos.
+regla_consolidacion:
+  autor: "Junta Técnica de Avalúos Corporativos — Lonja BAQ"
+  version: "0.1-codiseno"
+  
+  # Pesos por defecto para apartamentos NO VIS estrato 4-6 en propiedad horizontal
+  pesos_default:
+    M1_comparacion_mercado: 0.60
+    M2_costo_reposicion: 0.30
+    M3_capitalizacion_rentas: 0.10
+  
+  # Tolerancia de coherencia: si un método se aparta más de este % del valor
+  # central de los otros, el motor lo marca para revisión por la Junta Técnica
+  tolerancia_coherencia_pct: 0.15
+  
+  # Coeficiente de variación máximo admisible entre comparables (NTS profesional)
+  coeficiente_variacion_max: 0.075
+  
+  # Regla de fallback: si un método se desestima por divergencia, redistribuir
+  # el peso restante entre los métodos convergentes
+  redistribucion_fallback: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 3. PARÁMETROS DEL MÉTODO M2 — COSTOS DE CONSTRUCCIÓN
+# ─────────────────────────────────────────────────────────────────────────────
+# La Lonja declara la fuente de costos a usar y el factor de actualización.
+costos_construccion:
+  fuente_principal: "Camacol Regional Atlántico"
+  fuente_validacion: "DANE ICOCED"
+  vigencia_actual: "Q2-2026"
+  tabla_base_anio: 2025
+  factor_actualizacion: 1.2576
+  justificacion_factor: "+25.76% por incremento SMMLV +23.7% (fórmula Camacol BC: 1% SMMLV ≈ 1.12% costos)"
+  
+  # Tipologías habilitadas para avalúo corporativo
+  tipologias_aprobadas:
+    - "Multifamiliar VIS"
+    - "Multifamiliar medio-bajo"
+    - "Multifamiliar medio-medio (4-5 pisos)"
+    - "Multifamiliar medio-alto (5-6 pisos)"
+    - "Multifamiliar alto típico (6 pisos)"
+    - "Multifamiliar alto full acabados importados"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 4. PARÁMETROS DEL MÉTODO M2 — DEPRECIACIÓN FITTO-CORVINI
+# ─────────────────────────────────────────────────────────────────────────────
+depreciacion:
+  metodo: "fitto_corvini"
+  fundamento_normativo: "Resolución IGAC 620/2008 — modelos continuos exigidos"
+  
+  # Vidas útiles según sistema constructivo (norma)
+  vida_util_anos:
+    concreto: 100
+    metalica: 100
+    mamposteria_estructural: 100
+    muros_carga: 70
+  
+  # Coeficientes Fitto-Corvini por estado de conservación (norma)
+  coeficientes:
+    1.0: { A: 1.000, C: 0.000 }
+    1.5: { A: 1.084, C: 0.000 }
+    2.0: { A: 1.168, C: 0.025 }
+    2.5: { A: 1.252, C: 0.0809 }
+    3.0: { A: 1.336, C: 0.1810 }
+    3.5: { A: 1.420, C: 0.3320 }
+    4.0: { A: 1.504, C: 0.5230 }
+    5.0: { A: 0.000, C: 1.000 }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 5. PARÁMETROS DEL MÉTODO M3 — CAPITALIZACIÓN DE RENTAS
+# ─────────────────────────────────────────────────────────────────────────────
+# La Lonja declara las tasas de capitalización por tipología y zona.
+# Estas tasas son las que la Junta Técnica ya usa en sus dictámenes corporativos.
+capitalizacion_rentas:
+  
+  # Tasas por tipología — La Lonja edita estos valores trimestralmente
+  tasas_por_tipologia:
+    apto_NO_VIS_estrato_4:
+      tasa_central: 0.085
+      tasa_min: 0.075
+      tasa_max: 0.095
+      vacancia_pct: 0.06
+      gastos_no_recuperables_pct: 0.10
+      vigencia: "Q2-2026"
+      observacion: "Cap rate IMPLÍCITO del mercado (transacciones reales), no tasa deseada por inversionistas"
+    
+    apto_NO_VIS_estrato_5:
+      tasa_central: 0.075
+      tasa_min: 0.065
+      tasa_max: 0.085
+      vacancia_pct: 0.05
+      gastos_no_recuperables_pct: 0.10
+      vigencia: "Q2-2026"
+    
+    apto_NO_VIS_estrato_6:
+      tasa_central: 0.065
+      tasa_min: 0.055
+      tasa_max: 0.075
+      vacancia_pct: 0.04
+      gastos_no_recuperables_pct: 0.10
+      vigencia: "Q2-2026"
+    
+    local_comercial_estrato_4_5:
+      tasa_central: 0.105
+      tasa_min: 0.090
+      tasa_max: 0.120
+      vacancia_pct: 0.10
+      gastos_no_recuperables_pct: 0.12
+      vigencia: "Q2-2026"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 6. PARÁMETROS DEL MÉTODO M1 — COMPARACIÓN DE MERCADO
+# ─────────────────────────────────────────────────────────────────────────────
+comparacion_mercado:
+  
+  # Corrimiento oferta-cierre declarado por la Lonja
+  # La Lonja tiene los datos de cierre que el mercado abierto no tiene
+  corrimiento_oferta_cierre:
+    con_dos_o_mas_anclas_mismo_conjunto: 0.06   # 6% — ancla directa reduce sesgo
+    con_una_ancla_mismo_conjunto: 0.08          # 8%
+    sin_ancla_directa: 0.10                     # 10% — corrimiento típico
+    nota: "Estos porcentajes vienen de las series cerradas de la Lonja BAQ. Sinergia no los inventa."
+  
+  # Pesos de homogeneidad por proximidad al activo
+  pesos_homogeneidad:
+    mismo_conjunto: 1.00
+    mismo_barrio_clase_similar: 0.85
+    barrio_adyacente_clase_similar: 0.70
+    sector_amplio_clase_similar: 0.50
+  
+  # Ajustes técnicos por diferencias en comparables
+  ajustes:
+    diferencia_area:
+      maxima_pct_aceptable: 0.30
+      factor_correccion: "lineal_invertido"  # Más pequeño = más caro por m²
+    diferencia_antiguedad:
+      maxima_anios_aceptable: 10
+      depreciacion_anual_pct: 0.005          # 0.5% anual entre comparables
+    diferencia_estado:
+      escala: "Fitto-Corvini Clase 1-5"
+      factor_por_clase: 0.05                  # 5% por clase de diferencia
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 7. ZONAS HOMOGÉNEAS GEOECONÓMICAS — VALOR DEL SUELO
+# ─────────────────────────────────────────────────────────────────────────────
+# La Lonja declara los valores del suelo por sector. Estos pueden alinearse
+# con las ZHG del IGAC o ajustarse según observación gremial.
+valor_suelo_por_sector:
+  Miramar:
+    valor_central_m2: 4500000
+    rango_min_m2: 3800000
+    rango_max_m2: 5200000
+    vigencia: "Q2-2026"
+    fuente: "Observación gremial Lonja BAQ + ZHG IGAC referencial"
+  Riomar:
+    valor_central_m2: 5200000
+    rango_min_m2: 4500000
+    rango_max_m2: 6000000
+    vigencia: "Q2-2026"
+  Villa_Country:
+    valor_central_m2: 4800000
+    rango_min_m2: 4200000
+    rango_max_m2: 5500000
+    vigencia: "Q2-2026"
+  Alto_Prado:
+    valor_central_m2: 5500000
+    rango_min_m2: 4800000
+    rango_max_m2: 6200000
+    vigencia: "Q2-2026"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 8. CONFIGURACIÓN DE FIRMA CORPORATIVA
+# ─────────────────────────────────────────────────────────────────────────────
+# Avalúo corporativo (Decreto 1420/1998 Art. 11) requiere TRES firmas mínimo
+firma_corporativa:
+  modelo: "junta_tecnica_avaluos_corporativos"
+  firmantes_obligatorios:
+    - rol: "representante_legal_lonja"
+      nombre_placeholder: "[Representante Legal Lonja BAQ]"
+    - rol: "presidente_comite_tecnico"
+      nombre_placeholder: "[Presidente Comité Técnico]"
+    - rol: "perito_avaluador_ponente"
+      nombre_placeholder: "[Avaluador RAA Ponente]"
+  firmantes_opcionales:
+    - rol: "avaluador_revisor_par_1"
+    - rol: "avaluador_revisor_par_2"
+  
+  sello_corporativo:
+    incluir_logo_lonja: true
+    incluir_numero_consecutivo_lonja: true
+    incluir_acta_junta_tecnica: true
+    sello_criptografico_ed25519: true

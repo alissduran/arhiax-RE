@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ARHIAX Output & Temporal files
+output_corrida/
+output_referencia/dictamen_napoli.pdf.tmp
+*.log
+
+# Evitar subir PDFs y archivos comprimidos pesados
+*.pdf
+*.zip
+*.rar
+*.docx
+
+# Si deseas conservar los PDFs/ZIPs de referencia específicos, descomenta:
+# !motor_tma_lonja_baq_v1.0.zip

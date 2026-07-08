@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ARHIAX - Mapa Interactivo de Equipamientos cercanos</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Helvetica Neue', Arial, sans-serif; }
+        #map { width: 100%; height: 100%; }
+        .legend {
+            background: white; padding: 10px; line-height: 18px; color: #333; border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2); font-size: 12px;
+        }
+        .legend i { width: 12px; height: 12px; float: left; margin-right: 8px; border-radius: 50%; opacity: 0.9; }
+        .header {
+            position: absolute; top: 10px; left: 50px; z-index: 1000; background: rgba(13, 44, 107, 0.9);
+            color: white; padding: 5px 15px; border-radius: 4px; box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            pointer-events: none; font-size: 14px; font-weight: bold; letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">A R H I A X — Mapa de Equipamiento Urbano (2.0 km)</div>
+    <div id="map"></div>
+
+    <script>
+        var map = L.map('map').setView([10.9838, -74.7998], 15);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Añadir círculo de 2km de referencia
+        L.circle([10.9838, -74.7998], {
+            color: '#1B4FAF',
+            fillColor: '#1B4FAF',
+            fillOpacity: 0.05,
+            radius: 2000,
+            dashArray: '5, 5',
+            weight: 1.5
+        }).addTo(map);
+
+        // Inyectar marcadores
+        
+        L.marker([10.9838, -74.7998], {
+            icon: L.divIcon({
+                className: 'custom-div-icon',
+                html: "<div style='background-color:#C9A84C;width:15px;height:15px;border-radius:50%;border:2px solid #0D2C6B;box-shadow: 0 0 10px rgba(0,0,0,0.5);'></div>",
+                iconSize: [15, 15],
+                iconAnchor: [7.5, 7.5]
+            })
+        }).addTo(map).bindPopup(`<b>Inmueble: Calle 63 #37-71</b><br/>Barrio El Recreo`).openPopup();
+    
+                L.circleMarker([10.973100616403435, -74.79846176589871], {
+                    radius: 7,
+                    fillColor: '#8B1A1A',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Clinica General del Norte</b><br/>Categoria: Salud<br/>Distancia: 1200 m");
+            
+                L.circleMarker([10.995826829485702, -74.7960544141919], {
+                    radius: 7,
+                    fillColor: '#8B1A1A',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Clinica La Merced</b><br/>Categoria: Salud<br/>Distancia: 1400 m");
+            
+                L.circleMarker([10.986099441210625, -74.79761572281335], {
+                    radius: 7,
+                    fillColor: '#1A6B3A',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Corporacion Universitaria de la Costa - CUC</b><br/>Categoria: Educacion<br/>Distancia: 350 m");
+            
+                L.circleMarker([10.98222415538238, -74.80505053963495], {
+                    radius: 7,
+                    fillColor: '#1A6B3A',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Colegio Maria Auxiliadora</b><br/>Categoria: Educacion<br/>Distancia: 600 m");
+            
+                L.circleMarker([10.981242499554323, -74.79007716672939], {
+                    radius: 7,
+                    fillColor: '#1A6B3A',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Universidad del Atlantico - Sede Centro</b><br/>Categoria: Educacion<br/>Distancia: 1100 m");
+            
+                L.circleMarker([10.973026832622864, -74.79941677239492], {
+                    radius: 7,
+                    fillColor: '#D97D24',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Portal del Prado CC</b><br/>Categoria: Comercio<br/>Distancia: 1200 m");
+            
+                L.circleMarker([10.984608304183773, -74.79623351584151], {
+                    radius: 7,
+                    fillColor: '#D97D24',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Supermercado Olimpica Recreo</b><br/>Categoria: Comercio<br/>Distancia: 400 m");
+            
+                L.circleMarker([10.978603190363655, -74.79349111151183], {
+                    radius: 7,
+                    fillColor: '#D97D24',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Exito San Francisco</b><br/>Categoria: Comercio<br/>Distancia: 900 m");
+            
+                L.circleMarker([10.984151317070248, -74.79754047936997], {
+                    radius: 7,
+                    fillColor: '#1B4FAF',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Parque El Recreo</b><br/>Categoria: Recreacion<br/>Distancia: 250 m");
+            
+                L.circleMarker([10.978807844984125, -74.80506599511871], {
+                    radius: 7,
+                    fillColor: '#1B4FAF',
+                    color: '#ffffff',
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.95
+                }).addTo(map).bindPopup("<b>Parque Suri Salcedo</b><br/>Categoria: Recreacion<br/>Distancia: 800 m");
+            
+
+        // Leyenda
+        var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend'),
+                categories = ['Inmueble', 'Salud', 'Educacion', 'Comercio', 'Recreacion'],
+                colors = ['#C9A84C', '#8B1A1A', '#1A6B3A', '#D97D24', '#1B4FAF'];
+
+            div.innerHTML = '<b>Referencia</b><br>';
+            for (var i = 0; i < categories.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + colors[i] + '"></i> ' +
+                    categories[i] + '<br>';
+            }
+            return div;
+        };
+        legend.addTo(map);
+    </script>
+</body>
+</html>

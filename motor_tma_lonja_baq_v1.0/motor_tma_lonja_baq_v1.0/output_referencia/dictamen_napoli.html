@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dictamen de Avalúo ARHIAX-LAI-2026-DICT-0001</title>
+<style>
+    @page {
+      size: A4;
+      margin: 2cm 1.8cm;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: "Calibri", "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: #1A1A1A;
+      line-height: 1.5;
+      font-size: 10.5pt;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 24px;
+      background: white;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: "Cambria", "Georgia", serif;
+      color: #0B1426;
+      page-break-after: avoid;
+    }
+    
+    h1.brand-title {
+      font-size: 22pt;
+      margin: 0 0 4px 0;
+      letter-spacing: 0.02em;
+    }
+    
+    h2 {
+      font-size: 16pt;
+      border-bottom: 2px solid #8B6F47;
+      padding-bottom: 6px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+    }
+    
+    h3 {
+      font-size: 13pt;
+      color: #1F2A44;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    
+    h4 {
+      font-size: 11pt;
+      color: #8B6F47;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+    
+    p {
+      margin: 0 0 10px 0;
+      text-align: justify;
+    }
+    
+    section {
+      margin-bottom: 24px;
+      page-break-inside: avoid;
+    }
+    
+    section.encabezado {
+      border-bottom: 4px solid #8B6F47;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .brand-sub {
+      color: #5A6378;
+      font-style: italic;
+      font-size: 11pt;
+      margin: 0;
+    }
+    
+    .dictamen-meta {
+      margin-top: 12px;
+      font-size: 9.5pt;
+    }
+    
+    .dictamen-meta table {
+      border-collapse: collapse;
+      width: auto;
+    }
+    
+    .dictamen-meta td {
+      padding: 2px 12px 2px 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 10pt;
+    }
+    
+    table.info-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #C9CFD8;
+      vertical-align: top;
+    }
+    
+    table.info-table td.label {
+      font-weight: bold;
+      width: 40%;
+      background: #EEF1F6;
+    }
+    
+    code {
+      font-family: "Consolas", "Monaco", monospace;
+      font-size: 8.5pt;
+      background: #EEF1F6;
+      padding: 1px 4px;
+      border-radius: 2px;
+      color: #1F2A44;
+    }
+    
+    .metodo-card {
+      border: 1px solid #C9CFD8;
+      border-left: 5px solid #8B6F47;
+      padding: 14px 18px;
+      margin: 14px 0;
+      page-break-inside: avoid;
+      background: white;
+    }
+    
+    .estado-metodo {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 3px;
+      font-size: 9pt;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+    
+    .estado-metodo.ok {
+      background: #E6EFE9;
+      color: #2E5F3E;
+    }
+    
+    .estado-metodo.warn {
+      background: #F7E8E8;
+      color: #8B2E2E;
+    }
+    
+    .metodologia-text {
+      background: #F5F2EC;
+      padding: 10px 14px;
+      border-left: 3px solid #8B6F47;
+      font-style: italic;
+      font-size: 10pt;
+      margin: 10px 0;
+    }
+    
+    .resultado-table td {
+      padding: 5px 10px;
+      border-bottom: 1px solid #C9CFD8;
+    }
+    
+    .resultado-table td.label {
+      width: 35%;
+      font-weight: 600;
+    }
+    
+    .insumos-table {
+      font-size: 9pt;
+    }
+    
+    .insumos-table th {
+      background: #0B1426;
+      color: white;
+      text-align: left;
+      padding: 6px 10px;
+      font-weight: 600;
+    }
+    
+    .insumos-table td {
+      padding: 4px 10px;
+      border-bottom: 1px solid #C9CFD8;
+    }
+    
+    .ajustes-list, .observaciones-list {
+      font-size: 10pt;
+      padding-left: 22px;
+    }
+    
+    .ajustes-list li {
+      margin-bottom: 6px;
+    }
+    
+    table.consolidacion-table {
+      margin: 12px 0;
+    }
+    
+    table.consolidacion-table th {
+      background: #0B1426;
+      color: white;
+      text-align: left;
+      padding: 8px 12px;
+    }
+    
+    table.consolidacion-table td {
+      padding: 6px 12px;
+      border-bottom: 1px solid #C9CFD8;
+    }
+    
+    table.consolidacion-table tr.incluido {
+      background: #E6EFE9;
+    }
+    
+    table.consolidacion-table tr.desestimado {
+      background: #F7E8E8;
+      color: #5A6378;
+    }
+    
+    table.consolidacion-table tr.total {
+      background: #0B1426;
+      color: white;
+      font-size: 11pt;
+    }
+    
+    .decision-box {
+      background: #F5F2EC;
+      border-left: 5px solid #8B6F47;
+      padding: 12px 18px;
+      margin: 12px 0;
+    }
+    
+    .conclusion-section {
+      page-break-before: always;
+    }
+    
+    .valor-final-box {
+      background: #0B1426;
+      color: white;
+      padding: 32px 24px;
+      text-align: center;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    
+    .valor-numero {
+      font-family: "Cambria", serif;
+      font-size: 32pt;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    
+    .valor-letras {
+      font-size: 12pt;
+      margin-bottom: 12px;
+      opacity: 0.95;
+    }
+    
+    .valor-m2 {
+      font-size: 11pt;
+      opacity: 0.85;
+      letter-spacing: 0.05em;
+    }
+    
+    .firma-section {
+      page-break-before: always;
+    }
+    
+    .firma-box {
+      border: 2px solid #0B1426;
+      padding: 24px;
+      margin: 20px 0;
+    }
+    
+    .firma-linea {
+      border-bottom: 1px solid #0B1426;
+      width: 70%;
+      margin: 60px auto 8px auto;
+      height: 1px;
+    }
+    
+    .campo-firma {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .firma-data {
+      width: auto;
+      margin: 16px auto;
+    }
+    
+    .firma-data td {
+      padding: 4px 12px;
+    }
+    
+    .cripto-trail {
+      background: #0B1426;
+      color: white;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-family: "Consolas", monospace;
+      font-size: 9pt;
+      border-radius: 3px;
+    }
+    
+    .cripto-trail h4 {
+      color: #BFA37A;
+      margin: 0 0 10px 0;
+      font-family: "Cambria", serif;
+      font-size: 11pt;
+    }
+    
+    .cripto-trail code {
+      background: rgba(255,255,255,0.1);
+      color: #BFA37A;
+      word-break: break-all;
+    }
+    
+    .cripto-info {
+      margin-top: 12px;
+      font-family: "Calibri", sans-serif;
+      font-size: 9pt;
+      opacity: 0.85;
+    }
+    </style>
+</head>
+<body>
+
+    <section class="encabezado">
+      <div class="logo-area">
+        <h1 class="brand-title">DICTAMEN DE AVALÚO COMERCIAL</h1>
+        <p class="brand-sub">Triangulación Metodológica Asistida (TMA) · Estándar ARHIAX RE</p>
+      </div>
+      <div class="dictamen-meta">
+        <table>
+          <tr><td><b>N° Dictamen:</b></td><td>ARHIAX-LAI-2026-DICT-0001</td></tr>
+          <tr><td><b>Fecha de emisión:</b></td><td>07 de May de 2026</td></tr>
+          <tr><td><b>Vigencia:</b></td><td>1 año (hasta 07-05-2027)</td></tr>
+          <tr><td><b>Hash del avalúo:</b></td><td><code>1ce604163329ea64b0572729…</code></td></tr>
+          <tr><td><b>Hash de firma:</b></td><td><code>ED25519-SIMULATED:374a8cf2cdd326…</code></td></tr>
+        </table>
+      </div>
+    </section>
+    
+
+    <section>
+      <h2>1. Solicitante y propósito</h2>
+      <table class="info-table">
+        <tr><td class="label">Solicitante</td><td>Sinergia Consulting Group S.A.S.</td></tr>
+        <tr><td class="label">Documento</td><td>NIT 901.XXX.XXX-X</td></tr>
+        <tr><td class="label">Calidad</td><td>Validación de modelo TMA — caso de demostración</td></tr>
+        <tr><td class="label">Propósito del avalúo</td><td>Determinación del valor comercial actual del inmueble para fines de demostración de capacidad técnica del estándar TMA — Triangulación Metodológica Asistida.</td></tr>
+      </table>
+    </section>
+    
+
+    <section>
+      <h2>2. Identificación del bien objeto del avalúo</h2>
+      
+      <h3>2.1 Identificación legal</h3>
+      <table class="info-table">
+        <tr><td class="label">Folio de Matrícula Inmobiliaria</td><td><b>040-646406</b></td></tr>
+        <tr><td class="label">Dirección</td><td>TV 43 # 100-50, Apto 430, Torre 8, Etapa 3, Conjunto Residencial Napoli</td></tr>
+        <tr><td class="label">Ciudad</td><td>Barranquilla</td></tr>
+        <tr><td class="label">Barrio / Sector</td><td>Miramar</td></tr>
+        <tr><td class="label">Estrato socioeconómico</td><td>4</td></tr>
+      </table>
+      
+      <h3>2.2 Identificación técnica</h3>
+      <table class="info-table">
+        <tr><td class="label">Tipología</td><td>Apartamento NO VIS - Propiedad Horizontal</td></tr>
+        <tr><td class="label">Área privada construida</td><td>58.75 m²</td></tr>
+        <tr><td class="label">Coeficiente de copropiedad</td><td>0.2037%</td></tr>
+        <tr><td class="label">Antigüedad</td><td>3 años</td></tr>
+        <tr><td class="label">Piso</td><td>4</td></tr>
+        <tr><td class="label">Características adicionales</td><td>Conjunto cerrado con amenidades (piscina, gimnasio, salón social, vigilancia 24h)</td></tr>
+      </table>
+    </section>
+    
+
+    <section>
+      <h2>3. Marco normativo aplicable</h2>
+      <p>El presente dictamen se elabora en cumplimiento del siguiente marco normativo vigente:</p>
+      <ul>
+        <li><b>Ley 1673 de 2013</b> — Reglamento de la actividad del avaluador. Crea el Registro Abierto de Avaluadores (RAA). Artículo 22: el dictamen pericial sobre cuestiones técnicas de valuación se encomienda al avaluador inscrito en el RAA.</li>
+        <li><b>Decreto 556 de 2014</b> — Reglamentación de la Ley 1673. Artículo 5: trece categorías de avalúos. La presente categoría aplicable: 2 — Inmuebles urbanos.</li>
+        <li><b>Resolución IGAC 620 de 2008</b> — Procedimientos para los avalúos. Establece los métodos valuatorios (comparación de mercado, capitalización de rentas, costo de reposición, técnica residual) y la depreciación Fitto-Corvini para construcciones.</li>
+        <li><b>Resolución IGAC 1040 de 2023</b>, modificada parcialmente por la <b>Resolución 746 de 2024</b> — Metodología técnica vigente. Admite expresamente la aplicación puntual o masiva de los métodos valuatorios sin requerir necesariamente el ingreso al predio.</li>
+        <li><b>Decreto 1420 de 1998</b> — Disposiciones generales sobre avalúos para Ley 388 de 1997.</li>
+      </ul>
+    </section>
+    
+
+    <section class="seccion-metodos">
+      <h2>4. Métodos valuatorios aplicados</h2>
+      <p>De conformidad con el Artículo 1° de la Resolución IGAC 1040 de 2023, modificada por la Resolución 746 de 2024, se aplicaron tres métodos valuatorios reconocidos. La aplicación de múltiples métodos en paralelo permite la triangulación metodológica que fortalece la determinación del valor comercial.</p>
+      
+      
+        <div class="metodo-card">
+          <h3>4.1 Método M1 — Comparación de Mercado</h3>
+          <p class="estado-metodo ok">INCLUIDO (86%)</p>
+          
+          <p class="metodologia-text">Método M1 — Comparación de Mercado (Resolución IGAC 1040/2023). Se construyó conjunto de 8 comparables observados el 2026-05-06 sobre portales públicos declarados (Metrocuadrado, Trovit, Mitula, Nuroa). Aplicación de ajustes paramétricos por área, antigüedad, estado y homogeneidad de conjunto, con descuento del 8% por corrimiento oferta-cierre. Banda 80% calculada por percentiles 10 y 90 de los precios ajustados por m². Cada comparable se sella criptográficamente al momento de captura para verificabilidad posterior.</p>
+          
+          <h4>Resultado del método</h4>
+          <table class="resultado-table">
+            <tr><td class="label">Valor central</td><td><b>$ 242.264.085</b></td></tr>
+            <tr><td class="label">Banda 80%</td><td>$ 209.251.167 — $ 272.883.292</td></tr>
+            <tr><td class="label">Valor por m²</td><td>$ 4.123.644/m²</td></tr>
+            <tr><td class="label">Hash del resultado</td><td><code>e47391bb58596ee357aab632c6539e499b1f075deb98c5568cb55d73220f4e7a</code></td></tr>
+          </table>
+          
+          <h4>Ajustes aplicados</h4>
+          <ul class='ajustes-list'><li><b>Ajuste por homogeneidad de comparables</b> (factor 1.0000): Promedio ponderado: comparables del mismo conjunto Napoli reciben peso 1.0; conjuntos vecinos del cluster Miramar (Sorrento) reciben 0.85; comparables de barrio reciben 0.70.</li><li><b>Ajuste por diferencia de área</b> (factor 1.0000): Cap ±5% sobre el precio observado por m², proporcional a la diferencia de área respecto al activo (58.75 m²).</li><li><b>Ajuste por antigüedad</b> (factor 0.9700): Depreciación lineal de 1% por año hasta 10 años. Activo con 3 años aplica 3% de descuento sobre comparables 'para estrenar'.</li><li><b>Ajuste por estado relativo</b> (factor 0.9800): Descuento del 2% sobre comparables marcados como 'remodelado' para llevar el valor a un estado promedio del activo.</li><li><b>Corrimiento oferta-cierre</b> (factor 0.9400): Descuento del 6% sobre precios de listado para reflejar la diferencia oferta-vs-cierre observable en el mercado. El factor se calibra según homogeneidad: con 2 comparables del mismo conjunto (ancla directa) el sesgo se reduce.</li></ul>
+          
+          <h4>Insumos sellados criptográficamente</h4>
+          <table class='insumos-table'><thead><tr><th>#</th><th>Fuente</th><th>Fecha captura</th><th>Hash Ed25519</th></tr></thead><tbody>
+              <tr>
+                <td>1</td>
+                <td>Trovit / Nuroa</td>
+                <td>2026-05-06</td>
+                <td><code>0c7f8e39cf0c2a52…</code></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Nuroa.com.co</td>
+                <td>2026-05-06</td>
+                <td><code>4085b2368b40fa4a…</code></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Trovit</td>
+                <td>2026-05-06</td>
+                <td><code>9dce18fe91882f3e…</code></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Mitula Casas</td>
+                <td>2026-05-06</td>
+                <td><code>eed9e4fe64cb3b02…</code></td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>Mitula Casas</td>
+                <td>2026-05-06</td>
+                <td><code>326e86844cace4f8…</code></td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>Mitula Casas</td>
+                <td>2026-05-06</td>
+                <td><code>6772894f0be90963…</code></td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>Nuroa</td>
+                <td>2026-05-06</td>
+                <td><code>7482067c5bd50401…</code></td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>Trovit</td>
+                <td>2026-05-06</td>
+                <td><code>65f35fd7fc26b053…</code></td>
+              </tr></tbody></table>
+          
+          <h4>Observaciones del método</h4>
+          <ul class="observaciones-list">
+            <li>⚠ Coeficiente de variación de los comparables: 8.78% — SUPERA el umbral profesional admisible de 7.5% (referencia gremial Colombia). El avaluador debe declarar este punto en el dictamen y eventualmente filtrar comparables atípicos para reducir dispersión.</li><li>Se identificaron 2 comparables del mismo Conjunto Napoli, lo que constituye ancla principal de máxima homogeneidad.</li>
+          </ul>
+        </div>
+        
+        <div class="metodo-card">
+          <h3>4.2 Método M2 — Costo de Reposición a Nuevo</h3>
+          <p class="estado-metodo warn">DESESTIMADO POR DIVERGENCIA</p>
+          
+          <p class="metodologia-text">Método M2 — Costo de Reposición a Nuevo (Resolución IGAC 1040/2023, mod. 746/2024). Costo de construcción aplicado según tipología Camacol Q2-2026 ajustada: 'Multifamiliar medio-medio (4-5 pisos)' con costo total $ 4,152,758/m². Costo de construcción a nuevo: $ 243,974,532. Depreciación Fitto-Corvini (Resolución IGAC 620/2008): sistema concreto, vida útil 100 años, edad 3 años, Estado Clase 1.5, factor conservación 98.33%. Costo construcción depreciado: $ 239,897,718. Valor del suelo (cuota): $ 64,165,500 (coeficiente copropiedad 0.2037%). Valor M2 = construcción depreciada + cuota suelo.</p>
+          
+          <h4>Resultado del método</h4>
+          <table class="resultado-table">
+            <tr><td class="label">Valor central</td><td><b>$ 304.063.218</b></td></tr>
+            <tr><td class="label">Banda 80%</td><td>$ 213.817.086 — $ 318.660.159</td></tr>
+            <tr><td class="label">Valor por m²</td><td>$ 5.175.544/m²</td></tr>
+            <tr><td class="label">Hash del resultado</td><td><code>a72c1d739315de13e7111d291919a7aaadfd840628ff39367925b6237e769e17</code></td></tr>
+          </table>
+          
+          <h4>Ajustes aplicados</h4>
+          <ul class='ajustes-list'><li><b>Tipología Camacol aplicable: Multifamiliar medio-medio (4-5 pisos)</b> (factor 1.0000): Conjunto Napoli es propiedad horizontal multifamiliar de 4-5 pisos con acabados estándar — tipología 'medio-medio' aplicable según referencias publicadas Camacol Q1-2026. Costo total por m² aplicado: $ 4,152,758.</li><li><b>Depreciación Fitto-Corvini (Resolución IGAC 620/2008)</b> (factor 0.9833): Método Fitto-Corvini exigido por Resolución IGAC 620/2008 para construcciones. Sistema concreto, vida útil 100 años, edad 3 años, X=3.00%, Estado de Conservación Clase 1.5, factor depreciación Y=1.67%, factor conservación 98.33%.</li><li><b>Valor del suelo (cuota propiedad horizontal)</b> (factor 0.0020): Aplicación del coeficiente de copropiedad de 0.2037% sobre el valor estimado del lote del conjunto (área lote × valor m² terreno zona homogénea Miramar).</li><li><b>Banda 80% por sensibilidad de tipología y suelo</b> (factor 1.0000): Banda construida con tipologías Camacol adyacentes (medio-bajo y alto típico) y sensibilidad ±15% sobre valor del suelo para reflejar incertidumbre de la zona homogénea publicada.</li></ul>
+          
+          <h4>Insumos sellados criptográficamente</h4>
+          <table class='insumos-table'><thead><tr><th>#</th><th>Fuente</th><th>Fecha captura</th><th>Hash Ed25519</th></tr></thead><tbody>
+              <tr>
+                <td>1</td>
+                <td>Camacol regional Atlántico (proyección 2026 sobre tabla Feb-2025) + DANE ICOCED Ene-2026</td>
+                <td>2026-05-06</td>
+                <td><code>770ca83317dbdf6a…</code></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Estimación referencial Zona Homogénea Geoeconómica Miramar</td>
+                <td>2026-05-06</td>
+                <td><code>aa3a54649b0311a1…</code></td>
+              </tr></tbody></table>
+          
+          <h4>Observaciones del método</h4>
+          <ul class="observaciones-list">
+            <li>Componente construcción: 78.9% del valor M2 ($ 239,897,718).</li><li>Componente suelo: 21.1% del valor M2 ($ 64,165,500).</li><li>Edificación con antigüedad 3 años — Estado de Conservación Clase 1.5 (modo ACA Forense valida la clase con visita in situ). Curva Fitto-Corvini aplicada.</li><li>Valor del suelo es referencial — en modo ACA Forense se actualiza con consulta IGAC formal a Zona Homogénea Geoeconómica vigente.</li>
+          </ul>
+        </div>
+        
+        <div class="metodo-card">
+          <h3>4.3 Método M3 — Capitalización de Rentas</h3>
+          <p class="estado-metodo ok">INCLUIDO (14%)</p>
+          
+          <p class="metodologia-text">Método M3 — Capitalización de Rentas (Resolución IGAC 1040/2023). Canon mensual central observado: $ 2,000,000 COP/mes. Renta neta anual = canon × 12 × (1 - 6% vacancia) × (1 - 10% gastos) = $ 20,304,000. Tasa de capitalización aplicada: 8.50%. Valor M3 = renta neta anual / tasa = $ 238,870,588.</p>
+          
+          <h4>Resultado del método</h4>
+          <table class="resultado-table">
+            <tr><td class="label">Valor central</td><td><b>$ 238.870.588</b></td></tr>
+            <tr><td class="label">Banda 80%</td><td>$ 210.268.978 — $ 275.099.294</td></tr>
+            <tr><td class="label">Valor por m²</td><td>$ 4.065.882/m²</td></tr>
+            <tr><td class="label">Hash del resultado</td><td><code>b2d172473f06d3dd676f6b94d38e1a54bdd0ac097672ee8bb04dcf935d9ca2e8</code></td></tr>
+          </table>
+          
+          <h4>Ajustes aplicados</h4>
+          <ul class='ajustes-list'><li><b>Canon mensual de mercado</b> (factor 1.0000): Canon central observado para tipología apto_NO_VIS_50_70m2_estrato4: $ 2,000,000 COP/mes (rango $ 1,700,000 - $ 2,300,000).</li><li><b>Vacancia estimada</b> (factor 0.9400): Tasa de vacancia del 6.0% — refleja meses sin arrendatario en el ciclo anual.</li><li><b>Gastos no recuperables</b> (factor 0.9000): Gastos administrativos, mantenimiento y seguros no recuperables del propietario: 10.0%.</li><li><b>Tasa de capitalización aplicada: 8.5%</b> (factor 0.0850): Tasa de capitalización para residencial Costa Caribe — rango común 8%-10%, central 8.5%. Banda construida con tasas extremas combinadas con cánones extremos.</li></ul>
+          
+          <h4>Insumos sellados criptográficamente</h4>
+          <table class='insumos-table'><thead><tr><th>#</th><th>Fuente</th><th>Fecha captura</th><th>Hash Ed25519</th></tr></thead><tbody>
+              <tr>
+                <td>1</td>
+                <td>Observación portales públicos arriendo May-2026 (Mitula, Nuroa, Properati, Trovit)</td>
+                <td>2026-05-06</td>
+                <td><code>7c715a2dcd9d3839…</code></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Referencia tasa capitalización mercado residencial Costa Caribe</td>
+                <td>2026-05-06</td>
+                <td><code>79c144d000dd8ce4…</code></td>
+              </tr></tbody></table>
+          
+          <h4>Observaciones del método</h4>
+          <ul class="observaciones-list">
+            <li>Yield neto implícito en el resultado: 8.50% — coherente con la tasa de capitalización aplicada por construcción.</li><li>El activo se 'paga' (a renta bruta sin descuentos) en 119.4 meses — métrica de referencia para inversionistas.</li><li>M3 es método secundario en este avalúo — se aplica con peso menor en consolidado dado que el activo está en uso residencial directo, no en arriendo activo.</li>
+          </ul>
+        </div>
+        
+    </section>
+    
+
+    <section>
+      <h2>5. Análisis de coherencia metodológica</h2>
+      
+      <p>La regla de consolidación aplicada se declara explícitamente: <b>Metodología corporativa Sinergia LAI v1.0 (pendiente validación con metodología corporativa Lonja BAQ)</b> versión <b>v1.0</b>. Pesos declarados: M1=60%, M2=30%, M3=10%. Tolerancia de coherencia: 15%.</p>
+      
+      <p>Distancia máxima observada entre los métodos ejecutados: <b>24.01%</b>.</p>
+      
+      <h3>5.1 Tabla de consolidación</h3>
+      <table class="consolidacion-table">
+        <thead>
+          <tr>
+            <th>Estado</th>
+            <th>Método</th>
+            <th>Valor central</th>
+            <th>Peso</th>
+            <th>Aporte ponderado</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr class="incluido">
+            <td>✓ M1</td>
+            <td>Comparación de Mercado</td>
+            <td>$ 242.264.085</td>
+            <td>86%</td>
+            <td>$ 207.654.930</td>
+          </tr>
+          <tr class="desestimado">
+            <td>⊘ M2</td>
+            <td>Costo de Reposición a Nuevo</td>
+            <td>$ 304.063.218</td>
+            <td>0%</td>
+            <td>N/A</td>
+          </tr>
+          <tr class="incluido">
+            <td>✓ M3</td>
+            <td>Capitalización de Rentas</td>
+            <td>$ 238.870.588</td>
+            <td>14%</td>
+            <td>$ 34.124.369</td>
+          </tr>
+          <tr class="total">
+            <td colspan="4"><b>VALOR CONSOLIDADO TMA</b></td>
+            <td><b>$ 241.779.299</b></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h3>5.2 Decisión del motor de consolidación</h3>
+      <div class="decision-box">
+        <p><b>Estado:</b> AMARILLA</p>
+        <p>El método M2 se aparta más de la tolerancia (15%). Los demás métodos convergen. El motor desestima M2 y consolida con los métodos restantes según regla fallback. Avaluador debe validar la decisión (revisión estimada: 10-15 minutos).</p>
+      </div>
+      
+      <h3>5.3 Observaciones del motor</h3>
+      <ul>
+        <li>Distancia máxima entre métodos: 24.01% (entre M2 y M3).</li><li>Método M2 desestimado por divergencia. Reconsolidación con 2 métodos.</li>
+      </ul>
+    </section>
+    
+
+    <section class="conclusion-section">
+      <h2>6. Conclusión del avalúo</h2>
+      
+      <p>Una vez aplicados los métodos valuatorios reconocidos por la Resolución IGAC 1040 de 2023, ejecutada la triangulación metodológica conforme a la Resolución 620 de 2008, y validada la coherencia entre los resultados independientes, el avaluador firmante determina como valor comercial del bien el siguiente:</p>
+      
+      <div class="valor-final-box">
+        <div class="valor-numero">$ 241.779.299</div>
+        <div class="valor-letras"><i>(DOSCIENTOS CUARENTA Y UNO MILLONES SETECIENTOS SETENTA Y NUEVE MIL DOSCIENTOS NOVENTA Y NUEVE PESOS COLOMBIANOS M/CTE)</i></div>
+        <div class="valor-m2">Equivalente a $ 4.115.392/m²</div>
+      </div>
+      
+      <p>El valor determinado por el avaluador firmante está dentro de la banda 80% del consolidado, lo que indica coherencia con la triangulación metodológica realizada.</p>
+      
+      <h3>6.1 Vigencia del avalúo</h3>
+      <p>El presente avalúo tiene una vigencia de un (1) año contado a partir de su fecha de emisión, conforme a las prácticas profesionales vigentes en el sector inmobiliario colombiano. Después de transcurrido este término se requiere actualización del avalúo.</p>
+      
+      <h3>6.2 Observaciones del avaluador</h3>
+      <p>Avalúo emitido en modo ACA Forense. Los métodos M1 (Comparación de Mercado) y M3 (Capitalización de Rentas) presentan coherencia metodológica fuerte (distancia 1.4%). El método M2 (Costo de Reposición) se aparta por encima de la tolerancia debido al incremento atípico de costos de construcción 2026 (+25.76% por SMMLV) que excede la valorización del activo. Decisión de desestimación de M2 validada por el avaluador firmante.</p>
+      
+      <h3>6.3 Limitaciones del dictamen</h3>
+      <ul>
+        <li>El presente avalúo se basa en la información disponible al momento de su emisión y no contempla cambios posteriores en el mercado o en las condiciones del inmueble.</li>
+        <li>El valor del suelo aplicado es referencial sobre la Zona Homogénea Geoeconómica del sector. Para uso forense con efectos sobre patrimonio público se recomienda consulta IGAC formal.</li>
+        <li>Los comparables utilizados corresponden a precios de oferta observados en portales públicos, ajustados por el corrimiento oferta-cierre típico del mercado colombiano.</li>
+        <li>Las características físicas del activo (estado de conservación, orientación, vista) se asumen según la información disponible. La verificación in situ definitiva es responsabilidad del avaluador firmante.</li>
+      </ul>
+    </section>
+    
+
+    <section class="firma-section">
+      <h2>7. Firma del avaluador</h2>
+      
+      <div class="firma-box">
+        <p>El presente dictamen se emite y firma por el avaluador inscrito en el Registro Abierto de Avaluadores, asumiendo responsabilidad civil y penal por las conclusiones aquí presentadas, conforme al Artículo 22 de la Ley 1673 de 2013.</p>
+        
+        <div class="firma-fields">
+          <div class="campo-firma">
+            <p class="firma-linea"></p>
+            <p><b>Franco Martínez Mejía</b></p>
+          </div>
+          
+          <table class="firma-data">
+            <tr><td>Inscripción RAA:</td><td><b>RAA-XXXXXX</b></td></tr>
+            <tr><td>ERA de afiliación:</td><td>ANA — Autorregulador Nacional de Avaluadores</td></tr>
+            <tr><td>Categoría:</td><td>2 — Inmuebles urbanos</td></tr>
+            <tr><td>Fecha de firma:</td><td>07 de May de 2026, 17:33:20</td></tr>
+          </table>
+        </div>
+        
+        <div class="cripto-trail">
+          <h4>Sello criptográfico Cognitive Provenance (Ed25519)</h4>
+          <p><b>Hash del avalúo firmado:</b> <code>1ce604163329ea64b0572729c98c7e487a1eb97eca49c1651de3552cf9a08f66</code></p>
+          <p><b>Firma criptográfica:</b> <code>ED25519-SIMULATED:374a8cf2cdd3263694916588217a5d8333279f3b3f7f2a65856edfe273d9bdb1</code></p>
+          <p class="cripto-info">Este sello criptográfico permite verificar la integridad del dictamen ante cualquier modificación posterior. Cualquier auditor (SIC, ERA, juez) puede validar que los insumos y cálculos no fueron manipulados entre la emisión y la consulta.</p>
+        </div>
+      </div>
+    </section>
+    
+</body>
+</html>

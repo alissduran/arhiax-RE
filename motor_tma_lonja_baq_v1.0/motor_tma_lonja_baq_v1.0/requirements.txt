@@ -1,0 +1,25 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# DEPENDENCIAS PYTHON — Motor TMA + Capa Lonja BAQ
+# ═══════════════════════════════════════════════════════════════════════════════
+# Instalación:
+#   pip install -r requirements.txt
+# 
+# En Antigravity (entorno de ejecución):
+#   pip install --break-system-packages -r requirements.txt
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Núcleo (obligatorio)
+PyYAML>=6.0          # Carga del YAML de la Lonja
+
+# Generación de PDF a partir del HTML del dictamen (opcional pero recomendado)
+weasyprint>=60.0     # Conversión HTML → PDF del dictamen pericial
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Notas:
+# - El motor en sí NO requiere ninguna librería de cálculo numérico externa.
+#   Toda la matemática se hace con statistics/dataclasses de la stdlib.
+# - El hash criptográfico Ed25519 (sello corporativo) usa hashlib de la stdlib.
+# - Si weasyprint da problemas en Windows, el dictamen HTML se puede abrir
+#   directamente en el navegador y se puede imprimir a PDF desde ahí.
+# - Python 3.10+ requerido (uso de type hints modernos: list[dict], etc.)
+# ═══════════════════════════════════════════════════════════════════════════════

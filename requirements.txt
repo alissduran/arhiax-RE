@@ -1,0 +1,6 @@
+# Dependencias para el Backend Web (FastAPI + Uvicorn) y el Motor TMA
+fastapi>=0.100.0
+uvicorn>=0.20.0
+PyYAML>=6.0
+# weasyprint se maneja opcionalmente en el código para evitar fallos de compilación en Vercel
+weasyprint>=60.0
