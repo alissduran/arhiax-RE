@@ -442,28 +442,16 @@
           <div class="panel-header">Iniciar Nuevo Dictamen</div>
           <div class="panel-body">
             <div class="form-group">
-              <label for="input-folio">Matrícula Inmobiliaria</label>
+              <label for="input-folio">Matrícula Inmobiliaria (Opcional si tiene dirección)</label>
               <input type="text" id="input-folio" placeholder="Ej: 040-646406">
             </div>
             <div class="form-group">
-              <label for="input-direccion">Dirección</label>
+              <label for="input-direccion">Dirección (Opcional si tiene matrícula)</label>
               <input type="text" id="input-direccion" placeholder="Ej: Calle 63 # 37-71">
-            </div>
-            <div class="form-group">
-              <label for="input-barrio">Barrio</label>
-              <input type="text" id="input-barrio" placeholder="Ej: Miramar o El Recreo">
             </div>
             <div class="form-group">
               <label for="input-area">Área Privada (m²) (Opcional)</label>
               <input type="number" id="input-area" placeholder="Se extraerá del certificado si se deja vacío" step="0.01">
-            </div>
-            <div class="form-group">
-              <label for="input-estrato">Estrato</label>
-              <select id="input-estrato">
-                <option value="4">Estrato 4</option>
-                <option value="5">Estrato 5</option>
-                <option value="6">Estrato 6</option>
-              </select>
             </div>
             <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="crearDictamen()">Iniciar Caso</button>
           </div>
@@ -512,7 +500,7 @@
                 Carga de Insumos (Certificado & ArcGIS Pro)
               </h4>
               <p style="font-size: 11px; color: var(--color-gray); margin-bottom: 14px;">
-                Cargue el certificado de tradición para extraer el metraje, y las simulaciones 3D de ArcGIS Pro para compilar el dictamen oficial final.
+                Cargue el certificado de tradición para extraer el metraje y completar datos faltantes, y las simulaciones 3D de ArcGIS Pro para compilar el dictamen oficial final.
               </p>
               
               <div class="upload-zone-container">
@@ -636,10 +624,13 @@
         const badgeClass = c.estado === 'COMPLETADO' ? 'badge COMPLETADO' : 'badge PENDIENTE_IMAGENES';
         const label = c.estado === 'COMPLETADO' ? 'COMPLETADO' : (c.area ? 'INCOMPLETO' : 'PENDIENTE CTL');
         
+        const displayDireccion = c.direccion === 'Pendiente' ? 'Matrícula: ' + c.folio_matricula : c.direccion;
+        const displaySub = c.direccion === 'Pendiente' ? 'Dirección: Pendiente' : 'Matrícula: ' + c.folio_matricula;
+        
         item.innerHTML = `
           <div>
-            <div class="case-info-primary">${c.direccion}</div>
-            <div class="case-info-secondary">Matrícula: ${c.folio_matricula} · Área: ${c.area ? c.area + ' m²' : 'Pendiente'}</div>
+            <div class="case-info-primary">${displayDireccion}</div>
+            <div class="case-info-secondary">${displaySub} · Área: ${c.area ? c.area + ' m²' : 'Pendiente'}</div>
           </div>
           <span class="${badgeClass}">${label}</span>
         `;
@@ -649,13 +640,11 @@
 
     async function crearDictamen() {
       const folio = document.getElementById('input-folio').value.trim ? document.getElementById('input-folio').value.trim() : document.getElementById('input-folio').value;
-      const direccion = document.getElementById('input-direccion').value;
-      const barrio = document.getElementById('input-barrio').value;
+      const direccion = document.getElementById('input-direccion').value.trim ? document.getElementById('input-direccion').value.trim() : document.getElementById('input-direccion').value;
       const area = document.getElementById('input-area').value;
-      const estrato = document.getElementById('input-estrato').value;
 
-      if (!folio || !direccion || !barrio) {
-        alert("Por favor diligencie matrícula, dirección y barrio.");
+      if (!folio && !direccion) {
+        alert("Debe ingresar al menos la matrícula inmobiliaria o la dirección del predio.");
         return;
       }
 
@@ -667,9 +656,7 @@
           body: JSON.stringify({
             folio_matricula: folio,
             direccion,
-            barrio,
-            area: area ? parseFloat(area) : null,
-            estrato: parseInt(estrato)
+            area: area ? parseFloat(area) : null
           })
         });
         if (!response.ok) throw new Error("Error al crear dictamen");
@@ -678,7 +665,6 @@
         // Limpiar formulario
         document.getElementById('input-folio').value = "";
         document.getElementById('input-direccion').value = "";
-        document.getElementById('input-barrio').value = "";
         document.getElementById('input-area').value = "";
 
         await cargarDictamenes();
@@ -767,11 +753,15 @@
         const data = await response.json();
         
         if (imgType === 'certificado') {
-          if (data.area_extraida) {
-            alert(`[Éxito] Área extraída correctamente del certificado: ${data.area_extraida_fmt}`);
-          } else {
-            alert("[Advertencia] Se subió el certificado pero no se pudo extraer el metraje del texto automáticamente. Por favor ingrese el área manualmente.");
+          let alertMsg = "[Éxito] Certificado procesado.";
+          if (data.extraidos) {
+            const ext = data.extraidos;
+            if (ext.area) alertMsg += `\n- Área extraída: ${ext.area} m²`;
+            if (ext.folio && ext.folio !== 'Pendiente') alertMsg += `\n- Matrícula extraída: ${ext.folio}`;
+            if (ext.direccion && ext.direccion !== 'Pendiente') alertMsg += `\n- Dirección extraída: ${ext.direccion}`;
+            if (ext.barrio) alertMsg += `\n- Barrio detectado: ${ext.barrio}`;
           }
+          alert(alertMsg);
         }
         
         await cargarDictamenes();

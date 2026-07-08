@@ -54,8 +54,9 @@ else:
     ASSETS_DIR = API_DIR / "assets"
 ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
-def extraer_area_de_pdf(pdf_path: str) -> float:
-    """Extrae el área en m² del Certificado de Libertad y Tradición (PDF)."""
+def extraer_datos_de_pdf(pdf_path: str) -> dict:
+    """Analiza de manera inteligente el certificado para extraer área, matrícula, barrio y dirección."""
+    datos = {"area": None, "folio": None, "barrio": None, "direccion": None}
     try:
         reader = pypdf.PdfReader(pdf_path)
         texto = ""
@@ -64,27 +65,52 @@ def extraer_area_de_pdf(pdf_path: str) -> float:
             if t:
                 texto += t
                 
-        # Buscar patrones numéricos de área
-        patrones = [
+        # 1. Extraer Área
+        patrones_area = [
             r"(?:área|area)\s+(?:privada|construida)\s+(?:de\s+)?(\d+(?:[.,]\d+)?)\s*(?:m2|metros|mts|M2)",
             r"(?:cabida|superficie)\s+(?:de\s+)?(\d+(?:[.,]\d+)?)\s*(?:m2|metros|mts|M2)",
             r"(?:área|area)\s+(?:de\s+)?(\d+(?:[.,]\d+)?)\s*(?:m2|metros|mts|M2)",
             r"(\d+(?:[.,]\d+)?)\s*(?:m2|metros\s+cuadrados|mts2|M2)",
         ]
-        
-        for patron in patrones:
+        for patron in patrones_area:
             matches = re.findall(patron, texto, re.IGNORECASE)
             if matches:
                 val_str = matches[0].replace(",", ".")
                 try:
                     area_float = float(val_str)
-                    if 10 <= area_float <= 1000:  # Validar rango lógico de metros cuadrados
-                        return area_float
+                    if 10 <= area_float <= 1000:
+                        datos["area"] = area_float
+                        break
                 except ValueError:
                     continue
+
+        # 2. Extraer Matrícula (Folio) - busca formato 040-XXXXXX o similar
+        patron_folio = r"\b(\d{3}-\d+)\b"
+        matches_folio = re.findall(patron_folio, texto)
+        if matches_folio:
+            datos["folio"] = matches_folio[0]
+
+        # 3. Determinar Barrio
+        if "recreo" in texto.lower():
+            datos["barrio"] = "El Recreo"
+        elif "miramar" in texto.lower():
+            datos["barrio"] = "Miramar"
+
+        # 4. Extraer Dirección
+        patron_dir_label = r"(?:Dirección|Direccion|Ubicación|Ubicacion)\s*:\s*([^\n\r]+)"
+        matches_dir = re.findall(patron_dir_label, texto, re.IGNORECASE)
+        if matches_dir:
+            datos["direccion"] = matches_dir[0].strip()
+        else:
+            # Buscar nomenclatura directa de dirección colombiana
+            patron_nom = r"\b(?:CL|CRA|AV|DG|TV)\s+\d+[A-Z]?\s*#\s*\d+[A-Z]?\s*-\s*\d+\b"
+            matches_nom = re.findall(patron_nom, texto, re.IGNORECASE)
+            if matches_nom:
+                datos["direccion"] = matches_nom[0]
+
     except Exception as e:
-        print(f"Error al analizar texto del PDF: {e}")
-    return None
+        print(f"Error al extraer metadatos del PDF: {e}")
+    return datos
 
 @app.post("/api/login")
 def login(payload: dict = Body(...)):
@@ -106,15 +132,27 @@ def list_dictamenes():
 def create_dictamen(payload: dict = Body(...)):
     folio = payload.get("folio_matricula", "").strip()
     direccion = payload.get("direccion", "").strip()
-    barrio = payload.get("barrio", "").strip()
-    estrato = int(payload.get("estrato", 4))
+    
+    # Validar que al menos uno de los dos campos principales exista
+    if not folio and not direccion:
+        raise HTTPException(status_code=400, detail="Debe ingresar la matrícula inmobiliaria o la dirección del predio.")
+        
+    # Si falta alguno, poner placeholders temporales
+    if not folio:
+        folio = "Pendiente"
+    if not direccion:
+        direccion = "Pendiente"
+        
+    # Asignar barrio por defecto (se refinará al leer el Certificado)
+    barrio = "Miramar"
+    if "recreo" in direccion.lower():
+        barrio = "El Recreo"
+        
+    estrato = 4
     
     area_val = payload.get("area")
     area = float(area_val) if area_val else None
     
-    if not folio or not direccion or not barrio:
-        raise HTTPException(status_code=400, detail="Faltan campos obligatorios.")
-        
     # Calcular el valor si el área es proporcionada
     if area:
         valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
@@ -159,6 +197,7 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
     cursor = conn.cursor()
     
     area_extraida = None
+    extraidos = {}
     
     if img_type == "sombra_9am":
         cursor.execute("UPDATE dictamenes SET sombra_9am_cargada = 1 WHERE id = ?", (case_id,))
@@ -170,17 +209,41 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
         cursor.execute("UPDATE dictamenes SET certificado_cargado = 1, certificado_path = ? WHERE id = ?", 
                        (str(file_path), case_id))
         
-        # Intentar extraer el área del certificado si no se había ingresado previamente
-        cursor.execute("SELECT area, barrio FROM dictamenes WHERE id = ?", (case_id,))
+        # Analizar PDF completo
+        extraidos = extraer_datos_de_pdf(str(file_path))
+        
+        # Obtener valores actuales
+        cursor.execute("SELECT folio_matricula, direccion, area, barrio FROM dictamenes WHERE id = ?", (case_id,))
         row = cursor.fetchone()
-        if row and (row["area"] is None or row["area"] == 0):
-            area_extraida = extraer_area_de_pdf(str(file_path))
-            if area_extraida:
-                barrio = row["barrio"]
-                valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
-                valor_estimado = int(round(valor_m2 * area_extraida, -4))
+        
+        if row:
+            # 1. Completar folio de matrícula si estaba pendiente
+            nuevo_folio = row["folio_matricula"]
+            if (row["folio_matricula"] == "Pendiente" or not row["folio_matricula"]) and extraidos.get("folio"):
+                nuevo_folio = extraidos["folio"]
+                cursor.execute("UPDATE dictamenes SET folio_matricula = ? WHERE id = ?", (nuevo_folio, case_id))
+            
+            # 2. Completar dirección si estaba pendiente
+            nueva_direccion = row["direccion"]
+            if (row["direccion"] == "Pendiente" or not row["direccion"]) and extraidos.get("direccion"):
+                nueva_direccion = extraidos["direccion"]
+                cursor.execute("UPDATE dictamenes SET direccion = ? WHERE id = ?", (nueva_direccion, case_id))
+            
+            # 3. Completar Barrio
+            nuevo_barrio = row["barrio"]
+            if extraidos.get("barrio"):
+                nuevo_barrio = extraidos["barrio"]
+                cursor.execute("UPDATE dictamenes SET barrio = ? WHERE id = ?", (nuevo_barrio, case_id))
+
+            # 4. Completar Área y Valor Estimado
+            area_final = row["area"]
+            if (row["area"] is None or row["area"] == 0) and extraidos.get("area"):
+                area_final = extraidos["area"]
+                area_extraida = area_final
+                valor_m2 = 6887625 if "miramar" in nuevo_barrio.lower() else 5146666
+                valor_estimado = int(round(valor_m2 * area_final, -4))
                 cursor.execute("UPDATE dictamenes SET area = ?, valor_consolidado = ? WHERE id = ?", 
-                               (area_extraida, valor_estimado, case_id))
+                               (area_final, valor_estimado, case_id))
                 
     conn.commit()
     
@@ -214,7 +277,8 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
     return {
         "status": status,
         "area_extraida": area_extraida,
-        "area_extraida_fmt": f"{area_extraida} m²" if area_extraida else None
+        "area_extraida_fmt": f"{area_extraida} m²" if area_extraida else None,
+        "extraidos": extraidos
     }
 
 @app.get("/api/dictamenes/{case_id}/pdf")
