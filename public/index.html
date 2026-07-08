@@ -613,6 +613,9 @@
     function cargarDictamenes() {
       dictamenes = JSON.parse(localStorage.getItem("arhiax_cases") || "[]");
       renderDictamenesList();
+      if (dictamenes.length > 0 && !selectedCaseId) {
+        selectCase(dictamenes[0].id);
+      }
     }
 
     function renderDictamenesList() {
