@@ -23,6 +23,7 @@ sys.path.insert(0, str(TMA_PIEZAS))
 sys.path.insert(0, str(TMA_DATOS))
 sys.path.insert(0, str(LONJA_LAYER))
 sys.path.insert(0, str(API_DIR))
+sys.path.insert(0, str(PROJECT_ROOT))
 
 # Importaciones locales de base de datos y compilador
 from database import get_db_connection
