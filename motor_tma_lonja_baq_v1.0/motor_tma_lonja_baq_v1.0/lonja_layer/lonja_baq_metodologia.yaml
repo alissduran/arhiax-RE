@@ -135,9 +135,9 @@ capitalizacion_rentas:
   # Tasas por tipología — La Lonja edita estos valores trimestralmente
   tasas_por_tipologia:
     apto_NO_VIS_estrato_4:
-      tasa_central: 0.085
-      tasa_min: 0.075
-      tasa_max: 0.095
+      tasa_central: 0.0485
+      tasa_min: 0.040
+      tasa_max: 0.060
       vacancia_pct: 0.06
       gastos_no_recuperables_pct: 0.10
       vigencia: "Q2-2026"
