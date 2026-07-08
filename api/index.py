@@ -3,6 +3,8 @@ import sys
 import tempfile
 import yaml
 import shutil
+import re
+import pypdf
 from pathlib import Path
 from datetime import datetime
 from fastapi import FastAPI, HTTPException, Body, UploadFile, File, Depends
@@ -26,7 +28,7 @@ sys.path.insert(0, str(API_DIR))
 from database import get_db_connection
 from pdf_compiler import compile_pdf
 from address_normalizer import normalize_address_colombia
-from insumos_napoli import COMPARABLES_NAPOLI_MIRAMAR
+from insumos_napoli import PREDIO_NAPOLI_430, COMPARABLES_NAPOLI_MIRAMAR
 from pieza_5_bandeja_revision import generar_bandeja_html
 from contrato_datos import Predio, ResultadoMetodo, Insumo, AjusteAplicado, ReglaConsolidacion, AvaluoConsolidado, fmt_cop
 
@@ -47,6 +49,38 @@ ACCESS_PASSWORD = "Sinergia2026"
 # Asegurar carpeta de assets
 ASSETS_DIR = API_DIR / "assets"
 ASSETS_DIR.mkdir(parents=True, exist_ok=True)
+
+def extraer_area_de_pdf(pdf_path: str) -> float:
+    """Extrae el área en m² del Certificado de Libertad y Tradición (PDF)."""
+    try:
+        reader = pypdf.PdfReader(pdf_path)
+        texto = ""
+        for page in reader.pages:
+            t = page.extract_text()
+            if t:
+                texto += t
+                
+        # Buscar patrones numéricos de área
+        patrones = [
+            r"(?:área|area)\s+(?:privada|construida)\s+(?:de\s+)?(\d+(?:[.,]\d+)?)\s*(?:m2|metros|mts|M2)",
+            r"(?:cabida|superficie)\s+(?:de\s+)?(\d+(?:[.,]\d+)?)\s*(?:m2|metros|mts|M2)",
+            r"(?:área|area)\s+(?:de\s+)?(\d+(?:[.,]\d+)?)\s*(?:m2|metros|mts|M2)",
+            r"(\d+(?:[.,]\d+)?)\s*(?:m2|metros\s+cuadrados|mts2|M2)",
+        ]
+        
+        for patron in patrones:
+            matches = re.findall(patron, texto, re.IGNORECASE)
+            if matches:
+                val_str = matches[0].replace(",", ".")
+                try:
+                    area_float = float(val_str)
+                    if 10 <= area_float <= 1000:  # Validar rango lógico de metros cuadrados
+                        return area_float
+                except ValueError:
+                    continue
+    except Exception as e:
+        print(f"Error al analizar texto del PDF: {e}")
+    return None
 
 @app.post("/api/login")
 def login(payload: dict = Body(...)):
@@ -70,15 +104,19 @@ def create_dictamen(payload: dict = Body(...)):
     direccion = payload.get("direccion", "").strip()
     barrio = payload.get("barrio", "").strip()
     estrato = int(payload.get("estrato", 4))
-    area = float(payload.get("area", 50))
+    
+    area_val = payload.get("area")
+    area = float(area_val) if area_val else None
     
     if not folio or not direccion or not barrio:
         raise HTTPException(status_code=400, detail="Faltan campos obligatorios.")
         
-    # Calcular el valor comercial estimado base usando el motor calibrado
-    # El valor del metro cuadrado estimado base cambia según el barrio
-    valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
-    valor_estimado = int(round(valor_m2 * area, -4))
+    # Calcular el valor si el área es proporcionada
+    if area:
+        valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
+        valor_estimado = int(round(valor_m2 * area, -4))
+    else:
+        valor_estimado = None
     
     fecha_creacion = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
@@ -100,19 +138,23 @@ def create_dictamen(payload: dict = Body(...)):
 
 @app.post("/api/dictamenes/{case_id}/upload/{img_type}")
 async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)):
-    if img_type not in ["sombra_9am", "sombra_3pm", "mapa_satelital"]:
-        raise HTTPException(status_code=400, detail="Tipo de imagen inválido.")
+    if img_type not in ["sombra_9am", "sombra_3pm", "mapa_satelital", "certificado"]:
+        raise HTTPException(status_code=400, detail="Tipo de insumo inválido.")
         
     case_dir = ASSETS_DIR / f"case_{case_id}"
     case_dir.mkdir(parents=True, exist_ok=True)
     
-    file_path = case_dir / f"{img_type}.png"
+    # Manejar extensión del Certificado (PDF)
+    ext = ".pdf" if img_type == "certificado" else ".png"
+    file_path = case_dir / f"{img_type}{ext}"
+    
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
-    # Actualizar la base de datos
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    area_extraida = None
     
     if img_type == "sombra_9am":
         cursor.execute("UPDATE dictamenes SET sombra_9am_cargada = 1 WHERE id = ?", (case_id,))
@@ -120,7 +162,22 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
         cursor.execute("UPDATE dictamenes SET sombra_3pm_cargada = 1 WHERE id = ?", (case_id,))
     elif img_type == "mapa_satelital":
         cursor.execute("UPDATE dictamenes SET mapa_cargado = 1 WHERE id = ?", (case_id,))
+    elif img_type == "certificado":
+        cursor.execute("UPDATE dictamenes SET certificado_cargado = 1, certificado_path = ? WHERE id = ?", 
+                       (str(file_path), case_id))
         
+        # Intentar extraer el área del certificado si no se había ingresado previamente
+        cursor.execute("SELECT area, barrio FROM dictamenes WHERE id = ?", (case_id,))
+        row = cursor.fetchone()
+        if row and (row["area"] is None or row["area"] == 0):
+            area_extraida = extraer_area_de_pdf(str(file_path))
+            if area_extraida:
+                barrio = row["barrio"]
+                valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
+                valor_estimado = int(round(valor_m2 * area_extraida, -4))
+                cursor.execute("UPDATE dictamenes SET area = ?, valor_consolidado = ? WHERE id = ?", 
+                               (area_extraida, valor_estimado, case_id))
+                
     conn.commit()
     
     # Verificar si todas están cargadas para generar el PDF
@@ -128,8 +185,10 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
     row = cursor.fetchone()
     dictamen = dict(row)
     
-    if dictamen["sombra_9am_cargada"] and dictamen["sombra_3pm_cargada"] and dictamen["mapa_cargado"]:
-        # Compilar el PDF
+    # El PDF se compila si las sombras, el mapa y el metraje (área) ya están listos
+    if (dictamen["sombra_9am_cargada"] and dictamen["sombra_3pm_cargada"] and 
+        dictamen["mapa_cargado"] and dictamen["area"] is not None and dictamen["area"] > 0):
+        
         pdf_filename = f"ARHIAX_Dictamen_{dictamen['folio_matricula']}_final.pdf"
         pdf_output_path = case_dir / pdf_filename
         
@@ -148,7 +207,11 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
         status = "PENDIENTE_IMAGENES"
         
     conn.close()
-    return {"status": status}
+    return {
+        "status": status,
+        "area_extraida": area_extraida,
+        "area_extraida_fmt": f"{area_extraida} m²" if area_extraida else None
+    }
 
 @app.get("/api/dictamenes/{case_id}/pdf")
 def download_pdf(case_id: int):
@@ -163,7 +226,7 @@ def download_pdf(case_id: int):
         
     dictamen = dict(row)
     if dictamen["estado"] != "COMPLETADO" or not dictamen["pdf_path"]:
-        raise HTTPException(status_code=400, detail="El PDF aún no ha sido generado (faltan imágenes de ArcGIS Pro).")
+        raise HTTPException(status_code=400, detail="El PDF aún no ha sido generado (faltan imágenes de ArcGIS Pro o metraje).")
         
     if not os.path.exists(dictamen["pdf_path"]):
         raise HTTPException(status_code=404, detail="El archivo PDF físico no se encuentra en el servidor.")

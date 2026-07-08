@@ -7,6 +7,8 @@ DB_PATH = Path(__file__).resolve().parent / "database.db"
 def init_db():
     conn = sqlite3.connect(str(DB_PATH))
     cursor = conn.cursor()
+    
+    # Crear tabla si no existe
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS dictamenes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -14,7 +16,7 @@ def init_db():
             direccion TEXT NOT NULL,
             barrio TEXT NOT NULL,
             estrato INTEGER NOT NULL,
-            area REAL NOT NULL,
+            area REAL,
             estado TEXT NOT NULL,
             valor_consolidado INTEGER,
             fecha_creacion TEXT NOT NULL,
@@ -24,6 +26,20 @@ def init_db():
             pdf_path TEXT
         )
     """)
+    
+    # Migración: Agregar columnas de Certificado de Libertad y Tradición si no existen
+    try:
+        cursor.execute("ALTER TABLE dictamenes ADD COLUMN certificado_cargado INTEGER DEFAULT 0")
+    except sqlite3.OperationalError:
+        # Columna ya existe
+        pass
+        
+    try:
+        cursor.execute("ALTER TABLE dictamenes ADD COLUMN certificado_path TEXT")
+    except sqlite3.OperationalError:
+        # Columna ya existe
+        pass
+        
     conn.commit()
     conn.close()
 

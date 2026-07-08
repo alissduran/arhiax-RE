@@ -293,12 +293,18 @@
 
     .upload-zone-container {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
       gap: 15px;
       margin-top: 15px;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 800px) {
+      .upload-zone-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
       .upload-zone-container {
         grid-template-columns: 1fr;
       }
@@ -378,6 +384,17 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    .alert-banner {
+      background-color: var(--color-amber-bg);
+      color: var(--color-amber-text);
+      padding: 12px 18px;
+      border-radius: 4px;
+      border-left: 4px solid var(--color-amber-text);
+      font-size: 11px;
+      margin-top: 15px;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -399,7 +416,7 @@
         <input type="password" id="password-input" placeholder="Ingrese clave única" onkeydown="if(event.key==='Enter') attemptLogin()">
       </div>
       
-      <button class="btn-primary" style="width: 100%;" onclick="attemptLogin()">Ingresar al Sistema</button>
+      <button class="btn-primary" style="width: 100%;" onclick="attemptLogin()">Ingresar al Ecosistema</button>
     </div>
   </div>
 
@@ -437,8 +454,8 @@
               <input type="text" id="input-barrio" placeholder="Ej: Miramar o El Recreo">
             </div>
             <div class="form-group">
-              <label for="input-area">Área Privada (m²)</label>
-              <input type="number" id="input-area" placeholder="Ej: 58.75" step="0.01">
+              <label for="input-area">Área Privada (m²) (Opcional)</label>
+              <input type="number" id="input-area" placeholder="Se extraerá del certificado si se deja vacío" step="0.01">
             </div>
             <div class="form-group">
               <label for="input-estrato">Estrato</label>
@@ -448,7 +465,7 @@
                 <option value="6">Estrato 6</option>
               </select>
             </div>
-            <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="crearDictamen()">Calcular & Iniciar Caso</button>
+            <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="crearDictamen()">Iniciar Caso</button>
           </div>
         </div>
       </section>
@@ -458,7 +475,7 @@
         <!-- CASOS ACTIVOS -->
         <div class="panel" style="margin-bottom: 0;">
           <div class="panel-header">Casos y Dictámenes Activos</div>
-          <div class="panel-body" id="cases-list-container" style="max-height: 250px; overflow-y: auto;">
+          <div class="panel-body" id="cases-list-container" style="max-height: 220px; overflow-y: auto;">
             <!-- Dinámico -->
           </div>
         </div>
@@ -476,52 +493,63 @@
                   <h3 class="case-detail-title" id="txt-detail-direccion">-</h3>
                   <div style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">
                     Matrícula: <span id="txt-detail-folio" style="font-weight: 600;">-</span> · 
-                    Área: <span id="txt-detail-area">-</span> m² · 
+                    Área: <span id="txt-detail-area" style="font-weight: 600;">Pendiente</span> · 
                     Barrio: <span id="txt-detail-barrio">-</span>
                   </div>
                 </div>
                 <span class="badge" id="badge-detail-estado">-</span>
               </div>
+              
+              <!-- Alerta de metraje pendiente -->
+              <div class="alert-banner" id="banner-area-pendiente" style="display: none;">
+                ⚠️ El metraje (área) del apartamento está pendiente. Por favor, cargue el Certificado de Libertad y Tradición (PDF) abajo para extraer el área del texto automáticamente.
+              </div>
             </div>
 
-            <!-- PASO 1: CARGA DE IMÁGENES ARCGIS (SOLO PENDIENTE_IMAGENES) -->
+            <!-- PASO 1: CARGA DE INSUMOS (PDF & IMÁGENES) -->
             <div id="section-uploads" style="display: none;">
               <h4 style="font-size: 12px; font-weight: 700; color: var(--color-navy); border-bottom: 1px solid var(--color-border); padding-bottom: 6px; margin-bottom: 12px;">
-                Requiere Carga de Insumos ArcGIS Pro (Sombras & Satélite)
+                Carga de Insumos (Certificado & ArcGIS Pro)
               </h4>
               <p style="font-size: 11px; color: var(--color-gray); margin-bottom: 14px;">
-                Debido a que el motor no puede automatizar la toma de capturas del Daylight/Sombra en 3D de ArcGIS Pro, por favor cargue los siguientes insumos en formato PNG para compilar el dictamen final:
+                Cargue el certificado de tradición para extraer el metraje, y las simulaciones 3D de ArcGIS Pro para compilar el dictamen oficial final.
               </p>
               
               <div class="upload-zone-container">
+                <!-- Certificado Libertad y Tradición (PDF) -->
+                <div class="upload-card" id="card-certificado" onclick="triggerFileInput('file-certificado')">
+                  <label>Certificado Tradición</label>
+                  <span id="span-certificado">Pendiente (PDF)</span>
+                  <input type="file" id="file-certificado" accept="application/pdf" style="display: none;" onchange="subirInsumo('certificado', this)">
+                </div>
                 <!-- Sombra 9:00 AM -->
                 <div class="upload-card" id="card-sombra-9am" onclick="triggerFileInput('file-sombra-9am')">
                   <label>Sombra 9:00 AM</label>
-                  <span id="span-sombra-9am">Pendiente</span>
-                  <input type="file" id="file-sombra-9am" accept="image/png" style="display: none;" onchange="subirImagen('sombra_9am', this)">
+                  <span id="span-sombra-9am">Pendiente (PNG)</span>
+                  <input type="file" id="file-sombra-9am" accept="image/png" style="display: none;" onchange="subirInsumo('sombra_9am', this)">
                 </div>
                 <!-- Sombra 3:00 PM -->
                 <div class="upload-card" id="card-sombra-3pm" onclick="triggerFileInput('file-sombra-3pm')">
                   <label>Sombra 3:00 PM</label>
-                  <span id="span-sombra-3pm">Pendiente</span>
-                  <input type="file" id="file-sombra-3pm" accept="image/png" style="display: none;" onchange="subirImagen('sombra_3pm', this)">
+                  <span id="span-sombra-3pm">Pendiente (PNG)</span>
+                  <input type="file" id="file-sombra-3pm" accept="image/png" style="display: none;" onchange="subirInsumo('sombra_3pm', this)">
                 </div>
                 <!-- Mapa Satelital -->
                 <div class="upload-card" id="card-mapa" onclick="triggerFileInput('file-mapa')">
                   <label>Mapa Satelital</label>
-                  <span id="span-mapa">Pendiente</span>
-                  <input type="file" id="file-mapa" accept="image/png" style="display: none;" onchange="subirImagen('mapa_satelital', this)">
+                  <span id="span-mapa">Pendiente (PNG)</span>
+                  <input type="file" id="file-mapa" accept="image/png" style="display: none;" onchange="subirInsumo('mapa_satelital', this)">
                 </div>
               </div>
             </div>
 
-            <!-- PASO 2: DESCARGA DE DICTAMEN (SOLO COMPLETADO) -->
+            <!-- PASO 2: DESCARGA DE DICTAMEN -->
             <div id="section-download" style="display: none; text-align: center; padding: 20px 0;">
               <h4 style="font-size: 13px; font-weight: 700; color: var(--color-green-text); margin-bottom: 8px;">
                 ✓ DICTAMEN OFICIAL GENERADO
               </h4>
               <p style="font-size: 12px; color: var(--color-gray); margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
-                Todos los insumos de ArcGIS Pro se han integrado correctamente en la base del dictamen ReportLab. Ya puede descargar el PDF final firmado.
+                Todos los insumos se han integrado correctamente en la base del dictamen ReportLab. Ya puede descargar el PDF final firmado.
               </p>
               <button class="btn-primary" style="font-size: 13px; padding: 14px 28px;" onclick="descargarPDFDictamen()">
                 Descargar Dictamen Pericial (PDF)
@@ -606,12 +634,12 @@
         item.onclick = () => selectCase(c.id);
         
         const badgeClass = c.estado === 'COMPLETADO' ? 'badge COMPLETADO' : 'badge PENDIENTE_IMAGENES';
-        const label = c.estado === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE C ARGCIS';
+        const label = c.estado === 'COMPLETADO' ? 'COMPLETADO' : (c.area ? 'INCOMPLETO' : 'PENDIENTE CTL');
         
         item.innerHTML = `
           <div>
             <div class="case-info-primary">${c.direccion}</div>
-            <div class="case-info-secondary">Matrícula: ${c.folio_matricula} · Barrio: ${c.barrio}</div>
+            <div class="case-info-secondary">Matrícula: ${c.folio_matricula} · Área: ${c.area ? c.area + ' m²' : 'Pendiente'}</div>
           </div>
           <span class="${badgeClass}">${label}</span>
         `;
@@ -620,14 +648,14 @@
     }
 
     async function crearDictamen() {
-      const folio = document.getElementById('input-folio').value.strip ? document.getElementById('input-folio').value.strip() : document.getElementById('input-folio').value;
+      const folio = document.getElementById('input-folio').value.trim ? document.getElementById('input-folio').value.trim() : document.getElementById('input-folio').value;
       const direccion = document.getElementById('input-direccion').value;
       const barrio = document.getElementById('input-barrio').value;
       const area = document.getElementById('input-area').value;
       const estrato = document.getElementById('input-estrato').value;
 
-      if (!folio || !direccion || !barrio || !area) {
-        alert("Por favor diligencie todos los campos.");
+      if (!folio || !direccion || !barrio) {
+        alert("Por favor diligencie matrícula, dirección y barrio.");
         return;
       }
 
@@ -640,7 +668,7 @@
             folio_matricula: folio,
             direccion,
             barrio,
-            area: parseFloat(area),
+            area: area ? parseFloat(area) : null,
             estrato: parseInt(estrato)
           })
         });
@@ -673,28 +701,39 @@
       document.getElementById('txt-detail-id').textContent = `ID #${c.id}`;
       document.getElementById('txt-detail-direccion').textContent = c.direccion;
       document.getElementById('txt-detail-folio').textContent = c.folio_matricula;
-      document.getElementById('txt-detail-area').textContent = c.area;
       document.getElementById('txt-detail-barrio').textContent = c.barrio;
+      
+      const areaSpan = document.getElementById('txt-detail-area');
+      const areaPendienteBanner = document.getElementById('banner-area-pendiente');
+      
+      if (c.area) {
+        areaSpan.textContent = c.area;
+        areaPendienteBanner.style.display = 'none';
+      } else {
+        areaSpan.textContent = "Pendiente";
+        areaPendienteBanner.style.display = 'block';
+      }
       
       const badge = document.getElementById('badge-detail-estado');
       badge.className = `badge ${c.estado}`;
-      badge.textContent = c.estado === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE IMÁGENES';
+      badge.textContent = c.estado === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE INSUMOS';
       
       if (c.estado === 'PENDIENTE_IMAGENES') {
         document.getElementById('section-uploads').style.display = 'block';
         document.getElementById('section-download').style.display = 'none';
         
         // Renderizar estado de tarjetas de carga
-        updateUploadCard('sombra-9am', c.sombra_9am_cargada);
-        updateUploadCard('sombra-3pm', c.sombra_3pm_cargada);
-        updateUploadCard('mapa', c.mapa_cargado);
+        updateUploadCard('certificado', c.certificado_cargado, "PDF");
+        updateUploadCard('sombra-9am', c.sombra_9am_cargada, "PNG");
+        updateUploadCard('sombra-3pm', c.sombra_3pm_cargada, "PNG");
+        updateUploadCard('mapa', c.mapa_cargado, "PNG");
       } else {
         document.getElementById('section-uploads').style.display = 'none';
         document.getElementById('section-download').style.display = 'block';
       }
     }
 
-    function updateUploadCard(prefix, loaded) {
+    function updateUploadCard(prefix, loaded, format) {
       const card = document.getElementById(`card-${prefix}`);
       const span = document.getElementById(`span-${prefix}`);
       if (loaded) {
@@ -702,7 +741,7 @@
         span.textContent = "Cargado";
       } else {
         card.classList.remove('loaded');
-        span.textContent = "Pendiente";
+        span.textContent = `Pendiente (${format})`;
       }
     }
 
@@ -710,7 +749,7 @@
       document.getElementById(id).click();
     }
 
-    async function subirImagen(imgType, inputElement) {
+    async function subirInsumo(imgType, inputElement) {
       const file = inputElement.files[0];
       if (!file) return;
       
@@ -723,7 +762,17 @@
           method: 'POST',
           body: formData
         });
-        if (!response.ok) throw new Error("Fallo al subir la imagen");
+        if (!response.ok) throw new Error("Fallo al subir el archivo");
+        
+        const data = await response.json();
+        
+        if (imgType === 'certificado') {
+          if (data.area_extraida) {
+            alert(`[Éxito] Área extraída correctamente del certificado: ${data.area_extraida_fmt}`);
+          } else {
+            alert("[Advertencia] Se subió el certificado pero no se pudo extraer el metraje del texto automáticamente. Por favor ingrese el área manualmente.");
+          }
+        }
         
         await cargarDictamenes();
         selectCase(selectedCaseId);
