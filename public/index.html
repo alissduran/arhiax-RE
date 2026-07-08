@@ -479,10 +479,18 @@
               <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
                   <h3 class="case-detail-title" id="txt-detail-direccion">-</h3>
-                  <div style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">
-                    Matrícula: <span id="txt-detail-folio" style="font-weight: 600;">-</span> · 
-                    Área: <span id="txt-detail-area" style="font-weight: 600;">Pendiente</span> · 
-                    Barrio: <span id="txt-detail-barrio">-</span>
+                  <div style="font-size: 12px; color: var(--color-gray); margin-top: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <span>Matrícula: <span id="txt-detail-folio" style="font-weight: 600;">-</span></span> · 
+                    <span>Área: <span id="txt-detail-area" style="font-weight: 600;">Pendiente</span> m² <a href="#" onclick="mostrarEditarArea(event)" style="font-size:10px; color:var(--color-gold); font-weight:600; text-decoration:none; margin-left:3px;">(Editar)</a></span> · 
+                    <span>Barrio: <span id="txt-detail-barrio">-</span></span>
+                  </div>
+                  
+                  <!-- Formulario Inline para Editar Área manualmente -->
+                  <div id="form-editar-area" style="display: none; align-items: center; gap: 10px; margin-top: 8px; background: rgba(139,111,71,0.08); padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(139,111,71,0.2); max-width: fit-content;">
+                    <span style="font-size: 11px; font-weight: 600; color: var(--color-navy-soft);">Ingresar Metraje (m²):</span>
+                    <input type="number" id="input-editar-area" placeholder="Ej: 58.75" step="0.01" style="width: 90px; padding: 4px 8px; font-size: 12px; border: 1px solid var(--color-border); border-radius: 3px;">
+                    <button class="btn-primary" style="padding: 5px 10px; font-size: 9px; text-transform: uppercase;" onclick="guardarAreaManual()">Guardar</button>
+                    <button class="btn-secondary" style="padding: 5px 10px; font-size: 9px; text-transform: uppercase; border-color: var(--color-gray); color: var(--color-gray);" onclick="cancelarEditarArea()">Cancelar</button>
                   </div>
                 </div>
                 <span class="badge" id="badge-detail-estado">-</span>
@@ -781,6 +789,44 @@
       document.body.appendChild(a);
       a.click();
       a.remove();
+    }
+
+    function mostrarEditarArea(event) {
+      if (event) event.preventDefault();
+      const c = dictamenes.find(item => item.id === selectedCaseId);
+      if (!c) return;
+      document.getElementById('input-editar-area').value = c.area || "";
+      document.getElementById('form-editar-area').style.display = 'flex';
+    }
+
+    function cancelarEditarArea() {
+      document.getElementById('form-editar-area').style.display = 'none';
+    }
+
+    async function guardarAreaManual() {
+      const areaVal = document.getElementById('input-editar-area').value;
+      if (!areaVal || isNaN(parseFloat(areaVal))) {
+        alert("Por favor ingrese un metraje válido.");
+        return;
+      }
+      
+      showLoading(true);
+      try {
+        const response = await fetch(`/api/dictamenes/${selectedCaseId}/update`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ area: parseFloat(areaVal) })
+        });
+        if (!response.ok) throw new Error("Fallo al actualizar el área");
+        
+        cancelarEditarArea();
+        await cargarDictamenes();
+        selectCase(selectedCaseId);
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        showLoading(false);
+      }
     }
   </script>
 </body>

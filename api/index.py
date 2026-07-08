@@ -281,6 +281,75 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
         "extraidos": extraidos
     }
 
+@app.post("/api/dictamenes/{case_id}/update")
+def update_dictamen(case_id: int, payload: dict = Body(...)):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
+    row = cursor.fetchone()
+    
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Caso no encontrado.")
+        
+    dictamen = dict(row)
+    
+    # Obtener valores del payload
+    area = payload.get("area")
+    folio = payload.get("folio_matricula", dictamen["folio_matricula"])
+    direccion = payload.get("direccion", dictamen["direccion"])
+    
+    if area is not None:
+        try:
+            area = float(area)
+            barrio = dictamen["barrio"]
+            valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
+            valor_consolidado = int(round(valor_m2 * area, -4))
+            
+            cursor.execute("""
+                UPDATE dictamenes 
+                SET area = ?, valor_consolidado = ?, folio_matricula = ?, direccion = ?
+                WHERE id = ?
+            """, (area, valor_consolidado, folio, direccion, case_id))
+        except ValueError:
+            conn.close()
+            raise HTTPException(status_code=400, detail="Formato de área inválido.")
+    else:
+        cursor.execute("""
+            UPDATE dictamenes 
+            SET folio_matricula = ?, direccion = ?
+            WHERE id = ?
+        """, (folio, direccion, case_id))
+        
+    conn.commit()
+    
+    # Re-verificar si ya se puede compilar
+    cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
+    row = cursor.fetchone()
+    dictamen = dict(row)
+    
+    if (dictamen["sombra_9am_cargada"] and dictamen["sombra_3pm_cargada"] and 
+        dictamen["mapa_cargado"] and dictamen["area"] is not None and dictamen["area"] > 0):
+        
+        case_dir = ASSETS_DIR / f"case_{case_id}"
+        pdf_filename = f"ARHIAX_Dictamen_{dictamen['folio_matricula']}_final.pdf"
+        pdf_output_path = case_dir / pdf_filename
+        
+        try:
+            compile_pdf(dictamen, str(pdf_output_path))
+            cursor.execute("UPDATE dictamenes SET estado = 'COMPLETADO', pdf_path = ? WHERE id = ?", 
+                           (str(pdf_output_path), case_id))
+            conn.commit()
+            dictamen["estado"] = "COMPLETADO"
+        except Exception as e:
+            conn.close()
+            import traceback
+            traceback.print_exc()
+            raise HTTPException(status_code=500, detail=f"Error al compilar PDF del dictamen: {str(e)}")
+            
+    conn.close()
+    return dictamen
+
 @app.get("/api/dictamenes/{case_id}/pdf")
 def download_pdf(case_id: int):
     conn = get_db_connection()
