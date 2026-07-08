@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A R H I A X — Portal de Tasación TMA</title>
-  <!-- Google Fonts: Crimson Pro para serif premium y Inter para sans-serif -->
+  <title>A R H I A X — Portal Privado & Workflow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -45,11 +44,76 @@
       font-size: 14px;
     }
 
-    /* HEADER FIX */
+    /* LOGIN SCREEN */
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: var(--color-navy);
+      padding: 20px;
+    }
+
+    .login-card {
+      background-color: var(--color-white);
+      max-width: 400px;
+      width: 100%;
+      border-radius: 6px;
+      padding: 40px 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border-top: 5px solid var(--color-gold);
+      text-align: center;
+    }
+
+    .login-card h2 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 28px;
+      color: var(--color-navy);
+      margin-bottom: 8px;
+      letter-spacing: 0.1em;
+    }
+
+    .login-card p {
+      font-size: 12px;
+      color: var(--color-gray);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      color: var(--color-navy-soft);
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--color-gold);
+    }
+
+    /* HEADER */
     .arhiax-header {
       background-color: var(--color-navy);
       color: var(--color-white);
-      padding: 20px 40px;
+      padding: 18px 40px;
       border-bottom: 3px solid var(--color-gold);
       position: sticky;
       top: 0;
@@ -69,17 +133,10 @@
     }
 
     .header-logo-group p {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--color-gray);
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .header-meta {
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.6);
-      text-align: right;
     }
 
     /* CONTAINER LAYOUT */
@@ -88,17 +145,17 @@
       margin: 30px auto;
       padding: 0 20px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 350px 1fr;
       gap: 30px;
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 900px) {
       .dashboard-container {
         grid-template-columns: 1fr;
       }
     }
 
-    /* PANEL STYLING */
+    /* PANELS */
     .panel {
       background-color: var(--color-white);
       border: 1px solid var(--color-border);
@@ -107,14 +164,15 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      margin-bottom: 30px;
     }
 
     .panel-header {
-      padding: 18px 24px;
+      padding: 16px 20px;
       background-color: var(--color-navy-soft);
       color: var(--color-white);
       font-family: 'Crimson Pro', serif;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       border-bottom: 2px solid var(--color-gold);
       display: flex;
@@ -123,48 +181,17 @@
     }
 
     .panel-body {
-      padding: 24px;
-      flex-grow: 1;
+      padding: 20px;
     }
 
-    /* YAML EDITOR STYLING */
-    .editor-container {
-      position: relative;
-      height: 520px;
-      margin-bottom: 15px;
-    }
-
-    textarea.yaml-textarea {
-      width: 100%;
-      height: 100%;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      padding: 16px;
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-      resize: none;
-      line-height: 1.5;
-      outline: none;
-    }
-
-    textarea.yaml-textarea:focus {
-      border-color: var(--color-gold);
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 10px;
-    }
-
+    /* BUTTONS */
     button {
       font-family: 'Inter', sans-serif;
       font-weight: 600;
-      font-size: 12px;
+      font-size: 11px;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      padding: 12px 20px;
+      padding: 10px 18px;
       border-radius: 4px;
       cursor: pointer;
       border: none;
@@ -195,216 +222,153 @@
       background-color: rgba(11, 20, 38, 0.05);
     }
 
-    /* RESULT VIEWER STYLING */
-    .hero-banner {
+    button.btn-danger {
+      background-color: var(--color-red-text);
+      color: var(--color-white);
+    }
+
+    /* CASE LIST STYLING */
+    .case-list-item {
+      padding: 14px 18px;
+      border: 1px solid var(--color-border);
       border-radius: 4px;
-      padding: 24px;
-      text-align: center;
-      margin-bottom: 24px;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--color-white);
     }
 
-    .hero-banner.VERDE {
-      background-color: var(--color-green-bg);
-      border-left: 5px solid var(--color-green-text);
+    .case-list-item:hover {
+      border-color: var(--color-gold);
+      transform: translateX(2px);
     }
 
-    .hero-banner.AMARILLA {
-      background-color: var(--color-amber-bg);
-      border-left: 5px solid var(--color-amber-text);
+    .case-list-item.active {
+      border-color: var(--color-gold);
+      background-color: var(--color-soft);
     }
 
-    .hero-banner.ROJA {
-      background-color: var(--color-red-bg);
-      border-left: 5px solid var(--color-red-text);
+    .case-info-primary {
+      font-weight: 600;
+      color: var(--color-navy);
+    }
+
+    .case-info-secondary {
+      font-size: 11px;
+      color: var(--color-gray);
+      margin-top: 2px;
     }
 
     .badge {
       display: inline-block;
-      padding: 4px 10px;
+      padding: 3px 8px;
       font-weight: 700;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      border-radius: 20px;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .badge.VERDE { background-color: var(--color-green-text); color: var(--color-white); }
-    .badge.AMARILLA { background-color: var(--color-amber-text); color: var(--color-white); }
-    .badge.ROJA { background-color: var(--color-red-text); color: var(--color-white); }
-
-    .consolidado-title {
-      font-size: 11px;
-      color: var(--color-gray);
-      letter-spacing: 0.1em;
+      font-size: 9px;
+      letter-spacing: 0.05em;
+      border-radius: 12px;
       text-transform: uppercase;
     }
 
-    .consolidado-value {
-      font-family: 'Crimson Pro', serif;
-      font-size: 40px;
-      font-weight: 700;
-      color: var(--color-navy);
-      margin: 5px 0;
-    }
+    .badge.PENDIENTE_IMAGENES { background-color: var(--color-amber-bg); color: var(--color-amber-text); }
+    .badge.COMPLETADO { background-color: var(--color-green-bg); color: var(--color-green-text); }
 
-    .consolidado-banda {
-      font-size: 13px;
-      color: var(--color-ink);
-      font-weight: 500;
-    }
-
-    .consolidado-reason {
-      font-size: 12px;
-      color: var(--color-gray);
-      margin-top: 10px;
-      font-style: italic;
-    }
-
-    /* METHOD CARD */
-    .method-card {
+    /* DETAIL VIEW */
+    .case-detail-hero {
       background-color: var(--color-soft);
       border: 1px solid var(--color-border);
+      padding: 20px;
       border-radius: 4px;
-      padding: 16px;
-      margin-bottom: 14px;
-      transition: all 0.2s ease;
+      margin-bottom: 24px;
     }
 
-    .method-card.desestimado {
-      opacity: 0.65;
-      border-left: 4px solid var(--color-gray);
-    }
-
-    .method-card.efectivo {
-      border-left: 4px solid var(--color-gold);
-    }
-
-    .method-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-    }
-
-    .method-title-group .method-code {
-      font-size: 10px;
-      color: var(--color-gray);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .method-title-group .method-name {
+    .case-detail-title {
       font-family: 'Crimson Pro', serif;
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 22px;
       color: var(--color-navy);
-    }
-
-    .method-status {
-      font-size: 11px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
-    .method-status.efectivo {
+    .upload-zone-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .upload-zone-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .upload-card {
+      border: 2px dashed var(--color-border);
+      border-radius: 4px;
+      padding: 20px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background-color: var(--color-soft);
+    }
+
+    .upload-card:hover {
+      border-color: var(--color-gold);
+      background-color: #fcfbfa;
+    }
+
+    .upload-card.loaded {
+      border-style: solid;
+      border-color: var(--color-green-text);
+      background-color: var(--color-green-bg);
       color: var(--color-green-text);
     }
 
-    .method-status.desestimado {
-      color: var(--color-red-text);
+    .upload-card label {
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      display: block;
     }
 
-    .method-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      background-color: var(--color-white);
-      padding: 12px;
-      border-radius: 3px;
-      border: 1px solid var(--color-border);
-    }
-
-    .stat-box {
-      text-align: center;
-    }
-
-    .stat-label {
+    .upload-card span {
+      display: block;
       font-size: 9px;
       color: var(--color-gray);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      margin-top: 4px;
     }
 
-    .stat-val {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--color-navy);
+    .upload-card.loaded span {
+      color: var(--color-green-text);
     }
 
-    /* AUDIT TRAIL */
-    .audit-box {
-      background-color: var(--color-navy);
-      color: var(--color-white);
-      padding: 16px;
-      border-radius: 4px;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10px;
-      margin-top: 24px;
-      line-height: 1.6;
-    }
-
-    .audit-box h3 {
-      font-family: 'Crimson Pro', serif;
-      font-size: 13px;
-      color: var(--color-gold);
-      margin-bottom: 8px;
-      letter-spacing: 0.05em;
-    }
-
-    .audit-item {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      padding: 4px 0;
-    }
-
-    .audit-item:last-child {
-      border-bottom: none;
-    }
-
-    .audit-hash {
-      color: #A0B3D6;
-    }
-
-    /* LOADING SPINNER */
+    /* LOADING SCREEN overlay */
     .loading-overlay {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(255,255,255,0.8);
-      display: flex;
+      background-color: rgba(11,20,38,0.85);
+      display: none;
       align-items: center;
       justify-content: center;
-      z-index: 10;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      z-index: 1000;
+      color: white;
+      flex-direction: column;
+      gap: 15px;
     }
 
     .loading-overlay.active {
-      opacity: 1;
-      pointer-events: all;
+      display: flex;
     }
 
     .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(139, 111, 71, 0.1);
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255,255,255,0.1);
       border-left-color: var(--color-gold);
       border-radius: 50%;
       animation: spin 1s linear infinite;
@@ -418,300 +382,366 @@
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="arhiax-header">
-    <div class="header-logo-group">
-      <h1>A R H I A X</h1>
-      <p>Estándar agéntico de gobernanza & triangulación de avalúos</p>
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="global-loading">
+    <div class="spinner"></div>
+    <div style="font-weight: 600; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase;">Procesando Dictamen ARHIAX...</div>
+  </div>
+
+  <!-- PANTALLA DE LOGIN -->
+  <div class="login-container" id="login-screen">
+    <div class="login-card">
+      <h2>A R H I A X</h2>
+      <p>Acceso Restringido · Ecosistema de Gobernanza Catastral</p>
+      
+      <div class="form-group">
+        <label for="password-input">Contraseña del Sistema</label>
+        <input type="password" id="password-input" placeholder="Ingrese clave única" onkeydown="if(event.key==='Enter') attemptLogin()">
+      </div>
+      
+      <button class="btn-primary" style="width: 100%;" onclick="attemptLogin()">Ingresar al Sistema</button>
     </div>
-    <div class="header-meta">
-      <div>LONJA PROPIEDAD RAÍZ DE BARRANQUILLA</div>
-      <div>Vigencia Activa: 2026 · Estatus: Online</div>
-    </div>
-  </header>
+  </div>
 
-  <!-- MAIN CONTAINER -->
-  <main class="dashboard-container">
-    
-    <!-- LEFT PANEL: EDITOR DE METODOLOGÍA -->
-    <section class="panel" style="position: relative;">
-      <div class="loading-overlay" id="editor-loading">
-        <div class="spinner"></div>
+  <!-- PORTAL PRINCIPAL (OCULTO INICIALMENTE) -->
+  <div id="main-portal" style="display: none;">
+    <!-- HEADER -->
+    <header class="arhiax-header">
+      <div class="header-logo-group">
+        <h1>A R H I A X</h1>
+        <p>Ecosistema Privado de Gobernanza y Análisis de Riesgos</p>
       </div>
-      
-      <div class="panel-header">
-        <span>Declaración de Metodología (YAML)</span>
-        <span style="font-size: 11px; text-transform: uppercase; color: var(--color-gold);">lonja_baq_metodologia.yaml</span>
+      <div>
+        <button class="btn-secondary" style="color: white; border-color: white;" onclick="logout()">Cerrar Sesión</button>
       </div>
-      
-      <div class="panel-body" style="display: flex; flex-direction: column; height: 100%;">
-        <p style="font-size: 12px; color: var(--color-gray); margin-bottom: 12px;">
-          Edite los coeficientes, tolerancias y pesos de consolidación dictados por la Junta Técnica. El motor se recalculará dinámicamente.
-        </p>
-        <div class="editor-container">
-          <textarea class="yaml-textarea" id="yaml-input" spellcheck="false"></textarea>
-        </div>
-        
-        <div class="btn-group">
-          <button class="btn-primary" onclick="ejecutarMotor()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            Calcular Recálculo
-          </button>
-          <button class="btn-secondary" onclick="restablecerConfig()">Restablecer</button>
-        </div>
-      </div>
-    </section>
-    
-    <!-- RIGHT PANEL: RESULTADOS DEL MOTOR TMA -->
-    <section class="panel" style="position: relative;">
-      <div class="loading-overlay" id="results-loading">
-        <div class="spinner"></div>
-      </div>
-      
-      <div class="panel-header">
-        <span>Resultados TMA Consolidado</span>
-        <span id="txt-fecha" style="font-size: 11px; font-family: monospace;">-</span>
-      </div>
-      
-      <div class="panel-body">
-        
-        <!-- HERO BANNER DE RESULTADO CONSOLIDADO -->
-        <div class="hero-banner AMARILLA" id="hero-banner">
-          <span class="badge AMARILLA" id="lbl-estado">CARGANDO...</span>
-          <div class="consolidado-title">Valor Consolidado Recalculado</div>
-          <div class="consolidado-value" id="val-consolidado">$ 0</div>
-          <div class="consolidado-banda" id="val-banda">Banda 80%: -</div>
-          <div class="consolidado-reason" id="val-razon">-</div>
-        </div>
+    </header>
 
-        <!-- ACCIONES DE DICTAMEN -->
-        <div class="btn-group" style="margin-bottom: 24px;">
-          <button class="btn-primary" onclick="descargarHTML()">
-            Ver Bandeja de Revisión (HTML)
-          </button>
-          <button class="btn-secondary" id="btn-pdf" onclick="descargarPDF()">
-            Descargar Dictamen PDF
-          </button>
-        </div>
-
-        <!-- MÉTODOS APLICADOS -->
-        <h3 style="font-family: 'Crimson Pro', serif; font-size: 16px; margin-bottom: 12px; color: var(--color-navy);">
-          Desglose por Métodos Valuatorios
-        </h3>
-        
-        <div id="methods-container">
-          <!-- Dinámico -->
-        </div>
-
-        <!-- CADENA DE AUDITORÍA -->
-        <div class="audit-box">
-          <h3>Trazabilidad y Sello de Auditoría Criptográfica</h3>
-          <div class="audit-item">
-            <span>Hash de Transacción Avalúo:</span>
-            <span class="audit-hash" id="hash-transaccion">-</span>
+    <!-- DASHBOARD -->
+    <main class="dashboard-container">
+      
+      <!-- COLUMNA IZQUIERDA: CREAR DICTAMEN -->
+      <section>
+        <div class="panel">
+          <div class="panel-header">Iniciar Nuevo Dictamen</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="input-folio">Matrícula Inmobiliaria</label>
+              <input type="text" id="input-folio" placeholder="Ej: 040-646406">
+            </div>
+            <div class="form-group">
+              <label for="input-direccion">Dirección</label>
+              <input type="text" id="input-direccion" placeholder="Ej: Calle 63 # 37-71">
+            </div>
+            <div class="form-group">
+              <label for="input-barrio">Barrio</label>
+              <input type="text" id="input-barrio" placeholder="Ej: Miramar o El Recreo">
+            </div>
+            <div class="form-group">
+              <label for="input-area">Área Privada (m²)</label>
+              <input type="number" id="input-area" placeholder="Ej: 58.75" step="0.01">
+            </div>
+            <div class="form-group">
+              <label for="input-estrato">Estrato</label>
+              <select id="input-estrato">
+                <option value="4">Estrato 4</option>
+                <option value="5">Estrato 5</option>
+                <option value="6">Estrato 6</option>
+              </select>
+            </div>
+            <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="crearDictamen()">Calcular & Iniciar Caso</button>
           </div>
-          <div class="audit-item">
-            <span>Regla de Consolidación:</span>
-            <span id="audit-regla">-</span>
-          </div>
-          <div class="audit-item">
-            <span>Integridad de Insumos:</span>
-            <span style="color: #69C87B;">✓ FIRMA ELECTRÓNICA ACTIVA (Ed25519)</span>
+        </div>
+      </section>
+
+      <!-- COLUMNA DERECHA: LISTADO Y DETALLES -->
+      <section style="display: grid; grid-template-rows: auto 1fr; gap: 30px;">
+        <!-- CASOS ACTIVOS -->
+        <div class="panel" style="margin-bottom: 0;">
+          <div class="panel-header">Casos y Dictámenes Activos</div>
+          <div class="panel-body" id="cases-list-container" style="max-height: 250px; overflow-y: auto;">
+            <!-- Dinámico -->
           </div>
         </div>
 
-      </div>
-    </section>
+        <!-- DETALLE DEL CASO SELECCIONADO -->
+        <div class="panel" id="detail-panel" style="display: none;">
+          <div class="panel-header">
+            <span>Flujo de Trabajo del Caso</span>
+            <span id="txt-detail-id" style="font-family: monospace; font-size: 11px;">-</span>
+          </div>
+          <div class="panel-body">
+            <div class="case-detail-hero">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                  <h3 class="case-detail-title" id="txt-detail-direccion">-</h3>
+                  <div style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">
+                    Matrícula: <span id="txt-detail-folio" style="font-weight: 600;">-</span> · 
+                    Área: <span id="txt-detail-area">-</span> m² · 
+                    Barrio: <span id="txt-detail-barrio">-</span>
+                  </div>
+                </div>
+                <span class="badge" id="badge-detail-estado">-</span>
+              </div>
+            </div>
 
-  </main>
+            <!-- PASO 1: CARGA DE IMÁGENES ARCGIS (SOLO PENDIENTE_IMAGENES) -->
+            <div id="section-uploads" style="display: none;">
+              <h4 style="font-size: 12px; font-weight: 700; color: var(--color-navy); border-bottom: 1px solid var(--color-border); padding-bottom: 6px; margin-bottom: 12px;">
+                Requiere Carga de Insumos ArcGIS Pro (Sombras & Satélite)
+              </h4>
+              <p style="font-size: 11px; color: var(--color-gray); margin-bottom: 14px;">
+                Debido a que el motor no puede automatizar la toma de capturas del Daylight/Sombra en 3D de ArcGIS Pro, por favor cargue los siguientes insumos en formato PNG para compilar el dictamen final:
+              </p>
+              
+              <div class="upload-zone-container">
+                <!-- Sombra 9:00 AM -->
+                <div class="upload-card" id="card-sombra-9am" onclick="triggerFileInput('file-sombra-9am')">
+                  <label>Sombra 9:00 AM</label>
+                  <span id="span-sombra-9am">Pendiente</span>
+                  <input type="file" id="file-sombra-9am" accept="image/png" style="display: none;" onchange="subirImagen('sombra_9am', this)">
+                </div>
+                <!-- Sombra 3:00 PM -->
+                <div class="upload-card" id="card-sombra-3pm" onclick="triggerFileInput('file-sombra-3pm')">
+                  <label>Sombra 3:00 PM</label>
+                  <span id="span-sombra-3pm">Pendiente</span>
+                  <input type="file" id="file-sombra-3pm" accept="image/png" style="display: none;" onchange="subirImagen('sombra_3pm', this)">
+                </div>
+                <!-- Mapa Satelital -->
+                <div class="upload-card" id="card-mapa" onclick="triggerFileInput('file-mapa')">
+                  <label>Mapa Satelital</label>
+                  <span id="span-mapa">Pendiente</span>
+                  <input type="file" id="file-mapa" accept="image/png" style="display: none;" onchange="subirImagen('mapa_satelital', this)">
+                </div>
+              </div>
+            </div>
+
+            <!-- PASO 2: DESCARGA DE DICTAMEN (SOLO COMPLETADO) -->
+            <div id="section-download" style="display: none; text-align: center; padding: 20px 0;">
+              <h4 style="font-size: 13px; font-weight: 700; color: var(--color-green-text); margin-bottom: 8px;">
+                ✓ DICTAMEN OFICIAL GENERADO
+              </h4>
+              <p style="font-size: 12px; color: var(--color-gray); margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                Todos los insumos de ArcGIS Pro se han integrado correctamente en la base del dictamen ReportLab. Ya puede descargar el PDF final firmado.
+              </p>
+              <button class="btn-primary" style="font-size: 13px; padding: 14px 28px;" onclick="descargarPDFDictamen()">
+                Descargar Dictamen Pericial (PDF)
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
 
   <script>
-    // Variables globales
-    let defaultYaml = "";
+    let activeToken = localStorage.getItem("arhiax_token");
+    let dictamenes = [];
+    let selectedCaseId = null;
 
-    // Cargar config al arrancar
-    window.addEventListener('DOMContentLoaded', async () => {
-      await cargarMetodologiaDefecto();
-      await ejecutarMotor();
+    window.addEventListener('DOMContentLoaded', () => {
+      if (activeToken) {
+        showPortal();
+      }
     });
 
-    async function cargarMetodologiaDefecto() {
-      showLoading(true);
+    function showLoading(show) {
+      document.getElementById('global-loading').classList.toggle('active', show);
+    }
+
+    async function attemptLogin() {
+      const password = document.getElementById('password-input').value;
       try {
-        const response = await fetch('/api/config');
-        if (!response.ok) throw new Error("Error cargando configuración por defecto");
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
+        });
+        if (!response.ok) throw new Error("Contraseña incorrecta");
         const data = await response.json();
-        defaultYaml = data.yaml;
-        document.getElementById('yaml-input').value = defaultYaml;
+        localStorage.setItem("arhiax_token", data.token);
+        activeToken = data.token;
+        showPortal();
       } catch (err) {
-        alert("Fallo al conectar con la API. Asegúrese de que el backend FastAPI esté corriendo.");
+        alert(err.message);
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("arhiax_token");
+      activeToken = null;
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('main-portal').style.display = 'none';
+    }
+
+    async function showPortal() {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('main-portal').style.display = 'block';
+      await cargarDictamenes();
+    }
+
+    async function cargarDictamenes() {
+      try {
+        const response = await fetch('/api/dictamenes');
+        if (!response.ok) throw new Error("Fallo al cargar dictámenes");
+        dictamenes = await response.json();
+        renderDictamenesList();
+      } catch (err) {
         console.error(err);
-      } finally {
-        showLoading(false);
       }
     }
 
-    async function restablecerConfig() {
-      document.getElementById('yaml-input').value = defaultYaml;
-      await ejecutarMotor();
-    }
-
-    async function ejecutarMotor() {
-      showLoading(true);
-      const yamlContent = document.getElementById('yaml-input').value;
-      
-      try {
-        const response = await fetch('/api/calcular', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ yaml: yamlContent })
-        });
-        
-        if (!response.ok) {
-          const errData = await response.json();
-          throw new Error(errData.detail || "Error en ejecución del motor");
-        }
-        
-        const data = await response.json();
-        renderResultados(data);
-      } catch (err) {
-        alert("Error de Cálculo:\n" + err.message);
-      } finally {
-        showLoading(false);
-      }
-    }
-
-    function renderResultados(data) {
-      // 1. Hero banner
-      const banner = document.getElementById('hero-banner');
-      const badge = document.getElementById('lbl-estado');
-      
-      banner.className = `hero-banner ${data.estado}`;
-      badge.className = `badge ${data.estado}`;
-      badge.textContent = data.estado === 'VERDE' ? '✓ LISTO PARA FIRMA' : (data.estado === 'AMARILLA' ? '⚠ REQUIERE VALIDACIÓN' : '✗ ELEVAR A VISITA');
-      
-      document.getElementById('val-consolidado').textContent = data.valor_consolidado_fmt;
-      document.getElementById('val-banda').textContent = `Banda 80%: ${data.banda_baja_fmt} — ${data.banda_alta_fmt}`;
-      document.getElementById('val-razon').textContent = data.razon_estado;
-      
-      // Fecha
-      document.getElementById('txt-fecha').textContent = data.fecha_calculo;
-
-      // 2. Métodos
-      const container = document.getElementById('methods-container');
+    function renderDictamenesList() {
+      const container = document.getElementById('cases-list-container');
       container.innerHTML = "";
-      
-      data.metodos.forEach(m => {
-        const esEfectivo = data.metodos_efectivos.includes(m.metodo);
-        const peso = data.pesos_efectivos[m.metodo] || 0;
-        
-        const cardClass = esEfectivo ? 'method-card efectivo' : 'method-card desestimado';
-        const statusLabel = esEfectivo ? `EFECTIVO (${(peso * 100).toFixed(0)}%)` : 'DESESTIMADO';
-        const statusClass = esEfectivo ? 'method-status efectivo' : 'method-status desestimado';
-        
-        const cardHtml = `
-          <div class="${cardClass}">
-            <div class="method-header">
-              <div class="method-title-group">
-                <div class="method-code">${m.metodo}</div>
-                <div class="method-name">${m.nombre}</div>
-              </div>
-              <div class="${statusClass}">${statusLabel}</div>
-            </div>
-            <div class="method-stats">
-              <div class="stat-box">
-                <div class="stat-label">Valor Central</div>
-                <div class="stat-val">${m.valor_central_fmt}</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">Valor / m²</div>
-                <div class="stat-val">${m.valor_por_m2_fmt}</div>
-              </div>
-            </div>
-          </div>
-        `;
-        container.innerHTML += cardHtml;
-      });
-
-      // 3. Auditoría
-      document.getElementById('hash-transaccion').textContent = data.hash_avaluo.substring(0, 32) + '...';
-      document.getElementById('audit-regla').textContent = `${data.regla.autor} (v. ${data.regla.version})`;
-    }
-
-    async function descargarHTML() {
-      const yamlContent = document.getElementById('yaml-input').value;
-      try {
-        const response = await fetch('/api/dictamen/html', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ yaml: yamlContent })
-        });
-        if (!response.ok) throw new Error("Fallo al generar HTML");
-        
-        const html = await response.text();
-        
-        // Crear un Blob y descargarlo directamente (evita bloqueadores de pop-ups)
-        const blob = new Blob([html], { type: 'text/html' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "bandeja_revision_napoli.html";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-      } catch (err) {
-        alert(err.message);
+      if (dictamenes.length === 0) {
+        container.innerHTML = "<div style='color: var(--color-gray); text-align: center; padding: 20px; font-size:12px;'>No hay casos registrados actualmente.</div>";
+        return;
       }
+      
+      dictamenes.forEach(c => {
+        const item = document.createElement('div');
+        item.className = `case-list-item ${selectedCaseId === c.id ? 'active' : ''}`;
+        item.onclick = () => selectCase(c.id);
+        
+        const badgeClass = c.estado === 'COMPLETADO' ? 'badge COMPLETADO' : 'badge PENDIENTE_IMAGENES';
+        const label = c.estado === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE C ARGCIS';
+        
+        item.innerHTML = `
+          <div>
+            <div class="case-info-primary">${c.direccion}</div>
+            <div class="case-info-secondary">Matrícula: ${c.folio_matricula} · Barrio: ${c.barrio}</div>
+          </div>
+          <span class="${badgeClass}">${label}</span>
+        `;
+        container.appendChild(item);
+      });
     }
 
-    async function descargarPDF() {
-      const yamlContent = document.getElementById('yaml-input').value;
-      const btn = document.getElementById('btn-pdf');
-      btn.disabled = true;
-      btn.textContent = "Generando PDF...";
-      
+    async function crearDictamen() {
+      const folio = document.getElementById('input-folio').value.strip ? document.getElementById('input-folio').value.strip() : document.getElementById('input-folio').value;
+      const direccion = document.getElementById('input-direccion').value;
+      const barrio = document.getElementById('input-barrio').value;
+      const area = document.getElementById('input-area').value;
+      const estrato = document.getElementById('input-estrato').value;
+
+      if (!folio || !direccion || !barrio || !area) {
+        alert("Por favor diligencie todos los campos.");
+        return;
+      }
+
+      showLoading(true);
       try {
-        const response = await fetch('/api/dictamen/pdf', {
+        const response = await fetch('/api/dictamenes', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ yaml: yamlContent })
+          body: JSON.stringify({
+            folio_matricula: folio,
+            direccion,
+            barrio,
+            area: parseFloat(area),
+            estrato: parseInt(estrato)
+          })
         });
+        if (!response.ok) throw new Error("Error al crear dictamen");
+        const data = await response.json();
         
-        if (response.status === 501) {
-          // Servidor no compila Weasyprint
-          alert("Aviso: El servicio de PDF de Vercel no tiene precompiladas las librerías nativas de WeasyPrint. \n\nPara descargar el PDF:\n1. Abra la 'Bandeja de Revisión (HTML)'\n2. Use la combinación Ctrl+P (Imprimir) de su navegador y elija la opción 'Guardar como PDF'.");
-          return;
-        }
-        
-        if (!response.ok) throw new Error("Fallo al descargar PDF");
-        
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "dictamen_napoli_recalculado.pdf";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        // Limpiar formulario
+        document.getElementById('input-folio').value = "";
+        document.getElementById('input-direccion').value = "";
+        document.getElementById('input-barrio').value = "";
+        document.getElementById('input-area').value = "";
+
+        await cargarDictamenes();
+        selectCase(data.id);
       } catch (err) {
         alert(err.message);
       } finally {
-        btn.disabled = false;
-        btn.textContent = "Descargar Dictamen PDF";
+        showLoading(false);
       }
     }
 
-    function showLoading(active) {
-      const editorLoading = document.getElementById('editor-loading');
-      const resultsLoading = document.getElementById('results-loading');
-      if (active) {
-        editorLoading.classList.add('active');
-        resultsLoading.classList.add('active');
+    function selectCase(id) {
+      selectedCaseId = id;
+      renderDictamenesList();
+      
+      const c = dictamenes.find(item => item.id === id);
+      if (!c) return;
+      
+      document.getElementById('detail-panel').style.display = 'block';
+      document.getElementById('txt-detail-id').textContent = `ID #${c.id}`;
+      document.getElementById('txt-detail-direccion').textContent = c.direccion;
+      document.getElementById('txt-detail-folio').textContent = c.folio_matricula;
+      document.getElementById('txt-detail-area').textContent = c.area;
+      document.getElementById('txt-detail-barrio').textContent = c.barrio;
+      
+      const badge = document.getElementById('badge-detail-estado');
+      badge.className = `badge ${c.estado}`;
+      badge.textContent = c.estado === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE IMÁGENES';
+      
+      if (c.estado === 'PENDIENTE_IMAGENES') {
+        document.getElementById('section-uploads').style.display = 'block';
+        document.getElementById('section-download').style.display = 'none';
+        
+        // Renderizar estado de tarjetas de carga
+        updateUploadCard('sombra-9am', c.sombra_9am_cargada);
+        updateUploadCard('sombra-3pm', c.sombra_3pm_cargada);
+        updateUploadCard('mapa', c.mapa_cargado);
       } else {
-        editorLoading.classList.remove('active');
-        resultsLoading.classList.remove('active');
+        document.getElementById('section-uploads').style.display = 'none';
+        document.getElementById('section-download').style.display = 'block';
       }
+    }
+
+    function updateUploadCard(prefix, loaded) {
+      const card = document.getElementById(`card-${prefix}`);
+      const span = document.getElementById(`span-${prefix}`);
+      if (loaded) {
+        card.classList.add('loaded');
+        span.textContent = "Cargado";
+      } else {
+        card.classList.remove('loaded');
+        span.textContent = "Pendiente";
+      }
+    }
+
+    function triggerFileInput(id) {
+      document.getElementById(id).click();
+    }
+
+    async function subirImagen(imgType, inputElement) {
+      const file = inputElement.files[0];
+      if (!file) return;
+      
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      showLoading(true);
+      try {
+        const response = await fetch(`/api/dictamenes/${selectedCaseId}/upload/${imgType}`, {
+          method: 'POST',
+          body: formData
+        });
+        if (!response.ok) throw new Error("Fallo al subir la imagen");
+        
+        await cargarDictamenes();
+        selectCase(selectedCaseId);
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    function descargarPDFDictamen() {
+      const url = `/api/dictamenes/${selectedCaseId}/pdf`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ARHIAX_Dictamen_Caso_${selectedCaseId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     }
   </script>
 </body>
