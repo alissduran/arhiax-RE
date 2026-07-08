@@ -436,7 +436,7 @@ async def generar_dictamen_stateless(
     return FileResponse(
         path=str(output_pdf),
         filename=f"ARHIAX_Dictamen_{db_record['folio_matricula']}.pdf",
-        media_type="application/octet-stream"
+        media_type="application/pdf"
     )
 
 @app.get("/api/dictamenes/{case_id}/pdf")
@@ -460,7 +460,7 @@ def download_pdf(case_id: int):
     return FileResponse(
         path=dictamen["pdf_path"],
         filename=f"ARHIAX_Dictamen_{dictamen['folio_matricula']}.pdf",
-        media_type="application/octet-stream"
+        media_type="application/pdf"
     )
 
 @app.get("/api/config")

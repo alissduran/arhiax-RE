@@ -198,7 +198,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     if not os.path.exists(shadow_3pm_path):
         shadow_3pm_path = str(PROJECT_ROOT / "napoli_shadows2.png")
     if not os.path.exists(mapa_satellite_path):
-        mapa_satellite_path = str(PROJECT_ROOT / "napoli_shadows.png")  # Fallback
+        mapa_satellite_path = str(PROJECT_ROOT / "napoli_poi_map.png")  # Fallback
 
     # Generar mapas dinámicos POI
     poi_map_png = str(assets_dir / "poi_map.png")
@@ -248,13 +248,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(dt([
         ("Matricula Inmobiliaria", f"{folio} (Círculo Registral 040 Barranquilla)"),
         ("Direccion oficial", direccion),
-        ("Barrio catastral", barrio),
-        ("Estrato", str(estrato)),
         ("Area privada construida", f"{area} m2"),
         ("Valor Comercial Estimado", f"{fmt_cop(valor_consolidado)} COP (Banda: {fmt_cop(int(valor_consolidado*0.87))} -- {fmt_cop(int(valor_consolidado*1.13))})"),
         ("Fuente registral", "Consulta catastral e insumos geográficos ARHIAX"),
     ]))
     story.append(Spacer(1, 12))
+    story.append(PageBreak())
     
     # --- PÁGINA 2: LOCALIZACIÓN SATELITAL ---
     story.append(sec("01B - Localizacion Geografica del Inmueble"))
@@ -276,6 +275,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                                ParagraphStyle("cap_sat", fontName="Helvetica-Oblique", fontSize=7.5, textColor=colors.HexColor("#718096"), alignment=TA_CENTER)))
     
     story.append(Spacer(1, 8))
+    story.append(PageBreak())
     
     # --- PÁGINA 3: SOMBRAS ARCGIS PRO ---
     story.append(sec("01C - Analisis de Asolamiento y Sombras (ArcGIS Pro)"))
@@ -306,6 +306,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         story.append(alert_orange("<b>ATENCIÓN:</b> Faltan las imágenes de sombras ArcGIS Pro correspondientes a este dictamen. Cargue las imágenes desde el portal confidencial para incluirlas en el PDF oficial."))
 
     story.append(Spacer(1, 12))
+    story.append(PageBreak())
     
     # --- PÁGINA 4: ANÁLISIS POI ---
     story.append(sec("01D - Analisis de Equipamiento Urbano y Puntos de Interes (POI)"))
@@ -327,6 +328,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                                ParagraphStyle("cap_poi", fontName="Helvetica-Oblique", fontSize=7.5, textColor=colors.HexColor("#718096"), alignment=TA_CENTER)))
         
     story.append(Spacer(1, 12))
+    story.append(PageBreak())
     
     # --- PÁGINA 5: SCORE & RECOMENDACIONES ---
     story.append(sec("02 - Evaluacion y Score Catastral"))
@@ -360,6 +362,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         story.append(Spacer(1, 4))
         
     story.append(Spacer(1, 12))
+    story.append(PageBreak())
     
     # --- PÁGINA 6: SELLOS DE PROVENANCE ---
     story.append(sec("04 - Sello de Provenance Criptografico"))
