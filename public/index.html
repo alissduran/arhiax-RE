@@ -676,13 +676,24 @@
       document.getElementById('input-area').value = "";
 
       // Reiniciar archivos temporales para este nuevo caso
-      selectedFiles = {};
+      limpiarInputsDeArchivos();
 
       cargarDictamenes();
       selectCase(newCase.id);
     }
 
+    function limpiarInputsDeArchivos() {
+      document.getElementById('file-certificado').value = "";
+      document.getElementById('file-sombra-9am').value = "";
+      document.getElementById('file-sombra-3pm').value = "";
+      document.getElementById('file-mapa').value = "";
+      selectedFiles = {};
+    }
+
     function selectCase(id) {
+      if (selectedCaseId !== id) {
+        limpiarInputsDeArchivos();
+      }
       selectedCaseId = id;
       renderDictamenesList();
       
