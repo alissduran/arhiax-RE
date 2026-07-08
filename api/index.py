@@ -370,8 +370,8 @@ async def generar_dictamen_stateless(
     temp_run_dir = Path("/tmp") / f"run_{run_id}"
     temp_run_dir.mkdir(parents=True, exist_ok=True)
 
-    # 1. Guardar archivos cargados
-    if certificado:
+    # 1. Guardar archivos cargados (solo si no están vacíos)
+    if certificado and certificado.filename:
         cert_path = temp_run_dir / "certificado.pdf"
         with open(cert_path, "wb") as f:
             shutil.copyfileobj(certificado.file, f)
@@ -395,14 +395,14 @@ async def generar_dictamen_stateless(
     if area is None or area <= 0:
         raise HTTPException(status_code=400, detail="El metraje (área) del apartamento es requerido. Ingréselo manualmente o cargue un certificado que lo contenga.")
 
-    # Guardar imágenes de ArcGIS Pro si vienen
-    if sombra_9am:
+    # Guardar imágenes de ArcGIS Pro si vienen y no están vacías
+    if sombra_9am and sombra_9am.filename:
         with open(temp_run_dir / "sombra_9am.png", "wb") as f:
             shutil.copyfileobj(sombra_9am.file, f)
-    if sombra_3pm:
+    if sombra_3pm and sombra_3pm.filename:
         with open(temp_run_dir / "sombra_3pm.png", "wb") as f:
             shutil.copyfileobj(sombra_3pm.file, f)
-    if mapa_satelital:
+    if mapa_satelital and mapa_satelital.filename:
         with open(temp_run_dir / "mapa_satelital.png", "wb") as f:
             shutil.copyfileobj(mapa_satelital.file, f)
 
