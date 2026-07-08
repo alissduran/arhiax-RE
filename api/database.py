@@ -2,7 +2,11 @@ import sqlite3
 import os
 from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent / "database.db"
+# Usar /tmp en el entorno de servidor de Vercel (filesystem de sólo lectura excepto /tmp)
+if os.environ.get("VERCEL") or not os.access(str(Path(__file__).resolve().parent), os.W_OK):
+    DB_PATH = Path("/tmp/database.db")
+else:
+    DB_PATH = Path(__file__).resolve().parent / "database.db"
 
 def init_db():
     conn = sqlite3.connect(str(DB_PATH))
@@ -31,13 +35,11 @@ def init_db():
     try:
         cursor.execute("ALTER TABLE dictamenes ADD COLUMN certificado_cargado INTEGER DEFAULT 0")
     except sqlite3.OperationalError:
-        # Columna ya existe
         pass
         
     try:
         cursor.execute("ALTER TABLE dictamenes ADD COLUMN certificado_path TEXT")
     except sqlite3.OperationalError:
-        # Columna ya existe
         pass
         
     conn.commit()

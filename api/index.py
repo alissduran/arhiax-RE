@@ -46,8 +46,11 @@ app.add_middleware(
 DEFAULT_YAML_PATH = LONJA_LAYER / "lonja_baq_metodologia.yaml"
 ACCESS_PASSWORD = "Sinergia2026"
 
-# Asegurar carpeta de assets
-ASSETS_DIR = API_DIR / "assets"
+# Asegurar carpeta de assets dinámica para Vercel (/tmp)
+if os.environ.get("VERCEL") or not os.access(str(API_DIR), os.W_OK):
+    ASSETS_DIR = Path("/tmp/assets")
+else:
+    ASSETS_DIR = API_DIR / "assets"
 ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
 def extraer_area_de_pdf(pdf_path: str) -> float:

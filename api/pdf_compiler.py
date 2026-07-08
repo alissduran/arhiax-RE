@@ -59,7 +59,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str):
     p_hash = hashlib.sha256(f"{folio}{cert_num}{now_utc.isoformat()}".encode()).hexdigest()
     
     # Rutas de imágenes temporales de ArcGIS Pro cargadas
-    assets_dir = API_DIR / "assets" / f"case_{db_record['id']}"
+    if os.environ.get("VERCEL") or not os.access(str(API_DIR), os.W_OK):
+        assets_dir = Path("/tmp/assets") / f"case_{db_record['id']}"
+    else:
+        assets_dir = API_DIR / "assets" / f"case_{db_record['id']}"
     assets_dir.mkdir(parents=True, exist_ok=True)
     
     shadow_9am_path = str(assets_dir / "sombra_9am.png")
