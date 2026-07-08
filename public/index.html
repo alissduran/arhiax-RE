@@ -640,16 +640,6 @@
 
     async function descargarHTML() {
       const yamlContent = document.getElementById('yaml-input').value;
-      
-      // Abrir la ventana inmediatamente para evitar que el navegador lo bloquee como pop-up
-      const win = window.open("", "_blank");
-      if (!win) {
-        alert("El navegador bloqueó la ventana emergente. Por favor, permita las ventanas emergentes para este sitio en la barra de direcciones.");
-        return;
-      }
-      
-      win.document.write("<html><head><title>Cargando...</title></head><body style='font-family:sans-serif;padding:40px;color:#555;'>Generando bandeja de revisión, por favor espere...</body></html>");
-      
       try {
         const response = await fetch('/api/dictamen/html', {
           method: 'POST',
@@ -659,13 +649,19 @@
         if (!response.ok) throw new Error("Fallo al generar HTML");
         
         const html = await response.text();
-        win.document.open();
-        win.document.write(html);
-        win.document.close();
+        
+        // Crear un Blob y descargarlo directamente (evita bloqueadores de pop-ups)
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "bandeja_revision_napoli.html";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
       } catch (err) {
-        win.document.open();
-        win.document.write(`<html><body style='color:red;padding:40px;'><h3>Error de generación</h3><p>${err.message}</p></body></html>`);
-        win.document.close();
+        alert(err.message);
       }
     }
 
