@@ -35,7 +35,7 @@ BARRIO_COORDS = {
     "recreo": (10.9904, -74.7981),
 }
 
-def compile_pdf(db_record: dict, output_pdf_path: str):
+def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     """
     Compila dinámicamente un Dictamen PDF completo de 6 páginas con el estilo
     estándar ARHIAX Midnight Executive utilizando ReportLab.
@@ -59,10 +59,11 @@ def compile_pdf(db_record: dict, output_pdf_path: str):
     p_hash = hashlib.sha256(f"{folio}{cert_num}{now_utc.isoformat()}".encode()).hexdigest()
     
     # Rutas de imágenes temporales de ArcGIS Pro cargadas
-    if os.environ.get("VERCEL") or not os.access(str(API_DIR), os.W_OK):
-        assets_dir = Path("/tmp/assets") / f"case_{db_record['id']}"
-    else:
-        assets_dir = API_DIR / "assets" / f"case_{db_record['id']}"
+    if assets_dir is None:
+        if os.environ.get("VERCEL") or not os.access(str(API_DIR), os.W_OK):
+            assets_dir = Path("/tmp/assets") / f"case_{db_record['id']}"
+        else:
+            assets_dir = API_DIR / "assets" / f"case_{db_record['id']}"
     assets_dir.mkdir(parents=True, exist_ok=True)
     
     shadow_9am_path = str(assets_dir / "sombra_9am.png")

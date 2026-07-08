@@ -493,7 +493,7 @@
                     <button class="btn-secondary" style="padding: 5px 10px; font-size: 9px; text-transform: uppercase; border-color: var(--color-gray); color: var(--color-gray);" onclick="cancelarEditarArea()">Cancelar</button>
                   </div>
                 </div>
-                <span class="badge" id="badge-detail-estado">-</span>
+                <span class="badge" id="badge-detail-estado">PENDIENTE INSUMOS</span>
               </div>
               
               <!-- Alerta de metraje pendiente -->
@@ -541,14 +541,14 @@
 
             <!-- PASO 2: DESCARGA DE DICTAMEN -->
             <div id="section-download" style="display: none; text-align: center; padding: 20px 0;">
-              <h4 style="font-size: 13px; font-weight: 700; color: var(--color-green-text); margin-bottom: 8px;">
-                ✓ DICTAMEN OFICIAL GENERADO
+              <h4 style="font-size: 13px; font-weight: 700; color: var(--color-navy); margin-bottom: 8px;">
+                Dictamen Listo para Generar
               </h4>
               <p style="font-size: 12px; color: var(--color-gray); margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
-                Todos los insumos se han integrado correctamente en la base del dictamen ReportLab. Ya puede descargar el PDF final firmado.
+                Todos los insumos cargados y el metraje se enviarán en una sola petición al servidor pericial. Haz clic abajo para generar y descargar tu PDF final de 6 páginas.
               </p>
               <button class="btn-primary" style="font-size: 13px; padding: 14px 28px;" onclick="descargarPDFDictamen()">
-                Descargar Dictamen Pericial (PDF)
+                Generar y Descargar Dictamen (PDF)
               </button>
             </div>
 
@@ -561,8 +561,13 @@
 
   <script>
     let activeToken = localStorage.getItem("arhiax_token");
-    let dictamenes = [];
+    
+    // Usar LocalStorage para mantener el listado de casos de forma persistente y evitar fallos de contenedores serverless
+    let dictamenes = JSON.parse(localStorage.getItem("arhiax_cases") || "[]");
     let selectedCaseId = null;
+    
+    // Almacenamiento local de los archivos seleccionados en memoria para subirlos juntos stateless
+    let selectedFiles = {};
 
     window.addEventListener('DOMContentLoaded', () => {
       if (activeToken) {
@@ -602,18 +607,12 @@
     async function showPortal() {
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('main-portal').style.display = 'block';
-      await cargarDictamenes();
+      cargarDictamenes();
     }
 
-    async function cargarDictamenes() {
-      try {
-        const response = await fetch('/api/dictamenes');
-        if (!response.ok) throw new Error("Fallo al cargar dictámenes");
-        dictamenes = await response.json();
-        renderDictamenesList();
-      } catch (err) {
-        console.error(err);
-      }
+    function cargarDictamenes() {
+      dictamenes = JSON.parse(localStorage.getItem("arhiax_cases") || "[]");
+      renderDictamenesList();
     }
 
     function renderDictamenesList() {
@@ -629,8 +628,7 @@
         item.className = `case-list-item ${selectedCaseId === c.id ? 'active' : ''}`;
         item.onclick = () => selectCase(c.id);
         
-        const badgeClass = c.estado === 'COMPLETADO' ? 'badge COMPLETADO' : 'badge PENDIENTE_IMAGENES';
-        const label = c.estado === 'COMPLETADO' ? 'COMPLETADO' : (c.area ? 'INCOMPLETO' : 'PENDIENTE CTL');
+        const label = c.area ? 'LISTO C ARGCIS' : 'PENDIENTE CTL';
         
         const displayDireccion = c.direccion === 'Pendiente' ? 'Matrícula: ' + c.folio_matricula : c.direccion;
         const displaySub = c.direccion === 'Pendiente' ? 'Dirección: Pendiente' : 'Matrícula: ' + c.folio_matricula;
@@ -640,15 +638,15 @@
             <div class="case-info-primary">${displayDireccion}</div>
             <div class="case-info-secondary">${displaySub} · Área: ${c.area ? c.area + ' m²' : 'Pendiente'}</div>
           </div>
-          <span class="${badgeClass}">${label}</span>
+          <span class="badge PENDIENTE_IMAGENES">${label}</span>
         `;
         container.appendChild(item);
       });
     }
 
-    async function crearDictamen() {
-      const folio = document.getElementById('input-folio').value.trim ? document.getElementById('input-folio').value.trim() : document.getElementById('input-folio').value;
-      const direccion = document.getElementById('input-direccion').value.trim ? document.getElementById('input-direccion').value.trim() : document.getElementById('input-direccion').value;
+    function crearDictamen() {
+      const folio = document.getElementById('input-folio').value.trim();
+      const direccion = document.getElementById('input-direccion').value.trim();
       const area = document.getElementById('input-area').value;
 
       if (!folio && !direccion) {
@@ -656,32 +654,32 @@
         return;
       }
 
-      showLoading(true);
-      try {
-        const response = await fetch('/api/dictamenes', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            folio_matricula: folio,
-            direccion,
-            area: area ? parseFloat(area) : null
-          })
-        });
-        if (!response.ok) throw new Error("Error al crear dictamen");
-        const data = await response.json();
-        
-        // Limpiar formulario
-        document.getElementById('input-folio').value = "";
-        document.getElementById('input-direccion').value = "";
-        document.getElementById('input-area').value = "";
+      const newCase = {
+        id: Date.now(),
+        folio_matricula: folio || "Pendiente",
+        direccion: direccion || "Pendiente",
+        area: area ? parseFloat(area) : null,
+        barrio: direccion.toLowerCase().includes("recreo") ? "El Recreo" : "Miramar",
+        certificado_cargado: 0,
+        sombra_9am_cargada: 0,
+        sombra_3pm_cargada: 0,
+        mapa_cargado: 0
+      };
 
-        await cargarDictamenes();
-        selectCase(data.id);
-      } catch (err) {
-        alert(err.message);
-      } finally {
-        showLoading(false);
-      }
+      // Guardar en localStorage
+      dictamenes.unshift(newCase);
+      localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+      
+      // Limpiar formulario
+      document.getElementById('input-folio').value = "";
+      document.getElementById('input-direccion').value = "";
+      document.getElementById('input-area').value = "";
+
+      // Reiniciar archivos temporales para este nuevo caso
+      selectedFiles = {};
+
+      cargarDictamenes();
+      selectCase(newCase.id);
     }
 
     function selectCase(id) {
@@ -708,23 +706,15 @@
         areaPendienteBanner.style.display = 'block';
       }
       
-      const badge = document.getElementById('badge-detail-estado');
-      badge.className = `badge ${c.estado}`;
-      badge.textContent = c.estado === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE INSUMOS';
+      // Mostrar zona de uploads y botón de descarga siempre
+      document.getElementById('section-uploads').style.display = 'block';
+      document.getElementById('section-download').style.display = 'block';
       
-      if (c.estado === 'PENDIENTE_IMAGENES') {
-        document.getElementById('section-uploads').style.display = 'block';
-        document.getElementById('section-download').style.display = 'none';
-        
-        // Renderizar estado de tarjetas de carga
-        updateUploadCard('certificado', c.certificado_cargado, "PDF");
-        updateUploadCard('sombra-9am', c.sombra_9am_cargada, "PNG");
-        updateUploadCard('sombra-3pm', c.sombra_3pm_cargada, "PNG");
-        updateUploadCard('mapa', c.mapa_cargado, "PNG");
-      } else {
-        document.getElementById('section-uploads').style.display = 'none';
-        document.getElementById('section-download').style.display = 'block';
-      }
+      // Renderizar estado de tarjetas de carga según la memoria local de este caso
+      updateUploadCard('certificado', c.certificado_cargado, "PDF");
+      updateUploadCard('sombra-9am', c.sombra_9am_cargada, "PNG");
+      updateUploadCard('sombra-3pm', c.sombra_3pm_cargada, "PNG");
+      updateUploadCard('mapa', c.mapa_cargado, "PNG");
     }
 
     function updateUploadCard(prefix, loaded, format) {
@@ -746,49 +736,52 @@
     async function subirInsumo(imgType, inputElement) {
       const file = inputElement.files[0];
       if (!file) return;
-      
-      const formData = new FormData();
-      formData.append("file", file);
-      
-      showLoading(true);
-      try {
-        const response = await fetch(`/api/dictamenes/${selectedCaseId}/upload/${imgType}`, {
-          method: 'POST',
-          body: formData
-        });
-        if (!response.ok) throw new Error("Fallo al subir el archivo");
-        
-        const data = await response.json();
-        
-        if (imgType === 'certificado') {
-          let alertMsg = "[Éxito] Certificado procesado.";
-          if (data.extraidos) {
-            const ext = data.extraidos;
-            if (ext.area) alertMsg += `\n- Área extraída: ${ext.area} m²`;
-            if (ext.folio && ext.folio !== 'Pendiente') alertMsg += `\n- Matrícula extraída: ${ext.folio}`;
-            if (ext.direccion && ext.direccion !== 'Pendiente') alertMsg += `\n- Dirección extraída: ${ext.direccion}`;
-            if (ext.barrio) alertMsg += `\n- Barrio detectado: ${ext.barrio}`;
-          }
-          alert(alertMsg);
-        }
-        
-        await cargarDictamenes();
-        selectCase(selectedCaseId);
-      } catch (err) {
-        alert(err.message);
-      } finally {
-        showLoading(false);
-      }
-    }
 
-    function descargarPDFDictamen() {
-      const url = `/api/dictamenes/${selectedCaseId}/pdf`;
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `ARHIAX_Dictamen_Caso_${selectedCaseId}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      // Guardar el archivo en memoria temporal del navegador
+      selectedFiles[imgType] = file;
+
+      // Obtener caso y marcarlo como cargado localmente
+      const c = dictamenes.find(item => item.id === selectedCaseId);
+      if (c) {
+        if (imgType === 'certificado') {
+          c.certificado_cargado = 1;
+          
+          // Si el área del caso estaba pendiente, procesar certificado de forma rápida y stateless
+          if (!c.area) {
+            showLoading(true);
+            try {
+              const formData = new FormData();
+              formData.append("file", file);
+              const response = await fetch(`/api/dictamenes/${selectedCaseId}/upload/certificado`, {
+                method: 'POST',
+                body: formData
+              });
+              if (response.ok) {
+                const data = await response.json();
+                if (data.extraidos) {
+                  const ext = data.extraidos;
+                  if (ext.area) c.area = ext.area;
+                  if (ext.folio && c.folio_matricula === 'Pendiente') c.folio_matricula = ext.folio;
+                  if (ext.direccion && c.direccion === 'Pendiente') c.direccion = ext.direccion;
+                  if (ext.barrio) c.barrio = ext.barrio;
+                  
+                  alert(`[Éxito] Certificado analizado. Área extraída: ${ext.area || 'No encontrada'} m²`);
+                }
+              }
+            } catch (err) {
+              console.error("Error al pre-analizar PDF: ", err);
+            } finally {
+              showLoading(false);
+            }
+          }
+        }
+        else if (imgType === 'sombra_9am') c.sombra_9am_cargada = 1;
+        else if (imgType === 'sombra_3pm') c.sombra_3pm_cargada = 1;
+        else if (imgType === 'mapa_satelital') c.mapa_cargado = 1;
+        
+        localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+        selectCase(selectedCaseId);
+      }
     }
 
     function mostrarEditarArea(event) {
@@ -803,27 +796,66 @@
       document.getElementById('form-editar-area').style.display = 'none';
     }
 
-    async function guardarAreaManual() {
+    function guardarAreaManual() {
       const areaVal = document.getElementById('input-editar-area').value;
       if (!areaVal || isNaN(parseFloat(areaVal))) {
         alert("Por favor ingrese un metraje válido.");
         return;
       }
-      
+
+      const c = dictamenes.find(item => item.id === selectedCaseId);
+      if (c) {
+        c.area = parseFloat(areaVal);
+        localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+        cancelarEditarArea();
+        selectCase(selectedCaseId);
+      }
+    }
+
+    async function descargarPDFDictamen() {
+      const c = dictamenes.find(item => item.id === selectedCaseId);
+      if (!c) return;
+
+      if (!c.area) {
+        alert("Por favor ingrese el metraje (área) antes de generar el dictamen.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("folio_matricula", c.folio_matricula);
+      formData.append("direccion", c.direccion);
+      formData.append("area", c.area);
+      formData.append("barrio", c.barrio);
+
+      // Enviar archivos de memoria local
+      if (selectedFiles.certificado) formData.append("certificado", selectedFiles.certificado);
+      if (selectedFiles.sombra_9am) formData.append("sombra_9am", selectedFiles.sombra_9am);
+      if (selectedFiles.sombra_3pm) formData.append("sombra_3pm", selectedFiles.sombra_3pm);
+      if (selectedFiles.mapa_satelital) formData.append("mapa_satelital", selectedFiles.mapa_satelital);
+
       showLoading(true);
       try {
-        const response = await fetch(`/api/dictamenes/${selectedCaseId}/update`, {
+        const response = await fetch('/api/dictamenes/generar', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ area: parseFloat(areaVal) })
+          body: formData
         });
-        if (!response.ok) throw new Error("Fallo al actualizar el área");
-        
-        cancelarEditarArea();
-        await cargarDictamenes();
-        selectCase(selectedCaseId);
+
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(errText || "Fallo en compilación");
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ARHIAX_Dictamen_${c.folio_matricula}_final.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
       } catch (err) {
-        alert(err.message);
+        alert("Error al compilar el reporte PDF: " + err.message);
       } finally {
         showLoading(false);
       }

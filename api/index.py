@@ -7,7 +7,7 @@ import re
 import pypdf
 from pathlib import Path
 from datetime import datetime
-from fastapi import FastAPI, HTTPException, Body, UploadFile, File, Depends
+from fastapi import FastAPI, HTTPException, Body, UploadFile, File, Depends, Form
 from fastapi.responses import HTMLResponse, Response, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -349,6 +349,95 @@ def update_dictamen(case_id: int, payload: dict = Body(...)):
             
     conn.close()
     return dictamen
+
+@app.post("/api/dictamenes/generar")
+async def generar_dictamen_stateless(
+    folio_matricula: str = Form(None),
+    direccion: str = Form(None),
+    area: float = Form(None),
+    barrio: str = Form(None),
+    certificado: UploadFile = File(None),
+    sombra_9am: UploadFile = File(None),
+    sombra_3pm: UploadFile = File(None),
+    mapa_satelital: UploadFile = File(None)
+):
+    # Validar campos mínimos
+    if not folio_matricula and not direccion:
+        raise HTTPException(status_code=400, detail="Debe ingresar la matrícula inmobiliaria o la dirección.")
+
+    import uuid
+    run_id = str(uuid.uuid4())
+    temp_run_dir = Path("/tmp") / f"run_{run_id}"
+    temp_run_dir.mkdir(parents=True, exist_ok=True)
+
+    # 1. Guardar archivos cargados
+    if certificado:
+        cert_path = temp_run_dir / "certificado.pdf"
+        with open(cert_path, "wb") as f:
+            shutil.copyfileobj(certificado.file, f)
+        
+        # Intentar extraer datos
+        extraidos = extraer_datos_de_pdf(str(cert_path))
+        if not area and extraidos.get("area"):
+            area = extraidos["area"]
+        if (not folio_matricula or folio_matricula == "Pendiente") and extraidos.get("folio"):
+            folio_matricula = extraidos["folio"]
+        if (not direccion or direccion == "Pendiente") and extraidos.get("direccion"):
+            direccion = extraidos["direccion"]
+        if not barrio and extraidos.get("barrio"):
+            barrio = extraidos["barrio"]
+
+    if not barrio:
+        barrio = "Miramar"
+        if direccion and "recreo" in direccion.lower():
+            barrio = "El Recreo"
+
+    if area is None or area <= 0:
+        raise HTTPException(status_code=400, detail="El metraje (área) del apartamento es requerido. Ingréselo manualmente o cargue un certificado que lo contenga.")
+
+    # Guardar imágenes de ArcGIS Pro si vienen
+    if sombra_9am:
+        with open(temp_run_dir / "sombra_9am.png", "wb") as f:
+            shutil.copyfileobj(sombra_9am.file, f)
+    if sombra_3pm:
+        with open(temp_run_dir / "sombra_3pm.png", "wb") as f:
+            shutil.copyfileobj(sombra_3pm.file, f)
+    if mapa_satelital:
+        with open(temp_run_dir / "mapa_satelital.png", "wb") as f:
+            shutil.copyfileobj(mapa_satelital.file, f)
+
+    # 2. Calcular valor consolidado
+    valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
+    valor_consolidado = int(round(valor_m2 * area, -4))
+
+    # 3. Construir record para ReportLab
+    db_record = {
+        "id": 9999,  # ID temporal
+        "folio_matricula": folio_matricula or "Pendiente",
+        "direccion": direccion or "Pendiente",
+        "barrio": barrio,
+        "estrato": 4,
+        "area": area,
+        "valor_consolidado": valor_consolidado,
+        "sombra_9am_cargada": 1 if sombra_9am else 0,
+        "sombra_3pm_cargada": 1 if sombra_3pm else 0,
+        "mapa_cargado": 1 if mapa_satelital else 0
+    }
+
+    # 4. Compilar PDF
+    output_pdf = temp_run_dir / f"ARHIAX_Dictamen_{db_record['folio_matricula']}_final.pdf"
+    try:
+        compile_pdf(db_record, str(output_pdf), assets_dir=temp_run_dir)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Error al compilar el PDF pericial: {str(e)}")
+
+    return FileResponse(
+        path=str(output_pdf),
+        filename=f"ARHIAX_Dictamen_{db_record['folio_matricula']}.pdf",
+        media_type="application/pdf"
+    )
 
 @app.get("/api/dictamenes/{case_id}/pdf")
 def download_pdf(case_id: int):
