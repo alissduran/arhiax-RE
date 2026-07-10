@@ -308,28 +308,29 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
     # Verificar si todas están cargadas para generar el PDF
     cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
     row = cursor.fetchone()
-    dictamen = dict(row)
     
-    # El PDF se compila si las sombras, el mapa y el metraje (área) ya están listos
-    if (dictamen["sombra_9am_cargada"] and dictamen["sombra_3pm_cargada"] and 
-        dictamen["mapa_cargado"] and dictamen["area"] is not None and dictamen["area"] > 0):
+    status = "PENDIENTE_IMAGENES"
+    if row:
+        dictamen = dict(row)
         
-        pdf_filename = f"ARHIAX_Dictamen_{dictamen['folio_matricula']}_final.pdf"
-        pdf_output_path = case_dir / pdf_filename
-        
-        try:
-            compile_pdf(dictamen, str(pdf_output_path))
-            cursor.execute("UPDATE dictamenes SET estado = 'COMPLETADO', pdf_path = ? WHERE id = ?", 
-                           (str(pdf_output_path), case_id))
-            conn.commit()
-            status = "COMPLETADO"
-        except Exception as e:
-            conn.close()
-            import traceback
-            traceback.print_exc()
-            raise HTTPException(status_code=500, detail=f"Error al compilar PDF del dictamen: {str(e)}")
-    else:
-        status = "PENDIENTE_IMAGENES"
+        # El PDF se compila si las sombras, el mapa y el metraje (área) ya están listos
+        if (dictamen["sombra_9am_cargada"] and dictamen["sombra_3pm_cargada"] and 
+            dictamen["mapa_cargado"] and dictamen["area"] is not None and dictamen["area"] > 0):
+            
+            pdf_filename = f"ARHIAX_Dictamen_{dictamen['folio_matricula']}_final.pdf"
+            pdf_output_path = case_dir / pdf_filename
+            
+            try:
+                compile_pdf(dictamen, str(pdf_output_path))
+                cursor.execute("UPDATE dictamenes SET estado = 'COMPLETADO', pdf_path = ? WHERE id = ?", 
+                               (str(pdf_output_path), case_id))
+                conn.commit()
+                status = "COMPLETADO"
+            except Exception as e:
+                conn.close()
+                import traceback
+                traceback.print_exc()
+                raise HTTPException(status_code=500, detail=f"Error al compilar PDF del dictamen: {str(e)}")
         
     conn.close()
     return {
