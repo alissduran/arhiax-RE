@@ -83,7 +83,7 @@ def get_nearby_pois(lat, lon, radius=2000):
     
     try:
         headers = {"User-Agent": "ARHIAX-RE/0.2 (aliss@sinergia.com)"}
-        response = requests.post(overpass_url, data={"data": query}, headers=headers, timeout=10)
+        response = requests.post(overpass_url, data={"data": query}, headers=headers, timeout=1.5)
         if response.status_code != 200:
             return fallback_pois
             

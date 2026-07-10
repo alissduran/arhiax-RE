@@ -97,6 +97,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     MAP_IMG = mapa_satellite_path
     OUTPUT = output_pdf_path
     POI_MAP_PNG = poi_map_png
+    POI_MAP_HTML = poi_map_html
     SHADOW_IMG = shadow_9am_path
     SHADOW_IMG2 = shadow_3pm_path
     SCOPE_DISCLAIMER_FULL = (
@@ -203,10 +204,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Configuracion del Analisis de Asolamiento y Sombras
     FACADE_AZIMUTH = 110  # Orientacion por defecto: ESE (110°)
     OBSTRUCTIONS = [(240, 280, 30)]  # Obstruccion de la Torre 7 (240°-280° azimut, elevacion <= 30°)
-    SHADOW_IMG = r"C:\Users\aliss\Documents\Sinergia\RE\napoli_shadows.png"
-    SHADOW_IMG2 = r"C:\Users\aliss\Documents\Sinergia\RE\napoli_shadows2.png"
-    POI_MAP_PNG = r"C:\Users\aliss\Documents\Sinergia\RE\napoli_poi_map.png"
-    POI_MAP_HTML = r"C:\Users\aliss\Documents\Sinergia\RE\napoli_poi_map.html"
+    # Usar las rutas dinámicas ya configuradas arriba sin sobrescribirlas con rutas locales de Windows
+
     
     s = build_styles()
     s["header"] = ParagraphStyle("h_style", parent=s["label"], textColor=colors.white)
