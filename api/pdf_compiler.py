@@ -288,20 +288,23 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "[FUENTE: GMAPS-SAT]"))
     story.append(Spacer(1, 6))
     if os.path.exists(MAP_IMG):
-        img = RLImage(MAP_IMG, width=16*cm, height=9*cm)
-        img.hAlign = "CENTER"
-        t = Table([[img]], colWidths=["100%"])
-        t.setStyle(TableStyle([("GRID",(0,0),(-1,-1),1.5,C_AZUL_OSC),
-            ("TOPPADDING",(0,0),(-1,-1),4),("BOTTOMPADDING",(0,0),(-1,-1),4),
-            ("LEFTPADDING",(0,0),(-1,-1),4),("RIGHTPADDING",(0,0),(-1,-1),4),
-            ("ALIGN",(0,0),(-1,-1),"CENTER")]))
-        story.append(t)
-        story.append(Spacer(1, 4))
-        story.append(Paragraph(
-            "<i>Fig. 1 - Conjunto Residencial Napoli, Tv 43 #100-50. Se observan las torres (Etapas 1-4), "
-            "Av. Circunvalar, Parque Miramar, y conjuntos vecinos (Sorrento, Toscana, Florencia).</i>",
-            ParagraphStyle("cap", fontName="Helvetica-Oblique", fontSize=7.5,
-                           textColor=colors.HexColor("#718096"), leading=10, alignment=TA_CENTER)))
+        try:
+            img = RLImage(MAP_IMG, width=16*cm, height=9*cm)
+            img.hAlign = "CENTER"
+            t = Table([[img]], colWidths=["100%"])
+            t.setStyle(TableStyle([("GRID",(0,0),(-1,-1),1.5,C_AZUL_OSC),
+                ("TOPPADDING",(0,0),(-1,-1),4),("BOTTOMPADDING",(0,0),(-1,-1),4),
+                ("LEFTPADDING",(0,0),(-1,-1),4),("RIGHTPADDING",(0,0),(-1,-1),4),
+                ("ALIGN",(0,0),(-1,-1),"CENTER")]))
+            story.append(t)
+            story.append(Spacer(1, 4))
+            story.append(Paragraph(
+                "<i>Fig. 1 - Conjunto Residencial Napoli, Tv 43 #100-50. Se observan las torres (Etapas 1-4), "
+                "Av. Circunvalar, Parque Miramar, y conjuntos vecinos (Sorrento, Toscana, Florencia).</i>",
+                ParagraphStyle("cap", fontName="Helvetica-Oblique", fontSize=7.5,
+                               textColor=colors.HexColor("#718096"), leading=10, alignment=TA_CENTER)))
+        except Exception as img_err:
+            print(f"Warning: could not load MAP_IMG: {img_err}")
     story.append(Spacer(1, 6))
     story.append(dt([
         ("Coordenadas WGS84", "Lat: 10.9870 N | Lon: -74.8115 W"),
@@ -375,39 +378,45 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         images_to_show.append((SHADOW_IMG2, "3:00 PM (Tarde)"))
     
     if len(images_to_show) == 2:
-        img1 = RLImage(images_to_show[0][0], width=7.8*cm, height=4.5*cm)
-        img2 = RLImage(images_to_show[1][0], width=7.8*cm, height=4.5*cm)
-        t_s = Table([[img1, img2]], colWidths=["50%", "50%"])
-        t_s.setStyle(TableStyle([
-            ("GRID", (0,0), (-1,-1), 1.0, C_AZUL_OSC),
-            ("TOPPADDING", (0,0), (-1,-1), 4), ("BOTTOMPADDING", (0,0), (-1,-1), 4),
-            ("LEFTPADDING", (0,0), (-1,-1), 4), ("RIGHTPADDING", (0,0), (-1,-1), 4),
-            ("ALIGN", (0,0), (-1,-1), "CENTER")
-        ]))
-        story.append(t_s)
-        story.append(Spacer(1, 4))
-        story.append(Paragraph(
-            "<i>Fig. 2 - Simulacion 3D de Sombras Proyectadas a las 9:00 AM (Izquierda) y a las 3:00 PM (Derecha) "
-            "(ArcGIS Online - Escena Fotorrealista de Google). Se observa el impacto de la sombra de las torres aledanas.</i>",
-            ParagraphStyle("cap_shadow", fontName="Helvetica-Oblique", fontSize=7.5,
-                           textColor=colors.HexColor("#718096"), leading=10, alignment=TA_CENTER)))
+        try:
+            img1 = RLImage(images_to_show[0][0], width=7.8*cm, height=4.5*cm)
+            img2 = RLImage(images_to_show[1][0], width=7.8*cm, height=4.5*cm)
+            t_s = Table([[img1, img2]], colWidths=["50%", "50%"])
+            t_s.setStyle(TableStyle([
+                ("GRID", (0,0), (-1,-1), 1.0, C_AZUL_OSC),
+                ("TOPPADDING", (0,0), (-1,-1), 4), ("BOTTOMPADDING", (0,0), (-1,-1), 4),
+                ("LEFTPADDING", (0,0), (-1,-1), 4), ("RIGHTPADDING", (0,0), (-1,-1), 4),
+                ("ALIGN", (0,0), (-1,-1), "CENTER")
+            ]))
+            story.append(t_s)
+            story.append(Spacer(1, 4))
+            story.append(Paragraph(
+                "<i>Fig. 2 - Simulacion 3D de Sombras Proyectadas a las 9:00 AM (Izquierda) y a las 3:00 PM (Derecha) "
+                "(ArcGIS Online - Escena Fotorrealista de Google). Se observa el impacto de la sombra de las torres aledanas.</i>",
+                ParagraphStyle("cap_shadow", fontName="Helvetica-Oblique", fontSize=7.5,
+                               textColor=colors.HexColor("#718096"), leading=10, alignment=TA_CENTER)))
+        except Exception as img_err:
+            print(f"Warning: could not load shadow images: {img_err}")
     elif len(images_to_show) == 1:
-        img_shadow = RLImage(images_to_show[0][0], width=16*cm, height=9*cm)
-        img_shadow.hAlign = "CENTER"
-        t_s = Table([[img_shadow]], colWidths=["100%"])
-        t_s.setStyle(TableStyle([
-            ("GRID", (0,0), (-1,-1), 1.5, C_AZUL_OSC),
-            ("TOPPADDING", (0,0), (-1,-1), 4), ("BOTTOMPADDING", (0,0), (-1,-1), 4),
-            ("LEFTPADDING", (0,0), (-1,-1), 4), ("RIGHTPADDING", (0,0), (-1,-1), 4),
-            ("ALIGN", (0,0), (-1,-1), "CENTER")
-        ]))
-        story.append(t_s)
-        story.append(Spacer(1, 4))
-        story.append(Paragraph(
-            f"<i>Fig. 2 - Simulacion 3D de Sombras Proyectadas a las {images_to_show[0][1]} "
-            "(ArcGIS Online - Escena Fotorrealista de Google).</i>",
-            ParagraphStyle("cap_shadow", fontName="Helvetica-Oblique", fontSize=7.5,
-                           textColor=colors.HexColor("#718096"), leading=10, alignment=TA_CENTER)))
+        try:
+            img_shadow = RLImage(images_to_show[0][0], width=16*cm, height=9*cm)
+            img_shadow.hAlign = "CENTER"
+            t_s = Table([[img_shadow]], colWidths=["100%"])
+            t_s.setStyle(TableStyle([
+                ("GRID", (0,0), (-1,-1), 1.5, C_AZUL_OSC),
+                ("TOPPADDING", (0,0), (-1,-1), 4), ("BOTTOMPADDING", (0,0), (-1,-1), 4),
+                ("LEFTPADDING", (0,0), (-1,-1), 4), ("RIGHTPADDING", (0,0), (-1,-1), 4),
+                ("ALIGN", (0,0), (-1,-1), "CENTER")
+            ]))
+            story.append(t_s)
+            story.append(Spacer(1, 4))
+            story.append(Paragraph(
+                f"<i>Fig. 2 - Simulacion 3D de Sombras Proyectadas a las {images_to_show[0][1]} "
+                "(ArcGIS Online - Escena Fotorrealista de Google).</i>",
+                ParagraphStyle("cap_shadow", fontName="Helvetica-Oblique", fontSize=7.5,
+                               textColor=colors.HexColor("#718096"), leading=10, alignment=TA_CENTER)))
+        except Exception as img_err:
+            print(f"Warning: could not load shadow image: {img_err}")
     else:
         story.append(alert_orange(
             "<b>INTEGRACION 3D DISPONIBLE:</b> Puedes adjuntar una simulacion visual de sombras "
@@ -469,22 +478,25 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 6))
     
     if os.path.exists(POI_MAP_PNG):
-        img_poi_map = RLImage(POI_MAP_PNG, width=16*cm, height=9.77*cm)
-        img_poi_map.hAlign = "CENTER"
-        t_m = Table([[img_poi_map]], colWidths=["100%"])
-        t_m.setStyle(TableStyle([
-            ("GRID", (0,0), (-1,-1), 1.5, C_AZUL_OSC),
-            ("TOPPADDING", (0,0), (-1,-1), 4), ("BOTTOMPADDING", (0,0), (-1,-1), 4),
-            ("LEFTPADDING", (0,0), (-1,-1), 4), ("RIGHTPADDING", (0,0), (-1,-1), 4),
-            ("ALIGN", (0,0), (-1,-1), "CENTER")
-        ]))
-        story.append(t_m)
-        story.append(Spacer(1, 4))
-        story.append(Paragraph(
-            "<i>Fig. 3 - Distribucion Espacial de Equipamientos Urbanos y Puntos de Interes (POI) "
-            "en el radio de 2.0 km de la propiedad (Elaboracion Propia usando OpenStreetMap y Pillow).</i>",
-            ParagraphStyle("cap_poi_map", fontName="Helvetica-Oblique", fontSize=7.5,
-                           textColor=colors.HexColor("#718096"), leading=10, alignment=TA_CENTER)))
+        try:
+            img_poi_map = RLImage(POI_MAP_PNG, width=16*cm, height=9.77*cm)
+            img_poi_map.hAlign = "CENTER"
+            t_m = Table([[img_poi_map]], colWidths=["100%"])
+            t_m.setStyle(TableStyle([
+                ("GRID", (0,0), (-1,-1), 1.5, C_AZUL_OSC),
+                ("TOPPADDING", (0,0), (-1,-1), 4), ("BOTTOMPADDING", (0,0), (-1,-1), 4),
+                ("LEFTPADDING", (0,0), (-1,-1), 4), ("RIGHTPADDING", (0,0), (-1,-1), 4),
+                ("ALIGN", (0,0), (-1,-1), "CENTER")
+            ]))
+            story.append(t_m)
+            story.append(Spacer(1, 4))
+            story.append(Paragraph(
+                "<i>Fig. 3 - Distribucion Espacial de Equipamientos Urbanos y Puntos de Interes (POI) "
+                "en el radio de 2.0 km de la propiedad (Elaboracion Propia usando OpenStreetMap y Pillow).</i>",
+                ParagraphStyle("cap_poi_map", fontName="Helvetica-Oblique", fontSize=7.5,
+                               textColor=colors.HexColor("#718096"), leading=10, alignment=TA_CENTER)))
+        except Exception as img_err:
+            print(f"Warning: could not load POI_MAP_PNG: {img_err}")
         story.append(Spacer(1, 6))
     
     story.append(alert_green(get_cobertura_alert(barrio)))
