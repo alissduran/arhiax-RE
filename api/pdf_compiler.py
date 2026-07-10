@@ -15,13 +15,13 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from reportlab.platypus import Image as RLImage
-from dictamen_part1_styles import *
+from .dictamen_part1_styles import *
 from solar_engine import get_solar_position, analyze_facade_exposure
 from poi_engine import get_nearby_pois
 from map_generator import generate_maps
-from address_normalizer import normalize_address_colombia
+from .address_normalizer import normalize_address_colombia
 
-from dictamen_data import get_valuation, get_hallazgos, get_recs, get_identificacion_dt, get_localizacion_dt, get_cobertura_alert, get_analisis_registral_text, get_catastral_dt, get_pot_summary_dt, get_valoracion_alert, get_alcance_dt
+from .dictamen_data import get_valuation, get_hallazgos, get_recs, get_identificacion_dt, get_localizacion_dt, get_cobertura_alert, get_analisis_registral_text, get_catastral_dt, get_pot_summary_dt, get_valoracion_alert, get_alcance_dt
 
 def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
     BLOQUEOS_FIDUCIARIOS = {"hipoteca", "embargo", "afectacion", "patrimonio", "demanda", "usufructo", "medida cautelar"}
