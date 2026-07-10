@@ -841,27 +841,54 @@
       }
     }
 
-    function descargarPDFDictamen() {
+    async function descargarPDFDictamen() {
       const c = dictamenes.find(item => item.id === selectedCaseId);
       if (!c) return;
 
-      // Rellenar campos ocultos del formulario nativo
-      document.getElementById('hidden-folio').value = c.folio_matricula;
-      document.getElementById('hidden-direccion').value = c.direccion;
-      document.getElementById('hidden-area').value = c.area || "";
-      document.getElementById('hidden-barrio').value = c.barrio;
+      showLoading(true);
 
-      // Enviar el formulario. El navegador abrirá una pestaña temporal e iniciará la descarga nativa
-      // sin restricciones de blobs locales, previniendo bloqueos de seguridad del navegador o antivirus.
-      document.getElementById('form-dictamen-stateless').submit();
+      try {
+        const formData = new FormData();
+        formData.append('folio_matricula', c.folio_matricula);
+        formData.append('direccion', c.direccion);
+        formData.append('area', c.area || '0');
+        formData.append('barrio', c.barrio);
+
+        // Adjuntar los archivos reales que el usuario cargó en memoria
+        if (selectedFiles['certificado']) formData.append('certificado', selectedFiles['certificado']);
+        if (selectedFiles['sombra_9am']) formData.append('sombra_9am', selectedFiles['sombra_9am']);
+        if (selectedFiles['sombra_3pm']) formData.append('sombra_3pm', selectedFiles['sombra_3pm']);
+        if (selectedFiles['mapa_satelital']) formData.append('mapa_satelital', selectedFiles['mapa_satelital']);
+
+        const response = await fetch('/api/dictamenes/generar', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(`Error del servidor (${response.status}): ${errText}`);
+        }
+
+        // Descargar como blob y forzar nombre de archivo PDF
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ARHIAX_Dictamen_${c.folio_matricula}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+      } catch (err) {
+        console.error('Error al generar dictamen:', err);
+        alert('Error al generar el dictamen: ' + err.message);
+      } finally {
+        showLoading(false);
+      }
     }
   </script>
-  <!-- Formulario oculto nativo para descarga de PDF pericial en pestaña nueva -->
-  <form id="form-dictamen-stateless" action="/api/dictamenes/generar" method="POST" enctype="multipart/form-data" target="_blank" style="display: none;">
-    <input type="hidden" name="folio_matricula" id="hidden-folio">
-    <input type="hidden" name="direccion" id="hidden-direccion">
-    <input type="hidden" name="area" id="hidden-area">
-    <input type="hidden" name="barrio" id="hidden-barrio">
-  </form>
 </body>
 </html>
+
