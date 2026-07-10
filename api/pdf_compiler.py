@@ -2,14 +2,14 @@ import sys, os, hashlib, datetime
 from pathlib import Path
 
 API_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(API_DIR)
+PROJECT_ROOT = Path(os.path.dirname(API_DIR))
 
 if API_DIR not in sys.path:
     sys.path.insert(0, API_DIR)
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-PAQUETE_ROOT = os.path.join(PROJECT_ROOT, "motor_tma_lonja_baq_v1.0", "motor_tma_lonja_baq_v1.0")
+PAQUETE_ROOT = os.path.join(str(PROJECT_ROOT), "motor_tma_lonja_baq_v1.0", "motor_tma_lonja_baq_v1.0")
 TMA_PIEZAS = os.path.join(PAQUETE_ROOT, "tma_engine", "piezas")
 TMA_DATOS = os.path.join(PAQUETE_ROOT, "tma_engine", "datos")
 LONJA_LAYER = os.path.join(PAQUETE_ROOT, "lonja_layer")
@@ -47,10 +47,10 @@ def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
     return {"semaforo": "VERDE", "estructurable": True, "condiciones_precedentes": []}
 
 def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
-    folio = db_record.get('folio_matricula', '040-XXXXXX')
-    direccion = normalize_address_colombia(db_record.get('direccion', ''))
-    barrio = db_record.get('barrio', '')
-    area = float(db_record.get('area', 0))
+    folio = db_record.get('folio_matricula', '040-XXXXXX') or '040-XXXXXX'
+    direccion = normalize_address_colombia(db_record.get('direccion', '') or '')
+    barrio = db_record.get('barrio', '') or ''
+    area = float(db_record.get('area', 0) or 0)
     is_miramar = 'miramar' in barrio.lower()
     
     val_data = get_valuation(area, barrio)
