@@ -163,8 +163,12 @@ def resolver_matricula_por_direccion(direccion: str) -> tuple:
 
 @app.get("/api/resolver-matricula")
 def resolve_matricula_endpoint(direccion: str):
-    folio, barrio, estrato = resolver_matricula_por_direccion(direccion)
-    return {"folio_matricula": folio, "barrio": barrio, "estrato": estrato}
+    try:
+        folio, barrio, estrato = resolver_matricula_por_direccion(direccion)
+        return {"folio_matricula": folio, "barrio": barrio, "estrato": estrato}
+    except Exception as e:
+        import traceback
+        return {"error": str(e), "traceback": traceback.format_exc()}
 
 @app.post("/api/dictamenes")
 def create_dictamen(payload: dict = Body(...)):
