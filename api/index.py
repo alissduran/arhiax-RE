@@ -492,10 +492,15 @@ async def generar_dictamen_stateless(
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error al compilar el PDF pericial: {str(e)}")
 
-    return FileResponse(
-        path=str(output_pdf),
-        filename=f"ARHIAX_Dictamen_{db_record['folio_matricula']}.pdf",
-        media_type="application/pdf"
+    with open(output_pdf, "rb") as f:
+        pdf_bytes = f.read()
+
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{db_record["folio_matricula"]}.pdf"'
+        }
     )
 
 @app.get("/api/dictamenes/{case_id}/pdf")
@@ -516,10 +521,15 @@ def download_pdf(case_id: int):
     if not os.path.exists(dictamen["pdf_path"]):
         raise HTTPException(status_code=404, detail="El archivo PDF físico no se encuentra en el servidor.")
         
-    return FileResponse(
-        path=dictamen["pdf_path"],
-        filename=f"ARHIAX_Dictamen_{dictamen['folio_matricula']}.pdf",
-        media_type="application/pdf"
+    with open(dictamen["pdf_path"], "rb") as f:
+        pdf_bytes = f.read()
+
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{dictamen["folio_matricula"]}.pdf"'
+        }
     )
 
 @app.get("/api/config")
