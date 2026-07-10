@@ -775,6 +775,7 @@
           // Si el área del caso estaba pendiente, procesar certificado de forma rápida y stateless
           if (!c.area) {
             showLoading(true);
+            let areaEstablecida = false;
             try {
               const formData = new FormData();
               formData.append("file", file);
@@ -788,12 +789,8 @@
                   const ext = data.extraidos;
                   if (ext.area) {
                     c.area = ext.area;
+                    areaEstablecida = true;
                     alert(`[Éxito] Certificado analizado. Área extraída: ${ext.area} m²`);
-                  } else {
-                    const areaManual = prompt("No se pudo extraer el área automáticamente del certificado (puede ser un PDF escaneado o de formato no estándar).\n\nPor favor, ingrese el metraje (área) del inmueble en m²:");
-                    if (areaManual && !isNaN(parseFloat(areaManual))) {
-                      c.area = parseFloat(areaManual);
-                    }
                   }
                   if (ext.folio && c.folio_matricula === 'Pendiente') c.folio_matricula = ext.folio;
                   if (ext.direccion && c.direccion === 'Pendiente') c.direccion = ext.direccion;
@@ -804,6 +801,12 @@
               console.error("Error al pre-analizar PDF: ", err);
             } finally {
               showLoading(false);
+              if (!areaEstablecida) {
+                const areaManual = prompt("No se pudo extraer el área automáticamente del certificado (puede ser un PDF escaneado, de formato no estándar o por un límite de tiempo del servidor).\n\nPor favor, ingrese el metraje (área) del inmueble en m²:");
+                if (areaManual && !isNaN(parseFloat(areaManual))) {
+                  c.area = parseFloat(areaManual);
+                }
+              }
             }
           }
         }
