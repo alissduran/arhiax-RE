@@ -11,27 +11,47 @@ from fastapi import FastAPI, HTTPException, Body, UploadFile, File, Depends, For
 from fastapi.responses import HTMLResponse, Response, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-# 1. Configurar rutas de importación locales
-API_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = API_DIR.parent
-PAQUETE_ROOT = PROJECT_ROOT / "motor_tma_lonja_baq_v1.0" / "motor_tma_lonja_baq_v1.0"
-TMA_PIEZAS = PAQUETE_ROOT / "tma_engine" / "piezas"
-TMA_DATOS = PAQUETE_ROOT / "tma_engine" / "datos"
-LONJA_LAYER = PAQUETE_ROOT / "lonja_layer"
+import traceback
 
-sys.path.insert(0, str(TMA_PIEZAS))
-sys.path.insert(0, str(TMA_DATOS))
-sys.path.insert(0, str(LONJA_LAYER))
-sys.path.insert(0, str(API_DIR))
-sys.path.insert(0, str(PROJECT_ROOT))
+try:
+    # 1. Configurar rutas de importación locales
+    API_DIR = Path(__file__).resolve().parent
+    PROJECT_ROOT = API_DIR.parent
+    PAQUETE_ROOT = PROJECT_ROOT / "motor_tma_lonja_baq_v1.0" / "motor_tma_lonja_baq_v1.0"
+    TMA_PIEZAS = PAQUETE_ROOT / "tma_engine" / "piezas"
+    TMA_DATOS = PAQUETE_ROOT / "tma_engine" / "datos"
+    LONJA_LAYER = PAQUETE_ROOT / "lonja_layer"
 
-# Importaciones locales de base de datos y compilador
-from .database import get_db_connection
-from .pdf_compiler import compile_pdf
-from .address_normalizer import normalize_address_colombia
-from insumos_napoli import PREDIO_NAPOLI_430, COMPARABLES_NAPOLI_MIRAMAR
-from pieza_5_bandeja_revision import generar_bandeja_html
-from contrato_datos import Predio, ResultadoMetodo, Insumo, AjusteAplicado, ReglaConsolidacion, AvaluoConsolidado, fmt_cop
+    sys.path.insert(0, str(TMA_PIEZAS))
+    sys.path.insert(0, str(TMA_DATOS))
+    sys.path.insert(0, str(LONJA_LAYER))
+    sys.path.insert(0, str(API_DIR))
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+    # Importaciones locales de base de datos y compilador
+    from .database import get_db_connection
+    from .pdf_compiler import compile_pdf
+    from .address_normalizer import normalize_address_colombia
+    from insumos_napoli import PREDIO_NAPOLI_430, COMPARABLES_NAPOLI_MIRAMAR
+    from pieza_5_bandeja_revision import generar_bandeja_html
+    from contrato_datos import Predio, ResultadoMetodo, Insumo, AjusteAplicado, ReglaConsolidacion, AvaluoConsolidado, fmt_cop
+    
+    import_error = None
+except Exception as e:
+    import_error = traceback.format_exc()
+    get_db_connection = None
+    compile_pdf = None
+    normalize_address_colombia = None
+    PREDIO_NAPOLI_430 = None
+    COMPARABLES_NAPOLI_MIRAMAR = None
+    generar_bandeja_html = None
+    Predio = None
+    ResultadoMetodo = None
+    Insumo = None
+    AjusteAplicado = None
+    ReglaConsolidacion = None
+    AvaluoConsolidado = None
+    fmt_cop = None
 
 app = FastAPI(title="ARHIAX Workflow API", description="Portal privado y flujo de trabajo para dictámenes catastrales")
 
@@ -516,3 +536,12 @@ def get_config():
     with open(DEFAULT_YAML_PATH, "r", encoding="utf-8") as f:
         content = f.read()
     return {"yaml": content}
+
+if import_error:
+    app.routes.clear()
+    @app.api_route("/{path_name:path}", methods=["GET", "POST", "PUT", "DELETE"])
+    def fallback(path_name: str):
+        return {
+            "error": "Startup failed during imports",
+            "traceback": import_error
+        }
