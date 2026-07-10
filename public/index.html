@@ -786,12 +786,18 @@
                 const data = await response.json();
                 if (data.extraidos) {
                   const ext = data.extraidos;
-                  if (ext.area) c.area = ext.area;
+                  if (ext.area) {
+                    c.area = ext.area;
+                    alert(`[Éxito] Certificado analizado. Área extraída: ${ext.area} m²`);
+                  } else {
+                    const areaManual = prompt("No se pudo extraer el área automáticamente del certificado (puede ser un PDF escaneado o de formato no estándar).\n\nPor favor, ingrese el metraje (área) del inmueble en m²:");
+                    if (areaManual && !isNaN(parseFloat(areaManual))) {
+                      c.area = parseFloat(areaManual);
+                    }
+                  }
                   if (ext.folio && c.folio_matricula === 'Pendiente') c.folio_matricula = ext.folio;
                   if (ext.direccion && c.direccion === 'Pendiente') c.direccion = ext.direccion;
                   if (ext.barrio) c.barrio = ext.barrio;
-                  
-                  alert(`[Éxito] Certificado analizado. Área extraída: ${ext.area || 'No encontrada'} m²`);
                 }
               }
             } catch (err) {
