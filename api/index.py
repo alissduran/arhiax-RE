@@ -15,23 +15,28 @@ import traceback
 
 try:
     # 1. Configurar rutas de importación locales
-    API_DIR = Path(__file__).resolve().parent
-    PROJECT_ROOT = API_DIR.parent
-    PAQUETE_ROOT = PROJECT_ROOT / "motor_tma_lonja_baq_v1.0" / "motor_tma_lonja_baq_v1.0"
-    TMA_PIEZAS = PAQUETE_ROOT / "tma_engine" / "piezas"
-    TMA_DATOS = PAQUETE_ROOT / "tma_engine" / "datos"
-    LONJA_LAYER = PAQUETE_ROOT / "lonja_layer"
+    API_DIR = os.path.dirname(os.path.abspath(__file__))
+    PROJECT_ROOT = os.path.dirname(API_DIR)
+    
+    # Asegurar que estén al inicio de sys.path
+    if API_DIR not in sys.path:
+        sys.path.insert(0, API_DIR)
+    if PROJECT_ROOT not in sys.path:
+        sys.path.insert(0, PROJECT_ROOT)
 
-    sys.path.insert(0, str(TMA_PIEZAS))
-    sys.path.insert(0, str(TMA_DATOS))
-    sys.path.insert(0, str(LONJA_LAYER))
-    sys.path.insert(0, str(API_DIR))
-    sys.path.insert(0, str(PROJECT_ROOT))
+    PAQUETE_ROOT = os.path.join(PROJECT_ROOT, "motor_tma_lonja_baq_v1.0", "motor_tma_lonja_baq_v1.0")
+    TMA_PIEZAS = os.path.join(PAQUETE_ROOT, "tma_engine", "piezas")
+    TMA_DATOS = os.path.join(PAQUETE_ROOT, "tma_engine", "datos")
+    LONJA_LAYER = os.path.join(PAQUETE_ROOT, "lonja_layer")
+
+    sys.path.insert(0, TMA_PIEZAS)
+    sys.path.insert(0, TMA_DATOS)
+    sys.path.insert(0, LONJA_LAYER)
 
     # Importaciones locales de base de datos y compilador
-    from .database import get_db_connection
-    from .pdf_compiler import compile_pdf
-    from .address_normalizer import normalize_address_colombia
+    from database import get_db_connection
+    from pdf_compiler import compile_pdf
+    from address_normalizer import normalize_address_colombia
     from insumos_napoli import PREDIO_NAPOLI_430, COMPARABLES_NAPOLI_MIRAMAR
     from pieza_5_bandeja_revision import generar_bandeja_html
     from contrato_datos import Predio, ResultadoMetodo, Insumo, AjusteAplicado, ReglaConsolidacion, AvaluoConsolidado, fmt_cop

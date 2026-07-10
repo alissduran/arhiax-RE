@@ -1,27 +1,35 @@
 import sys, os, hashlib, datetime
 from pathlib import Path
 
-API_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = API_DIR.parent
-PAQUETE_ROOT = PROJECT_ROOT / 'motor_tma_lonja_baq_v1.0' / 'motor_tma_lonja_baq_v1.0'
-sys.path.insert(0, str(PAQUETE_ROOT / 'tma_engine' / 'piezas'))
-sys.path.insert(0, str(PAQUETE_ROOT / 'tma_engine' / 'datos'))
-sys.path.insert(0, str(PAQUETE_ROOT / 'lonja_layer'))
-sys.path.insert(0, str(API_DIR))
-sys.path.insert(0, str(PROJECT_ROOT))
+API_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(API_DIR)
+
+if API_DIR not in sys.path:
+    sys.path.insert(0, API_DIR)
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+PAQUETE_ROOT = os.path.join(PROJECT_ROOT, "motor_tma_lonja_baq_v1.0", "motor_tma_lonja_baq_v1.0")
+TMA_PIEZAS = os.path.join(PAQUETE_ROOT, "tma_engine", "piezas")
+TMA_DATOS = os.path.join(PAQUETE_ROOT, "tma_engine", "datos")
+LONJA_LAYER = os.path.join(PAQUETE_ROOT, "lonja_layer")
+
+sys.path.insert(0, TMA_PIEZAS)
+sys.path.insert(0, TMA_DATOS)
+sys.path.insert(0, LONJA_LAYER)
 
 from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph, Table, TableStyle, PageBreak, KeepTogether
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from reportlab.platypus import Image as RLImage
-from .dictamen_part1_styles import *
+from dictamen_part1_styles import *
 from solar_engine import get_solar_position, analyze_facade_exposure
 from poi_engine import get_nearby_pois
 from map_generator import generate_maps
-from .address_normalizer import normalize_address_colombia
+from address_normalizer import normalize_address_colombia
 
-from .dictamen_data import get_valuation, get_hallazgos, get_recs, get_identificacion_dt, get_localizacion_dt, get_cobertura_alert, get_analisis_registral_text, get_catastral_dt, get_pot_summary_dt, get_valoracion_alert, get_alcance_dt
+from dictamen_data import get_valuation, get_hallazgos, get_recs, get_identificacion_dt, get_localizacion_dt, get_cobertura_alert, get_analisis_registral_text, get_catastral_dt, get_pot_summary_dt, get_valoracion_alert, get_alcance_dt
 
 def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
     BLOQUEOS_FIDUCIARIOS = {"hipoteca", "embargo", "afectacion", "patrimonio", "demanda", "usufructo", "medida cautelar"}
