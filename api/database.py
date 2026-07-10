@@ -51,6 +51,3 @@ def get_db_connection():
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
     return conn
-
-# Inicializar base de datos
-init_db()
