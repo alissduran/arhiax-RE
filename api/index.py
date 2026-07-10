@@ -451,8 +451,8 @@ async def generar_dictamen_stateless(
         if direccion and "recreo" in direccion.lower():
             barrio = "El Recreo"
 
-    if area is None or area <= 0:
-        raise HTTPException(status_code=400, detail="El metraje (área) del apartamento es requerido. Ingréselo manualmente o cargue un certificado que lo contenga.")
+    if area is None or area < 0:
+        area = 0.0
 
     # Guardar imágenes de ArcGIS Pro si vienen y no están vacías
     if sombra_9am and sombra_9am.filename:

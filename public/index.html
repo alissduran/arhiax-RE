@@ -801,12 +801,6 @@
               console.error("Error al pre-analizar PDF: ", err);
             } finally {
               showLoading(false);
-              if (!areaEstablecida) {
-                const areaManual = prompt("No se pudo extraer el área automáticamente del certificado (puede ser un PDF escaneado, de formato no estándar o por un límite de tiempo del servidor).\n\nPor favor, ingrese el metraje (área) del inmueble en m²:");
-                if (areaManual && !isNaN(parseFloat(areaManual))) {
-                  c.area = parseFloat(areaManual);
-                }
-              }
             }
           }
         }
@@ -851,15 +845,10 @@
       const c = dictamenes.find(item => item.id === selectedCaseId);
       if (!c) return;
 
-      if (!c.area) {
-        alert("Por favor ingrese el metraje (área) antes de generar el dictamen.");
-        return;
-      }
-
       // Rellenar campos ocultos del formulario nativo
       document.getElementById('hidden-folio').value = c.folio_matricula;
       document.getElementById('hidden-direccion').value = c.direccion;
-      document.getElementById('hidden-area').value = c.area;
+      document.getElementById('hidden-area').value = c.area || "";
       document.getElementById('hidden-barrio').value = c.barrio;
 
       // Enviar el formulario. El navegador abrirá una pestaña temporal e iniciará la descarga nativa
