@@ -26,9 +26,9 @@ sys.path.insert(0, str(API_DIR))
 sys.path.insert(0, str(PROJECT_ROOT))
 
 # Importaciones locales de base de datos y compilador
-from database import get_db_connection
-from pdf_compiler import compile_pdf
-from address_normalizer import normalize_address_colombia
+from .database import get_db_connection
+from .pdf_compiler import compile_pdf
+from .address_normalizer import normalize_address_colombia
 from insumos_napoli import PREDIO_NAPOLI_430, COMPARABLES_NAPOLI_MIRAMAR
 from pieza_5_bandeja_revision import generar_bandeja_html
 from contrato_datos import Predio, ResultadoMetodo, Insumo, AjusteAplicado, ReglaConsolidacion, AvaluoConsolidado, fmt_cop
