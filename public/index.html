@@ -449,10 +449,6 @@
               <label for="input-direccion">Dirección (Opcional si tiene matrícula)</label>
               <input type="text" id="input-direccion" placeholder="Ej: Calle 63 # 37-71">
             </div>
-            <div class="form-group">
-              <label for="input-area">Área Privada (m²) (Opcional)</label>
-              <input type="number" id="input-area" placeholder="Se extraerá del certificado si se deja vacío" step="0.01">
-            </div>
             <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="crearDictamen()">Iniciar Caso</button>
           </div>
         </div>
@@ -647,22 +643,39 @@
       });
     }
 
-    function crearDictamen() {
+    async function crearDictamen() {
       const folio = document.getElementById('input-folio').value.trim();
       const direccion = document.getElementById('input-direccion').value.trim();
-      const area = document.getElementById('input-area').value;
 
       if (!folio && !direccion) {
         alert("Debe ingresar al menos la matrícula inmobiliaria o la dirección del predio.");
         return;
       }
 
+      showLoading(true);
+      let resolvedFolio = folio || "Pendiente";
+      let resolvedBarrio = direccion.toLowerCase().includes("recreo") ? "El Recreo" : "Miramar";
+
+      if (!folio && direccion) {
+        try {
+          const res = await fetch(`/api/resolver-matricula?direccion=${encodeURIComponent(direccion)}`);
+          if (res.ok) {
+            const data = await res.json();
+            resolvedFolio = data.folio_matricula;
+            resolvedBarrio = data.barrio;
+          }
+        } catch (err) {
+          console.error("Error al resolver matrícula:", err);
+        }
+      }
+      showLoading(false);
+
       const newCase = {
         id: Date.now(),
-        folio_matricula: folio || "Pendiente",
+        folio_matricula: resolvedFolio,
         direccion: direccion || "Pendiente",
-        area: area ? parseFloat(area) : null,
-        barrio: direccion.toLowerCase().includes("recreo") ? "El Recreo" : "Miramar",
+        area: null,
+        barrio: resolvedBarrio,
         certificado_cargado: 0,
         sombra_9am_cargada: 0,
         sombra_3pm_cargada: 0,
@@ -676,7 +689,6 @@
       // Limpiar formulario
       document.getElementById('input-folio').value = "";
       document.getElementById('input-direccion').value = "";
-      document.getElementById('input-area').value = "";
 
       // Reiniciar archivos temporales para este nuevo caso
       limpiarInputsDeArchivos();
