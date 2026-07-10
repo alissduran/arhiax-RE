@@ -37,9 +37,6 @@ try:
     from database import get_db_connection
     from pdf_compiler import compile_pdf
     from address_normalizer import normalize_address_colombia
-    from insumos_napoli import PREDIO_NAPOLI_430, COMPARABLES_NAPOLI_MIRAMAR
-    from pieza_5_bandeja_revision import generar_bandeja_html
-    from contrato_datos import Predio, ResultadoMetodo, Insumo, AjusteAplicado, ReglaConsolidacion, AvaluoConsolidado, fmt_cop
     
     import_error = None
 except Exception as e:
@@ -47,16 +44,6 @@ except Exception as e:
     get_db_connection = None
     compile_pdf = None
     normalize_address_colombia = None
-    PREDIO_NAPOLI_430 = None
-    COMPARABLES_NAPOLI_MIRAMAR = None
-    generar_bandeja_html = None
-    Predio = None
-    ResultadoMetodo = None
-    Insumo = None
-    AjusteAplicado = None
-    ReglaConsolidacion = None
-    AvaluoConsolidado = None
-    fmt_cop = None
 
 app = FastAPI(title="ARHIAX Workflow API", description="Portal privado y flujo de trabajo para dictámenes catastrales")
 
