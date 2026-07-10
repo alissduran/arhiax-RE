@@ -3,10 +3,11 @@ import os
 from pathlib import Path
 
 # Usar /tmp en el entorno de servidor de Vercel (filesystem de sólo lectura excepto /tmp)
-if os.environ.get("VERCEL") or not os.access(str(Path(__file__).resolve().parent), os.W_OK):
-    DB_PATH = Path("/tmp/database.db")
+API_DIR = os.path.dirname(os.path.abspath(__file__))
+if os.environ.get("VERCEL") or not os.access(API_DIR, os.W_OK):
+    DB_PATH = "/tmp/database.db"
 else:
-    DB_PATH = Path(__file__).resolve().parent / "database.db"
+    DB_PATH = os.path.join(API_DIR, "database.db")
 
 def init_db():
     conn = sqlite3.connect(str(DB_PATH))
