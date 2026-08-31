@@ -1,20 +1,31 @@
 import math
 import os
+import sys
+from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
-from poi_engine import get_nearby_pois
 
-def generate_maps(lat, lon, pois, output_png_path, output_html_path):
+# Garantizar que api/ esté en sys.path independientemente del llamador
+_API_DIR = str(Path(__file__).resolve().parent)
+if _API_DIR not in sys.path:
+    sys.path.insert(0, _API_DIR)
+
+from poi_engine import get_nearby_pois
+from geospatial_engine import evaluate_predio  # api/geospatial_engine.py
+
+def generate_maps(lat, lon, pois, output_png_path, output_html_path, inmueble_label="Inmueble", direccion=""):
     """
     Genera un mapa estático (PNG) usando Pillow y un mapa interactivo (HTML) con Leaflet.js.
     """
-    is_miramar = lat > 10.985
-    inmueble_label = "Napoli (Inmueble)" if is_miramar else "Inmueble"
-    inmueble_popup = "<b>Inmueble: Conjunto Residencial Napoli</b><br/>Tv 43 # 100-50" if is_miramar else "<b>Inmueble: Calle 63 #37-71</b><br/>Barrio El Recreo"
+    risk_eval = evaluate_predio(lat, lon)
+
+    dir_popup = f"<br/>{direccion}" if direccion else f"<br/>Lat: {lat:.5f}, Lon: {lon:.5f}"
+    inmueble_popup = f"<b>{inmueble_label}</b>{dir_popup}"
 
     # ── 1. GENERAR MAPA ESTÁTICO (Pillow) ──────────────────────────────────
     # Dimensiones de la imagen
     width, height = 1800, 1100
     cx, cy = width // 2, height // 2
+
     
     # Crear lienzo en blanco con fondo gris claro
     img = Image.new("RGBA", (width, height), "#F7F8FC")
@@ -241,6 +252,25 @@ def generate_maps(lat, lon, pois, output_png_path, output_html_path):
             return div;
         }};
         legend.addTo(map);
+
+        // Tarjeta Control ARHIAX - Diagnóstico Geotécnico POT
+        var riskCard = L.control({{position: 'topright'}});
+        riskCard.onAdd = function (map) {{
+            var div = L.DomUtil.create('div', 'legend');
+            div.style.backgroundColor = '#ffffff';
+            div.style.borderLeft = '5px solid #0D2C6B';
+            div.style.maxWidth = '280px';
+            div.innerHTML = `
+                <div style="font-weight:bold; color:#0D2C6B; margin-bottom:5px;">DIAGNÓSTICO GEOESPACIAL POT</div>
+                <div style="font-size:11px; color:#4A5568; line-height:1.4;">
+                    <b>• Amenaza Remoción:</b> <span style="color:{risk_eval['amenaza_remocion_masa']['color_hex']}; font-weight:bold;">{risk_eval['amenaza_remocion_masa']['nivel']}</span><br/>
+                    <b>• Zonificación Riesgo:</b> <span style="color:{risk_eval['areas_en_riesgo']['color_hex']}; font-weight:bold;">{risk_eval['areas_en_riesgo']['nivel']}</span><br/>
+                    <b>• Clase Suelo:</b> {risk_eval['amenaza_remocion_masa']['clase_suelo']}
+                </div>
+            `;
+            return div;
+        }};
+        riskCard.addTo(map);
     </script>
 </body>
 </html>"""

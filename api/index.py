@@ -7,7 +7,8 @@ import re
 import pypdf
 from pathlib import Path
 from datetime import datetime
-from fastapi import FastAPI, HTTPException, Body, UploadFile, File, Depends, Form
+from fastapi import FastAPI, HTTPException, Body, UploadFile, File, Depends, Form, BackgroundTasks
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, Response, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -37,6 +38,7 @@ try:
     from database import get_db_connection
     from pdf_compiler import compile_pdf
     from address_normalizer import normalize_address_colombia
+    from geocoder import geocodificar_desde_ctl, geocodificar_direccion
     
     import_error = None
 except Exception as e:
@@ -102,21 +104,26 @@ def extraer_datos_de_pdf(pdf_path: str) -> dict:
         if matches_folio:
             datos["folio"] = matches_folio[0]
 
-        # 3. Determinar Barrio
-        if "recreo" in texto.lower():
-            datos["barrio"] = "El Recreo"
-        elif "miramar" in texto.lower():
-            datos["barrio"] = "Miramar"
+        # 3. Extraer datos geoespaciales desde el CTL (direccion, barrio, lat, lon)
+        geo_ctl = geocodificar_desde_ctl(texto)
+        if geo_ctl.get("barrio") and not datos["barrio"]:
+            datos["barrio"] = geo_ctl["barrio"]
+        if geo_ctl.get("direccion") and not datos["direccion"]:
+            datos["direccion"] = geo_ctl["direccion"]
+        # Siempre guardamos lat/lon (incluso si son centroide fallback)
+        datos["lat"] = geo_ctl["lat"]
+        datos["lon"] = geo_ctl["lon"]
+        datos["fuente_geocod"] = geo_ctl["fuente_geocod"]
 
-        # 4. Extraer Dirección
-        patron_dir_label = r"(?:Dirección|Direccion|Ubicación|Ubicacion)\s*:\s*([^\n\r]+)"
-        matches_dir = re.findall(patron_dir_label, texto, re.IGNORECASE)
-        if matches_dir:
-            datos["direccion"] = matches_dir[0].strip()
-        else:
-            # Buscar nomenclatura directa de dirección colombiana
-            patron_nom = r"\b(?:CL|CRA|AV|DG|TV)\s+\d+[A-Z]?\s*#\s*\d+[A-Z]?\s*-\s*\d+\b"
-            matches_nom = re.findall(patron_nom, texto, re.IGNORECASE)
+        # 4. Extraer Dirección (complemento si geocoder no la encontró)
+        if not datos["direccion"]:
+            patron_dir_label = r"(?:Dirección|Direccion|Ubicación|Ubicacion)\s*:\s*([^\n\r]+)"
+            matches_dir = re.findall(patron_dir_label, texto, re.IGNORECASE)
+            if matches_dir:
+                datos["direccion"] = matches_dir[0].strip()
+            else:
+                patron_nom = r"\b(?:CL|CRA|AV|DG|TV)\s+\d+[A-Z]?\s*#\s*\d+[A-Z]?\s*-\s*\d+\b"
+                matches_nom = re.findall(patron_nom, texto, re.IGNORECASE)
             if matches_nom:
                 datos["direccion"] = matches_nom[0]
 
@@ -169,8 +176,6 @@ def resolver_matricula_por_direccion(direccion: str) -> tuple:
     
     barrio = "Miramar"
     if "recreo" in normalized.lower() or "el recreo" in normalized.lower():
-        barrio = "El Recreo"
-        
     return folio_simulado, barrio, 4
 
 @app.get("/api/resolver-matricula")
@@ -183,7 +188,7 @@ def resolve_matricula_endpoint(direccion: str):
         return {"error": str(e), "traceback": traceback.format_exc()}
 
 @app.post("/api/dictamenes")
-def create_dictamen(payload: dict = Body(...)):
+def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks = None):
     folio = payload.get("folio_matricula", "").strip()
     direccion = payload.get("direccion", "").strip()
     
@@ -208,17 +213,12 @@ def create_dictamen(payload: dict = Body(...)):
     if "recreo" in direccion.lower():
         barrio = "El Recreo"
         
-    area_val = payload.get("area")
-    area = float(area_val) if area_val else None
-    
-    # Calcular el valor si el área es proporcionada
-    if area:
-        valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
-        valor_estimado = int(round(valor_m2 * area, -4))
-    else:
-        valor_estimado = None
+    # El área e inicialización de valor estimado quedan en 0.0 y 0 hasta que se procese el Certificado
+    area = 0.0
+    valor_estimado = 0
     
     fecha_creacion = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    acreedor_real = payload.get("acreedor_real", None)
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -228,12 +228,29 @@ def create_dictamen(payload: dict = Body(...)):
     """, (folio, direccion, barrio, estrato, area, "PENDIENTE_IMAGENES", valor_estimado, fecha_creacion))
     conn.commit()
     new_id = cursor.lastrowid
+    # Guardar acreedor_real si fue declarado
+    if acreedor_real:
+        try:
+            cursor.execute("UPDATE dictamenes SET acreedor_real = ? WHERE id = ?", (acreedor_real, new_id))
+            conn.commit()
+        except Exception:
+            pass  # la columna puede no existir aun
     conn.close()
     
     # Crear carpeta física para guardar imágenes de este caso
     case_dir = ASSETS_DIR / f"case_{new_id}"
     case_dir.mkdir(parents=True, exist_ok=True)
     
+    # Lanzar la automatización de sombras con coordenadas geocodificadas reales
+    if background_tasks:
+        try:
+            from solar_automation import capturar_sombras_playwright
+            # Geocodificar la dirección real del predio (no hardcodeado por barrio)
+            lat_solar, lon_solar = geocodificar_direccion(direccion if direccion != "Pendiente" else barrio)
+            background_tasks.add_task(capturar_sombras_playwright, lat_solar, lon_solar, new_id, str(case_dir))
+        except Exception as e:
+            print(f"[ERROR] No se pudo lanzar la tarea de automatización de sombras: {e}")
+            
     return {"id": new_id, "folio_matricula": folio, "direccion": direccion, "barrio": barrio, "estado": "PENDIENTE_IMAGENES"}
 
 @app.post("/api/dictamenes/{case_id}/upload/{img_type}")
@@ -276,14 +293,15 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
         
         if row:
             # 1. Completar folio de matrícula si estaba pendiente
+            # 1. La matrícula inmobiliaria real del Certificado siempre prevalece sobre la tentativa
             nuevo_folio = row["folio_matricula"]
-            if (row["folio_matricula"] == "Pendiente" or not row["folio_matricula"]) and extraidos.get("folio"):
+            if extraidos.get("folio"):
                 nuevo_folio = extraidos["folio"]
                 cursor.execute("UPDATE dictamenes SET folio_matricula = ? WHERE id = ?", (nuevo_folio, case_id))
             
-            # 2. Completar dirección si estaba pendiente
+            # 2. La dirección específica del Certificado siempre prevalece sobre la general
             nueva_direccion = row["direccion"]
-            if (row["direccion"] == "Pendiente" or not row["direccion"]) and extraidos.get("direccion"):
+            if extraidos.get("direccion"):
                 nueva_direccion = extraidos["direccion"]
                 cursor.execute("UPDATE dictamenes SET direccion = ? WHERE id = ?", (nueva_direccion, case_id))
             
@@ -293,16 +311,23 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
                 nuevo_barrio = extraidos["barrio"]
                 cursor.execute("UPDATE dictamenes SET barrio = ? WHERE id = ?", (nuevo_barrio, case_id))
 
-            # 4. Completar Área y Valor Estimado
+            # 3b. Guardar coordenadas geocodificadas en la BD
+            if extraidos.get("lat") and extraidos.get("lon"):
+                cursor.execute(
+                    "UPDATE dictamenes SET lat = ?, lon = ?, fuente_geocod = ? WHERE id = ?",
+                    (extraidos["lat"], extraidos["lon"], extraidos.get("fuente_geocod", "nominatim"), case_id)
+                )
+
+            # 4. Completar Area y Valor Estimado
             area_final = row["area"]
             if (row["area"] is None or row["area"] == 0) and extraidos.get("area"):
                 area_final = extraidos["area"]
                 area_extraida = area_final
-                valor_m2 = 6887625 if "miramar" in nuevo_barrio.lower() else 5146666
-                valor_estimado = int(round(valor_m2 * area_final, -4))
-                cursor.execute("UPDATE dictamenes SET area = ?, valor_consolidado = ? WHERE id = ?", 
+                # Valor estimado provisional — sera recalculado por el motor TMA en compile_pdf
+                valor_estimado = int(round(6500000 * area_final, -4))
+                cursor.execute("UPDATE dictamenes SET area = ?, valor_consolidado = ? WHERE id = ?",
                                (area_final, valor_estimado, case_id))
-                
+
     conn.commit()
     
     # Verificar si todas están cargadas para generar el PDF
@@ -341,7 +366,7 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
     }
 
 @app.post("/api/dictamenes/{case_id}/update")
-def update_dictamen(case_id: int, payload: dict = Body(...)):
+def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: BackgroundTasks = None):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
@@ -354,34 +379,58 @@ def update_dictamen(case_id: int, payload: dict = Body(...)):
     dictamen = dict(row)
     
     # Obtener valores del payload
-    area = payload.get("area")
     folio = payload.get("folio_matricula", dictamen["folio_matricula"])
     direccion = payload.get("direccion", dictamen["direccion"])
     
-    if area is not None:
+    # Si la dirección cambia, recalcular el barrio de forma inteligente
+    barrio = dictamen["barrio"]
+    direccion_cambiada = False
+    if direccion and direccion != dictamen["direccion"]:
+        direccion_cambiada = True
+        # Bloque C: inferir barrio desde geocodificacion real en lugar de if/else manual
         try:
-            area = float(area)
-            barrio = dictamen["barrio"]
-            valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
-            valor_consolidado = int(round(valor_m2 * area, -4))
+            from geocoder import geocodificar_desde_ctl
+            geo = geocodificar_desde_ctl(direccion)
+            if geo.get("barrio") and geo["barrio"] != "Miramar":
+                barrio = geo["barrio"]
+        except Exception:
+            if "recreo" in direccion.lower():
+                barrio = "El Recreo"
+    
+    acreedor_real = payload.get("acreedor_real", dictamen.get("acreedor_real", None))
             
-            cursor.execute("""
-                UPDATE dictamenes 
-                SET area = ?, valor_consolidado = ?, folio_matricula = ?, direccion = ?
-                WHERE id = ?
-            """, (area, valor_consolidado, folio, direccion, case_id))
-        except ValueError:
-            conn.close()
-            raise HTTPException(status_code=400, detail="Formato de área inválido.")
-    else:
-        cursor.execute("""
-            UPDATE dictamenes 
-            SET folio_matricula = ?, direccion = ?
-            WHERE id = ?
-        """, (folio, direccion, case_id))
+    # El valor consolidado solo se actualiza si el área ya existe (extraída por certificado)
+    area = dictamen["area"]
+    valor_consolidado = dictamen["valor_consolidado"]
+    if area is not None:
+        valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
+        valor_consolidado = int(round(valor_m2 * area, -4))
+    
+    cursor.execute("""
+        UPDATE dictamenes 
+        SET folio_matricula = ?, direccion = ?, barrio = ?, valor_consolidado = ?
+        WHERE id = ?
+    """, (folio, direccion, barrio, valor_consolidado, case_id))
         
     conn.commit()
     
+    case_dir = ASSETS_DIR / f"case_{case_id}"
+    
+    # Lanzar la automatización de sombras con coordenadas geocodificadas reales
+    if direccion_cambiada and background_tasks:
+        try:
+            from solar_automation import capturar_sombras_playwright
+            # Usar geocoder universal en lugar del dict hardcodeado
+            lat_solar, lon_solar = geocodificar_direccion(direccion)
+            
+            # Resetear banderas de sombras cargadas antes de relanzar
+            cursor.execute("UPDATE dictamenes SET sombra_9am_cargada = 0, sombra_3pm_cargada = 0 WHERE id = ?", (case_id,))
+            conn.commit()
+            
+            background_tasks.add_task(capturar_sombras_playwright, lat_solar, lon_solar, case_id, str(case_dir))
+        except Exception as e:
+            print(f"[ERROR] No se pudo relanzar la automatización de sombras en update: {e}")
+
     # Re-verificar si ya se puede compilar
     cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
     row = cursor.fetchone()
@@ -408,6 +457,31 @@ def update_dictamen(case_id: int, payload: dict = Body(...)):
             
     conn.close()
     return dictamen
+
+@app.delete("/api/dictamenes/{case_id}")
+def delete_dictamen(case_id: int):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
+    row = cursor.fetchone()
+    
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Caso no encontrado.")
+        
+    cursor.execute("DELETE FROM dictamenes WHERE id = ?", (case_id,))
+    conn.commit()
+    conn.close()
+    
+    # Eliminar físicamente los archivos asociados al caso
+    case_dir = ASSETS_DIR / f"case_{case_id}"
+    if case_dir.exists() and case_dir.is_dir():
+        try:
+            shutil.rmtree(case_dir)
+        except Exception as e:
+            print(f"Error al eliminar la carpeta del caso {case_id}: {e}")
+            
+    return {"success": True, "message": f"Caso {case_id} eliminado exitosamente."}
 
 @app.post("/api/dictamenes/generar")
 async def generar_dictamen_stateless(
@@ -480,7 +554,8 @@ async def generar_dictamen_stateless(
         "valor_consolidado": valor_consolidado,
         "sombra_9am_cargada": 1 if sombra_9am else 0,
         "sombra_3pm_cargada": 1 if sombra_3pm else 0,
-        "mapa_cargado": 1 if mapa_satelital else 0
+        "mapa_cargado": 1 if mapa_satelital else 0,
+        "acreedor_real": None,  # Bloque D: campo para discrepancia — se puede pasar via Form en futuras versiones
     }
 
     # 4. Compilar PDF
@@ -539,6 +614,11 @@ def get_config():
     with open(DEFAULT_YAML_PATH, "r", encoding="utf-8") as f:
         content = f.read()
     return {"yaml": content}
+
+# Servir archivos estáticos del frontend (public) en la raíz
+PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
+if os.path.exists(PUBLIC_DIR):
+    app.mount("/", StaticFiles(directory=PUBLIC_DIR, html=True), name="public")
 
 if import_error:
     app.routes.clear()

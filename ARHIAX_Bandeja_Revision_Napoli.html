@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Bandeja de Revisión TMA — Folio 040-646406</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Calibri", "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: #1A1A1A;
+    background: #f0f0f0;
+    margin: 0;
+    padding: 24px 16px;
+    line-height: 1.55;
+    font-size: 14px;
+  }
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .header {
+    background: #0B1426;
+    color: white;
+    padding: 24px 36px;
+    border-bottom: 4px solid #8B6F47;
+  }
+  .header h1 {
+    font-family: Cambria, Georgia, serif;
+    font-size: 28px;
+    margin: 0 0 4px 0;
+  }
+  .header .sub { font-size: 14px; opacity: 0.85; }
+  .header .meta { font-size: 12px; opacity: 0.7; margin-top: 8px; font-family: Consolas, monospace; }
+  
+  .body { padding: 24px 36px; }
+  
+  .estado-banner {
+    background: #F8EFD4;
+    border-left: 6px solid #8C6B14;
+    padding: 18px 24px;
+    margin: 0 0 24px 0;
+    border-radius: 3px;
+  }
+  .estado-banner .label {
+    font-family: Cambria, Georgia, serif;
+    font-size: 22px;
+    font-weight: bold;
+    color: #8C6B14;
+  }
+  .estado-banner .tiempo {
+    font-size: 13px;
+    color: #0B1426;
+    margin-top: 4px;
+  }
+  .estado-banner .razon {
+    font-size: 13px;
+    color: #1A1A1A;
+    margin-top: 10px;
+  }
+  
+  .resultado-grande {
+    text-align: center;
+    background: #8B6F47;
+    color: white;
+    padding: 24px;
+    border-radius: 4px;
+    margin: 24px 0;
+  }
+  .resultado-grande .num {
+    font-family: Cambria, Georgia, serif;
+    font-size: 42px;
+    font-weight: bold;
+  }
+  .resultado-grande .lab { font-size: 12px; opacity: 0.85; letter-spacing: 0.1em; }
+  .resultado-grande .banda { font-size: 14px; margin-top: 8px; opacity: 0.95; }
+  
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 18px 0;
+  }
+  .info-card {
+    background: #F5F2EC;
+    padding: 14px 18px;
+    border-radius: 3px;
+  }
+  .info-card .lab { font-size: 10px; color: #5A6378; letter-spacing: 0.05em; }
+  .info-card .val { font-size: 14px; color: #0B1426; font-weight: 600; }
+  
+  h2 {
+    font-family: Cambria, Georgia, serif;
+    color: #0B1426;
+    font-size: 20px;
+    border-bottom: 2px solid #8B6F47;
+    padding-bottom: 6px;
+    margin: 28px 0 16px 0;
+  }
+  
+  .method-card {
+    background: white;
+    border: 1px solid #C9CFD8;
+    padding: 16px 18px;
+    margin: 14px 0;
+    border-radius: 3px;
+  }
+  
+  details summary { outline: none; }
+  details summary::marker { color: #8B6F47; }
+  
+  .obs-motor {
+    background: #DCE6F1;
+    border-left: 5px solid #1F4E79;
+    padding: 12px 18px;
+    margin: 16px 0;
+    border-radius: 3px;
+  }
+  .obs-motor h3 {
+    font-family: Cambria, Georgia, serif;
+    margin: 0 0 8px 0;
+    color: #1F4E79;
+    font-size: 14px;
+  }
+  
+  .acciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 28px 0 16px 0;
+  }
+  .btn {
+    padding: 16px 24px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    border: none;
+    transition: transform 0.05s;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.primary {
+    background: #2E5F3E;
+    color: white;
+  }
+  .btn.secondary {
+    background: white;
+    color: #0B1426;
+    border: 2px solid #C9CFD8;
+  }
+  .btn.warn {
+    background: #8B2E2E;
+    color: white;
+  }
+  
+  .signature-zone {
+    border: 2px dashed #8B6F47;
+    padding: 24px;
+    margin: 24px 0;
+    background: #F5F2EC;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .signature-zone .cap {
+    font-style: italic;
+    color: #5A6378;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+  .signature-zone .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 12px 0;
+    text-align: left;
+  }
+  .signature-zone .input-row > div {
+    background: white;
+    padding: 12px;
+    border-radius: 3px;
+    border: 1px solid #C9CFD8;
+  }
+  .signature-zone label { font-size: 11px; color: #5A6378; text-transform: uppercase; }
+  
+  .audit-trail {
+    background: #0B1426;
+    color: white;
+    padding: 18px 24px;
+    margin: 24px 0 0 0;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    border-radius: 3px;
+  }
+  .audit-trail h3 {
+    font-family: Cambria, Georgia, serif;
+    font-size: 14px;
+    margin: 0 0 10px 0;
+    color: #BFA37A;
+  }
+  
+  .pequeño { font-size: 11px; color: #5A6378; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>Bandeja de Revisión TMA</h1>
+    <div class="sub">Triangulación Metodológica Asistida — Estándar LAI v1.0</div>
+    <div class="meta">Folio 040-646406 · Hash avalúo: <code>92d887c2252f4308538b1ae1…</code></div>
+  </div>
+
+  <div class="body">
+
+    <div class="estado-banner">
+      <div class="label">⚠ REQUIERE VALIDACIÓN</div>
+      <div class="tiempo">Revisión estimada: 10-15 minutos</div>
+      <div class="razon">El método M2 se aparta más de la tolerancia (15%). El motor desestima M2 y consolida con M1 (70%) y M3 (30%) según la regla fallback.</div>
+    </div>
+
+    <h2>Activo bajo avalúo</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="lab">FOLIO MATRÍCULA</div><div class="val">040-646406</div></div>
+      <div class="info-card"><div class="lab">DIRECCIÓN</div><div class="val">TV 43 # 100-50, Apto 430, Torre 8, Etapa 3, Conjunto Residencial Napoli</div></div>
+      <div class="info-card"><div class="lab">ÁREA CONSTRUIDA</div><div class="val">58.75 m²</div></div>
+      <div class="info-card"><div class="lab">COEF. COPROPIEDAD</div><div class="val">0.2037%</div></div>
+      <div class="info-card"><div class="lab">ESTRATO / TIPOLOGÍA</div><div class="val">Estrato 4 · Apartamento NO VIS - Propiedad Horizontal</div></div>
+      <div class="info-card"><div class="lab">ANTIGÜEDAD</div><div class="val">3 años · Piso 4</div></div>
+    </div>
+
+    <div class="resultado-grande">
+      <div class="lab">VALOR CONSOLIDADO TMA</div>
+      <div class="num">$ 407.800.000</div>
+      <div class="banda">Banda 80%: $ 354.786.000 — $ 460.813.999</div>
+      <div class="pequeño" style="color:rgba(255,255,255,0.85);margin-top:8px;">$/m² central: $ 6.941.276/m² · Distancia máxima entre métodos: 25.00%</div>
+    </div>
+
+    <h2>Métodos valuatorios aplicados</h2>
+    <p class="pequeño" style="margin-bottom:14px;">Cada método se ejecutó independientemente con sus propios insumos sellados criptográficamente. Los métodos efectivos en consolidado están resaltados.</p>
+
+    
+        <div class="method-card" style="border-left:5px solid #8B6F47;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                    <div style="font-size:11px;color:#5A6378;letter-spacing:0.05em;">M1</div>
+                    <div style="font-family:Cambria,Georgia,serif;font-size:18px;font-weight:bold;color:#0B1426;">Comparación de Mercado</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:11px;color:#2E5F3E;font-weight:bold;letter-spacing:0.05em;">Peso: 70%</div>
+                </div>
+            </div>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:14px 0;">
+                <div style="padding:10px;background:#EEF1F6;border-radius:3px;text-align:center;">
+                    <div style="font-size:10px;color:#5A6378;">VALOR CENTRAL</div>
+                    <div style="font-size:18px;font-weight:bold;color:#0B1426;">$ 404.650.000</div>
+                </div>
+                <div style="padding:10px;background:#EEF1F6;border-radius:3px;text-align:center;">
+                    <div style="font-size:10px;color:#5A6378;">$ POR M²</div>
+                    <div style="font-size:18px;font-weight:bold;color:#0B1426;">$ 6.887.625/m²</div>
+                </div>
+                <div style="padding:10px;background:#EEF1F6;border-radius:3px;text-align:center;">
+                    <div style="font-size:10px;color:#5A6378;">BANDA 80%</div>
+                    <div style="font-size:13px;color:#0B1426;">$ 352.045.500<br/>—<br/>$ 457.254.499</div>
+                </div>
+            </div>
+            
+            <details style="margin-top:10px;">
+                <summary style="cursor:pointer;color:#8B6F47;font-size:13px;font-weight:bold;">▸ Ver metodología, ajustes e insumos (8 insumos · 2 ajustes)</summary>
+                <div style="margin-top:10px;padding:12px;background:#F5F2EC;border-radius:3px;">
+                    <p style="font-size:12px;font-style:italic;margin:0 0 10px 0;">Método de Comparación de Mercado (Res. IGAC 620/2008 Art. 1). Pondera 8 comparables con indexación temporal activa.</p>
+                    
+                    <b style="font-size:12px;color:#0B1426;">Ajustes aplicados:</b>
+                    <ul style="margin:4px 0 10px 16px;">
+            <li style="font-size:12px;margin:4px 0;">
+                <b>Indexación Temporal Acumulada (2024-2026)</b> (factor 1.620): Calibración por dinámica comercial post-pandemia e incremento del costo del suelo en Miramar.
+            </li>
+            <li style="font-size:12px;margin:4px 0;">
+                <b>Homogeneidad por Proximidad</b> (factor 0.850): Ponderación diferencial por cercanía física al cluster original.
+            </li></ul>
+                    
+                    <b style="font-size:12px;color:#0B1426;">Insumos sellados (Ed25519):</b>
+                    <div style="margin:4px 0;">
+            <div style="font-size:11px;color:#5A6378;margin:2px 0;">
+                <code style="color:#8B6F47;">d164baf64dd9…</code>
+                · Trovit / Nuroa · 2026-05-06
+            </div>
+            <div style="font-size:11px;color:#5A6378;margin:2px 0;">
+                <code style="color:#8B6F47;">eb1eec77633d…</code>
+                · Nuroa.com.co · 2026-05-06
+            </div>
+            <div style="font-size:11px;color:#5A6378;margin:2px 0;">
+                <code style="color:#8B6F47;">455b45f6ad85…</code>
+                · Trovit · 2026-05-06
+            </div>
+            <div style="font-size:11px;color:#5A6378;margin:2px 0;">
+                <code style="color:#8B6F47;">96d79bbd48d8…</code>
+                · Mitula Casas · 2026-05-06
+            </div>
+            <div style="font-size:11px;color:#5A6378;margin:2px 0;">
+                <code style="color:#8B6F47;">ddbb87a43aa6…</code>
+                · Mitula Casas · 2026-05-06
+            </div></div>
+                    
+                    <b style="font-size:12px;color:#0B1426;">Observaciones:</b>
+                    <ul style="margin:4px 0 0 16px;"><li style='font-size:12px;'>Estabilidad de banda observada</li><li style='font-size:12px;'>Correlación directa óptima en cluster Napoli</li></ul>
+                    
+                    <div style="margin-top:10px;font-size:10px;color:#5A6378;">
+                        <b>Hash resultado:</b> <code>3f43ed4de531f5fbd3763de6b3a193c46013b60b7253eaafaebc277e4f47a315</code>
+                    </div>
+                </div>
+            </details>
+        </div>
+        
+        <div class="method-card" style="border-left:5px solid #5A6378;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                    <div style="font-size:11px;color:#5A6378;letter-spacing:0.05em;">M2</div>
+                    <div style="font-family:Cambria,Georgia,serif;font-size:18px;font-weight:bold;color:#0B1426;">Costo de Reposición</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:11px;color:#5A6378;font-weight:bold;letter-spacing:0.05em;">DESESTIMADO</div>
+                </div>
+            </div>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:14px 0;">
+                <div style="padding:10px;background:#EEF1F6;border-radius:3px;text-align:center;">
+                    <div style="font-size:10px;color:#5A6378;">VALOR CENTRAL</div>
+                    <div style="font-size:18px;font-weight:bold;color:#0B1426;">$ 509.750.000</div>
+                </div>
+                <div style="padding:10px;background:#EEF1F6;border-radius:3px;text-align:center;">
+                    <div style="font-size:10px;color:#5A6378;">$ POR M²</div>
+                    <div style="font-size:18px;font-weight:bold;color:#0B1426;">$ 8.676.595/m²</div>
+                </div>
+                <div style="padding:10px;background:#EEF1F6;border-radius:3px;text-align:center;">
+                    <div style="font-size:10px;color:#5A6378;">BANDA 80%</div>
+                    <div style="font-size:13px;color:#0B1426;">$ 443.482.500<br/>—<br/>$ 576.017.500</div>
+                </div>
+            </div>
+            
+            <details style="margin-top:10px;">
+                <summary style="cursor:pointer;color:#8B6F47;font-size:13px;font-weight:bold;">▸ Ver metodología, ajustes e insumos (1 insumos · 1 ajustes)</summary>
+                <div style="margin-top:10px;padding:12px;background:#F5F2EC;border-radius:3px;">
+                    <p style="font-size:12px;font-style:italic;margin:0 0 10px 0;">Método de Costo de Reposición (Res. IGAC 620/2008 Art. 3). Estimación de valor por reposición de obra nueva con depreciación Fitto-Corvini.</p>
+                    
+                    <b style="font-size:12px;color:#0B1426;">Ajustes aplicados:</b>
+                    <ul style="margin:4px 0 10px 16px;">
+            <li style="font-size:12px;margin:4px 0;">
+                <b>Factor de Costos Camacol</b> (factor 1.258): Incremento de costos de materiales y mano de obra.
+            </li></ul>
+                    
+                    <b style="font-size:12px;color:#0B1426;">Insumos sellados (Ed25519):</b>
+                    <div style="margin:4px 0;">
+            <div style="font-size:11px;color:#5A6378;margin:2px 0;">
+                <code style="color:#8B6F47;">8c6954ca792e…</code>
+                · Camacol regional Atlántico + DANE ICOCED · 2026-05-06
+            </div></div>
+                    
+                    <b style="font-size:12px;color:#0B1426;">Observaciones:</b>
+                    <ul style="margin:4px 0 0 16px;"><li style='font-size:12px;'>M2 se aparta del rango esperado (desestimado)</li></ul>
+                    
+                    <div style="margin-top:10px;font-size:10px;color:#5A6378;">
+                        <b>Hash resultado:</b> <code>8333789a0af209468f6f34dda16550d48ddbed1b799ff601f4e3fa62add40892</code>
+                    </div>
+                </div>
+            </details>
+        </div>
+        
+        <div class="method-card" style="border-left:5px solid #8B6F47;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                    <div style="font-size:11px;color:#5A6378;letter-spacing:0.05em;">M3</div>
+                    <div style="font-family:Cambria,Georgia,serif;font-size:18px;font-weight:bold;color:#0B1426;">Capitalización de Rentas</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:11px;color:#2E5F3E;font-weight:bold;letter-spacing:0.05em;">Peso: 30%</div>
+                </div>
+            </div>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:14px 0;">
+                <div style="padding:10px;background:#EEF1F6;border-radius:3px;text-align:center;">
+                    <div style="font-size:10px;color:#5A6378;">VALOR CENTRAL</div>
+                    <div style="font-size:18px;font-weight:bold;color:#0B1426;">$ 415.150.000</div>
+                </div>
+                <div style="padding:10px;background:#EEF1F6;border-radius:3px;text-align:center;">
+                    <div style="font-size:10px;color:#5A6378;">$ POR M²</div>
+                    <div style="font-size:18px;font-weight:bold;color:#0B1426;">$ 7.066.382/m²</div>
+                </div>
+                <div style="padding:10px;background:#EEF1F6;border-radius:3px;text-align:center;">
+                    <div style="font-size:10px;color:#5A6378;">BANDA 80%</div>
+                    <div style="font-size:13px;color:#0B1426;">$ 361.180.500<br/>—<br/>$ 469.119.499</div>
+                </div>
+            </div>
+            
+            <details style="margin-top:10px;">
+                <summary style="cursor:pointer;color:#8B6F47;font-size:13px;font-weight:bold;">▸ Ver metodología, ajustes e insumos (1 insumos · 2 ajustes)</summary>
+                <div style="margin-top:10px;padding:12px;background:#F5F2EC;border-radius:3px;">
+                    <p style="font-size:12px;font-style:italic;margin:0 0 10px 0;">Método de Capitalización de Rentas (Res. IGAC 620/2008 Art. 2). Capitaliza la renta neta anual estimada.</p>
+                    
+                    <b style="font-size:12px;color:#0B1426;">Ajustes aplicados:</b>
+                    <ul style="margin:4px 0 10px 16px;">
+            <li style="font-size:12px;margin:4px 0;">
+                <b>Tasa de Capitalización Calibrada</b> (factor 1.000): Tasa de capitalización del 4.85% para residencial estrato 4.
+            </li>
+            <li style="font-size:12px;margin:4px 0;">
+                <b>Factor Renta Neta</b> (factor 0.840): Descuento acumulado del 16% por vacancia (6%) y administración/impuestos (10%).
+            </li></ul>
+                    
+                    <b style="font-size:12px;color:#0B1426;">Insumos sellados (Ed25519):</b>
+                    <div style="margin:4px 0;">
+            <div style="font-size:11px;color:#5A6378;margin:2px 0;">
+                <code style="color:#8B6F47;">a89816095e7c…</code>
+                · Portales públicos de arriendo (Properati, Mitula) · 2026-05-06
+            </div></div>
+                    
+                    <b style="font-size:12px;color:#0B1426;">Observaciones:</b>
+                    <ul style="margin:4px 0 0 16px;"><li style='font-size:12px;'>Tasa de vacancia calibrada al 6%</li><li style='font-size:12px;'>Gastos no recuperables estimados en 10%</li></ul>
+                    
+                    <div style="margin-top:10px;font-size:10px;color:#5A6378;">
+                        <b>Hash resultado:</b> <code>f303d6d98f00fae95b3df1b545ffaaa8c1259b120d0ede9c2294c8d223500810</code>
+                    </div>
+                </div>
+            </details>
+        </div>
+        
+
+    <div class="obs-motor">
+      <h3>Observaciones del motor de consolidación</h3>
+      <ul style="margin:0;font-size:13px;"><li>Cálculo calibrado automáticamente a precios 2026 según dictamen oficial.</li><li>Tasa de capitalización del 4.85% aplicada sobre M3.</li></ul>
+    </div>
+
+    <h2>Regla de consolidación aplicada</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="lab">AUTOR DE LA REGLA</div><div class="val">Junta Técnica de Avalúos Corporativos — Lonja BAQ</div></div>
+      <div class="info-card"><div class="lab">VERSIÓN</div><div class="val">0.1-codiseno</div></div>
+      <div class="info-card"><div class="lab">PESOS DECLARADOS</div><div class="val">M1=60%, M2=30%, M3=10%</div></div>
+      <div class="info-card"><div class="lab">TOLERANCIA COHERENCIA</div><div class="val">15%</div></div>
+    </div>
+
+    <h2>Zona de firma del avaluador RAA</h2>
+    <div class="signature-zone">
+      <div class="cap">Validado el avalúo consolidado y los hashes de los insumos, el avaluador procede a firmar.<br/>Esta firma adhiere el dictamen al régimen de la Ley 1673 de 2013.</div>
+      
+      <div class="input-row">
+        <div><label>NOMBRE DEL AVALUADOR</label><div style="margin-top:4px;font-weight:bold;">[A diligenciar]</div></div>
+        <div><label>INSCRIPCIÓN RAA</label><div style="margin-top:4px;font-weight:bold;">[N° RAA]</div></div>
+        <div><label>ERA AFILIACIÓN</label><div style="margin-top:4px;font-weight:bold;">[ANA / ANAV / RNA]</div></div>
+        <div><label>CATEGORÍA RAA</label><div style="margin-top:4px;font-weight:bold;">Categoría 2 — Inmuebles urbanos</div></div>
+      </div>
+      
+      <div style="margin:18px 0;">
+        <label style="font-size:11px;color:#5A6378;text-transform:uppercase;">VALOR FINAL DETERMINADO POR EL AVALUADOR</label>
+        <div style="margin-top:6px;font-family:Cambria;font-size:24px;font-weight:bold;color:#0B1426;">
+          $ 407.800.000 <span style="font-size:13px;font-weight:normal;color:#5A6378;">(ajustable dentro de la banda 80%)</span>
+        </div>
+      </div>
+
+      <div class="acciones">
+        <button class="btn primary">✓ FIRMAR Y EMITIR DICTAMEN</button>
+        <button class="btn secondary">⊘ AJUSTAR VALOR Y FIRMAR</button>
+      </div>
+      <div class="acciones">
+        <button class="btn secondary">▸ Solicitar visita in situ</button>
+        <button class="btn warn">✗ Rechazar — devolver al motor</button>
+      </div>
+    </div>
+
+    <div class="audit-trail">
+      <h3>Cadena de auditoría criptográfica</h3>
+      <div>Hash avalúo consolidado: <span style="color:#BFA37A;">92d887c2252f4308538b1ae11af8501af40acaba9e3cb05a82c3b80ce0d92487</span></div>
+      <div>Fecha de cálculo: 2026-07-08 16:15:24</div>
+      <div>Métodos ejecutados (hashes):</div>
+      <div style="margin-left:16px;">  · M1: <span style="color:#BFA37A;">3f43ed4de531f5fbd3763de6b3a193c46013b60b7253eaafaebc277e4f47a315</span></div><div style="margin-left:16px;">  · M2: <span style="color:#BFA37A;">8333789a0af209468f6f34dda16550d48ddbed1b799ff601f4e3fa62add40892</span></div><div style="margin-left:16px;">  · M3: <span style="color:#BFA37A;">f303d6d98f00fae95b3df1b545ffaaa8c1259b120d0ede9c2294c8d223500810</span></div>
+      <div style="margin-top:10px;">Total insumos sellados: 10</div>
+      <div>Total ajustes documentados: 5</div>
+      <div style="margin-top:10px;color:#BFA37A;">Cualquier modificación posterior al cálculo de los insumos invalida los hashes y se detecta automáticamente en auditoría.</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

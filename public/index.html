@@ -468,7 +468,10 @@
         <div class="panel" id="detail-panel" style="display: none;">
           <div class="panel-header">
             <span>Flujo de Trabajo del Caso</span>
-            <span id="txt-detail-id" style="font-family: monospace; font-size: 11px;">-</span>
+            <div style="display: flex; align-items: center; gap: 15px;">
+              <span id="txt-detail-id" style="font-family: monospace; font-size: 11px;">-</span>
+              <button class="btn-danger" style="padding: 4px 10px; font-size: 9px; margin: 0; background-color: var(--color-red-text);" onclick="eliminarCasoActual()">Eliminar Caso</button>
+            </div>
           </div>
           <div class="panel-body">
             <div class="case-detail-hero">
@@ -477,16 +480,25 @@
                   <h3 class="case-detail-title" id="txt-detail-direccion">-</h3>
                   <div style="font-size: 12px; color: var(--color-gray); margin-top: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <span>Matrícula: <span id="txt-detail-folio" style="font-weight: 600;">-</span></span> · 
-                    <span>Área: <span id="txt-detail-area" style="font-weight: 600;">Pendiente</span> m² <a href="#" onclick="mostrarEditarArea(event)" style="font-size:10px; color:var(--color-gold); font-weight:600; text-decoration:none; margin-left:3px;">(Editar)</a></span> · 
-                    <span>Barrio: <span id="txt-detail-barrio">-</span></span>
+                    <span>Área: <span id="txt-detail-area" style="font-weight: 600;">Pendiente</span> m²</span> · 
+                    <span>Barrio: <span id="txt-detail-barrio">-</span></span> · 
+                    <a href="#" onclick="mostrarEditarDatos(event)" style="font-size:10px; color:var(--color-gold); font-weight:600; text-decoration:none;">(Editar Datos)</a>
                   </div>
                   
-                  <!-- Formulario Inline para Editar Área manualmente -->
-                  <div id="form-editar-area" style="display: none; align-items: center; gap: 10px; margin-top: 8px; background: rgba(139,111,71,0.08); padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(139,111,71,0.2); max-width: fit-content;">
-                    <span style="font-size: 11px; font-weight: 600; color: var(--color-navy-soft);">Ingresar Metraje (m²):</span>
-                    <input type="number" id="input-editar-area" placeholder="Ej: 58.75" step="0.01" style="width: 90px; padding: 4px 8px; font-size: 12px; border: 1px solid var(--color-border); border-radius: 3px;">
-                    <button class="btn-primary" style="padding: 5px 10px; font-size: 9px; text-transform: uppercase;" onclick="guardarAreaManual()">Guardar</button>
-                    <button class="btn-secondary" style="padding: 5px 10px; font-size: 9px; text-transform: uppercase; border-color: var(--color-gray); color: var(--color-gray);" onclick="cancelarEditarArea()">Cancelar</button>
+                  <!-- Formulario Inline para Editar Datos (Dirección y Matrícula) -->
+                  <div id="form-editar-datos" style="display: none; flex-direction: column; gap: 10px; margin-top: 12px; background: rgba(139,111,71,0.08); padding: 12px; border-radius: 4px; border: 1px solid rgba(139,111,71,0.2); max-width: 400px;">
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                      <label style="font-size: 9px; font-weight: bold; color: var(--color-navy-soft);">Matrícula Inmobiliaria:</label>
+                      <input type="text" id="input-editar-folio" placeholder="Ej: 040-646406" style="padding: 6px; font-size: 12px; border: 1px solid var(--color-border); border-radius: 3px;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                      <label style="font-size: 9px; font-weight: bold; color: var(--color-navy-soft);">Dirección:</label>
+                      <input type="text" id="input-editar-direccion" placeholder="Ej: Calle 63 # 37-71" style="padding: 6px; font-size: 12px; border: 1px solid var(--color-border); border-radius: 3px;">
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 5px;">
+                      <button class="btn-primary" style="padding: 5px 12px; font-size: 9px; text-transform: uppercase;" onclick="guardarDatosManual()">Guardar</button>
+                      <button class="btn-secondary" style="padding: 5px 12px; font-size: 9px; text-transform: uppercase; border-color: var(--color-gray); color: var(--color-gray);" onclick="cancelarEditarDatos()">Cancelar</button>
+                    </div>
                   </div>
                 </div>
                 <span class="badge" id="badge-detail-estado">PENDIENTE INSUMOS</span>
@@ -637,7 +649,10 @@
             <div class="case-info-primary">${displayDireccion}</div>
             <div class="case-info-secondary">${displaySub} · Área: ${c.area ? c.area + ' m²' : 'Pendiente'}</div>
           </div>
-          <span class="badge PENDIENTE_IMAGENES">${label}</span>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="badge PENDIENTE_IMAGENES">${label}</span>
+            <button class="btn-danger" style="padding: 4px 6px; font-size: 8px; border-radius: 3px; margin: 0;" onclick="eliminarCaso(event, ${c.id})">✖</button>
+          </div>
         `;
         container.appendChild(item);
       });
@@ -772,36 +787,31 @@
         if (imgType === 'certificado') {
           c.certificado_cargado = 1;
           
-          // Si el área del caso estaba pendiente, procesar certificado de forma rápida y stateless
-          if (!c.area) {
-            showLoading(true);
-            let areaEstablecida = false;
-            try {
-              const formData = new FormData();
-              formData.append("file", file);
-              const response = await fetch(`/api/dictamenes/${selectedCaseId}/upload/certificado`, {
-                method: 'POST',
-                body: formData
-              });
-              if (response.ok) {
-                const data = await response.json();
-                if (data.extraidos) {
-                  const ext = data.extraidos;
-                  if (ext.area) {
-                    c.area = ext.area;
-                    areaEstablecida = true;
-                    alert(`[Éxito] Certificado analizado. Área extraída: ${ext.area} m²`);
-                  }
-                  if (ext.folio && c.folio_matricula === 'Pendiente') c.folio_matricula = ext.folio;
-                  if (ext.direccion && c.direccion === 'Pendiente') c.direccion = ext.direccion;
-                  if (ext.barrio) c.barrio = ext.barrio;
+          showLoading(true);
+          try {
+            const formData = new FormData();
+            formData.append("file", file);
+            const response = await fetch(`/api/dictamenes/${selectedCaseId}/upload/certificado`, {
+              method: 'POST',
+              body: formData
+            });
+            if (response.ok) {
+              const data = await response.json();
+              if (data.extraidos) {
+                const ext = data.extraidos;
+                if (ext.area) {
+                  c.area = ext.area;
+                  alert(`[Éxito] Certificado analizado. Área extraída: ${ext.area} m²`);
                 }
+                if (ext.folio) c.folio_matricula = ext.folio;
+                if (ext.direccion) c.direccion = ext.direccion;
+                if (ext.barrio) c.barrio = ext.barrio;
               }
-            } catch (err) {
-              console.error("Error al pre-analizar PDF: ", err);
-            } finally {
-              showLoading(false);
             }
+          } catch (err) {
+            console.error("Error al pre-analizar PDF: ", err);
+          } finally {
+            showLoading(false);
           }
         }
         else if (imgType === 'sombra_9am') c.sombra_9am_cargada = 1;
@@ -813,31 +823,99 @@
       }
     }
 
-    function mostrarEditarArea(event) {
+    function mostrarEditarDatos(event) {
       if (event) event.preventDefault();
       const c = dictamenes.find(item => item.id === selectedCaseId);
       if (!c) return;
-      document.getElementById('input-editar-area').value = c.area || "";
-      document.getElementById('form-editar-area').style.display = 'flex';
+      document.getElementById('input-editar-folio').value = c.folio_matricula || "";
+      document.getElementById('input-editar-direccion').value = c.direccion || "";
+      document.getElementById('form-editar-datos').style.display = 'flex';
     }
 
-    function cancelarEditarArea() {
-      document.getElementById('form-editar-area').style.display = 'none';
+    function cancelarEditarDatos() {
+      document.getElementById('form-editar-datos').style.display = 'none';
     }
 
-    function guardarAreaManual() {
-      const areaVal = document.getElementById('input-editar-area').value;
-      if (!areaVal || isNaN(parseFloat(areaVal))) {
-        alert("Por favor ingrese un metraje válido.");
+    async function guardarDatosManual() {
+      const folioVal = document.getElementById('input-editar-folio').value.trim();
+      const direccionVal = document.getElementById('input-editar-direccion').value.trim();
+      
+      if (!folioVal && !direccionVal) {
+        alert("Debe ingresar al menos la matrícula o la dirección.");
         return;
       }
 
-      const c = dictamenes.find(item => item.id === selectedCaseId);
-      if (c) {
-        c.area = parseFloat(areaVal);
-        localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
-        cancelarEditarArea();
-        selectCase(selectedCaseId);
+      showLoading(true);
+      try {
+        const response = await fetch(`/api/dictamenes/${selectedCaseId}/update`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            folio_matricula: folioVal,
+            direccion: direccionVal
+          })
+        });
+
+        if (response.ok) {
+          const updatedCaseData = await response.json();
+          const c = dictamenes.find(item => item.id === selectedCaseId);
+          if (c) {
+            c.folio_matricula = updatedCaseData.folio_matricula;
+            c.direccion = updatedCaseData.direccion;
+            c.barrio = updatedCaseData.barrio;
+            localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+          }
+          cancelarEditarDatos();
+          selectCase(selectedCaseId);
+        } else {
+          const errorMsg = await response.text();
+          alert("Error al actualizar datos: " + errorMsg);
+        }
+      } catch (err) {
+        console.error("Error al actualizar caso:", err);
+        alert("Error de conexión al actualizar caso.");
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function eliminarCaso(event, id) {
+      if (event) event.stopPropagation();
+      if (!confirm("¿Está seguro de que desea eliminar este dictamen de forma definitiva?")) {
+        return;
+      }
+
+      showLoading(true);
+      try {
+        const response = await fetch(`/api/dictamenes/${id}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          dictamenes = dictamenes.filter(item => item.id !== id);
+          localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+          
+          if (selectedCaseId === id) {
+            selectedCaseId = null;
+            document.getElementById('detail-panel').style.display = 'none';
+          }
+          
+          cargarDictamenes();
+        } else {
+          const errorMsg = await response.text();
+          alert("Error al eliminar caso del servidor: " + errorMsg);
+        }
+      } catch (err) {
+        console.error("Error al eliminar caso:", err);
+        alert("Error de conexión al eliminar el caso.");
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    function eliminarCasoActual() {
+      if (selectedCaseId) {
+        eliminarCaso(null, selectedCaseId);
       }
     }
 

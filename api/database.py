@@ -42,9 +42,30 @@ def init_db():
         cursor.execute("ALTER TABLE dictamenes ADD COLUMN certificado_path TEXT")
     except sqlite3.OperationalError:
         pass
+
+    # Migracion: Coordenadas geocodificadas universales (geocoder ARHIAX RE)
+    try:
+        cursor.execute("ALTER TABLE dictamenes ADD COLUMN lat REAL")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        cursor.execute("ALTER TABLE dictamenes ADD COLUMN lon REAL")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        cursor.execute("ALTER TABLE dictamenes ADD COLUMN fuente_geocod TEXT")
+    except sqlite3.OperationalError:
+        pass
+
+    # Migracion Sprint 2 Bloque D: acreedor real declarado
+    try:
+        cursor.execute("ALTER TABLE dictamenes ADD COLUMN acreedor_real TEXT")
+    except sqlite3.OperationalError:
+        pass
         
     conn.commit()
     conn.close()
+
 
 def get_db_connection():
     init_db()

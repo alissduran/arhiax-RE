@@ -1,5 +1,5 @@
 # dictamen_part1_styles.py
-# Estilos, colores y helpers compartidos para el Dictamen LAI completo
+# Estilos, colores y helpers compartidos para el Informe Base LAI (ARHIAX RE)
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY

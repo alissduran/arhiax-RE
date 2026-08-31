@@ -7,5 +7,9 @@ pillow>=10.0.0
 python-multipart>=0.0.5
 pypdf>=3.0.0
 requests>=2.25.0
+# Motor Geoespacial (STRtree + Point-in-Polygon sobre GeoJSON del POT)
+shapely>=2.0.0
 # weasyprint se maneja opcionalmente en el código para evitar fallos de compilación en Vercel
 weasyprint>=60.0
+playwright>=1.40.0
+

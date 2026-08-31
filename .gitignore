@@ -24,3 +24,12 @@ output_referencia/dictamen_napoli.pdf.tmp
 
 # Si deseas conservar los PDFs/ZIPs de referencia específicos, descomenta:
 # !motor_tma_lonja_baq_v1.0.zip
+
+# Database and assets
+*.db
+api/assets/
+*map*.png
+*map*.html
+*.geojson
+test_geo_resultado.json
+
