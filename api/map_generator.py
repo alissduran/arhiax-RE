@@ -1,6 +1,7 @@
 import math
 import os
 import sys
+import hashlib
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
@@ -12,14 +13,37 @@ if _API_DIR not in sys.path:
 from poi_engine import get_nearby_pois
 from geospatial_engine import evaluate_predio  # api/geospatial_engine.py
 
+def _try_font(*paths, size=22):
+    """Carga la primera fuente disponible (multi-plataforma: Windows/Linux)."""
+    for p in paths:
+        try:
+            return ImageFont.truetype(p, size)
+        except Exception:
+            continue
+    return ImageFont.load_default()
+
+
+def _escape_html(texto):
+    """Escapa texto para inyección segura en HTML/JS (F-09: XSS almacenado)."""
+    if texto is None:
+        return ""
+    return (str(texto)
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace('"', "&quot;")
+            .replace("'", "&#39;")
+            .replace("`", "&#96;"))
+
+
 def generate_maps(lat, lon, pois, output_png_path, output_html_path, inmueble_label="Inmueble", direccion=""):
     """
     Genera un mapa estático (PNG) usando Pillow y un mapa interactivo (HTML) con Leaflet.js.
     """
     risk_eval = evaluate_predio(lat, lon)
 
-    dir_popup = f"<br/>{direccion}" if direccion else f"<br/>Lat: {lat:.5f}, Lon: {lon:.5f}"
-    inmueble_popup = f"<b>{inmueble_label}</b>{dir_popup}"
+    dir_popup = f"<br/>{_escape_html(direccion)}" if direccion else f"<br/>Lat: {lat:.5f}, Lon: {lon:.5f}"
+    inmueble_popup = f"<b>{_escape_html(inmueble_label)}</b>{dir_popup}"
 
     # ── 1. GENERAR MAPA ESTÁTICO (Pillow) ──────────────────────────────────
     # Dimensiones de la imagen
@@ -31,17 +55,11 @@ def generate_maps(lat, lon, pois, output_png_path, output_html_path, inmueble_la
     img = Image.new("RGBA", (width, height), "#F7F8FC")
     draw = ImageDraw.Draw(img)
     
-    # Intentar cargar fuente Arial de Windows, si no usar default
-    try:
-        font_title = ImageFont.truetype("C:\\Windows\\Fonts\\arialbd.ttf", 36)
-        font_labels = ImageFont.truetype("C:\\Windows\\Fonts\\arial.ttf", 22)
-        font_legend = ImageFont.truetype("C:\\Windows\\Fonts\\arialbd.ttf", 24)
-        font_sub = ImageFont.truetype("C:\\Windows\\Fonts\\arial.ttf", 20)
-    except Exception:
-        font_title = ImageFont.load_default()
-        font_labels = ImageFont.load_default()
-        font_legend = ImageFont.load_default()
-        font_sub = ImageFont.load_default()
+    # Fuentes multi-plataforma (M-05): Windows Arial o DejaVu en Linux/Vercel
+    font_title = _try_font("C:\\Windows\\Fonts\\arialbd.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size=36)
+    font_labels = _try_font("C:\\Windows\\Fonts\\arial.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", size=22)
+    font_legend = _try_font("C:\\Windows\\Fonts\\arialbd.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size=24)
+    font_sub = _try_font("C:\\Windows\\Fonts\\arial.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", size=20)
         
     # Paleta de colores ARHIAX
     colors_dict = {
@@ -79,8 +97,8 @@ def generate_maps(lat, lon, pois, output_png_path, output_html_path, inmueble_la
             poi_idx += 1
 
     for idx, category, color, item in poi_list:
-        # Pseudo-ángulo determinista basado en el hash del nombre
-        angle = (hash(item["name"]) % 360) * (math.pi / 180.0)
+        # Ángulo determinista estable (M-04): md5, no hash() que varía por proceso
+        angle = (int(hashlib.md5(item["name"].encode("utf-8")).hexdigest()[:8], 16) % 360) * (math.pi / 180.0)
         dist_m = item["distance"]
         
         dx = dist_m * scale * math.cos(angle)
@@ -92,10 +110,7 @@ def generate_maps(lat, lon, pois, output_png_path, output_html_path, inmueble_la
         draw.ellipse([px - 14, py - 14, px + 14, py + 14], fill=color, outline="#ffffff", width=2)
         
         # Dibujar el número adentro
-        try:
-            font_num = ImageFont.truetype("C:\\Windows\\Fonts\\arialbd.ttf", 16)
-        except Exception:
-            font_num = ImageFont.load_default()
+        font_num = _try_font("C:\\Windows\\Fonts\\arialbd.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size=16)
         draw.text((px, py), str(idx), fill="#ffffff", font=font_num, anchor="mm")
             
     # Dibujar leyenda en la esquina superior izquierda
@@ -170,7 +185,7 @@ def generate_maps(lat, lon, pois, output_png_path, output_html_path, inmueble_la
     for category, items in pois.items():
         color = colors_dict.get(category, "#555555")
         for item in items:
-            angle = (hash(item["name"]) % 360) * (math.pi / 180.0)
+            angle = (int(hashlib.md5(item["name"].encode("utf-8")).hexdigest()[:8], 16) % 360) * (math.pi / 180.0)
             dist_deg_lat = (item["distance"] * math.sin(angle)) / meters_per_lat
             dist_deg_lon = (item["distance"] * math.cos(angle)) / meters_per_lon
             
@@ -185,7 +200,7 @@ def generate_maps(lat, lon, pois, output_png_path, output_html_path, inmueble_la
                     weight: 1.5,
                     opacity: 1,
                     fillOpacity: 0.95
-                }}).addTo(map).bindPopup("<b>{item['name']}</b><br/>Categoria: {category}<br/>Distancia: {int(item['distance'])} m");
+                }}).addTo(map).bindPopup("<b>{_escape_html(item['name'])}</b><br/>Categoria: {_escape_html(category)}<br/>Distancia: {int(item['distance'])} m");
             """)
             
     html_content = f"""<!DOCTYPE html>

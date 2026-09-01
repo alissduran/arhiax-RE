@@ -198,7 +198,7 @@ def analizar_texto_certificado(texto):
         if const_match:
             res["constructor"] = const_match.group(0).strip()
         else:
-            res["constructor"] = "Marval S.A.S. (referencial)"
+            res["constructor"] = "N/D"
 
         # 5. Generar lista de anotaciones final
         res["anotaciones"] = [

@@ -907,6 +907,21 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     detalle_score.append(("Score Integrado", generar_narrativa_score(score_result)))
     story.append(dt(detalle_score))
     story.append(Spacer(1, 8))
+
+    # ── 07B FICHA SARLAFT ESTRUCTURAL (Sprint 2 Bloque B, conectado) ──
+    story.append(sec("07B - Ficha SARLAFT Estructural"))
+    story.append(hr())
+    ficha_sarlaft = generar_ficha_sarlaft(
+        titulares=analysis.get("titulares", ""),
+        acreedor_snr=analysis.get("acreedor_snr"),
+        acreedor_real=analysis.get("acreedor_real"),
+        constructor=analysis.get("constructor"),
+        folio=folio,
+    )
+    story.append(dt(generar_tabla_sarlaft(ficha_sarlaft)))
+    story.append(Spacer(1, 4))
+    story.append(body(f"<b>Disclaimer:</b> {ficha_sarlaft['disclaimer']}"))
+    story.append(Spacer(1, 8))
     
     # ── 08B GATE FIDUCIARIO + CARGAS ECONOMICAS (Sprint 1 Bloques 3+7) ───
     story.append(sec("08B - Estructurabilidad Fiduciaria y Carga Economica"))

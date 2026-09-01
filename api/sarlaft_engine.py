@@ -79,7 +79,7 @@ def generar_ficha_sarlaft(
     Returns:
         Dict con: sujetos (list), timestamp, folio, estado, instrucciones.
     """
-    timestamp = datetime.datetime.utcnow().isoformat() + "Z"
+    timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z")
     sujetos = []
 
     # Procesar titulares (pueden venir como "Nombre1 + Nombre2")
