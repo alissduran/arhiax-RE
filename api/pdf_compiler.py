@@ -1001,7 +1001,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         [Paragraph("<b>HASH SHA-256</b>",s["mono"]),Paragraph(P_HASH,s["mono_hash"])],
         [Paragraph("<b>TIMESTAMP</b>",s["mono"]),Paragraph(NOW_UTC.isoformat(),s["mono"])],
         [Paragraph("<b>REFERENCIA</b>",s["mono"]),Paragraph(CERT_NUM,s["mono"])],
-        [Paragraph("<b>ALGORITMO</b>",s["mono"]),Paragraph("SHA-256 + Ed25519 (RFC 8032)",s["mono"])],
+        [Paragraph("<b>ALGORITMO</b>",s["mono"]),Paragraph("SHA-256 (integridad del contenido)",s["mono"])],
     ]
     tp = Table(prov_rows, colWidths=["30%","70%"])
     tp.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,-1),C_NEGRO_MONO),

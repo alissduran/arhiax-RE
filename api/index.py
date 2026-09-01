@@ -279,17 +279,13 @@ def resolver_matricula_por_direccion(direccion: str) -> tuple:
     if ("63" in normalized and "37" in normalized) or "RECREO" in normalized:
         return "040-314248", "El Recreo", 4
         
-    # 3. Fallback Determinista / Simulación inteligente
-    import hashlib
-    hash_object = hashlib.md5(normalized.encode('utf-8'))
-    hash_hex = hash_object.hexdigest()
-    num_seq = str(int(hash_hex[:8], 16))[:6].zfill(6)
-    folio_simulado = f"040-{num_seq}"
-    
+    # 3. Fallback para direcciones desconocidas (M-01/F-15):
+    # NO se fabrican folios simulados con md5 (parecerían matrículas reales en un
+    # dictamen pericial). Se devuelve 'Pendiente' y el barrio inferido por texto.
     barrio = "Miramar"
     if "recreo" in normalized.lower() or "el recreo" in normalized.lower():
         barrio = "El Recreo"
-    return folio_simulado, barrio, 4
+    return "Pendiente", barrio, 4
 
 @app.get("/api/resolver-matricula")
 def resolve_matricula_endpoint(direccion: str, auth: bool = Depends(require_auth)):

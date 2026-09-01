@@ -33,8 +33,9 @@ class TestSmokeApi(unittest.TestCase):
 
     def test_resolver_matricula_fallback_y_pendiente(self):
         from index import resolver_matricula_por_direccion
+        # M-01: las direcciones desconocidas devuelven 'Pendiente' (no folios simulados)
         folio, barrio, estrato = resolver_matricula_por_direccion("Carrera 5 # 20-33")
-        self.assertRegex(folio, r"^\d{3}-\d{6}$")  # folio simulado determinista
+        self.assertEqual(folio, "Pendiente")
         self.assertEqual(estrato, 4)
         self.assertEqual(resolver_matricula_por_direccion("Pendiente")[0], "Pendiente")
 
