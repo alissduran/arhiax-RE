@@ -700,8 +700,25 @@
       }
       showLoading(false);
 
+      // H-09: crear el caso en el servidor para que upload/update/delete usen un id real
+      // (si el servidor no responde, se degrada a id local para no bloquear el flujo)
+      let serverId = Date.now();
+      try {
+        const resCreate = await apiFetch('/api/dictamenes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ folio_matricula: resolvedFolio, direccion: direccion || 'Pendiente' })
+        });
+        if (resCreate.ok) {
+          const created = await resCreate.json();
+          if (created.id) serverId = created.id;
+        }
+      } catch (err) {
+        console.warn('No se pudo crear el caso en el servidor; se usará id local.', err);
+      }
+
       const newCase = {
-        id: Date.now(),
+        id: serverId,
         folio_matricula: resolvedFolio,
         direccion: direccion || "Pendiente",
         area: null,

@@ -147,10 +147,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     shadow_9am_path = str(assets_dir / 'sombra_9am.png')
     shadow_3pm_path = str(assets_dir / 'sombra_3pm.png')
     mapa_satellite_path = str(assets_dir / 'mapa_satelital.png')
-    
-    if not os.path.exists(shadow_9am_path): shadow_9am_path = str(PROJECT_ROOT / ('napoli_shadows.png' if is_miramar else 'recreo_shadows.png'))
-    if not os.path.exists(shadow_3pm_path): shadow_3pm_path = str(PROJECT_ROOT / ('napoli_shadows2.png' if is_miramar else 'recreo_shadows2.png'))
-    if not os.path.exists(mapa_satellite_path): mapa_satellite_path = str(PROJECT_ROOT / ('napoli_apartamentos_satellite_1778115269833.png' if is_miramar else 'recreo_poi_map.png'))
+    # H-07: NO se usan imagenes demo de otros predios como fallback; si el caso no
+    # tiene la imagen, la seccion correspondiente simplemente omite la figura
+    # (los usos en el story ya verifican os.path.exists).
     
     poi_map_png = str(assets_dir / 'poi_map.png')
     poi_map_html = str(assets_dir / 'poi_map.html')
@@ -334,6 +333,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     
     def alert_orange(text):
         return Paragraph(text, s["alert_naranja"])
+    
+    def alert_red(text):
+        return Paragraph(text, ParagraphStyle("alert_rojo",
+            fontName="Helvetica-Bold", fontSize=8, leading=11,
+            textColor=colors.HexColor("#8B2E2E"), backColor=colors.HexColor("#F7E8E8"),
+            borderColor=colors.HexColor("#8B2E2E"), borderWidth=0.5, borderPadding=6))
     
     def dt(rows):
         return data_table(rows, s)
@@ -655,9 +660,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(sec("04 - Analisis Catastral y Urbanistico [DATOS REALES]"))
     story.append(hr())
     story.append(body(
-        "Datos extraidos en vivo del Geoportal <b>Mi Ciudad Barranquilla</b>. "
-        "Capas: catastro/destinoseconomicos y ordenamiento/planeacion (5 capas). "
-        "<b>[FUENTE: ALCALDIA BAQ - DATOS REALES]</b>"))
+        "Analisis de informacion catastral y urbanistica del predio a partir de las capas "
+        "oficiales del POT de Barranquilla empaquetadas en la aplicacion (clases de suelo, "
+        "norma de uso, tratamientos urbanisticos) y estimaciones del modulo ARHIAX RE. "
+        "<b>[FUENTE: CAPAS POT BARRANQUILLA - MODULO ARHIAX RE]</b>"))
     story.append(Spacer(1, 4))
     story.append(sub("4.1 Datos Catastrales"))
     story.append(dt(get_catastral_dt(barrio, area)))
@@ -688,10 +694,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 4))
     story.append(dt(get_pot_summary_dt(barrio)))
     story.append(Spacer(1, 4))
-    story.append(alert_orange(
-        "<b>HALLAZGO MEDIO:</b> El tratamiento urbanistico muestra 5 poligonos de Consolidacion con "
-        "alturas maximas que varian entre 5 y 11 pisos. El proyecto Napoli debe verificar bajo cual "
-        "poligono especifico cae la Torre 8 para confirmar cumplimiento de altura."))
+    _am_pot = geo_eval.get("amenaza_remocion_masa", {}).get("intersecta", False)
+    _ri_pot = geo_eval.get("areas_en_riesgo", {}).get("intersecta", False)
+    if _am_pot or _ri_pot:
+        story.append(alert_orange(
+            "<b>HALLAZGO MEDIO:</b> El predio intersecta capas de amenaza/riesgo del POT de Barranquilla. "
+            "Verificar el cumplimiento de la norma urbanistica del poligono especifico y la afectacion por riesgo."))
+    else:
+        story.append(alert_orange(
+            "<b>HALLAZGO MEDIO:</b> El tratamiento urbanistico del sector presenta poligonos de Consolidacion "
+            "con alturas variables. Verificar el cumplimiento de la norma urbanistica del poligono especifico del predio."))
     story.append(Spacer(1, 8))
     
     # ── 04B ESTIMACIÓN REFERENCIAL DE MERCADO (NO ES AVALÚO) ────
@@ -812,18 +824,30 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     ))
     story.append(Spacer(1, 4))
     story.append(dt([
-        ("Endpoint consultado", "miciudad.barranquilla.gov.co/gis/rest/services/riesgos/amenazas/MapServer"),
-        ("Tipo de query", "Spatial Query (STRtree PIP / esriSpatialRelIntersects)"),
+        ("Fuente de datos", "Capas GeoJSON oficiales del POT de Barranquilla (empaquetadas en la aplicacion)"),
+        ("Metodo de cruce", "Spatial Query Point-in-Polygon (STRtree / Shapely) sobre geometrias normalizadas"),
         ("BBOX (WGS84)", bbox_str),
-        ("Total capas consultadas", "6 (Inundacion x2, Remocion x2, Riesgo No Mitigable, Arroyos)"),
+        ("Total capas evaluadas", "6 (Inundacion x2, Remocion x2, Riesgo No Mitigable, Arroyos)"),
         ("Clasificacion resultante", f"EVALUACION GEOTECNICA POT: {res_am}"),
     ]))
     story.append(Spacer(1, 4))
 
-    story.append(alert_green(
-        "<b>HALLAZGO POSITIVO:</b> Se cruzaron las 6 capas oficiales de riesgos de la Alcaldia de "
-        "Barranquilla con la ubicacion del Conjunto Napoli. Resultado: 0 poligonos de amenaza "
-        "intersectan el predio. Favorable para suscripcion de seguros y originacion hipotecaria."))
+    _geo_fallo = "no se completó" in (geo_eval.get("resumen_ejecutivo", "") or "").lower()
+    if _geo_fallo:
+        story.append(alert_orange(
+            "<b>ADVERTENCIA:</b> No fue posible completar la verificacion espacial del predio "
+            "(motor geoespacial no disponible o capas no encontradas). El resultado de riesgo "
+            "debe considerarse NO EVALUADO y requiere verificacion geotecnica profesional."))
+    elif am_eval.get("intersecta") or ri_eval.get("intersecta"):
+        story.append(alert_red(
+            "<b>HALLAZGO ADVERSO:</b> El predio intersecta capas de amenaza/riesgo del POT de "
+            "Barranquilla (ver detalle en la tabla anterior). Se requiere evaluacion geotecnica "
+            "detallada y verificacion de restricciones para originacion hipotecaria."))
+    else:
+        story.append(alert_green(
+            "<b>HALLAZGO POSITIVO:</b> El cruce espacial contra las capas oficiales de riesgos del "
+            "POT de Barranquilla no detecto interseccion de poligonos de amenaza con el predio. "
+            "Favorable para suscripcion de seguros y originacion hipotecaria."))
     story.append(Spacer(1, 8))
     
     # ── 06 HALLAZGOS CLASIFICADOS ──────────────────────────────
@@ -861,20 +885,27 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     
     story.append(sec("07 - Score Actuarial Integrado"))
     story.append(hr())
+    # Score dinamico real (Sprint 2): motores conectados, sin valores hardcodeados (H-05/H-06)
+    val_data_area = dict(val_data)
+    val_data_area["area"] = area
+    score_result = calcular_score_actuarial(hallazgos, geo_eval, analysis, val_data_area)
+    colores_score = score_result["colores"]
     story.append(badge_table([
-        ("Score Registral", "88 / 100", C_OK_BG, C_VERDE),
-        ("Score Hidrologico", "92 / 100", C_OK_BG, C_VERDE),
-        ("Score Juridico", "78 / 100", C_OK_BG, C_VERDE),
-        ("Score Integrado ARHIAX", "84 / 100", C_OK_BG, C_VERDE),
+        ("Score Registral", f"{score_result['score_registral']:.0f} / 100", colores_score["registral"][1], colores_score["registral"][0]),
+        ("Score Hidrologico", f"{score_result['score_hidrologico']:.0f} / 100", colores_score["hidrologico"][1], colores_score["hidrologico"][0]),
+        ("Score Juridico", f"{score_result['score_juridico']:.0f} / 100", colores_score["juridico"][1], colores_score["juridico"][0]),
+        ("Score Integrado ARHIAX", f"{score_result['score_integrado']:.0f} / 100", colores_score["integrado"][1], colores_score["integrado"][0]),
     ], s))
     story.append(Spacer(1, 4))
-    story.append(dt([
-        ("Score Registral (88/100)", "Certificado fresco (0 dias). Tradicion limpia. Penalizado leve por hipoteca abierta"),
-        ("Score Hidrologico (92/100)", "Sin amenazas registradas en capas oficiales de riesgos"),
-        ("Score Juridico (78/100)", "Compraventa NO VIS bien documentada. Afectacion a vivienda familiar vigente"),
-        ("Score Integrado (84/100)", "Perfil de riesgo BAJO. Activo operable sin condicionamientos criticos"),
-        ("Metodologia", "Modelo ponderado LAI v1.0: 40% registral + 30% juridico + 20% hidrologico + 10% catastral"),
-    ]))
+    detalle_score = []
+    for comp, nombre in [("registral", "Registral"), ("juridico", "Juridico"),
+                         ("hidrologico", "Hidrologico"), ("catastral", "Catastral")]:
+        detalle_score.append((
+            f"Score {nombre} ({score_result[f'score_{comp}']:.0f}/100)",
+            "; ".join(score_result["detalle"][comp])
+        ))
+    detalle_score.append(("Score Integrado", generar_narrativa_score(score_result)))
+    story.append(dt(detalle_score))
     story.append(Spacer(1, 8))
     
     # ── 08B GATE FIDUCIARIO + CARGAS ECONOMICAS (Sprint 1 Bloques 3+7) ───

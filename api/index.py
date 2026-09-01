@@ -655,6 +655,10 @@ async def generar_dictamen_stateless(
     valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
     valor_consolidado = int(round(valor_m2 * area, -4))
 
+    # H-08: si se adjuntó certificado, pasar su ruta para que compile_pdf lo analice
+    # (evita el hallazgo falso "AUSENCIA DE CTL" cuando el usuario SÍ subió el CTL)
+    _cert_path = str(cert_path) if (certificado and certificado.filename) else None
+
     # 3. Construir record para ReportLab
     db_record = {
         "id": 9999,  # ID temporal
@@ -668,6 +672,7 @@ async def generar_dictamen_stateless(
         "sombra_3pm_cargada": 1 if sombra_3pm else 0,
         "mapa_cargado": 1 if mapa_satelital else 0,
         "acreedor_real": None,  # Bloque D: campo para discrepancia — se puede pasar via Form en futuras versiones
+        "certificado_path": _cert_path,
     }
 
     # 4. Compilar PDF

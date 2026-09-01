@@ -78,6 +78,44 @@ class TestSmokeApi(unittest.TestCase):
         with self.assertRaises(HTTPException):
             require_auth(HTTPAuthorizationCredentials(scheme="Bearer", credentials="token-invalido"))
 
+    def test_pdf_compiler_genera_pdf_honesto(self):
+        """El PDF se genera con los motores dinámicos: sin plantilla fija de Napoli,
+        sin PII hardcodeada y con sección de scores presente (H-05/H-06/H-07/H-04)."""
+        import shutil
+        from pathlib import Path as _P
+        from pdf_compiler import compile_pdf
+        out_dir = ROOT_DIR / "tmp_pdf_test"
+        if out_dir.exists():
+            shutil.rmtree(out_dir, ignore_errors=True)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        record = {
+            "id": 1,
+            "folio_matricula": "040-646406",
+            "direccion": "Tv 43 # 100-50",
+            "barrio": "Miramar",
+            "estrato": 4,
+            "area": 75.5,
+            "valor_consolidado": 500000000,
+            "sombra_9am_cargada": 0,
+            "sombra_3pm_cargada": 0,
+            "mapa_cargado": 0,
+            "acreedor_real": None,
+            "certificado_path": None,
+        }
+        try:
+            compile_pdf(record, str(out_dir / "test.pdf"), assets_dir=out_dir)
+        except Exception as e:  # noqa: BLE001 — el compilador debe degradar con fallbacks
+            self.fail(f"compile_pdf lanzó excepción: {e}")
+        import pypdf
+        r = pypdf.PdfReader(str(out_dir / "test.pdf"))
+        txt = " ".join((p.extract_text() or "") for p in r.pages).lower()
+        self.assertIn("score registral", txt)
+        self.assertNotIn("torre 8", txt)
+        self.assertNotIn("conjunto napoli", txt)
+        self.assertNotIn("1.045.718.995", txt)
+        self.assertNotIn("1.140.834.790", txt)
+        shutil.rmtree(out_dir, ignore_errors=True)
+
 
 if __name__ == "__main__":
     unittest.main()

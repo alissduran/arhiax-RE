@@ -292,12 +292,13 @@ def get_valoracion_alert(barrio, val_data, fmt_cop):
     )
 
 def get_alcance_dt(barrio):
+    # F-21: alcance honesto — no se afirman integraciones que no existen.
     return [
-        ("Datos registrales SNR", "AUDITADOS -- Anotaciones del folio de matrícula procesadas"),
-        ("Capa catastral BAQ", "EJECUTADA -- Geoportal Mi Ciudad Barranquilla [DATOS OFICIALES]"),
-        ("POT/Ordenamiento BAQ", "EJECUTADA -- Cruce espacial de tratamientos y usos de suelo"),
+        ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
+        ("Capa catastral BAQ", "REFERENCIAL -- Estimacion del modulo ARHIAX RE (sin consulta en vivo)"),
+        ("POT/Ordenamiento BAQ", "EJECUTADA -- Cruce espacial sobre capas POT empaquetadas"),
         ("Riesgos/Amenazas BAQ", "EJECUTADA -- Cruce espacial STRtree contra capas de amenaza y riesgo"),
-        ("Integracion WFS-IGAC", "CONFORME -- Trazabilidad cruzada WGS84 a CTM12 (MAGNA-SIRGAS)"),
+        ("Integracion WFS-IGAC", "PLANIFICADA -- En desarrollo para consulta en vivo (ver roadmap)"),
         ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
         ("Verificacion SARLAFT", "NO EJECUTADA -- Requiere cruce de listas restrictivas en plataforma externa"),
         ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013)"),
@@ -320,7 +321,7 @@ def get_pot_summary_dt(barrio):
         ("Altura maxima segun tratamiento", "Sujeta a ficha normativa del polígono específico"),
         ("Planes Parciales", "SIN AFECTACION DIRECTA REGISTRADA"),
         ("Planes de Reordenamiento", "SIN AFECTACION DIRECTA REGISTRADA"),
-        ("Endpoint oficial", "miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer"),
+        ("Fuente de capas", "GeoJSON POT Barranquilla empaquetados en la aplicacion (sin consulta en vivo)"),
     ]
 
 
