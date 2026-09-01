@@ -685,6 +685,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(t)
     story.append(Spacer(1, 6))
     story.append(body(get_analisis_registral_text(barrio)))
+    story.append(Spacer(1, 4))
+    # I-4: deep-link al portal oficial del CTL (SNR) — nunca scraping
+    story.append(body(
+        "<b>Obtencion del CTL oficial (SNR):</b> el Certificado de Tradicion y Libertad se "
+        "obtiene en el portal oficial de la Superintendencia de Notariado y Registro: "
+        "<b>certificados.supernotariado.gov.co</b> (servicio de pago autorizado, ~COP 29.000-35.000). "
+        "ARHIAX no realiza consultas automatizadas ni scraping al SNR; el CTL debe "
+        "obtenerse por el canal oficial y adjuntarse al caso."))
     story.append(Spacer(1, 8))
     
     # ── 04 CATASTRAL Y POT [REAL] ──────────────────────────────
@@ -698,6 +706,32 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 4))
     story.append(sub("4.1 Datos Catastrales"))
     story.append(dt(get_catastral_dt(barrio, area)))
+    story.append(Spacer(1, 4))
+
+    # ── 4.1B Verificación catastral EN VIVO (Sprint 3, I-6) ──
+    # Consulta el catastro abierto de Barranquilla con caché y timeout corto;
+    # nunca rompe el PDF: si el servicio no responde, se declara NO DISPONIBLE.
+    try:
+        from integrations.catastro_live import verificar_catastro_barranquilla
+        _cat_live = verificar_catastro_barranquilla(lat, lon)
+    except Exception as e:
+        _cat_live = {"disponible": False, "error": f"motor no disponible: {e}"}
+    story.append(sub("4.1B Verificación Catastral en Vivo"))
+    if _cat_live.get("disponible"):
+        _fuente_url = _cat_live.get("fuente", {}).get("url", "N/D")
+        story.append(dt([
+            ("Estado", "CONSULTADA (servicio abierto Alcaldía de Barranquilla)"),
+            ("NUPRE catastral", _cat_live.get("nupre") or "N/D"),
+            ("Features terreno / datos adicionales",
+             f"{_cat_live.get('total_features_terreno', 0)} / {_cat_live.get('total_features_datos', 0)}"),
+            ("Fuente en vivo", _fuente_url),
+        ]))
+    else:
+        story.append(alert_orange(
+            "<b>Verificación catastral en vivo NO DISPONIBLE:</b> el servicio abierto de la "
+            "Alcaldía de Barranquilla no respondió al momento de generar el dictamen. "
+            "La información catastral de esta sección proviene de las capas POT "
+            "empaquetadas y debe verificarse antes de usarse en una decisión."))
     story.append(Spacer(1, 4))
     story.append(sub("4.2 POT -- Cruce de Capas de Ordenamiento [REAL]"))
     # POT audit table

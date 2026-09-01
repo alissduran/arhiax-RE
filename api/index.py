@@ -753,7 +753,12 @@ def verificar_catastro_en_vivo(
     bbox = (lon - buffer, lat - buffer, lon + buffer, lat + buffer)
 
     from integrations.arcgis_client import query_layer_bbox
-    base = "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos"
+    from config import get_ciudad
+    cfg_baq = get_ciudad("barranquilla")
+    base = (cfg_baq.get("arcgis") or {}).get(
+        "catastro",
+        "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos",
+    )
     # Capas: 545 (datos adicionales) vive en FeatureServer; 315 (terreno) en MapServer
     servicios = {
         "catastro_datos_adicionales": (f"{base}/FeatureServer", 545),
@@ -777,6 +782,15 @@ def verificar_catastro_en_vivo(
             "fuente": r.get("fuente", {}),
         }
     return resultado
+
+@app.get("/api/v1/geo/ciudades")
+def listar_ciudades_endpoint(auth: bool = Depends(require_auth)):
+    """Sprint 3 (I-3): estado de las ciudades configuradas para expansión multi-mercado."""
+    from config import listar_ciudades, get_nacionales
+    return {
+        "ciudades": listar_ciudades(),
+        "nacionales": {k: (v.get("estado", "") if isinstance(v, dict) else "") for k, v in get_nacionales().items()},
+    }
 
 # Servir archivos estáticos del frontend (public) en la raíz
 PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")

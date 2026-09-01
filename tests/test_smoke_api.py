@@ -232,6 +232,49 @@ class TestSmokeApi(unittest.TestCase):
             verificar_catastro_en_vivo()
         self.assertEqual(ctx.exception.status_code, 400)
 
+    def test_config_ciudades_carga(self):
+        """Sprint 3 (I-3): la config multi-ciudad carga y Barranquilla está activa."""
+        from config import listar_ciudades, get_ciudad, get_nacionales
+        ciudades = listar_ciudades()
+        self.assertIn("barranquilla", ciudades)
+        self.assertIn("bogota", ciudades)
+        self.assertIn("medellin", ciudades)
+        self.assertIn("cali", ciudades)
+        cfg_baq = get_ciudad("barranquilla")
+        self.assertIn("catastro", cfg_baq.get("arcgis", {}))
+        self.assertIn("igac", get_nacionales())
+
+    def test_catastro_live_estructura_y_cache(self):
+        """Sprint 3 (I-6): verificar_catastro_barranquilla devuelve la estructura
+        esperada y cachea por celda (sin golpear el servicio dos veces)."""
+        import api.integrations.catastro_live as cl
+        original = cl.query_layer_bbox
+        try:
+            llamadas = []
+
+            def stub(url, capa, bbox, **kwargs):
+                llamadas.append(capa)
+                if capa == 315:
+                    return {"disponible": True, "features": [{"properties": {"name": "0800TESTNUPRE"}}],
+                            "total_features": 1, "error": None, "fuente": {"url": "stub"}}
+                return {"disponible": True, "features": [], "total_features": 0,
+                        "error": None, "fuente": {"url": "stub"}}
+
+            cl.query_layer_bbox = stub
+            cl._CACHE.clear()
+            r1 = cl.verificar_catastro_barranquilla(10.99386, -74.79261)
+            self.assertTrue(r1["disponible"])
+            self.assertEqual(r1["nupre"], "0800TESTNUPRE")
+            self.assertIn("fuente", r1)
+            n_llamadas = len(llamadas)
+            # Segunda llamada con la misma celda: debe venir del caché (sin red)
+            r2 = cl.verificar_catastro_barranquilla(10.99386, -74.79261)
+            self.assertEqual(len(llamadas), n_llamadas)
+            self.assertEqual(r2["nupre"], "0800TESTNUPRE")
+        finally:
+            cl.query_layer_bbox = original
+            cl._CACHE.clear()
+
 
 if __name__ == "__main__":
     unittest.main()
