@@ -115,6 +115,57 @@ class TestSmokeApi(unittest.TestCase):
         self.assertNotIn("conjunto napoli", txt)
         self.assertNotIn("1.045.718.995", txt)
         self.assertNotIn("1.140.834.790", txt)
+        # Sin certificado: la ausencia de CTL es un hallazgo HONESTO
+        self.assertIn("ausencia de ctl", txt)
+        shutil.rmtree(out_dir, ignore_errors=True)
+
+    def test_pdf_compiler_con_certificado_no_declara_ausencia_falsa(self):
+        """H-08: si el CTL se adjuntó (certificado_path), el PDF no debe declarar
+        'AUSENCIA DE CTL' ni '[SIN CTL]'."""
+        import shutil
+        from io import BytesIO
+        from pathlib import Path as _P
+        from reportlab.pdfgen import canvas
+        from pdf_compiler import compile_pdf
+        out_dir = ROOT_DIR / "tmp_pdf_test_cert"
+        if out_dir.exists():
+            shutil.rmtree(out_dir, ignore_errors=True)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        # Certificado de prueba mínimo
+        buf = BytesIO()
+        c = canvas.Canvas(buf)
+        c.drawString(50, 780, "CERTIFICADO DE TRADICION Y LIBERTAD (PRUEBA)")
+        c.drawString(50, 760, "MATRICULA INMOBILIARIA: 040-777777")
+        c.drawString(50, 740, "DIRECCION: CALLE 63 # 37-71")
+        c.drawString(50, 720, "AREA PRIVADA 75.5 M2")
+        c.save()
+        cert_path = out_dir / "cert_prueba.pdf"
+        cert_path.write_bytes(buf.getvalue())
+        record = {
+            "id": 2,
+            "folio_matricula": "040-777777",
+            "direccion": "Calle 63 # 37-71",
+            "barrio": "El Recreo",
+            "estrato": 4,
+            "area": 75.5,
+            "valor_consolidado": 400000000,
+            "sombra_9am_cargada": 0,
+            "sombra_3pm_cargada": 0,
+            "mapa_cargado": 0,
+            "acreedor_real": None,
+            "certificado_path": str(cert_path),
+        }
+        try:
+            compile_pdf(record, str(out_dir / "test.pdf"), assets_dir=out_dir)
+        except Exception as e:  # noqa: BLE001
+            self.fail(f"compile_pdf con certificado lanzó excepción: {e}")
+        import pypdf
+        r = pypdf.PdfReader(str(out_dir / "test.pdf"))
+        txt = " ".join((p.extract_text() or "") for p in r.pages).lower()
+        self.assertNotIn("ausencia de ctl", txt)
+        self.assertNotIn("[sin ctl]", txt)
+        self.assertIn("ctl procesado", txt)
+        self.assertIn("040-777777", txt)
         shutil.rmtree(out_dir, ignore_errors=True)
 
     def test_carga_economica_inputs_invalidos(self):

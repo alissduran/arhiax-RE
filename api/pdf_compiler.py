@@ -624,19 +624,37 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 8))
     
     # ── 03 ANALISIS REGISTRAL ──────────────────────────────────
-    story.append(sec("03 - Analisis Registral SNR -- Cadena de Tradicion [CERTIFICADO FRESCO]"))
-    story.append(hr())
-    story.append(body(
-        f"Analisis basado en Certificado de Tradicion y Libertad cargado. "
-        f"Folio de matricula: {folio}. "
-        "<b>[FUENTE: SNR - DATOS AUTENTICOS]</b>"
+    # H-08/F-21: el título y el cuerpo distinguen si el CTL se procesó o no,
+    # y nunca afirman consultas SNR en vivo que no ocurren.
+    tiene_ctl = bool(db_record.get("certificado_path"))
+    story.append(sec(
+        "03 - Analisis Registral SNR -- Cadena de Tradicion [CTL PROCESADO]"
+        if tiene_ctl else
+        "03 - Analisis Registral SNR -- Cadena de Tradicion [SIN CTL]"
     ))
+    story.append(hr())
+    if tiene_ctl:
+        story.append(body(
+            f"Analisis del Certificado de Tradicion y Libertad adjuntado. "
+            f"Folio de matricula: {folio}. "
+            "<b>[FUENTE: CERTIFICADO ADJUNTADO POR EL USUARIO - NO ES CONSULTA SNR EN VIVO]</b>"
+        ))
+    else:
+        story.append(body(
+            f"No se adjunto Certificado de Tradicion y Libertad. Folio de matricula: {folio}. "
+            "La informacion registral se marca PENDIENTE hasta cargar el CTL. "
+            "<b>[FUENTE: SIN CTL ADJUNTADO]</b>"
+        ))
     story.append(Spacer(1, 4))
     
     ann = analysis.get("anotaciones", [])
     if not ann:
-        # Fallback si no hay CTL
-        ann = [("N/D", "N/D", "AUSENCIA DE CTL", "No se cargo el archivo PDF", "PENDIENTE")]
+        if tiene_ctl:
+            # El CTL se procesó pero no se detectaron anotaciones extraíbles
+            ann = [("N/D", "N/D", "SIN ANOTACIONES DETECTADAS",
+                    "El CTL procesado no presenta anotaciones extraibles", "N/D")]
+        else:
+            ann = [("N/D", "N/D", "AUSENCIA DE CTL", "No se cargo el archivo PDF", "PENDIENTE")]
         
     ann_data = [[Paragraph("<b>Anot.</b>",s["header"]),Paragraph("<b>Fecha</b>",s["header"]),
                  Paragraph("<b>Tipologia</b>",s["header"]),Paragraph("<b>Partes</b>",s["header"]),
