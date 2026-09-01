@@ -535,12 +535,26 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 01D ANALISIS DE EQUIPAMIENTO URBANO (POI) ────────────────
     story.append(sec("01D - Analisis de Equipamiento Urbano y Puntos de Interes (POI)"))
     story.append(hr())
-    story.append(body(
-        f"Analisis de accesibilidad y cobertura de equipamientos urbanos en un radio de <b>2.0 km</b> "
-        f"en torno al predio geocodificado. Los datos han sido extraidos dinamicamente de la base "
-        f"geografica de OpenStreetMap (OSM) y ordenados por proximidad geodesica. "
-        "<b>[FUENTE: OPENSTREETMAP OVERPASS API & ALGORITMO GEODESICO ARHIAX]</b>"
-    ))
+    _pois_con_fallback = any(
+        item.get("origen") == "referencial_no_osm"
+        for items in pois.values() for item in items
+    )
+    if _pois_con_fallback:
+        # M-03: no presentar POIs referenciales como datos OSM en vivo
+        story.append(body(
+            f"Analisis de accesibilidad y equipamientos urbanos en un radio de <b>2.0 km</b> "
+            f"en torno al predio geocodificado. "
+            "<b>[ADVERTENCIA DE FUENTE:</b> la consulta a OpenStreetMap no estuvo disponible; "
+            "los equipamientos mostrados son <b>REFERENCIALES del modulo ARHIAX</b> y deben "
+            "verificarse en campo antes de usarse en una decision.<b>]</b>"
+        ))
+    else:
+        story.append(body(
+            f"Analisis de accesibilidad y cobertura de equipamientos urbanos en un radio de <b>2.0 km</b> "
+            f"en torno al predio geocodificado. Los datos fueron extraidos de la base geografica de "
+            f"OpenStreetMap (OSM) y ordenados por proximidad geodesica. "
+            "<b>[FUENTE: OPENSTREETMAP OVERPASS API & ALGORITMO GEODESICO ARHIAX]</b>"
+        ))
     story.append(Spacer(1, 4))
     
     # M-02: se reutilizan los POIs y mapas generados en la inicialización (línea ~184);

@@ -36,48 +36,49 @@ def get_nearby_pois(lat, lon, radius=2000):
     out center;
     """
     
-    # Fallback local realista diferenciado por ubicación
+    # Fallback local realista diferenciado por ubicación (M-03: marcado como
+    # referencial — NO se presenta como si viniera de OSM en el dictamen)
     is_miramar = lat > 10.985
     if is_miramar:
         fallback_pois = {
             "Salud": [
-                {"name": "Clinica Portoazul Auna", "type": "Clinica / Hospital", "distance": 1850.0},
-                {"name": "Clinica Iberoamerica", "type": "Clinica / Hospital", "distance": 1950.0}
+                {"name": "Clinica Portoazul Auna", "type": "Clinica / Hospital", "distance": 1850.0, "origen": "referencial_no_osm"},
+                {"name": "Clinica Iberoamerica", "type": "Clinica / Hospital", "distance": 1950.0, "origen": "referencial_no_osm"}
             ],
             "Educacion": [
-                {"name": "Colegio Karl C. Parrish", "type": "Colegio Privado", "distance": 1450.0},
-                {"name": "Gimnasio Altair de Cartagena (Sede BAQ)", "type": "Colegio", "distance": 850.0},
-                {"name": "Colegio Marymount", "type": "Colegio Privado", "distance": 1700.0}
+                {"name": "Colegio Karl C. Parrish", "type": "Colegio Privado", "distance": 1450.0, "origen": "referencial_no_osm"},
+                {"name": "Gimnasio Altair de Cartagena (Sede BAQ)", "type": "Colegio", "distance": 850.0, "origen": "referencial_no_osm"},
+                {"name": "Colegio Marymount", "type": "Colegio Privado", "distance": 1700.0, "origen": "referencial_no_osm"}
             ],
             "Comercio": [
-                {"name": "Centro Comercial Miramar", "type": "Centro Comercial", "distance": 320.0},
-                {"name": "Supermercado Olimpica Miramar", "type": "Supermercado", "distance": 350.0},
-                {"name": "Mall Plaza Buenavista", "type": "Centro Comercial", "distance": 1600.0}
+                {"name": "Centro Comercial Miramar", "type": "Centro Comercial", "distance": 320.0, "origen": "referencial_no_osm"},
+                {"name": "Supermercado Olimpica Miramar", "type": "Supermercado", "distance": 350.0, "origen": "referencial_no_osm"},
+                {"name": "Mall Plaza Buenavista", "type": "Centro Comercial", "distance": 1600.0, "origen": "referencial_no_osm"}
             ],
             "Recreacion": [
-                {"name": "Parque Miramar", "type": "Parque Urbano", "distance": 150.0},
-                {"name": "Parque Boulevard Buenavista", "type": "Parque Urbano", "distance": 1250.0}
+                {"name": "Parque Miramar", "type": "Parque Urbano", "distance": 150.0, "origen": "referencial_no_osm"},
+                {"name": "Parque Boulevard Buenavista", "type": "Parque Urbano", "distance": 1250.0, "origen": "referencial_no_osm"}
             ]
         }
     else:
         fallback_pois = {
             "Salud": [
-                {"name": "Clinica General del Norte", "type": "Clinica / Hospital", "distance": 1200.0},
-                {"name": "Clinica La Merced", "type": "Clinica / Hospital", "distance": 1400.0}
+                {"name": "Clinica General del Norte", "type": "Clinica / Hospital", "distance": 1200.0, "origen": "referencial_no_osm"},
+                {"name": "Clinica La Merced", "type": "Clinica / Hospital", "distance": 1400.0, "origen": "referencial_no_osm"}
             ],
             "Educacion": [
-                {"name": "Corporacion Universitaria de la Costa - CUC", "type": "Universidad", "distance": 350.0},
-                {"name": "Colegio Maria Auxiliadora", "type": "Colegio", "distance": 600.0},
-                {"name": "Universidad del Atlantico - Sede Centro", "type": "Universidad", "distance": 1100.0}
+                {"name": "Corporacion Universitaria de la Costa - CUC", "type": "Universidad", "distance": 350.0, "origen": "referencial_no_osm"},
+                {"name": "Colegio Maria Auxiliadora", "type": "Colegio", "distance": 600.0, "origen": "referencial_no_osm"},
+                {"name": "Universidad del Atlantico - Sede Centro", "type": "Universidad", "distance": 1100.0, "origen": "referencial_no_osm"}
             ],
             "Comercio": [
-                {"name": "Portal del Prado CC", "type": "Centro Comercial", "distance": 1200.0},
-                {"name": "Supermercado Olimpica Recreo", "type": "Supermercado", "distance": 400.0},
-                {"name": "Exito San Francisco", "type": "Supermercado", "distance": 900.0}
+                {"name": "Portal del Prado CC", "type": "Centro Comercial", "distance": 1200.0, "origen": "referencial_no_osm"},
+                {"name": "Supermercado Olimpica Recreo", "type": "Supermercado", "distance": 400.0, "origen": "referencial_no_osm"},
+                {"name": "Exito San Francisco", "type": "Supermercado", "distance": 900.0, "origen": "referencial_no_osm"}
             ],
             "Recreacion": [
-                {"name": "Parque El Recreo", "type": "Parque Urbano", "distance": 250.0},
-                {"name": "Parque Suri Salcedo", "type": "Parque Urbano", "distance": 800.0}
+                {"name": "Parque El Recreo", "type": "Parque Urbano", "distance": 250.0, "origen": "referencial_no_osm"},
+                {"name": "Parque Suri Salcedo", "type": "Parque Urbano", "distance": 800.0, "origen": "referencial_no_osm"}
             ]
         }
     
