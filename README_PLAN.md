@@ -76,13 +76,14 @@ Auditoría técnica integral (seguridad + lógica) y correcciones:
 
 ### Sprint 3 — Integraciones institucionales en vivo y expansión a otros mercados (En curso)
 Objetivo: pasar de capas estáticas empaquetadas a **consultas en vivo** y habilitar otras ciudades.
+Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoservicios_colombia_ARHIAX.md` (verificados en vivo 2026-09-01).
 
-- [ ] **I-1: Conector WFS IGAC** — Consulta de capas catastrales/geográficas vía WFS (GetCapabilities/GetFeature) con trazabilidad.
-- [ ] **I-2: Conector de geoportales municipales** — Barranquilla, Bogotá (IDECA), Medellín, Cali: capas POT/riesgo por ciudad.
-- [ ] **I-3: Catastro multi-ciudad** — Configuración por ciudad (folios, círculos registrales, capas, metodología de valoración).
-- [ ] **I-4: Consulta CTL SNR** — Evaluar integración con proveedor de certificados de tradición (API de pago autorizada).
+- [x] **I-1: Conector ArcGIS REST y verificación catastral en vivo** — `api/integrations/arcgis_client.py` (query por BBOX → GeoJSON) y endpoint `GET /api/v1/geo/catastro` (auth) contra el catastro abierto de Barranquilla (`miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos`: FeatureServer 545 + MapServer 315). **Verificado en vivo**: devuelve NUPRE, área y atributos reales del predio.
+- [x] **I-2: Mapa de geoportales institucionales** — `api/config/ciudades.yaml` con endpoints reales verificados: IGAC (`mapas.igac.gov.co`, WMS cartografía básica), Medellín (`servidormapas`), Cali (IDESC/WMS), Bogotá (IDECA/Catastro en Línea), IDEAM (riesgo), ICDE (catálogo nacional), datos.gov.co (Socrata).
+- [ ] **I-3: Catastro multi-ciudad** — Activar capas POT/riesgo por ciudad (Bogotá/Medellín/Cali) y valoración por ciudad.
+- [ ] **I-4: Consulta CTL SNR** — Solo vía deep-link al portal oficial (`certificados.supernotariado.gov.co`) o integración B2B de pago (Certicámara/DataCrédito). **Nunca scraping** (la SNR alerta sobre CTL fraudulentos).
 - [ ] **I-5: Verificación SARLAFT real** — Integración con plataforma de listas restrictivas (si el cliente la provee).
-- [ ] **I-6: Endpoints y trazabilidad** — Registro de cada consulta institucional (fuente, fecha, parámetros, hash) en el PDF.
+- [ ] **I-6: Trazabilidad en el dictamen** — Registrar cada consulta institucional en vivo (fuente, fecha, parámetros, hash) en el PDF.
 
 ### Futuro (Backlog)
 - [ ] Persistencia gestionada (Postgres/Turso) en lugar de SQLite efímero.
