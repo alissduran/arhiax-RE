@@ -1,13 +1,18 @@
 import os
 import sys
 import tempfile
+import time
+import hmac
+import hashlib
 import yaml
 import shutil
 import re
 import pypdf
+from collections import defaultdict, deque
 from pathlib import Path
-from datetime import datetime
-from fastapi import FastAPI, HTTPException, Body, UploadFile, File, Depends, Form, BackgroundTasks
+from datetime import datetime, timedelta
+from fastapi import FastAPI, HTTPException, Body, UploadFile, File, Depends, Form, BackgroundTasks, Request
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, Response, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -49,17 +54,113 @@ except Exception as e:
 
 app = FastAPI(title="ARHIAX Workflow API", description="Portal privado y flujo de trabajo para dictámenes catastrales")
 
-# CORS
+# CORS — lista blanca explícita de orígenes (F-06: nunca "*" con credenciales)
+_ALLOWED_ORIGINS = [o.strip() for o in os.environ.get(
+    "ARHIAX_ALLOWED_ORIGINS",
+    "https://arhiax-re.vercel.app,http://localhost:8000,http://localhost:3000"
+).split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=_ALLOWED_ORIGINS,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 DEFAULT_YAML_PATH = Path(LONJA_LAYER) / "lonja_baq_metodologia.yaml"
-ACCESS_PASSWORD = "Sinergia2026"
+
+# ---- Autenticación real (F-01, F-02, F-05, F-22) ----
+# Credenciales y secreto de firma desde variables de entorno (Vercel env vars).
+# El fallback solo existe para desarrollo local y se sobreescribe en producción.
+ACCESS_PASSWORD = os.environ.get("ARHIAX_ACCESS_PASSWORD", "Sinergia2026")
+AUTH_SECRET = os.environ.get("ARHIAX_AUTH_SECRET", "cambiar-este-secreto-en-produccion")
+TOKEN_TTL_HOURS = int(os.environ.get("ARHIAX_TOKEN_TTL_HOURS", "8"))
+
+_security = HTTPBearer(auto_error=False)
+
+
+def _firmar(payload: str) -> str:
+    return hmac.new(AUTH_SECRET.encode("utf-8"), payload.encode("utf-8"), hashlib.sha256).hexdigest()
+
+
+def _crear_token() -> str:
+    exp = (datetime.now() + timedelta(hours=TOKEN_TTL_HOURS)).isoformat()
+    return f"{exp}.{_firmar(exp)}"
+
+
+def _verificar_token(token: str) -> bool:
+    try:
+        payload, firma = token.rsplit(".", 1)
+        if not hmac.compare_digest(_firmar(payload), firma):
+            return False
+        return datetime.now() < datetime.fromisoformat(payload)
+    except Exception:
+        return False
+
+
+def require_auth(credentials: HTTPAuthorizationCredentials = Depends(_security)):
+    if credentials is None or not _verificar_token(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Sesión inválida o expirada. Inicie sesión nuevamente.")
+    return True
+
+
+# Rate limiting simple en memoria para /api/login (F-03)
+_intentos_login = defaultdict(deque)
+
+
+def _check_login_rate_limit(request: Request, max_intentos: int = 5, ventana_seg: int = 300):
+    ip = request.client.host if request.client else "desconocida"
+    ahora = time.time()
+    cola = _intentos_login[ip]
+    while cola and ahora - cola[0] > ventana_seg:
+        cola.popleft()
+    if len(cola) >= max_intentos:
+        raise HTTPException(status_code=429, detail="Demasiados intentos fallidos. Intente en 5 minutos.")
+    cola.append(ahora)
+
+
+# ---- Validación de insumos (F-04, F-08) ----
+FOLIO_RE = re.compile(r"^\d{3}-\d{1,8}$")
+MAX_UPLOAD_BYTES = 8 * 1024 * 1024  # 8 MB
+
+
+def _sanitizar_folio(folio) -> str:
+    """Normaliza una matrícula inmobiliaria (040-XXXXXX) o devuelve 'Pendiente'."""
+    if not folio or not isinstance(folio, str):
+        return "Pendiente"
+    m = FOLIO_RE.match(folio.strip())
+    return m.group(0) if m else "Pendiente"
+
+
+def _validar_archivo_subido(file: UploadFile, img_type: str) -> None:
+    """Valida firma mágica del archivo según el tipo de insumo (F-04)."""
+    head = file.file.read(8)
+    file.file.seek(0)
+    if img_type == "certificado":
+        if not head.startswith(b"%PDF"):
+            raise HTTPException(status_code=400, detail="El certificado debe ser un archivo PDF válido.")
+    elif img_type in ("sombra_9am", "sombra_3pm", "mapa_satelital"):
+        if not head.startswith(b"\x89PNG\r\n\x1a\n"):
+            raise HTTPException(status_code=400, detail="La imagen debe ser un PNG válido.")
+
+
+def _copiar_con_limite(src, dst: Path, limite: int = MAX_UPLOAD_BYTES) -> int:
+    total = 0
+    try:
+        with open(dst, "wb") as out:
+            while chunk := src.read(65536):
+                total += len(chunk)
+                if total > limite:
+                    raise HTTPException(
+                        status_code=413,
+                        detail=f"Archivo excede el límite de {limite // (1024 * 1024)} MB.",
+                    )
+                out.write(chunk)
+    except HTTPException:
+        if dst.exists():
+            dst.unlink()
+        raise
+    return total
 
 # Asegurar carpeta de assets dinámica para Vercel (/tmp)
 if os.environ.get("VERCEL") or not os.access(str(API_DIR), os.W_OK):
@@ -132,20 +233,31 @@ def extraer_datos_de_pdf(pdf_path: str) -> dict:
     return datos
 
 @app.post("/api/login")
-def login(payload: dict = Body(...)):
+def login(payload: dict = Body(...), request: Request = None):
     password = payload.get("password", "")
-    if password == ACCESS_PASSWORD:
-        return {"success": True, "token": "session_active_sinergia_2026"}
-    raise HTTPException(status_code=401, detail="Contraseña incorrecta. Acceso denegado.")
+    if not isinstance(password, str) or not hmac.compare_digest(
+        password.encode("utf-8"), ACCESS_PASSWORD.encode("utf-8")
+    ):
+        if request is not None:
+            _check_login_rate_limit(request)
+        raise HTTPException(status_code=401, detail="Contraseña incorrecta. Acceso denegado.")
+    return {"success": True, "token": _crear_token(), "expires_in_hours": TOKEN_TTL_HOURS}
 
 @app.get("/api/dictamenes")
-def list_dictamenes():
+def list_dictamenes(auth: bool = Depends(require_auth)):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM dictamenes ORDER BY id DESC")
     rows = cursor.fetchall()
     conn.close()
-    return [dict(row) for row in rows]
+    # No exponer rutas internas del filesystem al cliente (F-13)
+    resultado = []
+    for row in rows:
+        d = dict(row)
+        d.pop("pdf_path", None)
+        d.pop("certificado_path", None)
+        resultado.append(d)
+    return resultado
 
 def resolver_matricula_por_direccion(direccion: str) -> tuple:
     """
@@ -180,16 +292,16 @@ def resolver_matricula_por_direccion(direccion: str) -> tuple:
     return folio_simulado, barrio, 4
 
 @app.get("/api/resolver-matricula")
-def resolve_matricula_endpoint(direccion: str):
+def resolve_matricula_endpoint(direccion: str, auth: bool = Depends(require_auth)):
     try:
         folio, barrio, estrato = resolver_matricula_por_direccion(direccion)
         return {"folio_matricula": folio, "barrio": barrio, "estrato": estrato}
     except Exception as e:
-        import traceback
-        return {"error": str(e), "traceback": traceback.format_exc()}
+        print(f"[ERROR] resolver-matricula: {e}")
+        raise HTTPException(status_code=500, detail="No fue posible resolver la matrícula. Intente nuevamente.")
 
 @app.post("/api/dictamenes")
-def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks = None):
+def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks = None, auth: bool = Depends(require_auth)):
     folio = payload.get("folio_matricula", "").strip()
     direccion = payload.get("direccion", "").strip()
     
@@ -255,19 +367,19 @@ def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks
     return {"id": new_id, "folio_matricula": folio, "direccion": direccion, "barrio": barrio, "estado": "PENDIENTE_IMAGENES"}
 
 @app.post("/api/dictamenes/{case_id}/upload/{img_type}")
-async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)):
+async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...), auth: bool = Depends(require_auth)):
     if img_type not in ["sombra_9am", "sombra_3pm", "mapa_satelital", "certificado"]:
         raise HTTPException(status_code=400, detail="Tipo de insumo inválido.")
-        
+    _validar_archivo_subido(file, img_type)
+
     case_dir = ASSETS_DIR / f"case_{case_id}"
     case_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Manejar extensión del Certificado (PDF)
     ext = ".pdf" if img_type == "certificado" else ".png"
     file_path = case_dir / f"{img_type}{ext}"
-    
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+
+    _copiar_con_limite(file.file, file_path)
         
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -343,7 +455,7 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
         if (dictamen["sombra_9am_cargada"] and dictamen["sombra_3pm_cargada"] and 
             dictamen["mapa_cargado"] and dictamen["area"] is not None and dictamen["area"] > 0):
             
-            pdf_filename = f"ARHIAX_Dictamen_{dictamen['folio_matricula']}_final.pdf"
+            pdf_filename = f"ARHIAX_Dictamen_{_sanitizar_folio(dictamen['folio_matricula'])}_final.pdf"
             pdf_output_path = case_dir / pdf_filename
             
             try:
@@ -354,9 +466,8 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
                 status = "COMPLETADO"
             except Exception as e:
                 conn.close()
-                import traceback
-                traceback.print_exc()
-                raise HTTPException(status_code=500, detail=f"Error al compilar PDF del dictamen: {str(e)}")
+                print(f"[ERROR] compilar PDF del dictamen {case_id}: {e}")
+                raise HTTPException(status_code=500, detail="Error al compilar el PDF del dictamen. Verifique los insumos e intente nuevamente.")
         
     conn.close()
     return {
@@ -367,7 +478,7 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
     }
 
 @app.post("/api/dictamenes/{case_id}/update")
-def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: BackgroundTasks = None):
+def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: BackgroundTasks = None, auth: bool = Depends(require_auth)):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
@@ -441,7 +552,7 @@ def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: B
         dictamen["mapa_cargado"] and dictamen["area"] is not None and dictamen["area"] > 0):
         
         case_dir = ASSETS_DIR / f"case_{case_id}"
-        pdf_filename = f"ARHIAX_Dictamen_{dictamen['folio_matricula']}_final.pdf"
+        pdf_filename = f"ARHIAX_Dictamen_{_sanitizar_folio(dictamen['folio_matricula'])}_final.pdf"
         pdf_output_path = case_dir / pdf_filename
         
         try:
@@ -452,15 +563,14 @@ def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: B
             dictamen["estado"] = "COMPLETADO"
         except Exception as e:
             conn.close()
-            import traceback
-            traceback.print_exc()
-            raise HTTPException(status_code=500, detail=f"Error al compilar PDF del dictamen: {str(e)}")
+            print(f"[ERROR] compilar PDF del dictamen {case_id}: {e}")
+            raise HTTPException(status_code=500, detail="Error al compilar el PDF del dictamen. Verifique los insumos e intente nuevamente.")
             
     conn.close()
     return dictamen
 
 @app.delete("/api/dictamenes/{case_id}")
-def delete_dictamen(case_id: int):
+def delete_dictamen(case_id: int, auth: bool = Depends(require_auth)):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
@@ -493,7 +603,8 @@ async def generar_dictamen_stateless(
     certificado: UploadFile = File(None),
     sombra_9am: UploadFile = File(None),
     sombra_3pm: UploadFile = File(None),
-    mapa_satelital: UploadFile = File(None)
+    mapa_satelital: UploadFile = File(None),
+    auth: bool = Depends(require_auth)
 ):
     # Validar campos mínimos
     if not folio_matricula and not direccion:
@@ -504,11 +615,11 @@ async def generar_dictamen_stateless(
     temp_run_dir = Path("/tmp") / f"run_{run_id}"
     temp_run_dir.mkdir(parents=True, exist_ok=True)
 
-    # 1. Guardar archivos cargados (solo si no están vacíos)
+    # 1. Guardar archivos cargados (solo si no están vacíos) con validación de contenido
     if certificado and certificado.filename:
+        _validar_archivo_subido(certificado, "certificado")
         cert_path = temp_run_dir / "certificado.pdf"
-        with open(cert_path, "wb") as f:
-            shutil.copyfileobj(certificado.file, f)
+        _copiar_con_limite(certificado.file, cert_path)
         
         # Intentar extraer datos
         extraidos = extraer_datos_de_pdf(str(cert_path))
@@ -529,16 +640,16 @@ async def generar_dictamen_stateless(
     if area is None or area < 0:
         area = 0.0
 
-    # Guardar imágenes de ArcGIS Pro si vienen y no están vacías
+    # Guardar imágenes de ArcGIS Pro si vienen y no están vacías (validación de contenido)
     if sombra_9am and sombra_9am.filename:
-        with open(temp_run_dir / "sombra_9am.png", "wb") as f:
-            shutil.copyfileobj(sombra_9am.file, f)
+        _validar_archivo_subido(sombra_9am, "sombra_9am")
+        _copiar_con_limite(sombra_9am.file, temp_run_dir / "sombra_9am.png")
     if sombra_3pm and sombra_3pm.filename:
-        with open(temp_run_dir / "sombra_3pm.png", "wb") as f:
-            shutil.copyfileobj(sombra_3pm.file, f)
+        _validar_archivo_subido(sombra_3pm, "sombra_3pm")
+        _copiar_con_limite(sombra_3pm.file, temp_run_dir / "sombra_3pm.png")
     if mapa_satelital and mapa_satelital.filename:
-        with open(temp_run_dir / "mapa_satelital.png", "wb") as f:
-            shutil.copyfileobj(mapa_satelital.file, f)
+        _validar_archivo_subido(mapa_satelital, "mapa_satelital")
+        _copiar_con_limite(mapa_satelital.file, temp_run_dir / "mapa_satelital.png")
 
     # 2. Calcular valor consolidado
     valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
@@ -547,7 +658,7 @@ async def generar_dictamen_stateless(
     # 3. Construir record para ReportLab
     db_record = {
         "id": 9999,  # ID temporal
-        "folio_matricula": folio_matricula or "Pendiente",
+        "folio_matricula": _sanitizar_folio(folio_matricula) or "Pendiente",
         "direccion": direccion or "Pendiente",
         "barrio": barrio,
         "estrato": 4,
@@ -564,23 +675,23 @@ async def generar_dictamen_stateless(
     try:
         compile_pdf(db_record, str(output_pdf), assets_dir=temp_run_dir)
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Error al compilar el PDF pericial: {str(e)}")
+        print(f"[ERROR] compilar PDF stateless: {e}")
+        raise HTTPException(status_code=500, detail="Error al compilar el PDF pericial. Verifique los insumos e intente nuevamente.")
 
     with open(output_pdf, "rb") as f:
         pdf_bytes = f.read()
 
+    folio_limpio = _sanitizar_folio(db_record["folio_matricula"])
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
         headers={
-            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{db_record["folio_matricula"]}.pdf"'
+            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{folio_limpio}.pdf"'
         }
     )
 
 @app.get("/api/dictamenes/{case_id}/pdf")
-def download_pdf(case_id: int):
+def download_pdf(case_id: int, auth: bool = Depends(require_auth)):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
@@ -600,16 +711,17 @@ def download_pdf(case_id: int):
     with open(dictamen["pdf_path"], "rb") as f:
         pdf_bytes = f.read()
 
+    folio_limpio = _sanitizar_folio(dictamen["folio_matricula"])
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
         headers={
-            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{dictamen["folio_matricula"]}.pdf"'
+            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{folio_limpio}.pdf"'
         }
     )
 
 @app.get("/api/config")
-def get_config():
+def get_config(auth: bool = Depends(require_auth)):
     if not DEFAULT_YAML_PATH.exists():
         raise HTTPException(status_code=404, detail="Metodología no encontrada.")
     with open(DEFAULT_YAML_PATH, "r", encoding="utf-8") as f:

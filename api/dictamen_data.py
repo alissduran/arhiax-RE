@@ -215,22 +215,27 @@ def get_identificacion_dt(barrio, db_record, val_data, fmt_cop):
     area = db_record.get("area", 0)
     
     if "miramar" in barrio:
+        # Los datos personales/registrales NUNCA se hardcodean (F-14/H-04): se poblan
+        # desde el CTL analizado (campo "titulares" del db_record) o quedan pendientes.
+        titulares = db_record.get("titulares")
+        if not titulares:
+            titulares = "PENDIENTE DE VERIFICACION (Requiere Certificado de Tradicion y Libertad del predio)"
         return [
             ("Matricula Inmobiliaria", f"{folio} (Circulo Registral 040 Barranquilla)"),
             ("Direccion oficial", direccion),
             ("Tipologia", "Apartamento -- Propiedad Horizontal (NO VIS)"),
             ("Area privada construida", f"{area} m2"),
-            ("Coeficiente de copropiedad", "0,2037%"),
-            ("Apertura del folio", "10 de mayo de 2023, Escritura 712/23-03-2023, Notaria 1a BAQ"),
-            ("NUPRE", "080010102200400020043000000000 (actualizado GC-BAQ Mar 2025)"),
-            ("Titulares vigentes", "Duran Bacca Alisson (CC 1.045.718.995) 50% + Triana Abello Brayan Dario (CC 1.140.834.790) 50%"),
-            ("Modalidad de adquisicion", "Compraventa NO VIS -- Esc. 2875/11-10-2023, Valor: $268.516.940"),
+            ("Coeficiente de copropiedad", "N/D (Sujeto a regimen de PH / Requiere CTL)"),
+            ("Apertura del folio", "N/D (Requiere CTL del predio)"),
+            ("NUPRE", "N/D (Sujeto a consulta GC-BAQ)"),
+            ("Titulares vigentes", titulares),
+            ("Modalidad de adquisicion", "N/D (Requiere CTL del predio)"),
             ("Valor Comercial Consolidado", f"{fmt_cop(val_data['consolidado'])} COP (Banda: {fmt_cop(val_data['banda_baja'])} -- {fmt_cop(val_data['banda_alta'])})"),
-            ("Constructor / Enajenante", "Urbanizadora Marval S.A.S. (NIT 830.012.053-3)"),
-            ("Acreedor hipotecario (SNR)", "Banco de Bogota S.A. (NIT 860.002.964-4) -- SEGUN CERTIFICADO SNR"),
-            ("Acreedor hipotecario (REAL)", "SCOTIABANK COLPATRIA S.A. -- Cesion de cartera. El SNR NO refleja este cambio"),
+            ("Constructor / Enajenante", "N/D (Requiere CTL del predio)"),
+            ("Acreedor hipotecario (SNR)", "N/D (Requiere CTL del predio)"),
+            ("Acreedor hipotecario (REAL)", "N/D (Requiere CTL del predio)"),
             ("ORIP", "Oficina de Registro de Instrumentos Publicos -- Barranquilla"),
-            ("Fuente registral", "Certificado SNR actualizado (Turno 2026-040-1-108528, 06-May-2026)"),
+            ("Fuente registral", "Pendiente de verificacion registral (sin CTL del predio)"),
         ]
     else:
         return [
@@ -248,7 +253,7 @@ def get_identificacion_dt(barrio, db_record, val_data, fmt_cop):
             ("Acreedor hipotecario (SNR)", "PENDIENTE DE VERIFICACION (Sin Certificado de Tradicion y Libertad)"),
             ("Acreedor hipotecario (REAL)", "PENDIENTE DE VERIFICACION (Sin Certificado de Tradicion y Libertad)"),
             ("ORIP", "Oficina de Registro de Instrumentos Publicos -- Barranquilla"),
-            ("Fuente registral", f"Consulta Catastral y Geoportal (Sin CTL, matricula {folio})"),
+            ("Fuente registral", f"Pendiente de verificacion registral (sin CTL, matricula {folio})"),
         ]
 
 def get_localizacion_dt(barrio, lat, lon):

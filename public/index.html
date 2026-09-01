@@ -577,6 +577,21 @@
     // Almacenamiento local de los archivos seleccionados en memoria para subirlos juntos stateless
     let selectedFiles = {};
 
+    // Helper de API: inyecta el token de sesión y cierra sesión ante 401 (auth real server-side)
+    async function apiFetch(path, options = {}) {
+      const headers = new Headers(options.headers || {});
+      if (activeToken) {
+        headers.set('Authorization', 'Bearer ' + activeToken);
+      }
+      const response = await fetch(path, { ...options, headers });
+      if (response.status === 401) {
+        alert('Su sesión ha expirado. Inicie sesión nuevamente.');
+        logout();
+        throw new Error('Sesión expirada');
+      }
+      return response;
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       if (activeToken) {
         showPortal();
@@ -673,7 +688,7 @@
 
       if (!folio && direccion) {
         try {
-          const res = await fetch(`/api/resolver-matricula?direccion=${encodeURIComponent(direccion)}`);
+          const res = await apiFetch(`/api/resolver-matricula?direccion=${encodeURIComponent(direccion)}`);
           if (res.ok) {
             const data = await res.json();
             resolvedFolio = data.folio_matricula;
@@ -791,7 +806,7 @@
           try {
             const formData = new FormData();
             formData.append("file", file);
-            const response = await fetch(`/api/dictamenes/${selectedCaseId}/upload/certificado`, {
+            const response = await apiFetch(`/api/dictamenes/${selectedCaseId}/upload/certificado`, {
               method: 'POST',
               body: formData
             });
@@ -847,7 +862,7 @@
 
       showLoading(true);
       try {
-        const response = await fetch(`/api/dictamenes/${selectedCaseId}/update`, {
+        const response = await apiFetch(`/api/dictamenes/${selectedCaseId}/update`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -887,7 +902,7 @@
 
       showLoading(true);
       try {
-        const response = await fetch(`/api/dictamenes/${id}`, {
+        const response = await apiFetch(`/api/dictamenes/${id}`, {
           method: 'DELETE'
         });
 
@@ -938,7 +953,7 @@
         if (selectedFiles['sombra_3pm']) formData.append('sombra_3pm', selectedFiles['sombra_3pm']);
         if (selectedFiles['mapa_satelital']) formData.append('mapa_satelital', selectedFiles['mapa_satelital']);
 
-        const response = await fetch('/api/dictamenes/generar', {
+        const response = await apiFetch('/api/dictamenes/generar', {
           method: 'POST',
           body: formData
         });

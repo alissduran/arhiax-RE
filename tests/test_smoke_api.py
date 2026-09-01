@@ -54,6 +54,30 @@ class TestSmokeApi(unittest.TestCase):
             login({"password": "password-incorrecta-xyz"})
         self.assertEqual(ctx.exception.status_code, 401)
 
+    def test_auth_tokens_firmados_y_expiracion(self):
+        """Los tokens se firman con HMAC y expiran (F-01/F-02)."""
+        from datetime import datetime, timedelta
+        from fastapi.security import HTTPAuthorizationCredentials
+        from fastapi import HTTPException
+        from index import _crear_token, _verificar_token, _firmar, require_auth, TOKEN_TTL_HOURS
+
+        token = _crear_token()
+        self.assertTrue(_verificar_token(token))
+        self.assertFalse(_verificar_token(token + "x"))
+        self.assertFalse(_verificar_token("firma-invalida"))
+
+        # Token con expiración en el pasado debe rechazarse
+        exp_pasado = (datetime.now() - timedelta(hours=1)).isoformat()
+        token_expirado = f"{exp_pasado}.{_firmar(exp_pasado)}"
+        self.assertFalse(_verificar_token(token_expirado))
+
+        creds_ok = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
+        self.assertTrue(require_auth(creds_ok))
+        with self.assertRaises(HTTPException):
+            require_auth(None)
+        with self.assertRaises(HTTPException):
+            require_auth(HTTPAuthorizationCredentials(scheme="Bearer", credentials="token-invalido"))
+
 
 if __name__ == "__main__":
     unittest.main()

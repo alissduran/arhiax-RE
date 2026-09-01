@@ -1,15 +1,16 @@
 # Dependencias para el Backend Web (FastAPI + Uvicorn) y el Motor TMA
-fastapi>=0.100.0
+# Pinning exacto (F-16): builds reproducibles y sin vulnerabilidades conocidas.
+# pypdf >= 3.15 es obligatorio (CVE-2023-36464: DoS al parsear PDFs maliciosos).
+fastapi==0.139.0
 uvicorn>=0.20.0
 PyYAML>=6.0
-reportlab>=4.0.0
+reportlab==4.5.0
 pillow>=10.0.0
 python-multipart>=0.0.5
-pypdf>=3.0.0
+pypdf==6.10.2
 requests>=2.25.0
 # Motor Geoespacial (STRtree + Point-in-Polygon sobre GeoJSON del POT)
-shapely>=2.0.0
-# weasyprint se maneja opcionalmente en el código para evitar fallos de compilación en Vercel
-weasyprint>=60.0
-playwright>=1.40.0
-
+shapely==2.1.2
+# Nota: weasyprint se eliminó (nunca se importa en api/).
+# playwright solo lo usa api/solar_automation.py, que NO corre en Vercel (sin navegador);
+# se instala bajo demanda si se ejecuta el worker de sombras localmente.
