@@ -6,6 +6,8 @@ import sys
 import unittest
 from pathlib import Path
 
+import pytest
+
 ROOT_DIR = Path(__file__).resolve().parent.parent
 API_DIR = ROOT_DIR / "api"
 sys.path.insert(0, str(ROOT_DIR))
@@ -79,9 +81,11 @@ class TestSmokeApi(unittest.TestCase):
         with self.assertRaises(HTTPException):
             require_auth(HTTPAuthorizationCredentials(scheme="Bearer", credentials="token-invalido"))
 
+    @pytest.mark.network
     def test_pdf_compiler_genera_pdf_honesto(self):
         """El PDF se genera con los motores dinámicos: sin plantilla fija de Napoli,
-        sin PII hardcodeada y con sección de scores presente (H-05/H-06/H-07/H-04)."""
+        sin PII hardcodeada y con sección de scores presente (H-05/H-06/H-07/H-04).
+        Marcado network: geocodifica en vivo (con fallbacks), se excluye del CI rápido."""
         import shutil
         from pathlib import Path as _P
         from pdf_compiler import compile_pdf
@@ -119,9 +123,10 @@ class TestSmokeApi(unittest.TestCase):
         self.assertIn("ausencia de ctl", txt)
         shutil.rmtree(out_dir, ignore_errors=True)
 
+    @pytest.mark.network
     def test_pdf_compiler_con_certificado_no_declara_ausencia_falsa(self):
         """H-08: si el CTL se adjuntó (certificado_path), el PDF no debe declarar
-        'AUSENCIA DE CTL' ni '[SIN CTL]'."""
+        'AUSENCIA DE CTL' ni '[SIN CTL]'. Marcado network (geocodifica en vivo)."""
         import shutil
         from io import BytesIO
         from pathlib import Path as _P

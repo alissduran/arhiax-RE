@@ -721,6 +721,44 @@ def download_pdf(case_id: int, auth: bool = Depends(require_auth)):
         }
     )
 
+@app.get("/api/health")
+def health():
+    """Monitoreo de plataforma (sin auth): 200 si la API responde."""
+    return {
+        "status": "ok",
+        "servicio": "arhiax-re-api",
+        "timestamp": datetime.now().isoformat(),
+    }
+
+@app.get("/api/v1/status")
+def status_endpoint(auth: bool = Depends(require_auth)):
+    """Monitoreo de servicios (auth): estado del motor geoespacial, ciudades y
+    servicios nacionales configurados. Sin llamadas de red salientes."""
+    from config import listar_ciudades, get_nacionales
+    from geospatial_engine import load_geospatial_index
+    cache = None
+    try:
+        cache = load_geospatial_index()
+    except Exception as e:
+        cache = {"error": str(e)[:120]}
+    geo = {"capas_disponibles": False, "features_amenaza": 0, "features_riesgo": 0}
+    if isinstance(cache, dict) and cache.get("capas_disponibles"):
+        geo = {
+            "capas_disponibles": True,
+            "features_amenaza": len(cache.get("amenaza", {}).get("items", [])),
+            "features_riesgo": len(cache.get("riesgo", {}).get("items", [])),
+        }
+    elif isinstance(cache, dict) and "error" in cache:
+        geo["error"] = cache["error"]
+    return {
+        "api": "ARHIAX RE",
+        "version": "2026.09",
+        "timestamp": datetime.now().isoformat(),
+        "motor_geoespacial": geo,
+        "ciudades": listar_ciudades(),
+        "nacionales": {k: (v.get("estado", "") if isinstance(v, dict) else "") for k, v in get_nacionales().items()},
+    }
+
 @app.get("/api/config")
 def get_config(auth: bool = Depends(require_auth)):
     if not DEFAULT_YAML_PATH.exists():

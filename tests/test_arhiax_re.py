@@ -4,6 +4,8 @@ import sys
 import re
 from pathlib import Path
 
+import pytest
+
 ROOT_DIR = Path(__file__).resolve().parent.parent
 API_DIR = ROOT_DIR / "api"
 sys.path.insert(0, str(ROOT_DIR))
@@ -19,6 +21,7 @@ class TestArhiaxReSuite(unittest.TestCase):
 
     # ── Tests originales (Hito 5) ────────────────────────────────────────────
 
+    @pytest.mark.network
     def test_geocodificar_direcciones_reales(self):
         lat_napoli, lon_napoli = geocodificar_direccion("Tv 43 # 100-50")
         self.assertTrue(10.94 <= lat_napoli <= 11.05)
@@ -28,6 +31,7 @@ class TestArhiaxReSuite(unittest.TestCase):
         self.assertTrue(10.94 <= lat_recreo <= 11.05)
         self.assertTrue(-74.85 <= lon_recreo <= -74.77)
 
+    @pytest.mark.network
     def test_geocodificar_fallback(self):
         lat, lon = geocodificar_direccion("Direccion inexistente 12345")
         self.assertEqual(lat, 10.9685)
@@ -45,6 +49,7 @@ class TestArhiaxReSuite(unittest.TestCase):
         barrio_extraido = extraer_barrio_de_texto(texto_simulado)
         self.assertEqual(barrio_extraido, "Alto Prado")
 
+    @pytest.mark.network
     def test_motor_geoespacial_dinamico(self):
         lat, lon = geocodificar_direccion("Tv 43 # 100-50")
         resultado = evaluate_predio(lat, lon)
