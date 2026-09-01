@@ -449,6 +449,15 @@
               <label for="input-direccion">Dirección (Opcional si tiene matrícula)</label>
               <input type="text" id="input-direccion" placeholder="Ej: Calle 63 # 37-71">
             </div>
+            <div class="form-group">
+              <label for="input-ciudad">Ciudad (verificación territorial en vivo)</label>
+              <select id="input-ciudad" style="width: 100%; padding: 8px; font-size: 12px; border: 1px solid var(--color-border); border-radius: 3px; background: var(--color-white);">
+                <option value="barranquilla">Barranquilla</option>
+                <option value="medellin">Medellín</option>
+                <option value="cali">Cali</option>
+                <option value="bogota">Bogotá D.C.</option>
+              </select>
+            </div>
             <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="crearDictamen()">Iniciar Caso</button>
           </div>
         </div>
@@ -482,7 +491,16 @@
                     <span>Matrícula: <span id="txt-detail-folio" style="font-weight: 600;">-</span></span> · 
                     <span>Área: <span id="txt-detail-area" style="font-weight: 600;">Pendiente</span> m²</span> · 
                     <span>Barrio: <span id="txt-detail-barrio">-</span></span> · 
+                    <span>Ciudad: <span id="txt-detail-ciudad">-</span></span> · 
                     <a href="#" onclick="mostrarEditarDatos(event)" style="font-size:10px; color:var(--color-gold); font-weight:600; text-decoration:none;">(Editar Datos)</a>
+                  </div>
+
+                  <!-- Verificación territorial en vivo por ciudad (Sprint 3) -->
+                  <div style="margin-top: 10px;">
+                    <button class="btn-secondary" style="padding: 5px 12px; font-size: 9px; text-transform: uppercase; border: 1px solid var(--color-gold); color: var(--color-gold); background: transparent; cursor: pointer;" onclick="verificarTerritorio()">
+                      Verificar Territorio en Vivo (Catastro/POT)
+                    </button>
+                    <div id="territorio-result" style="margin-top: 8px; font-size: 11px; color: var(--color-gray); line-height: 1.5; max-width: 520px;"></div>
                   </div>
                   
                   <!-- Formulario Inline para Editar Datos (Dirección y Matrícula) -->
@@ -730,6 +748,7 @@
         direccion: direccion || "Pendiente",
         area: null,
         barrio: resolvedBarrio,
+        ciudad: document.getElementById('input-ciudad').value || 'barranquilla',
         certificado_cargado: 0,
         sombra_9am_cargada: 0,
         sombra_3pm_cargada: 0,
@@ -774,6 +793,8 @@
       document.getElementById('txt-detail-direccion').textContent = c.direccion;
       document.getElementById('txt-detail-folio').textContent = c.folio_matricula;
       document.getElementById('txt-detail-barrio').textContent = c.barrio;
+      document.getElementById('txt-detail-ciudad').textContent = c.ciudad || 'barranquilla';
+      document.getElementById('territorio-result').innerHTML = '';
       
       const areaSpan = document.getElementById('txt-detail-area');
       const areaPendienteBanner = document.getElementById('banner-area-pendiente');
@@ -955,6 +976,39 @@
     function eliminarCasoActual() {
       if (selectedCaseId) {
         eliminarCaso(null, selectedCaseId);
+      }
+    }
+
+    async function verificarTerritorio() {
+      const c = dictamenes.find(item => item.id === selectedCaseId);
+      if (!c) return;
+      const resultDiv = document.getElementById('territorio-result');
+      resultDiv.innerHTML = 'Consultando servicio institucional en vivo…';
+      try {
+        const ciudad = c.ciudad || 'barranquilla';
+        const qs = new URLSearchParams({ ciudad });
+        if (c.direccion && c.direccion !== 'Pendiente') {
+          qs.set('direccion', c.direccion);
+        } else {
+          qs.set('lat', '10.9685');
+          qs.set('lon', '-74.7813');
+        }
+        const response = await apiFetch(`/api/v1/geo/catastro?${qs.toString()}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        let html = '<div style="border:1px solid var(--color-border); border-radius:4px; padding:8px 10px; background:rgba(139,111,71,0.05);">';
+        html += `<div style="font-weight:700; color:var(--color-navy); margin-bottom:4px;">${data.ciudad || ciudad} — Verificación territorial en vivo</div>`;
+        if (data.disponible) {
+          html += `<div style="color:var(--color-green-text); font-weight:600;">✓ Servicio consultado (${data.total_features} feature(s))</div>`;
+          if (data.resumen) html += `<div style="margin-top:3px;">${data.resumen}</div>`;
+        } else {
+          html += `<div style="color:var(--color-red-text); font-weight:600;">✗ No disponible: ${data.error || 'servicio sin respuesta'}</div>`;
+        }
+        if (data.fuente && data.fuente.url) html += `<div style="font-size:9px; color:var(--color-gray); margin-top:4px;">Fuente: ${data.fuente.url}</div>`;
+        html += '</div>';
+        resultDiv.innerHTML = html;
+      } catch (err) {
+        resultDiv.innerHTML = `<div style="color:var(--color-red-text);">Error al verificar: ${err.message}</div>`;
       }
     }
 

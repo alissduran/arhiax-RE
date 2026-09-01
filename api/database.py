@@ -2,12 +2,37 @@ import sqlite3
 import os
 from pathlib import Path
 
-# Usar /tmp en el entorno de servidor de Vercel (filesystem de sólo lectura excepto /tmp)
-API_DIR = os.path.dirname(os.path.abspath(__file__))
-if os.environ.get("VERCEL") or not os.access(API_DIR, os.W_OK):
-    DB_PATH = "/tmp/database.db"
-else:
-    DB_PATH = os.path.join(API_DIR, "database.db")
+
+def _resolver_db_path():
+    """Resuelve la ubicación de la base de datos (backlog: persistencia gestionada).
+
+    Prioridad:
+      1. ARHIAX_DB_PATH (variable de entorno): ruta local o `file:` de SQLite.
+         Si apunta a un esquema externo (postgres://, libsql://, wss://) se lanza
+         un error claro: ese soporte requiere un driver adicional y el adaptador
+         correspondiente en get_db_connection() (ver README).
+      2. Entorno Vercel: /tmp/database.db (efímero por instancia — se pierde entre
+         cold starts; usar ARHIAX_DB_PATH con un volumen persistente para datos reales).
+      3. Desarrollo local: api/database.db.
+    """
+    dsn = os.environ.get("ARHIAX_DB_PATH", "").strip()
+    if dsn:
+        if dsn.startswith(("postgres://", "postgresql://", "libsql://", "wss://", "turso://")):
+            raise RuntimeError(
+                "ARHIAX_DB_PATH usa un esquema externo no soportado por este build (solo SQLite). "
+                "Para conectar Turso/Postgres: instale el driver (libsql-experimental/psycopg) y "
+                "ajuste get_db_connection() para despachar por esquema (ver README_PLAN -> backlog)."
+            )
+        return dsn
+
+    API_DIR = os.path.dirname(os.path.abspath(__file__))
+    if os.environ.get("VERCEL") or not os.access(API_DIR, os.W_OK):
+        return "/tmp/database.db"
+    return os.path.join(API_DIR, "database.db")
+
+
+DB_PATH = _resolver_db_path()
+
 
 def init_db():
     conn = sqlite3.connect(str(DB_PATH))
@@ -68,6 +93,8 @@ def init_db():
 
 
 def get_db_connection():
+    # Nota (backlog persistencia gestionada): para despachar por esquema externo
+    # (Turso libsql / Postgres Neon) añadir aquí el branch según DB_PATH y el driver.
     init_db()
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row

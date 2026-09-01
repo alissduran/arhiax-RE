@@ -274,6 +274,32 @@ class TestSmokeApi(unittest.TestCase):
             terr.get_features_bbox = original_wfs
             terr._CACHE.clear()
 
+    def test_database_dsn_configurable(self):
+        """Backlog persistencia: ARHIAX_DB_PATH local funciona y el esquema externo
+        da un error claro (sin driver) en lugar de fallar silenciosamente."""
+        import os
+        import importlib
+        import database as db_mod
+        tmp = ROOT_DIR / "tmp_db_test" / "test.db"
+        tmp.parent.mkdir(parents=True, exist_ok=True)
+        old = os.environ.get("ARHIAX_DB_PATH")
+        try:
+            os.environ["ARHIAX_DB_PATH"] = str(tmp)
+            importlib.reload(db_mod)
+            self.assertEqual(db_mod.DB_PATH, str(tmp))
+            conn = db_mod.get_db_connection()
+            conn.execute("SELECT 1")
+            conn.close()
+            os.environ["ARHIAX_DB_PATH"] = "postgres://user:pass@host/db"
+            with self.assertRaises(RuntimeError):
+                importlib.reload(db_mod)  # el import re-resuelve DB_PATH y debe fallar claro
+        finally:
+            if old is None:
+                os.environ.pop("ARHIAX_DB_PATH", None)
+            else:
+                os.environ["ARHIAX_DB_PATH"] = old
+            importlib.reload(db_mod)
+
     def test_config_ciudades_carga(self):
         """Sprint 3 (I-3): la config multi-ciudad carga y Barranquilla está activa."""
         from config import listar_ciudades, get_ciudad, get_nacionales

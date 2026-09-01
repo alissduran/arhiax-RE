@@ -1,5 +1,17 @@
 import math
+import time
+
 import requests
+
+# Caché en memoria de POIs por celda (~110 m) para evitar golpear Overpass en
+# cada compilación de dictamen del mismo predio (rendimiento en Vercel).
+_POI_CACHE = {}
+_POI_TTL = 6 * 3600  # 6 horas: los POIs de OSM cambian poco
+
+
+def _celda(lat, lon):
+    return (round(lat, 3), round(lon, 3))
+
 
 def haversine(lat1, lon1, lat2, lon2):
     """Calcula la distancia geodésica en metros entre dos puntos en la Tierra."""
@@ -82,10 +94,19 @@ def get_nearby_pois(lat, lon, radius=2000):
             ]
         }
     
+    # Caché en memoria por celda (evita la llamada a Overpass en compilaciones repetidas)
+    celda = _celda(lat, lon)
+    ahora = time.time()
+    if celda in _POI_CACHE:
+        ts, cached = _POI_CACHE[celda]
+        if ahora - ts < _POI_TTL:
+            return cached
+
     try:
         headers = {"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
         response = requests.post(overpass_url, data={"data": query}, headers=headers, timeout=1.5)
         if response.status_code != 200:
+            _POI_CACHE[celda] = (ahora, fallback_pois)
             return fallback_pois
             
         data = response.json()
@@ -141,8 +162,10 @@ def get_nearby_pois(lat, lon, radius=2000):
         for cat in pois_categorized:
             if not pois_categorized[cat]:
                 pois_categorized[cat] = fallback_pois[cat]
-                
+
+        _POI_CACHE[celda] = (ahora, pois_categorized)
         return pois_categorized
-        
+
     except Exception:
+        _POI_CACHE[celda] = (ahora, fallback_pois)
         return fallback_pois
