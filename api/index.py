@@ -124,8 +124,8 @@ def extraer_datos_de_pdf(pdf_path: str) -> dict:
             else:
                 patron_nom = r"\b(?:CL|CRA|AV|DG|TV)\s+\d+[A-Z]?\s*#\s*\d+[A-Z]?\s*-\s*\d+\b"
                 matches_nom = re.findall(patron_nom, texto, re.IGNORECASE)
-            if matches_nom:
-                datos["direccion"] = matches_nom[0]
+                if matches_nom:
+                    datos["direccion"] = matches_nom[0]
 
     except Exception as e:
         print(f"Error al extraer metadatos del PDF: {e}")
@@ -176,6 +176,7 @@ def resolver_matricula_por_direccion(direccion: str) -> tuple:
     
     barrio = "Miramar"
     if "recreo" in normalized.lower() or "el recreo" in normalized.lower():
+        barrio = "El Recreo"
     return folio_simulado, barrio, 4
 
 @app.get("/api/resolver-matricula")
