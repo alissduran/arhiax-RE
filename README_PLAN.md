@@ -86,8 +86,10 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 - [x] **I-6: Trazabilidad en el dictamen** — Sección **4.1B "Verificación Catastral en Vivo"** en el PDF: estado CONSULTADA/NO DISPONIBLE + NUPRE + fuente/timestamp (vía `api/integrations/catastro_live.py`, con caché por celda y timeout corto; nunca rompe el PDF).
 
 ### Futuro (Backlog)
+- [x] **CI/CD** — GitHub Actions (`.github/workflows/ci.yml`): tests en cada push/PR (22 tests sin red en ~1s). [Hecho 2026-09-01]
+- [x] **Monitoreo** — `GET /api/health` (liveness sin auth) y `GET /api/v1/status` (auth: motor geoespacial, ciudades, servicios). [Hecho 2026-09-01]
 - [ ] Persistencia gestionada (Postgres/Turso) en lugar de SQLite efímero.
-- [ ] CI/CD: pipeline de tests + escaneo de dependencias (pip-audit) en cada push.
+- [ ] Escaneo de dependencias (pip-audit/OSV) en CI.
 - [ ] Panel de administración con roles.
 - [ ] Cola asíncrona para compilación de PDF (evitar timeouts en serverless).
 
