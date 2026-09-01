@@ -1,0 +1,65 @@
+# ─────────────────────────────────────────────────────────────
+# ARHIAX RE — Configuración por ciudad (Sprint 3: expansión)
+# ─────────────────────────────────────────────────────────────
+# Cada ciudad define:
+#   codigo_circulo:    Círculo registral (SNR) para folios de matrícula
+#   centroide:         Coordenadas por defecto (fallback geocodificación)
+#   capas_pot:         Capas locales empaquetadas (GeoJSON en api/data/<ciudad>/)
+#   wfs:               Servicios institucionales en vivo (Sprint 3, I-1/I-2)
+#   valoracion:        Parámetros de valoración referencial
+#
+# NOTA: los servicios WFS se verificaron o están PENDIENTES de verificación;
+# el cliente WFS (api/integrations/wfs_client.py) marca disponible=False cuando
+# un servicio no responde, y el dictamen lo refleja como NO EVALUADO (nunca
+# afirma datos que no obtuvo).
+
+ciudades:
+  barranquilla:
+    nombre: "Barranquilla"
+    codigo_circulo: "040"
+    centroide: { lat: 10.9685, lon: -74.7813 }
+    capas_pot_empaquetadas: true
+    wfs:
+      habilitado: false        # actualmente capas empaquetadas en api/data/
+      geoportal: ""            # PENDIENTE: verificar endpoint "Mi Ciudad" (ver informe Sprint 3)
+      capas_riesgo: []         # PENDIENTE: nombres de capas tras GetCapabilities
+    valoracion:
+      miramar_m2: 6887625
+      otro_barrio_m2: 5146666
+    estado: "ACTIVO (capas empaquetadas)"
+
+  bogota:
+    nombre: "Bogotá D.C."
+    codigo_circulo: "50"       # círculos múltiples (50C, 50N, 50S) — verificar
+    centroide: { lat: 4.7110, lon: -74.0721 }
+    capas_pot_empaquetadas: false
+    wfs:
+      habilitado: false
+      geoportal: ""            # PENDIENTE: IDECA WFS (ver informe Sprint 3)
+      capas_riesgo: []
+    valoracion: {}
+    estado: "EN EVALUACIÓN (requiere capas POT e IDECA)"
+
+  medellin:
+    nombre: "Medellín"
+    codigo_circulo: "001"
+    centroide: { lat: 6.2442, lon: -75.5812 }
+    capas_pot_empaquetadas: false
+    wfs:
+      habilitado: false
+      geoportal: ""            # PENDIENTE: geoportal Medellín (SIGIT/POT)
+      capas_riesgo: []
+    valoracion: {}
+    estado: "EN EVALUACIÓN (requiere capas POT)"
+
+  cali:
+    nombre: "Cali"
+    codigo_circulo: "031"
+    centroide: { lat: 3.4516, lon: -76.5320 }
+    capas_pot_empaquetadas: false
+    wfs:
+      habilitado: false
+      geoportal: ""            # PENDIENTE: geoportal Cali POT
+      capas_riesgo: []
+    valoracion: {}
+    estado: "EN EVALUACIÓN (requiere capas POT)"
