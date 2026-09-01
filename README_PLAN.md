@@ -80,10 +80,10 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 
 - [x] **I-1: Conector ArcGIS REST y verificación catastral en vivo** — `api/integrations/arcgis_client.py` (query por BBOX → GeoJSON) y endpoint `GET /api/v1/geo/catastro` (auth) contra el catastro abierto de Barranquilla (`miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos`: FeatureServer 545 + MapServer 315). **Verificado en vivo**: devuelve NUPRE, área y atributos reales del predio.
 - [x] **I-2: Mapa de geoportales institucionales** — `api/config/ciudades.yaml` con endpoints reales verificados: IGAC (`mapas.igac.gov.co`, WMS cartografía básica), Medellín (`servidormapas`), Cali (IDESC/WMS), Bogotá (IDECA/Catastro en Línea), IDEAM (riesgo), ICDE (catálogo nacional), datos.gov.co (Socrata).
-- [ ] **I-3: Catastro multi-ciudad** — Activar capas POT/riesgo por ciudad (Bogotá/Medellín/Cali) y valoración por ciudad.
-- [ ] **I-4: Consulta CTL SNR** — Solo vía deep-link al portal oficial (`certificados.supernotariado.gov.co`) o integración B2B de pago (Certicámara/DataCrédito). **Nunca scraping** (la SNR alerta sobre CTL fraudulentos).
-- [ ] **I-5: Verificación SARLAFT real** — Integración con plataforma de listas restrictivas (si el cliente la provee).
-- [ ] **I-6: Trazabilidad en el dictamen** — Registrar cada consulta institucional en vivo (fuente, fecha, parámetros, hash) en el PDF.
+- [x] **I-3: Catastro multi-ciudad** — `api/config/__init__.py` (carga de `ciudades.yaml`) + endpoint `GET /api/v1/geo/ciudades` (auth) con estado por ciudad; Barranquilla activa, Bogotá/Medellín/Cali en evaluación (requieren empaquetar sus capas POT o activar sus WFS).
+- [x] **I-4: Consulta CTL SNR** — Deep-link al portal oficial (`certificados.supernotariado.gov.co`) en el PDF (sección 03) y en el frontend. Política explícita: **nunca scraping** (la SNR alerta sobre CTL fraudulentos); integración B2B de pago (Certicámara/DataCrédito) si el negocio lo justifica.
+- [ ] **I-5: Verificación SARLAFT real** — Pendiente: requiere la plataforma de listas restrictivas del cliente (OFAC/UIAF/WorldCheck). El módulo actual genera la ficha estructural con hashes y declara `PENDIENTE_VERIFICACION_EXTERNA` de forma honesta.
+- [x] **I-6: Trazabilidad en el dictamen** — Sección **4.1B "Verificación Catastral en Vivo"** en el PDF: estado CONSULTADA/NO DISPONIBLE + NUPRE + fuente/timestamp (vía `api/integrations/catastro_live.py`, con caché por celda y timeout corto; nunca rompe el PDF).
 
 ### Futuro (Backlog)
 - [ ] Persistencia gestionada (Postgres/Turso) en lugar de SQLite efímero.
