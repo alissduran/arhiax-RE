@@ -237,6 +237,43 @@ class TestSmokeApi(unittest.TestCase):
             verificar_catastro_en_vivo()
         self.assertEqual(ctx.exception.status_code, 400)
 
+    def test_territorio_dispatcher_ciudades(self):
+        """Sprint 3: el dispatcher multi-ciudad devuelve formato uniforme y
+        Bogotá queda declarada en evaluación (sin afirmar datos)."""
+        import api.integrations.territorio as terr
+        original = terr.query_layer_bbox
+        original_wfs = terr.get_features_bbox
+        try:
+            terr.query_layer_bbox = lambda *a, **k: {
+                "disponible": True, "features": [{"properties": {"name": "0800T", "codigo_tratamiento": "Z4"}}],
+                "total_features": 1, "error": None, "fuente": {"url": "stub"},
+            }
+            terr.get_features_bbox = lambda *a, **k: {
+                "disponible": True, "features": [{"properties": {"barnombre": "SAN FERNANDO"}}],
+                "total_features": 1, "error": None, "fuente": {"url": "stub"},
+            }
+            terr._CACHE.clear()
+            r_baq = terr.verificar_territorio(10.99386, -74.79261, "barranquilla")
+            self.assertTrue(r_baq["disponible"])
+            self.assertIn("NUPRE", r_baq["resumen"] or "")
+            r_med = terr.verificar_territorio(6.2442, -75.5812, "medellin")
+            self.assertTrue(r_med["disponible"])
+            self.assertIn("tratamiento", r_med["resumen"] or "")
+            r_cali = terr.verificar_territorio(3.4516, -76.5320, "cali")
+            self.assertTrue(r_cali["disponible"])
+            self.assertIn("SAN FERNANDO", r_cali["resumen"] or "")
+            # Bogotá: no afirmar datos (en evaluación)
+            r_bog = terr.verificar_territorio(4.7110, -74.0721, "bogota")
+            self.assertFalse(r_bog["disponible"])
+            self.assertIn("evaluación", (r_bog.get("error") or "").lower())
+            # Ciudad no soportada
+            r_x = terr.verificar_territorio(4.0, -74.0, "cartagena")
+            self.assertFalse(r_x["disponible"])
+        finally:
+            terr.query_layer_bbox = original
+            terr.get_features_bbox = original_wfs
+            terr._CACHE.clear()
+
     def test_config_ciudades_carga(self):
         """Sprint 3 (I-3): la config multi-ciudad carga y Barranquilla está activa."""
         from config import listar_ciudades, get_ciudad, get_nacionales

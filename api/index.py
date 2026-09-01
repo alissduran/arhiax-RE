@@ -772,12 +772,14 @@ def verificar_catastro_en_vivo(
     lat: float = None,
     lon: float = None,
     direccion: str = None,
+    ciudad: str = "barranquilla",
     auth: bool = Depends(require_auth),
 ):
-    """Sprint 3 (I-1): verificación catastral EN VIVO contra el servicio abierto de
-    Barranquilla (ArcGIS REST 'catastro/datosabiertos': capas 545 datos adicionales
-    y 315 terreno). Devuelve features + fuente/timestamp; nunca afirma datos
-    que no obtuvo (disponible=False si el servicio no responde)."""
+    """Sprint 3 (I-1/I-3): verificación territorial EN VIVO por ciudad contra los
+    servicios institucionales abiertos (Barranquilla catastro ArcGIS, Medellín POT
+    servidormapas, Cali IDESC WFS; Bogotá en evaluación). Devuelve features +
+    fuente/timestamp; nunca afirma datos que no obtuvo (disponible=False si el
+    servicio no responde)."""
     if lat is None or lon is None:
         if not direccion:
             raise HTTPException(status_code=400, detail="Indique lat/lon o dirección.")
@@ -787,39 +789,21 @@ def verificar_catastro_en_vivo(
         except Exception:
             raise HTTPException(status_code=400, detail="No fue posible geocodificar la dirección.")
 
-    buffer = 0.0025  # ~250 m alrededor del predio
-    bbox = (lon - buffer, lat - buffer, lon + buffer, lat + buffer)
+    from integrations.territorio import verificar_territorio
+    res = verificar_territorio(lat, lon, ciudad)
 
-    from integrations.arcgis_client import query_layer_bbox
-    from config import get_ciudad
-    cfg_baq = get_ciudad("barranquilla")
-    base = (cfg_baq.get("arcgis") or {}).get(
-        "catastro",
-        "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos",
-    )
-    # Capas: 545 (datos adicionales) vive en FeatureServer; 315 (terreno) en MapServer
-    servicios = {
-        "catastro_datos_adicionales": (f"{base}/FeatureServer", 545),
-        "terreno": (f"{base}/MapServer", 315),
-    }
-
-    resultado = {
+    return {
         "coordenadas": {"lat": lat, "lon": lon},
-        "bbox": [round(v, 6) for v in bbox],
-        "ciudad": "Barranquilla",
-        "nota": "Verificación catastral en vivo (servicio abierto de la Alcaldía de Barranquilla). "
+        "ciudad": res.get("ciudad", ciudad),
+        "disponible": res.get("disponible", False),
+        "total_features": res.get("total_features", 0),
+        "resumen": res.get("resumen"),
+        "features": res.get("features", []),
+        "error": res.get("error"),
+        "fuente": res.get("fuente", {}),
+        "nota": "Verificación territorial en vivo contra servicios abiertos institucionales. "
                 "Los resultados no sustituyen el certificado de tradición y libertad (SNR).",
     }
-    for capa_nombre, (servicio_url, capa_id) in servicios.items():
-        r = query_layer_bbox(servicio_url, capa_id, bbox, max_features=10)
-        resultado[capa_nombre] = {
-            "disponible": r.get("disponible", False),
-            "total_features": r.get("total_features", 0),
-            "features": r.get("features", []),
-            "error": r.get("error"),
-            "fuente": r.get("fuente", {}),
-        }
-    return resultado
 
 @app.get("/api/v1/geo/ciudades")
 def listar_ciudades_endpoint(auth: bool = Depends(require_auth)):

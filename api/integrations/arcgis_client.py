@@ -28,11 +28,33 @@ log = logging.getLogger("arhiax.arcgis")
 
 TIMEOUT = 10.0
 UA = "ARHIAX-RE/1.0 (Sinergia Consulting Group)"
+RETRIES = 2  # servidores públicos (p. ej. servidormapas de Medellín) responden 400 a veces
 
 
 def _es_url_http(url: str) -> bool:
     parsed = urlparse(url)
     return parsed.scheme in ("http", "https") and bool(parsed.netloc)
+
+
+def _peticion_json(consulta: str, timeout: float) -> tuple:
+    """GET con reintentos. Devuelve (data, status) o lanza Exception."""
+    ultimo_err = None
+    for intento in range(RETRIES + 1):
+        try:
+            resp = requests.get(consulta, headers={"User-Agent": UA}, timeout=timeout)
+            resp.raise_for_status()
+            data = resp.json()
+            # El servidor puede devolver 200 con {"error": {...}} (p. ej. Medellín inestable)
+            if isinstance(data, dict) and data.get("error"):
+                ultimo_err = f"Error del servicio: {data['error'].get('message', data['error'])}"
+                continue
+            return data, resp.status_code
+        except Exception as e:
+            ultimo_err = e
+            if intento < RETRIES:
+                import time as _t
+                _t.sleep(0.5 * (intento + 1))
+    raise ultimo_err if isinstance(ultimo_err, Exception) else Exception(ultimo_err)
 
 
 def query_layer_bbox(
@@ -76,15 +98,13 @@ def query_layer_bbox(
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
     }
     try:
-        resp = requests.get(consulta, headers={"User-Agent": UA}, timeout=timeout)
-        resp.raise_for_status()
-        data = resp.json()
+        data, status = _peticion_json(consulta, timeout)
     except json.JSONDecodeError:
         return {
             "disponible": False,
             "error": "El servicio no devolvió JSON (¿capa inexistente o servicio caído?).",
             "features": [],
-            "fuente": {**fuente, "http_status": getattr(resp, "status_code", None)},
+            "fuente": {**fuente, "http_status": None},
         }
     except Exception as e:
         return {
@@ -101,7 +121,7 @@ def query_layer_bbox(
             "disponible": False,
             "error": f"Error del servicio: {err.get('message', err)}",
             "features": [],
-            "fuente": {**fuente, "http_status": resp.status_code},
+            "fuente": {**fuente, "http_status": status},
         }
 
     return {
@@ -109,7 +129,7 @@ def query_layer_bbox(
         "features": features,
         "total_features": len(features),
         "capa": layer_id,
-        "fuente": {**fuente, "http_status": resp.status_code},
+        "fuente": {**fuente, "http_status": status},
     }
 
 

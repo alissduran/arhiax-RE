@@ -92,6 +92,9 @@ def get_features_bbox(
 ) -> dict[str, Any]:
     """Consulta GetFeature de una capa por BBOX (minx, miny, maxx, maxy en EPSG:4326).
 
+    Usa WFS 1.1.0 con bbox simple + srsName (compatible con GeoServer de entidades
+    públicas; WFS 2.0.0 con URN suele devolver error en GeoServer).
+
     Retorna un dict con: disponible, features (lista), fuente (metadatos de la
     consulta), error (si aplica). Nunca lanza: los errores de red se devuelven
     como disponible=False para que el llamador decida (p. ej. marcar NO EVALUADO
@@ -103,11 +106,12 @@ def get_features_bbox(
 
     params = {
         "service": "WFS",
-        "version": "2.0.0",
+        "version": "1.0.0",
         "request": "GetFeature",
-        "typeNames": layer,
-        "bbox": f"{minx},{miny},{maxx},{maxy},urn:ogc:def:crs:EPSG::4326",
-        "count": str(max_features),
+        "typeName": layer,
+        "bbox": f"{minx},{miny},{maxx},{maxy}",
+        "outputFormat": "application/json",
+        "maxFeatures": str(max_features),
     }
     headers = {"Accept": output_format, "User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
     sep = "&" if "?" in url else "?"

@@ -54,23 +54,28 @@ ciudades:
     arcgis:
       servidormapas: "https://www.medellin.gov.co/servidormapas/rest/services"
       capa_pot: "ordenamiento_ter/VM_10_Sistema_Publico_Colectivo"
-      estado: "HOST VERIFICADO; catálogo sin servicios en ?f=json (revisar estructura)"
+      capa_suelo_id: 0
+      estado: "VERIFICADO EN VIVO 2026-09-01 (query capa ClasificacionSuelo OK con bbox)"
     valoracion: {}
-    estado: "EN EVALUACIÓN (POT Acuerdo 48)"
+    estado: "ACTIVO (POT Acuerdo 48 via servidormapas)"
 
   cali:
     nombre: "Cali"
     codigo_circulo: "031"
     centroide: { lat: 3.4516, lon: -76.5320 }
     capas_pot_empaquetadas: false
+    wfs:
+      url: "https://ws-idesc.cali.gov.co/geoserver/dapm/ows"
+      capa_barrios: "dapm:pdt_dpa_barrios_sectores"
+      capa_suelo: "dapm:pdt_dpa_clasificacion_suelo"
+      estado: "VERIFICADO EN VIVO 2026-09-01 (GetCapabilities 72KB + GetFeature barrios OK)"
     arcgis:
       geoportal: "https://geoportal.cali.gov.co"
       idesc: "https://idesc.cali.gov.co"
       wms_doc: "https://www.cali.gov.co/planeacion/publicaciones/46691/servicios_wms_idesc/"
       datos_abiertos: "https://datos.cali.gov.co"
-      estado: "HOSTS VERIFICADOS; URLs WMS oficiales en la página IDESC"
     valoracion: {}
-    estado: "EN EVALUACIÓN (IDESC Cali)"
+    estado: "ACTIVO (IDESC Cali via WFS GeoServer)"
 
 # Servicios nacionales (IGAC/IDEAM/ICDE/datos.gov.co) — Fase 1/2
 nacionales:
