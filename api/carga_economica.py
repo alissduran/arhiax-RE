@@ -43,8 +43,10 @@ def _cuota_pago_igual(capital, tasa_mensual, n_cuotas):
     Returns:
         Cuota mensual fija.
     """
+    if n_cuotas <= 0:  # M-06: proteger división por cero con plazo 0
+        return 0
     if tasa_mensual == 0:
-        return capital / n_cuotas if n_cuotas > 0 else 0
+        return capital / n_cuotas
     return capital * (tasa_mensual * (1 + tasa_mensual) ** n_cuotas) / \
            ((1 + tasa_mensual) ** n_cuotas - 1)
 
@@ -91,6 +93,17 @@ def estimar_carga_hipotecaria(
             es_estimacion:              True siempre (recordatorio).
             advertencia:                Texto de disclaimer.
     """
+    # M-06: validación de inputs (evita TypeError con None y división por cero)
+    if not isinstance(valor_inmueble, (int, float)) or valor_inmueble <= 0:
+        valor_inmueble = 0.0
+    if not isinstance(plazo_anos, (int, float)) or plazo_anos <= 0:
+        plazo_anos = None
+    if tasa_anual is not None and (
+        not isinstance(tasa_anual, (int, float)) or not (0 < tasa_anual <= 1)
+    ):
+        # Descartar tasas absurdas (p. ej. 12.5 en vez de 0.125)
+        tasa_anual = None
+
     tasa_ea = tasa_anual if tasa_anual is not None else TASA_REFERENCIAL_ANUAL
     plazo = plazo_anos if plazo_anos is not None else PLAZO_TIPICO_ANOS
     capital = capital_original if capital_original is not None else \

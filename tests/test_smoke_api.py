@@ -116,6 +116,17 @@ class TestSmokeApi(unittest.TestCase):
         self.assertNotIn("1.140.834.790", txt)
         shutil.rmtree(out_dir, ignore_errors=True)
 
+    def test_carga_economica_inputs_invalidos(self):
+        """M-06: inputs inválidos (plazo 0, valor None, tasa absurda) no deben
+        lanzar excepciones ni producir LTV negativo."""
+        from carga_economica import estimar_carga_hipotecaria
+        r1 = estimar_carga_hipotecaria(None, None, plazo_anos=0, tasa_anual=12.5)
+        self.assertIn("saldo_estimado", r1)
+        self.assertGreaterEqual(r1["ltv_estimado"], 0)
+        r2 = estimar_carga_hipotecaria(200000000, "10 de mayo de 2023")
+        self.assertGreaterEqual(r2["ltv_estimado"], 0)
+        self.assertGreaterEqual(r2["saldo_estimado"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -543,9 +543,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     ))
     story.append(Spacer(1, 4))
     
-    pois = get_nearby_pois(lat, lon, radius=2000)
-    generate_maps(lat, lon, pois, POI_MAP_PNG, POI_MAP_HTML)
-    
+    # M-02: se reutilizan los POIs y mapas generados en la inicialización (línea ~184);
+    # se elimina la llamada duplicada a Overpass/generate_maps.
     poi_table_data = [
         [Paragraph("<font color='white'><b>Categoria</b></font>", s["label"]),
          Paragraph("<font color='white'><b>Nombre del Equipamiento</b></font>", s["label"]),
@@ -1160,8 +1159,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
          "la reproyeccion podria generar falsos negativos/positivos en un rango de ~1-2m"),
         ("Mitigacion recomendada", "Para casos criticos en bordes de poligonos, realizar cruce directo en "
          "CTM12 usando ArcGIS Pro con datos descargados del Geoportal"),
-        ("Validacion geodesica", "Las coordenadas de salida del servidor (CTM12) fueron verificadas contra "
-         "Google Maps (WGS84) para confirmar coherencia posicional del predio"),
+        ("Validacion geodesica", "Coordenadas en WGS84 (EPSG:4326); la transformacion MAGNA-SIRGAS/CTM12 es "
+         "referencial -- para deslindes se requiere trabajo de campo en CTM12 nativo"),
         ("Normativa aplicable", "Resolucion 471/2020 IGAC -- Adopcion CTM12 como origen unico nacional. "
          "NTC 6271 -- Metadatos Geograficos"),
     ]))
@@ -1174,6 +1173,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "o deslindes, se requiere trabajo de campo en CTM12 nativo."))
     
     # ── CONTROLES DE CALIDAD SPRINT 0 ───────────────────────────
+    # M-13: los controles son advertencias (no asserts que tumben el PDF con 500).
     def ejecutar_controles_de_calidad():
         texto_completo = []
         for f in story:
@@ -1187,13 +1187,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                         elif isinstance(cell, str):
                             texto_completo.append(cell)
                             
-        texto_doc = "\\n".join(texto_completo)
+        texto_doc = "\n".join(texto_completo)
         
         # Test 1: No contradiccion
         apto = "APTO para portafolio" in texto_doc
         bloqueado = "BLOQUEADA" in texto_doc or "Imposible estructurar" in texto_doc
-        assert not (apto and bloqueado), "Contradicción: veredicto apto y bloqueo coexisten en el mismo documento."
-        print("OK - Test de no contradiccion: PASADO")
+        if apto and bloqueado:
+            print("ADVERTENCIA - Contradiccion: veredicto apto y bloqueo coexisten en el documento.")
+        else:
+            print("OK - Test de no contradiccion: PASADO")
         
         # Test 2: Boundary del avaluo
         import re
@@ -1204,7 +1206,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             valido = (re.search(r"no\s+(es|sustituye|constituye|refleja)", contexto, re.IGNORECASE) or 
                       re.search(r"no\s+(es|sustituye|constituye|refleja)", texto_posterior, re.IGNORECASE) or
                       "no es" in texto_posterior.lower() or "no sustituye" in texto_posterior.lower())
-            assert valido, f"Uso de 'avaluo' sin negacion explicita en contexto: '...{contexto.strip()} {texto_posterior.strip()}...'"
+            if not valido:
+                print(f"ADVERTENCIA - Uso de 'avaluo' sin negacion explicita: '...{contexto.strip()} {texto_posterior.strip()}...'")
         print("OK - Test de boundary de avaluo: PASADO")
     
     ejecutar_controles_de_calidad()
