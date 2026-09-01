@@ -86,12 +86,14 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 - [x] **I-6: Trazabilidad en el dictamen** — Sección **4.1B "Verificación Catastral en Vivo"** en el PDF: estado CONSULTADA/NO DISPONIBLE + NUPRE + fuente/timestamp (vía `api/integrations/catastro_live.py`, con caché por celda y timeout corto; nunca rompe el PDF).
 
 ### Futuro (Backlog)
-- [x] **CI/CD** — GitHub Actions (`.github/workflows/ci.yml`): tests en cada push/PR (22 tests sin red en ~1s). [Hecho 2026-09-01]
+- [x] **CI/CD** — GitHub Actions (`.github/workflows/ci.yml`): tests en cada push/PR (24 tests sin red en ~3s) + **pip-audit** (escaneo de vulnerabilidades; detectó y corrigió 15 CVEs de pypdf → 6.15.0). [Hecho 2026-09-01]
 - [x] **Monitoreo** — `GET /api/health` (liveness sin auth) y `GET /api/v1/status` (auth: motor geoespacial, ciudades, servicios). [Hecho 2026-09-01]
-- [ ] Persistencia gestionada (Postgres/Turso) en lugar de SQLite efímero.
-- [ ] Escaneo de dependencias (pip-audit/OSV) en CI.
+- [x] **Rendimiento del PDF** — Cachés en memoria: geocodificación (por dirección), POIs (por celda, TTL 6h: 2.09s → 0.0000s en compilaciones repetidas), catastro en vivo (por celda, TTL 1h), motor STRtree. [Hecho 2026-09-01]
+- [x] **UI multi-ciudad** — Selector de ciudad al crear el caso + botón "Verificar Territorio en Vivo" en el detalle (NUPRE/tratamiento/barrio/IDECA). [Hecho 2026-09-01]
+- [x] **Persistencia configurable** — `ARHIAX_DB_PATH` (env var) con fallback `/tmp` (Vercel) o local; esquema externo (postgres/libsql/turso) con error claro e instrucciones. [Hecho 2026-09-01]
+- [ ] **Persistencia gestionada real** — Conectar Turso/Postgres: definir `ARHIAX_DB_PATH` con la URL del servicio e instalar el driver (`libsql-experimental`/`psycopg`) + adaptador en `get_db_connection()`.
 - [ ] Panel de administración con roles.
-- [ ] Cola asíncrona para compilación de PDF (evitar timeouts en serverless).
+- [ ] Cola asíncrona para compilación de PDF (evitar timeouts en serverless; requiere Vercel Background Functions o QStash).
 
 ---
 
