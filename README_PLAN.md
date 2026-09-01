@@ -103,11 +103,11 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 
 | Variable | Descripción | Estado |
 |---|---|---|
-| `ARHIAX_ACCESS_PASSWORD` | Contraseña del portal | ⚠️ **PENDIENTE** — usar fallback por defecto |
-| `ARHIAX_AUTH_SECRET` | Secreto para firmar tokens | ⚠️ **PENDIENTE** — usar fallback por defecto |
+| `ARHIAX_ACCESS_PASSWORD` | Contraseña del portal | ✅ **CONFIGURADA** (production, encriptada) |
+| `ARHIAX_AUTH_SECRET` | Secreto para firmar tokens | ✅ **CONFIGURADA** (production, encriptada) |
 | `ARHIAX_TOKEN_TTL_HOURS` | Vigencia del token (default 8) | Opcional |
 
-> ⚠️ Hasta configurar `ARHIAX_ACCESS_PASSWORD` y `ARHIAX_AUTH_SECRET`, la autenticación usa los valores de desarrollo. **Configurar antes de uso real con clientes.**
+> Los valores de desarrollo que aparecen en `api/index.py` como fallback solo se usan si no hay variables de entorno (útil para desarrollo local). En producción, Vercel inyecta las variables configuradas.
 
 ## 📁 Estructura del módulo API
 
