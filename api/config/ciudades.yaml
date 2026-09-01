@@ -5,13 +5,13 @@
 #   codigo_circulo:    Círculo registral (SNR) para folios de matrícula
 #   centroide:         Coordenadas por defecto (fallback geocodificación)
 #   capas_pot:         Capas locales empaquetadas (GeoJSON en api/data/<ciudad>/)
-#   wfs:               Servicios institucionales en vivo (Sprint 3, I-1/I-2)
+#   arcgis/wfs:        Servicios institucionales EN VIVO (verificados 2026-09-01)
 #   valoracion:        Parámetros de valoración referencial
 #
-# NOTA: los servicios WFS se verificaron o están PENDIENTES de verificación;
-# el cliente WFS (api/integrations/wfs_client.py) marca disponible=False cuando
-# un servicio no responde, y el dictamen lo refleja como NO EVALUADO (nunca
-# afirma datos que no obtuvo).
+# El cliente api/integrations/arcgis_client.py marca disponible=False cuando un
+# servicio no responde; el dictamen lo refleja como NO EVALUADO (nunca afirma
+# datos que no obtuvo). Regla de oro: ejecutar GetCapabilities / ?f=json antes
+# de producción porque los nombres de capa cambian entre versiones.
 
 ciudades:
   barranquilla:
@@ -19,47 +19,76 @@ ciudades:
     codigo_circulo: "040"
     centroide: { lat: 10.9685, lon: -74.7813 }
     capas_pot_empaquetadas: true
-    wfs:
-      habilitado: false        # actualmente capas empaquetadas en api/data/
-      geoportal: ""            # PENDIENTE: verificar endpoint "Mi Ciudad" (ver informe Sprint 3)
-      capas_riesgo: []         # PENDIENTE: nombres de capas tras GetCapabilities
+    arcgis:
+      catastro: "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos"
+      capas_catastro:
+        terreno: 315
+        construccion: 310
+        datos_adicionales: 545
+      estratificacion: "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion"
+      ogc_features: "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/OGCFeatureServer"
+      estado: "VERIFICADO EN VIVO 2026-09-01 (query FeatureServer 545 OK con bbox)"
     valoracion:
       miramar_m2: 6887625
       otro_barrio_m2: 5146666
-    estado: "ACTIVO (capas empaquetadas)"
+    estado: "ACTIVO (capas empaquetadas + catastro en vivo)"
 
   bogota:
     nombre: "Bogotá D.C."
     codigo_circulo: "50"       # círculos múltiples (50C, 50N, 50S) — verificar
     centroide: { lat: 4.7110, lon: -74.0721 }
     capas_pot_empaquetadas: false
-    wfs:
-      habilitado: false
-      geoportal: ""            # PENDIENTE: IDECA WFS (ver informe Sprint 3)
-      capas_riesgo: []
+    arcgis:
+      catastro_en_linea: "https://catastroenlinea.catastrobogota.gov.co/cel"
+      mapas: "https://mapas.bogota.gov.co"
+      servicios_catastro: "https://servicios.catastrobogota.gov.co"
+      estado: "HOSTS VERIFICADOS; WFS/FeatureServers federados en jbb.gov.co/cajaviviendapopular.gov.co"
     valoracion: {}
-    estado: "EN EVALUACIÓN (requiere capas POT e IDECA)"
+    estado: "EN EVALUACIÓN (IDECA/catastro distrital)"
 
   medellin:
     nombre: "Medellín"
     codigo_circulo: "001"
     centroide: { lat: 6.2442, lon: -75.5812 }
     capas_pot_empaquetadas: false
-    wfs:
-      habilitado: false
-      geoportal: ""            # PENDIENTE: geoportal Medellín (SIGIT/POT)
-      capas_riesgo: []
+    arcgis:
+      servidormapas: "https://www.medellin.gov.co/servidormapas/rest/services"
+      capa_pot: "ordenamiento_ter/VM_10_Sistema_Publico_Colectivo"
+      estado: "HOST VERIFICADO; catálogo sin servicios en ?f=json (revisar estructura)"
     valoracion: {}
-    estado: "EN EVALUACIÓN (requiere capas POT)"
+    estado: "EN EVALUACIÓN (POT Acuerdo 48)"
 
   cali:
     nombre: "Cali"
     codigo_circulo: "031"
     centroide: { lat: 3.4516, lon: -76.5320 }
     capas_pot_empaquetadas: false
-    wfs:
-      habilitado: false
-      geoportal: ""            # PENDIENTE: geoportal Cali POT
-      capas_riesgo: []
+    arcgis:
+      geoportal: "https://geoportal.cali.gov.co"
+      idesc: "https://idesc.cali.gov.co"
+      wms_doc: "https://www.cali.gov.co/planeacion/publicaciones/46691/servicios_wms_idesc/"
+      datos_abiertos: "https://datos.cali.gov.co"
+      estado: "HOSTS VERIFICADOS; URLs WMS oficiales en la página IDESC"
     valoracion: {}
-    estado: "EN EVALUACIÓN (requiere capas POT)"
+    estado: "EN EVALUACIÓN (IDESC Cali)"
+
+# Servicios nacionales (IGAC/IDEAM/ICDE/datos.gov.co) — Fase 1/2
+nacionales:
+  igac:
+    catalogo: "https://mapas.igac.gov.co/server/rest/services"
+    cartografia_wms: "https://mapas.igac.gov.co/server/rest/services/carto/ProductosCartograficosVigentes/MapServer/WMSServer"
+    demanda_hidrica_wmts: "https://mapas.igac.gov.co/server/rest/services/atlas/demandahidrica/MapServer/WMTServer"
+    estado: "VERIFICADO EN VIVO 2026-09-01 (catálogo 21 servicios, WMS GetCapabilities OK)"
+  ideam:
+    gisserver: "https://visualizador.ideam.gov.co/gisserver/rest/services"
+    estado: "HOST VERIFICADO (amenazas inundación/remoción)"
+  icde:
+    catalogo: "https://www.icde.gov.co/geoservicio"
+    estado: "VERIFICADO (catálogo nacional de geoservicios)"
+  datos_gov_co:
+    socrata: "https://www.datos.gov.co/resource"
+    estado: "VERIFICADO (API Socrata, datasets abiertos)"
+  snr:
+    ctl_pago: "https://certificados.supernotariado.gov.co"
+    indice_propietarios: "https://servicios.supernotariado.gov.co"
+    estado: "CTL solo pago oficial o B2B autorizado (Certicámara/DataCrédito); NO scraping"

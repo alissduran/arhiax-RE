@@ -208,6 +208,30 @@ class TestSmokeApi(unittest.TestCase):
         self.assertIn("fuente", r2)
         self.assertIn("timestamp_utc", r2["fuente"])
 
+    def test_arcgis_client_manejo_errores(self):
+        """Sprint 3: el cliente ArcGIS nunca lanza; fallos -> disponible=False."""
+        from integrations.arcgis_client import query_layer_bbox, listar_colecciones_ogc
+        r1 = query_layer_bbox("https://ejemplo.invalido/FeatureServer", 1, (10.0, -75.0, 9.0, -74.0))
+        self.assertFalse(r1["disponible"])
+        r2 = query_layer_bbox("no-es-una-url", 1, (10.0, -75.0, 11.0, -74.0))
+        self.assertFalse(r2["disponible"])
+        r3 = query_layer_bbox(
+            "https://servicio-inexistente-xyz.com/FeatureServer", 1,
+            (10.94, -74.85, 11.05, -74.77),
+        )
+        self.assertFalse(r3["disponible"])
+        self.assertIn("fuente", r3)
+        r4 = listar_colecciones_ogc("https://ejemplo.invalido/ogc")
+        self.assertFalse(r4["disponible"])
+
+    def test_endpoint_catastro_valida_inputs(self):
+        """Sprint 3: el endpoint de catastro en vivo exige lat/lon o dirección (400)."""
+        from fastapi import HTTPException
+        from index import verificar_catastro_en_vivo
+        with self.assertRaises(HTTPException) as ctx:
+            verificar_catastro_en_vivo()
+        self.assertEqual(ctx.exception.status_code, 400)
+
 
 if __name__ == "__main__":
     unittest.main()

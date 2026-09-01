@@ -729,6 +729,55 @@ def get_config(auth: bool = Depends(require_auth)):
         content = f.read()
     return {"yaml": content}
 
+@app.get("/api/v1/geo/catastro")
+def verificar_catastro_en_vivo(
+    lat: float = None,
+    lon: float = None,
+    direccion: str = None,
+    auth: bool = Depends(require_auth),
+):
+    """Sprint 3 (I-1): verificación catastral EN VIVO contra el servicio abierto de
+    Barranquilla (ArcGIS REST 'catastro/datosabiertos': capas 545 datos adicionales
+    y 315 terreno). Devuelve features + fuente/timestamp; nunca afirma datos
+    que no obtuvo (disponible=False si el servicio no responde)."""
+    if lat is None or lon is None:
+        if not direccion:
+            raise HTTPException(status_code=400, detail="Indique lat/lon o dirección.")
+        try:
+            from geocoder import geocodificar_direccion
+            lat, lon = geocodificar_direccion(direccion)
+        except Exception:
+            raise HTTPException(status_code=400, detail="No fue posible geocodificar la dirección.")
+
+    buffer = 0.0025  # ~250 m alrededor del predio
+    bbox = (lon - buffer, lat - buffer, lon + buffer, lat + buffer)
+
+    from integrations.arcgis_client import query_layer_bbox
+    base = "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos"
+    # Capas: 545 (datos adicionales) vive en FeatureServer; 315 (terreno) en MapServer
+    servicios = {
+        "catastro_datos_adicionales": (f"{base}/FeatureServer", 545),
+        "terreno": (f"{base}/MapServer", 315),
+    }
+
+    resultado = {
+        "coordenadas": {"lat": lat, "lon": lon},
+        "bbox": [round(v, 6) for v in bbox],
+        "ciudad": "Barranquilla",
+        "nota": "Verificación catastral en vivo (servicio abierto de la Alcaldía de Barranquilla). "
+                "Los resultados no sustituyen el certificado de tradición y libertad (SNR).",
+    }
+    for capa_nombre, (servicio_url, capa_id) in servicios.items():
+        r = query_layer_bbox(servicio_url, capa_id, bbox, max_features=10)
+        resultado[capa_nombre] = {
+            "disponible": r.get("disponible", False),
+            "total_features": r.get("total_features", 0),
+            "features": r.get("features", []),
+            "error": r.get("error"),
+            "fuente": r.get("fuente", {}),
+        }
+    return resultado
+
 # Servir archivos estáticos del frontend (public) en la raíz
 PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
 if os.path.exists(PUBLIC_DIR):
