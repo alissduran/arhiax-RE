@@ -127,6 +127,20 @@ class TestSmokeApi(unittest.TestCase):
         self.assertGreaterEqual(r2["ltv_estimado"], 0)
         self.assertGreaterEqual(r2["saldo_estimado"], 0)
 
+    def test_motor_geoespacial_con_datos_empaquetados(self):
+        """F-17: el motor usa api/data/ (empaquetado) y detecta intersección real
+        en Napoli sin depender de rutas absolutas de Windows ni de red."""
+        from geospatial_engine import evaluate_predio, load_geospatial_index
+        cache = load_geospatial_index()
+        self.assertTrue(cache.get("capas_disponibles"), "capas del POT no disponibles en api/data/")
+        # Napoli (Tv 43 # 100-50) — intersecta amenaza Baja según datos POT
+        r = evaluate_predio(10.99386, -74.79261)
+        self.assertTrue(r["amenaza_remocion_masa"]["intersecta"])
+        self.assertEqual(r["amenaza_remocion_masa"]["nivel"], "Baja")
+        self.assertIn("Barranquilla", r["resumen_ejecutivo"])
+        # El resumen NO debe decir que no se completó (capas disponibles)
+        self.assertNotIn("no se completó", r["resumen_ejecutivo"].lower())
+
 
 if __name__ == "__main__":
     unittest.main()

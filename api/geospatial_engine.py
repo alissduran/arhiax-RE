@@ -8,24 +8,27 @@ from shapely.strtree import STRtree
 _SPATIAL_CACHE = None
 
 def _get_geojson_paths():
-    """Busca las rutas absolutas de los archivos GeoJSON."""
-    base_dir = Path(__file__).resolve().parent
+    """Busca las capas POT. Prioridad: api/data/ (empaquetadas con la app, F-17).
+    Retrocompatibilidad: raíz del repo en desarrollo local. Sin rutas absolutas."""
+    base_dir = Path(__file__).resolve().parent  # api/
+    data_dir = base_dir / "data"
     root_dir = base_dir.parent
-    
-    path_amenaza = root_dir / "Amenaza por remoción en masa.geojson"
-    path_riesgo = root_dir / "Áreas en riesgo.geojson"
-    
+
+    path_amenaza = data_dir / "amenaza_remocion_masa.geojson"
+    path_riesgo = data_dir / "areas_en_riesgo.geojson"
+
     if not path_amenaza.exists():
-        path_amenaza = Path("C:/Users/aliss/Documents/Sinergia/RE/Amenaza por remoción en masa.geojson")
+        path_amenaza = root_dir / "Amenaza por remoción en masa.geojson"
     if not path_riesgo.exists():
-        path_riesgo = Path("C:/Users/aliss/Documents/Sinergia/RE/Áreas en riesgo.geojson")
-        
+        path_riesgo = root_dir / "Áreas en riesgo.geojson"
+
     return path_amenaza, path_riesgo
 
 def load_geospatial_index():
     """
     Carga y construye índices espaciales (STRtree) para Amenaza y Riesgo.
     Retorna una tupla (index_amenaza, index_riesgo).
+    Si las capas no están disponibles, NO cachea el fallo (permite reintentos).
     """
     global _SPATIAL_CACHE
     if _SPATIAL_CACHE is not None:
@@ -62,10 +65,14 @@ def load_geospatial_index():
     tree_amenaza, items_amenaza = build_layer(path_amenaza, 'niveldeamenaza', 'clase_suelo')
     tree_riesgo, items_riesgo = build_layer(path_riesgo, 'nivelderiesgo', 'clasesuelo')
 
+    capas_disponibles = bool(tree_amenaza and tree_riesgo)
     _SPATIAL_CACHE = {
         'amenaza': {'tree': tree_amenaza, 'items': items_amenaza},
-        'riesgo': {'tree': tree_riesgo, 'items': items_riesgo}
+        'riesgo': {'tree': tree_riesgo, 'items': items_riesgo},
+        'capas_disponibles': capas_disponibles
     }
+    if not capas_disponibles:
+        _SPATIAL_CACHE = None  # no cachear el fallo
     return _SPATIAL_CACHE
 
 def evaluate_predio(lat: float, lon: float) -> dict:
@@ -141,13 +148,20 @@ def evaluate_predio(lat: float, lon: float) -> dict:
     }
 
     # Resumen Sintético
-    amenaza_text = f"Amenaza {res_amenaza['nivel']}" if res_amenaza['intersecta'] else "Sin Amenaza Identificada"
-    riesgo_text = f"Riesgo {res_riesgo['nivel']}" if res_riesgo['intersecta'] else "Sin Riesgo Identificado"
-
-    summary = (
-        f"El predio ubicado en ({lat:.5f}, {lon:.5f}) presenta evaluación de {amenaza_text} por remoción en masa "
-        f"y zonificación de {riesgo_text} según el Plan de Ordenamiento Territorial (POT) de Barranquilla."
-    )
+    if not cache.get("capas_disponibles"):
+        # F-17/H-11: si las capas no están, NO afirmar "sin afectación": marcar NO EVALUADO
+        summary = (
+            "No se completó la verificación espacial: capas del POT no disponibles "
+            "(faltan los datos empaquetados de la aplicación). El resultado debe "
+            "considerarse NO EVALUADO y requiere verificación geotécnica."
+        )
+    else:
+        amenaza_text = f"Amenaza {res_amenaza['nivel']}" if res_amenaza['intersecta'] else "Sin Amenaza Identificada"
+        riesgo_text = f"Riesgo {res_riesgo['nivel']}" if res_riesgo['intersecta'] else "Sin Riesgo Identificado"
+        summary = (
+            f"El predio ubicado en ({lat:.5f}, {lon:.5f}) presenta evaluación de {amenaza_text} por remoción en masa "
+            f"y zonificación de {riesgo_text} según el Plan de Ordenamiento Territorial (POT) de Barranquilla."
+        )
 
     return {
         'coordenadas': {'lat': lat, 'lon': lon},

@@ -31,5 +31,6 @@ api/assets/
 *map*.png
 *map*.html
 *.geojson
+!api/data/*.geojson
 test_geo_resultado.json
 
