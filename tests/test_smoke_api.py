@@ -141,6 +141,21 @@ class TestSmokeApi(unittest.TestCase):
         # El resumen NO debe decir que no se completó (capas disponibles)
         self.assertNotIn("no se completó", r["resumen_ejecutivo"].lower())
 
+    def test_wfs_client_manejo_errores(self):
+        """Sprint 3: el cliente WFS nunca lanza; los fallos se reportan como
+        disponible=False para que el dictamen marque NO EVALUADO en vez de mentir."""
+        from integrations.wfs_client import get_features_bbox
+        r1 = get_features_bbox("https://ejemplo.invalido/wfs", "capa:test", (10.0, -75.0, 9.0, -74.0))
+        self.assertFalse(r1["disponible"])
+        self.assertIn("error", r1)
+        r2 = get_features_bbox(
+            "https://servicio-inexistente-xyz.com/wfs", "capa:test",
+            (10.94, -74.85, 11.05, -74.77),
+        )
+        self.assertFalse(r2["disponible"])
+        self.assertIn("fuente", r2)
+        self.assertIn("timestamp_utc", r2["fuente"])
+
 
 if __name__ == "__main__":
     unittest.main()
