@@ -7,7 +7,10 @@ PyYAML>=6.0
 reportlab==4.5.0
 pillow>=10.0.0
 python-multipart>=0.0.5
-pypdf==6.10.2
+# pypdf >= 6.15.0 (PYSEC-2026-3655/3656, GHSA-jm82-fx9c-mx94 y 15 CVEs detectadas por
+# pip-audit en 6.10.2). Es la librería que parsea los certificados subidos por el usuario:
+# mantener siempre la versión parcheada.
+pypdf==6.15.0
 requests>=2.25.0
 # Motor Geoespacial (STRtree + Point-in-Polygon sobre GeoJSON del POT)
 shapely==2.1.2
