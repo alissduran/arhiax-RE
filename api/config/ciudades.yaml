@@ -39,12 +39,14 @@ ciudades:
     centroide: { lat: 4.7110, lon: -74.0721 }
     capas_pot_empaquetadas: false
     arcgis:
+      ideca_feature: "https://geoportal.jbb.gov.co/agc/rest/services/IDECA/CensoArbol/FeatureServer"
+      ideca_cobertura: "https://geoportal.jbb.gov.co/agc/rest/services/IDECA/coberturatierra1985/MapServer"
       catastro_en_linea: "https://catastroenlinea.catastrobogota.gov.co/cel"
       mapas: "https://mapas.bogota.gov.co"
       servicios_catastro: "https://servicios.catastrobogota.gov.co"
-      estado: "HOSTS VERIFICADOS; WFS/FeatureServers federados en jbb.gov.co/cajaviviendapopular.gov.co"
+      estado: "VERIFICADO EN VIVO 2026-09-01 (IDECA federado OK: CensoArbol/coberturatierra); catastro distrital 503 puntual, CEL sin API pública"
     valoracion: {}
-    estado: "EN EVALUACIÓN (IDECA/catastro distrital)"
+    estado: "PARCIAL (IDECA federado activo; catastro distrital pendiente)"
 
   medellin:
     nombre: "Medellín"

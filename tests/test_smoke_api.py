@@ -262,10 +262,10 @@ class TestSmokeApi(unittest.TestCase):
             r_cali = terr.verificar_territorio(3.4516, -76.5320, "cali")
             self.assertTrue(r_cali["disponible"])
             self.assertIn("SAN FERNANDO", r_cali["resumen"] or "")
-            # Bogotá: no afirmar datos (en evaluación)
+            # Bogotá: con IDECA federado configurado consulta en vivo (stub)
             r_bog = terr.verificar_territorio(4.7110, -74.0721, "bogota")
-            self.assertFalse(r_bog["disponible"])
-            self.assertIn("evaluación", (r_bog.get("error") or "").lower())
+            self.assertTrue(r_bog["disponible"])
+            self.assertIn("IDECA", r_bog["resumen"] or "")
             # Ciudad no soportada
             r_x = terr.verificar_territorio(4.0, -74.0, "cartagena")
             self.assertFalse(r_x["disponible"])

@@ -130,16 +130,35 @@ def _verificar_cali(lat: float, lon: float, res: dict) -> dict:
     return res
 
 
+def _verificar_bogota(lat: float, lon: float, res: dict) -> dict:
+    from config import get_ciudad
+    cfg = get_ciudad("bogota")
+    arcgis = cfg.get("arcgis") or {}
+    url = (arcgis.get("ideca_feature") or "").rstrip("/")
+    if not url:
+        res["error"] = ("Bogotá en evaluación: capa IDECA federada no configurada; "
+                        "catastro distrital 503 puntual, CEL es portal web sin API pública.")
+        return res
+    bbox = (lon - BUFFER, lat - BUFFER, lon + BUFFER, lat + BUFFER)
+    r = query_layer_bbox(url, 0, bbox, max_features=10, timeout=TIMEOUT)
+    res["disponible"] = bool(r.get("disponible"))
+    res["total_features"] = r.get("total_features", 0) or 0
+    res["features"] = (r.get("features") or [])[:5]
+    res["error"] = r.get("error")
+    res["fuente"] = r.get("fuente") or {}
+    if res["disponible"]:
+        res["resumen"] = ("IDECA Bogotá consultado en vivo (capas federadas). "
+                          "Catastro distrital (CEL) sin API pública: verificación catastral pendiente.")
+    elif not res["error"]:
+        res["error"] = "El servicio IDECA de Bogotá no devolvió features en el BBOX del predio."
+    return res
+
+
 def verificar_territorio(lat: float, lon: float, ciudad: str = "barranquilla") -> dict[str, Any]:
     """Verificación territorial en vivo de la ciudad indicada (con caché por celda)."""
     ciudad = (ciudad or "barranquilla").lower().strip()
     if ciudad not in ("barranquilla", "medellin", "cali", "bogota"):
         return {"ciudad": ciudad, "disponible": False, "error": "Ciudad no soportada.",
-                "features": [], "total_features": 0, "resumen": None, "fuente": {}}
-    if ciudad == "bogota":
-        return {"ciudad": "bogota", "disponible": False,
-                "error": "Bogotá en evaluación: catastro 503 puntual, CEL es portal web sin API pública. "
-                         "Usar IDECA cuando esté disponible.",
                 "features": [], "total_features": 0, "resumen": None, "fuente": {}}
 
     celda = _celda(lat, lon)
@@ -157,6 +176,8 @@ def verificar_territorio(lat: float, lon: float, ciudad: str = "barranquilla") -
             res = _verificar_medellin(lat, lon, res)
         elif ciudad == "cali":
             res = _verificar_cali(lat, lon, res)
+        elif ciudad == "bogota":
+            res = _verificar_bogota(lat, lon, res)
     except Exception as e:
         res["error"] = str(e)[:120]
 
