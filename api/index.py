@@ -825,10 +825,12 @@ def estado_cola_pdf(auth: dict = Depends(require_admin)):
 
 
 def _verificar_firma_qstash(request: Request, body_bytes: bytes) -> bool:
-    """Valida el header 'Upstash-Signature' (HMAC-SHA256 del body) contra las
-    signing keys de QStash configuradas (QSTASH_CURRENT/NEXT_SIGNING_KEY)."""
-    import hashlib as _hl
-    firma_header = request.headers.get("upstash-signature", "")
+    """Valida el JWT del header 'Upstash-Signature' (QStash v2 firma con JWT HS256
+    usando la signing key del workspace)."""
+    import base64 as _b64
+    import json as _json
+    import time as _t
+    firma_header = request.headers.get("upstash-signature", "").strip()
     if not firma_header:
         return False
     claves = [
@@ -838,11 +840,33 @@ def _verificar_firma_qstash(request: Request, body_bytes: bytes) -> bool:
     claves = [k for k in claves if k]
     if not claves:
         return False
-    firmas = re.findall(r"v1=([a-fA-F0-9]+)", firma_header) or [firma_header.strip()]
+    partes = firma_header.split(".")
+    if len(partes) != 3:
+        return False
+
+    def _b64d(s: str) -> bytes:
+        s = s.replace("-", "+").replace("_", "/")
+        s += "=" * (-len(s) % 4)
+        return _b64.b64decode(s)
+
     for clave in claves:
-        esperada = hmac.new(clave.encode("utf-8"), body_bytes, _hl.sha256).hexdigest()
-        if any(hmac.compare_digest(esperada, f.lower()) for f in firmas):
+        try:
+            firma = _b64d(partes[2])
+            esperada = hmac.new(clave.encode("utf-8"),
+                                f"{partes[0]}.{partes[1]}".encode("utf-8"),
+                                hashlib.sha256).digest()
+            if not hmac.compare_digest(firma, esperada):
+                continue
+            payload = _json.loads(_b64d(partes[1]))
+            # Anti-replay opcional: si el claim 'body' existe, debe ser el sha256 del body
+            if payload.get("body"):
+                if payload["body"] != hashlib.sha256(body_bytes).hexdigest():
+                    return False
+            if payload.get("exp") and _t.time() > payload["exp"]:
+                return False
             return True
+        except Exception:
+            continue
     return False
 
 
