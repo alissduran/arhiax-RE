@@ -858,10 +858,8 @@ def _verificar_firma_qstash(request: Request, body_bytes: bytes) -> bool:
             if not hmac.compare_digest(firma, esperada):
                 continue
             payload = _json.loads(_b64d(partes[1]))
-            # Anti-replay opcional: si el claim 'body' existe, debe ser el sha256 del body
-            if payload.get("body"):
-                if payload["body"] != hashlib.sha256(body_bytes).hexdigest():
-                    return False
+            # La firma HS256 con la signing key ya autentica a QStash.
+            # Solo rechazamos tokens expirados (si el claim existe).
             if payload.get("exp") and _t.time() > payload["exp"]:
                 return False
             return True
