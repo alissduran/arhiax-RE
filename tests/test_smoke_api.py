@@ -297,8 +297,9 @@ class TestSmokeApi(unittest.TestCase):
             terr._CACHE.clear()
 
     def test_database_dsn_configurable(self):
-        """Backlog persistencia: ARHIAX_DB_PATH local funciona y el esquema externo
-        da un error claro (sin driver) en lugar de fallar silenciosamente."""
+        """Backlog persistencia: DSN SQLite local funciona; DSN postgres (Neon)
+        se reconoce como postgres y, sin psycopg instalado, da error claro al
+        conectar (no falla silenciosamente)."""
         import os
         import importlib
         import database as db_mod
@@ -308,19 +309,48 @@ class TestSmokeApi(unittest.TestCase):
         try:
             os.environ["ARHIAX_DB_PATH"] = str(tmp)
             importlib.reload(db_mod)
-            self.assertEqual(db_mod.DB_PATH, str(tmp))
+            self.assertFalse(db_mod._ES_POSTGRES)
             conn = db_mod.get_db_connection()
             conn.execute("SELECT 1")
             conn.close()
+
             os.environ["ARHIAX_DB_PATH"] = "postgres://user:pass@host/db"
+            importlib.reload(db_mod)
+            self.assertTrue(db_mod._ES_POSTGRES)
             with self.assertRaises(RuntimeError):
-                importlib.reload(db_mod)  # el import re-resuelve DB_PATH y debe fallar claro
+                db_mod.get_db_connection()  # sin psycopg instalado -> error claro
         finally:
             if old is None:
                 os.environ.pop("ARHIAX_DB_PATH", None)
             else:
                 os.environ["ARHIAX_DB_PATH"] = old
             importlib.reload(db_mod)
+
+    def test_postgres_adapter_traduccion_sql(self):
+        """El adaptador Postgres traduce '?' -> '%s' y captura lastrowid con
+        RETURNING (probado con un cursor simulado, sin red)."""
+        from postgres_adapter import _CursorCompat
+
+        ejecutados = []
+
+        class CursorFake:
+            def execute(self, sql, params):
+                ejecutados.append((sql, params))
+                self._fila = {"id": 42}
+
+            def fetchone(self):
+                return getattr(self, "_fila", None)
+
+        c = _CursorCompat(CursorFake())
+        c.execute("INSERT INTO dictamenes (folio_matricula) VALUES (?)", ("040-1",))
+        sql_t, params = ejecutados[-1]
+        self.assertIn("%s", sql_t)
+        self.assertNotIn("?", sql_t)
+        self.assertIn("RETURNING id", sql_t)
+        self.assertEqual(c.lastrowid, 42)
+        # UPDATE no debe añadir RETURNING
+        c.execute("UPDATE dictamenes SET barrio = ? WHERE id = ?", ("x", 1))
+        self.assertNotIn("RETURNING", ejecutados[-1][0])
 
     def test_config_ciudades_carga(self):
         """Sprint 3 (I-3): la config multi-ciudad carga y Barranquilla está activa."""

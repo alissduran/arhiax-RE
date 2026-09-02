@@ -1,28 +1,22 @@
 import sqlite3
 import os
-from pathlib import Path
 
 
 def _resolver_db_path():
-    """Resuelve la ubicación de la base de datos (backlog: persistencia gestionada).
+    """Resuelve la ubicación/dsn de la base de datos (backlog: persistencia gestionada).
 
     Prioridad:
-      1. ARHIAX_DB_PATH (variable de entorno): ruta local o `file:` de SQLite.
-         Si apunta a un esquema externo (postgres://, libsql://, wss://) se lanza
-         un error claro: ese soporte requiere un driver adicional y el adaptador
-         correspondiente en get_db_connection() (ver README).
-      2. Entorno Vercel: /tmp/database.db (efímero por instancia — se pierde entre
-         cold starts; usar ARHIAX_DB_PATH con un volumen persistente para datos reales).
+      1. ARHIAX_DB_PATH (variable de entorno): ruta local, `file:` de SQLite o
+         URL de Postgres/Neon (postgres:// o postgresql://).
+      2. Entorno Vercel: /tmp/database.db (efímero por instancia).
       3. Desarrollo local: api/database.db.
+
+    Para Postgres/Neon: definir ARHIAX_DB_PATH con la URL de conexión y añadir
+    `psycopg[binary]` a requirements.txt (el adaptador api/postgres_adapter.py
+    traduce la API sqlite3 de la app a Postgres).
     """
     dsn = os.environ.get("ARHIAX_DB_PATH", "").strip()
     if dsn:
-        if dsn.startswith(("postgres://", "postgresql://", "libsql://", "wss://", "turso://")):
-            raise RuntimeError(
-                "ARHIAX_DB_PATH usa un esquema externo no soportado por este build (solo SQLite). "
-                "Para conectar Turso/Postgres: instale el driver (libsql-experimental/psycopg) y "
-                "ajuste get_db_connection() para despachar por esquema (ver README_PLAN -> backlog)."
-            )
         return dsn
 
     API_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -32,13 +26,14 @@ def _resolver_db_path():
 
 
 DB_PATH = _resolver_db_path()
+_ES_POSTGRES = DB_PATH.startswith(("postgres://", "postgresql://"))
 
 
 def init_db():
+    """Crea/migra el esquema SQLite (solo para DSN local o /tmp)."""
     conn = sqlite3.connect(str(DB_PATH))
     cursor = conn.cursor()
-    
-    # Crear tabla si no existe
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS dictamenes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,45 +51,37 @@ def init_db():
             pdf_path TEXT
         )
     """)
-    
-    # Migración: Agregar columnas de Certificado de Libertad y Tradición si no existen
-    try:
-        cursor.execute("ALTER TABLE dictamenes ADD COLUMN certificado_cargado INTEGER DEFAULT 0")
-    except sqlite3.OperationalError:
-        pass
-        
-    try:
-        cursor.execute("ALTER TABLE dictamenes ADD COLUMN certificado_path TEXT")
-    except sqlite3.OperationalError:
-        pass
 
-    # Migracion: Coordenadas geocodificadas universales (geocoder ARHIAX RE)
-    try:
-        cursor.execute("ALTER TABLE dictamenes ADD COLUMN lat REAL")
-    except sqlite3.OperationalError:
-        pass
-    try:
-        cursor.execute("ALTER TABLE dictamenes ADD COLUMN lon REAL")
-    except sqlite3.OperationalError:
-        pass
-    try:
-        cursor.execute("ALTER TABLE dictamenes ADD COLUMN fuente_geocod TEXT")
-    except sqlite3.OperationalError:
-        pass
+    migraciones = [
+        "ALTER TABLE dictamenes ADD COLUMN certificado_cargado INTEGER DEFAULT 0",
+        "ALTER TABLE dictamenes ADD COLUMN certificado_path TEXT",
+        "ALTER TABLE dictamenes ADD COLUMN lat REAL",
+        "ALTER TABLE dictamenes ADD COLUMN lon REAL",
+        "ALTER TABLE dictamenes ADD COLUMN fuente_geocod TEXT",
+        "ALTER TABLE dictamenes ADD COLUMN acreedor_real TEXT",
+    ]
+    for sql in migraciones:
+        try:
+            cursor.execute(sql)
+        except sqlite3.OperationalError:
+            pass
 
-    # Migracion Sprint 2 Bloque D: acreedor real declarado
-    try:
-        cursor.execute("ALTER TABLE dictamenes ADD COLUMN acreedor_real TEXT")
-    except sqlite3.OperationalError:
-        pass
-        
     conn.commit()
     conn.close()
 
 
 def get_db_connection():
-    # Nota (backlog persistencia gestionada): para despachar por esquema externo
-    # (Turso libsql / Postgres Neon) añadir aquí el branch según DB_PATH y el driver.
+    """Devuelve una conexión con API compatible sqlite3 (dict rows).
+
+    - DSN postgres (Neon): despacha a api/postgres_adapter (psycopg).
+    - En otro caso: SQLite local o /tmp.
+    """
+    if _ES_POSTGRES:
+        from postgres_adapter import conectar_postgres, init_postgres
+        conn = conectar_postgres(DB_PATH)
+        init_postgres(conn)
+        return conn
+
     init_db()
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
