@@ -663,6 +663,13 @@ async def generar_dictamen_stateless(
         # se degrada a síncrono (el cliente recibe el PDF igual).
         import uuid
         from cola_pdf import encolar_generacion, cola_configurada
+        if not cola_configurada():
+            # Sin QStash no se crea un trabajo huérfano en la BD: fallback directo.
+            return {
+                "encolado": False,
+                "detalle": "Cola no configurada (QSTASH_TOKEN / ARHIAX_WORKER_URL). "
+                           "Generando de forma síncrona.",
+            }
         job_id = str(uuid.uuid4())
         _crear_trabajo(job_id, "pendiente")
         datos = {
@@ -683,14 +690,8 @@ async def generar_dictamen_stateless(
                 "encolado": True, "job_id": job_id, "message_id": enc.get("message_id"),
                 "estado": "pendiente", "consulta": f"/api/v1/pdf/trabajos/{job_id}",
             }
-        # Fallback síncrono
-        _actualizar_trabajo(job_id, "error", error=enc.get("error") or enc.get("motivo"))
-        if not cola_configurada():
-            return {
-                "encolado": False,
-                "detalle": "Cola no configurada (QSTASH_TOKEN / ARHIAX_WORKER_URL). "
-                           "Generando de forma síncrona.",
-            }
+        # QStash configurado pero el publish falló
+        _actualizar_trabajo(job_id, "error", error=enc.get("error") or "publish fallido")
         raise HTTPException(status_code=500, detail=f"Error al encolar: {enc.get('error')}")
 
     import uuid
