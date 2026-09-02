@@ -34,7 +34,13 @@ def analizar_certificado(pdf_path):
         "constructor": "N/D",
         "anotaciones": [],
         "hallazgos": [],
-        "recs": []
+        "recs": [],
+        # Sprint 2 (exactitud): códigos del CTL para resolver el predio real en catastro
+        "codigo_catastral": None,
+        "nupre": None,
+        "tipo_predio_snr": None,
+        "descripcion_ctl": None,
+        "modalidad_adquisicion": "N/D",
     }
 
     if not pdf_path or not os.path.exists(pdf_path):
@@ -85,7 +91,12 @@ def analizar_texto_certificado(texto):
         "constructor": "N/D",
         "anotaciones": [],
         "hallazgos": [],
-        "recs": []
+        "recs": [],
+        "codigo_catastral": None,
+        "nupre": None,
+        "tipo_predio_snr": None,
+        "descripcion_ctl": None,
+        "modalidad_adquisicion": "N/D",
     }
 
     if not texto:
@@ -100,10 +111,51 @@ def analizar_texto_certificado(texto):
         # 2. Apertura del Folio
         m_apertura = re.search(r"(?:fecha\s+apertura|abierto\s+el|apertura)\s*[:\-]?\s*([^\n\r]+)", texto, re.IGNORECASE)
         if m_apertura:
+            # El CTL real pega el texto siguiente: "28-03-2001  RADICACIÓN: 2001-8209 ..."
             res["apertura"] = m_apertura.group(1).strip()
 
-        # Parsear Anotaciones - Requiere que ANOTACION este en una nueva linea
-        anotaciones_raw = re.split(r"(?:\r?\n|^)\s*ANOTACI[OÓ]N\s+(?:Nro|N[oO]?|:)\s*", texto, flags=re.IGNORECASE)
+        # 2b. Código catastral y NUPRE (fuente de verdad para el predio real)
+        m_cc = re.search(r"(?:CODIGO\s*CATASTRAL|C[OÓ]DIGO\s*CATASTRAL)\s*[:\-]?\s*(\d{20,30})", texto, re.IGNORECASE)
+        if m_cc:
+            res["codigo_catastral"] = m_cc.group(1)
+        m_nupre = re.search(r"NUPRE\s*[:\-]?\s*([A-Z0-9]{8,40})", texto, re.IGNORECASE)
+        if m_nupre:
+            cand = m_nupre.group(1).strip()
+            if re.match(r"^(AFT|NPR|08001)", cand, re.IGNORECASE):
+                res["nupre"] = cand
+
+        # 2c. Tipo de predio (URBANO/RURAL) y descripción (BODEGA/CASA/APARTAMENTO...)
+        m_tipo = re.search(r"Tipo\s+Predio\s*:\s*([A-ZÁÉÍÓÚÑ ]{3,20})", texto, re.IGNORECASE)
+        if m_tipo:
+            res["tipo_predio_snr"] = m_tipo.group(1).strip()
+        m_desc = re.search(
+            r"DESCRIPCION\s*:.*?\n(.*?)(?=\n\s*\n|\nAREA|\nSUPERINTENDENCIA|\nDIRECCION|\nCABIDA|\Z)",
+            texto, re.IGNORECASE | re.DOTALL)
+        if not m_desc:
+            # Formato compacto: "DESCRIPCION: CABIDA Y LINDEROS ... BODEGA NRO 3 ..."
+            m_desc = re.search(r"DESCRIPCION\s*:\s*(.+?)(?=\n\s*\n|\nAREA|\nSUPERINTENDENCIA|\Z)",
+                               texto, re.IGNORECASE | re.DOTALL)
+        if m_desc:
+            bloque = m_desc.group(1)
+            primera = " ".join(bloque.split())[:400]
+            res["descripcion_ctl"] = primera
+
+        # 2d. Dirección del inmueble (formato CTL SNR: bloque DIRECCION DEL INMUEBLE)
+        m_dir = re.search(
+            r"DIRECCION\s+DEL\s+INMUEBLE\s*\n(?:Tipo\s+Predio\s*:[^\n]*\n)?\s*(?:\d+\)\s*)?"
+            r"([A-Z0-9ÁÉÍÓÚÑ \.\#\-]{8,80})",
+            texto, re.IGNORECASE)
+        if m_dir:
+            cand_dir = m_dir.group(1).strip()
+            if re.search(r"\b(CL|CLL|CALLE|CRA|KR|CARRERA|TV|AV|DG|DIAGONAL)\b", cand_dir, re.IGNORECASE) and re.search(r"\d", cand_dir):
+                res["direccion"] = cand_dir
+
+        # Parsear Anotaciones - Requiere que ANOTACION este en una nueva linea.
+        # El CTL real usa indistintamente "ANOTACION: Nro 001", "ANOTACION Nro 002"
+        # y "Anotación Nro: 0" (salvedades). Se normaliza ":" pegado al token.
+        _texto_anot = re.sub(r"ANOTACI[OÓ]N\s*:", "ANOTACION ", texto, flags=re.IGNORECASE)
+        _texto_anot = re.sub(r"Anotaci[oó]n\s+Nro\s*:", "ANOTACION ", _texto_anot, flags=re.IGNORECASE)
+        anotaciones_raw = re.split(r"(?:\r?\n|^)\s*ANOTACI[OÓ]N\s+(?:Nro|N[oO]?|:)?\s*", _texto_anot, flags=re.IGNORECASE)
 
         
         parsed_anotaciones = []
@@ -123,32 +175,47 @@ def analizar_texto_certificado(texto):
             fecha_match = re.search(r"(\d{2}-\d{2}-\d{4})", a_block_clean)
             fecha_anot = fecha_match.group(1) if fecha_match else "N/D"
 
-            bloque_texto = " ".join(lines)
+            # Unir con \n (NO con espacio): los adquirentes/titulares se extraen
+            # de líneas completas "A: NOMBRE" y con espacio los nombres se mezclan.
+            bloque_texto = "\n".join(lines)
 
 
             tipo_anot = "OTRO"
-            if "COMPRAVENTA" in bloque_texto.upper() or "ADQUISICION" in bloque_texto.upper():
-                tipo_anot = "COMPRAVENTA"
-            elif "HIPOTECA" in bloque_texto.upper():
-                tipo_anot = "GRAVAMEN: Hipoteca"
-            elif "EMBARGO" in bloque_texto.upper():
-                tipo_anot = "GRAVAMEN: Embargo"
-            elif "AFECTACION" in bloque_texto.upper() or "VIVIENDA FAMILIAR" in bloque_texto.upper():
-                tipo_anot = "LIMITACION: Afectacion Vivienda"
-            elif "PATRIMONIO" in bloque_texto.upper() and "INEMBARGABLE" in bloque_texto.upper():
-                tipo_anot = "LIMITACION: Patrimonio Familia"
-            elif "CANCELACION" in bloque_texto.upper() or "CANCELA" in bloque_texto.upper():
+            sup = bloque_texto.upper()
+            # Prioridad 1: CANCELACION (p. ej. "CANCELACION: 0843 ... CANCELACION HIPOTECA").
+            # Debe evaluarse ANTES de HIPOTECA: la anotación que cancela menciona la hipoteca.
+            if "CANCELACION" in sup or "SE CANCELA ANOTACION" in sup or "CANCELA LA ANOTACION" in sup:
                 tipo_anot = "CANCELACION"
+            # Prioridad 2: aclaraciones/modificaciones (no crean ni extinguen gravámenes)
+            elif "ACLARACION" in sup or "MODIFICACION A LA HIPOTECA" in sup or "CORRECCION" in sup:
+                tipo_anot = "OTRO: Aclaracion"
+            elif "HIPOTECA" in sup:
+                tipo_anot = "GRAVAMEN: Hipoteca"
+            elif "EMBARGO" in sup or "MEDIDA CAUTELAR" in sup:
+                tipo_anot = "GRAVAMEN: Embargo"
+            elif "AFECTACION" in sup or "VIVIENDA FAMILIAR" in sup:
+                tipo_anot = "LIMITACION: Afectacion Vivienda"
+            elif "PATRIMONIO" in sup and "INEMBARGABLE" in sup:
+                tipo_anot = "LIMITACION: Patrimonio Familia"
+            elif "COMPRAVENTA" in sup or "ADQUISICION" in sup or "FUSION" in sup \
+                    or "DIVISION MATERIAL" in sup or "PERMUTA" in sup or "ADJUDICACION" in sup \
+                    or "MODO DE ADQUISICION" in sup:
+                tipo_anot = "COMPRAVENTA"
 
-            # Extraer partes (De: A:)
+            # Extraer partes (De: A:) de líneas completas (formato SNR).
             partes = "N/D"
-            de_match = re.search(r"DE\s*:\s*(.+?)(?=A\s*:|$)", bloque_texto, re.IGNORECASE)
-            a_match = re.search(r"A\s*:\s*(.+?)(?=\bDE\b|$|ESCRITURA|VALOR)", bloque_texto, re.IGNORECASE)
-            
-            de_part = de_match.group(1).strip() if de_match else ""
-            a_part = a_match.group(1).strip() if a_match else ""
+            de_part = ""
+            a_part = ""
+            for _l in lines:
+                _ls = _l.strip()
+                m_de = re.match(r"DE\s*:\s*(.+)", _ls, re.IGNORECASE)
+                m_a = re.match(r"A\s*:\s*(.+)", _ls, re.IGNORECASE)
+                if m_de and not de_part:
+                    de_part = m_de.group(1).strip()
+                elif m_a and not a_part:
+                    a_part = m_a.group(1).strip()
             if de_part or a_part:
-                partes = "{} -> {}".format(de_part, a_part)
+                partes = "{} -> {}".format(de_part, a_part) if de_part and a_part else (de_part or a_part)
                 if len(partes) > 120:
                     partes = partes[:117] + "..."
 
@@ -175,15 +242,35 @@ def analizar_texto_certificado(texto):
                 if item["num"] == target:
                     item["estado"] = "CANCELADA -- Anot. {} la extingue".format(canc_anot)
 
-        # 4. Extraer duenos y constructor
+        # 4. Extraer duenos: la anotación de adquisición de dominio MÁS RECIENTE
+        # no cancelada (compraventa, fusión, división, permuta, adjudicación) define
+        # al titular actual. Se toma la línea "A:" (adquirente) del bloque.
+        def _adquirente_de(bloque_texto):
+            """Extrae el nombre del adquirente de la línea 'A: ...' de una anotación."""
+            for line in bloque_texto.split("\n"):
+                ls = line.strip()
+                m = re.match(r"A\s*:\s*(.+)", ls, re.IGNORECASE)
+                if m:
+                    nombre = m.group(1).strip()
+                    # Quitar marcas de titular (X / I) y documentos (CC/NIT/CE)
+                    nombre = re.sub(r"\s*[XI]\s*$", "", nombre)
+                    nombre = re.sub(r"(?:\bCC\b|\bNIT\b|\bCE\b|C\.C\.|N\.I\.T\.)\s*[\d\.\-]+", "", nombre, flags=re.IGNORECASE)
+                    nombre = re.sub(r"[.,;]$", "", nombre).strip()
+                    nombre = " ".join(nombre.split())
+                    if len(nombre) >= 3:
+                        return nombre
+            return None
+
         titulares_lista = []
         for item in reversed(parsed_anotaciones):
-            if "COMPRAVENTA" in item["tipo"] and "CANCELADA" not in item["estado"]:
-                comp_match = re.search(r"A\s*:\s*([^,\.]+)", item["texto"], re.IGNORECASE)
-                if comp_match:
-                    cc_match = re.search(r"(?:C\.C\.|CC|NIT)\s*([\d\.\-]+)", item["texto"], re.IGNORECASE)
-                    cc_str = " (CC {})".format(cc_match.group(1)) if cc_match else ""
-                    titulares_lista.append("{}{}".format(comp_match.group(1).strip(), cc_str))
+            if item["tipo"] == "COMPRAVENTA" and "CANCELADA" not in item["estado"]:
+                nombre_titular = _adquirente_de(item["texto"])
+                if not nombre_titular:
+                    # Fallback: buscar el "A:" en el texto sin saltos de línea
+                    m2 = re.search(r"A\s*:\s*([^,\.]{4,90})", item["texto"], re.IGNORECASE)
+                    nombre_titular = m2.group(1).strip() if m2 else None
+                if nombre_titular:
+                    titulares_lista.append(nombre_titular)
                     break
         
         if titulares_lista:
@@ -192,11 +279,24 @@ def analizar_texto_certificado(texto):
             prop_match = re.findall(r"a\s+favor\s+de\s+([A-Z\s]{4,40})", texto)
             if prop_match:
                 res["titulares"] = prop_match[-1].strip()
+            else:
+                res["titulares"] = "PENDIENTE DE VERIFICACION (No se identificó anotación de adquisición vigente en el CTL)"
 
-        # Constructor
-        const_match = re.search(r"(CONSTRUCTORA|URBANIZADORA|CONSTRUCTOR|MARVAL|M.A.S.|S.A.S.|CONCIVI)\s+([A-Z\s]{3,20})", texto, re.IGNORECASE)
+        # Constructor: solo empresas constructoras/urbanizadoras explícitas con
+        # nombre propio. "INMOBILIARIA"/"S.A.S." sueltos NO cuentan (aparecen en
+        # "MATRICULA INMOBILIARIA" y en toda sociedad). Se exige que el match NO
+        # esté rodeado de palabras comunes de plantilla del certificado.
+        const_match = re.search(
+            r"(CONSTRUCTORA|URBANIZADORA|CONSTRUCTOR|CONCIVI|MARVAL)\s+([A-ZÁÉÍÓÚÑ0-9&\s]{3,30})",
+            texto, re.IGNORECASE)
         if const_match:
-            res["constructor"] = const_match.group(0).strip()
+            cand_const = const_match.group(0).strip()
+            # Descartar coincidencias espurias (plantillas del certificado)
+            if re.search(r"SUPERINTEND|REGISTRO|ORIP|NOTARIADO|MATRICULA|ESCRITURA|CERTIFICADO",
+                         cand_const, re.IGNORECASE) or len(cand_const) > 45:
+                res["constructor"] = "N/D"
+            else:
+                res["constructor"] = cand_const
         else:
             res["constructor"] = "N/D"
 

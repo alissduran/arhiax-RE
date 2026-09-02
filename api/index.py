@@ -196,7 +196,11 @@ else:
 ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
 def extraer_datos_de_pdf(pdf_path: str) -> dict:
-    """Analiza de manera inteligente el certificado para extraer área, matrícula, barrio y dirección."""
+    """Analiza de manera inteligente el certificado para extraer área, matrícula,
+    barrio, dirección y — clave para la exactitud — el código catastral/NUPRE que
+    el CTL del SNR incluye. Si el CTL trae código, el predio REAL se resuelve en
+    el catastro abierto y sus datos oficiales (dirección, coordenadas, destino)
+    prevalecen sobre cualquier inferencia."""
     datos = {"area": None, "folio": None, "barrio": None, "direccion": None}
     try:
         reader = pypdf.PdfReader(pdf_path)
@@ -231,16 +235,55 @@ def extraer_datos_de_pdf(pdf_path: str) -> dict:
         if matches_folio:
             datos["folio"] = matches_folio[0]
 
+        # 2b. Código catastral y NUPRE del CTL (fuente de verdad del predio real)
+        try:
+            from catastro_predio import extraer_codigo_nupre_de_ctl
+            cods = extraer_codigo_nupre_de_ctl(texto)
+            datos["codigo_catastral"] = cods.get("codigo_catastral")
+            datos["nupre"] = cods.get("nupre")
+        except Exception:
+            datos["codigo_catastral"] = None
+            datos["nupre"] = None
+
+        # 2c. Si el CTL trae código/NUPRE, resolver el predio REAL en el catastro:
+        # dirección oficial, coordenadas y barrio salen de ahí (no de Nominatim).
+        if datos.get("codigo_catastral") or datos.get("nupre"):
+            try:
+                from catastro_predio import enriquecer_desde_ctl
+                _r = enriquecer_desde_ctl(datos["codigo_catastral"], datos["nupre"])
+                if _r.get("disponible"):
+                    if _r.get("direccion_oficial"):
+                        datos["direccion"] = _r["direccion_oficial"]
+                    if _r.get("lat") is not None and _r.get("lon") is not None:
+                        datos["lat"] = _r["lat"]
+                        datos["lon"] = _r["lon"]
+                        datos["fuente_geocod"] = "catastro_predio_codigo"
+                    _ent = _r.get("entorno") or {}
+                    if _ent.get("barrio"):
+                        datos["barrio"] = _ent["barrio"]
+                    _p = _r.get("predio") or {}
+                    datos["destino_economico"] = _p.get("destino_economico")
+                    datos["condicion_juridica"] = (_r.get("condicion") or {}).get("condicion_juridica")
+                    _c = _r.get("construccion") or {}
+                    datos["tipo_construccion"] = _c.get("tipo_construccion")
+                    datos["pisos_construccion"] = _c.get("total_pisos")
+                    datos["area_catastral"] = _p.get("area_catastral_terreno")
+                    datos["estrato_catastral"] = (_ent or {}).get("estrato")
+            except Exception as e:
+                print(f"[EXTRAER-DATOS][WARN] enriquecimiento por código falló: {e}")
+
         # 3. Extraer datos geoespaciales desde el CTL (direccion, barrio, lat, lon)
-        geo_ctl = geocodificar_desde_ctl(texto)
-        if geo_ctl.get("barrio") and not datos["barrio"]:
-            datos["barrio"] = geo_ctl["barrio"]
-        if geo_ctl.get("direccion") and not datos["direccion"]:
-            datos["direccion"] = geo_ctl["direccion"]
-        # Siempre guardamos lat/lon (incluso si son centroide fallback)
-        datos["lat"] = geo_ctl["lat"]
-        datos["lon"] = geo_ctl["lon"]
-        datos["fuente_geocod"] = geo_ctl["fuente_geocod"]
+        # Solo como complemento si el predio por código no se resolvió.
+        if not datos.get("direccion") or not datos.get("lat"):
+            geo_ctl = geocodificar_desde_ctl(texto)
+            if not datos.get("barrio") and geo_ctl.get("barrio"):
+                datos["barrio"] = geo_ctl["barrio"]
+            if not datos.get("direccion") and geo_ctl.get("direccion"):
+                datos["direccion"] = geo_ctl["direccion"]
+            if not datos.get("lat") or not datos.get("lon"):
+                datos["lat"] = geo_ctl["lat"]
+                datos["lon"] = geo_ctl["lon"]
+                datos["fuente_geocod"] = geo_ctl["fuente_geocod"]
 
         # 4. Extraer Dirección (complemento si geocoder no la encontró)
         if not datos["direccion"]:
@@ -318,11 +361,11 @@ def resolver_matricula_por_direccion(direccion: str) -> tuple:
     Retorna: (folio_matricula, barrio, estrato)
     """
     if not direccion or direccion.strip().lower() == "pendiente":
-        return "Pendiente", "Miramar", 4
+        return "Pendiente", "", 4
         
     normalized = normalize_address_colombia(direccion)
     
-    # 1. Caso Napoli (Miramar)
+    # 1. Caso Napoli (Miramar) — activo de demostración explícito
     if ("43" in normalized and "100" in normalized) or "NAPOLI" in normalized:
         return "040-646406", "Miramar", 4
         
@@ -331,12 +374,10 @@ def resolver_matricula_por_direccion(direccion: str) -> tuple:
         return "040-314248", "El Recreo", 4
         
     # 3. Fallback para direcciones desconocidas (M-01/F-15):
-    # NO se fabrican folios simulados con md5 (parecerían matrículas reales en un
-    # dictamen pericial). Se devuelve 'Pendiente' y el barrio inferido por texto.
-    barrio = "Miramar"
-    if "recreo" in normalized.lower() or "el recreo" in normalized.lower():
-        barrio = "El Recreo"
-    return "Pendiente", barrio, 4
+    # NO se fabrican folios simulados ni se afirma un barrio de demostración:
+    # 'Miramar' pertenece al caso demo Napoli y no puede contaminar un predio
+    # real. El barrio real se resuelve al procesar el CTL (código catastral).
+    return "Pendiente", "", 4
 
 @app.get("/api/resolver-matricula")
 def resolve_matricula_endpoint(direccion: str, auth: bool = Depends(require_auth)):
@@ -356,8 +397,9 @@ def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks
     if not folio and not direccion:
         raise HTTPException(status_code=400, detail="Debe ingresar la matrícula inmobiliaria o la dirección del predio.")
         
-    # Asignar barrio y estrato iniciales
-    barrio = "Miramar"
+    # Asignar barrio y estrato iniciales. El barrio de demostración ("Miramar")
+    # NUNCA es el valor por defecto: se resuelve del CTL/catastro o queda pendiente.
+    barrio = ""
     estrato = 4
     
     # Si no se provee folio pero se provee dirección, intentar resolverlo automáticamente
@@ -672,6 +714,19 @@ async def generar_dictamen_stateless(
             }
         job_id = str(uuid.uuid4())
         _crear_trabajo(job_id, "pendiente")
+        # Persistir los insumos gráficos del job en la BD (el worker los recupera
+        # por job_id; QStash no transporta PNG grandes en el payload).
+        try:
+            if (sombra_9am and sombra_9am.filename):
+                _validar_archivo_subido(sombra_9am, "sombra_9am")
+            if (sombra_3pm and sombra_3pm.filename):
+                _validar_archivo_subido(sombra_3pm, "sombra_3pm")
+            if (mapa_satelital and mapa_satelital.filename):
+                _validar_archivo_subido(mapa_satelital, "mapa_satelital")
+        except HTTPException:
+            _actualizar_trabajo(job_id, "error", error="insumo gráfico inválido")
+            raise
+        _guardar_adjuntos_job(job_id, sombra_9am, sombra_3pm, mapa_satelital)
         datos = {
             "job_id": job_id,
             "folio_matricula": folio_matricula,
@@ -700,7 +755,8 @@ async def generar_dictamen_stateless(
     temp_run_dir.mkdir(parents=True, exist_ok=True)
 
     # 1. Guardar archivos cargados (solo si no están vacíos) con validación de contenido
-    if certificado and certificado.filename:
+    _ctl_adjuntado = bool(certificado and certificado.filename)
+    if _ctl_adjuntado:
         _validar_archivo_subido(certificado, "certificado")
         cert_path = temp_run_dir / "certificado.pdf"
         _copiar_con_limite(certificado.file, cert_path)
@@ -717,9 +773,14 @@ async def generar_dictamen_stateless(
             barrio = extraidos["barrio"]
 
     if not barrio:
-        barrio = "Miramar"
-        if direccion and "recreo" in direccion.lower():
-            barrio = "El Recreo"
+        # Con CTL adjunto nunca se afirma el barrio de demostración: si el CTL
+        # no permitió resolverlo, compile_pdf lo dejará PENDIENTE.
+        if not _ctl_adjuntado:
+            barrio = "Miramar"
+            if direccion and "recreo" in direccion.lower():
+                barrio = "El Recreo"
+        else:
+            barrio = ""
 
     if area is None or area < 0:
         area = 0.0
@@ -735,13 +796,13 @@ async def generar_dictamen_stateless(
         _validar_archivo_subido(mapa_satelital, "mapa_satelital")
         _copiar_con_limite(mapa_satelital.file, temp_run_dir / "mapa_satelital.png")
 
-    # 2. Calcular valor consolidado
+    # 2. Calcular valor consolidado (referencial; compile_pdf recalcula con Lonja)
     valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
     valor_consolidado = int(round(valor_m2 * area, -4))
 
     # H-08: si se adjuntó certificado, pasar su ruta para que compile_pdf lo analice
     # (evita el hallazgo falso "AUSENCIA DE CTL" cuando el usuario SÍ subió el CTL)
-    _cert_path = str(cert_path) if (certificado and certificado.filename) else None
+    _cert_path = str(cert_path) if _ctl_adjuntado else None
 
     # 3. Construir record para ReportLab
     db_record = {
@@ -757,6 +818,10 @@ async def generar_dictamen_stateless(
         "mapa_cargado": 1 if mapa_satelital else 0,
         "acreedor_real": None,  # Bloque D: campo para discrepancia — se puede pasar via Form en futuras versiones
         "certificado_path": _cert_path,
+        # Datos reales extraídos del CTL (compile_pdf los usa como hint si el
+        # catastro en vivo no responde al momento de compilar)
+        "lat": extraidos.get("lat") if _ctl_adjuntado else None,
+        "lon": extraidos.get("lon") if _ctl_adjuntado else None,
     }
 
     # 4. Compilar PDF
@@ -787,6 +852,77 @@ def _dir_trabajo(run_id: str) -> Path:
     d = Path(base) / f"run_{run_id}"
     d.mkdir(parents=True, exist_ok=True)
     return d
+
+
+def _guardar_adjuntos_job(job_id: str, sombra_9am=None, sombra_3pm=None, mapa_satelital=None):
+    """Persiste los insumos gráficos del job en la BD (BYTEA/BLOB).
+
+    La cola QStash no admite PNG grandes en el payload; en su lugar el worker los
+    recupera por job_id desde trabajos_pdf. Los archivos se leen SOLO si vienen
+    (UploadFile con nombre) y se valida su tipo antes de persistir.
+    """
+    def _bytes_de(upload) -> bytes:
+        if upload is None:
+            return None
+        try:
+            nombre = (upload.filename or "").strip()
+            if not nombre:
+                return None
+            return upload.file.read(MAX_UPLOAD_BYTES)
+        except Exception:
+            return None
+
+    b9 = _bytes_de(sombra_9am)
+    b3 = _bytes_de(sombra_3pm)
+    bm = _bytes_de(mapa_satelital)
+    if not (b9 or b3 or bm):
+        return
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            """
+            UPDATE trabajos_pdf SET
+                sombra_9am = COALESCE(?, sombra_9am),
+                sombra_3pm = COALESCE(?, sombra_3pm),
+                mapa_satelital = COALESCE(?, mapa_satelital)
+            WHERE id = ?
+            """,
+            (b9, b3, bm, job_id),
+        )
+        conn.commit()
+    except Exception as e:
+        print(f"[JOB-ADJUNTOS][WARN] no se pudieron persistir imágenes del job {job_id}: {e}")
+    finally:
+        conn.close()
+
+
+def _leer_adjuntos_job(job_id: str) -> dict:
+    """Recupera los bytes de los insumos gráficos persistidos para el job."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "SELECT sombra_9am, sombra_3pm, mapa_satelital FROM trabajos_pdf WHERE id = ?",
+            (job_id,),
+        )
+        fila = cursor.fetchone()
+    except Exception:
+        fila = None
+    finally:
+        conn.close()
+    if not fila:
+        return {}
+    def _bytes(col):
+        v = fila[col]
+        if v is None:
+            return None
+        return bytes(v) if not isinstance(v, (bytes, bytearray)) else v
+    return {
+        "sombra_9am": _bytes("sombra_9am"),
+        "sombra_3pm": _bytes("sombra_3pm"),
+        "mapa_satelital": _bytes("mapa_satelital"),
+    }
 
 
 def _crear_trabajo(job_id: str, estado: str = "pendiente"):
@@ -906,12 +1042,29 @@ async def worker_generar_pdf(request: Request):
     run_id = str(uuid.uuid4())
     temp_run_dir = _dir_trabajo(run_id)
 
+    # Recuperar los insumos gráficos persistidos para el job (imágenes de ArcGIS
+    # Online/mapa subidas por el usuario): el worker las escribe en temp_run_dir
+    # para que compile_pdf las incruste como figuras reales.
+    adjuntos = _leer_adjuntos_job(job_id)
+    for nombre_img, contenido in (("sombra_9am", adjuntos.get("sombra_9am")),
+                                  ("sombra_3pm", adjuntos.get("sombra_3pm")),
+                                  ("mapa_satelital", adjuntos.get("mapa_satelital"))):
+        if contenido:
+            try:
+                (temp_run_dir / f"{nombre_img}.png").write_bytes(contenido)
+                print(f"[WORKER] adjunto {nombre_img}.png recuperado ({len(contenido)} bytes)")
+            except Exception as e:
+                print(f"[WORKER][WARN] no se pudo escribir adjunto {nombre_img}: {e}")
+
     folio = payload.get("folio_matricula")
     direccion = payload.get("direccion") or "Pendiente"
     area = float(payload.get("area") or 0)
-    barrio = payload.get("barrio") or "Miramar"
+    barrio = payload.get("barrio") or ""
+    _ctl_adjuntado = bool(certificado_bytes)
 
     _cert_path = None
+    _extra_lat = None
+    _extra_lon = None
     if certificado_bytes:
         cert_path = temp_run_dir / "certificado.pdf"
         cert_path.write_bytes(certificado_bytes)
@@ -922,15 +1075,22 @@ async def worker_generar_pdf(request: Request):
                 area = extraidos["area"]
             if (not folio or folio == "Pendiente") and extraidos.get("folio"):
                 folio = extraidos["folio"]
-            if not direccion and extraidos.get("direccion"):
+            if (not direccion or direccion == "Pendiente") and extraidos.get("direccion"):
                 direccion = extraidos["direccion"]
             if not barrio and extraidos.get("barrio"):
                 barrio = extraidos["barrio"]
+            _extra_lat = extraidos.get("lat")
+            _extra_lon = extraidos.get("lon")
         except Exception:
             pass
 
     if not barrio:
-        barrio = "Miramar"
+        # Con CTL nunca se afirma el barrio de demostración (compile_pdf lo deja
+        # PENDIENTE o lo resuelve por código catastral). Sin CTL: caso demo legado.
+        if not _ctl_adjuntado:
+            barrio = "Miramar"
+        else:
+            barrio = ""
     if area is None or area < 0:
         area = 0.0
 
@@ -948,6 +1108,8 @@ async def worker_generar_pdf(request: Request):
         "mapa_cargado": 0,
         "acreedor_real": None,
         "certificado_path": _cert_path,
+        "lat": _extra_lat,
+        "lon": _extra_lon,
     }
     output_pdf = temp_run_dir / f"ARHIAX_Dictamen_{db_record['folio_matricula']}_final.pdf"
     try:

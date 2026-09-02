@@ -144,4 +144,8 @@ def init_postgres(conn) -> None:
             creado TEXT NOT NULL
         )
     """)
+    # Insumos adjuntos del job: imágenes ArcGIS/mapa en BYTEA para que el worker
+    # QStash las recupere por job_id (no viajan en el payload de la cola).
+    for col in ("sombra_9am", "sombra_3pm", "mapa_satelital"):
+        cur.execute(f"ALTER TABLE trabajos_pdf ADD COLUMN IF NOT EXISTS {col} BYTEA")
     conn.commit()

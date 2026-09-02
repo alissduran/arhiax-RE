@@ -34,3 +34,8 @@ api/assets/
 !api/data/*.geojson
 test_geo_resultado.json
 
+# Artefactos de pytest en Windows (permisos denegados al crear .pytest_cache)
+pytest-cache-files-*/
+tmp_*/
+.pytest_cache/
+

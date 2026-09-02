@@ -77,6 +77,14 @@ def init_db():
             creado TEXT NOT NULL
         )
     """)
+    # Insumos adjuntos del job (imágenes de ArcGIS Online / mapa): se persisten en
+    # la BD para que el worker QStash las recupere por job_id (QStash no admite
+    # PNG grandes en el payload). SQLite no tiene ADD COLUMN IF NOT EXISTS.
+    for col in ("sombra_9am", "sombra_3pm", "mapa_satelital"):
+        try:
+            cursor.execute(f"ALTER TABLE trabajos_pdf ADD COLUMN {col} BLOB")
+        except sqlite3.OperationalError:
+            pass
 
     conn.commit()
     conn.close()

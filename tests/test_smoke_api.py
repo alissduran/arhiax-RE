@@ -446,6 +446,58 @@ class TestSmokeApi(unittest.TestCase):
             cl.query_layer_bbox = original
             cl._CACHE.clear()
 
+    def test_adjuntos_job_persisten_y_se_recuperan(self):
+        """Sprint 2 (imágenes 3D): los insumos gráficos del job se persisten en
+        trabajos_pdf (BYTEA/BLOB) y el worker los recupera por job_id.
+
+        Regresión: en el flujo async la cola QStash no puede transportar PNG
+        grandes; antes las imágenes de ArcGIS Online se descartaban y el PDF caía
+        a la simulación geométrica."""
+        import os
+        import importlib
+        import database as db_mod
+        tmp = ROOT_DIR / "tmp_db_job" / "test_job.db"
+        tmp.parent.mkdir(parents=True, exist_ok=True)
+        old = os.environ.get("ARHIAX_DB_PATH")
+        try:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+            os.environ["ARHIAX_DB_PATH"] = str(tmp)
+            importlib.reload(db_mod)
+            db_mod.init_db()
+            import index as idx_mod
+            importlib.reload(idx_mod)
+
+            class FakeUpload:
+                def __init__(self, data, nombre):
+                    self._data = data
+                    self.filename = nombre
+                @property
+                def file(self):
+                    class _F:
+                        def __init__(self, d):
+                            self._d = d
+                        def read(self, n):
+                            return self._d
+                    return _F(self._data)
+
+            idx_mod._crear_trabajo("job-test-img", "pendiente")
+            png = bytes(range(256)) * 8
+            idx_mod._guardar_adjuntos_job("job-test-img",
+                                          sombra_9am=FakeUpload(png, "sombra_9am.png"),
+                                          mapa_satelital=FakeUpload(b"mapa-png", "mapa_satelital.png"))
+            r = idx_mod._leer_adjuntos_job("job-test-img")
+            self.assertEqual(r.get("sombra_9am"), png)
+            self.assertEqual(r.get("mapa_satelital"), b"mapa-png")
+            # Job inexistente: dict vacío (el worker degrada sin romper)
+            self.assertEqual(idx_mod._leer_adjuntos_job("no-existe"), {})
+        finally:
+            if old is None:
+                os.environ.pop("ARHIAX_DB_PATH", None)
+            else:
+                os.environ["ARHIAX_DB_PATH"] = old
+            importlib.reload(db_mod)
+
 
 if __name__ == "__main__":
     unittest.main()

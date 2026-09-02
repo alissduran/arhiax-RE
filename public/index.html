@@ -633,6 +633,60 @@
     // Almacenamiento local de los archivos seleccionados en memoria para subirlos juntos stateless
     let selectedFiles = {};
 
+    // ── Persistencia de insumos en IndexedDB ─────────────────────────────────
+    // Los PNG de ArcGIS Online viven SOLO en memoria del navegador y se pierden
+    // al recargar la página (aunque la UI muestre "Cargado" por el flag en
+    // localStorage). Aquí se guardan por caso para restaurarlos al reabrir.
+    let _idbDb = null;
+    function _idbOpen() {
+      return new Promise((resolve, reject) => {
+        if (_idbDb) return resolve(_idbDb);
+        const req = indexedDB.open('arhiax_insumos', 1);
+        req.onupgradeneeded = (ev) => {
+          const db = ev.target.result;
+          if (!db.objectStoreNames.contains('archivos')) {
+            db.createObjectStore('archivos'); // key: "case_<id>_<tipo>"
+          }
+        };
+        req.onsuccess = () => { _idbDb = req.result; resolve(_idbDb); };
+        req.onerror = () => reject(req.error);
+      });
+    }
+    async function idbGuardar(key, file) {
+      try {
+        const db = await _idbOpen();
+        return new Promise((resolve) => {
+          const tx = db.transaction('archivos', 'readwrite');
+          tx.objectStore('archivos').put(file, key);
+          tx.oncomplete = resolve;
+          tx.onerror = resolve;
+        });
+      } catch (e) { console.warn('IndexedDB no disponible:', e); }
+    }
+    async function idbLeer(key) {
+      try {
+        const db = await _idbOpen();
+        return new Promise((resolve) => {
+          const tx = db.transaction('archivos', 'readonly');
+          const req = tx.objectStore('archivos').get(key);
+          req.onsuccess = () => resolve(req.result || null);
+          req.onerror = () => resolve(null);
+        });
+      } catch (e) { return null; }
+    }
+    async function idbBorrar(key) {
+      try {
+        const db = await _idbOpen();
+        return new Promise((resolve) => {
+          const tx = db.transaction('archivos', 'readwrite');
+          tx.objectStore('archivos').delete(key);
+          tx.oncomplete = resolve;
+          tx.onerror = resolve;
+        });
+      } catch (e) { /* noop */ }
+    }
+    function _keyInsumo(caseId, imgType) { return `case_${caseId}_${imgType}`; }
+
     // Helper de API: inyecta el token de sesión y cierra sesión ante 401 (auth real server-side)
     async function apiFetch(path, options = {}) {
       const headers = new Headers(options.headers || {});
@@ -893,6 +947,45 @@
       updateUploadCard('sombra-9am', c.sombra_9am_cargada, "PNG");
       updateUploadCard('sombra-3pm', c.sombra_3pm_cargada, "PNG");
       updateUploadCard('mapa', c.mapa_cargado, "PNG");
+      
+      // Restaurar desde IndexedDB los blobs persistidos para este caso (tras
+      // recargas de página) para que el PDF incluya las imágenes de ArcGIS Online.
+      restaurarInsumosPersistidos(id);
+    }
+
+    // Restaura los archivos guardados en IndexedDB para un caso y ajusta las
+    // tarjetas a la realidad: si el flag dice "Cargado" pero no hay blob
+    // persistido (caso previo al fix), la tarjeta pasa a "Re-cargar" para que el
+    // usuario no crea que sus imágenes llegarán al PDF.
+    async function restaurarInsumosPersistidos(caseId) {
+      const tipos = [
+        ['certificado', 'certificado', 'PDF'],
+        ['sombra_9am', 'sombra-9am', 'PNG'],
+        ['sombra_3pm', 'sombra-3pm', 'PNG'],
+        ['mapa_satelital', 'mapa', 'PNG'],
+      ];
+      for (const [tipo, prefix, fmt] of tipos) {
+        const blob = await idbLeer(_keyInsumo(caseId, tipo));
+        if (blob) {
+          const ext = tipo === 'certificado' ? 'pdf' : 'png';
+          selectedFiles[tipo] = new File([blob], `${tipo}.${ext}`, { type: blob.type || 'application/octet-stream' });
+        } else {
+          // Si la BD dice cargado pero no hay blob → el archivo se perdió
+          const c = dictamenes.find(item => item.id === caseId);
+          if (c) {
+            const cargado = tipo === 'certificado' ? c.certificado_cargado
+              : tipo === 'sombra_9am' ? c.sombra_9am_cargada
+              : tipo === 'sombra_3pm' ? c.sombra_3pm_cargada
+              : c.mapa_cargado;
+            if (cargado) {
+              const card = document.getElementById(`card-${prefix}`);
+              const span = document.getElementById(`span-${prefix}`);
+              if (card) card.classList.remove('loaded');
+              if (span) span.textContent = `Re-cargar (${fmt}) — se perdió al recargar`;
+            }
+          }
+        }
+      }
     }
 
     function updateUploadCard(prefix, loaded, format) {
@@ -917,6 +1010,8 @@
 
       // Guardar el archivo en memoria temporal del navegador
       selectedFiles[imgType] = file;
+      // Y persistirlo en IndexedDB para que sobreviva a recargas de página
+      if (selectedCaseId) idbGuardar(_keyInsumo(selectedCaseId, imgType), file);
 
       // Obtener caso y marcarlo como cargado localmente
       const c = dictamenes.find(item => item.id === selectedCaseId);
@@ -1032,6 +1127,11 @@
           dictamenes = dictamenes.filter(item => item.id !== id);
           localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
           
+          // Limpiar insumos persistidos de este caso en IndexedDB
+          for (const t of ['certificado', 'sombra_9am', 'sombra_3pm', 'mapa_satelital']) {
+            idbBorrar(_keyInsumo(id, t));
+          }
+          
           if (selectedCaseId === id) {
             selectedCaseId = null;
             document.getElementById('detail-panel').style.display = 'none';
@@ -1092,6 +1192,20 @@
     async function descargarPDFDictamen() {
       const c = dictamenes.find(item => item.id === selectedCaseId);
       if (!c) return;
+
+      // Restaurar insumos persistidos en IndexedDB: tras una recarga de página los
+      // archivos de `selectedFiles` (memoria) se pierden aunque la UI diga
+      // "Cargado". Sin esta restauración el PDF se generaría sin las imágenes de
+      // ArcGIS Online y caería a la simulación geométrica automática.
+      for (const t of ['certificado', 'sombra_9am', 'sombra_3pm', 'mapa_satelital']) {
+        if (!selectedFiles[t]) {
+          const blob = await idbLeer(_keyInsumo(c.id, t));
+          if (blob) {
+            const ext = t === 'certificado' ? 'pdf' : 'png';
+            selectedFiles[t] = new File([blob], `${t}.${ext}`, { type: blob.type || 'application/octet-stream' });
+          }
+        }
+      }
 
       const estadoDiv = document.getElementById('generar-estado');
       const filename = `ARHIAX_Dictamen_${c.folio_matricula || 'caso'}.pdf`;

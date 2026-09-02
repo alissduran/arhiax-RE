@@ -120,18 +120,115 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     path_certificado = db_record.get('certificado_path')
     analysis = analizar_certificado(path_certificado)
     
+    # ── Sprint 2 (exactitud): resolver el predio REAL en el catastro cuando el
+    # CTL trae código catastral o NUPRE. Nunca rompe: si el servicio no responde
+    # o el predio no aparece, queda None y se degrada a los demás orígenes.
+    predio_real = None
+    if analysis.get("codigo_catastral") or analysis.get("nupre"):
+        try:
+            from catastro_predio import enriquecer_desde_ctl
+            _r = enriquecer_desde_ctl(analysis.get("codigo_catastral"),
+                                      analysis.get("nupre"))
+            if _r.get("disponible"):
+                predio_real = _r
+        except Exception as e:
+            print(f"[PDF][CATASTRO-PREDIO] enriquecimiento no disponible: {e}")
+            predio_real = None
+
     folio = analysis["folio"] if analysis["folio"] != "040-XXXXXX" else (db_record.get('folio_matricula', '040-XXXXXX') or '040-XXXXXX')
-    direccion = normalize_address_colombia(analysis.get("direccion") or db_record.get('direccion', '') or '')
-    if analysis.get("barrio") and analysis["barrio"] != "Desconocido":
-        barrio = analysis["barrio"]
+    # Dirección: 1) oficial catastral resuelta por código, 2) del CTL analizado,
+    # 3) del registro. Nunca se inventa.
+    if predio_real and predio_real.get("direccion_oficial"):
+        direccion = normalize_address_colombia(predio_real["direccion_oficial"])
+    elif analysis.get("direccion") and analysis["direccion"].lower() != "pendiente de verificacion":
+        direccion = normalize_address_colombia(analysis["direccion"])
     else:
-        barrio = db_record.get('barrio', '') or ''
-        
+        direccion = normalize_address_colombia(db_record.get('direccion', '') or '')
+    if not direccion or direccion.lower() in ("pendiente", "pendiente de verificacion", "n/d"):
+        direccion = "PENDIENTE DE VERIFICACION"
+
+    # Barrio: 1) capa oficial POT (Barrios de la Alcaldía), 2) texto del CTL,
+    # 3) registro. Se elimina el barrio de demostración como valor por defecto.
+    if predio_real:
+        _ent = predio_real.get("entorno") or {}
+        if _ent.get("barrio"):
+            barrio = _ent["barrio"]
+        else:
+            barrio = ""
+    else:
+        if analysis.get("barrio") and analysis["barrio"] != "Desconocido":
+            barrio = analysis["barrio"]
+        else:
+            barrio = db_record.get('barrio', '') or ''
+    if not barrio or barrio.lower() in ("pendiente", "miramar", "el recreo", "recreo", "desconocido"):
+        # Si el CTL se analizó (tiene código catastral) pero no aportó barrio,
+        # NO se afirma el demo: queda pendiente de verificación.
+        if path_certificado and (analysis.get("codigo_catastral") or analysis.get("nupre")):
+            barrio = ""
+        elif barrio and barrio.lower() in ("miramar", "el recreo", "recreo"):
+            barrio = barrio  # caso demo legado explícito (tests)
+        else:
+            barrio = ""
+
     area = float(db_record.get('area', 0) or 0)
     is_miramar = 'miramar' in barrio.lower()
     
+    # Datos reales del predio (destino/condición/construcción/NUPRE) para el PDF
+    _predio_destino = None
+    _predio_condicion = None
+    _predio_nupre = analysis.get("nupre")
+    _predio_codigo = analysis.get("codigo_catastral")
+    _predio_tipo_construccion = None
+    _predio_pisos = None
+    _predio_estrato_catastral = None
+    _predio_area_catastral = None
+    _ent2 = {}
+    _predio_tratamiento = None
+    if predio_real:
+        _p = predio_real.get("predio") or {}
+        _predio_destino = _p.get("destino_economico")
+        _predio_condicion = (predio_real.get("condicion") or {}).get("condicion_juridica")
+        _predio_nupre = _predio_nupre or _p.get("nupre")
+        _predio_codigo = _predio_codigo or _p.get("numero_predial_nacional")
+        _predio_area_catastral = _p.get("area_catastral_terreno")
+        _const = predio_real.get("construccion") or {}
+        _predio_tipo_construccion = _const.get("tipo_construccion")
+        _predio_pisos = _const.get("total_pisos")
+        _ent2 = predio_real.get("entorno") or {}
+        _predio_estrato_catastral = _ent2.get("estrato")
+        _predio_tratamiento = _ent2.get("tratamiento")
+    else:
+        _predio_tratamiento = None
+
+    # Tipología derivada del destino económico catastral + CTL (descripción).
+    # Si el CTL dice BODEGA o el destino es Industrial/Comercial → nunca PH.
+    _tipologia_texto = None
+    _desc_ctl = (analysis.get("descripcion_ctl") or "").upper()
+    if predio_real and _predio_destino:
+        _dest_up = str(_predio_destino).upper()
+        if "INDUSTRIAL" in _dest_up or "BODEGA" in _desc_ctl:
+            _tipologia_texto = "Bodega -- Uso Industrial (No Propiedad Horizontal)"
+        elif "COMERCIAL" in _dest_up or "OFICINA" in _dest_up:
+            _tipologia_texto = f"Local/Uso Comercial -- {_predio_destino}"
+        else:
+            _tipologia_texto = f"Uso {_predio_destino} (Según catastro)"
+    elif "BODEGA" in _desc_ctl:
+        _tipologia_texto = "Bodega -- Uso Industrial (No Propiedad Horizontal)"
+    if _tipologia_texto is None:
+        # Solo el caso demo explícito (sin CTL, barrio Miramar legado) conserva la
+        # tipología de demostración; un predio real SIN datos catastrales queda
+        # PENDIENTE (nunca se asume PH/Habitacional).
+        if is_miramar and not path_certificado:
+            _tipologia_texto = "Apartamento -- Propiedad Horizontal (NO VIS)"
+        else:
+            _tipologia_texto = "PENDIENTE DE VERIFICACION (Requiere consulta catastral)"
+
     # Val data con metodologia Lonja BAQ (estrato e integracion YAML)
-    estrato = db_record.get('estrato', 4)
+    estrato = _predio_estrato_catastral or db_record.get('estrato', 4)
+    try:
+        estrato = int(str(estrato).replace("No_Aplica", "4").split("_")[0])
+    except Exception:
+        estrato = 4
     val_data = get_valuation(area, barrio, estrato)
     res_avaluo = val_data
     
@@ -162,12 +259,22 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     
     BARRIO_COORDS = {'miramar': (10.9870, -74.8115), 'el recreo': (10.9838, -74.7998), 'recreo': (10.9838, -74.7998)}
 
-    # Prioridad 1: coordenadas ya geocodificadas y guardadas en la BD
-    lat = db_record.get('lat') or db_record.get('LAT')
-    lon = db_record.get('lon') or db_record.get('LON')
+    # Prioridad 1 (exactitud): coordenadas del predio REAL resueltas por código
+    # catastral/NUPRE del CTL (capa 105 Dirección oficial). Si el CTL trae código,
+    # estas coordenadas son la verdad, no el barrio de demostración.
+    lat = lon = None
+    if predio_real and predio_real.get("lat") is not None and predio_real.get("lon") is not None:
+        lat = predio_real["lat"]
+        lon = predio_real["lon"]
+        print(f"[PDF][CATASTRO-PREDIO] coords reales del predio: ({lat:.5f}, {lon:.5f})")
+
+    # Prioridad 2: coordenadas ya geocodificadas y guardadas en la BD
+    if lat is None or lon is None:
+        lat = db_record.get('lat') or db_record.get('LAT')
+        lon = db_record.get('lon') or db_record.get('LON')
 
     if not lat or not lon:
-        # Prioridad 2: geocodificar la direccion real del predio
+        # Prioridad 3: geocodificar la direccion real del predio
         try:
             from geocoder import geocodificar_direccion
             direccion_raw = db_record.get('direccion', '') or ''
@@ -176,7 +283,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             else:
                 raise ValueError("sin direccion valida")
         except Exception:
-            # Prioridad 3: fallback por barrio (solo para retrocompatibilidad)
+            # Prioridad 4: fallback por barrio (solo retrocompatibilidad con casos demo)
             coords = BARRIO_COORDS.get(barrio.lower().strip(), (10.9685, -74.7813))
             lat, lon = coords
 
@@ -242,13 +349,25 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
         bloqueos = []
         for h in hallazgos_list:
+            # Un hallazgo INFORMATIVO (tradición limpia, etc.) NUNCA bloquea:
+            # su texto menciona gravámenes en negación ("No se detectaron...").
+            if h[0] == "INFORMATIVO":
+                continue
             titulo = h[3].lower()
             descripcion = h[5].lower()
             implicacion = h[6].lower()
-            # Si tiene un bloqueo y no esta cancelado/resuelto
+            # Negaciones explícitas: el hallazgo describe la AUSENCIA del bloqueo
+            texto_completo = " | ".join([titulo, descripcion, implicacion])
+            if any(neg in texto_completo for neg in ("no se detectaron", "sin gravamenes",
+                                                     "sin gravámenes", "libre de gravamenes",
+                                                     "libre de gravámenes", "sin afectacion",
+                                                     "sin hipotecas", "no registra gravamenes")):
+                continue
+            # Solo se consideran bloqueos VIGENTES y no cancelados/resueltos
             is_vigente = "vigente" in titulo or "vigente" in descripcion or "vigente" in implicacion
             is_bloqueo = any(term in titulo or term in descripcion for term in BLOQUEOS_FIDUCIARIOS)
-            if is_vigente and is_bloqueo:
+            is_resuelto = any(w in titulo for w in ("cancelada", "levantada", "extinguida", "resuelto"))
+            if is_vigente and is_bloqueo and not is_resuelto:
                 bloqueos.append(h[3])
         if bloqueos:
             return {
@@ -403,11 +522,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(dt([
         ("Matricula Inmobiliaria", f"{folio} (Circulo Registral 040 Barranquilla)"),
         ("Direccion oficial", direccion),
-        ("Tipologia", "Apartamento -- Propiedad Horizontal" if is_miramar else "Residencial / Comercial"),
+        # Sprint 2 (exactitud): la tipología se deriva del CTL/destino catastral real.
+        # El caso de demostración (Napoli/Miramar PH) ya no puede contaminar predios
+        # reales: si el CTL trae código catastral, la tipología es la real o PENDIENTE.
+        ("Tipologia", _tipologia_texto),
         ("Area privada construida", f"{area:.2f} m2" if area else "Sin soporte CTL"),
-        ("Coeficiente de copropiedad", "0,2037% (PH)" if is_miramar else "N/D"),
+        # Coeficiente de copropiedad: solo aplica si el catastro confirma PH
+        ("Coeficiente de copropiedad",
+         "N/D (No Propiedad Horizontal)" if (_predio_condicion and "NO PROPIEDAD HORIZONTAL" in str(_predio_condicion).upper())
+         else ("0,2037% (PH)" if is_miramar else "N/D (Sujeto a regimen registral)")),
         ("Apertura del folio", apertura_val),
-        ("NUPRE", "080010102200400020043000000000 (Catastro BAQ)" if is_miramar else "Pendiente consulta catastral"),
+        ("NUPRE", f"{_predio_nupre} (Catastro BAQ)" if _predio_nupre
+         else ("080010102200400020043000000000 (Catastro BAQ)" if is_miramar else "Pendiente consulta catastral")),
+        ("Codigo catastral", f"{_predio_codigo} (GC-BAQ)" if _predio_codigo else "Pendiente consulta catastral"),
         ("Titulares vigentes", titulares_val),
         ("Modalidad de adquisicion", "Compraventa registrada en CTL" if len(analysis.get("anotaciones", [])) > 0 else "Sujeto a verificacion SNR"),
         ("Valor Comercial Consolidado", f"{fmt_cop(res_avaluo['consolidado'])} COP (Banda: {fmt_cop(res_avaluo['banda_baja'])} -- {fmt_cop(res_avaluo['banda_alta'])})"),
@@ -422,8 +549,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 01B LOCALIZACION ────────────────────────────────────────
     story.append(sec("01B - Localizacion Geografica del Inmueble"))
     story.append(hr())
+    _sector_desc = (barrio if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL"
+                    else "sector por verificar en campo")
     story.append(body(
-        f"Vista satelital del inmueble en el sector <b>{barrio}</b>, "
+        f"Vista satelital del inmueble en el {_sector_desc}, "
         f"Barranquilla. Coordenadas de ubicacion: <b>{lat:.5f} N, {lon:.5f} W</b>. "
         "<b>[FUENTE: GMAPS-SAT]</b>"
     ))
@@ -448,8 +577,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 6))
     story.append(dt([
         ("Coordenadas WGS84", f"Lat: {lat:.5f} N | Lon: {lon:.5f} W"),
-        ("Sector urbano", f"Barranquilla / {barrio}"),
-        ("Barrio catastral", barrio),
+        ("Sector urbano", f"Barranquilla / {barrio}" if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else "Barranquilla (sector por verificar)"),
+        ("Barrio catastral", barrio if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else "PENDIENTE DE VERIFICACION"),
+        ("Localidad", _ent2.get("localidad") if (_ent2 and _ent2.get("localidad")) else "N/D"),
         ("Infraestructura vial", "Vias de acceso inmediato geocodificadas"),
         ("Equipamientos cercanos", "Equipamiento urbano detectado en radio de 2.0 km"),
     ]))
@@ -657,13 +787,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(body(f"El motor ARHIAX identifico <b>{len(hallazgos)} hallazgos</b> sobre este activo."))
     story.append(Spacer(1, 4))
     
-    # Contar dinámicamente
+    # Contar dinámicamente por severidad real de los hallazgos (etiqueta genérica:
+    # un ALTO puede ser registral, geoespacial o de otro origen; no se afirma
+    # "Gravamenes" si el hallazgo ALTO es de amenaza/riesgo).
     n_alto = sum(1 for h in hallazgos if h[0] == "ALTO")
     n_medio = sum(1 for h in hallazgos if h[0] == "MEDIO")
     n_info = sum(1 for h in hallazgos if h[0] == "INFORMATIVO")
     story.append(badge_table([
-        ("ALTO -- Gravamenes", str(n_alto), colors.HexColor("#FBE9E9"), C_ROJO),
-        ("MEDIO -- Urbanistico/Riesgo/Limitaciones", str(n_medio), C_ALERTA_BG, C_NARANJA),
+        ("ALTO", str(n_alto), colors.HexColor("#FBE9E9"), C_ROJO),
+        ("MEDIO", str(n_medio), C_ALERTA_BG, C_NARANJA),
         ("INFORMATIVO", str(n_info), C_OK_BG, C_VERDE),
     ], s))
     story.append(Spacer(1, 8))
@@ -736,7 +868,17 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "<b>[FUENTE: CAPAS POT BARRANQUILLA - MODULO ARHIAX RE]</b>"))
     story.append(Spacer(1, 4))
     story.append(sub("4.1 Datos Catastrales"))
-    story.append(dt(get_catastral_dt(barrio, area)))
+    story.append(dt(get_catastral_dt(
+        barrio, area,
+        destino_economico=_predio_destino,
+        nupre=_predio_nupre,
+        codigo_catastral=_predio_codigo,
+        condicion=_predio_condicion,
+        area_catastral=_predio_area_catastral,
+        tipo_construccion=_predio_tipo_construccion,
+        pisos=_predio_pisos,
+        estrato=_predio_estrato_catastral,
+    )))
     story.append(Spacer(1, 4))
 
     # ── 4.1B Verificación catastral EN VIVO (Sprint 3, I-6) ──
@@ -748,7 +890,20 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     except Exception as e:
         _cat_live = {"disponible": False, "error": f"motor no disponible: {e}"}
     story.append(sub("4.1B Verificación Catastral en Vivo"))
-    if _cat_live.get("disponible"):
+    if predio_real and predio_real.get("disponible"):
+        # Si el CTL trajo código catastral/NUPRE y el predio se resolvió, esta es la
+        # verificación REAL del predio (no una coincidencia por bbox).
+        _p4 = predio_real.get("predio") or {}
+        story.append(dt([
+            ("Estado", "CONSULTADA -- Predio resuelto por codigo catastral/NUPRE del CTL"),
+            ("Codigo catastral", _p4.get("numero_predial_nacional") or "N/D"),
+            ("NUPRE", _predio_nupre or _p4.get("nupre") or "N/D"),
+            ("Destino economico", _predio_destino or "N/D"),
+            ("Condicion juridica", _predio_condicion or "N/D"),
+            ("Area terreno (catastro)", f"{_predio_area_catastral:.2f} m2" if _predio_area_catastral else "N/D"),
+            ("Fuente en vivo", "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)"),
+        ]))
+    elif _cat_live.get("disponible"):
         _fuente_url = _cat_live.get("fuente", {}).get("url", "N/D")
         story.append(dt([
             ("Estado", "CONSULTADA (servicio abierto Alcaldía de Barranquilla)"),
@@ -765,6 +920,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "empaquetadas y debe verificarse antes de usarse en una decisión."))
     story.append(Spacer(1, 4))
     story.append(sub("4.2 POT -- Cruce de Capas de Ordenamiento [REAL]"))
+    # Tratamiento urbanístico REAL desde la capa de planeación de la Alcaldía
+    # (si el predio se resolvió por código catastral). La fila 4 y el texto
+    # resumen reflejan el tratamiento consultado, no uno genérico de demo.
+    _trat_par = (str(_predio_tratamiento or "") if _predio_tratamiento else "")
+    _trat_txt = "Consolidacion Nivel 1B (alt 5), Nivel 2 (alt 11), Especial"
+    if _trat_par:
+        _trat_txt = f"{_trat_par} ({_ent2.get('tipo_tratamiento') or 'POT'})"
+        if _ent2.get("altura_maxima") and str(_ent2.get("altura_maxima")).lower() not in ("plan parcial",):
+            _trat_txt += f" -- Altura max: {_ent2.get('altura_maxima')}"
     # POT audit table
     pot_audit = [
         [Paragraph("<b>Layer</b>",s["header"]),Paragraph("<b>Capa</b>",s["header"]),
@@ -776,7 +940,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         [Paragraph("3",s["value"]),Paragraph("Planes Parciales",s["body"]),
          Paragraph("<b>0</b>",s["center"]),Paragraph("Sin afectacion por Plan Parcial",s["alert_verde"])],
         [Paragraph("4",s["value"]),Paragraph("Tratamientos Urbanisticos",s["body"]),
-         Paragraph("<b>5</b>",s["center"]),Paragraph("Consolidacion Nivel 1B (alt 5), Nivel 2 (alt 11), Especial",s["body"])],
+         Paragraph("<b>1</b>" if _trat_par else "<b>5</b>",s["center"]),
+         Paragraph(_trat_txt, s["body"])],
         [Paragraph("5",s["value"]),Paragraph("Planes de Reordenamiento",s["body"]),
          Paragraph("<b>0</b>",s["center"]),Paragraph("Sin afectacion por reordenamiento",s["alert_verde"])],
     ]
@@ -796,6 +961,11 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         story.append(alert_orange(
             "<b>HALLAZGO MEDIO:</b> El predio intersecta capas de amenaza/riesgo del POT de Barranquilla. "
             "Verificar el cumplimiento de la norma urbanistica del poligono especifico y la afectacion por riesgo."))
+    elif _trat_par:
+        story.append(alert_orange(
+            f"<b>HALLAZGO MEDIO:</b> El tratamiento urbanistico oficial del poligono es "
+            f"<b>{_trat_par}</b> ({_ent2.get('tipo_tratamiento') or 'POT'}). "
+            "Verificar el cumplimiento de la norma urbanistica del poligono especifico del predio."))
     else:
         story.append(alert_orange(
             "<b>HALLAZGO MEDIO:</b> El tratamiento urbanistico del sector presenta poligonos de Consolidacion "

@@ -304,13 +304,35 @@ def get_alcance_dt(barrio):
         ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013)"),
     ]
 
-def get_catastral_dt(barrio, area):
-    barrio_clean = barrio.strip().title() if barrio else "Barranquilla"
+def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
+                     codigo_catastral=None, condicion=None, area_catastral=None,
+                     tipo_construccion=None, pisos=None, estrato=None):
+    barrio_clean = barrio.strip().title() if barrio else "Pendiente de verificacion"
+    # Sprint 2 (exactitud): el destino económico y el NUPRE salen del catastro en
+    # vivo cuando el CTL trae código/NUPRE; nunca se asume HABITACIONAL por defecto.
+    if destino_economico:
+        destino_txt = f"{destino_economico} (Capa Predio GC-BAQ, en vivo)"
+    else:
+        destino_txt = "PENDIENTE DE VERIFICACION (Requiere consulta catastral del predio)"
+    condicion_txt = condicion if condicion else "Pendiente de verificacion"
+    if tipo_construccion and pisos:
+        constr_txt = f"{tipo_construccion} -- {pisos} piso(s)"
+    elif tipo_construccion:
+        constr_txt = tipo_construccion
+    else:
+        constr_txt = "Pendiente de verificacion"
+    area_reg_txt = f"{area:.2f} m2" if area else "Pendiente de verificacion"
+    if area_catastral and area_catastral != area:
+        area_reg_txt = f"{area:.2f} m2 (registral) / {area_catastral:.2f} m2 (catastral)" if area else f"{area_catastral:.2f} m2 (catastral)"
     return [
-        ("Area Registrada", f"{area:.2f} m2" if area else "Sujeto a verificación"), 
-        ("Barrio catastral", barrio_clean), 
-        ("NUPRE", "Sujeto a consulta directa GC-BAQ"),
-        ("Destino economico catastral", "HABITACIONAL / RESIDENCIAL (Norma urbana)")
+        ("Area Registrada", area_reg_txt),
+        ("Barrio catastral", barrio_clean),
+        ("NUPRE", nupre if nupre else "Pendiente de consulta GC-BAQ"),
+        ("Codigo catastral", codigo_catastral if codigo_catastral else "Pendiente de consulta GC-BAQ"),
+        ("Destino economico catastral", destino_txt),
+        ("Condicion juridica (GC-BAQ)", condicion_txt),
+        ("Tipo de construccion", constr_txt),
+        ("Estrato", estrato if estrato not in (None, "", "No_Aplica") else "No aplica (uso no residencial)"),
     ]
 
 def get_pot_summary_dt(barrio):
