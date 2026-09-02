@@ -107,11 +107,21 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 
 | Variable | Descripción | Estado |
 |---|---|---|
-| `ARHIAX_ACCESS_PASSWORD` | Contraseña del portal | ✅ **CONFIGURADA** (production, encriptada) |
-| `ARHIAX_AUTH_SECRET` | Secreto para firmar tokens | ✅ **CONFIGURADA** (production, encriptada) |
+| `ARHIAX_ACCESS_PASSWORD` | Contraseña global del portal (= cuenta admin si no hay ADMIN) | ✅ **CONFIGURADA** |
+| `ARHIAX_AUTH_SECRET` | Secreto para firmar tokens | ✅ **CONFIGURADA** |
+| `ARHIAX_ADMIN_USER` / `ARHIAX_ADMIN_PASSWORD` | Cuenta admin del panel (rol `admin`) | ✅ **CONFIGURADA** (`admin`) |
+| `ARHIAX_OPERADOR_USER` / `ARHIAX_OPERADOR_PASSWORD` | Cuenta operador (rol `operador`, opcional) | ✅ **CONFIGURADA** (`operador`) |
 | `ARHIAX_TOKEN_TTL_HOURS` | Vigencia del token (default 8) | Opcional |
+| `ARHIAX_DB_PATH` | DSN de la BD: ruta SQLite o URL **Neon** `postgresql://...` | ⏳ **PENDIENTE** (URL de Neon) |
+| `QSTASH_TOKEN` | Token de la cola QStash | ⏳ **PENDIENTE** (https://console.upstash.com/qstash) |
+| `ARHIAX_WORKER_URL` | URL pública del worker (`https://arhiax-re.vercel.app/api/v1/pdf/worker`) | ⏳ **PENDIENTE** (con QStash) |
+| `ARHIAX_TMP_DIR` | Directorio temporal para tests/worker (default `/tmp`) | Opcional (dev) |
 
-> Los valores de desarrollo que aparecen en `api/index.py` como fallback solo se usan si no hay variables de entorno (útil para desarrollo local). En producción, Vercel inyecta las variables configuradas.
+**Credenciales de acceso al portal** (producción):
+- **Admin**: usuario `admin` · contraseña `Arhiax-dWAsDUqMEQIW`
+- **Operador** (creada para pruebas): usuario `operador` · contraseña `Arhiax-op-s9Kx2vLmQ7` (cambiar en producción real)
+
+> Los valores de desarrollo que aparecen en `api/index.py` como fallback solo se usan si no hay variables de entorno. En producción, Vercel inyecta las variables configuradas.
 
 ## 📁 Estructura del módulo API
 
