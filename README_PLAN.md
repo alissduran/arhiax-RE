@@ -91,9 +91,9 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 - [x] **Rendimiento del PDF** — Cachés en memoria: geocodificación (por dirección), POIs (por celda, TTL 6h: 2.09s → 0.0000s en compilaciones repetidas), catastro en vivo (por celda, TTL 1h), motor STRtree. [Hecho 2026-09-01]
 - [x] **UI multi-ciudad** — Selector de ciudad al crear el caso + botón "Verificar Territorio en Vivo" en el detalle (NUPRE/tratamiento/barrio/IDECA). [Hecho 2026-09-01]
 - [x] **Persistencia configurable** — `ARHIAX_DB_PATH` (env var) con fallback `/tmp` (Vercel) o local; esquema externo (postgres/libsql/turso) con error claro e instrucciones. [Hecho 2026-09-01]
-- [ ] **Persistencia gestionada real** — Conectar Turso/Postgres: definir `ARHIAX_DB_PATH` con la URL del servicio e instalar el driver (`libsql-experimental`/`psycopg`) + adaptador en `get_db_connection()`.
-- [ ] Panel de administración con roles.
-- [ ] Cola asíncrona para compilación de PDF (evitar timeouts en serverless; requiere Vercel Background Functions o QStash).
+- [x] **Persistencia gestionada (Neon/Postgres) — adaptador listo** — `api/postgres_adapter.py` traduce la API sqlite3 de la app a Postgres (`?`→`%s`, `lastrowid`→`RETURNING id`, esquema con `ADD COLUMN IF NOT EXISTS`). **Para activar**: (1) crea una BD Neon (https://console.neon.tech, plan free) y copia la connection string; (2) defínela como `ARHIAX_DB_PATH` en Vercel; (3) añade `psycopg[binary]` a `requirements.txt`. [Adaptador hecho 2026-09-01; pendiente la conexión real]
+- [x] **Panel de administración con roles** — Usuarios `admin`/`operador` por env vars (`ARHIAX_ADMIN_USER/PASSWORD`, `ARHIAX_OPERADOR_USER/PASSWORD`); login con usuario+contraseña; tokens firmados con rol; `require_admin` en monitoreo (`/api/v1/status`), borrado de casos y cuentas (`/api/v1/admin/usuarios`); panel Admin en el frontend solo para admins. [Hecho 2026-09-01]
+- [x] **Cola asíncrona para PDF (QStash)** — `api/cola_pdf.py` (publica en QStash), `/api/dictamenes/generar?async=true`, worker `POST /api/v1/pdf/worker` y `GET /api/v1/pdf/trabajos/{id}` con tabla `trabajos_pdf` (persiste con Neon). **Para activar**: crea un token en https://console.upstash.com/qstash (plan free) → define `QSTASH_TOKEN` y `ARHIAX_WORKER_URL=https://arhiax-re.vercel.app/api/v1/pdf/worker` en Vercel. Sin token, la app degrada a generación síncrona (nunca se bloquea). [Código hecho 2026-09-01; pendiente el token]
 
 ---
 
