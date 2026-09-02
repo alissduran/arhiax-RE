@@ -133,4 +133,15 @@ def init_postgres(conn) -> None:
     }
     for nombre, tipo in columnas.items():
         cur.execute(f"ALTER TABLE dictamenes ADD COLUMN IF NOT EXISTS {nombre} {tipo}")
+
+    # Tabla de trabajos asíncronos (cola PDF) — persiste en Neon.
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS trabajos_pdf (
+            id TEXT PRIMARY KEY,
+            estado TEXT NOT NULL,
+            pdf BYTEA,
+            error TEXT,
+            creado TEXT NOT NULL
+        )
+    """)
     conn.commit()

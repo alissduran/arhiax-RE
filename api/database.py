@@ -66,6 +66,18 @@ def init_db():
         except sqlite3.OperationalError:
             pass
 
+    # Tabla de trabajos asíncronos (cola PDF): persiste con Neon si ARHIAX_DB_PATH
+    # apunta a Postgres; en SQLite /tmp (Vercel) es efímera.
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS trabajos_pdf (
+            id TEXT PRIMARY KEY,
+            estado TEXT NOT NULL,
+            pdf BLOB,
+            error TEXT,
+            creado TEXT NOT NULL
+        )
+    """)
+
     conn.commit()
     conn.close()
 

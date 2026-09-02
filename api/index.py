@@ -651,11 +651,47 @@ async def generar_dictamen_stateless(
     sombra_9am: UploadFile = File(None),
     sombra_3pm: UploadFile = File(None),
     mapa_satelital: UploadFile = File(None),
-    auth: bool = Depends(require_auth)
+    async_: bool = Form(False),
+    auth: dict = Depends(require_auth)
 ):
     # Validar campos mínimos
     if not folio_matricula and not direccion:
         raise HTTPException(status_code=400, detail="Debe ingresar la matrícula inmobiliaria o la dirección.")
+
+    if async_:
+        # Cola asíncrona (QStash): encolar y responder 202. Sin cola configurada,
+        # se degrada a síncrono (el cliente recibe el PDF igual).
+        import uuid
+        from cola_pdf import encolar_generacion, cola_configurada
+        job_id = str(uuid.uuid4())
+        _crear_trabajo(job_id, "pendiente")
+        datos = {
+            "job_id": job_id,
+            "folio_matricula": folio_matricula,
+            "direccion": direccion,
+            "area": area,
+            "barrio": barrio,
+        }
+        if certificado and certificado.filename:
+            _validar_archivo_subido(certificado, "certificado")
+            import base64
+            contenido = certificado.file.read(MAX_UPLOAD_BYTES)
+            datos["certificado_b64"] = base64.b64encode(contenido).decode("ascii")
+        enc = encolar_generacion(datos)
+        if enc.get("encolado"):
+            return {
+                "encolado": True, "job_id": job_id, "message_id": enc.get("message_id"),
+                "estado": "pendiente", "consulta": f"/api/v1/pdf/trabajos/{job_id}",
+            }
+        # Fallback síncrono
+        _actualizar_trabajo(job_id, "error", error=enc.get("error") or enc.get("motivo"))
+        if not cola_configurada():
+            return {
+                "encolado": False,
+                "detalle": "Cola no configurada (QSTASH_TOKEN / ARHIAX_WORKER_URL). "
+                           "Generando de forma síncrona.",
+            }
+        raise HTTPException(status_code=500, detail=f"Error al encolar: {enc.get('error')}")
 
     import uuid
     run_id = str(uuid.uuid4())
@@ -741,6 +777,141 @@ async def generar_dictamen_stateless(
             "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{folio_limpio}.pdf"'
         }
     )
+
+# ── Cola asíncrona de PDF (QStash) ─────────────────────────────────────
+
+def _dir_trabajo(run_id: str) -> Path:
+    """Directorio temporal de trabajo: ARHIAX_TMP_DIR (tests/dev) o /tmp (Vercel)."""
+    base = os.environ.get("ARHIAX_TMP_DIR") or "/tmp"
+    d = Path(base) / f"run_{run_id}"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
+def _crear_trabajo(job_id: str, estado: str = "pendiente"):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO trabajos_pdf (id, estado, creado) VALUES (?, ?, ?)",
+                   (job_id, estado, datetime.now().isoformat()))
+    conn.commit()
+    conn.close()
+
+
+def _actualizar_trabajo(job_id: str, estado: str, pdf_bytes=None, error=None):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    if pdf_bytes is not None:
+        cursor.execute("UPDATE trabajos_pdf SET estado = ?, pdf = ?, error = ? WHERE id = ?",
+                       (estado, pdf_bytes, error, job_id))
+    else:
+        cursor.execute("UPDATE trabajos_pdf SET estado = ?, error = ? WHERE id = ?",
+                       (estado, error, job_id))
+    conn.commit()
+    conn.close()
+
+
+@app.get("/api/v1/pdf/estado")
+def estado_cola_pdf(auth: dict = Depends(require_admin)):
+    """Estado de la cola asíncrona (solo admin)."""
+    from cola_pdf import estado_cola
+    return estado_cola()
+
+
+@app.post("/api/v1/pdf/worker")
+def worker_generar_pdf(payload: dict = Body(...), auth: dict = Depends(require_auth)):
+    """Worker de la cola (lo invoca QStash): compila el PDF del job y lo guarda.
+
+    Recibe JSON: {job_id, folio_matricula, direccion, area, barrio, certificado_b64?}.
+    """
+    import base64
+    job_id = str(payload.get("job_id") or "")
+    if not job_id:
+        raise HTTPException(status_code=400, detail="Falta job_id.")
+    _actualizar_trabajo(job_id, "procesando", error=None)
+
+    certificado_bytes = None
+    if payload.get("certificado_b64"):
+        try:
+            certificado_bytes = base64.b64decode(payload["certificado_b64"])
+        except Exception:
+            certificado_bytes = None
+
+    import uuid
+    run_id = str(uuid.uuid4())
+    temp_run_dir = _dir_trabajo(run_id)
+
+    folio = payload.get("folio_matricula")
+    direccion = payload.get("direccion") or "Pendiente"
+    area = float(payload.get("area") or 0)
+    barrio = payload.get("barrio") or "Miramar"
+
+    _cert_path = None
+    if certificado_bytes:
+        cert_path = temp_run_dir / "certificado.pdf"
+        cert_path.write_bytes(certificado_bytes)
+        _cert_path = str(cert_path)
+        try:
+            extraidos = extraer_datos_de_pdf(_cert_path)
+            if not area and extraidos.get("area"):
+                area = extraidos["area"]
+            if (not folio or folio == "Pendiente") and extraidos.get("folio"):
+                folio = extraidos["folio"]
+            if not direccion and extraidos.get("direccion"):
+                direccion = extraidos["direccion"]
+            if not barrio and extraidos.get("barrio"):
+                barrio = extraidos["barrio"]
+        except Exception:
+            pass
+
+    if not barrio:
+        barrio = "Miramar"
+    if area is None or area < 0:
+        area = 0.0
+
+    valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
+    db_record = {
+        "id": 9999,
+        "folio_matricula": _sanitizar_folio(folio) or "Pendiente",
+        "direccion": direccion or "Pendiente",
+        "barrio": barrio,
+        "estrato": 4,
+        "area": area,
+        "valor_consolidado": int(round(valor_m2 * area, -4)),
+        "sombra_9am_cargada": 0,
+        "sombra_3pm_cargada": 0,
+        "mapa_cargado": 0,
+        "acreedor_real": None,
+        "certificado_path": _cert_path,
+    }
+    output_pdf = temp_run_dir / f"ARHIAX_Dictamen_{db_record['folio_matricula']}_final.pdf"
+    try:
+        compile_pdf(db_record, str(output_pdf), assets_dir=temp_run_dir)
+        pdf_bytes = output_pdf.read_bytes()
+        _actualizar_trabajo(job_id, "listo", pdf_bytes=pdf_bytes)
+        return {"job_id": job_id, "estado": "listo", "bytes": len(pdf_bytes),
+                "folio": db_record["folio_matricula"]}
+    except Exception as e:
+        print(f"[ERROR] worker PDF {job_id}: {e}")
+        _actualizar_trabajo(job_id, "error", error=str(e)[:300])
+        raise HTTPException(status_code=500, detail="Error al compilar el PDF en el worker.")
+
+
+@app.get("/api/v1/pdf/trabajos/{job_id}")
+def obtener_trabajo_pdf(job_id: str, auth: dict = Depends(require_auth)):
+    """Consulta el estado de un trabajo asíncrono; si está listo, devuelve el PDF."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, estado, pdf, error FROM trabajos_pdf WHERE id = ?", (job_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if not row:
+        raise HTTPException(status_code=404, detail="Trabajo no encontrado.")
+    estado = row["estado"]
+    if estado == "listo" and row["pdf"]:
+        return Response(content=bytes(row["pdf"]), media_type="application/pdf",
+                        headers={"Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{job_id}.pdf"'})
+    return {"job_id": job_id, "estado": estado, "error": row["error"]}
+
 
 @app.get("/api/dictamenes/{case_id}/pdf")
 def download_pdf(case_id: int, auth: bool = Depends(require_auth)):

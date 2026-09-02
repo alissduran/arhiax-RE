@@ -352,6 +352,34 @@ class TestSmokeApi(unittest.TestCase):
         c.execute("UPDATE dictamenes SET barrio = ? WHERE id = ?", ("x", 1))
         self.assertNotIn("RETURNING", ejecutados[-1][0])
 
+    def test_cola_pdf_fallback_sin_config(self):
+        """Backlog cola: sin QSTASH_TOKEN la cola reporta no configurada y el
+        encolado degrada con instrucciones claras (fallback síncrono)."""
+        import cola_pdf
+        import os
+        old_tok = os.environ.get("QSTASH_TOKEN")
+        old_url = os.environ.get("ARHIAX_WORKER_URL")
+        try:
+            os.environ.pop("QSTASH_TOKEN", None)
+            os.environ.pop("ARHIAX_WORKER_URL", None)
+            import importlib
+            importlib.reload(cola_pdf)
+            self.assertFalse(cola_pdf.cola_configurada())
+            r = cola_pdf.encolar_generacion({"job_id": "x"})
+            self.assertFalse(r["encolado"])
+            self.assertIn("motivo", r)
+            self.assertFalse(cola_pdf.estado_cola()["configurada"])
+        finally:
+            if old_tok is None:
+                os.environ.pop("QSTASH_TOKEN", None)
+            else:
+                os.environ["QSTASH_TOKEN"] = old_tok
+            if old_url is None:
+                os.environ.pop("ARHIAX_WORKER_URL", None)
+            else:
+                os.environ["ARHIAX_WORKER_URL"] = old_url
+            importlib.reload(cola_pdf)
+
     def test_config_ciudades_carga(self):
         """Sprint 3 (I-3): la config multi-ciudad carga y Barranquilla está activa."""
         from config import listar_ciudades, get_ciudad, get_nacionales
