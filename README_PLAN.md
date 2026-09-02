@@ -91,7 +91,7 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 - [x] **Rendimiento del PDF** — Cachés en memoria: geocodificación (por dirección), POIs (por celda, TTL 6h: 2.09s → 0.0000s en compilaciones repetidas), catastro en vivo (por celda, TTL 1h), motor STRtree. [Hecho 2026-09-01]
 - [x] **UI multi-ciudad** — Selector de ciudad al crear el caso + botón "Verificar Territorio en Vivo" en el detalle (NUPRE/tratamiento/barrio/IDECA). [Hecho 2026-09-01]
 - [x] **Persistencia configurable** — `ARHIAX_DB_PATH` (env var) con fallback `/tmp` (Vercel) o local; esquema externo (postgres/libsql/turso) con error claro e instrucciones. [Hecho 2026-09-01]
-- [x] **Persistencia gestionada (Neon/Postgres) — adaptador listo** — `api/postgres_adapter.py` traduce la API sqlite3 de la app a Postgres (`?`→`%s`, `lastrowid`→`RETURNING id`, esquema con `ADD COLUMN IF NOT EXISTS`). **Para activar**: (1) crea una BD Neon (https://console.neon.tech, plan free) y copia la connection string; (2) defínela como `ARHIAX_DB_PATH` en Vercel; (3) añade `psycopg[binary]` a `requirements.txt`. [Adaptador hecho 2026-09-01; pendiente la conexión real]
+- [x] **Persistencia gestionada (Neon/Postgres)** — Adaptador `api/postgres_adapter.py` (traduce la API sqlite3 a Postgres) + `psycopg[binary]==3.3.5` + `ARHIAX_DB_PATH` con la BD Neon. **Activo 2026-09-02**: verificado en producción (crear/listar/borrar caso persiste en Postgres entre instancias serverless). [Completo]
 - [x] **Panel de administración con roles** — Usuarios `admin`/`operador` por env vars (`ARHIAX_ADMIN_USER/PASSWORD`, `ARHIAX_OPERADOR_USER/PASSWORD`); login con usuario+contraseña; tokens firmados con rol; `require_admin` en monitoreo (`/api/v1/status`), borrado de casos y cuentas (`/api/v1/admin/usuarios`); panel Admin en el frontend solo para admins. [Hecho 2026-09-01]
 - [x] **Cola asíncrona para PDF (QStash)** — `api/cola_pdf.py` (publica en QStash), `/api/dictamenes/generar?async=true`, worker `POST /api/v1/pdf/worker` y `GET /api/v1/pdf/trabajos/{id}` con tabla `trabajos_pdf` (persiste con Neon). **Para activar**: crea un token en https://console.upstash.com/qstash (plan free) → define `QSTASH_TOKEN` y `ARHIAX_WORKER_URL=https://arhiax-re.vercel.app/api/v1/pdf/worker` en Vercel. Sin token, la app degrada a generación síncrona (nunca se bloquea). [Código hecho 2026-09-01; pendiente el token]
 
@@ -112,7 +112,7 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 | `ARHIAX_ADMIN_USER` / `ARHIAX_ADMIN_PASSWORD` | Cuenta admin del panel (rol `admin`) | ✅ **CONFIGURADA** (`admin`) |
 | `ARHIAX_OPERADOR_USER` / `ARHIAX_OPERADOR_PASSWORD` | Cuenta operador (rol `operador`, opcional) | ✅ **CONFIGURADA** (`operador`) |
 | `ARHIAX_TOKEN_TTL_HOURS` | Vigencia del token (default 8) | Opcional |
-| `ARHIAX_DB_PATH` | DSN de la BD: ruta SQLite o URL **Neon** `postgresql://...` | ⏳ **PENDIENTE** (URL de Neon) |
+| `ARHIAX_DB_PATH` | DSN de la BD: ruta SQLite o URL **Neon** `postgresql://...` | ✅ **CONFIGURADA** (Neon/Postgres activo 2026-09-02; persistencia entre instancias verificada) |
 | `QSTASH_TOKEN` | Token de la cola QStash | ⏳ **PENDIENTE** (https://console.upstash.com/qstash) |
 | `ARHIAX_WORKER_URL` | URL pública del worker (`https://arhiax-re.vercel.app/api/v1/pdf/worker`) | ⏳ **PENDIENTE** (con QStash) |
 | `ARHIAX_TMP_DIR` | Directorio temporal para tests/worker (default `/tmp`) | Opcional (dev) |
