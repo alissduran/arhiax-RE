@@ -604,6 +604,7 @@
               <button class="btn-primary" style="font-size: 13px; padding: 14px 28px;" onclick="descargarPDFDictamen()">
                 Generar y Descargar Dictamen (PDF)
               </button>
+              <div id="generar-estado" style="margin-top: 10px; font-size: 11px; color: var(--color-gray); min-height: 16px;"></div>
               <!-- I-4 (Sprint 3): deep-link al portal oficial del CTL (SNR) — nunca scraping -->
               <div style="margin-top: 14px; font-size: 11px; color: var(--color-gray);">
                 ¿Necesitas el Certificado de Tradición y Libertad del predio?
@@ -1092,45 +1093,100 @@
       const c = dictamenes.find(item => item.id === selectedCaseId);
       if (!c) return;
 
-      showLoading(true);
+      const estadoDiv = document.getElementById('generar-estado');
+      const filename = `ARHIAX_Dictamen_${c.folio_matricula || 'caso'}.pdf`;
 
-      try {
-        const formData = new FormData();
-        formData.append('folio_matricula', c.folio_matricula);
-        formData.append('direccion', c.direccion);
-        formData.append('area', c.area || '0');
-        formData.append('barrio', c.barrio);
+      function setEstado(msg, color) {
+        estadoDiv.innerHTML = msg;
+        estadoDiv.style.color = color || 'var(--color-gray)';
+      }
 
-        // Adjuntar los archivos reales que el usuario cargó en memoria
-        if (selectedFiles['certificado']) formData.append('certificado', selectedFiles['certificado']);
-        if (selectedFiles['sombra_9am']) formData.append('sombra_9am', selectedFiles['sombra_9am']);
-        if (selectedFiles['sombra_3pm']) formData.append('sombra_3pm', selectedFiles['sombra_3pm']);
-        if (selectedFiles['mapa_satelital']) formData.append('mapa_satelital', selectedFiles['mapa_satelital']);
-
-        const response = await apiFetch('/api/dictamenes/generar', {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response.ok) {
-          const errText = await response.text();
-          throw new Error(`Error del servidor (${response.status}): ${errText}`);
-        }
-
-        // Descargar como blob y forzar nombre de archivo PDF
-        const blob = await response.blob();
+      function guardarBlob(blob) {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `ARHIAX_Dictamen_${c.folio_matricula}.pdf`;
+        a.download = filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
+        setEstado('✓ Dictamen generado y descargado.', 'var(--color-green-text)');
+      }
 
+      const formData = new FormData();
+      formData.append('folio_matricula', c.folio_matricula);
+      formData.append('direccion', c.direccion);
+      formData.append('area', c.area || '0');
+      formData.append('barrio', c.barrio);
+      if (selectedFiles['certificado']) formData.append('certificado', selectedFiles['certificado']);
+      if (selectedFiles['sombra_9am']) formData.append('sombra_9am', selectedFiles['sombra_9am']);
+      if (selectedFiles['sombra_3pm']) formData.append('sombra_3pm', selectedFiles['sombra_3pm']);
+      if (selectedFiles['mapa_satelital']) formData.append('mapa_satelital', selectedFiles['mapa_satelital']);
+
+      showLoading(true);
+      try {
+        // 1) Intentar generación ASÍNCRONA (cola QStash): responde al instante con job_id
+        formData.append('async_', 'true');
+        const res = await apiFetch('/api/dictamenes/generar', { method: 'POST', body: formData });
+        if (!res.ok) {
+          const err = await res.text().catch(() => '');
+          throw new Error(`Error del servidor (${res.status}): ${err.slice(0, 200)}`);
+        }
+        const data = await res.json().catch(() => null);
+
+        if (data && data.encolado === true && data.job_id) {
+          // 2) Polling del trabajo: el worker compila en segundo plano (QStash + Neon)
+          setEstado('⏳ Generando dictamen en segundo plano (cola QStash)…');
+          const jobId = data.job_id;
+          let intentos = 0;
+          while (intentos < 30) {  // hasta ~2.5 min
+            await new Promise(r => setTimeout(r, 5000));
+            intentos++;
+            try {
+              const rJob = await apiFetch(`/api/v1/pdf/trabajos/${jobId}`);
+              if (!rJob.ok) throw new Error(`HTTP ${rJob.status}`);
+              const ct = rJob.headers.get('content-type') || '';
+              if (ct.includes('application/pdf')) {
+                guardarBlob(await rJob.blob());
+                return;
+              }
+              const j = await rJob.json().catch(() => null);
+              if (j && j.estado === 'listo') {
+                // listo sin pdf en la respuesta (edge case): reintentar descarga
+                const r2 = await apiFetch(`/api/v1/pdf/trabajos/${jobId}`);
+                if (r2.headers.get('content-type')?.includes('application/pdf')) {
+                  guardarBlob(await r2.blob());
+                  return;
+                }
+                throw new Error('El dictamen se generó pero no se pudo descargar.');
+              }
+              if (j && j.estado === 'error') throw new Error('Error en el worker: ' + (j.error || 'desconocido'));
+              setEstado(`⏳ Generando en segundo plano… (intento ${intentos})`);
+            } catch (e) {
+              if (e.message.includes('Sesión expirada')) throw e;
+              // error de red puntual: seguir reintentando
+            }
+          }
+          throw new Error('Tiempo de espera agotado (2.5 min). Intente nuevamente.');
+        }
+
+        // 3) Cola no disponible: fallback a generación SÍNCRONA (sin async_)
+        formData.delete('async_');
+        setEstado('⏳ Generando dictamen (proceso síncrono, puede tardar ~20 s)…');
+        const resSync = await apiFetch('/api/dictamenes/generar', { method: 'POST', body: formData });
+        if (!resSync.ok) {
+          const err = await resSync.text().catch(() => '');
+          throw new Error(`Error del servidor (${resSync.status}): ${err.slice(0, 200)}`);
+        }
+        const ct = resSync.headers.get('content-type') || '';
+        if (ct.includes('application/pdf')) {
+          guardarBlob(await resSync.blob());
+        } else {
+          throw new Error('El servidor no devolvió el PDF esperado.');
+        }
       } catch (err) {
         console.error('Error al generar dictamen:', err);
-        alert('Error al generar el dictamen: ' + err.message);
+        setEstado('✗ ' + err.message, 'var(--color-red-text)');
       } finally {
         showLoading(false);
       }
