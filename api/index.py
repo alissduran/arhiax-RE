@@ -1043,6 +1043,16 @@ def listar_ciudades_endpoint(auth: bool = Depends(require_auth)):
         "nacionales": {k: (v.get("estado", "") if isinstance(v, dict) else "") for k, v in get_nacionales().items()},
     }
 
+@app.get("/api/v1/pdf/trabajos")
+def listar_trabajos_pdf(auth: dict = Depends(require_admin)):
+    """Lista los trabajos asíncronos de PDF (monitoreo, solo admin)."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, estado, error, creado FROM trabajos_pdf ORDER BY creado DESC LIMIT 50")
+    filas = cursor.fetchall()
+    conn.close()
+    return {"trabajos": [dict(f) for f in filas]}
+
 # Servir archivos estáticos del frontend (public) en la raíz
 PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
 if os.path.exists(PUBLIC_DIR):
