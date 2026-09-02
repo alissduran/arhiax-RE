@@ -69,12 +69,23 @@ app.add_middleware(
 
 DEFAULT_YAML_PATH = Path(LONJA_LAYER) / "lonja_baq_metodologia.yaml"
 
-# ---- Autenticación real (F-01, F-02, F-05, F-22) ----
-# Credenciales y secreto de firma desde variables de entorno (Vercel env vars).
-# El fallback solo existe para desarrollo local y se sobreescribe en producción.
-ACCESS_PASSWORD = os.environ.get("ARHIAX_ACCESS_PASSWORD", "Sinergia2026")
+# ---- Autenticación real con roles (backlog: panel de administración) ----
+# Credenciales desde variables de entorno (Vercel env vars). El fallback solo
+# existe para desarrollo local.
+ACCESS_PASSWORD = os.environ.get("ARHIAX_ACCESS_PASSWORD", "Sinergia2026")  # contraseña global = cuenta admin (retrocompat)
 AUTH_SECRET = os.environ.get("ARHIAX_AUTH_SECRET", "cambiar-este-secreto-en-produccion")
 TOKEN_TTL_HOURS = int(os.environ.get("ARHIAX_TOKEN_TTL_HOURS", "8"))
+
+# Usuarios con rol, definidos por env vars (persisten en Vercel):
+#   ARHIAX_ADMIN_USER / ARHIAX_ADMIN_PASSWORD        -> rol 'admin' (default: admin / ACCESS_PASSWORD)
+#   ARHIAX_OPERADOR_USER / ARHIAX_OPERADOR_PASSWORD  -> rol 'operador' (opcional)
+_USUARIOS = {}  # username.lower() -> (password, rol)
+_USUARIOS[os.environ.get("ARHIAX_ADMIN_USER", "admin").strip().lower()] = (
+    os.environ.get("ARHIAX_ADMIN_PASSWORD") or ACCESS_PASSWORD, "admin")
+_op_user = os.environ.get("ARHIAX_OPERADOR_USER", "").strip().lower()
+_op_pass = os.environ.get("ARHIAX_OPERADOR_PASSWORD", "").strip()
+if _op_user and _op_pass:
+    _USUARIOS[_op_user] = (_op_pass, "operador")
 
 _security = HTTPBearer(auto_error=False)
 
@@ -83,25 +94,40 @@ def _firmar(payload: str) -> str:
     return hmac.new(AUTH_SECRET.encode("utf-8"), payload.encode("utf-8"), hashlib.sha256).hexdigest()
 
 
-def _crear_token() -> str:
+def _crear_token(username: str, rol: str) -> str:
     exp = (datetime.now() + timedelta(hours=TOKEN_TTL_HOURS)).isoformat()
-    return f"{exp}.{_firmar(exp)}"
+    payload = f"{exp}|{username}|{rol}"
+    return f"{payload}.{_firmar(payload)}"
 
 
-def _verificar_token(token: str) -> bool:
+def _decodificar_token(token: str):
+    """Retorna (username, rol) si el token es válido, o None."""
     try:
         payload, firma = token.rsplit(".", 1)
         if not hmac.compare_digest(_firmar(payload), firma):
-            return False
-        return datetime.now() < datetime.fromisoformat(payload)
+            return None
+        exp_s, username, rol = payload.split("|", 2)
+        if datetime.now() >= datetime.fromisoformat(exp_s):
+            return None
+        return username, rol
     except Exception:
-        return False
+        return None
 
 
 def require_auth(credentials: HTTPAuthorizationCredentials = Depends(_security)):
-    if credentials is None or not _verificar_token(credentials.credentials):
+    if credentials is None:
         raise HTTPException(status_code=401, detail="Sesión inválida o expirada. Inicie sesión nuevamente.")
-    return True
+    datos = _decodificar_token(credentials.credentials)
+    if datos is None:
+        raise HTTPException(status_code=401, detail="Sesión inválida o expirada. Inicie sesión nuevamente.")
+    return {"username": datos[0], "rol": datos[1]}
+
+
+def require_admin(auth: dict = Depends(require_auth)):
+    """Restringe a usuarios con rol 'admin' (403 para operadores)."""
+    if auth.get("rol") != "admin":
+        raise HTTPException(status_code=403, detail="Se requieren privilegios de administrador.")
+    return auth
 
 
 # Rate limiting simple en memoria para /api/login (F-03)
@@ -235,13 +261,38 @@ def extraer_datos_de_pdf(pdf_path: str) -> dict:
 @app.post("/api/login")
 def login(payload: dict = Body(...), request: Request = None):
     password = payload.get("password", "")
-    if not isinstance(password, str) or not hmac.compare_digest(
-        password.encode("utf-8"), ACCESS_PASSWORD.encode("utf-8")
-    ):
+    username = (payload.get("username") or "").strip().lower()
+    if not isinstance(password, str):
+        raise HTTPException(status_code=401, detail="Credenciales inválidas.")
+    if username:
+        # Autenticación por usuario + rol (panel de administración)
+        cred = _USUARIOS.get(username)
+        if not cred or not hmac.compare_digest(password.encode("utf-8"), cred[0].encode("utf-8")):
+            if request is not None:
+                _check_login_rate_limit(request)
+            raise HTTPException(status_code=401, detail="Usuario o contraseña incorrectos.")
+        return {"success": True, "token": _crear_token(username, cred[1]), "rol": cred[1],
+                "username": username, "expires_in_hours": TOKEN_TTL_HOURS}
+    # Retrocompatibilidad: contraseña global == cuenta admin
+    admin_cred = _USUARIOS.get("admin", ("", ""))
+    if not hmac.compare_digest(password.encode("utf-8"), admin_cred[0].encode("utf-8")):
         if request is not None:
             _check_login_rate_limit(request)
         raise HTTPException(status_code=401, detail="Contraseña incorrecta. Acceso denegado.")
-    return {"success": True, "token": _crear_token(), "expires_in_hours": TOKEN_TTL_HOURS}
+    return {"success": True, "token": _crear_token("admin", "admin"), "rol": "admin",
+            "username": "admin", "expires_in_hours": TOKEN_TTL_HOURS}
+
+@app.get("/api/me")
+def me(auth: dict = Depends(require_auth)):
+    """Devuelve el usuario y rol de la sesión actual."""
+    return {"username": auth["username"], "rol": auth["rol"]}
+
+@app.get("/api/v1/admin/usuarios")
+def admin_usuarios(auth: dict = Depends(require_admin)):
+    """Lista las cuentas con rol conocidas (sin secretos). Solo admin."""
+    return {"usuarios": [
+        {"username": u, "rol": r} for u, (_p, r) in sorted(_USUARIOS.items())
+    ]}
 
 @app.get("/api/dictamenes")
 def list_dictamenes(auth: bool = Depends(require_auth)):
@@ -566,7 +617,7 @@ def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: B
     return dictamen
 
 @app.delete("/api/dictamenes/{case_id}")
-def delete_dictamen(case_id: int, auth: bool = Depends(require_auth)):
+def delete_dictamen(case_id: int, auth: dict = Depends(require_admin)):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
@@ -731,7 +782,7 @@ def health():
     }
 
 @app.get("/api/v1/status")
-def status_endpoint(auth: bool = Depends(require_auth)):
+def status_endpoint(auth: dict = Depends(require_admin)):
     """Monitoreo de servicios (auth): estado del motor geoespacial, ciudades y
     servicios nacionales configurados. Sin llamadas de red salientes."""
     from config import listar_ciudades, get_nacionales

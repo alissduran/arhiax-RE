@@ -58,28 +58,50 @@ class TestSmokeApi(unittest.TestCase):
         self.assertEqual(ctx.exception.status_code, 401)
 
     def test_auth_tokens_firmados_y_expiracion(self):
-        """Los tokens se firman con HMAC y expiran (F-01/F-02)."""
+        """Los tokens se firman con HMAC, expiran y llevan rol (F-01/F-02 + roles)."""
         from datetime import datetime, timedelta
         from fastapi.security import HTTPAuthorizationCredentials
         from fastapi import HTTPException
-        from index import _crear_token, _verificar_token, _firmar, require_auth, TOKEN_TTL_HOURS
+        from index import _crear_token, _decodificar_token, _firmar, require_auth, require_admin
 
-        token = _crear_token()
-        self.assertTrue(_verificar_token(token))
-        self.assertFalse(_verificar_token(token + "x"))
-        self.assertFalse(_verificar_token("firma-invalida"))
+        token = _crear_token("admin", "admin")
+        self.assertEqual(_decodificar_token(token), ("admin", "admin"))
+        self.assertIsNone(_decodificar_token(token + "x"))
+        self.assertIsNone(_decodificar_token("firma-invalida"))
 
         # Token con expiración en el pasado debe rechazarse
         exp_pasado = (datetime.now() - timedelta(hours=1)).isoformat()
-        token_expirado = f"{exp_pasado}.{_firmar(exp_pasado)}"
-        self.assertFalse(_verificar_token(token_expirado))
+        payload = f"{exp_pasado}|admin|admin"
+        token_expirado = f"{payload}.{_firmar(payload)}"
+        self.assertIsNone(_decodificar_token(token_expirado))
 
         creds_ok = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
-        self.assertTrue(require_auth(creds_ok))
+        sesion = require_auth(creds_ok)
+        self.assertEqual(sesion["rol"], "admin")
+        self.assertEqual(require_admin(sesion)["username"], "admin")
         with self.assertRaises(HTTPException):
             require_auth(None)
         with self.assertRaises(HTTPException):
             require_auth(HTTPAuthorizationCredentials(scheme="Bearer", credentials="token-invalido"))
+
+        # Un token de operador NO pasa require_admin (403)
+        tok_operador = _crear_token("operador1", "operador")
+        sesion_op = require_auth(HTTPAuthorizationCredentials(scheme="Bearer", credentials=tok_operador))
+        self.assertEqual(sesion_op["rol"], "operador")
+        with self.assertRaises(HTTPException) as ctx:
+            require_admin(sesion_op)
+        self.assertEqual(ctx.exception.status_code, 403)
+
+    def test_login_por_usuario_con_rol(self):
+        from fastapi import HTTPException
+        from index import login
+        r = login({"username": "admin", "password": "Sinergia2026"})
+        self.assertEqual(r["rol"], "admin")
+        self.assertEqual(r["username"], "admin")
+        # Usuario inexistente -> 401
+        with self.assertRaises(HTTPException) as ctx:
+            login({"username": "noexiste", "password": "x"})
+        self.assertEqual(ctx.exception.status_code, 401)
 
     @pytest.mark.network
     def test_pdf_compiler_genera_pdf_honesto(self):
