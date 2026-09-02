@@ -180,6 +180,22 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             coords = BARRIO_COORDS.get(barrio.lower().strip(), (10.9685, -74.7813))
             lat, lon = coords
 
+    # ── Sombras automáticas 9:00 AM / 3:00 PM (si el caso no trae las de ArcGIS Pro) ──
+    # Simulación geométrica: posición solar (solar_engine) + huella/altura del
+    # edificio (catastro en vivo, capa 310). El PDF las etiqueta como simulación.
+    _tenia_9 = os.path.exists(shadow_9am_path)
+    _tenia_3 = os.path.exists(shadow_3pm_path)
+    fuente_sombras = "arcgis_pro"
+    if not (_tenia_9 and _tenia_3):
+        try:
+            from shadow_render import generar_sombras_automaticas
+            met = generar_sombras_automaticas(lat, lon, assets_dir)
+            if not met.get("error") and met.get("imagenes"):
+                fuente_sombras = "simulacion_geometrica"
+            else:
+                print(f"[SHADOW] no se pudieron generar sombras automáticas: {met.get('error')}")
+        except Exception as e:
+            print(f"[SHADOW] generación automática no disponible: {e}")
 
     # ── HITO 4: Evaluación geoespacial dinámica (STRtree + POT GeoJSON) ─────────
     geo_eval = get_geospatial_evaluation(lat, lon)
@@ -502,9 +518,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             ]))
             story.append(t_s)
             story.append(Spacer(1, 4))
+            _nota_sombras = (
+                "Simulacion 3D de Sombras Proyectadas a las 9:00 AM (Izquierda) y a las 3:00 PM (Derecha) "
+                "(ArcGIS Online - Escena Fotorrealista de Google)."
+                if fuente_sombras == "arcgis_pro"
+                else "Simulacion GEOMETRICA de Sombras Proyectadas a las 9:00 AM (Izquierda) y 3:00 PM (Derecha) "
+                     "(generada automaticamente por ARHIAX: posicion solar + huella y altura del edificio segun catastro). "
+                     "No es un render fotorealista; verificar en campo."
+            )
             story.append(Paragraph(
-                "<i>Fig. 2 - Simulacion 3D de Sombras Proyectadas a las 9:00 AM (Izquierda) y a las 3:00 PM (Derecha) "
-                "(ArcGIS Online - Escena Fotorrealista de Google).</i>",
+                "<i>Fig. 2 - " + _nota_sombras + "</i>",
                 ParagraphStyle("cap_shadow", fontName="Helvetica-Oblique", fontSize=7.5,
                                textColor=colors.HexColor("#718096"), leading=10, alignment=TA_CENTER)))
         except Exception as img_err:
@@ -522,9 +545,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             ]))
             story.append(t_s)
             story.append(Spacer(1, 4))
+            _nota_1 = (
+                f"Simulacion 3D de Sombras Proyectadas a las {images_to_show[0][1]} "
+                "(ArcGIS Online - Escena Fotorrealista de Google)."
+                if fuente_sombras == "arcgis_pro"
+                else f"Simulacion GEOMETRICA de Sombras Proyectadas a las {images_to_show[0][1]} "
+                     "(generada automaticamente por ARHIAX: posicion solar + huella y altura del edificio segun catastro). "
+                     "No es un render fotorealista; verificar en campo."
+            )
             story.append(Paragraph(
-                f"<i>Fig. 2 - Simulacion 3D de Sombras Proyectadas a las {images_to_show[0][1]} "
-                "(ArcGIS Online - Escena Fotorrealista de Google).</i>",
+                f"<i>Fig. 2 - {_nota_1}</i>",
                 ParagraphStyle("cap_shadow", fontName="Helvetica-Oblique", fontSize=7.5,
                                textColor=colors.HexColor("#718096"), leading=10, alignment=TA_CENTER)))
         except Exception as img_err:

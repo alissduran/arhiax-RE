@@ -65,11 +65,13 @@ def query_layer_bbox(
     out_fields: str = "*",
     max_features: int = 20,
     timeout: float = TIMEOUT,
+    return_geometry: bool = False,
 ) -> dict[str, Any]:
     """Consulta una capa ArcGIS por BBOX (minx, miny, maxx, maxy en EPSG:4326).
 
     Retorna dict con: disponible, features, total, capa, fuente, error.
     Nunca lanza: los fallos de red se devuelven como disponible=False.
+    return_geometry=True incluye la geometría de cada feature (p. ej. huellas).
     """
     minx, miny, maxx, maxy = bbox
     if not (minx < maxx and miny < maxy):
@@ -87,7 +89,7 @@ def query_layer_bbox(
         "outSR": "4326",
         "outFields": out_fields,
         "resultRecordCount": str(max_features),
-        "returnGeometry": "false",
+        "returnGeometry": "true" if return_geometry else "false",
         "f": "geojson",
     }
     consulta = f"{query_url}?{urlencode(params)}"
