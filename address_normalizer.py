@@ -61,7 +61,7 @@ def normalize_address_colombia(address: str) -> str:
                 idx_to_insert = digit_indices[0]
                 parts.insert(idx_to_insert, "#")
             addr = " ".join(parts)
-
+ 
     # 6. Estandarizar espaciado de '#' y '-'
     addr = re.sub(r"\s*#\s*", " # ", addr)
     # Insert hyphen if we have space-separated numbers after '#'
@@ -72,31 +72,3 @@ def normalize_address_colombia(address: str) -> str:
     addr = " ".join(addr.split())
     
     return addr
-
-# Suite de pruebas unitarias rápida
-if __name__ == "__main__":
-    test_cases = [
-        ("Calle 72 # 43-15", "CL 72 # 43 - 15"),
-        ("Cl. 72 No. 43 - 15", "CL 72 # 43 - 15"),
-        ("Carrera 43 sur N° 72 - 15", "CRA 43 SUR # 72 - 15"),
-        ("Avenida Circunvalar No 110 - 240", "AV CIRCUNVALAR # 110 - 240"),
-        ("CL 72 43 15", "CL 72 # 43 - 15"),
-        ("cra 43 72 - 15", "CRA 43 # 72 - 15"),
-        ("DIAGONAL 54 # 23B - 12 SUR", "DG 54 # 23B - 12 SUR"),
-        ("TRANSVERSAL 5 No. 10-20", "TV 5 # 10 - 20")
-    ]
-    
-    print("Ejecutando pruebas del normalizador de direcciones...")
-    success = True
-    for raw, expected in test_cases:
-        result = normalize_address_colombia(raw)
-        if result == expected:
-            print(f" [OK] '{raw}' -> '{result}'")
-        else:
-            print(f" [FALLÓ] '{raw}'\n      Esperado: '{expected}'\n      Obtenido: '{result}'")
-            success = False
-            
-    if success:
-        print("\n¡Todas las pruebas pasaron exitosamente!")
-    else:
-        print("\nExisten discrepancias en las pruebas.")

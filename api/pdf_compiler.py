@@ -19,6 +19,12 @@ sys.path.insert(0, TMA_PIEZAS)
 sys.path.insert(0, TMA_DATOS)
 sys.path.insert(0, LONJA_LAYER)
 
+# API_DIR debe tener prioridad sobre PROJECT_ROOT y el motor TMA: hay copias
+# antiguas de poi_engine/solar_engine/address_normalizer en la raíz del repo que
+# provocaban que el PDF usara la versión obsoleta (POIs fabricados). Re-insertar
+# API_DIR al tope garantiza que los módulos de api/ sean los que se importen.
+sys.path.insert(0, str(API_DIR))
+
 from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph, Table, TableStyle, PageBreak, KeepTogether
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
@@ -535,25 +541,20 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 01D ANALISIS DE EQUIPAMIENTO URBANO (POI) ────────────────
     story.append(sec("01D - Analisis de Equipamiento Urbano y Puntos de Interes (POI)"))
     story.append(hr())
-    _pois_con_fallback = any(
-        item.get("origen") == "referencial_no_osm"
-        for items in pois.values() for item in items
-    )
-    if _pois_con_fallback:
-        # M-03: no presentar POIs referenciales como datos OSM en vivo
-        story.append(body(
-            f"Analisis de accesibilidad y equipamientos urbanos en un radio de <b>2.0 km</b> "
-            f"en torno al predio geocodificado. "
-            "<b>[ADVERTENCIA DE FUENTE:</b> la consulta a OpenStreetMap no estuvo disponible; "
-            "los equipamientos mostrados son <b>REFERENCIALES del modulo ARHIAX</b> y deben "
-            "verificarse en campo antes de usarse en una decision.<b>]</b>"
-        ))
+    _total_pois = sum(len(items) for items in pois.values())
+    if _total_pois == 0:
+        # M-03: OSM no disponible -> se declara SIN datos (no se inventan POIs)
+        story.append(alert_orange(
+            "<b>Equipamientos NO DISPONIBLES:</b> la consulta a OpenStreetMap no respondio al "
+            "momento de generar el dictamen, por lo que esta seccion no reporta equipamientos. "
+            "No se incluyen datos no verificados; reintente la generacion o verifique en campo."))
     else:
         story.append(body(
             f"Analisis de accesibilidad y cobertura de equipamientos urbanos en un radio de <b>2.0 km</b> "
-            f"en torno al predio geocodificado. Los datos fueron extraidos de la base geografica de "
-            f"OpenStreetMap (OSM) y ordenados por proximidad geodesica. "
-            "<b>[FUENTE: OPENSTREETMAP OVERPASS API & ALGORITMO GEODESICO ARHIAX]</b>"
+            f"en torno a las coordenadas del predio (Lat: {lat:.5f}, Lon: {lon:.5f}). "
+            f"Los datos fueron extraidos de la base geografica de "
+            f"OpenStreetMap (OSM) y ordenados por proximidad geodesica real. "
+            "<b>[FUENTE: OPENSTREETMAP OVERPASS API - DATOS REALES]</b>"
         ))
     story.append(Spacer(1, 4))
     
