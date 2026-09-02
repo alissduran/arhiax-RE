@@ -52,8 +52,9 @@ def encolar_generacion(datos: dict) -> dict[str, Any]:
                       "Ver README_PLAN -> cómo obtener el token.",
         }
     try:
+        # API QStash v2: POST /v2/publish/{destination} (V1 /v1/publish fue eliminado)
         resp = requests.post(
-            f"{QSTASH_URL.rstrip('/')}/v1/publish/{WORKER_URL}",
+            f"{QSTASH_URL.rstrip('/')}/v2/publish/{WORKER_URL}",
             json=datos,
             headers={"Authorization": f"Bearer {QSTASH_TOKEN}", "Content-Type": "application/json"},
             timeout=15,
