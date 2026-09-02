@@ -815,51 +815,61 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 4))
     
     area_calc = area if area > 0 else 1.0
-    story.append(dt([
-        ("Valor central estimado (referencial)", f"<b>{fmt_cop(res_avaluo['consolidado'])} COP</b> (Equivalente a {fmt_cop(res_avaluo['consolidado']/area_calc)} / m2)"),
-        ("Banda Baja al 80% (P10)", f"{fmt_cop(res_avaluo['banda_baja'])} COP ({fmt_cop(res_avaluo['banda_baja']/area_calc)} / m2)"),
-        ("Banda Alta al 80% (P90)", f"{fmt_cop(res_avaluo['banda_alta'])} COP ({fmt_cop(res_avaluo['banda_alta']/area_calc)} / m2)"),
-        ("M1 - Comparacion de Mercado (70%)", f"{fmt_cop(res_avaluo['m1'])} COP (Lector dominante, ofertas ajustadas del sector)"),
-        ("M2 - Costo de Reposicion (0%)", f"{fmt_cop(res_avaluo['m2'])} COP (Costo fisico directo + lote de terreno)"),
-        ("M3 - Capitalizacion de Rentas (30%)", f"{fmt_cop(res_avaluo['m3'])} COP (Validacion por renta mensual de {fmt_cop(res_avaluo['canon_mensual'])} con Cap Rate {res_avaluo['cap_rate']*100:.2f}% neto)"),
-        ("Canon de Renta Estimado", f"{fmt_cop(res_avaluo['canon_mensual'])} COP mensual (Cap Rate {res_avaluo['cap_rate']*100:.2f}% neto aplicado)"),
-        ("Vigencia de la estimación referencial", "6 meses a partir de la expedicion del dictamen"),
-    ]))
-    story.append(Spacer(1, 6))
-    
-    # Escala de Color Visual para Ubicación de Valor (Etiquetas Neutras)
-    scale_table_data = [
-        [Paragraph("<font color='white'><b>Banda baja (P10)</b></font>", s["label"]),
-         Paragraph("<font color='white'><b>Valor central estimado</b></font>", s["label"]),
-         Paragraph("<font color='white'><b>Banda alta (P90)</b></font>", s["label"])],
-        [Paragraph(f"<b>{fmt_cop(res_avaluo['banda_baja'])}</b><br/><font size=6.5 color='#718096'>Banda baja (P10)</font>", s["center"]),
-         Paragraph(f"<b>{fmt_cop(res_avaluo['consolidado'])}</b><br/><font size=6.5 color='#1A6B3A'><b>Valor central estimado</b></font>", s["center"]),
-         Paragraph(f"<b>{fmt_cop(res_avaluo['banda_alta'])}</b><br/><font size=6.5 color='#718096'>Banda alta (P90)</font>", s["center"])]
-    ]
-    t_scale = Table(scale_table_data, colWidths=["33%", "34%", "33%"])
-    t_scale.setStyle(TableStyle([
-        ("BACKGROUND", (0,0), (0,0), colors.HexColor("#D97D24")), # Naranja
-        ("BACKGROUND", (1,0), (1,0), colors.HexColor("#1A6B3A")), # Verde bosque
-        ("BACKGROUND", (2,0), (2,0), colors.HexColor("#8B1A1A")), # Carmesi
-        ("BACKGROUND", (0,1), (0,1), colors.HexColor("#FFF5EB")),
-        ("BACKGROUND", (1,1), (1,1), colors.HexColor("#EBF5EE")),
-        ("BACKGROUND", (2,1), (2,1), colors.HexColor("#FDF2F2")),
-        ("GRID", (0,0), (-1,-1), 0.6, colors.HexColor("#0D2C6B")),
-        ("TOPPADDING", (0,0), (-1,-1), 5),
-        ("BOTTOMPADDING", (0,0), (-1,-1), 5),
-        ("ALIGN", (0,0), (-1,-1), "CENTER"),
-        ("VALIGN", (0,0), (-1,-1), "MIDDLE")
-    ]))
-    story.append(t_scale)
+    tiene_valor = area > 0 and (res_avaluo.get('consolidado') or 0) > 0
+    if not tiene_valor:
+        # Sin metraje: la estimación de mercado no es calculable -> aviso claro,
+        # nunca una tabla de valores $0 que parezca información real.
+        story.append(alert_orange(
+            "<b>ESTIMACION NO CALCULADA:</b> no fue posible estimar el valor referencial de mercado "
+            "porque falta el metraje (area en m2) del predio (area = 0). Cargue el Certificado de "
+            "Tradicion y Libertad para extraer el area automaticamente, o registre el area del inmueble "
+            "antes de generar el dictamen."))
+        story.append(Spacer(1, 6))
+    else:
+        story.append(dt([
+            ("Valor central estimado (referencial)", f"<b>{fmt_cop(res_avaluo['consolidado'])} COP</b> (Equivalente a {fmt_cop(res_avaluo['consolidado']/area_calc)} / m2)"),
+            ("Banda Baja al 80% (P10)", f"{fmt_cop(res_avaluo['banda_baja'])} COP ({fmt_cop(res_avaluo['banda_baja']/area_calc)} / m2)"),
+            ("Banda Alta al 80% (P90)", f"{fmt_cop(res_avaluo['banda_alta'])} COP ({fmt_cop(res_avaluo['banda_alta']/area_calc)} / m2)"),
+            ("M1 - Comparacion de Mercado (70%)", f"{fmt_cop(res_avaluo['m1'])} COP (Lector dominante, ofertas ajustadas del sector)"),
+            ("M2 - Costo de Reposicion (0%)", f"{fmt_cop(res_avaluo['m2'])} COP (Costo fisico directo + lote de terreno)"),
+            ("M3 - Capitalizacion de Rentas (30%)", f"{fmt_cop(res_avaluo['m3'])} COP (Validacion por renta mensual de {fmt_cop(res_avaluo['canon_mensual'])} con Cap Rate {res_avaluo['cap_rate']*100:.2f}% neto)"),
+            ("Canon de Renta Estimado", f"{fmt_cop(res_avaluo['canon_mensual'])} COP mensual (Cap Rate {res_avaluo['cap_rate']*100:.2f}% neto aplicado)"),
+            ("Vigencia de la estimación referencial", "6 meses a partir de la expedicion del dictamen"),
+        ]))
+        story.append(Spacer(1, 6))
+
+        # Escala de Color Visual para Ubicación de Valor (Etiquetas Neutras)
+        scale_table_data = [
+            [Paragraph("<font color='white'><b>Banda baja (P10)</b></font>", s["label"]),
+             Paragraph("<font color='white'><b>Valor central estimado</b></font>", s["label"]),
+             Paragraph("<font color='white'><b>Banda alta (P90)</b></font>", s["label"])],
+            [Paragraph(f"<b>{fmt_cop(res_avaluo['banda_baja'])}</b><br/><font size=6.5 color='#718096'>Banda baja (P10)</font>", s["center"]),
+             Paragraph(f"<b>{fmt_cop(res_avaluo['consolidado'])}</b><br/><font size=6.5 color='#1A6B3A'><b>Valor central estimado</b></font>", s["center"]),
+             Paragraph(f"<b>{fmt_cop(res_avaluo['banda_alta'])}</b><br/><font size=6.5 color='#718096'>Banda alta (P90)</font>", s["center"])]
+        ]
+        t_scale = Table(scale_table_data, colWidths=["33%", "34%", "33%"])
+        t_scale.setStyle(TableStyle([
+            ("BACKGROUND", (0,0), (0,0), colors.HexColor("#D97D24")), # Naranja
+            ("BACKGROUND", (1,0), (1,0), colors.HexColor("#1A6B3A")), # Verde bosque
+            ("BACKGROUND", (2,0), (2,0), colors.HexColor("#8B1A1A")), # Carmesi
+            ("BACKGROUND", (0,1), (0,1), colors.HexColor("#FFF5EB")),
+            ("BACKGROUND", (1,1), (1,1), colors.HexColor("#EBF5EE")),
+            ("BACKGROUND", (2,1), (2,1), colors.HexColor("#FDF2F2")),
+            ("GRID", (0,0), (-1,-1), 0.6, colors.HexColor("#0D2C6B")),
+            ("TOPPADDING", (0,0), (-1,-1), 5),
+            ("BOTTOMPADDING", (0,0), (-1,-1), 5),
+            ("ALIGN", (0,0), (-1,-1), "CENTER"),
+            ("VALIGN", (0,0), (-1,-1), "MIDDLE")
+        ]))
+        story.append(t_scale)
+        story.append(Spacer(1, 4))
+        story.append(alert_green(get_valoracion_alert(barrio, val_data, fmt_cop)))
+
     story.append(Spacer(1, 4))
-    
     story.append(body(
         "Esta estimacion es referencial y de caracter automatico. <b>No sustituye un avaluo comercial</b> "
         "elaborado por avaluador inscrito en el RAA conforme a la Ley 1673 de 2013 y las metodologias valuatorias vigentes."
     ))
-    story.append(Spacer(1, 4))
-    
-    story.append(alert_green(get_valoracion_alert(barrio, val_data, fmt_cop)))
     story.append(Spacer(1, 8))
 
     # ── 05 HIDROLOGICO [REAL] ──────────────────────────────────
