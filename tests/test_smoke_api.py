@@ -314,11 +314,13 @@ class TestSmokeApi(unittest.TestCase):
             conn.execute("SELECT 1")
             conn.close()
 
-            os.environ["ARHIAX_DB_PATH"] = "postgres://user:pass@host/db"
+            os.environ["ARHIAX_DB_PATH"] = "postgres://user:pass@host-invalido-xyz/db"
             importlib.reload(db_mod)
             self.assertTrue(db_mod._ES_POSTGRES)
-            with self.assertRaises(RuntimeError):
-                db_mod.get_db_connection()  # sin psycopg instalado -> error claro
+            # Sin servicio real: debe fallar (RuntimeError sin driver local, o error de
+            # conexión con psycopg instalado en CI). Nunca devuelve conexión sqlite.
+            with self.assertRaises(Exception):
+                db_mod.get_db_connection()
         finally:
             if old is None:
                 os.environ.pop("ARHIAX_DB_PATH", None)
