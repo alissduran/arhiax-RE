@@ -17,3 +17,7 @@ shapely==2.1.2
 # Nota: weasyprint se eliminó (nunca se importa en api/).
 # playwright solo lo usa api/solar_automation.py, que NO corre en Vercel (sin navegador);
 # se instala bajo demanda si se ejecuta el worker de sombras localmente.
+
+# Persistencia gestionada (Neon/Postgres): al activar ARHIAX_DB_PATH con una URL
+# postgresql://, descomenta la línea siguiente para instalar el driver psycopg:
+# psycopg[binary]==3.2.9
