@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-ARHIAX RE — Cola asíncrona de generación de PDF (backlog, QStash de Upstash)
+ARHIAX RE — Cola asíncrona de generación de PDF (QStash de Upstash)
 
-Permite encolar la compilación pesada del dictamen (que en el camino síncrono
-puede acercarse al timeout de la función serverless) en QStash:
+Permite encolar la compilación pesada del dictamen en QStash:
 
-    QSTASH_TOKEN         -> token de la cola (https://console.upstash.com/qstash)
-    ARHIAX_WORKER_URL    -> URL pública del worker, p. ej.
-                            https://arhiax-re.vercel.app/api/v1/pdf/worker
+    QSTASH_TOKEN      -> token del servicio (console.upstash.com -> QStash -> Tokens)
+    QSTASH_URL        -> URL regional/global del API (default https://qstash.upstash.io;
+                         p. ej. https://qstash-us-east-1.upstash.io)
+    ARHIAX_WORKER_URL -> URL pública del worker, p. ej.
+                         https://arhiax-re.vercel.app/api/v1/pdf/worker
 
 Sin token configurado, encolar_generacion() devuelve encolado=False y el
 llamador ejecuta el camino síncrono (fallback): la app nunca se bloquea.
@@ -21,9 +22,8 @@ from typing import Any
 import requests
 
 QSTASH_TOKEN = os.environ.get("QSTASH_TOKEN", "").strip()
+QSTASH_URL = os.environ.get("QSTASH_URL", "").strip() or "https://qstash.upstash.io"
 WORKER_URL = os.environ.get("ARHIAX_WORKER_URL", "").strip()
-
-QSTASH_API = "https://qstash.upstash.io/v1/publish"
 
 
 def cola_configurada() -> bool:
@@ -34,6 +34,7 @@ def estado_cola() -> dict[str, Any]:
     return {
         "configurada": cola_configurada(),
         "worker_url": WORKER_URL or None,
+        "qstash_url": QSTASH_URL if cola_configurada() else None,
         "proveedor": "qstash" if cola_configurada() else None,
     }
 
@@ -52,7 +53,7 @@ def encolar_generacion(datos: dict) -> dict[str, Any]:
         }
     try:
         resp = requests.post(
-            f"{QSTASH_API}/{WORKER_URL}",
+            f"{QSTASH_URL.rstrip('/')}/v1/publish/{WORKER_URL}",
             json=datos,
             headers={"Authorization": f"Bearer {QSTASH_TOKEN}", "Content-Type": "application/json"},
             timeout=15,

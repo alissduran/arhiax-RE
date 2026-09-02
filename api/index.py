@@ -824,12 +824,49 @@ def estado_cola_pdf(auth: dict = Depends(require_admin)):
     return estado_cola()
 
 
-@app.post("/api/v1/pdf/worker")
-def worker_generar_pdf(payload: dict = Body(...), auth: dict = Depends(require_auth)):
-    """Worker de la cola (lo invoca QStash): compila el PDF del job y lo guarda.
+def _verificar_firma_qstash(request: Request, body_bytes: bytes) -> bool:
+    """Valida el header 'Upstash-Signature' (HMAC-SHA256 del body) contra las
+    signing keys de QStash configuradas (QSTASH_CURRENT/NEXT_SIGNING_KEY)."""
+    import hashlib as _hl
+    firma_header = request.headers.get("upstash-signature", "")
+    if not firma_header:
+        return False
+    claves = [
+        os.environ.get("QSTASH_CURRENT_SIGNING_KEY", "").strip(),
+        os.environ.get("QSTASH_NEXT_SIGNING_KEY", "").strip(),
+    ]
+    claves = [k for k in claves if k]
+    if not claves:
+        return False
+    firmas = re.findall(r"v1=([a-fA-F0-9]+)", firma_header) or [firma_header.strip()]
+    for clave in claves:
+        esperada = hmac.new(clave.encode("utf-8"), body_bytes, _hl.sha256).hexdigest()
+        if any(hmac.compare_digest(esperada, f.lower()) for f in firmas):
+            return True
+    return False
 
+
+@app.post("/api/v1/pdf/worker")
+async def worker_generar_pdf(request: Request):
+    """Worker de la cola: compila el PDF del job y lo guarda en Neon.
+
+    Autenticación: firma válida de QStash (Upstash-Signature) o Bearer de la app.
     Recibe JSON: {job_id, folio_matricula, direccion, area, barrio, certificado_b64?}.
     """
+    import json as _json
+    body_bytes = await request.body()
+    if not _verificar_firma_qstash(request, body_bytes):
+        # Fallback: token Bearer de la aplicación
+        auth_header = request.headers.get("authorization", "")
+        if not auth_header.startswith("Bearer "):
+            raise HTTPException(status_code=401, detail="Sesión inválida o expirada. Inicie sesión nuevamente.")
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=auth_header[7:].strip())
+        require_auth(creds)
+    try:
+        payload = _json.loads(body_bytes.decode("utf-8"))
+    except Exception:
+        raise HTTPException(status_code=400, detail="Body JSON inválido.")
+
     import base64
     job_id = str(payload.get("job_id") or "")
     if not job_id:
