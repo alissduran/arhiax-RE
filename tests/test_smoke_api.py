@@ -354,6 +354,27 @@ class TestSmokeApi(unittest.TestCase):
         c.execute("UPDATE dictamenes SET barrio = ? WHERE id = ?", ("x", 1))
         self.assertNotIn("RETURNING", ejecutados[-1][0])
 
+    def test_parser_direccion_colombiana(self):
+        """Geocoder catastral: el parser extrae clase/vía/generadora/número de
+        formatos reales (offline, sin red)."""
+        from geocoder_catastral import parsear_direccion_colombiana
+        casos = {
+            "CRA 43 # 98-32": ("Carrera", "43", "", "98", "32"),
+            "Cra 43#98-32": ("Carrera", "43", "", "98", "32"),
+            "CL 72 # 57-10": ("Calle", "72", "", "57", "10"),
+            "Carrera 57 # 72-26": ("Carrera", "57", "", "72", "26"),
+            "CRA 43A # 98-10": ("Carrera", "43", "A", "98", "10"),
+            "Tv 43 # 100-50": ("Transversal", "43", "", "100", "50"),
+            "AV 68 # 53-10": ("Avenida", "68", "", "53", "10"),
+            "DG 22A # 18-2, Barranquilla": ("Diagonal", "22", "A", "18", "2"),
+        }
+        for texto, esperado in casos.items():
+            r = parsear_direccion_colombiana(texto)
+            self.assertEqual(r, esperado, f"falló para '{texto}': {r}")
+        # No matchea: sin número de predio
+        self.assertIsNone(parsear_direccion_colombiana("Calle 72"))
+        self.assertIsNone(parsear_direccion_colombiana("Avenida Circunvalar 110-240"))
+
     def test_cola_pdf_fallback_sin_config(self):
         """Backlog cola: sin QSTASH_TOKEN la cola reporta no configurada y el
         encolado degrada con instrucciones claras (fallback síncrono)."""

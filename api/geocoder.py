@@ -62,6 +62,21 @@ def geocodificar_direccion(direccion, ciudad="Barranquilla"):
     if cache_key in _GEOCODE_CACHE:
         return _GEOCODE_CACHE[cache_key]
 
+    # 0. Catastro oficial de Barranquilla (capa 105): precisión por nomenclatura
+    # municipal, superior a Nominatim (OSM no indexa la mayoría de números de
+    # predio y Nominatim devolvía el centroide del perímetro urbano).
+    if "barranquilla" in ciudad.lower() or not ciudad:
+        try:
+            from geocoder_catastral import geocodificar_catastro_barranquilla
+            res_cat = geocodificar_catastro_barranquilla(direccion)
+            if res_cat:
+                coords = (res_cat["lat"], res_cat["lon"])
+                _GEOCODE_CACHE[cache_key] = coords
+                print(f"[GEOCODER][CATASTRO] '{direccion}' -> {coords} (oficial: {res_cat.get('direccion_oficial')})")
+                return coords
+        except Exception:
+            pass
+
     intentos = [
         "{}, {}, Colombia".format(direccion_norm, ciudad),
         "{}, {}, Colombia".format(direccion.strip(), ciudad),
@@ -126,10 +141,11 @@ def _nominatim_query(query):
             if abs(lat - LAT_GENERICA_BAQ) < 0.0001 and abs(lon - LON_GENERICA_BAQ) < 0.0001:
                 continue
                 
-            # 2. Descartar si el tipo es ciudad/condado administrativo completo
-            if item.get("addresstype") in ("city", "county") or item.get("type") == "administrative":
-                if item.get("name", "").lower() == "barranquilla":
-                    continue
+            # 2. Descartar SIEMPRE los resultados administrativos genéricos
+            # (city/county/administrative, p. ej. 'Perímetro Urbano Barranquilla'):
+            # su centroide NO es la ubicación de ningún predio.
+            if item.get("addresstype") in ("city", "county", "state", "region") or item.get("type") == "administrative":
+                continue
             
             # 3. Validar que esté dentro de los límites geográficos de Barranquilla
             if _BAQ_LAT_MIN <= lat <= _BAQ_LAT_MAX and _BAQ_LON_MIN <= lon <= _BAQ_LON_MAX:
