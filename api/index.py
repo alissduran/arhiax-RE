@@ -799,14 +799,20 @@ def _crear_trabajo(job_id: str, estado: str = "pendiente"):
 
 
 def _actualizar_trabajo(job_id: str, estado: str, pdf_bytes=None, error=None):
+    """Crea o actualiza un trabajo (UPSERT: funciona también si el worker se invoca
+    sin pasar por /generar async, que es quien crea el job)."""
     conn = get_db_connection()
     cursor = conn.cursor()
-    if pdf_bytes is not None:
-        cursor.execute("UPDATE trabajos_pdf SET estado = ?, pdf = ?, error = ? WHERE id = ?",
-                       (estado, pdf_bytes, error, job_id))
-    else:
-        cursor.execute("UPDATE trabajos_pdf SET estado = ?, error = ? WHERE id = ?",
-                       (estado, error, job_id))
+    cursor.execute(
+        """
+        INSERT INTO trabajos_pdf (id, estado, pdf, error, creado) VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+            estado = excluded.estado,
+            pdf = excluded.pdf,
+            error = excluded.error
+        """,
+        (job_id, estado, pdf_bytes, error, datetime.now().isoformat()),
+    )
     conn.commit()
     conn.close()
 
