@@ -93,7 +93,7 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 - [x] **Persistencia configurable** — `ARHIAX_DB_PATH` (env var) con fallback `/tmp` (Vercel) o local; esquema externo (postgres/libsql/turso) con error claro e instrucciones. [Hecho 2026-09-01]
 - [x] **Persistencia gestionada (Neon/Postgres)** — Adaptador `api/postgres_adapter.py` (traduce la API sqlite3 a Postgres) + `psycopg[binary]==3.3.5` + `ARHIAX_DB_PATH` con la BD Neon. **Activo 2026-09-02**: verificado en producción (crear/listar/borrar caso persiste en Postgres entre instancias serverless). [Completo]
 - [x] **Panel de administración con roles** — Usuarios `admin`/`operador` por env vars (`ARHIAX_ADMIN_USER/PASSWORD`, `ARHIAX_OPERADOR_USER/PASSWORD`); login con usuario+contraseña; tokens firmados con rol; `require_admin` en monitoreo (`/api/v1/status`), borrado de casos y cuentas (`/api/v1/admin/usuarios`); panel Admin en el frontend solo para admins. [Hecho 2026-09-01]
-- [x] **Cola asíncrona para PDF (QStash)** — `api/cola_pdf.py` (publica en QStash), `/api/dictamenes/generar?async=true`, worker `POST /api/v1/pdf/worker` y `GET /api/v1/pdf/trabajos/{id}` con tabla `trabajos_pdf`. **Verificado 2026-09-02 con Neon**: worker compila y guarda, y la recuperación del PDF funciona entre requests (persistencia entre instancias). **Para activar el publish automático**: define `QSTASH_TOKEN` y `ARHIAX_WORKER_URL=https://arhiax-re.vercel.app/api/v1/pdf/worker` en Vercel (token en https://console.upstash.com → QStash → Tokens/API Keys). Sin token, la app degrada a generación síncrona (nunca se bloquea).
+- [x] **Cola asíncrona para PDF (QStash)** — `api/cola_pdf.py` (API v2: `POST /v2/publish/{destino}`), `/api/dictamenes/generar?async=true`, worker `POST /api/v1/pdf/worker` (verifica firma JWT HS256 de QStash o Bearer) y `GET /api/v1/pdf/trabajos/{id}` con tabla `trabajos_pdf` en Neon. **Activo 2026-09-02**: ciclo end-to-end verificado en producción (encolar → QStash entrega → worker compila → PDF recuperado, 126 KB). [Completo]
 
 ---
 
@@ -113,8 +113,10 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 | `ARHIAX_OPERADOR_USER` / `ARHIAX_OPERADOR_PASSWORD` | Cuenta operador (rol `operador`, opcional) | ✅ **CONFIGURADA** (`operador`) |
 | `ARHIAX_TOKEN_TTL_HOURS` | Vigencia del token (default 8) | Opcional |
 | `ARHIAX_DB_PATH` | DSN de la BD: ruta SQLite o URL **Neon** `postgresql://...` | ✅ **CONFIGURADA** (Neon/Postgres activo 2026-09-02; persistencia entre instancias verificada) |
-| `QSTASH_TOKEN` | Token de la cola QStash | ⏳ **PENDIENTE** (https://console.upstash.com/qstash) |
-| `ARHIAX_WORKER_URL` | URL pública del worker (`https://arhiax-re.vercel.app/api/v1/pdf/worker`) | ⏳ **PENDIENTE** (con QStash) |
+| `QSTASH_TOKEN` | Token de la cola QStash | ✅ **CONFIGURADA** (activo 2026-09-02) |
+| `ARHIAX_WORKER_URL` | URL pública del worker (`https://arhiax-re.vercel.app/api/v1/pdf/worker`) | ✅ **CONFIGURADA** |
+| `QSTASH_URL` | URL regional del API (`https://qstash-us-east-1.upstash.io`) | ✅ **CONFIGURADA** |
+| `QSTASH_CURRENT_SIGNING_KEY` / `QSTASH_NEXT_SIGNING_KEY` | Claves para verificar la firma JWT del worker | ✅ **CONFIGURADAS** |
 | `ARHIAX_TMP_DIR` | Directorio temporal para tests/worker (default `/tmp`) | Opcional (dev) |
 
 **Credenciales de acceso al portal** (producción):
