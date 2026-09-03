@@ -30,6 +30,7 @@ from address_normalizer import normalize_address_colombia
 # Centroides por ciudad - fallback de ultimo recurso
 CENTROIDE_BAQ = (10.9685, -74.7813)
 CENTROIDE_MED = (6.2442, -75.5812)
+CENTROIDE_BOG = (4.7110, -74.0721)
 
 # Cache en memoria: (ciudad, direccion normalizada) -> (lat, lon)
 _GEOCODE_CACHE = {}
@@ -37,6 +38,7 @@ _GEOCODE_CACHE = {}
 # Bounding boxes por ciudad (margen amplio para area metropolitana)
 _BBOX_BAQ = (10.85, 11.10, -74.95, -74.65)          # (lat_min, lat_max, lon_min, lon_max)
 _BBOX_MED = (5.98, 6.50, -75.80, -75.30)            # Valle de Aburrá amplio
+_BBOX_BOG = (4.45, 4.85, -74.25, -73.90)            # Bogotá D.C. + sabana cercana
 
 
 def _es_medellin(ciudad: str) -> bool:
@@ -44,12 +46,25 @@ def _es_medellin(ciudad: str) -> bool:
     return "medellin" in c or "medellín" in c or c in ("med", "aburra", "valle de aburra")
 
 
+def _es_bogota(ciudad: str) -> bool:
+    c = (ciudad or "").lower().strip()
+    return "bogota" in c or "bogotá" in c or c in ("bog", "dc", "bogota dc")
+
+
 def _centroide(ciudad: str):
-    return CENTROIDE_MED if _es_medellin(ciudad) else CENTROIDE_BAQ
+    if _es_medellin(ciudad):
+        return CENTROIDE_MED
+    if _es_bogota(ciudad):
+        return CENTROIDE_BOG
+    return CENTROIDE_BAQ
 
 
 def _bbox(ciudad: str):
-    return _BBOX_MED if _es_medellin(ciudad) else _BBOX_BAQ
+    if _es_medellin(ciudad):
+        return _BBOX_MED
+    if _es_bogota(ciudad):
+        return _BBOX_BOG
+    return _BBOX_BAQ
 
 
 def geocodificar_direccion(direccion, ciudad="Barranquilla"):
@@ -91,6 +106,14 @@ def geocodificar_direccion(direccion, ciudad="Barranquilla"):
                 _GEOCODE_CACHE[cache_key] = coords
                 print(f"[GEOCODER][CATASTRO-MED] '{direccion}' -> {coords} (oficial: {res_cat.get('direccion_oficial')})")
                 return coords
+        elif _es_bogota(ciudad):
+            from geocoder_catastral_bogota import geocodificar_catastro_bogota
+            res_cat = geocodificar_catastro_bogota(direccion)
+            if res_cat:
+                coords = (res_cat["lat"], res_cat["lon"])
+                _GEOCODE_CACHE[cache_key] = coords
+                print(f"[GEOCODER][CATASTRO-BOG] '{direccion}' -> {coords} (oficial: {res_cat.get('direccion_oficial')})")
+                return coords
         elif "barranquilla" in ciudad.lower() or not ciudad:
             from geocoder_catastral import geocodificar_catastro_barranquilla
             res_cat = geocodificar_catastro_barranquilla(direccion)
@@ -102,7 +125,12 @@ def geocodificar_direccion(direccion, ciudad="Barranquilla"):
     except Exception:
         pass
 
-    nombre_ciudad = "Medellín" if _es_medellin(ciudad) else "Barranquilla"
+    if _es_medellin(ciudad):
+        nombre_ciudad = "Medellín"
+    elif _es_bogota(ciudad):
+        nombre_ciudad = "Bogotá"
+    else:
+        nombre_ciudad = "Barranquilla"
     intentos = [
         "{}, {}, Colombia".format(direccion_norm, nombre_ciudad),
         "{}, {}, Colombia".format(direccion.strip(), nombre_ciudad),
@@ -146,6 +174,8 @@ def _nominatim_query(query, ciudad="Barranquilla"):
     # fallback genérico (centroide administrativo, no es ningún predio)
     if _es_medellin(ciudad):
         nodo_generico = (6.2518405, -75.5635890)   # nodo ciudad de Medellín
+    elif _es_bogota(ciudad):
+        nodo_generico = (4.7110, -74.0721)          # nodo Bogotá D.C.
     else:
         nodo_generico = (11.0101922, -74.8231794)  # nodo de Barranquilla
     lat_min, lat_max, lon_min, lon_max = _bbox(ciudad)

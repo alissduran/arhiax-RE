@@ -202,10 +202,11 @@ def extraer_datos_de_pdf(pdf_path: str, ciudad: str = "barranquilla") -> dict:
     el catastro abierto de la ciudad indicada y sus datos oficiales (dirección,
     coordenadas, destino) prevalecen sobre cualquier inferencia.
 
-    ciudad: 'barranquilla' (catastro datosabiertos) | 'medellin' (servidormapas).
+    ciudad: 'barranquilla' (datosabiertos) | 'medellin' (servidormapas) | 'bogota' (serviciosgis).
     """
     datos = {"area": None, "folio": None, "barrio": None, "direccion": None}
     es_medellin = "medellin" in (ciudad or "").lower()
+    es_bogota = "bogota" in (ciudad or "").lower()
     try:
         reader = pypdf.PdfReader(pdf_path)
         texto = ""
@@ -251,14 +252,19 @@ def extraer_datos_de_pdf(pdf_path: str, ciudad: str = "barranquilla") -> dict:
 
         # 2c. Si el CTL trae código/NUPRE, resolver el predio REAL en el catastro
         # de la ciudad: dirección oficial, coordenadas y barrio salen de ahí.
+        # (Bogotá no publica capa predial con NUPRE: la resolución es por punto en
+        # compile_pdf; aquí basta con dejar el código declarado.)
         if datos.get("codigo_catastral") or datos.get("nupre"):
             try:
                 if es_medellin:
                     from catastro_predio_medellin import enriquecer_desde_ctl as _enr
-                else:
+                    _r = _enr(datos["codigo_catastral"], datos["nupre"])
+                elif not es_bogota:
                     from catastro_predio import enriquecer_desde_ctl as _enr
-                _r = _enr(datos["codigo_catastral"], datos["nupre"])
-                if _r.get("disponible"):
+                    _r = _enr(datos["codigo_catastral"], datos["nupre"])
+                else:
+                    _r = None
+                if _r and _r.get("disponible"):
                     if _r.get("direccion_oficial"):
                         datos["direccion"] = _r["direccion_oficial"]
                     if _r.get("lat") is not None and _r.get("lon") is not None:
@@ -703,7 +709,7 @@ async def generar_dictamen_stateless(
 ):
     # Normalizar ciudad: solo soportadas (barranquilla/medellin); otras -> BAQ
     ciudad = (ciudad or "barranquilla").lower().strip()
-    if ciudad not in ("barranquilla", "medellin"):
+    if ciudad not in ("barranquilla", "medellin", "bogota"):
         ciudad = "barranquilla"
     # Validar campos mínimos
     if not folio_matricula and not direccion:
@@ -1074,7 +1080,7 @@ async def worker_generar_pdf(request: Request):
     area = float(payload.get("area") or 0)
     barrio = payload.get("barrio") or ""
     ciudad = (payload.get("ciudad") or "barranquilla").lower().strip()
-    if ciudad not in ("barranquilla", "medellin"):
+    if ciudad not in ("barranquilla", "medellin", "bogota"):
         ciudad = "barranquilla"
     _ctl_adjuntado = bool(certificado_bytes)
 

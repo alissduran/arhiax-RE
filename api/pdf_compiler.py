@@ -118,19 +118,29 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
 
 
 def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
-    # Ciudad del predio (Sprint 3: barranquilla activa, medellin en expansión).
-    # Controla qué catastro/POT se consulta y qué textos se imprimen.
+    # Ciudad del predio (Sprint 3: barranquilla activa; medellin y bogota en
+    # expansión). Controla qué catastro/POT se consulta y qué textos se imprimen.
     ciudad = (db_record.get('ciudad') or 'barranquilla').lower().strip()
-    if ciudad not in ('barranquilla', 'medellin'):
+    if ciudad not in ('barranquilla', 'medellin', 'bogota'):
         ciudad = 'barranquilla'
     es_medellin = ciudad == 'medellin'
+    es_bogota = ciudad == 'bogota'
     from config import get_ciudad
     cfg_ciudad = get_ciudad(ciudad)
-    _NOMBRE_CIUDAD = cfg_ciudad.get('nombre', 'Barranquilla' if not es_medellin else 'Medellín')
-    _CIRCULO = cfg_ciudad.get('codigo_circulo', '001' if es_medellin else '040')
-    _COD_DANE = cfg_ciudad.get('codigo_dane', '05001' if es_medellin else '08001')
+    if es_bogota:
+        _NOMBRE_CIUDAD = cfg_ciudad.get('nombre', 'Bogotá D.C.')
+        _CIRCULO = cfg_ciudad.get('codigo_circulo', '50')
+        _COD_DANE = cfg_ciudad.get('codigo_dane', '11001')
+    elif es_medellin:
+        _NOMBRE_CIUDAD = cfg_ciudad.get('nombre', 'Medellín')
+        _CIRCULO = cfg_ciudad.get('codigo_circulo', '001')
+        _COD_DANE = cfg_ciudad.get('codigo_dane', '05001')
+    else:
+        _NOMBRE_CIUDAD = cfg_ciudad.get('nombre', 'Barranquilla')
+        _CIRCULO = cfg_ciudad.get('codigo_circulo', '040')
+        _COD_DANE = cfg_ciudad.get('codigo_dane', '08001')
     _ORIP = ("Oficina de Registro de Instrumentos Publicos -- " +
-             ("Medellín" if es_medellin else "Barranquilla"))
+             (_NOMBRE_CIUDAD if not es_bogota else "Bogotá D.C. (ORIP Central)"))
 
     # Cargar y analizar el certificado de libertad y tradicion de forma dinamica (Punto 1)
     from legal_analyzer import analizar_certificado
@@ -140,9 +150,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── Sprint 2 (exactitud): resolver el predio REAL en el catastro cuando el
     # CTL trae código catastral o NUPRE. Nunca rompe: si el servicio no responde
     # o el predio no aparece, queda None y se degrada a los demás orígenes.
-    # Sprint 3: despacho por ciudad (BAQ datosabiertos vs Medellín servidormapas).
-    # En Medellín, sin CTL pero con dirección, se intenta resolver por coordenadas
-    # (uso del predio más cercano) para llenar barrio/destino reales.
+    # Sprint 3: despacho por ciudad (BAQ datosabiertos vs Medellín servidormapas
+    # vs Bogotá catastro distrital). En Medellín/Bogotá, sin CTL pero con
+    # dirección, se intenta resolver por coordenadas (uso del predio/sector más
+    # cercano) para llenar barrio/destino reales.
     predio_real = None
     _lat_geo = None
     _lon_geo = None
@@ -159,20 +170,23 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         except Exception as e:
             print(f"[PDF][CATASTRO-PREDIO:{ciudad}] enriquecimiento no disponible: {e}")
             predio_real = None
-    elif es_medellin:
+    if predio_real is None and (es_medellin or es_bogota):
         # Sin código en el CTL (o sin CTL): geocodificar la dirección y resolver
-        # el uso del predio más cercano en el catastro de Medellín.
+        # por coordenadas el entorno catastral real de la ciudad.
         try:
             from geocoder import geocodificar_direccion
             _dir_raw = db_record.get('direccion', '') or ''
             if _dir_raw and _dir_raw.lower() not in ('pendiente', ''):
                 _lat_geo, _lon_geo = geocodificar_direccion(_dir_raw, ciudad=ciudad)
-                from catastro_predio_medellin import enriquecer_por_punto
-                _r = enriquecer_por_punto(_lat_geo, _lon_geo)
+                if es_bogota:
+                    from catastro_predio_bogota import enriquecer_por_punto as _enr_punto
+                else:
+                    from catastro_predio_medellin import enriquecer_por_punto as _enr_punto
+                _r = _enr_punto(_lat_geo, _lon_geo)
                 if _r.get("disponible"):
                     predio_real = _r
         except Exception as e:
-            print(f"[PDF][CATASTRO-MED:PUNTO] enriquecimiento por punto no disponible: {e}")
+            print(f"[PDF][CATASTRO-{ciudad.upper()}:PUNTO] enriquecimiento por punto no disponible: {e}")
             predio_real = None
 
     folio = analysis["folio"] if analysis["folio"] != "040-XXXXXX" else (db_record.get('folio_matricula', '040-XXXXXX') or '040-XXXXXX')
@@ -231,28 +245,44 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     _predio_tratamiento = None
     if predio_real:
         _p = predio_real.get("predio") or {}
-        _predio_destino = _p.get("destino_economico")
-        # Medellín no expone condición jurídica en las capas abiertas (queda
-        # PENDIENTE); Barranquilla la trae del servicio temático 'condicion'.
-        _predio_condicion = (predio_real.get("condicion") or {}).get("condicion_juridica")
-        # NUPRE/código SOLO se afirman si vinieron del CTL o de la resolución
-        # exacta por código. La resolución por punto (sin CTL) cae en el predio
-        # más cercano y podría ser un vecino: no se afirma su NUPRE como propio.
-        _resol_punto = predio_real.get("resolucion") == "por_punto_referencial"
-        if not _resol_punto:
-            _predio_nupre = _predio_nupre or _p.get("nupre") or _p.get("codigo_homologado")
-            _predio_codigo = _predio_codigo or _p.get("numero_predial_nacional") or _p.get("numero_predial")
-        # Área/tipo/pisos: Barranquilla los trae en 'construccion'; Medellín en
-        # 'lote' (Base_Catastral l3/l5). Se aceptan ambas estructuras.
-        _const = predio_real.get("construccion") or predio_real.get("lote") or {}
-        _predio_area_catastral = _p.get("area_catastral_terreno") or _const.get("area_lote")
-        _predio_tipo_construccion = _const.get("tipo_construccion")
-        _predio_pisos = _const.get("total_pisos") or _const.get("numero_pisos")
         _ent2 = predio_real.get("entorno") or {}
-        _predio_estrato_catastral = _ent2.get("estrato") or _p.get("estrato")
-        _predio_tratamiento = _ent2.get("tratamiento")
-        _predio_codigo_barrio = _ent2.get("codigo_barrio")
-        _predio_comuna = _ent2.get("comuna")
+        _resol_punto = predio_real.get("resolucion") == "por_punto_referencial"
+        if es_bogota:
+            # Bogotá: sin capa predial con NUPRE en abierto; el destino económico
+            # es el USO PREDOMINANTE por manzana (referencial del sector).
+            _predio_destino = (_ent2.get("uso_economico") if not _resol_punto
+                               else _ent2.get("uso_economico"))
+            if _predio_destino:
+                _predio_destino = f"{_predio_destino} (uso predominante por manzana)"
+            _predio_estrato_catastral = _ent2.get("estrato")
+            _predio_codigo_barrio = _ent2.get("sector_catastral")
+            _predio_comuna = _ent2.get("localidad")
+        else:
+            _predio_destino = _p.get("destino_economico")
+            # Medellín no expone condición jurídica en las capas abiertas (queda
+            # PENDIENTE); Barranquilla la trae del servicio temático 'condicion'.
+            _predio_condicion = (predio_real.get("condicion") or {}).get("condicion_juridica")
+            # NUPRE/código SOLO se afirman si vinieron del CTL o de la resolución
+            # exacta por código. La resolución por punto (sin CTL) cae en el predio
+            # más cercano y podría ser un vecino: no se afirma su NUPRE como propio.
+            if not _resol_punto:
+                _predio_nupre = _predio_nupre or _p.get("nupre") or _p.get("codigo_homologado")
+                _predio_codigo = _predio_codigo or _p.get("numero_predial_nacional") or _p.get("numero_predial")
+            # Área/tipo/pisos: Barranquilla los trae en 'construccion'; Medellín en
+            # 'lote' (Base_Catastral l3/l5). Se aceptan ambas estructuras.
+            _const = predio_real.get("construccion") or predio_real.get("lote") or {}
+            _predio_area_catastral = _p.get("area_catastral_terreno") or _const.get("area_lote")
+            _predio_tipo_construccion = _const.get("tipo_construccion")
+            _predio_pisos = _const.get("total_pisos") or _const.get("numero_pisos")
+            _predio_estrato_catastral = _ent2.get("estrato") or _p.get("estrato")
+            _predio_tratamiento = _ent2.get("tratamiento")
+            _predio_codigo_barrio = _ent2.get("codigo_barrio")
+            _predio_comuna = _ent2.get("comuna")
+        # Construcción de Bogotá (pisos) desde su propio dict
+        if es_bogota:
+            _const_bog = predio_real.get("construccion") or {}
+            _predio_tipo_construccion = _const_bog.get("tipo_construccion")
+            _predio_pisos = _const_bog.get("total_pisos")
     else:
         _predio_tratamiento = None
         _predio_codigo_barrio = None
@@ -347,8 +377,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             # Prioridad 4: fallback (centroide de la ciudad o barrio demo legado)
             if barrio.lower().strip() in BARRIO_COORDS:
                 coords = BARRIO_COORDS[barrio.lower().strip()]
+            elif es_bogota:
+                coords = (4.7110, -74.0721)
+            elif es_medellin:
+                coords = (6.2442, -75.5812)
             else:
-                coords = (6.2442, -75.5812) if es_medellin else (10.9685, -74.7813)
+                coords = (10.9685, -74.7813)
             lat, lon = coords
 
     # ── Sombras automáticas 9:00 AM / 3:00 PM (si el caso no trae las de ArcGIS Pro) ──
@@ -372,6 +406,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Barranquilla: motor STRtree sobre GeoJSON POT empaquetados (api/data/).
     # Medellín: capas de gestión del riesgo EN VIVO (VC_Gestion_Riesgo) resueltas
     # por el módulo catastro_predio_medellin (amenazas por punto).
+    # Bogotá: capas IDIGER en vivo (mov. masa urbano, sismos, geotecnia).
     if es_medellin and predio_real:
         _amz = (predio_real.get("amenazas") or {})
         _mm = _amz.get("movimiento_masa") or {"intersecta": False}
@@ -409,12 +444,50 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                 f"(DAGRD): {'; '.join(_det_amz) if _det_amz else 'sin afectaciones registradas por amenaza'}."
             ),
         }
+    elif es_bogota and predio_real:
+        _amz = (predio_real.get("amenazas") or {})
+        _mm = _amz.get("movimiento_masa_urbano") or {"intersecta": False}
+        _si = _amz.get("respuesta_sismica") or {"intersecta": False}
+        _ge = _amz.get("zonificacion_geotecnica") or {"intersecta": False}
+        _nivel_mm = (_mm.get("nivel") or "N/D") if _mm.get("intersecta") else None
+        _det_amz = []
+        if _mm.get("intersecta"):
+            _det_amz.append(f"movimientos en masa: {_mm.get('nivel') or 'N/D'}")
+        if _si.get("intersecta"):
+            _det_amz.append(f"respuesta sísmica: {_si.get('nivel') or 'N/D'}")
+        if _ge.get("intersecta"):
+            _det_amz.append(f"zonificación geotécnica: {_ge.get('nivel') or 'N/D'}")
+        geo_eval = {
+            "amenaza_remocion_masa": {
+                "intersecta": bool(_mm.get("intersecta")),
+                "nivel": _nivel_mm or "Sin afectación",
+                "clase_suelo": (_ent2.get("clase_suelo") or "Urbano"),
+                "area_poligono_m2": 0, "objectid": None,
+                "color_hex": "#D92C2C" if _mm.get("intersecta") else "#7F8C8D",
+            },
+            "areas_en_riesgo": {
+                "intersecta": bool(_si.get("intersecta") or _ge.get("intersecta")),
+                "nivel": ", ".join(_det_amz) if _det_amz else "Sin riesgo identificado",
+                "clase_suelo": (_ent2.get("clase_suelo") or "Urbano"),
+                "area_poligono_m2": 0, "objectid": None,
+                "color_hex": "#F08C2B" if (_si.get("intersecta") or _ge.get("intersecta")) else "#7F8C8D",
+            },
+            "resumen_ejecutivo": (
+                f"Predio en {_NOMBRE_CIUDAD} evaluado contra las capas oficiales del IDIGER "
+                f"(emergencias/gestionriesgos): {'; '.join(_det_amz) if _det_amz else 'sin afectaciones registradas'}."
+            ),
+        }
     else:
         geo_eval = get_geospatial_evaluation(lat, lon)
+    if es_bogota:
+        _fuente_geo = "IDIGER Bogotá -- emergencias/gestionriesgos (en vivo)"
+    elif es_medellin:
+        _fuente_geo = "Servidormapas Medellín -- VC_Gestion_Riesgo (DAGRD, en vivo)"
+    else:
+        _fuente_geo = "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)"
     hallazgos = _inject_geospatial_hallazgo(
         hallazgos, geo_eval, barrio,
-        fuente_pot=("Servidormapas Medellín -- VC_Gestion_Riesgo (DAGRD, en vivo)"
-                    if es_medellin else "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)"),
+        fuente_pot=_fuente_geo,
         nombre_ciudad=_NOMBRE_CIUDAD,
     )
     # ──────────────────────────────────────────────────────────────────────────────
@@ -685,15 +758,26 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         except Exception as img_err:
             print(f"Warning: could not load MAP_IMG: {img_err}")
     story.append(Spacer(1, 6))
-    _localidad_txt = _ent2.get("comuna") if es_medellin else (_ent2.get("localidad") if _ent2 else None)
-    story.append(dt([
+    _localidad_txt = None
+    if es_medellin:
+        _localidad_txt = _ent2.get("comuna")
+    elif es_bogota:
+        _localidad_txt = _ent2.get("localidad")
+    else:
+        _localidad_txt = _ent2.get("localidad") if _ent2 else None
+    _filas_localizacion = [
         ("Coordenadas WGS84", f"Lat: {lat:.5f} N | Lon: {lon:.5f} W"),
         ("Sector urbano", f"{_NOMBRE_CIUDAD} / {barrio}" if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else f"{_NOMBRE_CIUDAD} (sector por verificar)"),
         ("Barrio catastral", barrio if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else "PENDIENTE DE VERIFICACION"),
         ("Comuna/Localidad", _localidad_txt if _localidad_txt else "N/D"),
+    ]
+    if es_bogota and _ent2.get("upz"):
+        _filas_localizacion.append(("UPZ (Unidad de Planeamiento Zonal)", _ent2["upz"]))
+    _filas_localizacion += [
         ("Infraestructura vial", "Vias de acceso inmediato geocodificadas"),
         ("Equipamientos cercanos", "Equipamiento urbano detectado en radio de 2.0 km"),
-    ]))
+    ]
+    story.append(dt(_filas_localizacion))
     story.append(Spacer(1, 8))
      # Calcular asolamiento para 9:00 AM, 12:00 PM, 3:00 PM
     solar_results = []
@@ -979,6 +1063,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             f"de la Alcaldía (uso del predio, estrato, clasificación de suelo, tratamiento "
             f"urbanístico) y estimaciones del modulo ARHIAX RE. "
             f"<b>[FUENTE: SERVIDORMAPAS MEDELLÍN - EN VIVO]</b>"))
+    elif es_bogota:
+        story.append(body(
+            f"Analisis de informacion catastral y urbanistica del predio a partir de las capas "
+            f"oficiales del catastro distrital y POT de Bogotá consultadas EN VIVO en el geoportal "
+            f"de la Unidad Administrativa Especial de Catastro Distrital (lote, sector catastral, "
+            f"uso económico por manzana, estrato, UPZ, localidad, clasificación de suelo Decreto "
+            f"555/2021, valor de referencia) y estimaciones del modulo ARHIAX RE. "
+            f"<b>[FUENTE: CATASTRO DISTRITAL BOGOTÁ - EN VIVO]</b>"))
     else:
         story.append(body(
             "Analisis de informacion catastral y urbanistica del predio a partir de las capas "
@@ -1005,14 +1097,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Consulta el catastro abierto con caché y timeout corto; nunca rompe el PDF:
     # si el servicio no responde, se declara NO DISPONIBLE.
     _cat_live = {"disponible": False}
-    if not es_medellin:
+    if not es_medellin and not es_bogota:
         try:
             from integrations.catastro_live import verificar_catastro_barranquilla
             _cat_live = verificar_catastro_barranquilla(lat, lon)
         except Exception as e:
             _cat_live = {"disponible": False, "error": f"motor no disponible: {e}"}
     story.append(sub("4.1B Verificación Catastral en Vivo"))
-    if predio_real and predio_real.get("disponible"):
+    if predio_real and predio_real.get("disponible") and not es_bogota:
         # Si el CTL trajo código catastral/NUPRE y el predio se resolvió, esta es la
         # verificación REAL del predio (no una coincidencia por bbox).
         _p4 = predio_real.get("predio") or {}
@@ -1027,6 +1119,20 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             ("Fuente en vivo", ("Servidormapas Alcaldia de Medellín (capa Uso del predio)"
                                 if es_medellin else
                                 "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)")),
+        ]))
+    elif es_bogota and predio_real and predio_real.get("disponible"):
+        # Bogotá: sin capa predial con NUPRE en abierto; se reporta la consulta
+        # por punto (lote, sector catastral, uso por manzana, estrato, UPZ...).
+        _en_bog = (predio_real.get("entorno") or {})
+        story.append(dt([
+            ("Estado", "CONSULTADA -- Entorno catastral resuelto por coordenadas (catastro distrital)"),
+            ("Codigo lote", _en_bog.get("codigo_lote") or "N/D"),
+            ("Codigo manzana", _en_bog.get("codigo_manzana") or "N/D"),
+            ("Sector catastral", _en_bog.get("sector_catastral") or "N/D"),
+            ("Uso economico (manzana)", _en_bog.get("uso_economico") or "N/D"),
+            ("Estrato", _en_bog.get("estrato") or "N/D"),
+            ("Valor ref. m2 (manzana)", f"${_en_bog.get('valor_ref_m2'):,.0f}" if _en_bog.get("valor_ref_m2") else "N/D"),
+            ("Fuente en vivo", "Catastro distrital Bogotá (serviciosgis.catastrobogota.gov.co)"),
         ]))
     elif _cat_live.get("disponible"):
         _fuente_url = _cat_live.get("fuente", {}).get("url", "N/D")
@@ -1064,8 +1170,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
          Paragraph("<b>1</b>",s["center"]),Paragraph(_clase_suelo_txt, s["body"])],
         [Paragraph("2",s["value"]),Paragraph("Norma Uso de Suelo",s["body"]),
          Paragraph("<b>1</b>",s["center"]),
-         Paragraph(("<b>Uso del predio consultado</b> (destino: "
-                    f"{_predio_destino or 'N/D'})") if es_medellin
+         Paragraph((f"<b>Uso consultado en vivo</b> (uso económico: "
+                    f"{_predio_destino or 'N/D'})") if (es_medellin or es_bogota)
                    else "<b>ACTIVIDAD CENTRAL</b>", s["body"])],
         [Paragraph("3",s["value"]),Paragraph("Planes Parciales",s["body"]),
          Paragraph("<b>0</b>",s["center"]),Paragraph("Sin afectacion por Plan Parcial",s["alert_verde"])],
@@ -1184,15 +1290,42 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     res_ri = f"RIESGO {ri_eval.get('nivel', 'Baja').upper()}" if ri_eval.get('intersecta') else "SIN AFECTACION"
 
     if es_medellin:
+        _amz05 = (predio_real.get("amenazas") or {}) if predio_real else {}
+        _capas_riesgo = [
+            ("Amenaza por Inundaciones", "inundacion"),
+            ("Amenaza por Movimientos en Masa", "movimiento_masa"),
+            ("Amenaza por Avenidas Torrenciales", "avenida_torrencial"),
+            ("Susceptibilidad Sísmica", "sismo"),
+        ]
+        _fuente_riesgo = "Servidormapas Alcaldía de Medellín - VC_Gestion_Riesgo (DAGRD)"
+        _total_capas = "4 (Inundaciones, Mov. en masa, Avenidas torrenciales, Sismos)"
+        _nombre_cruce = "de gestión del riesgo de Medellín (DAGRD)"
+    elif es_bogota:
+        _amz05 = (predio_real.get("amenazas") or {}) if predio_real else {}
+        _capas_riesgo = [
+            ("Amenaza por Movimientos en Masa (urbano)", "movimiento_masa_urbano"),
+            ("Respuesta Sísmica", "respuesta_sismica"),
+            ("Zonificación Geotécnica", "zonificacion_geotecnica"),
+        ]
+        _fuente_riesgo = "Catastro Distrital Bogotá - emergencias/gestionriesgos (IDIGER)"
+        _total_capas = "3 (Mov. en masa urbano, Respuesta sísmica, Zonificación geotécnica)"
+        _nombre_cruce = "de gestión del riesgo de Bogotá (IDIGER)"
+    else:
+        _amz05 = {}
+        _capas_riesgo = []
+        _fuente_riesgo = ""
+        _total_capas = ""
+        _nombre_cruce = ""
+
+    if es_medellin or es_bogota:
         story.append(body(
-            f"Consulta EN VIVO contra las capas oficiales de gestión del riesgo de la Alcaldía de "
-            f"Medellín (DAGRD - VC_Gestion_Riesgo): amenaza por inundación, movimientos en masa, "
-            f"avenidas torrenciales y susceptibilidad sísmica. Se ejecuto una intersección espacial "
-            f"con las coordenadas del predio sobre cada capa. "
-            f"<b>[FUENTE: SERVIDORMAPAS MEDELLÍN - GESTION DEL RIESGO (EN VIVO)]</b>"))
+            f"Consulta EN VIVO contra las capas oficiales {_nombre_cruce}: "
+            + "; ".join(nombre for nombre, _clave in _capas_riesgo)
+            + ". Se ejecuto una intersección espacial con las coordenadas del predio "
+            + "sobre cada capa. "
+            f"<b>[FUENTE: {_fuente_riesgo.upper()} (EN VIVO)]</b>"))
         story.append(Spacer(1, 4))
         story.append(sub("5.1 Inventario de Capas Consultadas"))
-        _amz05 = (predio_real.get("amenazas") or {}) if predio_real else {}
         def _res_amenaza(dict_capa):
             if dict_capa and dict_capa.get("intersecta"):
                 return Paragraph(f"{dict_capa.get('nivel') or 'DETECTADA'}", s["alert_naranja"])
@@ -1200,15 +1333,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         risk_audit = [
             [Paragraph("<b>Layer</b>",s["header"]),Paragraph("<b>Nombre de Capa</b>",s["header"]),
              Paragraph("<b>Punto Evaluado</b>",s["header"]),Paragraph("<b>Resultado</b>",s["header"])],
-            [Paragraph("1",s["value"]),Paragraph("Amenaza por Inundaciones",s["body"]),
-             Paragraph(f"{lat:.5f}, {lon:.5f}",s["value"]), _res_amenaza(_amz05.get("inundacion"))],
-            [Paragraph("2",s["value"]),Paragraph("Amenaza por Movimientos en Masa",s["body"]),
-             Paragraph(f"{lat:.5f}, {lon:.5f}",s["value"]), _res_amenaza(_amz05.get("movimiento_masa"))],
-            [Paragraph("3",s["value"]),Paragraph("Amenaza por Avenidas Torrenciales",s["body"]),
-             Paragraph(f"{lat:.5f}, {lon:.5f}",s["value"]), _res_amenaza(_amz05.get("avenida_torrencial"))],
-            [Paragraph("4",s["value"]),Paragraph("Susceptibilidad Sísmica",s["body"]),
-             Paragraph(f"{lat:.5f}, {lon:.5f}",s["value"]), _res_amenaza(_amz05.get("sismo"))],
         ]
+        for idx, (nombre, clave) in enumerate(_capas_riesgo, start=1):
+            risk_audit.append([
+                Paragraph(str(idx), s["value"]), Paragraph(nombre, s["body"]),
+                Paragraph(f"{lat:.5f}, {lon:.5f}", s["value"]),
+                _res_amenaza(_amz05.get(clave)),
+            ])
         t_risk = Table(risk_audit, colWidths=["10%","38%","22%","30%"])
         t_risk.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,0),C_AZUL_OSC),("TEXTCOLOR",(0,0),(-1,0),colors.white),
             ("ROWBACKGROUNDS",(0,1),(-1,-1),[colors.white,colors.HexColor("#F0F4FB")]),
@@ -1219,15 +1350,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         story.append(Spacer(1, 4))
         story.append(body(
             f"<b>Metodologia de cruce:</b> Intersección espacial (point-in-polygon) con las coordenadas "
-            f"del predio (Lat: {lat:.5f}, Lon: {lon:.5f}) contra las capas oficiales de gestión del riesgo "
-            f"de Medellín. Diagnostico consolidado: {geo_eval.get('resumen_ejecutivo', 'Evaluacion completada.')}"
+            f"del predio (Lat: {lat:.5f}, Lon: {lon:.5f}) contra las capas oficiales {_nombre_cruce}. "
+            f"Diagnostico consolidado: {geo_eval.get('resumen_ejecutivo', 'Evaluacion completada.')}"
         ))
         story.append(Spacer(1, 4))
         story.append(dt([
-            ("Fuente de datos", "Servidormapas Alcaldía de Medellín - VC_Gestion_Riesgo (consultas en vivo)"),
+            ("Fuente de datos", _fuente_riesgo + " (consultas en vivo)"),
             ("Metodo de cruce", "Point-in-Polygon sobre geometrías oficiales"),
             ("Coordenadas (WGS84)", f"{lat:.5f}, {lon:.5f}"),
-            ("Total capas evaluadas", "4 (Inundaciones, Mov. en masa, Avenidas torrenciales, Sismos)"),
+            ("Total capas evaluadas", _total_capas),
         ]))
         story.append(Spacer(1, 4))
         _geo_fallo = False

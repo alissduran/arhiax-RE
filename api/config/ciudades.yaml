@@ -36,17 +36,31 @@ ciudades:
   bogota:
     nombre: "Bogotá D.C."
     codigo_circulo: "50"       # círculos múltiples (50C, 50N, 50S) — verificar
+    codigo_dane: "11001"
     centroide: { lat: 4.7110, lon: -74.0721 }
     capas_pot_empaquetadas: false
     arcgis:
+      catastro: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services"
+      # Capas EN VIVO verificadas 2026-09-03 (query por bbox OK):
+      capa_lote: "catastro/lote/MapServer/0"
+      capa_manzana: "catastro/manzana/MapServer/0"
+      capa_sector: "catastro/sectorcatastral/MapServer/0"           # SCANOMBRE = barrio
+      capa_uso_manzana: "catastro/usopredominante/MapServer/0"      # GRUPOUSOECON
+      capa_placa: "catastro/placadomiciliaria/MapServer/0"          # geocodificación
+      capa_construccion: "catastro/construccion/MapServer/0"
+      capa_estrato: "ordenamientoterritorial/estratificacion/MapServer/1"
+      capa_upz: "ordenamientoterritorial/unidadplaneamientozonal/MapServer/0"
+      capa_localidad: "ordenamientoterritorial/localidad/MapServer/0"
+      capa_suelo: "ordenamientoterritorial/suelo/MapServer/0"
+      capa_valor_ref: "catastro/valorreferencia/MapServer/0"
+      capas_riesgo: "emergencias/gestionriesgos/MapServer"
       ideca_feature: "https://geoportal.jbb.gov.co/agc/rest/services/IDECA/CensoArbol/FeatureServer"
-      ideca_cobertura: "https://geoportal.jbb.gov.co/agc/rest/services/IDECA/coberturatierra1985/MapServer"
       catastro_en_linea: "https://catastroenlinea.catastrobogota.gov.co/cel"
       mapas: "https://mapas.bogota.gov.co"
       servicios_catastro: "https://servicios.catastrobogota.gov.co"
-      estado: "VERIFICADO EN VIVO 2026-09-01 (IDECA federado OK: CensoArbol/coberturatierra); catastro distrital 503 puntual, CEL sin API pública"
+      estado: "VERIFICADO EN VIVO 2026-09-03 (lote/sector/uso/estrato/UPZ/localidad/suelo/riesgo OK; sin capa predial NUPRE en abierto)"
     valoracion: {}
-    estado: "PARCIAL (IDECA federado activo; catastro distrital pendiente)"
+    estado: "ACTIVO (catastro distrital + POT Decreto 555/2021 via serviciosgis, Sprint 3)"
 
   medellin:
     nombre: "Medellín"

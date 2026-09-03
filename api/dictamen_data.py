@@ -296,6 +296,7 @@ def get_valoracion_alert(barrio, val_data, fmt_cop):
 def get_alcance_dt(barrio, ciudad="barranquilla"):
     # F-21: alcance honesto — no se afirman integraciones que no existen.
     es_med = "medellin" in (ciudad or "").lower()
+    es_bog = "bogota" in (ciudad or "").lower()
     if es_med:
         return [
             ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
@@ -303,6 +304,17 @@ def get_alcance_dt(barrio, ciudad="barranquilla"):
             ("POT/Ordenamiento Medellín", "EJECUTADA -- Clasificación de suelo y tratamientos consultados en vivo"),
             ("Riesgos/Amenazas Medellín", "EJECUTADA -- Capas de gestión del riesgo DAGRD consultadas en vivo"),
             ("Integracion WFS-IGAC", "PLANIFICADA -- En desarrollo para consulta en vivo (ver roadmap)"),
+            ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
+            ("Verificacion SARLAFT", "NO EJECUTADA -- Requiere cruce de listas restrictivas en plataforma externa"),
+            ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013)"),
+        ]
+    if es_bog:
+        return [
+            ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
+            ("Capa catastral Bogotá", "CONSULTADA EN VIVO -- Lote, sector, uso por manzana (serviciosgis catastro distrital)"),
+            ("POT/Ordenamiento Bogotá", "EJECUTADA -- Suelo Decreto 555/2021, UPZ y localidad consultados en vivo"),
+            ("Riesgos/Amenazas Bogotá", "EJECUTADA -- Capas IDIGER consultadas en vivo (mov. masa, sismos, geotecnia)"),
+            ("Detalle predial (NUPRE/destino por predio)", "NO DISPONIBLE EN ABIERTO -- El catastro distrital no publica capa predial con NUPRE; el destino es uso predominante por manzana (referencial)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
             ("Verificacion SARLAFT", "NO EJECUTADA -- Requiere cruce de listas restrictivas en plataforma externa"),
             ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013)"),
@@ -324,12 +336,23 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
                      ciudad="barranquilla"):
     barrio_clean = barrio.strip().title() if barrio else "Pendiente de verificacion"
     es_med = "medellin" in (ciudad or "").lower()
-    gc_nombre = "Medellín" if es_med else "Barranquilla"
-    gc_sigla = "GC-MED" if es_med else "GC-BAQ"
+    es_bog = "bogota" in (ciudad or "").lower()
+    if es_bog:
+        gc_nombre = "Bogotá"
+        gc_sigla = "GC-BOG"
+    elif es_med:
+        gc_nombre = "Medellín"
+        gc_sigla = "GC-MED"
+    else:
+        gc_nombre = "Barranquilla"
+        gc_sigla = "GC-BAQ"
     # Sprint 2 (exactitud): el destino económico y el NUPRE salen del catastro en
     # vivo cuando el CTL trae código/NUPRE; nunca se asume HABITACIONAL por defecto.
     if destino_economico:
-        destino_txt = f"{destino_economico} (Capa Predio {gc_sigla}, en vivo)"
+        if es_bog:
+            destino_txt = f"{destino_economico} (uso predominante por manzana, en vivo)"
+        else:
+            destino_txt = f"{destino_economico} (Capa Predio {gc_sigla}, en vivo)"
     else:
         destino_txt = "PENDIENTE DE VERIFICACION (Requiere consulta catastral del predio)"
     condicion_txt = condicion if condicion else "Pendiente de verificacion"
@@ -355,6 +378,7 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
 
 def get_pot_summary_dt(barrio, ciudad="barranquilla"):
     es_med = "medellin" in (ciudad or "").lower()
+    es_bog = "bogota" in (ciudad or "").lower()
     if es_med:
         return [
             ("Clasificacion del suelo", "SUELO URBANO (POT Medellín - Acuerdo 48/2014, consultado en vivo)"),
@@ -364,6 +388,16 @@ def get_pot_summary_dt(barrio, ciudad="barranquilla"):
             ("Planes Parciales", "SIN AFECTACION DIRECTA REGISTRADA"),
             ("Planes de Reordenamiento", "SIN AFECTACION DIRECTA REGISTRADA"),
             ("Fuente de capas", "Servidormapas Alcaldía de Medellín (consultas en vivo, Sprint 3)"),
+        ]
+    if es_bog:
+        return [
+            ("Clasificacion del suelo", "SUELO SEGUN POT BOGOTA (Decreto 555/2021, consultado en vivo)"),
+            ("Norma uso de suelo", "SEGUN USO ECONOMICO PREDOMINANTE POR MANZANA (consulta en vivo)"),
+            ("Unidad de Planeamiento Zonal (UPZ)", "SEGUN CAPA UPZ CATASTRO DISTRITAL (consultada en vivo)"),
+            ("Altura maxima segun tratamiento", "Sujeta a ficha normativa del polígono específico (UPZ)"),
+            ("Planes Parciales", "SIN AFECTACION DIRECTA REGISTRADA"),
+            ("Planes de Reordenamiento", "SIN AFECTACION DIRECTA REGISTRADA"),
+            ("Fuente de capas", "Catastro Distrital Bogotá (serviciosgis, consultas en vivo, Sprint 3)"),
         ]
     return [
         ("Clasificacion del suelo", "SUELO URBANO (POT Barranquilla - Confirmado)"),
