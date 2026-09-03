@@ -1232,6 +1232,7 @@
       formData.append('direccion', c.direccion);
       formData.append('area', c.area || '0');
       formData.append('barrio', c.barrio);
+      formData.append('ciudad', c.ciudad || 'barranquilla');
       if (selectedFiles['certificado']) formData.append('certificado', selectedFiles['certificado']);
       if (selectedFiles['sombra_9am']) formData.append('sombra_9am', selectedFiles['sombra_9am']);
       if (selectedFiles['sombra_3pm']) formData.append('sombra_3pm', selectedFiles['sombra_3pm']);

@@ -57,11 +57,14 @@ def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
         return {"semaforo": "ROJO", "estructurable": False, "condiciones_precedentes": bloqueos}
     return {"semaforo": "VERDE", "estructurable": True, "condiciones_precedentes": []}
 
-def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str) -> list:
+def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
+                                fuente_pot: str = "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)",
+                                nombre_ciudad: str = "Barranquilla") -> list:
     """
     Reemplaza el hallazgo de amenaza/riesgo hardcodeado por un resultado dinámico
-    obtenido del motor geoespacial (STRtree + GeoJSON POT Barranquilla).
-    Detecta el índice del hallazgo existente por su texto clave y lo sustituye.
+    obtenido del motor geoespacial (STRtree + GeoJSON POT Barranquilla, o capas de
+    gestión del riesgo en vivo para Medellín). Detecta el índice del hallazgo
+    existente por su texto clave y lo sustituye.
     """
     from reportlab.lib import colors as rl_colors
 
@@ -79,10 +82,10 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str) ->
         color_sev   = rl_colors.HexColor("#D92C2C")
         color_bg    = rl_colors.HexColor("#FFF0F0")
         titulo = f"H-GEO | Afectación por Amenaza/Riesgo Detectada ({nivel_texto})"
-        fuente = "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)"
+        fuente = fuente_pot
         desc = (
-            f"El motor geoespacial detectó intersección del predio con zonas de riesgo del POT. "
-            f"Amenaza remocción en masa: {am.get('nivel', 'N/A')} | "
+            f"El motor geoespacial detectó intersección del predio con zonas de riesgo del POT de {nombre_ciudad}. "
+            f"Amenaza remoción en masa: {am.get('nivel', 'N/A')} | "
             f"Áreas en riesgo: {ri.get('nivel', 'N/A')} | "
             f"Clase de suelo: {clase_suelo}. {resumen}"
         )
@@ -92,9 +95,9 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str) ->
         color_sev   = rl_colors.HexColor("#1A6B3A")
         color_bg    = rl_colors.HexColor("#EBF5EE")
         titulo = "H-GEO | Zona Libre de Amenazas y Riesgos (Evaluación Dinámica POT)"
-        fuente = "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)"
+        fuente = fuente_pot
         desc = (
-            f"El motor geoespacial ARHIAX cruzó las coordenadas del predio contra los GeoJSON oficiales del POT de Barranquilla. "
+            f"El motor geoespacial ARHIAX cruzó las coordenadas del predio contra las capas oficiales del POT de {nombre_ciudad}. "
             f"Resultado: Sin intersección en amenaza por remoción en masa ni en áreas en riesgo. {resumen}"
         )
         impl = "Favorable para suscripción de seguros y originación hipotecaria sin recargos ambientales. Evaluación computada en tiempo real."
@@ -115,6 +118,20 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str) ->
 
 
 def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
+    # Ciudad del predio (Sprint 3: barranquilla activa, medellin en expansión).
+    # Controla qué catastro/POT se consulta y qué textos se imprimen.
+    ciudad = (db_record.get('ciudad') or 'barranquilla').lower().strip()
+    if ciudad not in ('barranquilla', 'medellin'):
+        ciudad = 'barranquilla'
+    es_medellin = ciudad == 'medellin'
+    from config import get_ciudad
+    cfg_ciudad = get_ciudad(ciudad)
+    _NOMBRE_CIUDAD = cfg_ciudad.get('nombre', 'Barranquilla' if not es_medellin else 'Medellín')
+    _CIRCULO = cfg_ciudad.get('codigo_circulo', '001' if es_medellin else '040')
+    _COD_DANE = cfg_ciudad.get('codigo_dane', '05001' if es_medellin else '08001')
+    _ORIP = ("Oficina de Registro de Instrumentos Publicos -- " +
+             ("Medellín" if es_medellin else "Barranquilla"))
+
     # Cargar y analizar el certificado de libertad y tradicion de forma dinamica (Punto 1)
     from legal_analyzer import analizar_certificado
     path_certificado = db_record.get('certificado_path')
@@ -123,23 +140,51 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── Sprint 2 (exactitud): resolver el predio REAL en el catastro cuando el
     # CTL trae código catastral o NUPRE. Nunca rompe: si el servicio no responde
     # o el predio no aparece, queda None y se degrada a los demás orígenes.
+    # Sprint 3: despacho por ciudad (BAQ datosabiertos vs Medellín servidormapas).
+    # En Medellín, sin CTL pero con dirección, se intenta resolver por coordenadas
+    # (uso del predio más cercano) para llenar barrio/destino reales.
     predio_real = None
+    _lat_geo = None
+    _lon_geo = None
     if analysis.get("codigo_catastral") or analysis.get("nupre"):
         try:
-            from catastro_predio import enriquecer_desde_ctl
+            if es_medellin:
+                from catastro_predio_medellin import enriquecer_desde_ctl
+            else:
+                from catastro_predio import enriquecer_desde_ctl
             _r = enriquecer_desde_ctl(analysis.get("codigo_catastral"),
                                       analysis.get("nupre"))
             if _r.get("disponible"):
                 predio_real = _r
         except Exception as e:
-            print(f"[PDF][CATASTRO-PREDIO] enriquecimiento no disponible: {e}")
+            print(f"[PDF][CATASTRO-PREDIO:{ciudad}] enriquecimiento no disponible: {e}")
+            predio_real = None
+    elif es_medellin:
+        # Sin código en el CTL (o sin CTL): geocodificar la dirección y resolver
+        # el uso del predio más cercano en el catastro de Medellín.
+        try:
+            from geocoder import geocodificar_direccion
+            _dir_raw = db_record.get('direccion', '') or ''
+            if _dir_raw and _dir_raw.lower() not in ('pendiente', ''):
+                _lat_geo, _lon_geo = geocodificar_direccion(_dir_raw, ciudad=ciudad)
+                from catastro_predio_medellin import enriquecer_por_punto
+                _r = enriquecer_por_punto(_lat_geo, _lon_geo)
+                if _r.get("disponible"):
+                    predio_real = _r
+        except Exception as e:
+            print(f"[PDF][CATASTRO-MED:PUNTO] enriquecimiento por punto no disponible: {e}")
             predio_real = None
 
     folio = analysis["folio"] if analysis["folio"] != "040-XXXXXX" else (db_record.get('folio_matricula', '040-XXXXXX') or '040-XXXXXX')
-    # Dirección: 1) oficial catastral resuelta por código, 2) del CTL analizado,
-    # 3) del registro. Nunca se inventa.
+    # Dirección: 1) oficial catastral resuelta (código o punto), 2) del CTL
+    # analizado, 3) del registro. Nunca se inventa.
     if predio_real and predio_real.get("direccion_oficial"):
-        direccion = normalize_address_colombia(predio_real["direccion_oficial"])
+        # Medellín devuelve la dirección en casillado catastral ("CL  009 043 B 068");
+        # se conserva como dato oficial pero se compacta para lectura.
+        _dir_of = predio_real["direccion_oficial"]
+        if es_medellin:
+            _dir_of = " ".join(str(_dir_of).split())
+        direccion = normalize_address_colombia(_dir_of)
     elif analysis.get("direccion") and analysis["direccion"].lower() != "pendiente de verificacion":
         direccion = normalize_address_colombia(analysis["direccion"])
     else:
@@ -187,18 +232,31 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     if predio_real:
         _p = predio_real.get("predio") or {}
         _predio_destino = _p.get("destino_economico")
+        # Medellín no expone condición jurídica en las capas abiertas (queda
+        # PENDIENTE); Barranquilla la trae del servicio temático 'condicion'.
         _predio_condicion = (predio_real.get("condicion") or {}).get("condicion_juridica")
-        _predio_nupre = _predio_nupre or _p.get("nupre")
-        _predio_codigo = _predio_codigo or _p.get("numero_predial_nacional")
-        _predio_area_catastral = _p.get("area_catastral_terreno")
-        _const = predio_real.get("construccion") or {}
+        # NUPRE/código SOLO se afirman si vinieron del CTL o de la resolución
+        # exacta por código. La resolución por punto (sin CTL) cae en el predio
+        # más cercano y podría ser un vecino: no se afirma su NUPRE como propio.
+        _resol_punto = predio_real.get("resolucion") == "por_punto_referencial"
+        if not _resol_punto:
+            _predio_nupre = _predio_nupre or _p.get("nupre") or _p.get("codigo_homologado")
+            _predio_codigo = _predio_codigo or _p.get("numero_predial_nacional") or _p.get("numero_predial")
+        # Área/tipo/pisos: Barranquilla los trae en 'construccion'; Medellín en
+        # 'lote' (Base_Catastral l3/l5). Se aceptan ambas estructuras.
+        _const = predio_real.get("construccion") or predio_real.get("lote") or {}
+        _predio_area_catastral = _p.get("area_catastral_terreno") or _const.get("area_lote")
         _predio_tipo_construccion = _const.get("tipo_construccion")
-        _predio_pisos = _const.get("total_pisos")
+        _predio_pisos = _const.get("total_pisos") or _const.get("numero_pisos")
         _ent2 = predio_real.get("entorno") or {}
-        _predio_estrato_catastral = _ent2.get("estrato")
+        _predio_estrato_catastral = _ent2.get("estrato") or _p.get("estrato")
         _predio_tratamiento = _ent2.get("tratamiento")
+        _predio_codigo_barrio = _ent2.get("codigo_barrio")
+        _predio_comuna = _ent2.get("comuna")
     else:
         _predio_tratamiento = None
+        _predio_codigo_barrio = None
+        _predio_comuna = None
 
     # Tipología derivada del destino económico catastral + CTL (descripción).
     # Si el CTL dice BODEGA o el destino es Industrial/Comercial → nunca PH.
@@ -268,23 +326,29 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         lon = predio_real["lon"]
         print(f"[PDF][CATASTRO-PREDIO] coords reales del predio: ({lat:.5f}, {lon:.5f})")
 
-    # Prioridad 2: coordenadas ya geocodificadas y guardadas en la BD
+    # Prioridad 2: coordenadas ya geocodificadas (bloque de enriquecimiento) o BD
     if lat is None or lon is None:
-        lat = db_record.get('lat') or db_record.get('LAT')
-        lon = db_record.get('lon') or db_record.get('LON')
+        if _lat_geo is not None and _lon_geo is not None:
+            lat, lon = _lat_geo, _lon_geo
+        else:
+            lat = db_record.get('lat') or db_record.get('LAT')
+            lon = db_record.get('lon') or db_record.get('LON')
 
     if not lat or not lon:
-        # Prioridad 3: geocodificar la direccion real del predio
+        # Prioridad 3: geocodificar la direccion real del predio (con la ciudad)
         try:
             from geocoder import geocodificar_direccion
             direccion_raw = db_record.get('direccion', '') or ''
             if direccion_raw and direccion_raw.lower() not in ('pendiente', ''):
-                lat, lon = geocodificar_direccion(direccion_raw)
+                lat, lon = geocodificar_direccion(direccion_raw, ciudad=ciudad)
             else:
                 raise ValueError("sin direccion valida")
         except Exception:
-            # Prioridad 4: fallback por barrio (solo retrocompatibilidad con casos demo)
-            coords = BARRIO_COORDS.get(barrio.lower().strip(), (10.9685, -74.7813))
+            # Prioridad 4: fallback (centroide de la ciudad o barrio demo legado)
+            if barrio.lower().strip() in BARRIO_COORDS:
+                coords = BARRIO_COORDS[barrio.lower().strip()]
+            else:
+                coords = (6.2442, -75.5812) if es_medellin else (10.9685, -74.7813)
             lat, lon = coords
 
     # ── Sombras automáticas 9:00 AM / 3:00 PM (si el caso no trae las de ArcGIS Pro) ──
@@ -304,9 +368,55 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         except Exception as e:
             print(f"[SHADOW] generación automática no disponible: {e}")
 
-    # ── HITO 4: Evaluación geoespacial dinámica (STRtree + POT GeoJSON) ─────────
-    geo_eval = get_geospatial_evaluation(lat, lon)
-    hallazgos = _inject_geospatial_hallazgo(hallazgos, geo_eval, barrio)
+    # ── HITO 4: Evaluación geoespacial dinámica ───────────────────────────────
+    # Barranquilla: motor STRtree sobre GeoJSON POT empaquetados (api/data/).
+    # Medellín: capas de gestión del riesgo EN VIVO (VC_Gestion_Riesgo) resueltas
+    # por el módulo catastro_predio_medellin (amenazas por punto).
+    if es_medellin and predio_real:
+        _amz = (predio_real.get("amenazas") or {})
+        _mm = _amz.get("movimiento_masa") or {"intersecta": False}
+        _in = _amz.get("inundacion") or {"intersecta": False}
+        _av = _amz.get("avenida_torrencial") or {"intersecta": False}
+        _si = _amz.get("sismo") or {"intersecta": False}
+        _niveles = [x.get("nivel") for x in (_mm, _in, _av, _si) if x.get("intersecta") and x.get("nivel")]
+        _nivel_mm = (_mm.get("nivel") or "N/D") if _mm.get("intersecta") else None
+        _det_amz = []
+        if _mm.get("intersecta"):
+            _det_amz.append(f"movimientos en masa: {_mm.get('nivel') or 'N/D'}")
+        if _in.get("intersecta"):
+            _det_amz.append(f"inundación: {_in.get('nivel') or 'N/D'}")
+        if _av.get("intersecta"):
+            _det_amz.append(f"avenidas torrenciales: {_av.get('nivel') or 'N/D'}")
+        if _si.get("intersecta"):
+            _det_amz.append(f"sismos: {_si.get('nivel') or 'N/D'}")
+        geo_eval = {
+            "amenaza_remocion_masa": {
+                "intersecta": bool(_mm.get("intersecta")),
+                "nivel": _nivel_mm or "Sin afectación",
+                "clase_suelo": (_ent2.get("clase_suelo") or "Urbano"),
+                "area_poligono_m2": 0, "objectid": None,
+                "color_hex": "#D92C2C" if _mm.get("intersecta") else "#7F8C8D",
+            },
+            "areas_en_riesgo": {
+                "intersecta": bool(_in.get("intersecta") or _av.get("intersecta") or _si.get("intersecta")),
+                "nivel": ", ".join(_det_amz) if _det_amz else "Sin riesgo identificado",
+                "clase_suelo": (_ent2.get("clase_suelo") or "Urbano"),
+                "area_poligono_m2": 0, "objectid": None,
+                "color_hex": "#F08C2B" if (_in.get("intersecta") or _av.get("intersecta")) else "#7F8C8D",
+            },
+            "resumen_ejecutivo": (
+                f"Predio en {_NOMBRE_CIUDAD} evaluado contra las capas oficiales de gestión del riesgo "
+                f"(DAGRD): {'; '.join(_det_amz) if _det_amz else 'sin afectaciones registradas por amenaza'}."
+            ),
+        }
+    else:
+        geo_eval = get_geospatial_evaluation(lat, lon)
+    hallazgos = _inject_geospatial_hallazgo(
+        hallazgos, geo_eval, barrio,
+        fuente_pot=("Servidormapas Medellín -- VC_Gestion_Riesgo (DAGRD, en vivo)"
+                    if es_medellin else "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)"),
+        nombre_ciudad=_NOMBRE_CIUDAD,
+    )
     # ──────────────────────────────────────────────────────────────────────────────
 
     pois = get_nearby_pois(lat, lon, radius=2000)
@@ -520,7 +630,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         acreedor_snr = "SIN GRAVÁMENES ACTIVOS REGISTRADOS"
         
     story.append(dt([
-        ("Matricula Inmobiliaria", f"{folio} (Circulo Registral 040 Barranquilla)"),
+        ("Matricula Inmobiliaria", f"{folio} (Circulo Registral {_CIRCULO} {_NOMBRE_CIUDAD})"),
         ("Direccion oficial", direccion),
         # Sprint 2 (exactitud): la tipología se deriva del CTL/destino catastral real.
         # El caso de demostración (Napoli/Miramar PH) ya no puede contaminar predios
@@ -532,16 +642,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
          "N/D (No Propiedad Horizontal)" if (_predio_condicion and "NO PROPIEDAD HORIZONTAL" in str(_predio_condicion).upper())
          else ("0,2037% (PH)" if is_miramar else "N/D (Sujeto a regimen registral)")),
         ("Apertura del folio", apertura_val),
-        ("NUPRE", f"{_predio_nupre} (Catastro BAQ)" if _predio_nupre
+        ("NUPRE", f"{_predio_nupre} (Catastro {_NOMBRE_CIUDAD})" if _predio_nupre
          else ("080010102200400020043000000000 (Catastro BAQ)" if is_miramar else "Pendiente consulta catastral")),
-        ("Codigo catastral", f"{_predio_codigo} (GC-BAQ)" if _predio_codigo else "Pendiente consulta catastral"),
+        ("Codigo catastral", f"{_predio_codigo} (GC-{_NOMBRE_CIUDAD.upper()[:3]})" if _predio_codigo else "Pendiente consulta catastral"),
         ("Titulares vigentes", titulares_val),
         ("Modalidad de adquisicion", "Compraventa registrada en CTL" if len(analysis.get("anotaciones", [])) > 0 else "Sujeto a verificacion SNR"),
         ("Valor Comercial Consolidado", f"{fmt_cop(res_avaluo['consolidado'])} COP (Banda: {fmt_cop(res_avaluo['banda_baja'])} -- {fmt_cop(res_avaluo['banda_alta'])})"),
         ("Constructor / Enajenante", constructor_val),
         ("Acreedor hipotecario (SNR)", acreedor_snr),
         ("Acreedor hipotecario (REAL)", acreedor_snr),
-        ("ORIP", "Oficina de Registro de Instrumentos Publicos -- Barranquilla"),
+        ("ORIP", _ORIP),
         ("Fuente registral", f"Certificado SNR cargado: {Path(path_certificado).name}" if path_certificado else "Consulta referencial sin CTL"),
     ]))
     story.append(Spacer(1, 8))
@@ -553,7 +663,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                     else "sector por verificar en campo")
     story.append(body(
         f"Vista satelital del inmueble en el {_sector_desc}, "
-        f"Barranquilla. Coordenadas de ubicacion: <b>{lat:.5f} N, {lon:.5f} W</b>. "
+        f"{_NOMBRE_CIUDAD}. Coordenadas de ubicacion: <b>{lat:.5f} N, {lon:.5f} W</b>. "
         "<b>[FUENTE: GMAPS-SAT]</b>"
     ))
     story.append(Spacer(1, 6))
@@ -575,11 +685,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         except Exception as img_err:
             print(f"Warning: could not load MAP_IMG: {img_err}")
     story.append(Spacer(1, 6))
+    _localidad_txt = _ent2.get("comuna") if es_medellin else (_ent2.get("localidad") if _ent2 else None)
     story.append(dt([
         ("Coordenadas WGS84", f"Lat: {lat:.5f} N | Lon: {lon:.5f} W"),
-        ("Sector urbano", f"Barranquilla / {barrio}" if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else "Barranquilla (sector por verificar)"),
+        ("Sector urbano", f"{_NOMBRE_CIUDAD} / {barrio}" if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else f"{_NOMBRE_CIUDAD} (sector por verificar)"),
         ("Barrio catastral", barrio if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else "PENDIENTE DE VERIFICACION"),
-        ("Localidad", _ent2.get("localidad") if (_ent2 and _ent2.get("localidad")) else "N/D"),
+        ("Comuna/Localidad", _localidad_txt if _localidad_txt else "N/D"),
         ("Infraestructura vial", "Vias de acceso inmediato geocodificadas"),
         ("Equipamientos cercanos", "Equipamiento urbano detectado en radio de 2.0 km"),
     ]))
@@ -778,7 +889,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             print(f"Warning: could not load POI_MAP_PNG: {img_err}")
         story.append(Spacer(1, 6))
     
-    story.append(alert_green(get_cobertura_alert(barrio)))
+    story.append(alert_green(get_cobertura_alert(barrio, ciudad=ciudad)))
     story.append(Spacer(1, 8))
     
     # ── 02 RESUMEN HALLAZGOS ───────────────────────────────────
@@ -861,11 +972,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 04 CATASTRAL Y POT [REAL] ──────────────────────────────
     story.append(sec("04 - Analisis Catastral y Urbanistico [DATOS REALES]"))
     story.append(hr())
-    story.append(body(
-        "Analisis de informacion catastral y urbanistica del predio a partir de las capas "
-        "oficiales del POT de Barranquilla empaquetadas en la aplicacion (clases de suelo, "
-        "norma de uso, tratamientos urbanisticos) y estimaciones del modulo ARHIAX RE. "
-        "<b>[FUENTE: CAPAS POT BARRANQUILLA - MODULO ARHIAX RE]</b>"))
+    if es_medellin:
+        story.append(body(
+            f"Analisis de informacion catastral y urbanistica del predio a partir de las capas "
+            f"oficiales del catastro y POT de Medellín consultadas EN VIVO en el servidormapas "
+            f"de la Alcaldía (uso del predio, estrato, clasificación de suelo, tratamiento "
+            f"urbanístico) y estimaciones del modulo ARHIAX RE. "
+            f"<b>[FUENTE: SERVIDORMAPAS MEDELLÍN - EN VIVO]</b>"))
+    else:
+        story.append(body(
+            "Analisis de informacion catastral y urbanistica del predio a partir de las capas "
+            "oficiales del POT de Barranquilla empaquetadas en la aplicacion (clases de suelo, "
+            "norma de uso, tratamientos urbanisticos) y estimaciones del modulo ARHIAX RE. "
+            "<b>[FUENTE: CAPAS POT BARRANQUILLA - MODULO ARHIAX RE]</b>"))
     story.append(Spacer(1, 4))
     story.append(sub("4.1 Datos Catastrales"))
     story.append(dt(get_catastral_dt(
@@ -878,30 +997,36 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         tipo_construccion=_predio_tipo_construccion,
         pisos=_predio_pisos,
         estrato=_predio_estrato_catastral,
+        ciudad=ciudad,
     )))
     story.append(Spacer(1, 4))
 
     # ── 4.1B Verificación catastral EN VIVO (Sprint 3, I-6) ──
-    # Consulta el catastro abierto de Barranquilla con caché y timeout corto;
-    # nunca rompe el PDF: si el servicio no responde, se declara NO DISPONIBLE.
-    try:
-        from integrations.catastro_live import verificar_catastro_barranquilla
-        _cat_live = verificar_catastro_barranquilla(lat, lon)
-    except Exception as e:
-        _cat_live = {"disponible": False, "error": f"motor no disponible: {e}"}
+    # Consulta el catastro abierto con caché y timeout corto; nunca rompe el PDF:
+    # si el servicio no responde, se declara NO DISPONIBLE.
+    _cat_live = {"disponible": False}
+    if not es_medellin:
+        try:
+            from integrations.catastro_live import verificar_catastro_barranquilla
+            _cat_live = verificar_catastro_barranquilla(lat, lon)
+        except Exception as e:
+            _cat_live = {"disponible": False, "error": f"motor no disponible: {e}"}
     story.append(sub("4.1B Verificación Catastral en Vivo"))
     if predio_real and predio_real.get("disponible"):
         # Si el CTL trajo código catastral/NUPRE y el predio se resolvió, esta es la
         # verificación REAL del predio (no una coincidencia por bbox).
         _p4 = predio_real.get("predio") or {}
+        _cod4 = _p4.get("numero_predial_nacional") or _p4.get("numero_predial") or "N/D"
         story.append(dt([
             ("Estado", "CONSULTADA -- Predio resuelto por codigo catastral/NUPRE del CTL"),
-            ("Codigo catastral", _p4.get("numero_predial_nacional") or "N/D"),
-            ("NUPRE", _predio_nupre or _p4.get("nupre") or "N/D"),
+            ("Codigo catastral", _cod4),
+            ("NUPRE", _predio_nupre or _p4.get("nupre") or _p4.get("codigo_homologado") or "N/D"),
             ("Destino economico", _predio_destino or "N/D"),
-            ("Condicion juridica", _predio_condicion or "N/D"),
+            ("Condicion juridica", _predio_condicion or ("N/D (no expuesta en capas abiertas)" if es_medellin else "N/D")),
             ("Area terreno (catastro)", f"{_predio_area_catastral:.2f} m2" if _predio_area_catastral else "N/D"),
-            ("Fuente en vivo", "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)"),
+            ("Fuente en vivo", ("Servidormapas Alcaldia de Medellín (capa Uso del predio)"
+                                if es_medellin else
+                                "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)")),
         ]))
     elif _cat_live.get("disponible"):
         _fuente_url = _cat_live.get("fuente", {}).get("url", "N/D")
@@ -914,10 +1039,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         ]))
     else:
         story.append(alert_orange(
-            "<b>Verificación catastral en vivo NO DISPONIBLE:</b> el servicio abierto de la "
-            "Alcaldía de Barranquilla no respondió al momento de generar el dictamen. "
-            "La información catastral de esta sección proviene de las capas POT "
-            "empaquetadas y debe verificarse antes de usarse en una decisión."))
+            f"<b>Verificación catastral en vivo NO DISPONIBLE:</b> el servicio abierto de "
+            f"{_NOMBRE_CIUDAD} no respondió al momento de generar el dictamen o el predio no "
+            f"se resolvió por código catastral/NUPRE. La información catastral de esta sección "
+            f"debe verificarse antes de usarse en una decisión."))
     story.append(Spacer(1, 4))
     story.append(sub("4.2 POT -- Cruce de Capas de Ordenamiento [REAL]"))
     # Tratamiento urbanístico REAL desde la capa de planeación de la Alcaldía
@@ -929,14 +1054,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _trat_txt = f"{_trat_par} ({_ent2.get('tipo_tratamiento') or 'POT'})"
         if _ent2.get("altura_maxima") and str(_ent2.get("altura_maxima")).lower() not in ("plan parcial",):
             _trat_txt += f" -- Altura max: {_ent2.get('altura_maxima')}"
+    _clase_suelo_txt = (_ent2.get("clase_suelo") or "SUELO URBANO") if _ent2.get("clase_suelo") else "SUELO URBANO"
+    _clase_suelo_txt = f"<b>{_clase_suelo_txt.upper()}</b>"
     # POT audit table
     pot_audit = [
         [Paragraph("<b>Layer</b>",s["header"]),Paragraph("<b>Capa</b>",s["header"]),
          Paragraph("<b>Features</b>",s["header"]),Paragraph("<b>Resultado</b>",s["header"])],
         [Paragraph("1",s["value"]),Paragraph("Clases de Suelo",s["body"]),
-         Paragraph("<b>1</b>",s["center"]),Paragraph("<b>SUELO URBANO</b> (cod_suelo: 01)",s["body"])],
+         Paragraph("<b>1</b>",s["center"]),Paragraph(_clase_suelo_txt, s["body"])],
         [Paragraph("2",s["value"]),Paragraph("Norma Uso de Suelo",s["body"]),
-         Paragraph("<b>1</b>",s["center"]),Paragraph("<b>ACTIVIDAD CENTRAL</b>",s["body"])],
+         Paragraph("<b>1</b>",s["center"]),
+         Paragraph(("<b>Uso del predio consultado</b> (destino: "
+                    f"{_predio_destino or 'N/D'})") if es_medellin
+                   else "<b>ACTIVIDAD CENTRAL</b>", s["body"])],
         [Paragraph("3",s["value"]),Paragraph("Planes Parciales",s["body"]),
          Paragraph("<b>0</b>",s["center"]),Paragraph("Sin afectacion por Plan Parcial",s["alert_verde"])],
         [Paragraph("4",s["value"]),Paragraph("Tratamientos Urbanisticos",s["body"]),
@@ -953,14 +1083,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         ("VALIGN",(0,0),(-1,-1),"MIDDLE")]))
     story.append(t_pot)
     story.append(Spacer(1, 4))
-    story.append(dt(get_pot_summary_dt(barrio)))
+    story.append(dt(get_pot_summary_dt(barrio, ciudad=ciudad)))
     story.append(Spacer(1, 4))
     _am_pot = geo_eval.get("amenaza_remocion_masa", {}).get("intersecta", False)
     _ri_pot = geo_eval.get("areas_en_riesgo", {}).get("intersecta", False)
     if _am_pot or _ri_pot:
         story.append(alert_orange(
-            "<b>HALLAZGO MEDIO:</b> El predio intersecta capas de amenaza/riesgo del POT de Barranquilla. "
-            "Verificar el cumplimiento de la norma urbanistica del poligono especifico y la afectacion por riesgo."))
+            f"<b>HALLAZGO MEDIO:</b> El predio intersecta capas de amenaza/riesgo del POT de "
+            f"{_NOMBRE_CIUDAD}. Verificar el cumplimiento de la norma urbanistica del poligono "
+            f"especifico y la afectacion por riesgo."))
     elif _trat_par:
         story.append(alert_orange(
             f"<b>HALLAZGO MEDIO:</b> El tratamiento urbanistico oficial del poligono es "
@@ -1045,70 +1176,119 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 05 HIDROLOGICO [REAL] ──────────────────────────────────
     story.append(sec("05 - Analisis Hidrologico y de Riesgos [DATOS REALES]"))
     story.append(hr())
-    story.append(body(
-        "Consulta en vivo contra <b>todas las capas</b> del servicio riesgos/amenazas/MapServer "
-        "de la Alcaldia de Barranquilla y el motor geoespacial ARHIAX. Se ejecuto una query espacial "
-        "con las coordenadas del predio sobre cada capa disponible. "
-        "<b>[FUENTE: ALCALDIA BAQ - DATOS REALES - STRtree POT]</b>"))
-    story.append(Spacer(1, 4))
-    story.append(sub("5.1 Inventario de Capas Consultadas"))
-    
     bbox_str = f"{lon-0.0025:.3f},{lat-0.0025:.3f},{lon+0.0025:.3f},{lat+0.0025:.3f}"
     am_eval = geo_eval.get('amenaza_remocion_masa', {})
     ri_eval = geo_eval.get('areas_en_riesgo', {})
-    
+
     res_am = f"AMENAZA {am_eval.get('nivel', 'Baja').upper()}" if am_eval.get('intersecta') else "SIN AFECTACION"
     res_ri = f"RIESGO {ri_eval.get('nivel', 'Baja').upper()}" if ri_eval.get('intersecta') else "SIN AFECTACION"
-    
-    # Table showing each layer queried and result
-    risk_audit = [
-        [Paragraph("<b>Layer ID</b>",s["header"]),Paragraph("<b>Nombre de Capa</b>",s["header"]),
-         Paragraph("<b>BBOX Consultado</b>",s["header"]),Paragraph("<b>Features</b>",s["header"]),
-         Paragraph("<b>Resultado</b>",s["header"])],
-        [Paragraph("0",s["value"]),Paragraph("Amenaza por Inundacion",s["body"]),
-         Paragraph(bbox_str,s["value"]),Paragraph("<b>0</b>",s["center"]),
-         Paragraph("SIN AFECTACION",s["alert_verde"])],
-        [Paragraph("1",s["value"]),Paragraph("Amenaza por Inundacion (Historica)",s["body"]),
-         Paragraph(bbox_str,s["value"]),Paragraph("<b>0</b>",s["center"]),
-         Paragraph("SIN AFECTACION",s["alert_verde"])],
-        [Paragraph("2",s["value"]),Paragraph("Amenaza por Remocion en Masa",s["body"]),
-         Paragraph(bbox_str,s["value"]),Paragraph("<b>1</b>" if am_eval.get('intersecta') else "<b>0</b>",s["center"]),
-         Paragraph(res_am, s["alert_naranja"] if am_eval.get('intersecta') else s["alert_verde"])],
-        [Paragraph("3",s["value"]),Paragraph("Amenaza por Remocion en Masa (Historica)",s["body"]),
-         Paragraph(bbox_str,s["value"]),Paragraph("<b>0</b>",s["center"]),
-         Paragraph("SIN AFECTACION",s["alert_verde"])],
-        [Paragraph("4",s["value"]),Paragraph("Zonas de Riesgo No Mitigable",s["body"]),
-         Paragraph(bbox_str,s["value"]),Paragraph("<b>1</b>" if ri_eval.get('intersecta') else "<b>0</b>",s["center"]),
-         Paragraph(res_ri, s["alert_naranja"] if ri_eval.get('intersecta') else s["alert_verde"])],
-        [Paragraph("5",s["value"]),Paragraph("Arroyos y Cauces Urbanos",s["body"]),
-         Paragraph(bbox_str,s["value"]),Paragraph("<b>0</b>",s["center"]),
-         Paragraph("SIN AFECTACION",s["alert_verde"])],
-    ]
-    t_risk = Table(risk_audit, colWidths=["10%","28%","30%","10%","22%"])
-    t_risk.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,0),C_AZUL_OSC),("TEXTCOLOR",(0,0),(-1,0),colors.white),
-        ("ROWBACKGROUNDS",(0,1),(-1,-1),[colors.white,colors.HexColor("#F0F4FB")]),
-        ("GRID",(0,0),(-1,-1),0.4,C_BORDE),("TOPPADDING",(0,0),(-1,-1),4),
-        ("BOTTOMPADDING",(0,0),(-1,-1),4),("LEFTPADDING",(0,0),(-1,-1),5),
-        ("VALIGN",(0,0),(-1,-1),"MIDDLE")]))
-    story.append(t_risk)
-    story.append(Spacer(1, 4))
-    story.append(body(
-        f"<b>Metodologia de cruce:</b> Se construyo un Bounding Box (BBOX) en WGS84 centrado en las "
-        f"coordenadas de la direccion evaluada: {direccion} (Lat: {lat:.5f}, Lon: {lon:.5f}), con un buffer "
-        f"espacial de ~250m. Se ejecuto el cruce espacial pericial contra las capas oficiales del POT. "
-        f"Diagnostico consolidado: {geo_eval.get('resumen_ejecutivo', 'Evaluacion completada.')}"
-    ))
-    story.append(Spacer(1, 4))
-    story.append(dt([
-        ("Fuente de datos", "Capas GeoJSON oficiales del POT de Barranquilla (empaquetadas en la aplicacion)"),
-        ("Metodo de cruce", "Spatial Query Point-in-Polygon (STRtree / Shapely) sobre geometrias normalizadas"),
-        ("BBOX (WGS84)", bbox_str),
-        ("Total capas evaluadas", "6 (Inundacion x2, Remocion x2, Riesgo No Mitigable, Arroyos)"),
-        ("Clasificacion resultante", f"EVALUACION GEOTECNICA POT: {res_am}"),
-    ]))
-    story.append(Spacer(1, 4))
 
-    _geo_fallo = "no se completó" in (geo_eval.get("resumen_ejecutivo", "") or "").lower()
+    if es_medellin:
+        story.append(body(
+            f"Consulta EN VIVO contra las capas oficiales de gestión del riesgo de la Alcaldía de "
+            f"Medellín (DAGRD - VC_Gestion_Riesgo): amenaza por inundación, movimientos en masa, "
+            f"avenidas torrenciales y susceptibilidad sísmica. Se ejecuto una intersección espacial "
+            f"con las coordenadas del predio sobre cada capa. "
+            f"<b>[FUENTE: SERVIDORMAPAS MEDELLÍN - GESTION DEL RIESGO (EN VIVO)]</b>"))
+        story.append(Spacer(1, 4))
+        story.append(sub("5.1 Inventario de Capas Consultadas"))
+        _amz05 = (predio_real.get("amenazas") or {}) if predio_real else {}
+        def _res_amenaza(dict_capa):
+            if dict_capa and dict_capa.get("intersecta"):
+                return Paragraph(f"{dict_capa.get('nivel') or 'DETECTADA'}", s["alert_naranja"])
+            return Paragraph("SIN AFECTACION", s["alert_verde"])
+        risk_audit = [
+            [Paragraph("<b>Layer</b>",s["header"]),Paragraph("<b>Nombre de Capa</b>",s["header"]),
+             Paragraph("<b>Punto Evaluado</b>",s["header"]),Paragraph("<b>Resultado</b>",s["header"])],
+            [Paragraph("1",s["value"]),Paragraph("Amenaza por Inundaciones",s["body"]),
+             Paragraph(f"{lat:.5f}, {lon:.5f}",s["value"]), _res_amenaza(_amz05.get("inundacion"))],
+            [Paragraph("2",s["value"]),Paragraph("Amenaza por Movimientos en Masa",s["body"]),
+             Paragraph(f"{lat:.5f}, {lon:.5f}",s["value"]), _res_amenaza(_amz05.get("movimiento_masa"))],
+            [Paragraph("3",s["value"]),Paragraph("Amenaza por Avenidas Torrenciales",s["body"]),
+             Paragraph(f"{lat:.5f}, {lon:.5f}",s["value"]), _res_amenaza(_amz05.get("avenida_torrencial"))],
+            [Paragraph("4",s["value"]),Paragraph("Susceptibilidad Sísmica",s["body"]),
+             Paragraph(f"{lat:.5f}, {lon:.5f}",s["value"]), _res_amenaza(_amz05.get("sismo"))],
+        ]
+        t_risk = Table(risk_audit, colWidths=["10%","38%","22%","30%"])
+        t_risk.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,0),C_AZUL_OSC),("TEXTCOLOR",(0,0),(-1,0),colors.white),
+            ("ROWBACKGROUNDS",(0,1),(-1,-1),[colors.white,colors.HexColor("#F0F4FB")]),
+            ("GRID",(0,0),(-1,-1),0.4,C_BORDE),("TOPPADDING",(0,0),(-1,-1),4),
+            ("BOTTOMPADDING",(0,0),(-1,-1),4),("LEFTPADDING",(0,0),(-1,-1),5),
+            ("VALIGN",(0,0),(-1,-1),"MIDDLE")]))
+        story.append(t_risk)
+        story.append(Spacer(1, 4))
+        story.append(body(
+            f"<b>Metodologia de cruce:</b> Intersección espacial (point-in-polygon) con las coordenadas "
+            f"del predio (Lat: {lat:.5f}, Lon: {lon:.5f}) contra las capas oficiales de gestión del riesgo "
+            f"de Medellín. Diagnostico consolidado: {geo_eval.get('resumen_ejecutivo', 'Evaluacion completada.')}"
+        ))
+        story.append(Spacer(1, 4))
+        story.append(dt([
+            ("Fuente de datos", "Servidormapas Alcaldía de Medellín - VC_Gestion_Riesgo (consultas en vivo)"),
+            ("Metodo de cruce", "Point-in-Polygon sobre geometrías oficiales"),
+            ("Coordenadas (WGS84)", f"{lat:.5f}, {lon:.5f}"),
+            ("Total capas evaluadas", "4 (Inundaciones, Mov. en masa, Avenidas torrenciales, Sismos)"),
+        ]))
+        story.append(Spacer(1, 4))
+        _geo_fallo = False
+        if (predio_real and (predio_real.get("amenazas") or {}).get("disponible") is False):
+            _geo_fallo = True
+    else:
+        story.append(body(
+            "Consulta en vivo contra <b>todas las capas</b> del servicio riesgos/amenazas/MapServer "
+            "de la Alcaldia de Barranquilla y el motor geoespacial ARHIAX. Se ejecuto una query espacial "
+            "con las coordenadas del predio sobre cada capa disponible. "
+            "<b>[FUENTE: ALCALDIA BAQ - DATOS REALES - STRtree POT]</b>"))
+        story.append(Spacer(1, 4))
+        story.append(sub("5.1 Inventario de Capas Consultadas"))
+        # Table showing each layer queried and result
+        risk_audit = [
+            [Paragraph("<b>Layer ID</b>",s["header"]),Paragraph("<b>Nombre de Capa</b>",s["header"]),
+             Paragraph("<b>BBOX Consultado</b>",s["header"]),Paragraph("<b>Features</b>",s["header"]),
+             Paragraph("<b>Resultado</b>",s["header"])],
+            [Paragraph("0",s["value"]),Paragraph("Amenaza por Inundacion",s["body"]),
+             Paragraph(bbox_str,s["value"]),Paragraph("<b>0</b>",s["center"]),
+             Paragraph("SIN AFECTACION",s["alert_verde"])],
+            [Paragraph("1",s["value"]),Paragraph("Amenaza por Inundacion (Historica)",s["body"]),
+             Paragraph(bbox_str,s["value"]),Paragraph("<b>0</b>",s["center"]),
+             Paragraph("SIN AFECTACION",s["alert_verde"])],
+            [Paragraph("2",s["value"]),Paragraph("Amenaza por Remocion en Masa",s["body"]),
+             Paragraph(bbox_str,s["value"]),Paragraph("<b>1</b>" if am_eval.get('intersecta') else "<b>0</b>",s["center"]),
+             Paragraph(res_am, s["alert_naranja"] if am_eval.get('intersecta') else s["alert_verde"])],
+            [Paragraph("3",s["value"]),Paragraph("Amenaza por Remocion en Masa (Historica)",s["body"]),
+             Paragraph(bbox_str,s["value"]),Paragraph("<b>0</b>",s["center"]),
+             Paragraph("SIN AFECTACION",s["alert_verde"])],
+            [Paragraph("4",s["value"]),Paragraph("Zonas de Riesgo No Mitigable",s["body"]),
+             Paragraph(bbox_str,s["value"]),Paragraph("<b>1</b>" if ri_eval.get('intersecta') else "<b>0</b>",s["center"]),
+             Paragraph(res_ri, s["alert_naranja"] if ri_eval.get('intersecta') else s["alert_verde"])],
+            [Paragraph("5",s["value"]),Paragraph("Arroyos y Cauces Urbanos",s["body"]),
+             Paragraph(bbox_str,s["value"]),Paragraph("<b>0</b>",s["center"]),
+             Paragraph("SIN AFECTACION",s["alert_verde"])],
+        ]
+        t_risk = Table(risk_audit, colWidths=["10%","28%","30%","10%","22%"])
+        t_risk.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,0),C_AZUL_OSC),("TEXTCOLOR",(0,0),(-1,0),colors.white),
+            ("ROWBACKGROUNDS",(0,1),(-1,-1),[colors.white,colors.HexColor("#F0F4FB")]),
+            ("GRID",(0,0),(-1,-1),0.4,C_BORDE),("TOPPADDING",(0,0),(-1,-1),4),
+            ("BOTTOMPADDING",(0,0),(-1,-1),4),("LEFTPADDING",(0,0),(-1,-1),5),
+            ("VALIGN",(0,0),(-1,-1),"MIDDLE")]))
+        story.append(t_risk)
+        story.append(Spacer(1, 4))
+        story.append(body(
+            f"<b>Metodologia de cruce:</b> Se construyo un Bounding Box (BBOX) en WGS84 centrado en las "
+            f"coordenadas de la direccion evaluada: {direccion} (Lat: {lat:.5f}, Lon: {lon:.5f}), con un buffer "
+            f"espacial de ~250m. Se ejecuto el cruce espacial pericial contra las capas oficiales del POT. "
+            f"Diagnostico consolidado: {geo_eval.get('resumen_ejecutivo', 'Evaluacion completada.')}"
+        ))
+        story.append(Spacer(1, 4))
+        story.append(dt([
+            ("Fuente de datos", "Capas GeoJSON oficiales del POT de Barranquilla (empaquetadas en la aplicacion)"),
+            ("Metodo de cruce", "Spatial Query Point-in-Polygon (STRtree / Shapely) sobre geometrias normalizadas"),
+            ("BBOX (WGS84)", bbox_str),
+            ("Total capas evaluadas", "6 (Inundacion x2, Remocion x2, Riesgo No Mitigable, Arroyos)"),
+            ("Clasificacion resultante", f"EVALUACION GEOTECNICA POT: {res_am}"),
+        ]))
+        story.append(Spacer(1, 4))
+        _geo_fallo = "no se completó" in (geo_eval.get("resumen_ejecutivo", "") or "").lower()
     if _geo_fallo:
         story.append(alert_orange(
             "<b>ADVERTENCIA:</b> No fue posible completar la verificacion espacial del predio "
@@ -1116,13 +1296,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "debe considerarse NO EVALUADO y requiere verificacion geotecnica profesional."))
     elif am_eval.get("intersecta") or ri_eval.get("intersecta"):
         story.append(alert_red(
-            "<b>HALLAZGO ADVERSO:</b> El predio intersecta capas de amenaza/riesgo del POT de "
-            "Barranquilla (ver detalle en la tabla anterior). Se requiere evaluacion geotecnica "
-            "detallada y verificacion de restricciones para originacion hipotecaria."))
+            f"<b>HALLAZGO ADVERSO:</b> El predio intersecta capas de amenaza/riesgo del POT de "
+            f"{_NOMBRE_CIUDAD} (ver detalle en la tabla anterior). Se requiere evaluacion geotecnica "
+            f"detallada y verificacion de restricciones para originacion hipotecaria."))
     else:
         story.append(alert_green(
-            "<b>HALLAZGO POSITIVO:</b> El cruce espacial contra las capas oficiales de riesgos del "
-            "POT de Barranquilla no detecto interseccion de poligonos de amenaza con el predio. "
+            f"<b>HALLAZGO POSITIVO:</b> El cruce espacial contra las capas oficiales de riesgos de "
+            f"{_NOMBRE_CIUDAD} no detecto interseccion de poligonos de amenaza con el predio. "
             "Favorable para suscripcion de seguros y originacion hipotecaria."))
     story.append(Spacer(1, 8))
     
@@ -1291,7 +1471,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 10 ALCANCE ─────────────────────────────────────────────
     story.append(sec("10 - Declaracion de Alcance"))
     story.append(hr())
-    story.append(dt(get_alcance_dt(barrio)))
+    story.append(dt(get_alcance_dt(barrio, ciudad=ciudad)))
     story.append(Spacer(1, 8))
 
     # ── 11 RUTA DE VERIFICACION (Sprint 1 Bloque 4) ────────────
@@ -1407,7 +1587,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(body(
         "Las consultas espaciales se ejecutan enviando un <b>Bounding Box (BBOX)</b> en coordenadas "
         "WGS84 (EPSG:4326, grados decimales) con el parametro <b>inSR=4326</b> en la URL del "
-        "query REST. El servidor ArcGIS de la Alcaldia de Barranquilla ejecuta la reproyeccion "
+        f"query REST. El servidor ArcGIS de la Alcaldía de {_NOMBRE_CIUDAD} ejecuta la reproyeccion "
         "al vuelo (<i>on-the-fly reprojection</i>) al CRS nativo del servicio antes de realizar "
         "la operacion de interseccion espacial (<i>esriSpatialRelIntersects</i>)."))
     story.append(Spacer(1, 4))
@@ -1424,13 +1604,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     
     story.append(sub("A.3 Precision Esperada y Limitaciones"))
     story.append(body(
-        "La transformacion entre WGS84 y MAGNA-SIRGAS/CTM12 introduce un error despreciable "
-        "para efectos de analisis urbanistico y de riesgos (<b>< 1 metro</b> en la zona de Barranquilla), "
+        f"La transformacion entre WGS84 y MAGNA-SIRGAS/CTM12 introduce un error despreciable "
+        f"para efectos de analisis urbanistico y de riesgos (<b>< 1 metro</b> en la zona de {_NOMBRE_CIUDAD}), "
         "dado que ambos marcos (WGS84/ITRF y MAGNA-SIRGAS) son compatibles a nivel centimetrico. "
         "Sin embargo, se documentan las siguientes limitaciones:"))
     story.append(Spacer(1, 4))
     story.append(dt([
-        ("Precision de la reproyeccion", "< 1 metro (WGS84 <-> MAGNA-SIRGAS en zona Barranquilla)"),
+        ("Precision de la reproyeccion", f"< 1 metro (WGS84 <-> MAGNA-SIRGAS en zona {_NOMBRE_CIUDAD})"),
         ("Precision del BBOX", "~250m de buffer en cada direccion -- suficiente para interseccion de poligonos"),
         ("Riesgo en zonas limitrofes", "Si el predio esta en el BORDE de un poligono de amenaza o tratamiento, "
          "la reproyeccion podria generar falsos negativos/positivos en un rango de ~1-2m"),

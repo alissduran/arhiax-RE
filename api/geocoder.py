@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 ARHIAX RE - Modulo de Geocodificacion Universal
-Convierte cualquier direccion de Barranquilla a coordenadas (lat, lon).
-Sin dependencias externas. Sin API key. Usa Nominatim (OpenStreetMap).
+Convierte cualquier direccion de Barranquilla u otras ciudades soportadas
+(Medellín, Sprint 3) a coordenadas (lat, lon).
+Sin dependencias externas. Sin API key. Usa el catastro oficial de la ciudad
+cuando está disponible y Nominatim (OpenStreetMap) como respaldo.
 
 Funciones principales:
     geocodificar_direccion(direccion, ciudad) -> (lat, lon)
@@ -25,48 +27,71 @@ if _API_DIR not in sys.path:
 
 from address_normalizer import normalize_address_colombia
 
-# Centroide de Barranquilla - fallback de ultimo recurso
+# Centroides por ciudad - fallback de ultimo recurso
 CENTROIDE_BAQ = (10.9685, -74.7813)
+CENTROIDE_MED = (6.2442, -75.5812)
 
-# Cache en memoria: direccion normalizada -> (lat, lon)
+# Cache en memoria: (ciudad, direccion normalizada) -> (lat, lon)
 _GEOCODE_CACHE = {}
 
-# Bounding box de Barranquilla (margen amplio para area metropolitana)
-_BAQ_LAT_MIN, _BAQ_LAT_MAX = 10.85, 11.10
-_BAQ_LON_MIN, _BAQ_LON_MAX = -74.95, -74.65
+# Bounding boxes por ciudad (margen amplio para area metropolitana)
+_BBOX_BAQ = (10.85, 11.10, -74.95, -74.65)          # (lat_min, lat_max, lon_min, lon_max)
+_BBOX_MED = (5.98, 6.50, -75.80, -75.30)            # Valle de Aburrá amplio
+
+
+def _es_medellin(ciudad: str) -> bool:
+    c = (ciudad or "").lower().strip()
+    return "medellin" in c or "medellín" in c or c in ("med", "aburra", "valle de aburra")
+
+
+def _centroide(ciudad: str):
+    return CENTROIDE_MED if _es_medellin(ciudad) else CENTROIDE_BAQ
+
+
+def _bbox(ciudad: str):
+    return _BBOX_MED if _es_medellin(ciudad) else _BBOX_BAQ
 
 
 def geocodificar_direccion(direccion, ciudad="Barranquilla"):
     """
-    Convierte una direccion textual a coordenadas (lat, lon) via Nominatim OSM.
+    Convierte una direccion textual a coordenadas (lat, lon).
 
     Estrategia en cascada:
       1. Cache en memoria (hit instantaneo en llamadas repetidas)
-      2. Nominatim con direccion completa normalizada
-      3. Nominatim con direccion original sin normalizar
-      4. Nominatim con tipo de via + numero simplificado (ej: Calle 63, Barranquilla)
-      5. Centroide de Barranquilla como ultimo recurso
+      2. Catastro oficial de la ciudad (Barranquilla capa 105 / Medellín
+         VC_Direccion): precisión por nomenclatura municipal
+      3. Nominatim con direccion completa normalizada
+      4. Nominatim con direccion original sin normalizar
+      5. Nominatim con tipo de via + numero simplificado (ej: Calle 63, ciudad)
+      6. Centroide de la ciudad como ultimo recurso
 
     Returns:
         tuple: (lat, lon) - siempre retorna un valor, nunca lanza excepcion.
     """
     if not direccion or not direccion.strip():
-        return CENTROIDE_BAQ
+        return _centroide(ciudad)
 
     try:
         direccion_norm = normalize_address_colombia(direccion.strip())
     except Exception:
         direccion_norm = direccion.strip().upper()
 
-    cache_key = "{}|{}".format(direccion_norm, ciudad)
+    cache_key = "{}|{}".format(ciudad.lower().strip(), direccion_norm)
     if cache_key in _GEOCODE_CACHE:
         return _GEOCODE_CACHE[cache_key]
 
-    # 0. Catastro oficial de Barranquilla (capa 105): precisión por nomenclatura
-    # municipal, superior a Nominatim (OSM no indexa la mayoría de números de
-    # predio y Nominatim devolvía el centroide del perímetro urbano).
-    if "barranquilla" in ciudad.lower() or not ciudad:
-        try:
+    # 0. Catastro oficial de la ciudad: precisión por nomenclatura municipal,
+    # superior a Nominatim (OSM no indexa la mayoría de números de predio).
+    try:
+        if _es_medellin(ciudad):
+            from geocoder_catastral_medellin import geocodificar_catastro_medellin
+            res_cat = geocodificar_catastro_medellin(direccion)
+            if res_cat:
+                coords = (res_cat["lat"], res_cat["lon"])
+                _GEOCODE_CACHE[cache_key] = coords
+                print(f"[GEOCODER][CATASTRO-MED] '{direccion}' -> {coords} (oficial: {res_cat.get('direccion_oficial')})")
+                return coords
+        elif "barranquilla" in ciudad.lower() or not ciudad:
             from geocoder_catastral import geocodificar_catastro_barranquilla
             res_cat = geocodificar_catastro_barranquilla(direccion)
             if res_cat:
@@ -74,20 +99,22 @@ def geocodificar_direccion(direccion, ciudad="Barranquilla"):
                 _GEOCODE_CACHE[cache_key] = coords
                 print(f"[GEOCODER][CATASTRO] '{direccion}' -> {coords} (oficial: {res_cat.get('direccion_oficial')})")
                 return coords
-        except Exception:
-            pass
+    except Exception:
+        pass
 
+    nombre_ciudad = "Medellín" if _es_medellin(ciudad) else "Barranquilla"
     intentos = [
-        "{}, {}, Colombia".format(direccion_norm, ciudad),
-        "{}, {}, Colombia".format(direccion.strip(), ciudad),
+        "{}, {}, Colombia".format(direccion_norm, nombre_ciudad),
+        "{}, {}, Colombia".format(direccion.strip(), nombre_ciudad),
     ]
 
     # Intento simplificado con tipo de via + numero
-    m = re.search(r"\b(CL|CRA|AV|DG|TV|AP)\s+(\d+)", direccion_norm)
+    m = re.search(r"\b(CL|CRA|CR|AV|DG|TV|AP)\s+(\d+)", direccion_norm)
     if m:
         prefijo_map = {
             "CL": "Calle",
             "CRA": "Carrera",
+            "CR": "Carrera",
             "AV": "Avenida",
             "DG": "Diagonal",
             "TV": "Transversal",
@@ -95,28 +122,33 @@ def geocodificar_direccion(direccion, ciudad="Barranquilla"):
         }
         tipo_via = prefijo_map.get(m.group(1), "Calle")
         numero_via = m.group(2)
-        intentos.append("{} {}, {}, Colombia".format(tipo_via, numero_via, ciudad))
+        intentos.append("{} {}, {}, Colombia".format(tipo_via, numero_via, nombre_ciudad))
 
     for query in intentos:
-        resultado = _nominatim_query(query)
+        resultado = _nominatim_query(query, ciudad)
         if resultado:
             _GEOCODE_CACHE[cache_key] = resultado
             return resultado
 
-    print("[GEOCODER][WARN] Sin resultado especifico para '{}'. Usando centroide de Barranquilla.".format(direccion))
-    _GEOCODE_CACHE[cache_key] = CENTROIDE_BAQ
-    return CENTROIDE_BAQ
+    print("[GEOCODER][WARN] Sin resultado especifico para '{}' en {}. Usando centroide.".format(direccion, nombre_ciudad))
+    _GEOCODE_CACHE[cache_key] = _centroide(ciudad)
+    return _GEOCODE_CACHE[cache_key]
 
 
-def _nominatim_query(query):
+def _nominatim_query(query, ciudad="Barranquilla"):
     """
-    Ejecuta una query a Nominatim y filtra resultados dentro del bbox de Barranquilla.
-    Descarta resultados que representen la municipalidad completa (nodo administrativo genérico de Barranquilla).
+    Ejecuta una query a Nominatim y filtra resultados dentro del bbox de la
+    ciudad indicada (Barranquilla o Medellín). Descarta resultados que
+    representen la municipalidad completa (nodo administrativo genérico).
     Retorna (lat, lon) o None si no hay resultado valido.
     """
-    # Coordenadas exactas del nodo de Barranquilla que Nominatim retorna como fallback genérico
-    LAT_GENERICA_BAQ = 11.0101922
-    LON_GENERICA_BAQ = -74.8231794
+    # Coordenadas exactas del nodo del municipio que Nominatim retorna como
+    # fallback genérico (centroide administrativo, no es ningún predio)
+    if _es_medellin(ciudad):
+        nodo_generico = (6.2518405, -75.5635890)   # nodo ciudad de Medellín
+    else:
+        nodo_generico = (11.0101922, -74.8231794)  # nodo de Barranquilla
+    lat_min, lat_max, lon_min, lon_max = _bbox(ciudad)
 
     try:
         params = urllib.parse.urlencode({
@@ -125,7 +157,7 @@ def _nominatim_query(query):
             "limit": "3",
             "countrycodes": "co",
             "bounded": "1",
-            "viewbox": "{},{},{},{}".format(_BAQ_LON_MIN, _BAQ_LAT_MAX, _BAQ_LON_MAX, _BAQ_LAT_MIN)
+            "viewbox": "{},{},{},{}".format(lon_min, lat_max, lon_max, lat_min)
         })
         url = "https://nominatim.openstreetmap.org/search?{}".format(params)
         req = urllib.request.Request(url, headers={"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"})
@@ -137,8 +169,8 @@ def _nominatim_query(query):
             lat = float(item["lat"])
             lon = float(item["lon"])
             
-            # 1. Descartar si coincide exactamente con el nodo genérico del municipio de Barranquilla
-            if abs(lat - LAT_GENERICA_BAQ) < 0.0001 and abs(lon - LON_GENERICA_BAQ) < 0.0001:
+            # 1. Descartar si coincide exactamente con el nodo genérico del municipio
+            if abs(lat - nodo_generico[0]) < 0.0001 and abs(lon - nodo_generico[1]) < 0.0001:
                 continue
                 
             # 2. Descartar SIEMPRE los resultados administrativos genéricos
@@ -147,8 +179,8 @@ def _nominatim_query(query):
             if item.get("addresstype") in ("city", "county", "state", "region") or item.get("type") == "administrative":
                 continue
             
-            # 3. Validar que esté dentro de los límites geográficos de Barranquilla
-            if _BAQ_LAT_MIN <= lat <= _BAQ_LAT_MAX and _BAQ_LON_MIN <= lon <= _BAQ_LON_MAX:
+            # 3. Validar que esté dentro de los límites geográficos de la ciudad
+            if lat_min <= lat <= lat_max and lon_min <= lon <= lon_max:
                 print("[GEOCODER][OK] '{}' -> ({:.5f}, {:.5f})".format(query, lat, lon))
                 return (lat, lon)
 
@@ -234,9 +266,13 @@ def _es_direccion_valida(texto):
     return bool(tiene_via and tiene_numero)
 
 
-def geocodificar_desde_ctl(texto_pdf):
+def geocodificar_desde_ctl(texto_pdf, ciudad="Barranquilla"):
     """
     Pipeline completo: texto del CTL -> direccion -> barrio -> (lat, lon).
+
+    Args:
+        texto_pdf: texto completo del CTL
+        ciudad:    ciudad del predio ('barranquilla' | 'medellin' | ...)
 
     Returns:
         dict: {
@@ -250,11 +286,12 @@ def geocodificar_desde_ctl(texto_pdf):
     direccion = extraer_direccion_de_ctl(texto_pdf)
     barrio    = extraer_barrio_de_texto(texto_pdf)
 
+    centroide = _centroide(ciudad)
     if direccion:
-        lat, lon = geocodificar_direccion(direccion)
-        fuente = "centroide_fallback" if (lat, lon) == CENTROIDE_BAQ else "nominatim"
+        lat, lon = geocodificar_direccion(direccion, ciudad)
+        fuente = "centroide_fallback" if (lat, lon) == centroide else "nominatim"
     else:
-        lat, lon = CENTROIDE_BAQ
+        lat, lon = centroide
         fuente = "centroide_fallback"
 
     return {

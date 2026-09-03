@@ -195,13 +195,17 @@ else:
     ASSETS_DIR = Path(API_DIR) / "assets"
 ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
-def extraer_datos_de_pdf(pdf_path: str) -> dict:
+def extraer_datos_de_pdf(pdf_path: str, ciudad: str = "barranquilla") -> dict:
     """Analiza de manera inteligente el certificado para extraer área, matrícula,
     barrio, dirección y — clave para la exactitud — el código catastral/NUPRE que
     el CTL del SNR incluye. Si el CTL trae código, el predio REAL se resuelve en
-    el catastro abierto y sus datos oficiales (dirección, coordenadas, destino)
-    prevalecen sobre cualquier inferencia."""
+    el catastro abierto de la ciudad indicada y sus datos oficiales (dirección,
+    coordenadas, destino) prevalecen sobre cualquier inferencia.
+
+    ciudad: 'barranquilla' (catastro datosabiertos) | 'medellin' (servidormapas).
+    """
     datos = {"area": None, "folio": None, "barrio": None, "direccion": None}
+    es_medellin = "medellin" in (ciudad or "").lower()
     try:
         reader = pypdf.PdfReader(pdf_path)
         texto = ""
@@ -245,12 +249,15 @@ def extraer_datos_de_pdf(pdf_path: str) -> dict:
             datos["codigo_catastral"] = None
             datos["nupre"] = None
 
-        # 2c. Si el CTL trae código/NUPRE, resolver el predio REAL en el catastro:
-        # dirección oficial, coordenadas y barrio salen de ahí (no de Nominatim).
+        # 2c. Si el CTL trae código/NUPRE, resolver el predio REAL en el catastro
+        # de la ciudad: dirección oficial, coordenadas y barrio salen de ahí.
         if datos.get("codigo_catastral") or datos.get("nupre"):
             try:
-                from catastro_predio import enriquecer_desde_ctl
-                _r = enriquecer_desde_ctl(datos["codigo_catastral"], datos["nupre"])
+                if es_medellin:
+                    from catastro_predio_medellin import enriquecer_desde_ctl as _enr
+                else:
+                    from catastro_predio import enriquecer_desde_ctl as _enr
+                _r = _enr(datos["codigo_catastral"], datos["nupre"])
                 if _r.get("disponible"):
                     if _r.get("direccion_oficial"):
                         datos["direccion"] = _r["direccion_oficial"]
@@ -263,19 +270,16 @@ def extraer_datos_de_pdf(pdf_path: str) -> dict:
                         datos["barrio"] = _ent["barrio"]
                     _p = _r.get("predio") or {}
                     datos["destino_economico"] = _p.get("destino_economico")
-                    datos["condicion_juridica"] = (_r.get("condicion") or {}).get("condicion_juridica")
-                    _c = _r.get("construccion") or {}
-                    datos["tipo_construccion"] = _c.get("tipo_construccion")
-                    datos["pisos_construccion"] = _c.get("total_pisos")
-                    datos["area_catastral"] = _p.get("area_catastral_terreno")
+                    _c = _r.get("lote") or _r.get("construccion") or {}
+                    datos["area_catastral"] = _c.get("area_lote") or _c.get("area_catastral_terreno")
                     datos["estrato_catastral"] = (_ent or {}).get("estrato")
             except Exception as e:
-                print(f"[EXTRAER-DATOS][WARN] enriquecimiento por código falló: {e}")
+                print(f"[EXTRAER-DATOS][WARN] enriquecimiento por código falló ({ciudad}): {e}")
 
         # 3. Extraer datos geoespaciales desde el CTL (direccion, barrio, lat, lon)
         # Solo como complemento si el predio por código no se resolvió.
         if not datos.get("direccion") or not datos.get("lat"):
-            geo_ctl = geocodificar_desde_ctl(texto)
+            geo_ctl = geocodificar_desde_ctl(texto, ciudad=ciudad)
             if not datos.get("barrio") and geo_ctl.get("barrio"):
                 datos["barrio"] = geo_ctl["barrio"]
             if not datos.get("direccion") and geo_ctl.get("direccion"):
@@ -689,6 +693,7 @@ async def generar_dictamen_stateless(
     direccion: str = Form(None),
     area: float = Form(None),
     barrio: str = Form(None),
+    ciudad: str = Form("barranquilla"),
     certificado: UploadFile = File(None),
     sombra_9am: UploadFile = File(None),
     sombra_3pm: UploadFile = File(None),
@@ -696,6 +701,10 @@ async def generar_dictamen_stateless(
     async_: bool = Form(False),
     auth: dict = Depends(require_auth)
 ):
+    # Normalizar ciudad: solo soportadas (barranquilla/medellin); otras -> BAQ
+    ciudad = (ciudad or "barranquilla").lower().strip()
+    if ciudad not in ("barranquilla", "medellin"):
+        ciudad = "barranquilla"
     # Validar campos mínimos
     if not folio_matricula and not direccion:
         raise HTTPException(status_code=400, detail="Debe ingresar la matrícula inmobiliaria o la dirección.")
@@ -733,6 +742,7 @@ async def generar_dictamen_stateless(
             "direccion": direccion,
             "area": area,
             "barrio": barrio,
+            "ciudad": ciudad,
         }
         if certificado and certificado.filename:
             _validar_archivo_subido(certificado, "certificado")
@@ -761,8 +771,9 @@ async def generar_dictamen_stateless(
         cert_path = temp_run_dir / "certificado.pdf"
         _copiar_con_limite(certificado.file, cert_path)
         
-        # Intentar extraer datos
-        extraidos = extraer_datos_de_pdf(str(cert_path))
+        # Intentar extraer datos (con la ciudad indicada para resolver el predio
+        # real en el catastro correcto: BAQ datosabiertos o Medellín servidormapas)
+        extraidos = extraer_datos_de_pdf(str(cert_path), ciudad=ciudad)
         if not area and extraidos.get("area"):
             area = extraidos["area"]
         if (not folio_matricula or folio_matricula == "Pendiente") and extraidos.get("folio"):
@@ -774,8 +785,9 @@ async def generar_dictamen_stateless(
 
     if not barrio:
         # Con CTL adjunto nunca se afirma el barrio de demostración: si el CTL
-        # no permitió resolverlo, compile_pdf lo dejará PENDIENTE.
-        if not _ctl_adjuntado:
+        # no permitió resolverlo, compile_pdf lo dejará PENDIENTE. Sin CTL, el
+        # barrio demo ('Miramar') solo aplica al caso de demostración de BAQ.
+        if not _ctl_adjuntado and ciudad == "barranquilla":
             barrio = "Miramar"
             if direccion and "recreo" in direccion.lower():
                 barrio = "El Recreo"
@@ -810,6 +822,7 @@ async def generar_dictamen_stateless(
         "folio_matricula": _sanitizar_folio(folio_matricula) or "Pendiente",
         "direccion": direccion or "Pendiente",
         "barrio": barrio,
+        "ciudad": ciudad,
         "estrato": 4,
         "area": area,
         "valor_consolidado": valor_consolidado,
@@ -1060,6 +1073,9 @@ async def worker_generar_pdf(request: Request):
     direccion = payload.get("direccion") or "Pendiente"
     area = float(payload.get("area") or 0)
     barrio = payload.get("barrio") or ""
+    ciudad = (payload.get("ciudad") or "barranquilla").lower().strip()
+    if ciudad not in ("barranquilla", "medellin"):
+        ciudad = "barranquilla"
     _ctl_adjuntado = bool(certificado_bytes)
 
     _cert_path = None
@@ -1070,7 +1086,7 @@ async def worker_generar_pdf(request: Request):
         cert_path.write_bytes(certificado_bytes)
         _cert_path = str(cert_path)
         try:
-            extraidos = extraer_datos_de_pdf(_cert_path)
+            extraidos = extraer_datos_de_pdf(_cert_path, ciudad=ciudad)
             if not area and extraidos.get("area"):
                 area = extraidos["area"]
             if (not folio or folio == "Pendiente") and extraidos.get("folio"):
@@ -1088,7 +1104,7 @@ async def worker_generar_pdf(request: Request):
         # Con CTL nunca se afirma el barrio de demostración (compile_pdf lo deja
         # PENDIENTE o lo resuelve por código catastral). Sin CTL: caso demo legado.
         if not _ctl_adjuntado:
-            barrio = "Miramar"
+            barrio = "Miramar" if ciudad == "barranquilla" else ""
         else:
             barrio = ""
     if area is None or area < 0:
@@ -1100,6 +1116,7 @@ async def worker_generar_pdf(request: Request):
         "folio_matricula": _sanitizar_folio(folio) or "Pendiente",
         "direccion": direccion or "Pendiente",
         "barrio": barrio,
+        "ciudad": ciudad,
         "estrato": 4,
         "area": area,
         "valor_consolidado": int(round(valor_m2 * area, -4)),

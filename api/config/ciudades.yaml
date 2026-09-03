@@ -50,16 +50,26 @@ ciudades:
 
   medellin:
     nombre: "Medellín"
-    codigo_circulo: "001"
+    codigo_circulo: "001"       # Círculo registral Medellín (SNR)
+    codigo_dane: "05001"
     centroide: { lat: 6.2442, lon: -75.5812 }
     capas_pot_empaquetadas: false
     arcgis:
       servidormapas: "https://www.medellin.gov.co/servidormapas/rest/services"
-      capa_pot: "ordenamiento_ter/VM_10_Sistema_Publico_Colectivo"
-      capa_suelo_id: 0
-      estado: "VERIFICADO EN VIVO 2026-09-01 (query capa ClasificacionSuelo OK con bbox)"
+      # Capas EN VIVO verificadas 2026-09-03 (query por punto OK):
+      capa_uso_predio: "mapas_nacionales/VC_Catastro/MapServer/3"          # uso/destino + NUPRE
+      capa_barrios: "mapas_nacionales/VC_Limite_Politico_Admtivo/MapServer/0"
+      capa_comunas: "mapas_nacionales/VC_Limite_Politico_Admtivo/MapServer/1"
+      capa_estrato: "vivienda_ciudad_terri/VC_Catastro_VCT/MapServer/10"
+      capa_lote: "ServiciosCatastro/Base_Catastral/MapServer/3"
+      capa_construccion: "ServiciosCatastro/Base_Catastral/MapServer/5"
+      capa_clasificacion_suelo: "ordenamiento_ter/VM_02_Clasificacion_Suelo/MapServer/4"
+      capa_tratamientos: "ordenamiento_ter/VM_22_Tratamientos_Urbanos/MapServer/0"
+      capa_nomenclatura: "mapas_nacionales/VC_Direccion/MapServer/0"
+      capas_amenazas: "ambiente_dllo_sost/VC_Gestion_Riesgo/MapServer"
+      estado: "VERIFICADO EN VIVO 2026-09-03 (predio/uso/barrio/estrato/suelo/tratamiento OK)"
     valoracion: {}
-    estado: "ACTIVO (POT Acuerdo 48 via servidormapas)"
+    estado: "ACTIVO (catastro distrital + POT via servidormapas, Sprint 3)"
 
   cali:
     nombre: "Cali"

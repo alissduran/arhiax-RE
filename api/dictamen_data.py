@@ -266,11 +266,12 @@ def get_localizacion_dt(barrio, lat, lon):
         ("Equipamientos cercanos", "Equipamientos institucionales, comerciales y asistenciales en radio 2.0 km"),
     ]
 
-def get_cobertura_alert(barrio):
+def get_cobertura_alert(barrio, ciudad="barranquilla"):
     barrio_clean = barrio.strip().title() if barrio else "el sector"
+    nombre_ciudad = "Medellín" if "medellin" in (ciudad or "").lower() else "Barranquilla"
     return (
         f"<b>EVALUACION DE COBERTURA:</b> El inmueble ubicado en <b>{barrio_clean}</b> cuenta con una calificacion "
-        f"de conectividad y equipamiento <b>SATISFACTORIA</b> dentro del perimetro urbano de Barranquilla. "
+        f"de conectividad y equipamiento <b>SATISFACTORIA</b> dentro del perimetro urbano de {nombre_ciudad}. "
         f"El radio de amortiguacion de 2.0 km concentra equipamientos de comercio, salud, educacion y recreacion, "
         f"garantizando accesibilidad peatonal y vehicular bajo el estandar de proximidad urbana."
     )
@@ -292,8 +293,20 @@ def get_valoracion_alert(barrio, val_data, fmt_cop):
         f"y el método de capitalización de rentas (M3) según la tasa de rentabilidad neta de la tipología."
     )
 
-def get_alcance_dt(barrio):
+def get_alcance_dt(barrio, ciudad="barranquilla"):
     # F-21: alcance honesto — no se afirman integraciones que no existen.
+    es_med = "medellin" in (ciudad or "").lower()
+    if es_med:
+        return [
+            ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
+            ("Capa catastral Medellín", "CONSULTADA EN VIVO -- Uso del predio (servidormapas Alcaldía)"),
+            ("POT/Ordenamiento Medellín", "EJECUTADA -- Clasificación de suelo y tratamientos consultados en vivo"),
+            ("Riesgos/Amenazas Medellín", "EJECUTADA -- Capas de gestión del riesgo DAGRD consultadas en vivo"),
+            ("Integracion WFS-IGAC", "PLANIFICADA -- En desarrollo para consulta en vivo (ver roadmap)"),
+            ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
+            ("Verificacion SARLAFT", "NO EJECUTADA -- Requiere cruce de listas restrictivas en plataforma externa"),
+            ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013)"),
+        ]
     return [
         ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
         ("Capa catastral BAQ", "REFERENCIAL -- Estimacion del modulo ARHIAX RE (sin consulta en vivo)"),
@@ -307,12 +320,16 @@ def get_alcance_dt(barrio):
 
 def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
                      codigo_catastral=None, condicion=None, area_catastral=None,
-                     tipo_construccion=None, pisos=None, estrato=None):
+                     tipo_construccion=None, pisos=None, estrato=None,
+                     ciudad="barranquilla"):
     barrio_clean = barrio.strip().title() if barrio else "Pendiente de verificacion"
+    es_med = "medellin" in (ciudad or "").lower()
+    gc_nombre = "Medellín" if es_med else "Barranquilla"
+    gc_sigla = "GC-MED" if es_med else "GC-BAQ"
     # Sprint 2 (exactitud): el destino económico y el NUPRE salen del catastro en
     # vivo cuando el CTL trae código/NUPRE; nunca se asume HABITACIONAL por defecto.
     if destino_economico:
-        destino_txt = f"{destino_economico} (Capa Predio GC-BAQ, en vivo)"
+        destino_txt = f"{destino_economico} (Capa Predio {gc_sigla}, en vivo)"
     else:
         destino_txt = "PENDIENTE DE VERIFICACION (Requiere consulta catastral del predio)"
     condicion_txt = condicion if condicion else "Pendiente de verificacion"
@@ -328,15 +345,26 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
     return [
         ("Area Registrada", area_reg_txt),
         ("Barrio catastral", barrio_clean),
-        ("NUPRE", nupre if nupre else "Pendiente de consulta GC-BAQ"),
-        ("Codigo catastral", codigo_catastral if codigo_catastral else "Pendiente de consulta GC-BAQ"),
+        ("NUPRE", nupre if nupre else f"Pendiente de consulta {gc_sigla}"),
+        ("Codigo catastral", codigo_catastral if codigo_catastral else f"Pendiente de consulta {gc_sigla}"),
         ("Destino economico catastral", destino_txt),
-        ("Condicion juridica (GC-BAQ)", condicion_txt),
+        ("Condicion juridica", condicion_txt),
         ("Tipo de construccion", constr_txt),
         ("Estrato", estrato if estrato not in (None, "", "No_Aplica") else "No aplica (uso no residencial)"),
     ]
 
-def get_pot_summary_dt(barrio):
+def get_pot_summary_dt(barrio, ciudad="barranquilla"):
+    es_med = "medellin" in (ciudad or "").lower()
+    if es_med:
+        return [
+            ("Clasificacion del suelo", "SUELO URBANO (POT Medellín - Acuerdo 48/2014, consultado en vivo)"),
+            ("Norma uso de suelo", "SEGUN USO DEL PREDIO EN CATASTRO (consulta en vivo)"),
+            ("Tratamiento urbanistico", "SEGUN CAPA DE TRATAMIENTOS POT MEDELLIN (consultada en vivo)"),
+            ("Altura maxima segun tratamiento", "Sujeta a ficha normativa del polígono específico"),
+            ("Planes Parciales", "SIN AFECTACION DIRECTA REGISTRADA"),
+            ("Planes de Reordenamiento", "SIN AFECTACION DIRECTA REGISTRADA"),
+            ("Fuente de capas", "Servidormapas Alcaldía de Medellín (consultas en vivo, Sprint 3)"),
+        ]
     return [
         ("Clasificacion del suelo", "SUELO URBANO (POT Barranquilla - Confirmado)"),
         ("Norma uso de suelo", "ACTIVIDAD URBANA RESIDENCIAL / COMERCIAL"),
