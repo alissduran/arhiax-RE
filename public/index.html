@@ -601,6 +601,10 @@
               <p style="font-size: 12px; color: var(--color-gray); margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
                 Todos los insumos cargados y el metraje se enviarán en una sola petición al servidor pericial. Haz clic abajo para generar y descargar tu PDF final de 6 páginas.
               </p>
+              <!-- Refuerzo UX (Sprint 3): aviso permanente cuando falta el CTL -->
+              <div id="aviso-sin-ctl" style="display: none; margin-bottom: 14px; padding: 10px 14px; font-size: 11px; line-height: 1.5; color: #8B2E2E; background: #FDF2F2; border: 1px solid #E6B8B8; border-radius: 4px; text-align: left; max-width: 520px; margin-left: auto; margin-right: auto;">
+                ⚠️ <b>Sin Certificado de Tradición y Libertad (CTL):</b> este dictamen se generará <b>sin análisis registral</b> y quedará marcado como <b>NO APTO</b> para decisiones de crédito, garantía o compraventa. Cargue el CTL del predio (botón "Certificado Tradición") para obtener el dictamen completo.
+              </div>
               <button class="btn-primary" style="font-size: 13px; padding: 14px 28px;" onclick="descargarPDFDictamen()">
                 Generar y Descargar Dictamen (PDF)
               </button>
@@ -948,6 +952,9 @@
       updateUploadCard('sombra-3pm', c.sombra_3pm_cargada, "PNG");
       updateUploadCard('mapa', c.mapa_cargado, "PNG");
       
+      // Refuerzo UX: aviso visible si el caso aún no tiene CTL
+      actualizarAvisoSinCtl();
+
       // Restaurar desde IndexedDB los blobs persistidos para este caso (tras
       // recargas de página) para que el PDF incluya las imágenes de ArcGIS Online.
       restaurarInsumosPersistidos(id);
@@ -986,6 +993,7 @@
           }
         }
       }
+      actualizarAvisoSinCtl();
     }
 
     function updateUploadCard(prefix, loaded, format) {
@@ -998,6 +1006,17 @@
         card.classList.remove('loaded');
         span.textContent = `Pendiente (${format})`;
       }
+    }
+
+    // Refuerzo UX (Sprint 3): muestra el aviso "sin CTL" en la zona de descarga
+    // cuando el caso NO tiene el certificado cargado (ni en memoria ni IndexedDB).
+    function actualizarAvisoSinCtl() {
+      const aviso = document.getElementById('aviso-sin-ctl');
+      if (!aviso) return;
+      const c = dictamenes.find(item => item.id === selectedCaseId);
+      if (!c) return;
+      const tieneCtl = !!selectedFiles['certificado'] || c.certificado_cargado;
+      aviso.style.display = tieneCtl ? 'none' : 'block';
     }
 
     function triggerFileInput(id) {
@@ -1051,6 +1070,7 @@
         else if (imgType === 'mapa_satelital') c.mapa_cargado = 1;
         
         localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+        actualizarAvisoSinCtl();
         selectCase(selectedCaseId);
       }
     }
@@ -1204,6 +1224,27 @@
             const ext = t === 'certificado' ? 'pdf' : 'png';
             selectedFiles[t] = new File([blob], `${t}.${ext}`, { type: blob.type || 'application/octet-stream' });
           }
+        }
+      }
+
+      // Refuerzo UX (Sprint 3): si no hay CTL cargado (ni en memoria ni restaurado
+      // de IndexedDB), advertir ANTES de generar. No bloquea: el usuario puede
+      // continuar y el PDF saldrá marcado como NO APTO.
+      const tieneCtl = !!selectedFiles['certificado'] || c.certificado_cargado;
+      if (!tieneCtl) {
+        const continuar = window.confirm(
+          '⚠️ No se ha cargado el Certificado de Tradición y Libertad (CTL) de este predio.\n\n' +
+          'El dictamen se generará SIN análisis registral (titularidad, hipotecas, embargos) ' +
+          'y quedará marcado como NO APTO para decisiones de crédito, garantía o compraventa.\n\n' +
+          '¿Desea continuar de todos modos? (Recomendado: cancelar y cargar el CTL primero)'
+        );
+        if (!continuar) {
+          const aviso = document.getElementById('aviso-sin-ctl');
+          if (aviso) {
+            aviso.style.display = 'block';
+            aviso.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
         }
       }
 

@@ -598,9 +598,24 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         n_alto = sum(1 for h in hallazgos_list if h[0] == "ALTO")
         n_medio = sum(1 for h in hallazgos_list if h[0] == "MEDIO")
         n_info = sum(1 for h in hallazgos_list if h[0] == "INFORMATIVO")
-        
+
+        # Refuerzo UX (Sprint 3): si NO se adjuntó el CTL, el informe se marca
+        # explícitamente como NO APTO para decisiones (sin bloquear la descarga).
+        sin_ctl = False
+        for h in hallazgos_list:
+            titulo_h = (h[3] if len(h) > 3 else "") or ""
+            if "AUSENCIA DE CERTIFICADO" in titulo_h.upper() or "AUSENCIA DE CTL" in titulo_h.upper():
+                sin_ctl = True
+                break
+
         res_fiel = evaluar_estructurabilidad_fiduciaria(hallazgos_list)
-        if not res_fiel["estructurable"]:
+        if sin_ctl:
+            label = ("▪ INFORME BASE LAI — GENERADO SIN CERTIFICADO DE TRADICIÓN Y LIBERTAD (CTL). "
+                     "Los datos registrales quedan PENDIENTES: este documento NO ES APTO para decisiones "
+                     "de crédito, garantía o compraventa. Adjunte el CTL del predio para un dictamen completo.")
+            bg = C_RIESGO_BG
+            tc = C_ROJO
+        elif not res_fiel["estructurable"]:
             label = f"▪ INFORME BASE LAI — RESULTADO PRELIMINAR: {n_alto} ALTO · {n_medio} MEDIO · {n_info} INFORMATIVO (BLOQUEADO / semáforo ROJO)"
             bg = C_RIESGO_BG
             tc = C_ROJO
@@ -1016,6 +1031,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             f"No se adjunto Certificado de Tradicion y Libertad. Folio de matricula: {folio}. "
             "La informacion registral se marca PENDIENTE hasta cargar el CTL. "
             "<b>[FUENTE: SIN CTL ADJUNTADO]</b>"
+        ))
+        story.append(Spacer(1, 4))
+        # Refuerzo UX (Sprint 3): sin CTL, el análisis registral no existe y el
+        # documento no es apto para decisiones; se advierte de forma explícita.
+        story.append(alert_red(
+            "<b>DICTAMEN GENERADO SIN CTL:</b> no se puede verificar la titularidad, "
+            "las hipotecas, embargos o afectaciones del predio. Este documento es "
+            "un <b>informe base preliminar NO APTO para decisiones</b> de credito, "
+            "garantia o compraventa. Para el dictamen completo adjunte el Certificado "
+            "de Tradicion y Libertad (SNR) del predio."
         ))
     story.append(Spacer(1, 4))
     
