@@ -286,7 +286,8 @@ def get_valoracion_alert(barrio, val_data, fmt_cop):
     barrio_clean = barrio.strip().title() if barrio else "el sector"
     return (
         f"<b>SINTESIS DE VALORACION:</b> La estimación comercial consolidada de "
-        f"<b>{fmt_cop(val_data['consolidado'])} COP</b> responde a la metodología de la Lonja de Barranquilla, "
+        f"<b>{fmt_cop(val_data['consolidado'])} COP</b> responde a la metodología valuatoria "
+        f"consolidada del modulo ARHIAX (M1 · M2 · M3), "
         f"integrando el método de comparación de mercado (M1) calibrado por sector geoeconómico ({barrio_clean}) "
         f"y el método de capitalización de rentas (M3) según la tasa de rentabilidad neta de la tipología."
     )

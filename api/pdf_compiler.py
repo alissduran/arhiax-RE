@@ -979,7 +979,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "Determinacion del valor comercial y rango de valor estimado del inmueble utilizando "
         "metodologia valuatoria consolidada automatica (ponderacion de Comparacion de Mercado M1 "
         "y Capitalizacion de Rentas M3). El Metodo de Costo de Reposicion M2 fue calibrado "
-        "segun la declaracion metodologica de la Lonja de Propiedad Raiz de Barranquilla. "
+        "segun metodologia valuatoria consolidada con parametros de mercado y costos de construccion vigentes. "
         "<b>[FUENTE: ESTIMACIÓN REFERENCIAL DE MERCADO ARHIAX (AUTOMÁTICA)]</b>"
     ))
     story.append(Spacer(1, 4))
