@@ -608,7 +608,13 @@
               <button class="btn-primary" style="font-size: 13px; padding: 14px 28px;" onclick="descargarPDFDictamen()">
                 Generar y Descargar Dictamen (PDF)
               </button>
+              <div style="margin-top: 8px;">
+                <button class="btn-secondary" style="font-size: 12px; padding: 10px 20px;" onclick="descargarGpvF77()">
+                  Generar GPV-F-77 (Estudio de Títulos Art. 276 Ley 1955 de 2019)
+                </button>
+              </div>
               <div id="generar-estado" style="margin-top: 10px; font-size: 11px; color: var(--color-gray); min-height: 16px;"></div>
+              <div id="generar-estado-gpv" style="margin-top: 4px; font-size: 11px; color: var(--color-gray); min-height: 14px;"></div>
               <!-- I-4 (Sprint 3): deep-link al portal oficial del CTL (SNR) — nunca scraping -->
               <div style="margin-top: 14px; font-size: 11px; color: var(--color-gray);">
                 ¿Necesitas el Certificado de Tradición y Libertad del predio?
@@ -1343,6 +1349,82 @@
       } catch (err) {
         console.error('Error al generar dictamen:', err);
         setEstado('✗ ' + err.message, 'var(--color-red-text)');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // ── GPV-F-77: Estudio de Títulos Art. 276 Ley 1955 de 2019 (DOCX) ──────
+    // Genera aparte del dictamen el formato oficial del Ministerio de Vivienda,
+    // pre-diligenciado con el CTL del caso. A diferencia del dictamen, el
+    // GPV-F-77 SÍ requiere el CTL (es un estudio de títulos: sin folio no hay
+    // fuente registral), por lo que sin certificado no se llama al servidor.
+    async function descargarGpvF77() {
+      const c = dictamenes.find(item => item.id === selectedCaseId);
+      if (!c) return;
+
+      const estadoDiv = document.getElementById('generar-estado-gpv');
+
+      // Restaurar el CTL persistido en IndexedDB si hace falta (recarga de página)
+      if (!selectedFiles['certificado']) {
+        const blob = await idbLeer(_keyInsumo(c.id, 'certificado'));
+        if (blob) {
+          selectedFiles['certificado'] = new File([blob], 'certificado.pdf', { type: blob.type || 'application/pdf' });
+        }
+      }
+      const tieneCtl = !!selectedFiles['certificado'] || c.certificado_cargado;
+      if (!tieneCtl) {
+        const aviso = document.getElementById('aviso-sin-ctl');
+        if (aviso) {
+          aviso.style.display = 'block';
+          aviso.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        estadoDiv.innerHTML =
+          '✗ El GPV-F-77 es un Estudio de Títulos: requiere el CTL del predio para poder diligenciarse. ' +
+          'Cargue el Certificado de Tradición y Libertad e intente nuevamente.';
+        estadoDiv.style.color = 'var(--color-red-text)';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('folio_matricula', c.folio_matricula || '');
+      formData.append('direccion', c.direccion || '');
+      formData.append('area', c.area || '0');
+      formData.append('barrio', c.barrio || '');
+      formData.append('ciudad', c.ciudad || 'barranquilla');
+      if (selectedFiles['certificado']) formData.append('certificado', selectedFiles['certificado']);
+
+      showLoading(true);
+      try {
+        estadoDiv.innerHTML = '⏳ Generando Estudio de Títulos GPV-F-77 (DOCX)…';
+        estadoDiv.style.color = 'var(--color-gray)';
+        const res = await apiFetch('/api/dictamenes/gpv-f77', { method: 'POST', body: formData });
+        if (!res.ok) {
+          const err = await res.text().catch(() => '');
+          throw new Error(`Error del servidor (${res.status}): ${err.slice(0, 300)}`);
+        }
+        const ct = res.headers.get('content-type') || '';
+        if (!ct.includes('wordprocessingml')) {
+          throw new Error('El servidor no devolvió el DOCX esperado.');
+        }
+        const blob = await res.blob();
+        const filename = `GPV-F-77_Estudio_Titulos_FMI_${c.folio_matricula || 'caso'}.docx`;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        estadoDiv.innerHTML =
+          '✓ GPV-F-77 generado y descargado. Es un BORRADOR: revíselo, complételo y fírmelo ' +
+          'el profesional jurídico (Sección 4).';
+        estadoDiv.style.color = 'var(--color-green-text)';
+      } catch (err) {
+        console.error('Error al generar GPV-F-77:', err);
+        estadoDiv.innerHTML = '✗ ' + err.message;
+        estadoDiv.style.color = 'var(--color-red-text)';
       } finally {
         showLoading(false);
       }

@@ -21,3 +21,7 @@ shapely==2.1.2
 # Persistencia gestionada (Neon/Postgres): driver psycopg (activado 2026-09-02,
 # ARHIAX_DB_PATH apunta a la BD Neon).
 psycopg[binary]==3.3.5
+
+# GPV-F-77 (Sprint 3): relleno del DOCX oficial Estudio de Títulos Art. 276
+# Ley 1955 de 2019 (plantilla MVCT). python-docx trae lxml como dependencia.
+python-docx==1.2.0

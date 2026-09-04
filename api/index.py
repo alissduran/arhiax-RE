@@ -863,6 +863,102 @@ async def generar_dictamen_stateless(
         }
     )
 
+# ── GPV-F-77: Formato Estudio de Títulos Art. 276 Ley 1955 de 2019 ──────
+# Genera el DOCX oficial del Ministerio de Vivienda pre-diligenciado con el CTL
+# del caso (mismo flujo de insumos que /api/dictamenes/generar, sin valoración).
+
+@app.post("/api/dictamenes/gpv-f77")
+async def generar_gpv_f77_endpoint(
+    folio_matricula: str = Form(None),
+    direccion: str = Form(None),
+    area: float = Form(None),
+    barrio: str = Form(None),
+    ciudad: str = Form("barranquilla"),
+    certificado: UploadFile = File(None),
+    auth: dict = Depends(require_auth)
+):
+    # Normalizar ciudad: solo soportadas (barranquilla/medellin/bogota)
+    ciudad = (ciudad or "barranquilla").lower().strip()
+    if ciudad not in ("barranquilla", "medellin", "bogota"):
+        ciudad = "barranquilla"
+
+    # El GPV-F-77 es un Estudio de Títulos (instructivo GPV-I-20): el CTL del SNR
+    # es la fuente registral obligatoria. Sin él no hay folio que estudiar.
+    if not (certificado and certificado.filename):
+        raise HTTPException(
+            status_code=400,
+            detail=("El GPV-F-77 (Estudio de Títulos Art. 276 Ley 1955 de 2019) requiere el "
+                    "Certificado de Tradición y Libertad (CTL) del predio: sin el folio no hay "
+                    "fuente registral para el estudio. Cargue el CTL e intente nuevamente."))
+
+    import uuid
+    from legal_analyzer import analizar_certificado
+    from gpv_f77 import generar_docx_gpv_f77
+
+    run_id = str(uuid.uuid4())
+    temp_run_dir = _dir_trabajo(run_id)
+    cert_path = temp_run_dir / "certificado.pdf"
+    try:
+        _validar_archivo_subido(certificado, "certificado")
+        _copiar_con_limite(certificado.file, cert_path)
+        # Extraer metadatos (área, dirección, barrio, código catastral/NUPRE) con el
+        # geocoder de la ciudad, y el análisis jurídico completo (titulares, anotaciones).
+        extraidos = extraer_datos_de_pdf(str(cert_path), ciudad=ciudad)
+        analysis = analizar_certificado(str(cert_path))
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[GPV-F-77][ERROR] análisis del CTL: {e}")
+        raise HTTPException(status_code=500,
+                            detail="No se pudo analizar el Certificado de Tradición y Libertad cargado.")
+
+    # Folio: prioridad CTL (extraidos) -> form
+    folio = extraidos.get("folio") or (folio_matricula or "").strip() or analysis.get("folio") or "Pendiente"
+    # Dirección: registral del CTL -> catastral oficial -> la digitada por el usuario
+    dir_registral = (analysis.get("direccion") or "").strip()
+    if dir_registral.lower().startswith("pendiente"):
+        dir_registral = ""
+    dir_final = dir_registral or (extraidos.get("direccion") or "").strip() or (direccion or "").strip()
+    # Barrio: catastro/CTL -> form
+    barrio_final = (extraidos.get("barrio") or "").strip() or (barrio or "").strip()
+
+    ctx = {
+        "folio": folio,
+        "ciudad": ciudad,
+        "direccion": dir_final,
+        "barrio": barrio_final,
+        "area_juridica": extraidos.get("area") or (area if area not in (None, 0) else None),
+        "area_catastral": extraidos.get("area_catastral"),
+        "codigo_catastral": extraidos.get("codigo_catastral") or analysis.get("codigo_catastral"),
+        "nupre": extraidos.get("nupre") or analysis.get("nupre"),
+        "apertura": analysis.get("apertura"),
+        "titulares": analysis.get("titulares"),
+        "descripcion_ctl": analysis.get("descripcion_ctl"),
+        "anotaciones_detalle": analysis.get("anotaciones_detalle") or [],
+        "sin_ctl": False,
+    }
+
+    try:
+        docx_bytes = generar_docx_gpv_f77(ctx)
+    except FileNotFoundError as e:
+        print(f"[GPV-F-77][ERROR] plantilla: {e}")
+        raise HTTPException(status_code=500,
+                            detail="Plantilla GPV-F-77 no disponible en el servidor.")
+    except Exception as e:
+        print(f"[GPV-F-77][ERROR] generación DOCX: {e}")
+        raise HTTPException(status_code=500,
+                            detail="Error al generar el Estudio de Títulos GPV-F-77.")
+
+    folio_limpio = _sanitizar_folio(folio) or "caso"
+    return Response(
+        content=docx_bytes,
+        media_type=("application/vnd.openxmlformats-officedocument"
+                    ".wordprocessingml.document"),
+        headers={
+            "Content-Disposition": f'attachment; filename="GPV-F-77_Estudio_Titulos_FMI_{folio_limpio}.docx"'
+        }
+    )
+
 # ── Cola asíncrona de PDF (QStash) ─────────────────────────────────────
 
 def _dir_trabajo(run_id: str) -> Path:

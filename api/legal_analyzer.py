@@ -33,6 +33,7 @@ def analizar_certificado(pdf_path):
         "titulares": "PENDIENTE DE VERIFICACION (Sin Certificado cargado)",
         "constructor": "N/D",
         "anotaciones": [],
+        "anotaciones_detalle": [],
         "hallazgos": [],
         "recs": [],
         # Sprint 2 (exactitud): códigos del CTL para resolver el predio real en catastro
@@ -90,6 +91,7 @@ def analizar_texto_certificado(texto):
         "titulares": "PENDIENTE DE VERIFICACION (Sin propietarios vigentes detectados)",
         "constructor": "N/D",
         "anotaciones": [],
+        "anotaciones_detalle": [],
         "hallazgos": [],
         "recs": [],
         "codigo_catastral": None,
@@ -305,6 +307,9 @@ def analizar_texto_certificado(texto):
             (item["num"], item["fecha"], item["tipo"], item["partes"], item["estado"])
             for item in parsed_anotaciones
         ]
+        # Detalle completo (texto crudo) por anotación: lo usa el GPV-F-77 para
+        # redactar el tracto sucesivo con escritura/notaría sin re-parsear el PDF.
+        res["anotaciones_detalle"] = parsed_anotaciones
 
         # 5b. Inferir acreedor_snr del CTL (D1 — NLP automático)
         # Extrae el acreedor del gravamen hipotecario más reciente activo
