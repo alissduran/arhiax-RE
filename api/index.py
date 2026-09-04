@@ -874,6 +874,7 @@ async def generar_gpv_f77_endpoint(
     area: float = Form(None),
     barrio: str = Form(None),
     ciudad: str = Form("barranquilla"),
+    expediente: str = Form(None),
     certificado: UploadFile = File(None),
     auth: dict = Depends(require_auth)
 ):
@@ -927,6 +928,7 @@ async def generar_gpv_f77_endpoint(
         "ciudad": ciudad,
         "direccion": dir_final,
         "barrio": barrio_final,
+        "expediente": (expediente or "").strip() or None,
         "area_juridica": extraidos.get("area") or (area if area not in (None, 0) else None),
         "area_catastral": extraidos.get("area_catastral"),
         "codigo_catastral": extraidos.get("codigo_catastral") or analysis.get("codigo_catastral"),
