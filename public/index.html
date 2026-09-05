@@ -470,12 +470,8 @@
           <div class="panel-header">Iniciar Nuevo Dictamen</div>
           <div class="panel-body">
             <div class="form-group">
-              <label for="input-folio">Matrícula Inmobiliaria (Opcional si tiene dirección)</label>
+              <label for="input-folio">Matrícula Inmobiliaria (SNR)</label>
               <input type="text" id="input-folio" placeholder="Ej: 040-646406">
-            </div>
-            <div class="form-group">
-              <label for="input-direccion">Dirección (Opcional si tiene matrícula)</label>
-              <input type="text" id="input-direccion" placeholder="Ej: Calle 63 # 37-71">
             </div>
             <div class="form-group">
               <label for="input-ciudad">Ciudad (verificación territorial en vivo)</label>
@@ -531,15 +527,14 @@
                     <div id="territorio-result" style="margin-top: 8px; font-size: 11px; color: var(--color-gray); line-height: 1.5; max-width: 520px;"></div>
                   </div>
                   
-                  <!-- Formulario Inline para Editar Datos (Dirección y Matrícula) -->
+                  <!-- Formulario Inline para Editar Datos (Matrícula) -->
                   <div id="form-editar-datos" style="display: none; flex-direction: column; gap: 10px; margin-top: 12px; background: rgba(139,111,71,0.08); padding: 12px; border-radius: 4px; border: 1px solid rgba(139,111,71,0.2); max-width: 400px;">
                     <div style="display: flex; flex-direction: column; gap: 4px;">
                       <label style="font-size: 9px; font-weight: bold; color: var(--color-navy-soft);">Matrícula Inmobiliaria:</label>
                       <input type="text" id="input-editar-folio" placeholder="Ej: 040-646406" style="padding: 6px; font-size: 12px; border: 1px solid var(--color-border); border-radius: 3px;">
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                      <label style="font-size: 9px; font-weight: bold; color: var(--color-navy-soft);">Dirección:</label>
-                      <input type="text" id="input-editar-direccion" placeholder="Ej: Calle 63 # 37-71" style="padding: 6px; font-size: 12px; border: 1px solid var(--color-border); border-radius: 3px;">
+                    <div style="font-size: 9px; color: var(--color-gray); line-height: 1.4;">
+                      La dirección, el área y el barrio se obtienen automáticamente del Certificado de Tradición y Libertad (CTL) al cargarlo.
                     </div>
                     <div style="display: flex; gap: 10px; margin-top: 5px;">
                       <button class="btn-primary" style="padding: 5px 12px; font-size: 9px; text-transform: uppercase;" onclick="guardarDatosManual()">Guardar</button>
@@ -822,8 +817,9 @@
         
         const label = c.area ? 'LISTO C ARGCIS' : 'PENDIENTE CTL';
         
-        const displayDireccion = c.direccion === 'Pendiente' ? 'Matrícula: ' + c.folio_matricula : c.direccion;
-        const displaySub = c.direccion === 'Pendiente' ? 'Dirección: Pendiente' : 'Matrícula: ' + c.folio_matricula;
+        const sinDireccion = !c.direccion || c.direccion === 'Pendiente';
+        const displayDireccion = sinDireccion ? 'Matrícula: ' + (c.folio_matricula || '—') : c.direccion;
+        const displaySub = sinDireccion ? 'Dirección: Pendiente (requiere CTL)' : 'Matrícula: ' + c.folio_matricula;
         
         item.innerHTML = `
           <div>
@@ -841,30 +837,14 @@
 
     async function crearDictamen() {
       const folio = document.getElementById('input-folio').value.trim();
-      const direccion = document.getElementById('input-direccion').value.trim();
 
-      if (!folio && !direccion) {
-        alert("Debe ingresar al menos la matrícula inmobiliaria o la dirección del predio.");
+      if (!folio) {
+        alert("Debe ingresar el número de matrícula inmobiliaria del predio (SNR). La dirección, el área y el barrio se obtienen del CTL.");
         return;
       }
 
       showLoading(true);
-      let resolvedFolio = folio || "Pendiente";
-      let resolvedBarrio = direccion.toLowerCase().includes("recreo") ? "El Recreo" : "Miramar";
-
-      if (!folio && direccion) {
-        try {
-          const res = await apiFetch(`/api/resolver-matricula?direccion=${encodeURIComponent(direccion)}`);
-          if (res.ok) {
-            const data = await res.json();
-            resolvedFolio = data.folio_matricula;
-            resolvedBarrio = data.barrio;
-          }
-        } catch (err) {
-          console.error("Error al resolver matrícula:", err);
-        }
-      }
-      showLoading(false);
+      const resolvedFolio = folio;
 
       // H-09: crear el caso en el servidor para que upload/update/delete usen un id real
       // (si el servidor no responde, se degrada a id local para no bloquear el flujo)
@@ -873,7 +853,7 @@
         const resCreate = await apiFetch('/api/dictamenes', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ folio_matricula: resolvedFolio, direccion: direccion || 'Pendiente' })
+          body: JSON.stringify({ folio_matricula: resolvedFolio, direccion: 'Pendiente' })
         });
         if (resCreate.ok) {
           const created = await resCreate.json();
@@ -886,9 +866,9 @@
       const newCase = {
         id: serverId,
         folio_matricula: resolvedFolio,
-        direccion: direccion || "Pendiente",
+        direccion: "Pendiente",
         area: null,
-        barrio: resolvedBarrio,
+        barrio: "",
         ciudad: document.getElementById('input-ciudad').value || 'barranquilla',
         certificado_cargado: 0,
         sombra_9am_cargada: 0,
@@ -902,7 +882,6 @@
       
       // Limpiar formulario
       document.getElementById('input-folio').value = "";
-      document.getElementById('input-direccion').value = "";
 
       // Reiniciar archivos temporales para este nuevo caso
       limpiarInputsDeArchivos();
@@ -931,7 +910,10 @@
       
       document.getElementById('detail-panel').style.display = 'block';
       document.getElementById('txt-detail-id').textContent = `ID #${c.id}`;
-      document.getElementById('txt-detail-direccion').textContent = c.direccion;
+      const dirTitulo = (!c.direccion || c.direccion === 'Pendiente')
+        ? ('Matrícula ' + (c.folio_matricula || '—'))
+        : c.direccion;
+      document.getElementById('txt-detail-direccion').textContent = dirTitulo;
       document.getElementById('txt-detail-folio').textContent = c.folio_matricula;
       document.getElementById('txt-detail-barrio').textContent = c.barrio;
       document.getElementById('txt-detail-ciudad').textContent = c.ciudad || 'barranquilla';
@@ -1086,7 +1068,6 @@
       const c = dictamenes.find(item => item.id === selectedCaseId);
       if (!c) return;
       document.getElementById('input-editar-folio').value = c.folio_matricula || "";
-      document.getElementById('input-editar-direccion').value = c.direccion || "";
       document.getElementById('form-editar-datos').style.display = 'flex';
     }
 
@@ -1096,27 +1077,25 @@
 
     async function guardarDatosManual() {
       const folioVal = document.getElementById('input-editar-folio').value.trim();
-      const direccionVal = document.getElementById('input-editar-direccion').value.trim();
-      
-      if (!folioVal && !direccionVal) {
-        alert("Debe ingresar al menos la matrícula o la dirección.");
+      if (!folioVal) {
+        alert("Debe ingresar el número de matrícula inmobiliaria (SNR).");
         return;
       }
 
       showLoading(true);
       try {
+        const c = dictamenes.find(item => item.id === selectedCaseId);
         const response = await apiFetch(`/api/dictamenes/${selectedCaseId}/update`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             folio_matricula: folioVal,
-            direccion: direccionVal
+            direccion: (c && c.direccion) || 'Pendiente'
           })
         });
 
         if (response.ok) {
           const updatedCaseData = await response.json();
-          const c = dictamenes.find(item => item.id === selectedCaseId);
           if (c) {
             c.folio_matricula = updatedCaseData.folio_matricula;
             c.direccion = updatedCaseData.direccion;
@@ -1186,16 +1165,16 @@
       const c = dictamenes.find(item => item.id === selectedCaseId);
       if (!c) return;
       const resultDiv = document.getElementById('territorio-result');
+      // La georreferenciación precisa sale del CTL/catastro: sin dirección
+      // (aún no se cargó o procesó el CTL) no se consulta con coordenadas por defecto.
+      if (!c.direccion || c.direccion === 'Pendiente') {
+        resultDiv.innerHTML = '<div style="color:var(--color-gray);">Cargue el Certificado de Tradición y Libertad (CTL) del caso para poder verificar el territorio en vivo: la dirección y la georreferenciación se toman del CTL.</div>';
+        return;
+      }
       resultDiv.innerHTML = 'Consultando servicio institucional en vivo…';
       try {
         const ciudad = c.ciudad || 'barranquilla';
-        const qs = new URLSearchParams({ ciudad });
-        if (c.direccion && c.direccion !== 'Pendiente') {
-          qs.set('direccion', c.direccion);
-        } else {
-          qs.set('lat', '10.9685');
-          qs.set('lon', '-74.7813');
-        }
+        const qs = new URLSearchParams({ ciudad, direccion: c.direccion });
         const response = await apiFetch(`/api/v1/geo/catastro?${qs.toString()}`);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
