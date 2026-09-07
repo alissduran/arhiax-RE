@@ -115,5 +115,65 @@ class TestCargaEconomicaConCuantiaDelCtl(unittest.TestCase):
         self.assertGreaterEqual(r["ltv_estimado"], 0)
 
 
+class TestValorEstableConDireccionCatastralDelCtl(unittest.TestCase):
+    """Regresión (dictamen real 50C-1463431, queja del usuario: el precio saltó
+    de $291.460.000 a $212.990.000 al corregir la localidad).
+
+    El valor de mercado se calcula por ESTRATO ($5.200.000/m2 estrato 4;
+    $3.800.000/m2 estrato 3). El lote real (DG 61B 20 04, lote 007202018025)
+    es estrato 4. Si el CASO (formulario) lleva la placa registral alternativa
+    'CRA 20 # 61-55' — que NO existe en la capa oficial de placas — y esa se
+    geocodifica, Nominatim cae en la manzana vecina estrato 3 y el precio baja.
+    Cuando el CTL declara la DIRECCION CATASTRAL, ESA debe gobernar."""
+
+    def test_la_direccion_catastral_del_ctl_gana_a_la_del_formulario(self):
+        from pdf_compiler import _direccion_para_geocodificar
+        analysis = {"direccion": "DG 61B 20 04"}
+        db_record = {"direccion": "CRA 20 # 61-55"}  # placa alternativa del portal
+        self.assertEqual(_direccion_para_geocodificar(analysis, db_record),
+                         "DG 61B 20 04")
+
+    def test_sin_direccion_ctl_usa_la_del_caso(self):
+        from pdf_compiler import _direccion_para_geocodificar
+        analysis = {"direccion": None}
+        db_record = {"direccion": "Carrera 9 # 61-08"}
+        self.assertEqual(_direccion_para_geocodificar(analysis, db_record),
+                         "Carrera 9 # 61-08")
+
+    def test_analisis_extrae_la_catastral_no_la_alternativa(self):
+        """Del bloque DIRECCION DEL INMUEBLE con placa alternativa + catastral,
+        el analizador elige 'DG 61B 20 04' (etiqueta DIRECCION CATASTRAL)."""
+        from legal_analyzer import analizar_texto_certificado
+        txt = _CTL_CON_DIRECCION_CATASTRAL
+        res = analizar_texto_certificado(txt)
+        self.assertEqual(res.get("direccion"), "DG 61B 20 04")
+        self.assertNotIn("61-55", res.get("direccion") or "")
+
+    def test_valor_estrato4_no_cambia_por_la_placa_del_formulario(self):
+        """get_valuation con estrato 4 y área real da $291.460.000 (sin caer al
+        valor de estrato 3 que produjo $212.990.000)."""
+        from dictamen_data import get_valuation
+        v = get_valuation(56.05, "San Luis", estrato=4)
+        self.assertEqual(v["consolidado"], 291460000)
+        v3 = get_valuation(56.05, "San Luis", estrato=3)
+        self.assertEqual(v3["consolidado"], 212990000)
+
+
+_CTL_CON_DIRECCION_CATASTRAL = """
+La validez de este documento podra verificarse en la pagina certificados.supernotariado.gov.co
+Certificado generado con el Pin No: 2609075062142575095Nro Matricula: 50C-1463431
+CIRCULO REGISTRAL: 50C - BOGOTA ZONA CENTRO  DEPTO: BOGOTA D C  MUNICIPIO: BOGOTA, D.C.
+FECHA APERTURA: 17-09-1997
+ESTADO DEL FOLIO: ACTIVO
+DIRECCION DEL INMUEBLE
+1) AVENIDA (CALLE) 63 20-04 / CARRERA 20 61-55
+2) DG 61B 20 04 AP 401 (DIRECCION CATASTRAL)
+ANOTACION: Nro 001 Fecha: 16-09-1997
+ESPECIFICACION: OTRO
+NRO TOTAL DE ANOTACIONES: *1*
+"""
+
+
 if __name__ == "__main__":
     unittest.main()
+

@@ -219,6 +219,23 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
     return hallazgos
 
 
+def _direccion_para_geocodificar(analysis, db_record):
+    """Elige la dirección con la que geocodificar el predio.
+
+    Regresión (dictamen real 50C-1463431, queja del usuario: el precio saltó de
+    $291.460.000 a $212.990.000): la dirección del FORMULARIO puede ser una
+    placa registral alternativa ('CRA 20 # 61-55') que NO existe en la capa
+    oficial de placas; geocodificarla con Nominatim caía en la manzana vecina de
+    estrato 3 y el valor de mercado bajaba. Cuando el CTL declara la DIRECCION
+    CATASTRAL (análisis legal), ESA es la placa oficial a geocodificar.
+    """
+    _dir_ctl = (analysis.get("direccion") or "").strip()
+    _ok = _dir_ctl.lower() not in ("", "pendiente", "pendiente de verificacion", "n/d")
+    if _ok:
+        return _dir_ctl
+    return (db_record.get("direccion") or "").strip()
+
+
 def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Ciudad del predio (Sprint 3: barranquilla activa; medellin y bogota en
     # expansión). Controla qué catastro/POT se consulta y qué textos se imprimen.
@@ -297,7 +314,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         # por coordenadas el entorno catastral real de la ciudad.
         try:
             from geocoder import geocodificar_direccion
-            _dir_raw = db_record.get('direccion', '') or ''
+            # Regresión (dictamen real 50C-1463431, cambio de precio $291M->$212M):
+            # la dirección del FORMULARIO puede ser una placa registral alternativa
+            # ('CRA 20 # 61-55') que NO existe en la capa oficial de placas; al
+            # geocodificarla, Nominatim caía en la manzana vecina de estrato 3 y el
+            # valor de mercado bajaba de $5.200.000/m2 (estr. 4) a $3.800.000/m2
+            # (estr. 3). Cuando el CTL declara la DIRECCION CATASTRAL, ESA es la
+            # placa oficial a geocodificar (DG 61B 20 04 -> lote estrato 4 real).
+            _dir_raw = _direccion_para_geocodificar(analysis, db_record)
             if _dir_raw and _dir_raw.lower() not in ('pendiente', ''):
                 _lat_geo, _lon_geo = geocodificar_direccion(_dir_raw, ciudad=ciudad)
                 _cod_lote_bog = None
