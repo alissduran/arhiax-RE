@@ -640,7 +640,29 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             ),
         }
     else:
-        geo_eval = get_geospatial_evaluation(lat, lon)
+        if es_bogota or es_medellin:
+            # El predio NO se resolvió en el catastro de la ciudad: el motor
+            # empaquetado de Barranquilla NO debe evaluar coordenadas de otra
+            # ciudad (regresión: un caso de Bogotá sin predio resuelto cruzaba
+            # el 'POT de Barranquilla' y afirmaba resultados ajenos). Se marca
+            # NO EVALUADO con la ciudad correcta.
+            geo_eval = {
+                "amenaza_remocion_masa": {"intersecta": False, "nivel": None,
+                                          "clase_suelo": "N/D",
+                                          "area_poligono_m2": 0, "objectid": None,
+                                          "color_hex": "#7F8C8D"},
+                "areas_en_riesgo": {"intersecta": False, "nivel": None,
+                                    "clase_suelo": "N/D",
+                                    "area_poligono_m2": 0, "objectid": None,
+                                    "color_hex": "#7F8C8D"},
+                "resumen_ejecutivo": (
+                    "NO EVALUADO: no se resolvió el predio en el catastro de {} "
+                    "al momento de generar el dictamen; la verificación de amenazas/"
+                    "riesgos queda PENDIENTE (no se aplicó el motor de otra ciudad)."
+                ).format(_NOMBRE_CIUDAD),
+            }
+        else:
+            geo_eval = get_geospatial_evaluation(lat, lon)
     if es_bogota:
         _fuente_geo = "IDIGER Bogotá -- emergencias/gestionriesgos (en vivo)"
     elif es_medellin:

@@ -268,10 +268,18 @@ def get_localizacion_dt(barrio, lat, lon):
 
 def get_cobertura_alert(barrio, ciudad="barranquilla"):
     barrio_clean = barrio.strip().title() if barrio else "el sector"
-    nombre_ciudad = "Medellín" if "medellin" in (ciudad or "").lower() else "Barranquilla"
+    c = (ciudad or "").lower()
+    if "medellin" in c or "medellín" in c:
+        nombre_ciudad = "Medellín"
+    elif "bogota" in c or "bogotá" in c:
+        nombre_ciudad = "Bogotá D.C."
+    else:
+        nombre_ciudad = "Barranquilla"
+    # 'Bogotá D.C.' ya termina en punto: no duplicar el punto de la frase
+    punto = "" if nombre_ciudad.endswith(".") else "."
     return (
         f"<b>EVALUACION DE COBERTURA:</b> El inmueble ubicado en <b>{barrio_clean}</b> cuenta con una calificacion "
-        f"de conectividad y equipamiento <b>SATISFACTORIA</b> dentro del perimetro urbano de {nombre_ciudad}. "
+        f"de conectividad y equipamiento <b>SATISFACTORIA</b> dentro del perimetro urbano de {nombre_ciudad}{punto} "
         f"El radio de amortiguacion de 2.0 km concentra equipamientos de comercio, salud, educacion y recreacion, "
         f"garantizando accesibilidad peatonal y vehicular bajo el estandar de proximidad urbana."
     )

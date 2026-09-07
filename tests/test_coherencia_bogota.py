@@ -207,6 +207,19 @@ class TestCoherenciaMedellin(unittest.TestCase):
         filas_baq = dict(get_pot_summary_dt("x", ciudad="barranquilla"))
         self.assertIn("SIN AFECTACION", filas_baq["Planes Parciales"].upper())
 
+    def test_cobertura_alert_con_la_ciudad_correcta(self):
+        """Regresión (reporte del usuario): en un caso de Bogotá la evaluación
+        de cobertura (01D) decía 'perimetro urbano de Barranquilla' porque el
+        texto solo distinguía Medellín de Barranquilla."""
+        from dictamen_data import get_cobertura_alert
+        bog = get_cobertura_alert("LA ESPERANZA", ciudad="bogota")
+        self.assertIn("Bogotá D.C.", bog)
+        self.assertNotIn("Barranquilla", bog)
+        med = get_cobertura_alert("Astorga", ciudad="medellin")
+        self.assertIn("Medellín", med)
+        baq = get_cobertura_alert("Miramar", ciudad="barranquilla")
+        self.assertIn("Barranquilla", baq)
+
     def test_ruta_no_genera_paso_por_hallazgo_informativo(self):
         """Regresión (dictamen real 50C-1463431): el hallazgo INFORMATIVO
         'Zona Libre de Amenazas' contenía las palabras 'amenazas/riesgos' y
