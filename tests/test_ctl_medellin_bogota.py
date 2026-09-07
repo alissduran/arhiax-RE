@@ -217,6 +217,42 @@ class TestCondicionJuridicaDesdeCtl(unittest.TestCase):
         self.assertIsNone(inferir_condicion_juridica(None))
 
 
+    def test_direccion_catastral_prioritaria(self):
+        """Regresión (dictamen real): el CTL de Bogotá trae varias placas en el
+        bloque del inmueble ('AVENIDA (CALLE)63 20-04/CARRERA 20 61-55' y la
+        oficial 'DG 61B 20 04 AP 401 (DIRECCION CATASTRAL)'). Se debe extraer la
+        DIRECCION CATASTRAL y descartar la unidad, no la placa registral
+        alternativa (que se geocodificaba en un punto equivocado)."""
+        from legal_analyzer import analizar_texto_certificado
+        from geocoder import extraer_direccion_de_ctl
+        bloque = ("DIRECCION DEL INMUEBLE\nTipo Predio: URBANO\n"
+                  "1) AVENIDA (CALLE)63 20-04/CARRERA 20 61-55 EDIFICIO SAN FELIPE "
+                  "P.H. APARTAMENTO 401\n"
+                  "2) DG 61B 20 04 AP 401 (DIRECCION CATASTRAL)\n"
+                  "DETERMINACION DEL INMUEBLE:")
+        res = analizar_texto_certificado(bloque)
+        self.assertEqual(res["direccion"], "DG 61B 20 04")
+        self.assertEqual(extraer_direccion_de_ctl(bloque), "DG 61B 20 04")
+        # El normalizador de Bogotá acepta el formato catastral sin guion
+        from geocoder_catastral_bogota import normalizar_direccion_bogota
+        self.assertEqual(normalizar_direccion_bogota("DG 61B 20 04"),
+                         ("DG 61B", "20 04"))
+
+    def test_hipoteca_anotacion_014_con_acreedor(self):
+        """La hipoteca vigente de la anot. 014 (BBVA, escritura 5069/2022) se
+        detecta con su acreedor: el hallazgo ALTO es REAL del folio."""
+        from legal_analyzer import analizar_texto_certificado
+        anot = ("ANOTACION: Nro 014 Fecha: 25-11-2022 Radicacion: 2022-50C-6-107189\n"
+                "Doc: ESCRITURA 5069 DEL 09-11-2022 NOTARIA CUARENTA Y CUATRO DE BOGOTA\n"
+                "ESPECIFICACION: GRAVAMEN: 0219 HIPOTECA ABIERTA SIN LIMITE DE CUANTIA\n"
+                "A: BANCO BILBAO VIZCAYA ARGENTARIA COLOMBIA S.A. BBVA COLOMBIA\n")
+        res = analizar_texto_certificado(anot)
+        hip = [a for a in res["anotaciones"] if "Hipoteca" in a[2] and "CANCELADA" not in a[4]]
+        self.assertEqual(len(hip), 1)
+        self.assertIn("BBVA", hip[0][3].upper())
+        self.assertTrue(any("Hipoteca" in h[3] for h in res["hallazgos"]))
+
+
 class TestDiscrepanciaCirculoRegistral(unittest.TestCase):
 
     def test_discrepancia_ctl_de_otra_ciudad(self):

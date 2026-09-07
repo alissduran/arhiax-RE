@@ -41,7 +41,7 @@ _RE_DIR = re.compile(
     r"^\s*(CL|CLL|CALLE|KR|K|CR|CRA|CARRERA|AK|AV|AVDA|AVENIDA|AUTOPISTA|"
     r"TV|TRANSV|TRANSVERSAL|DG|DIAGONAL)"
     r"[\s\.]*(\d+)\s*([A-Za-z])?\s*(?:BIS)?\s*"
-    r"(?:#\s*|\s*N[°o]?\.?\s*)?(\d+)\s*([A-Za-z])?\s*[-–—]\s*(\d+)\s*$",
+    r"(?:#\s*|\s*N[°o]?\.?\s*)?(\d+)\s*([A-Za-z])?\s*(?:[-–—]\s*|\s+)(\d+)\s*$",
     re.IGNORECASE,
 )
 

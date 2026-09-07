@@ -237,6 +237,24 @@ def extraer_direccion_de_ctl(texto_pdf):
     if not texto_pdf:
         return None
 
+    # 0. Preferir la DIRECCION CATASTRAL oficial cuando el CTL la distingue
+    # (Bogotá: 'DG 61B 20 04 AP 401 (DIRECCION CATASTRAL)' junto a placas
+    # registrales alternativas 'AVENIDA (CALLE)63 20-04/CARRERA 20 61-55').
+    idx_di = texto_pdf.upper().find("DIRECCION DEL INMUEBLE")
+    if idx_di >= 0:
+        ventana = texto_pdf[idx_di: idx_di + 700]
+        m_cat = re.search(
+            r"([A-Z0-9ÁÉÍÓÚÑ\.\#\-/ ]{4,90}?)\s*\(?\s*DIRECCION CATASTRAL",
+            ventana, re.IGNORECASE)
+        if m_cat:
+            cand = m_cat.group(1).strip()
+            cand = re.split(r"\s+(?:APARTAMENTO|APTO|AP\b|EDIFICIO|TORRE|CASA\b|"
+                            r"CONJUNTO|BLOQUE|PISO|OFICINA|LOCAL|UNIDAD|PH\b|P\.H\.)\b",
+                            cand)[0]
+            cand = " ".join(cand.split()).strip(" .,;/")
+            if _es_direccion_valida(cand):
+                return cand
+
     # 1. Etiquetas explicitas en el CTL
     patrones_etiqueta = [
         r"(?:Direcci[oO]n|Ubicaci[oO]n|Localizaci[oO]n)\s*[:\-]?\s*([^\n\r]{10,100})",

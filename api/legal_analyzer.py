@@ -237,15 +237,38 @@ def analizar_texto_certificado(texto):
             primera = " ".join(bloque.split())[:400]
             res["descripcion_ctl"] = primera
 
-        # 2d. Dirección del inmueble (formato CTL SNR: bloque DIRECCION DEL INMUEBLE)
-        m_dir = re.search(
-            r"DIRECCION\s+DEL\s+INMUEBLE\s*\n(?:Tipo\s+Predio\s*:[^\n]*\n)?\s*(?:\d+\)\s*)?"
-            r"([A-Z0-9ÁÉÍÓÚÑ \.\#\-]{8,80})",
-            texto, re.IGNORECASE)
-        if m_dir:
-            cand_dir = m_dir.group(1).strip()
-            if re.search(r"\b(CL|CLL|CALLE|CRA|KR|CARRERA|TV|AV|DG|DIAGONAL)\b", cand_dir, re.IGNORECASE) and re.search(r"\d", cand_dir):
-                res["direccion"] = cand_dir
+        # 2d. Dirección del inmueble (formato CTL SNR: bloque DIRECCION DEL INMUEBLE).
+        # El CTL de Bogotá distingue la DIRECCION CATASTRAL oficial (p. ej.
+        # '2) DG 61B 20 04 AP 401 (DIRECCION CATASTRAL)') junto a otras placas
+        # registrales ('AVENIDA (CALLE) 63 20-04/CARRERA 20 61-55...'): se
+        # prefiere la CATASTRAL y se descarta la unidad (AP/EDIFICIO/PH).
+        _dir_oficial = None
+        idx_di = texto.upper().find("DIRECCION DEL INMUEBLE")
+        if idx_di >= 0:
+            ventana = texto[idx_di: idx_di + 700]
+            m_cat = re.search(
+                r"([A-Z0-9ÁÉÍÓÚÑ\.\#\-/ ]{4,90}?)\s*\(?\s*DIRECCION CATASTRAL",
+                ventana, re.IGNORECASE)
+            if m_cat:
+                _dir_oficial = m_cat.group(1)
+            else:
+                m_prim = re.search(
+                    r"(?:[0-9]+\)\s*)?((?:AV|AVENIDA|CL|CLL|CALLE|CRA|KR|CARRERA|"
+                    r"TV|DG|DIAGONAL|AK)\s*[A-Z0-9ÁÉÍÓÚÑ\.\#\-/ ]{4,60})",
+                    ventana, re.IGNORECASE)
+                if m_prim:
+                    _dir_oficial = m_prim.group(1)
+        if _dir_oficial:
+            # Descartar unidad/edificio: 'DG 61B 20 04 AP 401' -> 'DG 61B 20 04'
+            _dir_oficial = re.split(
+                r"\s+(?:APARTAMENTO|APTO|AP\b|EDIFICIO|TORRE|CASA\b|CONJUNTO|BLOQUE|"
+                r"PISO|OFICINA|LOCAL|UNIDAD|PH\b|P\.H\.)\b", _dir_oficial)[0]
+            _dir_oficial = re.sub(r"\(?\s*DIRECCION CATASTRAL\s*\)?", "", _dir_oficial)
+            _dir_oficial = " ".join(_dir_oficial.split()).strip(" .,;/")
+            if (re.search(r"\b(CL|CLL|CALLE|CRA|KR|CARRERA|TV|AV|AVENIDA|DG|DIAGONAL|AK)\b",
+                          _dir_oficial, re.IGNORECASE)
+                    and re.search(r"\d", _dir_oficial)):
+                res["direccion"] = _dir_oficial
 
         # Parsear Anotaciones - Requiere que ANOTACION este en una nueva linea.
         # El CTL real usa indistintamente "ANOTACION: Nro 001", "ANOTACION Nro 002"
