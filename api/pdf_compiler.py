@@ -138,7 +138,11 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
     hay_riesgo  = ri.get('intersecta', False)
 
     if hay_amenaza or hay_riesgo:
-        nivel_texto = am.get('nivel', ri.get('nivel', 'Detectado'))
+        # Nivel SOLO de la capa que intersecta (am o ri): si una capa no
+        # intersecta su 'nivel' es None y no debe aparecer en el título
+        # (regresión: 'Detectada (Sin afectación)' con severidad MEDIO).
+        nivel_texto = ((am.get('nivel') if hay_amenaza else None) or
+                       (ri.get('nivel') if hay_riesgo else None) or 'Detectado')
         clase_suelo = am.get('clase_suelo', ri.get('clase_suelo', 'N/A'))
         # Severidad coherente con el nivel real de la amenaza (fix inconsistencia)
         severidad, color_sev, color_bg, impl = _severidad_geo_desde_nivel(am, ri)
@@ -146,8 +150,8 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
         fuente = fuente_pot
         desc = (
             f"El motor geoespacial detectó intersección del predio con zonas de riesgo del POT de {nombre_ciudad}. "
-            f"Amenaza remoción en masa: {am.get('nivel', 'N/A')} | "
-            f"Áreas en riesgo: {ri.get('nivel', 'N/A')} | "
+            f"Amenaza remoción en masa: {am.get('nivel') or 'Sin afectación'} | "
+            f"Áreas en riesgo: {ri.get('nivel') or 'Sin afectación'} | "
             f"Clase de suelo: {clase_suelo}. {resumen}"
         )
     else:
@@ -544,14 +548,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         geo_eval = {
             "amenaza_remocion_masa": {
                 "intersecta": bool(_mm.get("intersecta")),
-                "nivel": _nivel_mm or "Sin afectación",
+                "nivel": _nivel_mm,
                 "clase_suelo": (_ent2.get("clase_suelo") or "Urbano"),
                 "area_poligono_m2": 0, "objectid": None,
                 "color_hex": "#D92C2C" if _mm.get("intersecta") else "#7F8C8D",
             },
             "areas_en_riesgo": {
                 "intersecta": bool(_in.get("intersecta") or _av.get("intersecta") or _si.get("intersecta")),
-                "nivel": ", ".join(_det_amz) if _det_amz else "Sin riesgo identificado",
+                "nivel": ", ".join(_det_amz) if _det_amz else None,
                 "clase_suelo": (_ent2.get("clase_suelo") or "Urbano"),
                 "area_poligono_m2": 0, "objectid": None,
                 "color_hex": "#F08C2B" if (_in.get("intersecta") or _av.get("intersecta")) else "#7F8C8D",
@@ -565,29 +569,30 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _amz = (predio_real.get("amenazas") or {})
         _mm = _amz.get("movimiento_masa_urbano") or {"intersecta": False}
         _si = _amz.get("respuesta_sismica") or {"intersecta": False}
-        _ge = _amz.get("zonificacion_geotecnica") or {"intersecta": False}
-        _nivel_mm = (_mm.get("nivel") or "N/D") if _mm.get("intersecta") else None
+        # Geotecnia = tipo de suelo (Aluvial...), NO amenaza: dato informativo
+        _geo_suelo = _amz.get("geotecnia_tipo_suelo")
+        _nivel_mm = (_mm.get("nivel")) if _mm.get("intersecta") else None
         _det_amz = []
-        if _mm.get("intersecta"):
-            _det_amz.append(f"movimientos en masa: {_mm.get('nivel') or 'N/D'}")
-        if _si.get("intersecta"):
-            _det_amz.append(f"respuesta sísmica: {_si.get('nivel') or 'N/D'}")
-        if _ge.get("intersecta"):
-            _det_amz.append(f"zonificación geotécnica: {_ge.get('nivel') or 'N/D'}")
+        if _mm.get("intersecta") and _mm.get("nivel"):
+            _det_amz.append(f"movimientos en masa: {_mm.get('nivel')}")
+        if _si.get("intersecta") and _si.get("nivel"):
+            _det_amz.append(f"respuesta sísmica: {_si.get('nivel')}")
+        if _geo_suelo:
+            _det_amz.append(f"suelo geotécnico (informativo): {_geo_suelo}")
         geo_eval = {
             "amenaza_remocion_masa": {
                 "intersecta": bool(_mm.get("intersecta")),
-                "nivel": _nivel_mm or "Sin afectación",
+                "nivel": _nivel_mm,
                 "clase_suelo": (_ent2.get("clase_suelo") or "Urbano"),
                 "area_poligono_m2": 0, "objectid": None,
                 "color_hex": "#D92C2C" if _mm.get("intersecta") else "#7F8C8D",
             },
             "areas_en_riesgo": {
-                "intersecta": bool(_si.get("intersecta") or _ge.get("intersecta")),
-                "nivel": ", ".join(_det_amz) if _det_amz else "Sin riesgo identificado",
+                "intersecta": bool(_si.get("intersecta")),
+                "nivel": ", ".join(_det_amz) if _det_amz else None,
                 "clase_suelo": (_ent2.get("clase_suelo") or "Urbano"),
                 "area_poligono_m2": 0, "objectid": None,
-                "color_hex": "#F08C2B" if (_si.get("intersecta") or _ge.get("intersecta")) else "#7F8C8D",
+                "color_hex": "#F08C2B" if _si.get("intersecta") else "#7F8C8D",
             },
             "resumen_ejecutivo": (
                 f"Predio en {_NOMBRE_CIUDAD} evaluado contra las capas oficiales del IDIGER "
@@ -1322,47 +1327,72 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             f"se resolvió por código catastral/NUPRE. La información catastral de esta sección "
             f"debe verificarse antes de usarse en una decisión."))
     story.append(Spacer(1, 4))
-    story.append(sub("4.2 POT -- Cruce de Capas de Ordenamiento [REAL]"))
-    # Tratamiento urbanístico REAL desde la capa de planeación de la Alcaldía
-    # (si el predio se resolvió por código catastral). La fila 4 y el texto
-    # resumen reflejan el tratamiento consultado, no uno genérico de demo.
+    story.append(sub("4.2 POT -- Cruce de Capas de Ordenamiento"))
     _trat_par = (str(_predio_tratamiento or "") if _predio_tratamiento else "")
-    _trat_txt = "Consolidacion Nivel 1B (alt 5), Nivel 2 (alt 11), Especial"
-    if _trat_par:
-        _trat_txt = f"{_trat_par} ({_ent2.get('tipo_tratamiento') or 'POT'})"
-        if _ent2.get("altura_maxima") and str(_ent2.get("altura_maxima")).lower() not in ("plan parcial",):
-            _trat_txt += f" -- Altura max: {_ent2.get('altura_maxima')}"
-    _clase_suelo_txt = (_ent2.get("clase_suelo") or "SUELO URBANO") if _ent2.get("clase_suelo") else "SUELO URBANO"
-    _clase_suelo_txt = f"<b>{_clase_suelo_txt.upper()}</b>"
-    # POT audit table
-    pot_audit = [
-        [Paragraph("<b>Layer</b>",s["header"]),Paragraph("<b>Capa</b>",s["header"]),
-         Paragraph("<b>Features</b>",s["header"]),Paragraph("<b>Resultado</b>",s["header"])],
-        [Paragraph("1",s["value"]),Paragraph("Clases de Suelo",s["body"]),
-         Paragraph("<b>1</b>",s["center"]),Paragraph(_clase_suelo_txt, s["body"])],
-        [Paragraph("2",s["value"]),Paragraph("Norma Uso de Suelo",s["body"]),
-         Paragraph("<b>1</b>",s["center"]),
-         Paragraph((f"<b>Uso consultado en vivo</b> (uso económico: "
-                    f"{_predio_destino or 'N/D'})") if (es_medellin or es_bogota)
-                   else "<b>ACTIVIDAD CENTRAL</b>", s["body"])],
-        [Paragraph("3",s["value"]),Paragraph("Planes Parciales",s["body"]),
-         Paragraph("<b>0</b>",s["center"]),Paragraph("Sin afectacion por Plan Parcial",s["alert_verde"])],
-        [Paragraph("4",s["value"]),Paragraph("Tratamientos Urbanisticos",s["body"]),
-         Paragraph("<b>1</b>" if _trat_par else "<b>5</b>",s["center"]),
-         Paragraph(_trat_txt, s["body"])],
-        [Paragraph("5",s["value"]),Paragraph("Planes de Reordenamiento",s["body"]),
-         Paragraph("<b>0</b>",s["center"]),Paragraph("Sin afectacion por reordenamiento",s["alert_verde"])],
-    ]
-    t_pot = Table(pot_audit, colWidths=["8%","25%","12%","55%"])
-    t_pot.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,0),C_AZUL_OSC),("TEXTCOLOR",(0,0),(-1,0),colors.white),
-        ("ROWBACKGROUNDS",(0,1),(-1,-1),[colors.white,colors.HexColor("#F0F4FB")]),
-        ("GRID",(0,0),(-1,-1),0.4,C_BORDE),("TOPPADDING",(0,0),(-1,-1),4),
-        ("BOTTOMPADDING",(0,0),(-1,-1),4),("LEFTPADDING",(0,0),(-1,-1),5),
-        ("VALIGN",(0,0),(-1,-1),"MIDDLE")]))
-    story.append(t_pot)
-    story.append(Spacer(1, 4))
-    story.append(dt(get_pot_summary_dt(barrio, ciudad=ciudad)))
-    story.append(Spacer(1, 4))
+    _clase_suelo_real = (_ent2.get("clase_suelo") or "").strip()
+
+    # Bogotá/Medellín: la tabla de auditoría de capas POT es específica de
+    # Barranquilla (no aplica a otras ciudades: se evitaba afirmar datos de BAQ
+    # en un dictamen de Bogotá). Se muestra el resumen POT con los VALORES
+    # reales consultados en vivo (o PENDIENTE honesto si el servicio no llegó).
+    if es_bogota or es_medellin:
+        _resumen_pot = get_pot_summary_dt(
+            barrio, ciudad=ciudad,
+            clase_suelo=_ent2.get("clase_suelo"),
+            uso_economico=_ent2.get("uso_economico") or _predio_destino,
+            upz=_ent2.get("upz"),
+            tratamiento=_ent2.get("tratamiento"),
+            tipo_tratamiento=(_ent2.get("codigo_tratamiento")
+                              or _ent2.get("tipo_tratamiento")),
+        )
+        story.append(dt(_resumen_pot))
+        story.append(Spacer(1, 3))
+        if not (_clase_suelo_real or _ent2.get("uso_economico")
+                or _ent2.get("upz") or _trat_par):
+            story.append(alert_orange(
+                "<b>Consulta POT en vivo sin valores:</b> el geoportal de "
+                f"{_NOMBRE_CIUDAD} no devolvió datos de suelo/uso/UPZ para las "
+                "coordenadas del predio al momento de generar el dictamen. "
+                "Verificar en el portal oficial de la ciudad."))
+    else:
+        # Barranquilla: auditoría de capas POT empaquetadas (aplica solo a BAQ)
+        _clase_suelo_txt = _clase_suelo_real.upper() if _clase_suelo_real else "SUELO URBANO"
+        _trat_txt = "Consolidacion Nivel 1B (alt 5), Nivel 2 (alt 11), Especial"
+        if _trat_par:
+            _trat_txt = f"{_trat_par} ({_ent2.get('tipo_tratamiento') or 'POT'})"
+            if _ent2.get("altura_maxima") and str(_ent2.get("altura_maxima")).lower() not in ("plan parcial",):
+                _trat_txt += f" -- Altura max: {_ent2.get('altura_maxima')}"
+        pot_audit = [
+            [Paragraph("<b>Layer</b>",s["header"]),Paragraph("<b>Capa</b>",s["header"]),
+             Paragraph("<b>Features</b>",s["header"]),Paragraph("<b>Resultado</b>",s["header"])],
+            [Paragraph("1",s["value"]),Paragraph("Clases de Suelo",s["body"]),
+             Paragraph("<b>1</b>",s["center"]),Paragraph(f"<b>{_clase_suelo_txt}</b>", s["body"])],
+            [Paragraph("2",s["value"]),Paragraph("Norma Uso de Suelo",s["body"]),
+             Paragraph("<b>1</b>",s["center"]),
+             Paragraph((f"<b>Uso consultado en vivo</b> (uso económico: "
+                        f"{_predio_destino or 'N/D'})") if (es_medellin or es_bogota)
+                       else "<b>ACTIVIDAD CENTRAL</b>", s["body"])],
+            [Paragraph("3",s["value"]),Paragraph("Planes Parciales",s["body"]),
+             Paragraph("<b>0</b>",s["center"]),Paragraph("Sin afectacion por Plan Parcial",s["alert_verde"])],
+            [Paragraph("4",s["value"]),Paragraph("Tratamientos Urbanisticos",s["body"]),
+             Paragraph("<b>1</b>" if _trat_par else "<b>5</b>",s["center"]),
+             Paragraph(_trat_txt, s["body"])],
+            [Paragraph("5",s["value"]),Paragraph("Planes de Reordenamiento",s["body"]),
+             Paragraph("<b>0</b>",s["center"]),Paragraph("Sin afectacion por reordenamiento",s["alert_verde"])],
+        ]
+        t_pot = Table(pot_audit, colWidths=["8%","25%","12%","55%"])
+        t_pot.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,0),C_AZUL_OSC),("TEXTCOLOR",(0,0),(-1,0),colors.white),
+            ("ROWBACKGROUNDS",(0,1),(-1,-1),[colors.white,colors.HexColor("#F0F4FB")]),
+            ("GRID",(0,0),(-1,-1),0.4,C_BORDE),("TOPPADDING",(0,0),(-1,-1),4),
+            ("BOTTOMPADDING",(0,0),(-1,-1),4),("LEFTPADDING",(0,0),(-1,-1),5),
+            ("VALIGN",(0,0),(-1,-1),"MIDDLE")]))
+        story.append(t_pot)
+        story.append(Spacer(1, 4))
+        story.append(dt(get_pot_summary_dt(barrio, ciudad=ciudad)))
+        story.append(Spacer(1, 4))
+
+    # Hallazgo de amenaza/riesgo (aplica a todas las ciudades; con el filtro de
+    # 'Sin afectación' ya no se dispara en falso para Bogotá/Medellín)
     _am_pot = geo_eval.get("amenaza_remocion_masa", {}).get("intersecta", False)
     _ri_pot = geo_eval.get("areas_en_riesgo", {}).get("intersecta", False)
     if _am_pot or _ri_pot:
@@ -1370,12 +1400,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             f"<b>HALLAZGO MEDIO:</b> El predio intersecta capas de amenaza/riesgo del POT de "
             f"{_NOMBRE_CIUDAD}. Verificar el cumplimiento de la norma urbanistica del poligono "
             f"especifico y la afectacion por riesgo."))
-    elif _trat_par:
+    elif _trat_par and not es_bogota:
+        # Tratamiento real del polígono (Medellín/BAQ). Bogotá no expone
+        # tratamiento en abierto: la sección 4.3 remite a la ficha normativa SDP.
         story.append(alert_orange(
             f"<b>HALLAZGO MEDIO:</b> El tratamiento urbanistico oficial del poligono es "
             f"<b>{_trat_par}</b> ({_ent2.get('tipo_tratamiento') or 'POT'}). "
             "Verificar el cumplimiento de la norma urbanistica del poligono especifico del predio."))
-    else:
+    elif not es_bogota and not es_medellin and not _trat_par:
         story.append(alert_orange(
             "<b>HALLAZGO MEDIO:</b> El tratamiento urbanistico del sector presenta poligonos de Consolidacion "
             "con alturas variables. Verificar el cumplimiento de la norma urbanistica del poligono especifico del predio."))

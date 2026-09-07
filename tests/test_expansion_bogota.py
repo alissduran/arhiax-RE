@@ -79,14 +79,14 @@ class TestExpansionBogota(unittest.TestCase):
                 "uso_economico": "COMERCIO Y OFICINAS", "clase_suelo": "Urbano",
                 "valor_ref_m2": 3600000.0, "codigo_lote": "008213029001",
                 "codigo_manzana": "008213029"}
-            cb.consultar_construccion = lambda lat, lon: {
+            cb.consultar_construccion = lambda lat, lon, codigo_lote=None: {
                 "disponible": True, "tipo_construccion": "Edificación",
                 "total_pisos": 1, "codigo_construccion": "X"}
             cb.consultar_amenazas = lambda lat, lon: {
                 "disponible": True,
                 "movimiento_masa_urbano": {"intersecta": True, "nivel": "Amenaza Alta"},
                 "respuesta_sismica": {"intersecta": False},
-                "zonificacion_geotecnica": {"intersecta": True, "nivel": "Aluvial"}}
+                "geotecnia_tipo_suelo": "Aluvial"}
 
             r = cb.enriquecer_por_punto(4.646815, -74.061595)
             self.assertTrue(r["disponible"])

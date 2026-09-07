@@ -60,30 +60,22 @@ def calcular_score_actuarial(
     # ── Score Registral (base 100) ────────────────────────────────────────────
     score_registral = 100.0
     detalle_registral = []
-
     anotaciones = analysis.get("anotaciones", [])
-    for num, fecha, tipo, partes, estado in anotaciones:
-        if "CANCELADA" in estado:
-            continue
-        if "Hipoteca" in tipo:
-            score_registral -= 8
-            detalle_registral.append(f"-8 pts: Hipoteca vigente (Anot. {num})")
-        elif "Embargo" in tipo:
-            score_registral -= 15
-            detalle_registral.append(f"-15 pts: Embargo vigente (Anot. {num})")
-        elif "Demanda" in tipo:
-            score_registral -= 12
-            detalle_registral.append(f"-12 pts: Demanda civil inscrita (Anot. {num})")
 
-    # Discrepancia de acreedor
-    if analysis.get("acreedor_snr") and analysis.get("acreedor_real"):
-        from legal_analyzer import detectar_discrepancia_acreedor
-        disc = detectar_discrepancia_acreedor(
-            analysis["acreedor_snr"], analysis["acreedor_real"]
-        )
-        if disc:
-            score_registral -= 7
-            detalle_registral.append("-7 pts: Discrepancia acreedor SNR vs. real")
+    # Penalización por SEVERIDAD de los hallazgos (no por duplicar criterios con
+    # las anotaciones): un hallazgo ALTO (hipoteca/embargo vigente, ausencia de
+    # CTL) es BLOQUEANTE y debe reflejarse en el score — antes una hipoteca
+    # vigente ALTO solo restaba 8 pts y el score salía 92 con semáforo ROJO
+    # (contradicción inicio/fin del dictamen).
+    _tiene_alto = False
+    for sev, _tc, _bg, titulo, _f, _d, _i in hallazgos:
+        if sev == "ALTO":
+            score_registral -= 30
+            detalle_registral.append(f"-30 pts: {titulo.split('|')[-1].strip()}")
+            _tiene_alto = True
+        elif sev == "MEDIO":
+            score_registral -= 12
+            detalle_registral.append(f"-12 pts: {titulo.split('|')[-1].strip()}")
 
     # LTV alto penaliza en registral (E1 aprobado)
     if carga and carga.get("ltv_estimado", 0) > 0.80:
@@ -185,8 +177,20 @@ def calcular_score_actuarial(
         1
     )
 
+    # Coherencia con el semáforo del resumen: un hallazgo ALTO es BLOQUEANTE y
+    # el score integrado NO puede declarar perfil EXCELENTE/FAVORABLE con un
+    # bloqueante activo (antes: inicio 'BLOQUEADO/ROJO' vs. fin 'Score 95.8
+    # EXCELENTE'). Se topa el integrado a zona ELEVADO.
+    bloqueado = _tiene_alto
+    if bloqueado:
+        score_integrado = min(score_integrado, 55.0)
+        # Los parciales se mantienen como están; solo el integrado y su etiqueta
+        # reflejan el bloqueo cualitativo.
+
     # Colores para el score integrado
     tc_int, bg_int, etiqueta_int = color_score(score_integrado)
+    if bloqueado:
+        etiqueta_int = "BLOQUEADO"
 
     return {
         "score_registral":   round(score_registral, 1),
@@ -195,6 +199,7 @@ def calcular_score_actuarial(
         "score_catastral":   round(score_catastral, 1),
         "score_integrado":   score_integrado,
         "etiqueta":          etiqueta_int,
+        "bloqueado":         bloqueado,
         "colores": {
             "registral":   color_score(score_registral),
             "juridico":    color_score(score_juridico),
@@ -225,6 +230,12 @@ def generar_narrativa_score(score_result: dict) -> str:
     sj = score_result["score_juridico"]
     sh = score_result["score_hidrologico"]
     sc = score_result["score_catastral"]
+    if score_result.get("bloqueado"):
+        return (
+            f"Perfil BLOQUEADO (hallazgos de severidad ALTO activos): score "
+            f"integrado topeado en {si}/100. Registral: {sr}/100 · Jurídico: "
+            f"{sj}/100 · Hidrológico: {sh}/100 · Catastral: {sc}/100. "
+            f"Metodología ponderada LAI v1.0 (40/30/20/10).")
     return (
         f"Perfil de riesgo {et} (Score {si}/100). "
         f"Registral: {sr}/100 · Jurídico: {sj}/100 · "

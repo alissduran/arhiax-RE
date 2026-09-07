@@ -175,11 +175,18 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
         p = r_uso["features"][0].get("properties", {})
         res["uso_economico"] = p.get("GRUPOUSOECON")
 
-    # Estrato (manzanas de estrato)
+    # Estrato (manzanas de estrato). Bogotá estratifica 1-6: el valor '0' o
+    # ausente significa manzana SIN estratificación (uso no residencial), no un
+    # estrato real: se deja None para que el dictamen lo marque como tal.
     r_est = _q_bbox("ordenamientoterritorial/estratificacion", 1, lon, lat, "CODIGO_MANZANA,ESTRATO")
     if r_est.get("features"):
         p = r_est["features"][0].get("properties", {})
-        res["estrato"] = p.get("ESTRATO")
+        estr = p.get("ESTRATO")
+        try:
+            estr_int = int(str(estr).strip() or 0)
+        except (TypeError, ValueError):
+            estr_int = 0
+        res["estrato"] = estr_int if 1 <= estr_int <= 6 else None
 
     # UPZ
     r_upz = _q_bbox("ordenamientoterritorial/unidadplaneamientozonal", 0, lon, lat,
@@ -217,8 +224,15 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
 
 # ── 2. Construcción (pisos) ─────────────────────────────────────────────────
 
-def consultar_construccion(lat: float, lon: float) -> dict[str, Any]:
-    cache_key = f"bog_const|{round(lat, 5)}|{round(lon, 5)}"
+def consultar_construccion(lat: float, lon: float, codigo_lote: str = None) -> dict[str, Any]:
+    """Pisos del EDIFICIO PRINCIPAL del lote.
+
+    El bbox puede devolver varias construcciones (portería, garajes, locales de
+    1 piso): se elige la de MAYOR número de pisos/altura dentro del lote del
+    predio (cuando el código de lote se conoce), no la primera del bbox —
+    antes un predio en PH podía reportar '1 piso' si la primera construcción
+    coincidente era una caseta vecina."""
+    cache_key = f"bog_const|{round(lat, 5)}|{round(lon, 5)}|{codigo_lote or ''}"
     cached = _cache_get(cache_key)
     if cached is not None:
         return cached
@@ -226,17 +240,55 @@ def consultar_construccion(lat: float, lon: float) -> dict[str, Any]:
            "total_pisos": None, "area_construida": None, "codigo_construccion": None}
     r = _q_bbox("catastro/construccion", 0, lon, lat,
                 "CONCODIGO,CONNPISOS,CONALTURA,LOTECODIGO", max_features=10)
-    if r.get("features"):
-        p = r["features"][0].get("properties", {})
+    feats = r.get("features") or []
+    if codigo_lote:
+        feats_lote = [f for f in feats
+                      if str((f.get("properties") or {}).get("LOTECODIGO") or "") == str(codigo_lote)]
+        if feats_lote:
+            feats = feats_lote
+
+    def _pisos(f):
+        try:
+            return int((f.get("properties") or {}).get("CONNPISOS") or 0)
+        except (TypeError, ValueError):
+            return 0
+
+    def _altura(f):
+        try:
+            return float((f.get("properties") or {}).get("CONALTURA") or 0)
+        except (TypeError, ValueError):
+            return 0
+
+    if feats:
+        # Edificio principal: mayor (pisos, altura) entre las del lote
+        mejor = max(feats, key=lambda f: (_pisos(f), _altura(f)))
+        p = mejor.get("properties", {})
         res["codigo_construccion"] = p.get("CONCODIGO")
-        res["total_pisos"] = p.get("CONNPISOS")
+        pisos = _pisos(mejor)
+        res["total_pisos"] = pisos or None
         res["altura"] = p.get("CONALTURA")
-        res["tipo_construccion"] = "Edificación" if (p.get("CONNPISOS") or 0) > 1 else "Edificación"
-        res["disponible"] = True
+        res["tipo_construccion"] = "Edificación"
+        res["disponible"] = bool(pisos or p.get("CONALTURA"))
     else:
         res["error"] = "construcción sin coincidencia en Bogotá"
     _cache_set(cache_key, res)
     return res
+
+
+def _es_no_afectacion(valor) -> bool:
+    """True si el valor textual de una capa de amenazas indica que NO hay
+    afectación (los servicios IDIGER devuelven textos tipo 'Sin afectación',
+    'No aplica' que antes se trataban como intersección real)."""
+    if valor is None:
+        return True
+    s = str(valor).strip().upper()
+    # Normaliza tildes ('SIN AFECTACIÓN' -> 'SIN AFECTACION')
+    for a, b in (("Á", "A"), ("É", "E"), ("Í", "I"), ("Ó", "O"), ("Ú", "U")):
+        s = s.replace(a, b)
+    if not s or s in ("0", "NA", "N/A", "NINGUNA", "NO APLICA", "NO REGISTRA",
+                      "NO PRESENTA", "SIN DATO", "SIN INFORMACION"):
+        return True
+    return any(k in s for k in ("SIN AFECTACION", "SIN RIESGO", "SIN AMENAZA"))
 
 
 # ── 3. Amenazas y riesgos (IDIGER) ──────────────────────────────────────────
@@ -246,20 +298,34 @@ def consultar_amenazas(lat: float, lon: float) -> dict[str, Any]:
     cached = _cache_get(cache_key)
     if cached is not None:
         return cached
+    # Solo capas de AMENAZA real: remoción en masa (l2) y respuesta sísmica
+    # (l7, microzonificación con nivel Alta/Media/Baja). La capa l8 GEOTECNIA
+    # describe el TIPO DE SUELO ('Aluvial', 'Lacustre'...) y NO es una amenaza:
+    # se reporta como dato informativo sin disparar intersección (regresión:
+    # un predio en suelo 'Aluvial' aparecía como 'Afectación por Amenaza').
     capas = {
         "movimiento_masa_urbano": (2, "AMENAZA"),
         "respuesta_sismica": (7, "ZONA_RESPUESTA"),
-        "zonificacion_geotecnica": (8, "GEOTECNIA"),
     }
-    res = {"disponible": False, "error": None}
+    res = {"disponible": False, "error": None, "geotecnia_tipo_suelo": None}
     for nombre, (lid, campo) in capas.items():
         r = _q_bbox("emergencias/gestionriesgos", lid, lon, lat, campo, max_features=3)
         if r.get("features"):
             p = r["features"][0].get("properties", {})
             valor = p.get(campo)
-            res[nombre] = {"intersecta": bool(valor), "nivel": valor or None}
+            intersecta = bool(valor) and not _es_no_afectacion(valor)
+            res[nombre] = {"intersecta": intersecta,
+                           "nivel": None if not intersecta else valor}
         else:
             res[nombre] = {"intersecta": False, "nivel": None}
+    # Geotecnia (tipo de suelo) — informativo, nunca intersección de amenaza
+    try:
+        r_geo = _q_bbox("emergencias/gestionriesgos", 8, lon, lat, "GEOTECNIA", max_features=3)
+        if r_geo.get("features"):
+            v_geo = (r_geo["features"][0].get("properties") or {}).get("GEOTECNIA")
+            res["geotecnia_tipo_suelo"] = None if _es_no_afectacion(v_geo) else v_geo
+    except Exception:
+        pass
     res["disponible"] = any(
         (res[k].get("intersecta") if isinstance(res.get(k), dict) else False) for k in capas)
     if not res["disponible"]:
@@ -279,7 +345,11 @@ def enriquecer_por_punto(lat: float = None, lon: float = None) -> dict[str, Any]
     res["lon"] = float(lon)
     res["resolucion"] = "por_punto_referencial"
     res["entorno"] = consultar_entorno_urbano(float(lat), float(lon))
-    res["construccion"] = consultar_construccion(float(lat), float(lon))
+    # Pasar el código de lote para elegir la construcción del EDIFICIO del
+    # predio (no la primera construcción vecina del bbox)
+    res["construccion"] = consultar_construccion(
+        float(lat), float(lon),
+        codigo_lote=(res["entorno"].get("codigo_lote") or None))
     res["amenazas"] = consultar_amenazas(float(lat), float(lon))
     res["disponible"] = bool(res["entorno"].get("disponible")
                              or res["construccion"].get("disponible")

@@ -376,24 +376,40 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
         ("Estrato", estrato if estrato not in (None, "", "No_Aplica") else "No aplica (uso no residencial)"),
     ]
 
-def get_pot_summary_dt(barrio, ciudad="barranquilla"):
+def get_pot_summary_dt(barrio, ciudad="barranquilla", clase_suelo=None,
+                       uso_economico=None, upz=None, tratamiento=None,
+                       tipo_tratamiento=None):
+    """Resumen POT por ciudad. Cuando la consulta en vivo trajo el valor real
+    (clase_suelo, uso, UPZ, tratamiento) se muestra; si no, PENDIENTE (nunca se
+    afirma un valor genérico como si fuera del predio)."""
     es_med = "medellin" in (ciudad or "").lower()
     es_bog = "bogota" in (ciudad or "").lower()
+
+    def _v(valor, pendiente):
+        valor = (valor or "").strip()
+        return valor if valor and valor.upper() not in ("N/A", "N/D", "NONE") else pendiente
+
     if es_med:
+        suelo = _v(clase_suelo, "PENDIENTE (consulta en vivo no disponible)")
+        uso = _v(uso_economico, "PENDIENTE (consulta en vivo no disponible)")
+        trat = _v(tratamiento, "PENDIENTE (consulta en vivo no disponible)")
         return [
-            ("Clasificacion del suelo", "SUELO URBANO (POT Medellín - Acuerdo 48/2014, consultado en vivo)"),
-            ("Norma uso de suelo", "SEGUN USO DEL PREDIO EN CATASTRO (consulta en vivo)"),
-            ("Tratamiento urbanistico", "SEGUN CAPA DE TRATAMIENTOS POT MEDELLIN (consultada en vivo)"),
+            ("Clasificacion del suelo", f"{suelo} (POT Medellín - Acuerdo 48/2014, en vivo)" if _v(clase_suelo, "") else suelo),
+            ("Norma uso de suelo", f"{uso} (catastro en vivo)" if _v(uso_economico, "") else uso),
+            ("Tratamiento urbanistico", f"{trat} (polígono {tipo_tratamiento})" if (_v(tratamiento, "") and tipo_tratamiento) else trat),
             ("Altura maxima segun tratamiento", "Sujeta a ficha normativa del polígono específico"),
             ("Planes Parciales", "SIN AFECTACION DIRECTA REGISTRADA"),
             ("Planes de Reordenamiento", "SIN AFECTACION DIRECTA REGISTRADA"),
             ("Fuente de capas", "Servidormapas Alcaldía de Medellín (consultas en vivo, Sprint 3)"),
         ]
     if es_bog:
+        suelo = _v(clase_suelo, "PENDIENTE (consulta en vivo no disponible)")
+        uso = _v(uso_economico, "PENDIENTE (consulta en vivo no disponible)")
+        upz_txt = _v(upz, "PENDIENTE (consulta en vivo no disponible)")
         return [
-            ("Clasificacion del suelo", "SUELO SEGUN POT BOGOTA (Decreto 555/2021, consultado en vivo)"),
-            ("Norma uso de suelo", "SEGUN USO ECONOMICO PREDOMINANTE POR MANZANA (consulta en vivo)"),
-            ("Unidad de Planeamiento Zonal (UPZ)", "SEGUN CAPA UPZ CATASTRO DISTRITAL (consultada en vivo)"),
+            ("Clasificacion del suelo", f"{suelo} (POT Bogotá Decreto 555/2021, en vivo)" if _v(clase_suelo, "") else suelo),
+            ("Norma uso de suelo", f"{uso} (uso predominante por manzana, en vivo)" if _v(uso_economico, "") else uso),
+            ("Unidad de Planeamiento Zonal (UPZ)", f"{upz_txt} (capa UPZ catastro distrital)" if _v(upz, "") else upz_txt),
             ("Altura maxima segun tratamiento", "Sujeta a ficha normativa del polígono específico (UPZ)"),
             ("Planes Parciales", "SIN AFECTACION DIRECTA REGISTRADA"),
             ("Planes de Reordenamiento", "SIN AFECTACION DIRECTA REGISTRADA"),

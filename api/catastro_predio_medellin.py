@@ -383,6 +383,22 @@ def consultar_lote_y_construccion(lat: float, lon: float) -> dict[str, Any]:
 
 # ── 4. Amenazas (VC_Gestion_Riesgo) ──────────────────────────────────────────
 
+def _es_no_afectacion(valor) -> bool:
+    """True si el valor textual indica que NO hay afectación ('Sin afectación',
+    'No aplica'...). Antes esos textos se trataban como intersección real y el
+    dictamen reportaba 'Afectación Detectada (Sin afectación)'."""
+    if valor is None:
+        return True
+    s = str(valor).strip().upper()
+    # Normaliza tildes ('SIN AFECTACIÓN' -> 'SIN AFECTACION')
+    for a, b in (("Á", "A"), ("É", "E"), ("Í", "I"), ("Ó", "O"), ("Ú", "U")):
+        s = s.replace(a, b)
+    if not s or s in ("0", "NA", "N/A", "NINGUNA", "NO APLICA", "NO REGISTRA",
+                      "NO PRESENTA", "SIN DATO", "SIN INFORMACION"):
+        return True
+    return any(k in s for k in ("SIN AFECTACION", "SIN RIESGO", "SIN AMENAZA"))
+
+
 def consultar_amenazas(lat: float, lon: float) -> dict[str, Any]:
     """Amenaza por inundación, movimiento en masa, avenida torrencial y sismo."""
     cache_key = f"med_riesgo|{round(lat, 5)}|{round(lon, 5)}"
@@ -402,9 +418,12 @@ def consultar_amenazas(lat: float, lon: float) -> dict[str, Any]:
         r = _q_punto("ambiente_dllo_sost/VC_Gestion_Riesgo", lid, lon, lat, campos, max_features=3)
         if r.get("features"):
             p = r["features"][0].get("properties", {})
+            valor = p.get("grado_amenaza") or p.get("categoria")
+            # 'Sin afectación'/'No aplica' NO son intersección (regresión H-GEO)
+            intersecta = bool(valor) and not _es_no_afectacion(valor)
             res[nombre] = {
-                "intersecta": True,
-                "nivel": p.get("grado_amenaza") or p.get("categoria"),
+                "intersecta": intersecta,
+                "nivel": valor if intersecta else None,
                 "categoria": p.get("categoria"),
             }
         else:
