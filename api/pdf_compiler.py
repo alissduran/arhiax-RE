@@ -1773,6 +1773,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     from reportlab.platypus import KeepTogether
     story.append(sec("06 - Hallazgos Clasificados por Severidad"))
     story.append(hr())
+    # Nota en lenguaje claro: cómo leer la severidad (para cualquier lector)
+    story.append(body(
+        "<b>Como leer esta seccion:</b> cada hallazgo senala un punto que merece atencion antes "
+        "de tomar una decision sobre el inmueble. <b>ALTO</b> (rojo) = condiciona o bloquea la "
+        "operacion hasta resolverlo (p. ej. pagar y cancelar una hipoteca). <b>MEDIO</b> (naranja) "
+        "= requiere una verificacion puntual por un profesional. <b>INFORMATIVO</b> (verde) = "
+        "situacion favorable o sin riesgo aparente. El hallazgo indica <b>a quien afecta y que "
+        "hacer</b>; no califica al propietario, sino al estado del inmueble."))
+    story.append(Spacer(1, 6))
     
     for sev, tc, bg, titulo, fuente, descripcion, implicacion in hallazgos:
         sev_style = ParagraphStyle("sev_s", fontName="Helvetica-Bold", fontSize=8, textColor=tc, leading=11)

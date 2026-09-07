@@ -452,20 +452,73 @@ def analizar_texto_certificado(texto):
         # acreedor_real se declara externamente o queda None (sin discrepancia)
         res.setdefault("acreedor_real", None)
 
-        # 6. Generar Hallazgos dinamicos
+        # 6. Generar Hallazgos dinamicos (redactados en LENGUAJE CLARO para que
+        # cualquier persona entienda qué significa el gravamen y a quién afecta).
         h_idx = 1
+
+        def _acreedor_de(item):
+            """Acreedor legible de una anotación de gravamen ('A: BBVA...')."""
+            partes = (item.get("partes") or "").strip()
+            a = partes.split("->")[-1].strip() if "->" in partes else partes
+            if len(a) < 4:
+                m = re.search(r"A\s*:\s*([A-Z0-9ÁÉÍÓÚÑ&\.\s]{6,90})",
+                              item.get("texto") or "")
+                a = m.group(1).strip() if m else ""
+            a = re.sub(r"(?:\.?NIT#?\s*[\d]+|N\.?I\.?T\.?\s*[\d]+)", "", a, flags=re.I)
+            return " ".join(a.split()).strip(" .,;")
+
+        def _cuantia_de(item):
+            m = re.search(
+                r"(?:CREDITO INICIAL APROBADO POR|VALOR ACTO|CUANTIA|por\s+valor\s+de)\s*"
+                r"\$?\s*([\d]{1,3}(?:[.,][\d]{3})+)", (item.get("texto") or ""), re.IGNORECASE)
+            return m.group(1) if m else None
+
         for item in parsed_anotaciones:
             if "GRAVAMEN" in item["tipo"] and "CANCELADA" not in item["estado"]:
-                res["hallazgos"].append((
-                    "ALTO", C_ROJO, C_RIESGO_BG,
-                    "H-0{} | {} Vigente (Anot. {})".format(h_idx, item['tipo'], item['num']),
-                    "SNR Registral",
-                    "Se detecto un gravamen activo registrado en la anotacion {}: {}...".format(item['num'], item['texto'][:250]),
-                    "BLOQUEO para estructuracion fiduciaria. Requiere levantamiento de hipoteca/embargo."
-                ))
+                es_hipoteca = "Hipoteca" in item["tipo"]
+                acreedor = _acreedor_de(item)
+                cuantia = _cuantia_de(item)
+                fecha = item.get("fecha") or "N/D"
+                extra_acr = (" a favor de {}".format(acreedor)) if acreedor else ""
+                extra_mto = (" por {} COP".format(cuantia)) if cuantia else ""
+                if es_hipoteca:
+                    titulo = "H-0{} | Hipoteca vigente{} (Anot. {})".format(
+                        h_idx, extra_acr, item['num'])
+                    desc = (
+                        "El folio registra una HIPOTECA VIGENTE inscrita el {} (anot. {}){}".format(
+                            fecha, item['num'], extra_acr + extra_mto) + ". "
+                        "En lenguaje claro: este inmueble esta comprometido como garantia de un "
+                        "credito que aun no ha sido cancelado. La hipoteca es una carga que pesa "
+                        "sobre la propiedad (no sobre la persona): sigue al inmueble aunque cambie "
+                        "de dueno hasta que se pague el credito y se cancele en el registro."
+                    )
+                    impl = (
+                        "Para vender, refinanciar o dar este inmueble en garantia, primero hay que "
+                        "gestionar el credito con {} y tramitar la CANCELACION de la hipoteca ante "
+                        "la ORIP. No impide ser dueno, pero condiciona cualquier operacion sobre el "
+                        "apartamento hasta que el gravamen se levante.".format(
+                            acreedor if acreedor else "el banco acreedor")
+                    )
+                else:
+                    titulo = "H-0{} | {} vigente (Anot. {})".format(h_idx, item['tipo'], item['num'])
+                    desc = (
+                        "El folio registra {} inscrito el {} (anot. {}){}".format(
+                            item['tipo'].lower(), fecha, item['num'], extra_acr) + ". "
+                        "En lenguaje claro: existe una orden o carga registrada que limita la libre "
+                        "disposicion del inmueble y debe resolverse antes de cualquier operacion."
+                    )
+                    impl = (
+                        "Se requiere gestionar el levantamiento del gravamen (pago, orden judicial "
+                        "o acuerdo con la entidad acreedora) y su cancelacion en el registro antes "
+                        "de vender o estructurar garantias sobre el inmueble."
+                    )
+                res["hallazgos"].append(("ALTO", C_ROJO, C_RIESGO_BG, titulo,
+                                         "SNR Registral", desc, impl))
                 res["recs"].append((
                     "R-0{} | Cancelacion de gravamen Anot. {}".format(h_idx, item['num']),
-                    "Se debe tramitar la escritura publica de cancelacion y registrarla en el folio SNR para sanear el predio."
+                    "Tramitar con {} la cancelacion del gravamen (pago/paz y salvo) y registrarla "
+                    "en el folio SNR para dejar el inmueble libre de cargas.".format(
+                        acreedor if acreedor else "la entidad acreedora")
                 ))
                 h_idx += 1
             elif "LIMITACION" in item["tipo"] and "CANCELADA" not in item["estado"]:
@@ -473,12 +526,17 @@ def analizar_texto_certificado(texto):
                     "MEDIO", C_NARANJA, C_ALERTA_BG,
                     "H-0{} | Afectacion/Limitacion Vigente (Anot. {})".format(h_idx, item['num']),
                     "SNR Registral",
-                    "Se detecto una afectacion o limitacion al dominio vigente: {}...".format(item['texto'][:250]),
-                    "Restringe libre disposicion. Venta o traspaso requiere consentimiento de los conyuges/titulares."
+                    "El folio registra una limitacion al dominio (anot. {}): {}. En lenguaje claro: "
+                    "el inmueble tiene una restriccion legal (p. ej. afectacion a vivienda familiar) "
+                    "que exige el consentimiento de las personas protegidas para venderlo o "
+                    "traspasarlo.".format(item['num'], (item.get('texto') or '')[:160]),
+                    "Vender o aportar el inmueble requiere el levantamiento de la limitacion con la "
+                    "participacion de los titulares/beneficiarios ante notaria."
                 ))
                 res["recs"].append((
                     "R-0{} | Levantamiento de Limitacion Anot. {}".format(h_idx, item['num']),
-                    "Si se aporta a fideicomiso, se requiere desafectacion mediante escritura publica conjunta."
+                    "Tramitar la desafectacion/levantamiento de la limitacion mediante escritura "
+                    "publica conjunta y su registro en el folio SNR."
                 ))
                 h_idx += 1
 
@@ -488,8 +546,11 @@ def analizar_texto_certificado(texto):
                 "INFORMATIVO", C_VERDE, C_OK_BG,
                 "H-01 | Tradicion Registral Libre de Gravamenes Activos",
                 "SNR -- Tradicion",
-                "Se analizaron todas las anotaciones del certificado. No se detectaron hipotecas, embargos ni afectaciones vigentes.",
-                "Favorable para la originacion de creditos y estructuracion de garantias sin restricciones."
+                "Se analizaron todas las anotaciones del folio y NO se encontraron hipotecas, "
+                "embargos ni afectaciones vigentes. En lenguaje claro: el inmueble aparece libre "
+                "de cargas registradas.",
+                "Favorable para vender, dar en garantia o estructurar operaciones sin restricciones "
+                "registrales (sujeto a verificar el paz y salvo de impuestos)."
             ))
 
     except Exception as e:
