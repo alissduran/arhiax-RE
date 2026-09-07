@@ -225,5 +225,57 @@ class TestArhiaxReSuite(unittest.TestCase):
         self.assertEqual(len(ruta_limpia), 0)
 
 
+class TestCoherenciaSeveridadGeo(unittest.TestCase):
+    """Regresión (fix reportado por el usuario): el hallazgo H-GEO de la sección
+    06 no puede declarar 'Severidad ALTO' cuando la amenaza detectada es de
+    nivel Baja. La severidad debe ser proporcional al nivel del motor."""
+
+    @staticmethod
+    def _hallazgo_hgeo(geo_eval):
+        from pdf_compiler import _inject_geospatial_hallazgo
+        base = [("INFORMATIVO", None, None,
+                 "H-01 | Zona Libre de Amenazas y Riesgos (Evaluación Dinámica POT)",
+                 "SNR", "x", "y")]
+        hs = _inject_geospatial_hallazgo(list(base), geo_eval, "Barrio Prueba")
+        for h in hs:
+            if "H-GEO" in h[3]:
+                return h
+        return None
+
+    def test_amenaza_baja_no_es_severidad_alto(self):
+        """Nivel Baja -> severidad MEDIO (nunca ALTO): incoherencia reportada."""
+        h = self._hallazgo_hgeo({
+            "amenaza_remocion_masa": {"intersecta": True, "nivel": "Baja"},
+            "areas_en_riesgo": {"intersecta": False, "nivel": None},
+            "resumen_ejecutivo": "Resumen de prueba."})
+        self.assertIsNotNone(h)
+        self.assertEqual(h[0], "MEDIO")
+        self.assertNotEqual(h[0], "ALTO")
+
+    def test_amenaza_alta_si_es_severidad_alto(self):
+        """Nivel Alta -> severidad ALTO (el caso realmente grave se mantiene)."""
+        h = self._hallazgo_hgeo({
+            "amenaza_remocion_masa": {"intersecta": True, "nivel": "Alta"},
+            "areas_en_riesgo": {"intersecta": False, "nivel": None},
+            "resumen_ejecutivo": "Resumen de prueba."})
+        self.assertIsNotNone(h)
+        self.assertEqual(h[0], "ALTO")
+
+    def test_amenaza_media_es_severidad_medio(self):
+        h = self._hallazgo_hgeo({
+            "amenaza_remocion_masa": {"intersecta": False, "nivel": None},
+            "areas_en_riesgo": {"intersecta": True, "nivel": "Media"},
+            "resumen_ejecutivo": "Resumen de prueba."})
+        self.assertIsNotNone(h)
+        self.assertEqual(h[0], "MEDIO")
+
+    def test_titulos_de_seccion_sin_etiqueta_datos_reales(self):
+        """Los títulos de secciones del compilador ya no llevan '[DATOS REALES]'
+        (retirada solicitada por el usuario del PDF visible)."""
+        import api.pdf_compiler as pc
+        src = Path(pc.__file__).read_text(encoding="utf-8")
+        self.assertNotIn("[DATOS REALES]", src)
+
+
 if __name__ == "__main__":
     unittest.main()

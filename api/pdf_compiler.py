@@ -57,6 +57,34 @@ def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
         return {"semaforo": "ROJO", "estructurable": False, "condiciones_precedentes": bloqueos}
     return {"semaforo": "VERDE", "estructurable": True, "condiciones_precedentes": []}
 
+def _severidad_geo_desde_nivel(am: dict, ri: dict):
+    """Severidad/colores del hallazgo H-GEO proporcionales al NIVEL de amenaza
+    o riesgo detectado (misma escala que score_engine: Alta/Muy Alta -> ALTO,
+    Media -> MEDIO, Baja -> severidad media-leve). Evita el absurdo de declarar
+    'Severidad ALTO' con una amenaza de nivel Baja."""
+    from reportlab.lib import colors as rl_colors
+    niveles = " | ".join([
+        str((am or {}).get("nivel") or ""),
+        str((ri or {}).get("nivel") or ""),
+    ]).upper()
+    if any(k in niveles for k in ("MUY ALTA", "MUY ALTO", "ALTA", "ALTO")):
+        return ("ALTO",
+                rl_colors.HexColor("#D92C2C"), rl_colors.HexColor("#FFF0F0"),
+                "Potencial restriccion para originacion hipotecaria y seguros: "
+                "se recomienda evaluacion geotecnica de detalle antes de estructurar garantias.")
+    if any(k in niveles for k in ("MEDIA", "MEDIO")):
+        return ("MEDIO",
+                rl_colors.HexColor("#E67E22"), rl_colors.HexColor("#FFF6EC"),
+                "Requiere evaluacion geotecnica complementaria y puede generar "
+                "condiciones o recargos en la suscripcion de polizas.")
+    # Nivel Baja/Bajo u otro con intersección: afectación presente pero menor
+    return ("MEDIO",
+            rl_colors.HexColor("#E67E22"), rl_colors.HexColor("#FFF6EC"),
+            "Afectacion de nivel Baja detectada: se recomienda verificacion "
+            "puntual por profesional competente en caso de intervencion fisica "
+            "del predio; impacto esperado menor en originacion.")
+
+
 def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
                                 fuente_pot: str = "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)",
                                 nombre_ciudad: str = "Barranquilla") -> list:
@@ -78,9 +106,8 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
     if hay_amenaza or hay_riesgo:
         nivel_texto = am.get('nivel', ri.get('nivel', 'Detectado'))
         clase_suelo = am.get('clase_suelo', ri.get('clase_suelo', 'N/A'))
-        severidad   = "ALTO"
-        color_sev   = rl_colors.HexColor("#D92C2C")
-        color_bg    = rl_colors.HexColor("#FFF0F0")
+        # Severidad coherente con el nivel real de la amenaza (fix inconsistencia)
+        severidad, color_sev, color_bg, impl = _severidad_geo_desde_nivel(am, ri)
         titulo = f"H-GEO | Afectación por Amenaza/Riesgo Detectada ({nivel_texto})"
         fuente = fuente_pot
         desc = (
@@ -89,7 +116,6 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
             f"Áreas en riesgo: {ri.get('nivel', 'N/A')} | "
             f"Clase de suelo: {clase_suelo}. {resumen}"
         )
-        impl = "Requiere evaluación de ingeniería geotécnica. Puede generar recargos en pólizas y restricciones para originación hipotecaria."
     else:
         severidad   = "INFORMATIVO"
         color_sev   = rl_colors.HexColor("#1A6B3A")
@@ -924,7 +950,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             f"en torno a las coordenadas del predio (Lat: {lat:.5f}, Lon: {lon:.5f}). "
             f"Los datos fueron extraidos de la base geografica de "
             f"OpenStreetMap (OSM) y ordenados por proximidad geodesica real. "
-            "<b>[FUENTE: OPENSTREETMAP OVERPASS API - DATOS REALES]</b>"
+            "<b>[FUENTE: OPENSTREETMAP OVERPASS API]</b>"
         ))
     story.append(Spacer(1, 4))
     
@@ -1079,7 +1105,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 8))
     
     # ── 04 CATASTRAL Y POT [REAL] ──────────────────────────────
-    story.append(sec("04 - Analisis Catastral y Urbanistico [DATOS REALES]"))
+    story.append(sec("04 - Analisis Catastral y Urbanistico"))
     story.append(hr())
     if es_medellin:
         story.append(body(
@@ -1305,7 +1331,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 8))
 
     # ── 05 HIDROLOGICO [REAL] ──────────────────────────────────
-    story.append(sec("05 - Analisis Hidrologico y de Riesgos [DATOS REALES]"))
+    story.append(sec("05 - Analisis Hidrologico y de Riesgos"))
     story.append(hr())
     bbox_str = f"{lon-0.0025:.3f},{lat-0.0025:.3f},{lon+0.0025:.3f},{lat+0.0025:.3f}"
     am_eval = geo_eval.get('amenaza_remocion_masa', {})
@@ -1394,7 +1420,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "Consulta en vivo contra <b>todas las capas</b> del servicio riesgos/amenazas/MapServer "
             "de la Alcaldia de Barranquilla y el motor geoespacial ARHIAX. Se ejecuto una query espacial "
             "con las coordenadas del predio sobre cada capa disponible. "
-            "<b>[FUENTE: ALCALDIA BAQ - DATOS REALES - STRtree POT]</b>"))
+            "<b>[FUENTE: ALCALDIA BAQ - STRtree POT]</b>"))
         story.append(Spacer(1, 4))
         story.append(sub("5.1 Inventario de Capas Consultadas"))
         # Table showing each layer queried and result
