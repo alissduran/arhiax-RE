@@ -70,7 +70,7 @@ CODIGO CATASTRAL: 007202182500104001COD CATASTRAL ANT: SIN INFORMACION
 NUPRE: AAA0083SHNN
 ESTADO DEL FOLIO: ACTIVO
 DESCRIPCION: CABIDA Y LINDEROS
-Contenidos en ESCRITURA Nro 3822 de fecha 15-09-97 en NOTARIA 5 de SANTAFE DE BOGOTA APARTAMENTO 401
+Contenidos en ESCRITURA Nro 3822 de fecha 15-09-97 en NOTARIA 5 DE SANTAFE DE BOGOTA APARTAMENTO 401 con area de 56.05 M2 con coeficiente de 5.40%
 COMPLEMENTACION:
 L.E.P.INGENIEROS LTDA ADQUIRIO ASI: PARTE POR COMPRA A RINCON ROJAS MARIA CRISTINA POR ESCRITURA 2105
 DE 2-08-94 NOTARIA 33 DE SANTAFE DE BOGOTA, REGISTRADA AL FOLIO 050-0554696 ESTA ADQUIRIO POR COMPRA
@@ -184,6 +184,37 @@ class TestCtlBogotaRealComprado(unittest.TestCase):
         res = analizar_texto_certificado(_TEXTO_CTL_BOGOTA_REAL)
         self.assertEqual(res["circulo_registral"], "50C - BOGOTA ZONA CENTRO")
         self.assertNotIn("DEPTO", res["circulo_registral"])
+
+
+class TestCondicionJuridicaDesdeCtl(unittest.TestCase):
+    """La condición jurídica (PH / No PH) se infiere del CTL cuando el catastro
+    no la publica (Medellín/Bogotá). El CTL real de Bogotá dice 'APARTAMENTO
+    401 con coeficiente' + anotación de PROPIEDAD HORIZONTAL -> PH."""
+
+    def test_bogota_apartamento_con_coeficiente_es_ph(self):
+        from legal_analyzer import (analizar_texto_certificado,
+                                    inferir_condicion_juridica)
+        res = analizar_texto_certificado(_TEXTO_CTL_BOGOTA_REAL)
+        cond = inferir_condicion_juridica(res.get("texto_ctl"),
+                                          res.get("descripcion_ctl"))
+        self.assertEqual(cond, "Propiedad Horizontal")
+
+    def test_bodega_sin_ph_es_no_ph(self):
+        from legal_analyzer import inferir_condicion_juridica
+        texto = ("MATRICULA INMOBILIARIA: 040-347004\n"
+                 "DESCRIPCION: CABIDA Y LINDEROS BODEGA NUMERO 3, AREA 570.9 M2")
+        self.assertEqual(inferir_condicion_juridica(texto), "No Propiedad Horizontal")
+
+    def test_no_ph_explicito(self):
+        from legal_analyzer import inferir_condicion_juridica
+        texto = "MATRICULA: 001-123\nNO PROPIEDAD HORIZONTAL. CASA LOTE"
+        self.assertEqual(inferir_condicion_juridica(texto), "No Propiedad Horizontal")
+
+    def test_sin_marcador_devuelve_none(self):
+        from legal_analyzer import inferir_condicion_juridica
+        texto = "MATRICULA: 001-123\nANOTACION Nro 001 COMPRAVENTA"
+        self.assertIsNone(inferir_condicion_juridica(texto))
+        self.assertIsNone(inferir_condicion_juridica(None))
 
 
 class TestDiscrepanciaCirculoRegistral(unittest.TestCase):

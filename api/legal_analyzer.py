@@ -21,6 +21,49 @@ C_OK_BG = colors.HexColor("#EBF5EE")
 C_ALERTA_BG = colors.HexColor("#FFF5EB")
 C_RIESGO_BG = colors.HexColor("#FDF2F2")
 
+def inferir_condicion_juridica(texto, descripcion_ctl=None):
+    """Infiera la CONDICIÓN JURÍDICA (Propiedad Horizontal / No PH) desde el
+    texto del CTL/SNR — fuente registral disponible en todas las ciudades.
+
+    El dato catastral de 'condición' solo lo publica Barranquilla; Medellín y
+    Bogotá no lo exponen en capas abiertas, pero el folio sí lo dice:
+      * PH: mención de 'PROPIEDAD HORIZONTAL', 'COEFICIENTE' (de copropiedad),
+        'REGLAMENTO DE PROPIEDAD HORIZONTAL', 'CONSTITUCION DE PROPIEDAD
+        HORIZONTAL' o unidad con coeficiente (apartamento/oficina/parqueadero).
+      * No PH: 'NO PROPIEDAD HORIZONTAL' explícito, o lote/terreno/bodega
+        descrito como predio independiente sin marcadores de copropiedad.
+
+    Regla de honestidad: sin marcador claro devuelve None (el dictamen lo deja
+    PENDIENTE para verificación del profesional). Nunca se afirma PH ni No PH
+    sin evidencia en el folio.
+    """
+    if not texto:
+        return None
+    sup = " ".join(str(texto).upper().split())
+    desc = " ".join(str(descripcion_ctl or "").upper().split())
+    # 1) No PH explícito tiene prioridad sobre menciones genéricas de PH
+    if "NO PROPIEDAD HORIZONTAL" in sup:
+        return "No Propiedad Horizontal"
+    # 2) Marcadores fuertes de propiedad horizontal
+    marcadores_ph = [
+        "PROPIEDAD HORIZONTAL",
+        "REGLAMENTO DE PROPIEDAD HORIZONTAL",
+        "CONSTITUCION DE PROPIEDAD HORIZONTAL",
+        "COEFICIENTE",
+    ]
+    if any(m in sup for m in marcadores_ph):
+        return "Propiedad Horizontal"
+    # 2b) Un folio individual de APARTAMENTO implica régimen de PH (unidad con
+    # coeficiente en la descripción/escritura); se acepta de la descripción.
+    if any(k in desc for k in ("APARTAMENTO", "APTO ", "APTO.")):
+        return "Propiedad Horizontal"
+    # 3) Predio independiente (lote/terreno/bodega) sin marcadores PH
+    if any(k in sup for k in ("BODEGA", "LOTE DE TERRENO", "TERRENO", "CASA LOTE")):
+        if "COEFICIENTE" not in sup and "APARTAMENTO" not in sup:
+            return "No Propiedad Horizontal"
+    return None
+
+
 def analizar_certificado(pdf_path):
     """
     Carga el PDF del Certificado de Libertad y Tradicion y delega el analisis.
@@ -435,7 +478,10 @@ def analizar_texto_certificado(texto):
              "No se pudo analizar el contenido textual del CTL por falla interna: {}.".format(e),
              "Se requiere verificacion manual de la tradicion del inmueble.")
         ]
-    
+
+    # Texto completo del CTL (para inferencias como condición jurídica PH/No PH)
+    res["texto_ctl"] = texto[:30000] if texto else None
+
     return res
 
 

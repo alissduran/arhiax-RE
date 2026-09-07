@@ -368,6 +368,21 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _predio_codigo_barrio = None
         _predio_comuna = None
 
+    # Condición jurídica (PH / No PH): el catastro solo la publica en
+    # Barranquilla; para Medellín/Bogotá (y BAQ sin servicio) se infiere del
+    # propio CTL/SNR — fuente registral disponible en todas las ciudades
+    # (p. ej. 'APARTAMENTO 401 con coeficiente' o 'EDIFICIO ... PROPIEDAD
+    # HORIZONTAL' => PH; 'BODEGA'/'NO PROPIEDAD HORIZONTAL' => No PH).
+    if not _predio_condicion and path_certificado:
+        try:
+            from legal_analyzer import inferir_condicion_juridica
+            _cond_ctl = inferir_condicion_juridica(
+                analysis.get("texto_ctl"), analysis.get("descripcion_ctl"))
+            if _cond_ctl:
+                _predio_condicion = _cond_ctl
+        except Exception as _e_cond:
+            print(f"[PDF][CONDICION] inferencia desde CTL no disponible: {_e_cond}")
+
     # Tipología derivada del destino económico catastral + CTL (descripción).
     # Si el CTL dice BODEGA o el destino es Industrial/Comercial → nunca PH.
     _tipologia_texto = None
