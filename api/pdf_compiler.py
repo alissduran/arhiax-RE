@@ -42,6 +42,25 @@ from ruta_verificacion import generar_ruta, generar_tabla_ruta
 from score_engine import calcular_score_actuarial, generar_narrativa_score, color_score
 from sarlaft_engine import generar_ficha_sarlaft, generar_tabla_sarlaft
 
+# ── Ortografía: wrapper de Paragraph que restaura las tildes en TODO el PDF ──
+# ('Analisis' -> 'Análisis', 'Direccion' -> 'Dirección') sin tocar las cadenas
+# fuente ni las etiquetas HTML. Se define DESPUÉS de todos los imports y se
+# parchea también en dictamen_part1_styles (data_table/helpers) y en el propio
+# reportlab.platypus para cubrir cualquier importador posterior.
+from ortografia import corregir_es
+from reportlab.platypus import Paragraph as _RLParagraph
+
+class Paragraph(_RLParagraph):
+    def __init__(self, text, style=None, bulletText=None, **kw):
+        if isinstance(text, str):
+            text = corregir_es(text)
+        _RLParagraph.__init__(self, text, style, bulletText=bulletText, **kw)
+
+import dictamen_part1_styles as _estilos_mod
+import reportlab.platypus as _rlp_mod
+_estilos_mod.Paragraph = Paragraph
+_rlp_mod.Paragraph = Paragraph
+
 def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
     BLOQUEOS_FIDUCIARIOS = {"hipoteca", "embargo", "afectacion", "patrimonio", "demanda", "usufructo", "medida cautelar"}
     bloqueos = []
@@ -826,7 +845,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         canvas.rect(0, 0, letter[0], letter[1], fill=1, stroke=0)
         canvas.setFont("Helvetica", 6.5)
         canvas.setFillColor(colors.HexColor("#718096"))
-        canvas.drawString(40, 20, f"ARHIAX Informe Base LAI | Folio {FOLIO} | {CERT_NUM} | {SCOPE_DISCLAIMER_FOOTER}")
+        canvas.drawString(40, 20, corregir_es(
+            f"ARHIAX Informe Base LAI | Folio {FOLIO} | {CERT_NUM} | {SCOPE_DISCLAIMER_FOOTER}"))
         canvas.drawRightString(letter[0]-40, 20, f"Pag. {doc.page}")
         canvas.restoreState()
     
@@ -1813,6 +1833,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     
     story.append(sec("07 - Score Actuarial Integrado"))
     story.append(hr())
+    # Nota en lenguaje claro: cómo interpretar el score
+    story.append(body(
+        "<b>Como leer el score:</b> es un puntaje de 0 a 100 que resume el nivel de riesgo del "
+        "inmueble (100 = riesgo bajo). Combina cuatro frentes: Registral (gravámenes y "
+        "tradición), Juridico (titularidad), Hidrologico (amenazas) y Catastral (datos del "
+        "predio). <b>Importante:</b> si existe un hallazgo ALTO (por ejemplo, una hipoteca "
+        "vigente), el resultado integrado se marca <b>BLOQUEADO</b> aunque el número sea alto: "
+        "el puntaje no puede verse como favorable mientras haya una condicion que deba "
+        "resolverse primero."))
+    story.append(Spacer(1, 6))
     # Score dinamico real (Sprint 2): motores conectados, sin valores hardcodeados (H-05/H-06)
     val_data_area = dict(val_data)
     val_data_area["area"] = area
@@ -1839,6 +1869,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 07B FICHA SARLAFT ESTRUCTURAL (Sprint 2 Bloque B, conectado) ──
     story.append(sec("07B - Ficha SARLAFT Estructural"))
     story.append(hr())
+    # Nota en lenguaje claro: qué es y qué NO hace esta sección
+    story.append(body(
+        "<b>Que es esta seccion:</b> deja listos los nombres de las personas y entidades del caso "
+        "(titular, banco acreedor, constructor) con su huella digital (hash), para que un "
+        "profesional los cruce contra las listas restrictivas de lavado de activos (UIAF, OFAC, "
+        "ONU). <b>En lenguaje claro: ARHIAX no ejecuta esa verificacion</b> porque requiere "
+        "acceso a las bases oficiales de pago/licencia; por eso el estado es PENDIENTE. El hash "
+        "garantiza que los nombres entregados no se alteren entre la generacion y el cruce."))
+    story.append(Spacer(1, 6))
     ficha_sarlaft = generar_ficha_sarlaft(
         titulares=analysis.get("titulares", ""),
         acreedor_snr=analysis.get("acreedor_snr"),
