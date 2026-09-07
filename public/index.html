@@ -567,6 +567,12 @@
                   <span id="span-certificado">Pendiente (PDF)</span>
                   <input type="file" id="file-certificado" name="certificado" form="form-dictamen-stateless" accept="application/pdf" style="display: none;" onchange="subirInsumo('certificado', this)">
                 </div>
+                <!-- Licencia de construcción (PDF, OPCIONAL — mejora 5: confronta lo licenciado vs construido vs norma POT) -->
+                <div class="upload-card" id="card-licencia" onclick="triggerFileInput('file-licencia')" style="border-style: dashed;">
+                  <label>Licencia de Construcción <span style="color:var(--color-gray); font-weight:400;">(opcional)</span></label>
+                  <span id="span-licencia">No cargada (PDF)</span>
+                  <input type="file" id="file-licencia" name="licencia" accept="application/pdf" style="display: none;" onchange="subirLicencia(this)">
+                </div>
                 <!-- Sombra 9:00 AM -->
                 <div class="upload-card" id="card-sombra-9am" onclick="triggerFileInput('file-sombra-9am')">
                   <label>Sombra 9:00 AM</label>
@@ -871,6 +877,7 @@
         barrio: "",
         ciudad: document.getElementById('input-ciudad').value || 'barranquilla',
         certificado_cargado: 0,
+        licencia_cargada: 0,
         sombra_9am_cargada: 0,
         sombra_3pm_cargada: 0,
         mapa_cargado: 0
@@ -892,6 +899,8 @@
 
     function limpiarInputsDeArchivos() {
       document.getElementById('file-certificado').value = "";
+      const licInput = document.getElementById('file-licencia');
+      if (licInput) licInput.value = "";
       document.getElementById('file-sombra-9am').value = "";
       document.getElementById('file-sombra-3pm').value = "";
       document.getElementById('file-mapa').value = "";
@@ -936,6 +945,10 @@
       
       // Renderizar estado de tarjetas de carga según la memoria local de este caso
       updateUploadCard('certificado', c.certificado_cargado, "PDF");
+      const licFlag = document.getElementById('span-licencia');
+      if (licFlag && !selectedFiles['licencia'] && !(c.licencia_cargada)) {
+        licFlag.textContent = "No cargada (PDF)";
+      }
       updateUploadCard('sombra-9am', c.sombra_9am_cargada, "PNG");
       updateUploadCard('sombra-3pm', c.sombra_3pm_cargada, "PNG");
       updateUploadCard('mapa', c.mapa_cargado, "PNG");
@@ -1061,6 +1074,30 @@
         actualizarAvisoSinCtl();
         selectCase(selectedCaseId);
       }
+    }
+
+    // Mejora 5: licencia de construcción (PDF opcional). Solo se guarda en
+    // memoria + IndexedDB y se envía al generar el dictamen (no requiere
+    // pre-análisis en el servidor).
+    async function subirLicencia(inputElement) {
+      const file = inputElement.files[0];
+      if (!file) return;
+      if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+        alert('La licencia de construcción debe ser un archivo PDF.');
+        inputElement.value = "";
+        return;
+      }
+      selectedFiles['licencia'] = file;
+      if (selectedCaseId) idbGuardar(_keyInsumo(selectedCaseId, 'licencia'), file);
+      const c = dictamenes.find(item => item.id === selectedCaseId);
+      if (c) {
+        c.licencia_cargada = 1;
+        localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+      }
+      const span = document.getElementById('span-licencia');
+      if (span) span.textContent = "Cargado (PDF)";
+      const card = document.getElementById('card-licencia');
+      if (card) card.classList.add('loaded');
     }
 
     function mostrarEditarDatos(event) {
@@ -1202,11 +1239,11 @@
       // archivos de `selectedFiles` (memoria) se pierden aunque la UI diga
       // "Cargado". Sin esta restauración el PDF se generaría sin las imágenes de
       // ArcGIS Online y caería a la simulación geométrica automática.
-      for (const t of ['certificado', 'sombra_9am', 'sombra_3pm', 'mapa_satelital']) {
+      for (const t of ['certificado', 'licencia', 'sombra_9am', 'sombra_3pm', 'mapa_satelital']) {
         if (!selectedFiles[t]) {
           const blob = await idbLeer(_keyInsumo(c.id, t));
           if (blob) {
-            const ext = t === 'certificado' ? 'pdf' : 'png';
+            const ext = (t === 'certificado' || t === 'licencia') ? 'pdf' : 'png';
             selectedFiles[t] = new File([blob], `${t}.${ext}`, { type: blob.type || 'application/octet-stream' });
           }
         }
@@ -1268,6 +1305,7 @@
       formData.append('barrio', c.barrio);
       formData.append('ciudad', c.ciudad || 'barranquilla');
       if (selectedFiles['certificado']) formData.append('certificado', selectedFiles['certificado']);
+      if (selectedFiles['licencia']) formData.append('licencia', selectedFiles['licencia']);
       if (selectedFiles['sombra_9am']) formData.append('sombra_9am', selectedFiles['sombra_9am']);
       if (selectedFiles['sombra_3pm']) formData.append('sombra_3pm', selectedFiles['sombra_3pm']);
       if (selectedFiles['mapa_satelital']) formData.append('mapa_satelital', selectedFiles['mapa_satelital']);

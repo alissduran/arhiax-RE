@@ -206,6 +206,23 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     from legal_analyzer import analizar_certificado
     path_certificado = db_record.get('certificado_path')
     analysis = analizar_certificado(path_certificado)
+
+    # Mejora 5 (Sprint 3): licencia de construcción adjuntada (opcional). Se
+    # analiza para confrontar lo LICENCIADO vs lo CONSTRUIDO vs la norma POT
+    # en la sección 4.3 (detecta exceso frente a la licencia, aunque la capa
+    # POT no lo refleje). Nunca rompe: sin licencia o sin pisos identificados,
+    # la confrontación se mantiene contra la norma del POT.
+    licencia = None
+    path_licencia = db_record.get('licencia_path')
+    if path_licencia:
+        try:
+            from licencia_analyzer import analizar_licencia
+            licencia = analizar_licencia(path_licencia)
+            print(f"[PDF][LICENCIA] analizada: {licencia.get('numero_licencia')} "
+                  f"pisos={licencia.get('pisos_aprobados')}")
+        except Exception as e:
+            print(f"[PDF][LICENCIA] no disponible: {e}")
+            licencia = None
     
     # ── Sprint 2 (exactitud): resolver el predio REAL en el catastro cuando el
     # CTL trae código catastral o NUPRE. Nunca rompe: si el servicio no responde
@@ -587,6 +604,17 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             hallazgos.append(_h_urb)
     except Exception as _e_urb:
         print(f"[PDF][EDIFICABILIDAD] hallazgo de exceso no disponible: {_e_urb}")
+
+    # Mejora 5: H-LIC cuando lo construido excede lo LICENCIADO (autoridad más
+    # concreta que la capa POT: la licencia puede amparar más por derechos
+    # adquiridos, pero nunca menos de lo ejecutado).
+    try:
+        from edificabilidad import hallazgo_exceso_licencia
+        _h_lic = hallazgo_exceso_licencia(ciudad, _ent2, _predio_pisos, licencia)
+        if _h_lic:
+            hallazgos.append(_h_lic)
+    except Exception as _e_lic:
+        print(f"[PDF][LICENCIA] hallazgo H-LIC no disponible: {_e_lic}")
     # ──────────────────────────────────────────────────────────────────────────────
 
     pois = get_nearby_pois(lat, lon, radius=2000)
@@ -1338,32 +1366,52 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "con alturas variables. Verificar el cumplimiento de la norma urbanistica del poligono especifico del predio."))
     story.append(Spacer(1, 8))
 
-    # ── 4.3 EDIFICABILIDAD Y ALTURA MÁXIMA (Norma Urbanística) ────────────
+    # ── 4.3 EDIFICABILIDAD Y ALTURA MÁXIMA (Norma Urbanística + Licencia) ──
     # Sprint 3: parámetros POT de edificabilidad por ciudad (tratamiento,
     # índice de construcción, densidad, altura máxima en pisos) confrontados
     # con lo ya construido según catastro. Detecta el caso de exceso de altura
     # (p. ej. construir 20 pisos donde la norma permite 11). Sin dato normativo
     # numérico (Bogotá/ficha UPZ, planes parciales) se marca PENDIENTE.
+    # Mejora 5: si se adjuntó la licencia de construcción, lo LICENCIADO tiene
+    # prioridad sobre la capa POT en la confrontación (autorización concreta).
     try:
-        from edificabilidad import (filas_edificabilidad, fuente_norma_texto,
-                                    link_oficial, _confrontacion)
+        from edificabilidad import (filas_edificabilidad, filas_licencia,
+                                    fuente_norma_texto, link_oficial,
+                                    _confrontacion, confrontacion_con_licencia)
         story.append(sub("4.3 Edificabilidad y Altura Maxima (Norma Urbanistica)"))
         _filas_edi = filas_edificabilidad(ciudad, _ent2, _predio_pisos)
         story.append(dt(_filas_edi))
         story.append(Spacer(1, 3))
-        _est_edi, _txt_edi = _confrontacion(ciudad, _ent2, _predio_pisos)
-        if _est_edi == "exceso":
+        # Confrontación: con licencia identificada se prioriza lo licenciado
+        _est_edi, _txt_edi = confrontacion_con_licencia(ciudad, _ent2, _predio_pisos, licencia)
+        _usa_lic = _est_edi != "sin_licencia"
+        if _est_edi in ("sin_licencia", "licencia_sin_pisos"):
+            _est_edi, _txt_edi = _confrontacion(ciudad, _ent2, _predio_pisos)
+        if _est_edi in ("exceso", "exceso_licencia"):
             story.append(alert_red(
-                f"<b>{_txt_edi}.</b> Requiere verificacion de la licencia de "
-                "construccion y de la ficha normativa ante la curaduria urbana "
-                "o la autoridad de planeacion competente."))
-        elif _est_edi == "dentro":
+                f"<b>{_txt_edi.rstrip('.')}.</b> Requiere verificacion de la "
+                "licencia de construccion y de la ficha normativa ante la "
+                "curaduria urbana o la autoridad de planeacion competente."))
+        elif _est_edi in ("dentro", "dentro_licencia", "sin_construccion_lic"):
             story.append(alert_green(
-                f"<b>Confrontacion urbanistica:</b> {_txt_edi}. Sujeto a la "
+                f"<b>Confrontacion urbanistica:</b> {_txt_edi.rstrip('.')}. Sujeto a la "
                 "licencia de construccion y a la ficha normativa vigente."))
         elif _est_edi in ("pendiente", "sin_norma", "sin_construccion"):
             story.append(alert_orange(
-                f"<b>Confrontacion urbanistica:</b> {_txt_edi}."))
+                f"<b>Confrontacion urbanistica:</b> {_txt_edi.rstrip('.')}."))
+        # Datos de la licencia de construcción (si se adjuntó)
+        if licencia:
+            story.append(Spacer(1, 3))
+            _filas_lic = filas_licencia(licencia)
+            if _filas_lic:
+                story.append(dt(_filas_lic))
+                if licencia.get("numero_licencia") and not _usa_lic and \
+                        licencia.get("disponible"):
+                    story.append(alert_orange(
+                        "<b>Licencia adjuntada sin pisos autorizados identificados:</b> "
+                        "el texto de la licencia no permite extraer el numero de pisos "
+                        "con certeza. La confrontacion usa la capa POT; revisar la "
+                        "licencia manualmente para la verificacion final."))
         _nom_portal, _url_portal = link_oficial(ciudad)
         _nota_fuente = fuente_norma_texto(ciudad, _ent2)
         story.append(body(

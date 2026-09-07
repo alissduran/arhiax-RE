@@ -210,6 +210,108 @@ def hallazgo_exceso_altura(ciudad, ent2, pisos_construidos):
          "avalúos y estructuración de garantías."))
 
 
+def filas_licencia(lic):
+    """Filas (label, valor) con los datos autorizados por la licencia (mejora 5).
+    Solo incluye lo que el analizador identificó con certeza; el resto N/D."""
+    l = lic or {}
+    filas = []
+    num = (l.get("numero_licencia") or "").strip()
+    filas.append(("N° Licencia de construcción", num or "NO REGISTRA — no se adjuntó"))
+    if num:
+        if l.get("modalidad"):
+            filas.append(("Modalidad", str(l["modalidad"]).capitalize()))
+        if l.get("curaduria"):
+            filas.append(("Curaduría urbana / entidad", "Curaduría {}".format(l["curaduria"])))
+        if l.get("pisos_aprobados"):
+            filas.append(("Pisos autorizados por licencia",
+                          "{} piso(s)".format(l["pisos_aprobados"])))
+        if l.get("altura_aprobada_m"):
+            filas.append(("Altura autorizada",
+                          "{} m".format(l["altura_aprobada_m"])))
+        if l.get("area_aprobada_m2"):
+            filas.append(("Área autorizada",
+                          "{} m²".format(l["area_aprobada_m2"])))
+        if l.get("fecha_expedicion"):
+            filas.append(("Fecha de expedición", l["fecha_expedicion"]))
+    return filas
+
+
+def confrontacion_con_licencia(ciudad, ent2, pisos_construidos, lic):
+    """Confrontación total: lo LICENCIADO vs lo CONSTRUIDO vs la norma POT.
+
+    La licencia de construcción es la autorización CONCRETA del proyecto: si el
+    analizador identificó los pisos autorizados, tiene prioridad sobre la capa
+    POT (una licencia puede amparar más pisos por derechos adquiridos o norma
+    anterior). Devuelve (estado, texto) con estado en
+    'exceso_licencia' | 'dentro_licencia' | 'licencia_sin_pisos' | 'sin_licencia'.
+    """
+    lic = lic or {}
+    pisos_lic = lic.get("pisos_aprobados")
+    construidos = _parse_pisos(pisos_construidos)
+
+    if not (lic.get("numero_licencia") or pisos_lic):
+        return "sin_licencia", None
+
+    if not pisos_lic:
+        return "licencia_sin_pisos", (
+            "Licencia adjuntada, pero no se identificó el número de pisos "
+            "autorizados en el texto: revisar manualmente la licencia.")
+
+    if construidos is None:
+        return "sin_construccion_lic", (
+            "Catastro sin pisos registrados: aplicar los {} pisos autorizados "
+            "por la licencia como parámetro del proyecto.".format(pisos_lic))
+
+    if construidos > pisos_lic:
+        return "exceso_licencia", (
+            "POSIBLE EXCESO FRENTE A LA LICENCIA: {} pisos construidos (catastro) "
+            "superan los {} pisos autorizados por la licencia adjuntada.".format(
+                construidos, pisos_lic))
+
+    # construidos <= licenciados: conforme a licencia; contrastar con la capa POT
+    permitido = altura_permitida(ciudad, ent2)[0]
+    if permitido and pisos_lic > permitido:
+        return "dentro_licencia", (
+            "Dentro de la licencia ({} pisos construidos de {} autorizados). La "
+            "licencia ampara más pisos que la capa POT actual ({}): posibles "
+            "derechos adquiridos o norma anterior — verificar vigencia de la "
+            "licencia y su ejecución.".format(construidos, pisos_lic, permitido))
+    return "dentro_licencia", (
+        "Dentro de la licencia: {} pisos construidos de {} autorizados "
+        "(coherente con la norma POT).".format(construidos, pisos_lic))
+
+
+def hallazgo_exceso_licencia(ciudad, ent2, pisos_construidos, lic):
+    """Hallazgo H-LIC cuando lo construido excede lo LICENCIADO (mejora 5).
+
+    Es la alerta del caso 'la constructora edificó 20 pisos donde la licencia
+    autorizaba 11' aunque la capa POT no lo reflejara. None si no hay exceso
+    verificable (nunca se afirma sin pisos licenciados identificados)."""
+    lic = lic or {}
+    pisos_lic = lic.get("pisos_aprobados")
+    construidos = _parse_pisos(pisos_construidos)
+    if not pisos_lic or not construidos or construidos <= pisos_lic:
+        return None
+    nombre = {"barranquilla": "Barranquilla", "medellin": "Medellín",
+              "bogota": "Bogotá D.C."}.get((ciudad or "").lower(), "la ciudad")
+    num_lic = (lic.get("numero_licencia") or "licencia adjuntada").strip()
+    return (
+        "ALTO",
+        colors.HexColor("#D92C2C"),
+        colors.HexColor("#FFF0F0"),
+        "H-LIC | Exceso frente a Licencia: {} pisos construidos vs. {} autorizados".format(
+            construidos, pisos_lic),
+        "Licencia de construcción -- {}".format(num_lic),
+        ("La edificación registrada en catastro ({0} pisos) supera los {1} pisos "
+         "autorizados por la licencia de construcción adjuntada al caso "
+         "({2}). Un exceso frente a la licencia puede implicar unidades sin "
+         "licencia, sanciones urbanísticas o imposibilidad de legalizar la "
+         "totalidad construida en {3}.").format(construidos, pisos_lic, num_lic, nombre),
+        ("Verificación OBLIGATORIA ante la curaduría urbana: confrontar la "
+         "licencia, sus planos aprobados y la obra ejecutada. Impacto directo "
+         "en la titularidad de unidades, avalúos y estructuración de garantías."))
+
+
 def fuente_norma_texto(ciudad, ent2=None):
     """Texto de fuente normativa y fecha para la tabla (honesto, con la norma)."""
     e = ent2 or {}

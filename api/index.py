@@ -743,6 +743,7 @@ async def generar_dictamen_stateless(
     barrio: str = Form(None),
     ciudad: str = Form("barranquilla"),
     certificado: UploadFile = File(None),
+    licencia: UploadFile = File(None),
     sombra_9am: UploadFile = File(None),
     sombra_3pm: UploadFile = File(None),
     mapa_satelital: UploadFile = File(None),
@@ -796,6 +797,11 @@ async def generar_dictamen_stateless(
             import base64
             contenido = certificado.file.read(MAX_UPLOAD_BYTES)
             datos["certificado_b64"] = base64.b64encode(contenido).decode("ascii")
+        if licencia and licencia.filename:
+            _validar_archivo_subido(licencia, "certificado")  # la licencia también es PDF
+            import base64
+            contenido_lic = licencia.file.read(MAX_UPLOAD_BYTES)
+            datos["licencia_b64"] = base64.b64encode(contenido_lic).decode("ascii")
         enc = encolar_generacion(datos)
         if enc.get("encolado"):
             return {
@@ -855,6 +861,14 @@ async def generar_dictamen_stateless(
         _validar_archivo_subido(mapa_satelital, "mapa_satelital")
         _copiar_con_limite(mapa_satelital.file, temp_run_dir / "mapa_satelital.png")
 
+    # Mejora 5: licencia de construcción (PDF opcional) para confrontar lo
+    # LICENCIADO vs lo CONSTRUIDO vs la norma POT en la sección 4.3.
+    _lic_path = None
+    if licencia and licencia.filename:
+        _validar_archivo_subido(licencia, "certificado")  # PDF válido
+        _lic_path = str(temp_run_dir / "licencia.pdf")
+        _copiar_con_limite(licencia.file, Path(_lic_path))
+
     # 2. Calcular valor consolidado (referencial; compile_pdf recalcula con Lonja)
     valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
     valor_consolidado = int(round(valor_m2 * area, -4))
@@ -878,6 +892,7 @@ async def generar_dictamen_stateless(
         "mapa_cargado": 1 if mapa_satelital else 0,
         "acreedor_real": None,  # Bloque D: campo para discrepancia — se puede pasar via Form en futuras versiones
         "certificado_path": _cert_path,
+        "licencia_path": _lic_path,
         # Datos reales extraídos del CTL (compile_pdf los usa como hint si el
         # catastro en vivo no responde al momento de compilar)
         "lat": extraidos.get("lat") if _ctl_adjuntado else None,
@@ -1249,6 +1264,19 @@ async def worker_generar_pdf(request: Request):
         except Exception:
             pass
 
+    # Mejora 5: licencia de construcción (b64 en el payload del job)
+    _lic_path = None
+    licencia_b64 = payload.get("licencia_b64")
+    if licencia_b64:
+        try:
+            lic_bytes = base64.b64decode(licencia_b64)
+            if lic_bytes[:4] == b"%PDF":
+                _lic_p = temp_run_dir / "licencia.pdf"
+                _lic_p.write_bytes(lic_bytes)
+                _lic_path = str(_lic_p)
+        except Exception as e:
+            print(f"[WORKER][WARN] licencia no recuperable: {e}")
+
     if not barrio:
         # Con CTL nunca se afirma el barrio de demostración (compile_pdf lo deja
         # PENDIENTE o lo resuelve por código catastral). Sin CTL: caso demo legado.
@@ -1274,6 +1302,7 @@ async def worker_generar_pdf(request: Request):
         "mapa_cargado": 0,
         "acreedor_real": None,
         "certificado_path": _cert_path,
+        "licencia_path": _lic_path,
         "lat": _extra_lat,
         "lon": _extra_lon,
     }
