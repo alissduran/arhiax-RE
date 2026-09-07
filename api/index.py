@@ -146,7 +146,11 @@ def _check_login_rate_limit(request: Request, max_intentos: int = 5, ventana_seg
 
 
 # ---- Validación de insumos (F-04, F-08) ----
-FOLIO_RE = re.compile(r"^\d{3}-\d{1,8}$")
+# Folios de matrícula SNR por oficina de registro: Barranquilla '040-...',
+# Medellín '001-...', Bogotá con sub-oficinas alfanuméricas '50C-/50N-/50S-...'
+# (Zona Centro/Norte/Sur). Solo alfanumérico superior: seguro para nombres de
+# archivo y headers (sin '/' ni '..').
+FOLIO_RE = re.compile(r"^[0-9]{2,3}[A-Z]?-\d{1,12}$")
 MAX_UPLOAD_BYTES = 8 * 1024 * 1024  # 8 MB
 
 
@@ -267,11 +271,17 @@ def extraer_datos_de_pdf(pdf_path: str, ciudad: str = "barranquilla") -> dict:
                 except ValueError:
                     continue
 
-        # 2. Extraer Matrícula (Folio) - busca formato 040-XXXXXX o similar
-        patron_folio = r"\b(\d{3}-\d+)\b"
-        matches_folio = re.findall(patron_folio, texto)
-        if matches_folio:
-            datos["folio"] = matches_folio[0]
+        # 2. Extraer Matrícula (Folio). Anclado a la etiqueta del CTL cuando es
+        # posible (acepta '040-...', '001-...' y '50C-/50N-/50S-...' de Bogotá);
+        # el fallback exige >=3 dígitos tras el guion para no capturar fechas.
+        m_folio = re.search(
+            r"(?:MATRICULA\s+INMOBILIARIA)\s*[:\-]?\s*([0-9]{2,3}[A-Z]?-\d{1,12})",
+            texto, re.IGNORECASE)
+        if not m_folio:
+            m_folio = re.search(r"\b(\d{3}-\d{3,12})\b", texto) or \
+                      re.search(r"\b(\d{2}[A-Z]-\d{1,12})\b", texto)
+        if m_folio:
+            datos["folio"] = m_folio.group(1)
 
         # 2b. Código catastral y NUPRE del CTL (fuente de verdad del predio real)
         try:

@@ -1,4 +1,4 @@
-import sys, os, hashlib, datetime
+import sys, os, hashlib, datetime, re
 from pathlib import Path
 
 API_DIR = Path(__file__).resolve().parent
@@ -83,6 +83,40 @@ def _severidad_geo_desde_nivel(am: dict, ri: dict):
             "Afectacion de nivel Baja detectada: se recomienda verificacion "
             "puntual por profesional competente en caso de intervencion fisica "
             "del predio; impacto esperado menor en originacion.")
+
+
+def _num_circulo(cod):
+    """'050' -> '50', '50C' -> '50', '001' -> '1': dígitos del código de
+    oficina de registro sin ceros a la izquierda (para comparar 050 vs 50)."""
+    m = re.match(r"^\s*0*(\d+)", str(cod or ""))
+    return m.group(1) if m else None
+
+
+def _detectar_discrepancia_circulo(folio, circulo_registral, codigo_circulo_ciudad):
+    """Devuelve (codigo_circulo_folio, discrepante).
+
+    Los folios SNR pertenecen a la oficina de registro del predio: Barranquilla
+    '040-...', Medellín '001-...', Bogotá '50C-/50N-/50S-...'. Compara el código
+    del folio (o el círculo declarado por el CTL) con el de la ciudad del caso,
+    normalizando ceros a la izquierda ('050' == '50'). discrepante=True si no
+    coinciden (p. ej. un CTL '001-...' adjuntado a un caso de Bogotá).
+    """
+    circ = (circulo_registral or "").strip()
+    prefijo = ""
+    if circ:
+        m = re.match(r"^\s*(\d{2,3}[A-Z]?|0*\d+[A-Z]?)", circ, re.IGNORECASE)
+        if m:
+            prefijo = m.group(1).upper().lstrip("0") or "0"
+    if not prefijo and folio:
+        m2 = re.match(r"^(\d{2,3}[A-Z]?)-\d+", str(folio).strip())
+        if m2:
+            prefijo = m2.group(1).upper().lstrip("0") or "0"
+    num_ciudad = _num_circulo(codigo_circulo_ciudad)
+    if not prefijo or not num_ciudad:
+        return prefijo or None, False
+    # Compara solo la parte numérica ('50C' y '50' y '050' coinciden en '50')
+    num_prefijo = _num_circulo(prefijo) or ""
+    return prefijo, num_prefijo != num_ciudad
 
 
 def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
@@ -349,6 +383,28 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Cargar hallazgos y recomendaciones dinamicas del analizador legal
     hallazgos = list(analysis["hallazgos"])
     recs = list(analysis["recs"])
+
+    # ── Mejora 2 (Sprint 3): coherencia círculo registral del CTL vs. ciudad ──
+    # Los folios SNR pertenecen a una oficina de registro: Barranquilla '040',
+    # Medellín '001', Bogotá '50C/50N/50S'. Si el CTL adjuntado declara un
+    # círculo distinto al del caso (p. ej. folio '001-...' en un caso de Bogotá),
+    # el análisis registral NO corresponde al predio esperado: se advierte.
+    _circ_ctl = (analysis.get("circulo_registral") or "").strip()
+    _circ_folio, _ctl_discrepante = _detectar_discrepancia_circulo(
+        folio, _circ_ctl, _CIRCULO)
+    # Código legible para el hallazgo: prefijo crudo del folio ('001', '50C')
+    _m_cod = re.match(r"^(\d{2,3}[A-Z]?)-\d+", str(folio).strip())
+    _circ_mostrar = _m_cod.group(1).upper() if _m_cod else (_circ_folio or "")
+    if _ctl_discrepante:
+        hallazgos.append((
+            "MEDIO", C_NARANJA, C_ALERTA_BG,
+            f"H-CTL | Certificado de otro circulo registral ({_circ_mostrar}) vs. caso {_NOMBRE_CIUDAD}",
+            "SNR -- Verificacion de coherencia",
+            (f"El CTL adjuntado declara el circulo registral '{_circ_ctl}' (folio {folio}), "
+             f"que NO corresponde a la oficina de registro de {_NOMBRE_CIUDAD} ({_CIRCULO}). "
+             "El certificado podria ser de un predio de otra ciudad."),
+            "Verificar que el CTL corresponde al predio del caso; si el folio es de otra "
+            "ciudad, cree el caso con esa ciudad o cargue el certificado correcto."))
     
     cert_num = f'ARHIAX-LAI-2026-{db_record.get("id", 0):04d}'
     now_utc = datetime.datetime.now(datetime.timezone.utc)
@@ -755,8 +811,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     else:
         acreedor_snr = "SIN GRAVÁMENES ACTIVOS REGISTRADOS"
         
+    # Mejora 2: la fila de matrícula refleja el CÍRCULO REGISTRAL REAL del CTL
+    # cuando el certificado lo declara (no solo el de la ciudad del caso).
+    _mat_circ_txt = f"Circulo Registral {_CIRCULO} {_NOMBRE_CIUDAD}"
+    if _circ_ctl:
+        _mat_circ_txt = f"Circulo Registral segun CTL: {_circ_ctl}"
+        if _ctl_discrepante:
+            _mat_circ_txt += f" [NO coincide con {_CIRCULO} {_NOMBRE_CIUDAD}]"
     story.append(dt([
-        ("Matricula Inmobiliaria", f"{folio} (Circulo Registral {_CIRCULO} {_NOMBRE_CIUDAD})"),
+        ("Matricula Inmobiliaria", f"{folio} ({_mat_circ_txt})"),
         ("Direccion oficial", direccion),
         # Sprint 2 (exactitud): la tipología se deriva del CTL/destino catastral real.
         # El caso de demostración (Napoli/Miramar PH) ya no puede contaminar predios

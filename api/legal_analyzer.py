@@ -42,6 +42,7 @@ def analizar_certificado(pdf_path):
         "tipo_predio_snr": None,
         "descripcion_ctl": None,
         "modalidad_adquisicion": "N/D",
+        "circulo_registral": None,
     }
 
     if not pdf_path or not os.path.exists(pdf_path):
@@ -99,16 +100,38 @@ def analizar_texto_certificado(texto):
         "tipo_predio_snr": None,
         "descripcion_ctl": None,
         "modalidad_adquisicion": "N/D",
+        # Sprint 3 (mejora 2): círculo registral real que declara el CTL
+        # (p. ej. '001 - MEDELLIN', '050 - BOGOTA D.C. ZONA CENTRO'). Permite
+        # detectar un CTL de otra ciudad adjuntado por error al caso.
+        "circulo_registral": None,
     }
 
     if not texto:
         return res
 
     try:
-        # 1. Extraer Folio
-        m_folio = re.search(r"\b(\d{3}-\d+)\b", texto)
+        # 1. Extraer Folio. Colombia usa matrículas por oficina de registro:
+        #    Barranquilla '040-...', Medellín '001-...' y Bogotá con sub-oficinas
+        #    alfanuméricas '50C-...', '50N-...', '50S-...' (Zona Centro/Norte/Sur).
+        #    El patrón flexible solo se acepta anclado a la etiqueta del CTL o
+        #    con reglas que NO capturan fechas (dd-mm-aaaa) como folio.
+        m_folio = re.search(
+            r"(?:MATRICULA\s+INMOBILIARIA|MATR[IÍ]CULA\s+INMOBILIARIA)\s*[:\-]?\s*"
+            r"([0-9]{2,3}[A-Z]?-\d{1,12})", texto, re.IGNORECASE)
+        if not m_folio:
+            # Fallback sin etiqueta: folio numérico de 3 dígitos (≥3 tras el
+            # guion, para no confundir fechas 21-03-2001) o sub-oficina con letra.
+            m_folio = re.search(r"\b(\d{3}-\d{3,12})\b", texto) or \
+                      re.search(r"\b(\d{2}[A-Z]-\d{1,12})\b", texto)
         if m_folio:
             res["folio"] = m_folio.group(1)
+
+        # 1b. Círculo registral real declarado en el CTL
+        m_circ = re.search(
+            r"(?:CIRCULO\s+REGISTRAL|C[IÍ]RCULO\s+REGISTRAL)\s*[:\-]?\s*([^\n\r]{2,70})",
+            texto, re.IGNORECASE)
+        if m_circ:
+            res["circulo_registral"] = " ".join(m_circ.group(1).split()).strip(" -")
 
         # 2. Apertura del Folio
         m_apertura = re.search(r"(?:fecha\s+apertura|abierto\s+el|apertura)\s*[:\-]?\s*([^\n\r]+)", texto, re.IGNORECASE)
