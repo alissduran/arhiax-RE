@@ -322,7 +322,7 @@ def get_alcance_dt(barrio, ciudad="barranquilla"):
             ("Capa catastral Bogotá", "CONSULTADA EN VIVO -- Lote, sector, uso por manzana (serviciosgis catastro distrital)"),
             ("POT/Ordenamiento Bogotá", "EJECUTADA -- Suelo Decreto 555/2021, UPZ y localidad consultados en vivo"),
             ("Riesgos/Amenazas Bogotá", "EJECUTADA -- Capas IDIGER consultadas en vivo (mov. masa, sismos, geotecnia)"),
-            ("Detalle predial (NUPRE/destino por predio)", "NO DISPONIBLE EN ABIERTO -- El catastro distrital no publica capa predial con NUPRE; el destino es uso predominante por manzana (referencial)"),
+            ("Detalle predial (NUPRE/destino por predio)", "NO DISPONIBLE EN ABIERTO -- El catastro distrital no expone capa predial con NUPRE; el destino es uso predominante por manzana (referencial)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
             ("Verificacion SARLAFT", "NO EJECUTADA -- Requiere cruce de listas restrictivas en plataforma externa"),
             ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013)"),

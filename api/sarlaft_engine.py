@@ -170,9 +170,14 @@ def generar_tabla_sarlaft(ficha: dict) -> list:
     Returns:
         List of (label, valor) tuples para data_table().
     """
+    n_sujetos = ficha["total_sujetos"]
+    if n_sujetos == 1:
+        estado_sujetos = "1 sujeto identificado"
+    else:
+        estado_sujetos = "{} sujetos identificados".format(n_sujetos)
     filas = [
         ("Estado de verificación SARLAFT",
-         f"⚠ PENDIENTE VERIFICACIÓN EXTERNA — {ficha['total_sujetos']} sujetos identificados"),
+         f"⚠ PENDIENTE VERIFICACIÓN EXTERNA — {estado_sujetos}"),
         ("Hash de integridad de la ficha", ficha["hash_ficha"]),
         ("Timestamp de generación (UTC)", ficha["timestamp_utc"]),
     ]

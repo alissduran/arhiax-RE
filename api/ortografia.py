@@ -88,6 +88,13 @@ _CORRECCIONES = {
     "bogota": "bogotá", "medellin": "medellín",
     "especifico": "específico", "especifica": "específica", "especificos": "específicos", "especificas": "específicas",
     "urbanistico": "urbanístico", "urbanistica": "urbanística", "urbanisticos": "urbanísticos", "urbanisticas": "urbanísticas",
+    "fisico": "físico", "fisica": "física", "fisicos": "físicos", "fisicas": "físicas",
+    "metodo": "método", "metodos": "métodos",
+    "parametro": "parámetro", "parametros": "parámetros",
+    "frances": "francés", "francesa": "francesa", "franceses": "franceses",
+    "metodologia": "metodología", "metodologias": "metodologías",
+    "politica": "política", "politicas": "políticas", "politico": "político", "politicos": "políticos",
+    "despues": "después", "telefono": "teléfono", "telefonos": "teléfonos",
     "predominante": "predominante", "incidencia": "incidencia",
     "simulacion": "simulación",
     "silenciosamente": "silenciosamente",
@@ -143,12 +150,27 @@ def corregir_es(texto):
         marcado = marcado.replace(u, "\x00URL{}\x00".format(i), 1)
     partes = _SEGMENTO.findall(marcado)
     salida = []
+    # 'publica' es ambiguo: adjetivo ('escritura publica' -> 'pública') o verbo
+    # ('el catastro no publica capa' -> se deja sin tilde). Tras una negación o
+    # pronombre átono es verbo; en los demás casos del dominio, adjetivo.
+    _PREV_VERBO_PUBLICA = {"no", "se", "lo", "la", "los", "las"}
+    prev_token = None
     for p in partes:
         if p.startswith("<") or "\x00" in p or not re.match(r"^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$", p):
             salida.append(p)
+            continue
+        lower = p.lower()
+        if (lower == "publica" and prev_token in _PREV_VERBO_PUBLICA
+                and not any(ch in lower for ch in "ÁÉÍÓÚáéíóú")):
+            # Verbo 'publicar' (3.ª pers.): sin tilde ('no publica').
+            salida.append(p)
         else:
             salida.append(_corregir_token(p))
+        prev_token = lower
     resultado = "".join(salida)
+    # Colapso de puntos dobles ('Bogotá D.C..' -> 'Bogotá D.C.'), sin tocar
+    # puntos suspensivos ('...') — se aplica antes de restaurar las URLs.
+    resultado = re.sub(r"\.\.(?!\.)", ".", resultado)
     for i, u in enumerate(urls):
         resultado = resultado.replace("\x00URL{}\x00".format(i), u, 1)
     return resultado

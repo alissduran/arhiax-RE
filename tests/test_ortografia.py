@@ -39,6 +39,18 @@ class TestCorregirEs(unittest.TestCase):
                          "https://www.medellin.gov.co")
         self.assertEqual(corregir_es("<b>Analisis</b>"), "<b>Análisis</b>")
 
+    def test_metodo_frances_y_parametros(self):
+        self.assertEqual(corregir_es("metodo frances de amortizacion"),
+                         "método francés de amortización")
+        self.assertEqual(corregir_es("parametros de mercado"), "parámetros de mercado")
+        self.assertEqual(corregir_es("Metodo de Costo"), "Método de Costo")
+
+    def test_publica_adjetivo_pero_no_verbo(self):
+        # "pública" como adjetivo lleva tilde...
+        self.assertEqual(corregir_es("escritura publica"), "escritura pública")
+        # ...pero "publica" como verbo (3.ª pers. de publicar) NO lleva tilde.
+        self.assertEqual(corregir_es("no publica capa predial"), "no publica capa predial")
+
 
 if __name__ == "__main__":
     unittest.main()
