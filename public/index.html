@@ -1271,23 +1271,34 @@
       }
 
       const estadoDiv = document.getElementById('generar-estado');
-      const filename = `ARHIAX_Dictamen_${c.folio_matricula || 'caso'}.pdf`;
+      // Entrega por aparte: el servidor responde un ZIP con el dictamen y los
+      // anexos (o un PDF si no hubo anexos). El nombre de archivo sigue el
+      // content-type recibido.
+      const nombreBase = `ARHIAX_Dictamen_FMI_${c.folio_matricula || 'caso'}`;
 
       function setEstado(msg, color) {
         estadoDiv.innerHTML = msg;
         estadoDiv.style.color = color || 'var(--color-gray)';
       }
 
-      function guardarBlob(blob) {
+      function extDeCt(ct) {
+        return (ct || '').includes('application/zip') ? 'zip' : 'pdf';
+      }
+
+      function guardarBlob(blob, ct) {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = filename;
+        a.download = `${nombreBase}.${extDeCt(ct)}`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
-        setEstado('✓ Dictamen generado y descargado.', 'var(--color-green-text)');
+        setEstado(
+          extDeCt(ct) === 'zip'
+            ? '✓ Descargado: ZIP con el dictamen y sus anexos por aparte.'
+            : '✓ Dictamen generado y descargado.',
+          'var(--color-green-text)');
       }
 
       const formData = new FormData();
@@ -1333,16 +1344,17 @@
               const rJob = await apiFetch(`/api/v1/pdf/trabajos/${jobId}`);
               if (!rJob.ok) throw new Error(`HTTP ${rJob.status}`);
               const ct = rJob.headers.get('content-type') || '';
-              if (ct.includes('application/pdf')) {
-                guardarBlob(await rJob.blob());
+              if (ct.includes('application/pdf') || ct.includes('application/zip')) {
+                guardarBlob(await rJob.blob(), ct);
                 return;
               }
               const j = await rJob.json().catch(() => null);
               if (j && j.estado === 'listo') {
-                // listo sin pdf en la respuesta (edge case): reintentar descarga
+                // listo sin archivo en la respuesta (edge case): reintentar descarga
                 const r2 = await apiFetch(`/api/v1/pdf/trabajos/${jobId}`);
-                if (r2.headers.get('content-type')?.includes('application/pdf')) {
-                  guardarBlob(await r2.blob());
+                const ct2 = r2.headers.get('content-type') || '';
+                if (ct2.includes('application/pdf') || ct2.includes('application/zip')) {
+                  guardarBlob(await r2.blob(), ct2);
                   return;
                 }
                 throw new Error('El dictamen se generó pero no se pudo descargar.');
@@ -1366,10 +1378,10 @@
           throw new Error(`Error del servidor (${resSync.status}): ${err.slice(0, 200)}`);
         }
         const ct = resSync.headers.get('content-type') || '';
-        if (ct.includes('application/pdf')) {
-          guardarBlob(await resSync.blob());
+        if (ct.includes('application/pdf') || ct.includes('application/zip')) {
+          guardarBlob(await resSync.blob(), ct);
         } else {
-          throw new Error('El servidor no devolvió el PDF esperado.');
+          throw new Error('El servidor no devolvió el PDF/ZIP esperado.');
         }
       } catch (err) {
         console.error('Error al generar dictamen:', err);

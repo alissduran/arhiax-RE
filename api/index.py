@@ -899,7 +899,7 @@ async def generar_dictamen_stateless(
         "lon": extraidos.get("lon") if _ctl_adjuntado else None,
     }
 
-    # 4. Compilar PDF
+    # 4. Compilar PDF (dictamen + anexos por separado)
     output_pdf = temp_run_dir / f"ARHIAX_Dictamen_{db_record['folio_matricula']}_final.pdf"
     try:
         compile_pdf(db_record, str(output_pdf), assets_dir=temp_run_dir)
@@ -907,15 +907,24 @@ async def generar_dictamen_stateless(
         print(f"[ERROR] compilar PDF stateless: {e}")
         raise HTTPException(status_code=500, detail="Error al compilar el PDF pericial. Verifique los insumos e intente nuevamente.")
 
-    with open(output_pdf, "rb") as f:
-        pdf_bytes = f.read()
-
-    folio_limpio = _sanitizar_folio(db_record["folio_matricula"])
+    # 4b. Empaquetar DICTAMEN + ANEXOS en un solo ZIP (entrega por aparte)
+    import zipfile as _zipfile
+    import io as _io
+    pdf_bytes = output_pdf.read_bytes()
+    anexos_path = output_pdf.with_name(output_pdf.stem + "_Anexos.pdf")
+    folio_limpio = _sanitizar_folio(db_record["folio_matricula"]) or "caso"
+    nombre_base = f"FMI_{folio_limpio}"
+    buf_zip = _io.BytesIO()
+    with _zipfile.ZipFile(buf_zip, "w", _zipfile.ZIP_DEFLATED) as z:
+        z.writestr(f"ARHIAX_Dictamen_{nombre_base}.pdf", pdf_bytes)
+        if anexos_path.exists():
+            z.writestr(f"ARHIAX_Anexos_{nombre_base}.pdf", anexos_path.read_bytes())
+    buf_zip.seek(0)
     return Response(
-        content=pdf_bytes,
-        media_type="application/pdf",
+        content=buf_zip.getvalue(),
+        media_type="application/zip",
         headers={
-            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{folio_limpio}.pdf"'
+            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{nombre_base}.zip"'
         }
     )
 
@@ -1309,9 +1318,21 @@ async def worker_generar_pdf(request: Request):
     output_pdf = temp_run_dir / f"ARHIAX_Dictamen_{db_record['folio_matricula']}_final.pdf"
     try:
         compile_pdf(db_record, str(output_pdf), assets_dir=temp_run_dir)
+        # Empaquetar dictamen + anexos en ZIP (entrega por aparte)
+        import zipfile as _zipfile
+        import io as _io
         pdf_bytes = output_pdf.read_bytes()
-        _actualizar_trabajo(job_id, "listo", pdf_bytes=pdf_bytes)
-        return {"job_id": job_id, "estado": "listo", "bytes": len(pdf_bytes),
+        anexos_path = output_pdf.with_name(output_pdf.stem + "_Anexos.pdf")
+        folio_limpio = _sanitizar_folio(db_record["folio_matricula"]) or "caso"
+        buf_zip = _io.BytesIO()
+        with _zipfile.ZipFile(buf_zip, "w", _zipfile.ZIP_DEFLATED) as z:
+            z.writestr(f"ARHIAX_Dictamen_FMI_{folio_limpio}.pdf", pdf_bytes)
+            if anexos_path.exists():
+                z.writestr(f"ARHIAX_Anexos_FMI_{folio_limpio}.pdf", anexos_path.read_bytes())
+        buf_zip.seek(0)
+        zip_bytes = buf_zip.getvalue()
+        _actualizar_trabajo(job_id, "listo", pdf_bytes=zip_bytes)
+        return {"job_id": job_id, "estado": "listo", "bytes": len(zip_bytes),
                 "folio": db_record["folio_matricula"]}
     except Exception as e:
         print(f"[ERROR] worker PDF {job_id}: {e}")
@@ -1331,7 +1352,12 @@ def obtener_trabajo_pdf(job_id: str, auth: dict = Depends(require_auth)):
         raise HTTPException(status_code=404, detail="Trabajo no encontrado.")
     estado = row["estado"]
     if estado == "listo" and row["pdf"]:
-        return Response(content=bytes(row["pdf"]), media_type="application/pdf",
+        contenido = bytes(row["pdf"])
+        # El worker guarda el ZIP (dictamen + anexos): detectar por la firma ZIP
+        if contenido[:2] == b"PK":
+            return Response(content=contenido, media_type="application/zip",
+                            headers={"Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{job_id}.zip"'})
+        return Response(content=contenido, media_type="application/pdf",
                         headers={"Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{job_id}.pdf"'})
     return {"job_id": job_id, "estado": estado, "error": row["error"]}
 
@@ -1357,12 +1383,31 @@ def download_pdf(case_id: int, auth: bool = Depends(require_auth)):
     with open(dictamen["pdf_path"], "rb") as f:
         pdf_bytes = f.read()
 
-    folio_limpio = _sanitizar_folio(dictamen["folio_matricula"])
+    folio_limpio = _sanitizar_folio(dictamen["folio_matricula"]) or "caso"
+    nombre_base = f"FMI_{folio_limpio}"
+    # Entrega por aparte: si el compilador generó los anexos junto al dictamen
+    # (…_Anexos.pdf), se empaquetan ambos en un ZIP.
+    anexos_path = Path(dictamen["pdf_path"]).with_name(Path(dictamen["pdf_path"]).stem + "_Anexos.pdf")
+    if anexos_path.exists():
+        import zipfile as _zipfile
+        import io as _io
+        buf_zip = _io.BytesIO()
+        with _zipfile.ZipFile(buf_zip, "w", _zipfile.ZIP_DEFLATED) as z:
+            z.writestr(f"ARHIAX_Dictamen_{nombre_base}.pdf", pdf_bytes)
+            z.writestr(f"ARHIAX_Anexos_{nombre_base}.pdf", anexos_path.read_bytes())
+        buf_zip.seek(0)
+        return Response(
+            content=buf_zip.getvalue(),
+            media_type="application/zip",
+            headers={
+                "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{nombre_base}.zip"'
+            }
+        )
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
         headers={
-            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{folio_limpio}.pdf"'
+            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{nombre_base}.pdf"'
         }
     )
 

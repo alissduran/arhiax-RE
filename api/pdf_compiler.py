@@ -2057,6 +2057,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 8))
     
     # ── ANEXO A: NOTA TECNICA GEODESICA ────────────────────────
+    # Los anexos se entregan como DOCUMENTO SEPARADO (el dictamen principal
+    # termina en la Ruta de Verificación; los anexos van en un PDF propio).
+    _idx_anexo = len(story)
     story.append(sec("Anexo A - Nota Tecnica Geodesica"))
     story.append(hr())
     story.append(body(
@@ -2186,12 +2189,38 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         print("OK - Test de boundary de avaluo: PASADO")
     
     ejecutar_controles_de_calidad()
-    
+
     # ── BUILD PDF ──────────────────────────────────────────────
+    # Entrega por separado: (1) el DICTAMEN (secciones 00-11, sin anexos) y
+    # (2) los ANEXOS (p. ej. Anexo A - Nota Técnica Geodésica) en su propio
+    # archivo '..._Anexos.pdf', para que el portal los empaquete en un ZIP.
     doc = SimpleDocTemplate(OUTPUT, pagesize=letter,
         topMargin=1.2*cm, bottomMargin=1.5*cm, leftMargin=1.8*cm, rightMargin=1.8*cm)
-    doc.build(story, onFirstPage=on_page, onLaterPages=on_page)
+    story_dictamen = story[:_idx_anexo] if _idx_anexo else story
+    doc.build(story_dictamen, onFirstPage=on_page, onLaterPages=on_page)
     print(f"SUCCESS: PDF GENERADO: {OUTPUT}")
+
+    _ruta_anexos = None
+    if _idx_anexo is not None and _idx_anexo < len(story):
+        out_anexos = str(Path(OUTPUT).with_name(Path(OUTPUT).stem + "_Anexos.pdf"))
+        doc2 = SimpleDocTemplate(out_anexos, pagesize=letter,
+            topMargin=1.2*cm, bottomMargin=1.5*cm, leftMargin=1.8*cm, rightMargin=1.8*cm)
+        # Portada breve de los anexos con la referencia del dictamen (trazabilidad)
+        story_anexos = [
+            sec("Anexos - Documento tecnico de soporte"),
+            hr(),
+            body(
+                f"Anexos del dictamen <b>{CERT_NUM}</b> (Folio {FOLIO}), generado el "
+                f"{NOW_UTC.strftime('%d %b %Y %H:%M UTC')}. Hash SHA-256 del dictamen: "
+                f"{P_HASH}. Estos documentos son complemento tecnico del dictamen "
+                "principal y no tienen validez por separado."
+            ),
+            Spacer(1, 10),
+        ] + story[_idx_anexo:]
+        doc2.build(story_anexos, onFirstPage=on_page, onLaterPages=on_page)
+        _ruta_anexos = out_anexos
+        print(f"SUCCESS: PDF ANEXOS GENERADO: {out_anexos}")
+
     print(f"  Folio: {FOLIO}")
     print(f"  Hash SHA-256: {P_HASH}")
     print(f"  Timestamp: {NOW_UTC.isoformat()}")
