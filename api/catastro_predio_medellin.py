@@ -273,7 +273,13 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
         return cached
     res = {"disponible": False, "error": None, "barrio": None, "comuna": None,
            "localidad": None, "estrato": None, "clase_suelo": None,
-           "tratamiento": None, "codigo_manzana": None}
+           "tratamiento": None, "codigo_manzana": None,
+           # Parámetros de edificabilidad del POT (VM_22 l0) — Sprint 3:
+           # índice de construcción máximo, densidad máxima, franja de altura
+           # y altura normativa (pisos) cuando el polígono la expone.
+           "indice_construccion_max": None, "densidad_max": None,
+           "franja_altura": None, "altura_normativa": None,
+           "categoria_tratamiento": None, "fecha_norma": None}
 
     # Barrio y comuna con NOMBRE (VC_Limite_Politico_Admtivo l0/l1). La capa
     # ide_catastro expone los mismos polígonos pero no responde a intersección
@@ -307,14 +313,25 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
         res["clase_suelo"] = p.get("clase_suelo")
         res["categoria_suelo"] = p.get("categoria_suelo")
 
-    # Tratamiento urbanístico (VM_22 l0)
+    # Tratamiento urbanístico y parámetros de edificabilidad (VM_22 l0).
+    # La capa oficial del POT de Medellín (Acuerdo 48/2014, servidormapas) expone
+    # por polígono normativo: tratamiento, índice de construcción máximo,
+    # densidad máxima, franja de altura y altura normativa en pisos cuando aplica.
     r_trat = _q_punto("ordenamiento_ter/VM_22_Tratamientos_Urbanos", 0, lon, lat,
-                      "tratamiento,tipo,codigo_tramiento,alturavariable")
+                      "tratamiento,tipo,codigo_tramiento,alturavariable,"
+                      "indiceconstruccmax,densidadmax,franjabase,alturanormativa,"
+                      "categoria_tratamiento,fecha_adopcion")
     if r_trat.get("features"):
         p = r_trat["features"][0].get("properties", {})
         res["tratamiento"] = p.get("tratamiento")
         res["tipo_tratamiento"] = p.get("tipo")
         res["codigo_tratamiento"] = p.get("codigo_tramiento")
+        res["indice_construccion_max"] = p.get("indiceconstruccmax")
+        res["densidad_max"] = p.get("densidadmax")
+        res["franja_altura"] = p.get("franjabase")
+        res["altura_normativa"] = p.get("alturanormativa")
+        res["categoria_tratamiento"] = p.get("categoria_tratamiento")
+        res["fecha_norma"] = p.get("fecha_adopcion")
 
     res["disponible"] = bool(res["barrio"] or res["comuna"] or res["estrato"]
                              or res["clase_suelo"] or res["tratamiento"])

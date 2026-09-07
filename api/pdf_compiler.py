@@ -516,6 +516,18 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         fuente_pot=_fuente_geo,
         nombre_ciudad=_NOMBRE_CIUDAD,
     )
+
+    # Sprint 3 (edificabilidad): hallazgo H-URB cuando lo CONSTRUIDO en catastro
+    # excede la ALTURA MÁXIMA normativa del polígono (POT por ciudad). Solo se
+    # afirma cuando la capa oficial expone un número de pisos; de lo contrario
+    # la tabla 4.3 lo deja PENDIENTE/remisión oficial (nunca se inventa).
+    try:
+        from edificabilidad import hallazgo_exceso_altura
+        _h_urb = hallazgo_exceso_altura(ciudad, _ent2, _predio_pisos)
+        if _h_urb:
+            hallazgos.append(_h_urb)
+    except Exception as _e_urb:
+        print(f"[PDF][EDIFICABILIDAD] hallazgo de exceso no disponible: {_e_urb}")
     # ──────────────────────────────────────────────────────────────────────────────
 
     pois = get_nearby_pois(lat, lon, radius=2000)
@@ -1259,7 +1271,46 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "<b>HALLAZGO MEDIO:</b> El tratamiento urbanistico del sector presenta poligonos de Consolidacion "
             "con alturas variables. Verificar el cumplimiento de la norma urbanistica del poligono especifico del predio."))
     story.append(Spacer(1, 8))
-    
+
+    # ── 4.3 EDIFICABILIDAD Y ALTURA MÁXIMA (Norma Urbanística) ────────────
+    # Sprint 3: parámetros POT de edificabilidad por ciudad (tratamiento,
+    # índice de construcción, densidad, altura máxima en pisos) confrontados
+    # con lo ya construido según catastro. Detecta el caso de exceso de altura
+    # (p. ej. construir 20 pisos donde la norma permite 11). Sin dato normativo
+    # numérico (Bogotá/ficha UPZ, planes parciales) se marca PENDIENTE.
+    try:
+        from edificabilidad import (filas_edificabilidad, fuente_norma_texto,
+                                    link_oficial, _confrontacion)
+        story.append(sub("4.3 Edificabilidad y Altura Maxima (Norma Urbanistica)"))
+        _filas_edi = filas_edificabilidad(ciudad, _ent2, _predio_pisos)
+        story.append(dt(_filas_edi))
+        story.append(Spacer(1, 3))
+        _est_edi, _txt_edi = _confrontacion(ciudad, _ent2, _predio_pisos)
+        if _est_edi == "exceso":
+            story.append(alert_red(
+                f"<b>{_txt_edi}.</b> Requiere verificacion de la licencia de "
+                "construccion y de la ficha normativa ante la curaduria urbana "
+                "o la autoridad de planeacion competente."))
+        elif _est_edi == "dentro":
+            story.append(alert_green(
+                f"<b>Confrontacion urbanistica:</b> {_txt_edi}. Sujeto a la "
+                "licencia de construccion y a la ficha normativa vigente."))
+        elif _est_edi in ("pendiente", "sin_norma", "sin_construccion"):
+            story.append(alert_orange(
+                f"<b>Confrontacion urbanistica:</b> {_txt_edi}."))
+        _nom_portal, _url_portal = link_oficial(ciudad)
+        _nota_fuente = fuente_norma_texto(ciudad, _ent2)
+        story.append(body(
+            f"<b>Fuente normativa:</b> {_nota_fuente}"
+            f"<link href='{_url_portal}'>{_nom_portal}</link>. La altura de la "
+            "capa es referencial con la fecha de la norma: la licencia aprobada "
+            "puede tener derechos adquiridos y la norma puede estar en revision; "
+            "la autoridad competente es la curaduria urbana o la oficina de "
+            "planeacion de la ciudad."))
+        story.append(Spacer(1, 4))
+    except Exception as _e_edi:
+        print(f"[PDF][EDIFICABILIDAD] seccion 4.3 no disponible: {_e_edi}")
+
     # ── 04B ESTIMACIÓN REFERENCIAL DE MERCADO (NO ES AVALÚO) ────
     story.append(sec("04B - Estimación Referencial de Mercado (NO es avalúo)"))
     story.append(hr())
