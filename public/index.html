@@ -765,6 +765,88 @@
       document.getElementById('session-info').textContent = `Sesión: ${activeUsername} · ${activeRol === 'admin' ? 'Administrador' : 'Operador'}`;
       document.getElementById('btn-admin').style.display = (activeRol === 'admin') ? 'inline-block' : 'none';
       cargarDictamenes();
+      // Persistencia Neon: fusionar la lista local con los casos del servidor
+      // (la lista vive en localStorage, pero el servidor con Neon persiste los
+      // casos; al abrir el portal se reconcilian ambos lados).
+      sincronizarCasosConServidor();
+    }
+
+    // ── Sincronización con el servidor (Neon/Postgres) ────────────────────────
+    // La lista del portal vive en localStorage (offline-first), pero el servidor
+    // persiste los casos en Neon. Esta función reconcilia ambos lados:
+    //   1) Trae los casos del servidor y agrega los que faltan localmente.
+    //   2) Los casos locales con id provisional (Date.now(), creados cuando el
+    //      servidor no respondió) se crean en el servidor para que persistan.
+    // Nunca elimina nada local; degrada silencioso si no hay conexión.
+    async function sincronizarCasosConServidor() {
+      try {
+        const resp = await apiFetch('/api/dictamenes');
+        if (!resp.ok) return;
+        const serverCases = await resp.json();
+        if (!Array.isArray(serverCases)) return;
+        const local = JSON.parse(localStorage.getItem("arhiax_cases") || "[]");
+        let changed = false;
+
+        // 1) Casos del servidor ausentes localmente -> agregarlos
+        serverCases.forEach(sc => {
+          if (!local.some(l => l.id === sc.id)) {
+            local.push({
+              id: sc.id,
+              folio_matricula: sc.folio_matricula || 'Pendiente',
+              direccion: sc.direccion || 'Pendiente',
+              barrio: sc.barrio || '',
+              area: sc.area || null,
+              estrato: (sc.estrato !== undefined && sc.estrato !== null) ? sc.estrato : 4,
+              ciudad: sc.ciudad || 'barranquilla',
+              estado: sc.estado || 'PENDIENTE_IMAGENES',
+              certificado_cargado: sc.certificado_cargado || 0,
+              _delServidor: true
+            });
+            changed = true;
+          }
+        });
+
+        // 2) Casos locales con id provisional -> crearlos en el servidor
+        const idsServer = new Set(serverCases.map(c => c.id));
+        for (const c of local) {
+          const idLocal = (typeof c.id === 'number') ? c.id : 0;
+          if (idLocal >= 1e12 && !idsServer.has(idLocal) && !c._delServidor) {
+            try {
+              const body = {
+                folio_matricula: c.folio_matricula || 'Pendiente',
+                direccion: c.direccion || 'Pendiente',
+                ciudad: c.ciudad || 'barranquilla'
+              };
+              const r = await apiFetch('/api/dictamenes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+              });
+              if (r.ok) {
+                const creado = await r.json();
+                if (creado && creado.id) {
+                  c.id = creado.id;
+                  c._delServidor = true;
+                  changed = true;
+                }
+              }
+            } catch (e) {
+              /* sin conexión: el caso se queda local y se reintenta en la próxima apertura */
+            }
+          }
+        }
+
+        if (changed) {
+          dictamenes = local;
+          localStorage.setItem("arhiax_cases", JSON.stringify(local));
+          renderDictamenesList();
+          if (selectedCaseId && !dictamenes.some(c => c.id === selectedCaseId)) {
+            selectCase(dictamenes.length > 0 ? dictamenes[0].id : null);
+          }
+        }
+      } catch (e) {
+        console.warn('Sin conexión con el servidor; se usa la lista local.', e);
+      }
     }
 
     async function toggleAdminPanel() {
@@ -855,11 +937,12 @@
       // H-09: crear el caso en el servidor para que upload/update/delete usen un id real
       // (si el servidor no responde, se degrada a id local para no bloquear el flujo)
       let serverId = Date.now();
+      const ciudadForm = document.getElementById('input-ciudad').value || 'barranquilla';
       try {
         const resCreate = await apiFetch('/api/dictamenes', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ folio_matricula: resolvedFolio, direccion: 'Pendiente' })
+          body: JSON.stringify({ folio_matricula: resolvedFolio, direccion: 'Pendiente', ciudad: ciudadForm })
         });
         if (resCreate.ok) {
           const created = await resCreate.json();
@@ -875,7 +958,7 @@
         direccion: "Pendiente",
         area: null,
         barrio: "",
-        ciudad: document.getElementById('input-ciudad').value || 'barranquilla',
+        ciudad: ciudadForm,
         certificado_cargado: 0,
         licencia_cargada: 0,
         sombra_9am_cargada: 0,
@@ -1127,7 +1210,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             folio_matricula: folioVal,
-            direccion: (c && c.direccion) || 'Pendiente'
+            direccion: (c && c.direccion) || 'Pendiente',
+            ciudad: (c && c.ciudad) || 'barranquilla'
           })
         });
 

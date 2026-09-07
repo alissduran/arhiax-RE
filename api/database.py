@@ -59,6 +59,10 @@ def init_db():
         "ALTER TABLE dictamenes ADD COLUMN lon REAL",
         "ALTER TABLE dictamenes ADD COLUMN fuente_geocod TEXT",
         "ALTER TABLE dictamenes ADD COLUMN acreedor_real TEXT",
+        # Persistencia multi-ciudad: sin esta columna un caso de Bogotá/Medellín
+        # guardado en Neon se recargaba como 'barranquilla' (la lista del portal
+        # sincroniza con el servidor y usa c.ciudad para generar el dictamen).
+        "ALTER TABLE dictamenes ADD COLUMN ciudad TEXT",
     ]
     for sql in migraciones:
         try:

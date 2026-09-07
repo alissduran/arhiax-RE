@@ -453,6 +453,13 @@ def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks
     # NUNCA es el valor por defecto: se resuelve del CTL/catastro o queda pendiente.
     barrio = ""
     estrato = 4
+    # Persistencia multi-ciudad: el caso guarda la ciudad elegida en el portal
+    # (barranquilla/medellin/bogota) para que al sincronizar con Neon se genere
+    # el dictamen de la ciudad correcta (regresión: un caso de Bogotá guardado
+    # sin ciudad se recargaba como Barranquilla).
+    ciudad = (payload.get("ciudad") or "barranquilla").lower().strip()
+    if ciudad not in ("barranquilla", "medellin", "bogota"):
+        ciudad = "barranquilla"
     
     # Si no se provee folio pero se provee dirección, intentar resolverlo automáticamente
     if not folio and direccion and direccion.lower() != "pendiente":
@@ -477,9 +484,9 @@ def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO dictamenes (folio_matricula, direccion, barrio, estrato, area, estado, valor_consolidado, fecha_creacion)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    """, (folio, direccion, barrio, estrato, area, "PENDIENTE_IMAGENES", valor_estimado, fecha_creacion))
+        INSERT INTO dictamenes (folio_matricula, direccion, barrio, estrato, area, estado, valor_consolidado, fecha_creacion, ciudad)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (folio, direccion, barrio, estrato, area, "PENDIENTE_IMAGENES", valor_estimado, fecha_creacion, ciudad))
     conn.commit()
     new_id = cursor.lastrowid
     # Guardar acreedor_real si fue declarado
@@ -651,7 +658,13 @@ def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: B
                 barrio = "El Recreo"
     
     acreedor_real = payload.get("acreedor_real", dictamen.get("acreedor_real", None))
-            
+
+    # Persistencia multi-ciudad: mantener/actualizar la ciudad del caso (puede
+    # llegar del payload cuando el usuario la cambia en el portal).
+    ciudad = (payload.get("ciudad") or dictamen.get("ciudad") or "barranquilla").lower().strip()
+    if ciudad not in ("barranquilla", "medellin", "bogota"):
+        ciudad = "barranquilla"
+
     # El valor consolidado solo se actualiza si el área ya existe (extraída por certificado)
     area = dictamen["area"]
     valor_consolidado = dictamen["valor_consolidado"]
@@ -661,9 +674,9 @@ def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: B
     
     cursor.execute("""
         UPDATE dictamenes 
-        SET folio_matricula = ?, direccion = ?, barrio = ?, valor_consolidado = ?
+        SET folio_matricula = ?, direccion = ?, barrio = ?, valor_consolidado = ?, ciudad = ?
         WHERE id = ?
-    """, (folio, direccion, barrio, valor_consolidado, case_id))
+    """, (folio, direccion, barrio, valor_consolidado, ciudad, case_id))
         
     conn.commit()
     

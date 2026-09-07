@@ -130,6 +130,7 @@ def init_postgres(conn) -> None:
         "lon": "REAL",
         "fuente_geocod": "TEXT",
         "acreedor_real": "TEXT",
+        "ciudad": "TEXT",  # persistencia multi-ciudad (Neon)
     }
     for nombre, tipo in columnas.items():
         cur.execute(f"ALTER TABLE dictamenes ADD COLUMN IF NOT EXISTS {nombre} {tipo}")
