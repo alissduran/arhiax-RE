@@ -7,6 +7,54 @@ Estándar de Codificación: ARHIAX-RE v1.0
 
 import re
 
+# Sufijos de mejora/uso que en la nomenclatura SNR suelen acompañar la placa
+# (p. ej. "CL 40 # 50B - 62 BDGA 3" o "... TORRE 2 APTO 501"). NO son parte de
+# la placa catastral: se recorta todo lo que sigue a la primera palabra de
+# mejora. "CASA" se excluye a propósito (puede ser parte real de la
+# nomenclatura en desarrollos).
+_RE_SUFIJO_MEJORA = re.compile(
+    r"\s+(?:BDGA\b|BODEGAS?\b|LOCAL\b|LOC\b|OFICINA\b|OF\b|APTO\b|APARTAMENTO\b|APT\b|"
+    r"TORRE\b|INTERIOR\b|INT\b|PISO\b|EDIFICIO\b|ED\b|BLOQUE\b|BL\b|CONJUNTO\b|CONJ\b|"
+    r"UNIDAD\b|MEJORA\b|MEJ\b|MODULO\b|MOD\b).*$",
+    re.IGNORECASE,
+)
+
+# Prefijos de listado que traen las direcciones del CTL/SNR ("2) ", "1. ", "- ")
+_RE_PREFIJO_LISTADO = re.compile(r"^\s*(?:\d+\s*[\)\-\u2013.]|[-–—•·])\s*")
+
+# Indicadores de número: "No. 61", "N° 61", "Nro 61" -> "# 61" (para catastro).
+# Sin \b final: tras '.' o '°' no existe límite de palabra.
+_RE_NO_INDICADOR = re.compile(
+    r"\b(?:No\.?|N[°º]?\.?|Nro\.?|Número|NUMERO|Num)(?=\s|$)",
+    re.IGNORECASE)
+
+
+def limpiar_direccion_consulta(direccion: str) -> str:
+    """Limpia una dirección para CONSULTA catastral sin alterar la original.
+
+    Reglas (Sprint 3 — geocoder por dirección):
+      1. Quita prefijos de listado del CTL/SNR: '2) ', '1. ', '- '.
+      2. Quita sufijos de mejora tras la placa: 'BDGA 3', 'LOCAL 2', 'TORRE A'.
+      3. Convierte indicadores de número ('No.', 'N°', 'Nro') en '#'.
+      4. Compacta letras pegadas al guion de placa: '50 B - 62' -> '50B - 62'
+         (el formato SNR separa la letra con espacios: '50 B - 62').
+      5. Normaliza espacios múltiples.
+
+    Ejemplos:
+      '2) CL 40 # 50 B - 62 BDGA 3'  -> 'CL 40 # 50B - 62'
+      'Calle 10 No. 43B - 43 Local 1' -> 'Calle 10 # 43B - 43'
+    """
+    if not direccion:
+        return ""
+    txt = direccion.strip()
+    txt = _RE_PREFIJO_LISTADO.sub("", txt)
+    txt = _RE_SUFIJO_MEJORA.sub("", txt)
+    txt = _RE_NO_INDICADOR.sub("# ", txt)
+    # '50 B - 62' -> '50B - 62'  (letra de placa pegada al número)
+    txt = re.sub(r"(\d)\s+([A-Za-z])\s*[-–—]", r"\1\2 -", txt)
+    txt = re.sub(r"\s*[-–—]\s*", " - ", txt)
+    return " ".join(txt.split()).strip(" .,;")
+
 def normalize_address_colombia(address: str) -> str:
     """
     Normaliza una dirección urbana colombiana al formato estándar requerido por

@@ -25,7 +25,7 @@ _API_DIR = str(Path(__file__).resolve().parent)
 if _API_DIR not in sys.path:
     sys.path.insert(0, _API_DIR)
 
-from address_normalizer import normalize_address_colombia
+from address_normalizer import normalize_address_colombia, limpiar_direccion_consulta
 
 # Centroides por ciudad - fallback de ultimo recurso
 CENTROIDE_BAQ = (10.9685, -74.7813)
@@ -87,8 +87,12 @@ def geocodificar_direccion(direccion, ciudad="Barranquilla"):
         return _centroide(ciudad)
 
     try:
-        direccion_norm = normalize_address_colombia(direccion.strip())
+        # Limpieza SNR (prefijos '2) ', sufijos 'BDGA 3', 'No.')->'#') antes de
+        # normalizar: las direcciones del CTL traen ruido que rompía la consulta.
+        direccion_limpia = limpiar_direccion_consulta(direccion.strip())
+        direccion_norm = normalize_address_colombia(direccion_limpia)
     except Exception:
+        direccion_limpia = direccion.strip()
         direccion_norm = direccion.strip().upper()
 
     cache_key = "{}|{}".format(ciudad.lower().strip(), direccion_norm)
@@ -133,6 +137,7 @@ def geocodificar_direccion(direccion, ciudad="Barranquilla"):
         nombre_ciudad = "Barranquilla"
     intentos = [
         "{}, {}, Colombia".format(direccion_norm, nombre_ciudad),
+        "{}, {}, Colombia".format(direccion_limpia, nombre_ciudad),
         "{}, {}, Colombia".format(direccion.strip(), nombre_ciudad),
     ]
 

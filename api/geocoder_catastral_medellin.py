@@ -63,7 +63,8 @@ def normalizar_direccion_medellin(direccion: str) -> Optional[str]:
     (p. ej. 'Carrera 43C # 9-46' -> 'CR 43C 9-46'). Retorna None si no matchea."""
     if not direccion:
         return None
-    txt = _SUFIJOS_LIMPIEZA.sub("", direccion.strip())
+    from address_normalizer import limpiar_direccion_consulta
+    txt = _SUFIJOS_LIMPIEZA.sub("", limpiar_direccion_consulta(direccion))
     txt = txt.strip().rstrip(".,;")
     m = _RE_DIR.match(txt)
     if not m:

@@ -64,7 +64,9 @@ def normalizar_direccion_bogota(direccion: str) -> Optional[tuple]:
     """
     if not direccion:
         return None
-    txt = _SUFIJOS_LIMPIEZA.sub("", direccion.strip()).strip().rstrip(".,;")
+    from address_normalizer import limpiar_direccion_consulta
+    txt = _SUFIJOS_LIMPIEZA.sub("", limpiar_direccion_consulta(direccion))
+    txt = txt.strip().rstrip(".,;")
     m = _RE_DIR.match(txt)
     if not m:
         return None

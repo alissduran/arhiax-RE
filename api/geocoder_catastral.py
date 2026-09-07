@@ -43,7 +43,9 @@ def parsear_direccion_colombiana(direccion: str):
     de una dirección tipo 'CRA 43 # 98-32'. Retorna None si no matchea."""
     if not direccion:
         return None
-    txt = re.sub(r",\s*(Barranquilla|BAQ|Atl[áa]ntico|Colombia)$", "", direccion.strip(), flags=re.I)
+    from address_normalizer import limpiar_direccion_consulta
+    txt = limpiar_direccion_consulta(direccion)
+    txt = re.sub(r",\s*(Barranquilla|BAQ|Atl[áa]ntico|Colombia)$", "", txt, flags=re.I)
     m = _RE_DIR.match(txt)
     if not m:
         return None
