@@ -207,6 +207,41 @@ class TestCoherenciaMedellin(unittest.TestCase):
         filas_baq = dict(get_pot_summary_dt("x", ciudad="barranquilla"))
         self.assertIn("SIN AFECTACION", filas_baq["Planes Parciales"].upper())
 
+    def test_ruta_no_genera_paso_por_hallazgo_informativo(self):
+        """Regresión (dictamen real 50C-1463431): el hallazgo INFORMATIVO
+        'Zona Libre de Amenazas' contenía las palabras 'amenazas/riesgos' y
+        generaba un paso geotécnico espurio en la Ruta de Verificación aunque
+        el predio NO tiene ninguna amenaza. Solo ALTO/MEDIO generan pasos."""
+        from ruta_verificacion import generar_ruta
+        # Reproducir el mapeo del pdf_compiler sobre los hallazgos reales
+        def mapear(hallazgos):
+            rutas = []
+            for sev, _tc, _bg, titulo, fuente, desc, _i in hallazgos:
+                if sev == "INFORMATIVO":
+                    continue
+                tl = titulo.lower()
+                if "hipoteca" in tl and "vigente" in tl:
+                    rutas.append({"tipo": "hipoteca_vigente", "referencia": fuente})
+                elif ("riesgo" in tl or "amenaza" in tl or "geo" in tl) \
+                        and "zona libre" not in tl and "libre de" not in desc.lower():
+                    rutas.append({"tipo": "riesgo_geoespacial", "referencia": fuente})
+            return rutas
+
+        hallazgos = [
+            ("ALTO", None, None,
+             "H-01 | Hipoteca vigente a favor de BBVA Colombia (Anot. 014)",
+             "SNR Registral", "hipoteca vigente", "gestionar"),
+            ("INFORMATIVO", None, None,
+             "H-GEO | Zona Libre de Amenazas y Riesgos (Evaluación Dinámica POT)",
+             "IDIGER Bogotá", "sin interseccion", "favorable"),
+        ]
+        tipos = [p["tipo"] for p in mapear(hallazgos)]
+        self.assertEqual(tipos, ["hipoteca_vigente"])
+        ruta = generar_ruta([{"tipo": "hipoteca_vigente"}], nombre_ciudad="Bogotá D.C.")
+        self.assertEqual(len(ruta), 1)
+        # El paso geotécnico solo debe existir con intersección real (ALTO/MEDIO)
+        self.assertNotIn("geotécnico", ruta[0]["descripcion"])
+
 
 if __name__ == "__main__":
     unittest.main()

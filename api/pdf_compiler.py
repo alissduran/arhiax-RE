@@ -1988,8 +1988,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 11 RUTA DE VERIFICACION (Sprint 1 Bloque 4) ────────────
     story.append(sec("11 - Ruta de Verificacion Profesional"))
     story.append(hr())
+    # La ruta solo se arma con hallazgos que exigen ACCION (ALTO/MEDIO). Un
+    # hallazgo INFORMATIVO (p. ej. 'Zona Libre de Amenazas y Riesgos') no debe
+    # generar pasos: antes su título contenía 'amenazas/riesgos' y disparaba un
+    # paso geotécnico espurio aunque el predio NO tuviera ninguna amenaza.
     hallazgos_ruta = []
     for sev, tc, bg, titulo, fuente, descripcion, implicacion in hallazgos:
+        if sev == "INFORMATIVO":
+            continue
         titulo_lower = titulo.lower()
         desc_lower = descripcion.lower()
         if "ausencia" in titulo_lower and "ctl" in titulo_lower:
@@ -2004,7 +2010,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             hallazgos_ruta.append({"tipo": "patrimonio_familia", "referencia": fuente})
         elif "embargo" in titulo_lower:
             hallazgos_ruta.append({"tipo": "embargo_vigente", "referencia": fuente})
-        elif "riesgo" in titulo_lower or "amenaza" in titulo_lower or "geo" in titulo_lower:
+        elif ("riesgo" in titulo_lower or "amenaza" in titulo_lower or "geo" in titulo_lower) \
+                and "zona libre" not in titulo_lower and "libre de" not in desc_lower:
             hallazgos_ruta.append({"tipo": "riesgo_geoespacial", "referencia": fuente})
     ruta = generar_ruta(hallazgos_ruta, nombre_ciudad=_NOMBRE_CIUDAD)
     if ruta:
