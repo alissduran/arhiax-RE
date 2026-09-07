@@ -1165,28 +1165,52 @@
           method: 'DELETE'
         });
 
-        if (response.ok) {
+        // Se elimina el caso local SIEMPRE: la lista vive en localStorage y el
+        // servidor puede no conocer el id (caso creado localmente con id Date.now()
+        // cuando el POST falló, o BD efímera en Vercel). Un 404 del servidor no
+        // debe impedir limpiar la lista del navegador.
+        const borrable = response.ok || response.status === 404;
+        let aviso = null;
+        if (!response.ok && response.status !== 404) {
+          aviso = (await response.text().catch(() => '')) || `HTTP ${response.status}`;
+        }
+
+        if (borrable) {
           dictamenes = dictamenes.filter(item => item.id !== id);
           localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
-          
+
           // Limpiar insumos persistidos de este caso en IndexedDB
           for (const t of ['certificado', 'sombra_9am', 'sombra_3pm', 'mapa_satelital']) {
             idbBorrar(_keyInsumo(id, t));
           }
-          
+
           if (selectedCaseId === id) {
             selectedCaseId = null;
             document.getElementById('detail-panel').style.display = 'none';
           }
-          
+
           cargarDictamenes();
+          if (aviso) {
+            alert("Caso eliminado de este dispositivo. Nota del servidor: " + aviso);
+          }
         } else {
-          const errorMsg = await response.text();
-          alert("Error al eliminar caso del servidor: " + errorMsg);
+          alert("Error al eliminar caso del servidor: " + aviso);
         }
       } catch (err) {
-        console.error("Error al eliminar caso:", err);
-        alert("Error de conexión al eliminar el caso.");
+        // Sin conexión: el caso sigue borrándose de la lista local (la fuente de
+        // verdad del portal es localStorage; el servidor es un espejo opcional).
+        console.error("Error de conexión al eliminar caso:", err);
+        dictamenes = dictamenes.filter(item => item.id !== id);
+        localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+        for (const t of ['certificado', 'sombra_9am', 'sombra_3pm', 'mapa_satelital']) {
+          idbBorrar(_keyInsumo(id, t));
+        }
+        if (selectedCaseId === id) {
+          selectedCaseId = null;
+          document.getElementById('detail-panel').style.display = 'none';
+        }
+        cargarDictamenes();
+        alert("Sin conexión al servidor: el caso se eliminó solo de este dispositivo.");
       } finally {
         showLoading(false);
       }

@@ -561,5 +561,60 @@ class TestCiudadesNoOperativas(unittest.TestCase):
         asyncio.run(_correr())
 
 
+    def test_delete_dictamen_idempotente(self):
+        """DELETE de un caso que solo existe en el navegador (localStorage) no
+        debe bloquear con 404: el servidor responde success 'ya_inexistente'
+        para que el portal limpie su lista local (regresión reportada por el
+        usuario: 'Error al eliminar caso: Caso no encontrado')."""
+        import sqlite3
+        from pathlib import Path as _P
+        import index as index_mod
+
+        tmp = _P(ROOT_DIR) / "tmp_db_test" / "delete_test.db"
+        tmp.parent.mkdir(parents=True, exist_ok=True)
+        if tmp.exists():
+            tmp.unlink()
+
+        def _conectar_elim(db_path):
+            c = sqlite3.connect(str(db_path))
+            c.row_factory = sqlite3.Row
+            return c
+
+        conn = _conectar_elim(tmp)
+        conn.execute("""CREATE TABLE dictamenes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            folio_matricula TEXT NOT NULL,
+            direccion TEXT NOT NULL, barrio TEXT NOT NULL, estrato INTEGER NOT NULL,
+            area REAL, estado TEXT NOT NULL, valor_consolidado INTEGER,
+            fecha_creacion TEXT NOT NULL)""")
+        conn.execute("""INSERT INTO dictamenes
+            (folio_matricula, direccion, barrio, estrato, area, estado, valor_consolidado, fecha_creacion)
+            VALUES ('040-999', 'Calle 1 # 1-1', 'Miramar', 4, 50.0, 'PENDIENTE_IMAGENES', 0, '2026-01-01')""")
+        conn.commit()
+        conn.close()
+
+        orig_get_db = index_mod.get_db_connection
+        index_mod.get_db_connection = lambda: _conectar_elim(tmp)
+        try:
+            # Caso inexistente (id local del navegador, nunca creado en el server):
+            # responde success y NO lanza HTTPException 404.
+            r = index_mod.delete_dictamen(999999999, auth={"username": "admin", "rol": "admin"})
+            self.assertTrue(r.get("success"))
+            self.assertTrue(r.get("ya_inexistente"))
+            # Caso existente: se elimina de verdad.
+            r2 = index_mod.delete_dictamen(1, auth={"username": "admin", "rol": "admin"})
+            self.assertTrue(r2.get("success"))
+            self.assertNotIn("ya_inexistente", r2)
+            c_verif = _conectar_elim(tmp)
+            cursor = c_verif.execute(
+                "SELECT COUNT(*) AS n FROM dictamenes WHERE id = 1")
+            self.assertEqual(cursor.fetchone()["n"], 0)
+            c_verif.close()
+        finally:
+            index_mod.get_db_connection = orig_get_db
+            if tmp.exists():
+                tmp.unlink(missing_ok=True)
+
+
 if __name__ == "__main__":
     unittest.main()

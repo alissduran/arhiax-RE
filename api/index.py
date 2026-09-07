@@ -716,24 +716,26 @@ def delete_dictamen(case_id: int, auth: dict = Depends(require_admin)):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
     row = cursor.fetchone()
-    
-    if not row:
+
+    if row:
+        cursor.execute("DELETE FROM dictamenes WHERE id = ?", (case_id,))
+        conn.commit()
         conn.close()
-        raise HTTPException(status_code=404, detail="Caso no encontrado.")
-        
-    cursor.execute("DELETE FROM dictamenes WHERE id = ?", (case_id,))
-    conn.commit()
+        # Eliminar físicamente los archivos asociados al caso
+        case_dir = ASSETS_DIR / f"case_{case_id}"
+        if case_dir.exists() and case_dir.is_dir():
+            try:
+                shutil.rmtree(case_dir)
+            except Exception as e:
+                print(f"Error al eliminar la carpeta del caso {case_id}: {e}")
+        return {"success": True, "message": f"Caso {case_id} eliminado exitosamente."}
+
     conn.close()
-    
-    # Eliminar físicamente los archivos asociados al caso
-    case_dir = ASSETS_DIR / f"case_{case_id}"
-    if case_dir.exists() and case_dir.is_dir():
-        try:
-            shutil.rmtree(case_dir)
-        except Exception as e:
-            print(f"Error al eliminar la carpeta del caso {case_id}: {e}")
-            
-    return {"success": True, "message": f"Caso {case_id} eliminado exitosamente."}
+    # DELETE idempotente: el caso puede existir SOLO en el navegador (la lista del
+    # portal vive en localStorage; si el POST de creación falló se usó un id local
+    # `Date.now()`, y en Vercel sin Neon la BD /tmp es efímera). No es un error que
+    # bloquee: el frontend debe poder limpiar su lista local igualmente.
+    return {"success": True, "message": f"Caso {case_id} no existía en el servidor (se omite).", "ya_inexistente": True}
 
 @app.post("/api/dictamenes/generar")
 async def generar_dictamen_stateless(
