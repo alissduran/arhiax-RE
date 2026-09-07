@@ -111,8 +111,16 @@ def geocodificar_direccion(direccion, ciudad="Barranquilla"):
                 print(f"[GEOCODER][CATASTRO-MED] '{direccion}' -> {coords} (oficial: {res_cat.get('direccion_oficial')})")
                 return coords
         elif _es_bogota(ciudad):
+            # Reintento: las capas de serviciosgis tienen timeouts intermitentes;
+            # un solo fallo hacía caer al fallback Nominatim, que resuelve la
+            # 'Diagonal 61' truncada en otra localidad (regresión dictamen real
+            # 50C-1463431: DG 61B # 20-04 -> RESTREPO sur en vez de SAN LUIS).
             from geocoder_catastral_bogota import geocodificar_catastro_bogota
             res_cat = geocodificar_catastro_bogota(direccion)
+            if not res_cat:
+                import time as _time
+                _time.sleep(1.5)
+                res_cat = geocodificar_catastro_bogota(direccion)
             if res_cat:
                 coords = (res_cat["lat"], res_cat["lon"])
                 _GEOCODE_CACHE[cache_key] = coords
@@ -141,21 +149,27 @@ def geocodificar_direccion(direccion, ciudad="Barranquilla"):
         "{}, {}, Colombia".format(direccion.strip(), nombre_ciudad),
     ]
 
-    # Intento simplificado con tipo de via + numero
-    m = re.search(r"\b(CL|CRA|CR|AV|DG|TV|AP)\s+(\d+)", direccion_norm)
-    if m:
-        prefijo_map = {
-            "CL": "Calle",
-            "CRA": "Carrera",
-            "CR": "Carrera",
-            "AV": "Avenida",
-            "DG": "Diagonal",
-            "TV": "Transversal",
-            "AP": "Autopista"
-        }
-        tipo_via = prefijo_map.get(m.group(1), "Calle")
-        numero_via = m.group(2)
-        intentos.append("{} {}, {}, Colombia".format(tipo_via, numero_via, nombre_ciudad))
+    # Intento simplificado con tipo de via + numero. En BOGOTÁ se omite: la
+    # placa catastral ya se intentó arriba, y Nominatim sin el número de placa
+    # devuelve el punto MEDIO de la vía, que en calles largas cae en otra
+    # localidad (regresión: 'Diagonal 61B' -> Restrepo). En BAQ/MED las vías
+    # son cortas y el fallback aproxima mejor; aun así se conserva.
+    es_bogota_dir = _es_bogota(ciudad)
+    if not es_bogota_dir:
+        m = re.search(r"\b(CL|CRA|CR|AV|DG|TV|AP)\s+(\d+)", direccion_norm)
+        if m:
+            prefijo_map = {
+                "CL": "Calle",
+                "CRA": "Carrera",
+                "CR": "Carrera",
+                "AV": "Avenida",
+                "DG": "Diagonal",
+                "TV": "Transversal",
+                "AP": "Autopista"
+            }
+            tipo_via = prefijo_map.get(m.group(1), "Calle")
+            numero_via = m.group(2)
+            intentos.append("{} {}, {}, Colombia".format(tipo_via, numero_via, nombre_ciudad))
 
     for query in intentos:
         resultado = _nominatim_query(query, ciudad)

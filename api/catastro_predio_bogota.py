@@ -113,6 +113,29 @@ def _q_bbox(svc_path: str, lid: int, lon: float, lat: float,
     return {"disponible": True, "features": features, "total": len(features), "error": None}
 
 
+def _q_pip(svc_path: str, lid: int, lon: float, lat: float,
+           out_fields: str = "*", max_features: int = 3,
+           timeout: float = TIMEOUT) -> dict[str, Any]:
+    """Consulta point-in-polygon EXACTA: devuelve SOLO el polígono que contiene
+    el punto (esriGeometryPoint + intersects). A diferencia del bbox, no trae
+    features VECINAS de otras manzanas/sectores en orden arbitrario — regresión:
+    el dictamen del predio real (DG 61B # 20-04, lote 007202018025) resolvía el
+    entorno en el Restrepo/localidad vecina porque el bbox devolvía primero otro
+    lote (el punto de placa está en el borde de la manzana)."""
+    params = {
+        "where": "1=1", "outFields": out_fields, "outSR": "4326",
+        "geometry": f"{lon},{lat}",
+        "geometryType": "esriGeometryPoint", "inSR": "4326",
+        "spatialRel": "esriSpatialRelIntersects",
+        "returnGeometry": "false", "f": "json", "resultRecordCount": str(max_features),
+    }
+    data = _get_json(f"{BASE}/{svc_path}/MapServer/{lid}/query", params, timeout)
+    if data is None:
+        return {"disponible": False, "features": [], "error": "servicio sin respuesta"}
+    features = [_norm_feature(f) for f in data.get("features", [])]
+    return {"disponible": True, "features": features, "total": len(features), "error": None}
+
+
 def _centro(feature: dict) -> Optional[tuple]:
     geom = feature.get("geometry") or {}
     coords = geom.get("coordinates")
@@ -134,10 +157,19 @@ def _centro(feature: dict) -> Optional[tuple]:
 
 # ── 1. Entorno urbano por punto (lote, sector, uso, estrato, UPZ, suelo) ─────
 
-def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
+def consultar_entorno_urbano(lat: float, lon: float, codigo_lote: str = None,
+                             codigo_manzana: str = None) -> dict[str, Any]:
     """Lote+manzana, sector con nombre, uso por manzana, estrato, UPZ,
-    localidad, suelo y valor de referencia por punto."""
-    cache_key = f"bog_entorno|{round(lat, 5)}|{round(lon, 5)}"
+    localidad, suelo y valor de referencia por punto.
+
+    Regresión (dictamen real 50C-1463431): antes se consultaba por BBOX y se
+    tomaba la PRIMERA feature (features[0]) — pero el bbox alrededor del punto
+    de placa (que queda en el borde de la manzana) devolvía el LOTE VECINO de
+    otra localidad (Restrepo/LA ESPERANZA) en vez del lote real del CTL
+    (SAN LUIS / TEUSAQUILLO). Ahora se resuelve por point-in-polygon exacto y,
+    cuando se conoce el código de lote (de la placa domiciliaria oficial), se
+    consulta la manzana por código."""
+    cache_key = f"bog_entorno|{round(lat, 5)}|{round(lon, 5)}|{codigo_lote or ''}"
     cached = _cache_get(cache_key)
     if cached is not None:
         return cached
@@ -147,30 +179,55 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
            "clase_suelo": None, "valor_ref_m2": None, "codigo_manzana": None,
            "codigo_lote": None}
 
-    # Lote (identifica predio y manzana)
-    r_lote = _q_bbox("catastro/lote", 0, lon, lat, "LOTCODIGO,MANZCODIGO,LOTUPREDIA", max_features=10)
-    if r_lote.get("features"):
-        p = r_lote["features"][0].get("properties", {})
-        res["codigo_lote"] = p.get("LOTCODIGO")
-        res["codigo_manzana"] = p.get("MANZCODIGO")
-        mz = p.get("MANZCODIGO")
+    mz = codigo_manzana
+    if codigo_lote and not mz:
+        # Lote exacto por código: entrega la manzana real del predio (el bbox
+        # alrededor del punto de placa podía caer en la manzana vecina).
+        r_lote_cod = _q_capa("catastro/lote", 0, f"LOTCODIGO='{codigo_lote}'",
+                             "LOTCODIGO,MANZCODIGO,LOTUPREDIA", max_features=3)
+        for f in r_lote_cod.get("features", []):
+            p = f.get("properties", {})
+            mz = p.get("MANZCODIGO") or mz
+            if not res["codigo_lote"]:
+                res["codigo_lote"] = p.get("LOTCODIGO") or codigo_lote
+    if not res["codigo_lote"]:
+        res["codigo_lote"] = codigo_lote
+    if not mz:
+        # Sin código: identificar el lote/manzana del punto por point-in-polygon
+        # (el bbox devolvía el LOTE VECINO como features[0]).
+        r_lote = _q_pip("catastro/lote", 0, lon, lat,
+                        "LOTCODIGO,MANZCODIGO,LOTUPREDIA", max_features=3)
+        if not r_lote.get("features"):
+            r_lote = _q_bbox("catastro/lote", 0, lon, lat,
+                             "LOTCODIGO,MANZCODIGO,LOTUPREDIA", max_features=10)
+        for f in r_lote.get("features", []):
+            p = f.get("properties", {})
+            if not res["codigo_lote"]:
+                res["codigo_lote"] = p.get("LOTCODIGO")
+            mz = p.get("MANZCODIGO") or mz
+            break
 
-    # Sector catastral con NOMBRE (barrio oficial)
-    r_sec = _q_bbox("catastro/sectorcatastral", 0, lon, lat, "SCACODIGO,SCANOMBRE,SCATIPO")
+    # Sector catastral con NOMBRE (barrio oficial): point-in-polygon exacto
+    # (regresión: el bbox devolvía el sector VECINO cuando el punto está en el
+    # límite — p. ej. 'LA ESPERANZA' en vez de 'SAN LUIS').
+    r_sec = _q_pip("catastro/sectorcatastral", 0, lon, lat, "SCACODIGO,SCANOMBRE,SCATIPO")
+    if not r_sec.get("features"):
+        r_sec = _q_bbox("catastro/sectorcatastral", 0, lon, lat, "SCACODIGO,SCANOMBRE,SCATIPO")
     if r_sec.get("features"):
         p = r_sec["features"][0].get("properties", {})
         res["sector_catastral"] = p.get("SCACODIGO")
         res["barrio"] = p.get("SCANOMBRE")
 
     # Uso económico predominante por MANZANA (exacto si tenemos el código)
-    mz = res.get("codigo_manzana")
     if mz:
         r_uso = _q_capa("catastro/usopredominante", 0, f"MANCODIGO='{mz}'",
                         "MANCODIGO,GRUPOUSOECON,ANO")
         if not r_uso.get("features"):
-            r_uso = _q_bbox("catastro/usopredominante", 0, lon, lat, "MANCODIGO,GRUPOUSOECON,ANO")
+            r_uso = _q_pip("catastro/usopredominante", 0, lon, lat,
+                           "MANCODIGO,GRUPOUSOECON,ANO")
     else:
-        r_uso = _q_bbox("catastro/usopredominante", 0, lon, lat, "MANCODIGO,GRUPOUSOECON,ANO")
+        r_uso = _q_pip("catastro/usopredominante", 0, lon, lat,
+                       "MANCODIGO,GRUPOUSOECON,ANO")
     if r_uso.get("features"):
         p = r_uso["features"][0].get("properties", {})
         res["uso_economico"] = p.get("GRUPOUSOECON")
@@ -178,7 +235,11 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
     # Estrato (manzanas de estrato). Bogotá estratifica 1-6: el valor '0' o
     # ausente significa manzana SIN estratificación (uso no residencial), no un
     # estrato real: se deja None para que el dictamen lo marque como tal.
-    r_est = _q_bbox("ordenamientoterritorial/estratificacion", 1, lon, lat, "CODIGO_MANZANA,ESTRATO")
+    r_est = _q_pip("ordenamientoterritorial/estratificacion", 1, lon, lat,
+                   "CODIGO_MANZANA,ESTRATO")
+    if not r_est.get("features"):
+        r_est = _q_bbox("ordenamientoterritorial/estratificacion", 1, lon, lat,
+                        "CODIGO_MANZANA,ESTRATO")
     if r_est.get("features"):
         p = r_est["features"][0].get("properties", {})
         estr = p.get("ESTRATO")
@@ -188,32 +249,55 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
             estr_int = 0
         res["estrato"] = estr_int if 1 <= estr_int <= 6 else None
 
-    # UPZ
-    r_upz = _q_bbox("ordenamientoterritorial/unidadplaneamientozonal", 0, lon, lat,
-                    "CODIGO_UPZ,NOMBRE")
+    # UPZ / Localidad / Suelo: point-in-polygon exacto (una sola feature por
+    # punto; el bbox podía mezclar dos localidades en el límite).
+    r_upz = _q_pip("ordenamientoterritorial/unidadplaneamientozonal", 0, lon, lat,
+                   "CODIGO_UPZ,NOMBRE")
+    if not r_upz.get("features"):
+        r_upz = _q_bbox("ordenamientoterritorial/unidadplaneamientozonal", 0, lon, lat,
+                        "CODIGO_UPZ,NOMBRE")
     if r_upz.get("features"):
         p = r_upz["features"][0].get("properties", {})
         res["upz"] = p.get("NOMBRE")
 
-    # Localidad
-    r_loc = _q_bbox("ordenamientoterritorial/localidad", 0, lon, lat, "LOCCODIGO,LOCNOMBRE")
+    r_loc = _q_pip("ordenamientoterritorial/localidad", 0, lon, lat, "LOCCODIGO,LOCNOMBRE")
+    if not r_loc.get("features"):
+        r_loc = _q_bbox("ordenamientoterritorial/localidad", 0, lon, lat,
+                        "LOCCODIGO,LOCNOMBRE")
     if r_loc.get("features"):
         p = r_loc["features"][0].get("properties", {})
         res["localidad"] = p.get("LOCNOMBRE")
 
-    # Suelo (clasificación POT vigente)
-    r_sue = _q_bbox("ordenamientoterritorial/suelo", 0, lon, lat, "SUECODIGO,SUECSUELO,SUEAADMIN")
+    r_sue = _q_pip("ordenamientoterritorial/suelo", 0, lon, lat,
+                   "SUECODIGO,SUECSUELO,SUEAADMIN")
+    if not r_sue.get("features"):
+        r_sue = _q_bbox("ordenamientoterritorial/suelo", 0, lon, lat,
+                        "SUECODIGO,SUECSUELO,SUEAADMIN")
     if r_sue.get("features"):
         p = r_sue["features"][0].get("properties", {})
         cs = p.get("SUECSUELO")
         res["clase_suelo"] = {1: "Urbano", 2: "Rural", 3: "Expansión"}.get(cs, f"Suelo {cs}")
 
-    # Valor de referencia (m2 por manzana)
-    r_val = _q_bbox("catastro/valorreferencia", 0, lon, lat, "MANCODIGO,V_REF,ANO")
+    # Valor de referencia (m2 por manzana) — solo la manzana REAL del predio
+    # (regresión: antes tomaba V_REF de la primera manzana del bbox, ajena).
+    if mz:
+        r_val = _q_capa("catastro/valorreferencia", 0, f"MANCODIGO='{mz}'",
+                        "MANCODIGO,V_REF,ANO")
+        if not r_val.get("features"):
+            r_val = _q_pip("catastro/valorreferencia", 0, lon, lat, "MANCODIGO,V_REF,ANO")
+    else:
+        r_val = _q_pip("catastro/valorreferencia", 0, lon, lat, "MANCODIGO,V_REF,ANO")
     if r_val.get("features"):
-        p = r_val["features"][0].get("properties", {})
+        # Varias filas por año: tomar la más reciente (mayor ANO)
+        mejores = sorted(r_val["features"],
+                         key=lambda f: ((f.get("properties") or {}).get("ANO") or 0),
+                         reverse=True)
+        p = mejores[0].get("properties", {})
         res["valor_ref_m2"] = p.get("V_REF")
+        if not mz:
+            mz = p.get("MANCODIGO")
 
+    res["codigo_manzana"] = mz or res.get("codigo_manzana")
     res["disponible"] = bool(res["barrio"] or res["localidad"] or res["estrato"]
                              or res["uso_economico"] or res["clase_suelo"])
     if not res["disponible"]:
@@ -227,21 +311,28 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
 def consultar_construccion(lat: float, lon: float, codigo_lote: str = None) -> dict[str, Any]:
     """Pisos del EDIFICIO PRINCIPAL del lote.
 
-    El bbox puede devolver varias construcciones (portería, garajes, locales de
-    1 piso): se elige la de MAYOR número de pisos/altura dentro del lote del
-    predio (cuando el código de lote se conoce), no la primera del bbox —
-    antes un predio en PH podía reportar '1 piso' si la primera construcción
-    coincidente era una caseta vecina."""
+    Cuando se conoce el código de lote (placa domiciliaria oficial), se consulta
+    por LOTECODIGO EXACTO: el dictamen real (50C-1463431, lote 007202018025)
+    reportaba '4 piso(s)' porque el bbox alrededor del punto de placa devolvía
+    primero una construcción VECINA de otra manzana; el lote real tiene un
+    edificio de 6 pisos (la persona que vive allí lo confirmó: 'mi edificio es
+    de más de 4 pisos'). El bbox se mantiene solo como respaldo."""
     cache_key = f"bog_const|{round(lat, 5)}|{round(lon, 5)}|{codigo_lote or ''}"
     cached = _cache_get(cache_key)
     if cached is not None:
         return cached
     res = {"disponible": False, "error": None, "tipo_construccion": None,
            "total_pisos": None, "area_construida": None, "codigo_construccion": None}
-    r = _q_bbox("catastro/construccion", 0, lon, lat,
-                "CONCODIGO,CONNPISOS,CONALTURA,LOTECODIGO", max_features=10)
-    feats = r.get("features") or []
+    feats = []
     if codigo_lote:
+        r = _q_capa("catastro/construccion", 0, f"LOTECODIGO='{codigo_lote}'",
+                    "CONCODIGO,CONNPISOS,CONALTURA,LOTECODIGO", max_features=10)
+        feats = r.get("features") or []
+    if not feats:
+        r = _q_bbox("catastro/construccion", 0, lon, lat,
+                    "CONCODIGO,CONNPISOS,CONALTURA,LOTECODIGO", max_features=10)
+        feats = r.get("features") or []
+    if codigo_lote and feats:
         feats_lote = [f for f in feats
                       if str((f.get("properties") or {}).get("LOTECODIGO") or "") == str(codigo_lote)]
         if feats_lote:
@@ -336,21 +427,53 @@ def consultar_amenazas(lat: float, lon: float) -> dict[str, Any]:
 
 # ── 4. Enriquecimiento integral por punto (Bogotá no expone NUPRE en abierto) ─
 
-def enriquecer_por_punto(lat: float = None, lon: float = None) -> dict[str, Any]:
-    """Pipeline por coordenadas (no hay resolución por código en abierto)."""
+def _centroide_lote_por_codigo(codigo_lote: str):
+    """Centroide (lon, lat) del polígono del lote consultado por código.
+
+    El punto de la placa domiciliaria cae en el BORDE de la manzana (a veces
+    sobre la vía) y el point-in-polygon sobre él puede resolver la manzana
+    vecina. El centroide del lote real es el punto de referencia estable para
+    sector/localidad/UPZ/estrato (regresión dictamen 50C-1463431)."""
+    if not codigo_lote:
+        return None
+    r = _q_capa("catastro/lote", 0, f"LOTCODIGO='{codigo_lote}'",
+                "LOTCODIGO,MANZCODIGO", max_features=3, return_geometry=True)
+    for f in r.get("features", []):
+        c = _centro(f)
+        if c:
+            return (float(c[1]), float(c[0]))  # (lat, lon)
+    return None
+
+
+def enriquecer_por_punto(lat: float = None, lon: float = None,
+                         codigo_lote: str = None) -> dict[str, Any]:
+    """Pipeline por coordenadas (no hay resolución por código en abierto).
+
+    codigo_lote: si se conoce (placa domiciliaria oficial resuelta por el
+    geocoder catastral), se pasa a entorno/construcción para consultar la
+    manzana y el edificio EXACTOS del predio (regresión: el dictamen real
+    50C-1463431 resolvía el entorno en el lote vecino del Restrepo)."""
     if lat is None or lon is None:
         return {"disponible": False, "error": "sin coordenadas", "predio": {}}
+    # Punto de referencia estable: centroide del lote por código cuando se
+    # conoce (el punto de placa queda en el borde de la manzana).
+    _lat_ref, _lon_ref = float(lat), float(lon)
+    _centro_lote = _centroide_lote_por_codigo(codigo_lote) if codigo_lote else None
+    if _centro_lote:
+        _lat_ref, _lon_ref = _centro_lote
     res: dict[str, Any] = {"disponible": False, "error": None, "predio": {}}
-    res["lat"] = float(lat)
-    res["lon"] = float(lon)
+    res["lat"] = _lat_ref
+    res["lon"] = _lon_ref
     res["resolucion"] = "por_punto_referencial"
-    res["entorno"] = consultar_entorno_urbano(float(lat), float(lon))
+    res["entorno"] = consultar_entorno_urbano(_lat_ref, _lon_ref,
+                                              codigo_lote=codigo_lote)
     # Pasar el código de lote para elegir la construcción del EDIFICIO del
     # predio (no la primera construcción vecina del bbox)
+    _lote_efectivo = (codigo_lote
+                      or (res["entorno"].get("codigo_lote") or None))
     res["construccion"] = consultar_construccion(
-        float(lat), float(lon),
-        codigo_lote=(res["entorno"].get("codigo_lote") or None))
-    res["amenazas"] = consultar_amenazas(float(lat), float(lon))
+        _lat_ref, _lon_ref, codigo_lote=_lote_efectivo)
+    res["amenazas"] = consultar_amenazas(_lat_ref, _lon_ref)
     res["disponible"] = bool(res["entorno"].get("disponible")
                              or res["construccion"].get("disponible")
                              or res["amenazas"].get("disponible"))

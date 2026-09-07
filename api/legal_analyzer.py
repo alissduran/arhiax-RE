@@ -21,6 +21,34 @@ C_OK_BG = colors.HexColor("#EBF5EE")
 C_ALERTA_BG = colors.HexColor("#FFF5EB")
 C_RIESGO_BG = colors.HexColor("#FDF2F2")
 
+def _parsear_cuantia_cop(texto: str):
+    """Extrae y convierte a entero una cuantía en COP declarada en una anotación
+    ('CUANTIA: $ 160.000.000', 'por valor de 160.000.000', '160.000.000,00').
+    Devuelve None si no se encuentra (el dictamen NO inventa la cuantía)."""
+    if not texto:
+        return None
+    m = re.search(
+        r"(?:CREDITO INICIAL APROBADO POR|VALOR ACTO|CUANTIA|por\s+valor\s+de)"
+        r"\s*:?\s*\$?\s*([\d]{1,3}(?:[.,][\d]{3})+)", texto, re.IGNORECASE)
+    if not m:
+        return None
+    raw = m.group(1)
+    # '160.000.000' (formato colombiano: punto de miles) o '160,000,000'
+    if "," in raw and "." in raw:
+        # 1.234.567,89 -> quitar puntos, coma a decimal (se descarta)
+        num = raw.replace(".", "").replace(",", "")
+    elif "." in raw and "," not in raw:
+        num = raw.replace(".", "")     # 160.000.000 -> 160000000
+    elif "," in raw and "." not in raw:
+        num = raw.replace(",", "")     # 160,000,000 -> 160000000
+    else:
+        num = raw
+    try:
+        return int(num)
+    except (TypeError, ValueError):
+        return None
+
+
 def inferir_condicion_juridica(texto, descripcion_ctl=None):
     """Infiera la CONDICIÓN JURÍDICA (Propiedad Horizontal / No PH) desde el
     texto del CTL/SNR — fuente registral disponible en todas las ciudades.
@@ -437,7 +465,8 @@ def analizar_texto_certificado(texto):
             and "CANCELADA" not in item["estado"]
         ]
         if hipotecas_vigentes:
-            partes_hip = hipotecas_vigentes[-1]["partes"]
+            _ult_hip = hipotecas_vigentes[-1]
+            partes_hip = _ult_hip["partes"]
             # Las partes tienen formato "De -> A" donde A es el acreedor
             if "->" in partes_hip:
                 acreedor_raw = partes_hip.split("->")[-1].strip()
@@ -445,10 +474,21 @@ def analizar_texto_certificado(texto):
                 acreedor_raw = partes_hip.strip()
             # Fallback al texto completo si el extracto es muy corto
             if len(acreedor_raw) < 4:
-                acreedor_raw = hipotecas_vigentes[-1]["texto"][:80]
+                acreedor_raw = _ult_hip["texto"][:80]
             res["acreedor_snr"] = acreedor_raw
+            # Fecha y CUANTÍA de la hipoteca vigente (la carga económica 08B debe
+            # amortizar desde la CONSTITUCIÓN del crédito — anotación de hipoteca —
+            # no desde la apertura del folio, y usar la cuantía declarada en el
+            # CTL en vez de un LTV supuesto).
+            res["hipoteca_vigente"] = {
+                "anotacion": _ult_hip.get("num"),
+                "fecha": _ult_hip.get("fecha"),
+                "acreedor": res["acreedor_snr"],
+                "cuantia_cop": _parsear_cuantia_cop(_ult_hip.get("texto") or ""),
+            }
         else:
             res["acreedor_snr"] = None
+            res["hipoteca_vigente"] = None
         # acreedor_real se declara externamente o queda None (sin discrepancia)
         res.setdefault("acreedor_real", None)
 

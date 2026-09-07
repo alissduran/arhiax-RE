@@ -122,38 +122,108 @@ class TestEstratoYConstruccionBogota(unittest.TestCase):
     def test_estrato_0_se_trata_como_sin_estrato(self):
         import catastro_predio_bogota as bog
 
-        def fake_q(layer, lid, lon, lat, out, max_features=3):
+        def fake_bbox(layer, lid, lon, lat, out, max_features=3, buf=0.003, timeout=7.0):
             if lid == 1:
                 return {"features": [{"properties": {"CODIGO_MANZANA": "X", "ESTRATO": "0"}}]}
             return {"features": []}
-        orig = bog._q_bbox
+        orig_bbox = bog._q_bbox
+        orig_pip = bog._q_pip
         bog._cache_get = lambda k: None
         bog._cache_set = lambda k, v: None
-        bog._q_bbox = fake_q
+        bog._q_bbox = fake_bbox
+        bog._q_pip = lambda *a, **k: {"features": []}  # sin coincidencia PIP
         try:
             r = bog.consultar_entorno_urbano(4.64, -74.07)
             self.assertIsNone(r["estrato"])  # nunca '0'
         finally:
-            bog._q_bbox = orig
+            bog._q_bbox = orig_bbox
+            bog._q_pip = orig_pip
 
     def test_construccion_elige_el_edificio_de_mas_pisos_del_lote(self):
-        """Un bbox con caseta de 1 piso y edificio de 5 pisos del MISMO lote:
-        se reportan los 5 pisos (no la primera coincidencia)."""
+        """Un lote con caseta de 1 piso y edificio de 5 pisos (mismo lote):
+        se reportan los 5 pisos (no la primera coincidencia). Regresión
+        50C-1463431: el dictamen reportaba 4 pisos de una construcción VECINA
+        porque el bbox no filtraba por el LOTECODIGO real (el real tiene 6)."""
         import catastro_predio_bogota as bog
         feats = [
             {"properties": {"CONCODIGO": "A1", "CONNPISOS": 1, "CONALTURA": 3.0, "LOTECODIGO": "L-1"}},
             {"properties": {"CONCODIGO": "B2", "CONNPISOS": 5, "CONALTURA": 16.0, "LOTECODIGO": "L-1"}},
         ]
-        orig = bog._q_bbox
+        orig_bbox = bog._q_bbox
+        orig_capa = bog._q_capa
         bog._cache_get = lambda k: None
         bog._cache_set = lambda k, v: None
-        bog._q_bbox = lambda *a, **k: {"features": feats}
+        # Con código de lote, la consulta va por _q_capa (LOTECODIGO exacto)
+        bog._q_capa = lambda *a, **k: {"features": feats}
+        bog._q_bbox = lambda *a, **k: {"features": []}
         try:
             r = bog.consultar_construccion(4.64, -74.07, codigo_lote="L-1")
             self.assertEqual(r["total_pisos"], 5)
             self.assertEqual(r["codigo_construccion"], "B2")
         finally:
-            bog._q_bbox = orig
+            bog._q_bbox = orig_bbox
+            bog._q_capa = orig_capa
+
+    def test_entorno_urbano_usa_el_lote_real_cuando_se_conoce_su_codigo(self):
+        """Regresión 50C-1463431: con el código de lote real (007202018025) el
+        entorno se resuelve en SAN LUIS/TEUSAQUILLO, no en el lote vecino del
+        Restrepo que devolvía el bbox alrededor del punto de placa."""
+        import catastro_predio_bogota as bog
+
+        def fake_capa(svc_path, lid, where, out_fields="*", max_features=5,
+                      return_geometry=False, timeout=7.0):
+            if "catastro/lote" in svc_path and "007202018025" in where:
+                return {"features": [
+                    {"properties": {"LOTCODIGO": "007202018025",
+                                    "MANZCODIGO": "007202018"}}]}
+            if "catastro/usopredominante" in svc_path and "007202018" in where:
+                return {"features": [
+                    {"properties": {"MANCODIGO": "007202018",
+                                    "GRUPOUSOECON": "RESIDENCIAL", "ANO": 1609459200000}}]}
+            if "catastro/valorreferencia" in svc_path and "007202018" in where:
+                return {"features": [
+                    {"properties": {"MANCODIGO": "007202018",
+                                    "V_REF": 2700000.0, "ANO": 1609459200000}}]}
+            return {"features": []}
+
+        def fake_pip(svc_path, lid, lon, lat, out_fields="*", max_features=3, timeout=7.0):
+            if "sectorcatastral" in svc_path:
+                return {"features": [{"properties": {"SCACODIGO": "007202",
+                                                     "SCANOMBRE": "SAN LUIS"}}]}
+            if "localidad" in svc_path:
+                return {"features": [{"properties": {"LOCCODIGO": "13",
+                                                     "LOCNOMBRE": "TEUSAQUILLO"}}]}
+            if "unidadplaneamientozonal" in svc_path:
+                return {"features": [{"properties": {"CODIGO_UPZ": "100",
+                                                     "NOMBRE": "GALERIAS"}}]}
+            if "estratificacion" in svc_path:
+                return {"features": [{"properties": {"CODIGO_MANZANA": "00720218",
+                                                     "ESTRATO": 4}}]}
+            if "suelo" in svc_path:
+                return {"features": [{"properties": {"SUECODIGO": "CLS001",
+                                                     "SUECSUELO": 1}}]}
+            return {"features": []}
+
+        orig_capa = bog._q_capa
+        orig_pip = bog._q_pip
+        bog._cache_get = lambda k: None
+        bog._cache_set = lambda k, v: None
+        bog._q_capa = fake_capa
+        bog._q_pip = fake_pip
+        try:
+            r = bog.consultar_entorno_urbano(4.6494, -74.07,
+                                             codigo_lote="007202018025")
+            self.assertEqual(r["barrio"], "SAN LUIS")
+            self.assertEqual(r["sector_catastral"], "007202")
+            self.assertEqual(r["localidad"], "TEUSAQUILLO")
+            self.assertEqual(r["upz"], "GALERIAS")
+            self.assertEqual(r["estrato"], 4)
+            self.assertEqual(r["uso_economico"], "RESIDENCIAL")
+            self.assertEqual(r["valor_ref_m2"], 2700000.0)
+            self.assertEqual(r["codigo_manzana"], "007202018")
+        finally:
+            bog._q_capa = orig_capa
+            bog._q_pip = orig_pip
 
 
 class TestCoherenciaMedellin(unittest.TestCase):

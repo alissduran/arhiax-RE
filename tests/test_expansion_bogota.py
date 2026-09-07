@@ -73,7 +73,7 @@ class TestExpansionBogota(unittest.TestCase):
         original_amz = cb.consultar_amenazas
         cb._CACHE.clear()
         try:
-            cb.consultar_entorno_urbano = lambda lat, lon: {
+            cb.consultar_entorno_urbano = lambda lat, lon, codigo_lote=None, codigo_manzana=None: {
                 "disponible": True, "barrio": "LA SALLE", "sector_catastral": "008206",
                 "localidad": "CHAPINERO", "upz": "PARDO RUBIO", "estrato": 3,
                 "uso_economico": "COMERCIO Y OFICINAS", "clase_suelo": "Urbano",

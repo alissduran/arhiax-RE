@@ -300,11 +300,27 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _dir_raw = db_record.get('direccion', '') or ''
             if _dir_raw and _dir_raw.lower() not in ('pendiente', ''):
                 _lat_geo, _lon_geo = geocodificar_direccion(_dir_raw, ciudad=ciudad)
+                _cod_lote_bog = None
                 if es_bogota:
+                    # Placa domiciliaria oficial: da el punto EXACTO del lote y su
+                    # código. Regresión (dictamen real 50C-1463431): sin este
+                    # paso el entorno se resolvía en el lote vecino del Restrepo
+                    # (sur) en vez de SAN LUIS/TEUSAQUILLO (norte, el real).
+                    # geocodificar_direccion ya consultó la placa internamente y
+                    # cacheó el punto; aquí recuperamos también el código de lote.
+                    try:
+                        from geocoder_catastral_bogota import geocodificar_catastro_bogota
+                        _placa = geocodificar_catastro_bogota(_dir_raw)
+                        if _placa:
+                            _lat_geo, _lon_geo = _placa["lat"], _placa["lon"]
+                            _cod_lote_bog = _placa.get("codigo_lote")
+                    except Exception as _e_placa:
+                        print(f"[PDF][CATASTRO-BOG:PLACA] placa no disponible: {_e_placa}")
                     from catastro_predio_bogota import enriquecer_por_punto as _enr_punto
+                    _r = _enr_punto(_lat_geo, _lon_geo, codigo_lote=_cod_lote_bog)
                 else:
                     from catastro_predio_medellin import enriquecer_por_punto as _enr_punto
-                _r = _enr_punto(_lat_geo, _lon_geo)
+                    _r = _enr_punto(_lat_geo, _lon_geo)
                 if _r.get("disponible"):
                     predio_real = _r
         except Exception as e:
@@ -1235,6 +1251,45 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         ("MEDIO", str(n_medio), C_ALERTA_BG, C_NARANJA),
         ("INFORMATIVO", str(n_info), C_OK_BG, C_VERDE),
     ], s))
+    story.append(Spacer(1, 6))
+    # UX: identificar CUÁL hallazgo es cada uno (la persona que revisa el dictamen
+    # debe saber que el ALTO es la hipoteca y cuál es el INFORMATIVO sin esperar a
+    # la sección 06). Se listan títulos compactos por severidad.
+    if hallazgos:
+        _mapa_color = {
+            "ALTO": (C_ROJO, colors.HexColor("#FBE9E9")),
+            "MEDIO": (C_NARANJA, C_ALERTA_BG),
+            "INFORMATIVO": (C_VERDE, C_OK_BG),
+        }
+        _filas_resumen = [("Severidad", "Hallazgo identificado", "")]
+        for h in hallazgos:
+            sev_h = h[0] if h and h[0] in _mapa_color else "INFORMATIVO"
+            tc_h, bg_h = _mapa_color[sev_h]
+            titulo_h = (h[3] if len(h) > 3 else "") or ""
+            fuente_h = (h[4] if len(h) > 4 else "") or ""
+            p_sev = Paragraph(f"<b>{sev_h}</b>", ParagraphStyle(
+                "res_sev", fontName="Helvetica-Bold", fontSize=7.5,
+                textColor=tc_h, leading=10))
+            p_tit = Paragraph(titulo_h, ParagraphStyle(
+                "res_tit", fontName="Helvetica", fontSize=8,
+                textColor=colors.HexColor("#2D3748"), leading=10))
+            p_fu = Paragraph(f"<font size=6.5 color='#718096'>{fuente_h}</font>",
+                             ParagraphStyle("res_fu", fontName="Helvetica",
+                                            fontSize=6.5, leading=9))
+            _filas_resumen.append([p_sev, p_tit, p_fu])
+        _t_res = Table(_filas_resumen, colWidths=["12%", "68%", "20%"])
+        _t_res.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), C_AZUL_OSC),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+             [colors.white, colors.HexColor("#F5F7FB")]),
+            ("GRID", (0, 0), (-1, -1), 0.4, C_BORDE),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("TOPPADDING", (0, 0), (-1, -1), 3.5),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 3.5),
+            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ]))
+        story.append(KeepTogether([_t_res, Spacer(1, 4)]))
     story.append(Spacer(1, 8))
     
     # ── 03 ANALISIS REGISTRAL ──────────────────────────────────
@@ -1812,7 +1867,6 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 8))
     
     # ── 06 HALLAZGOS CLASIFICADOS ──────────────────────────────
-    from reportlab.platypus import KeepTogether
     story.append(sec("06 - Hallazgos Clasificados por Severidad"))
     story.append(hr())
     # Nota en lenguaje claro: cómo leer la severidad (para cualquier lector)
@@ -1953,18 +2007,35 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                              if "Hipoteca" in a[2] and "CANCELADA" not in a[4]]
     if hipotecas_activas_08b:
         story.append(sub("Carga Economica del Gravamen Hipotecario Vigente"))
+        # Regresión (dictamen real 50C-1463431): la amortización debe partir de la
+        # CONSTITUCIÓN del crédito (fecha de la anotación de hipoteca, 25-11-2022)
+        # y usar la CUANTÍA declarada en el CTL (160.000.000), no la apertura del
+        # folio (1997 -> '0 cuotas') ni un LTV 70% sobre el valor del inmueble.
+        _hip_info = analysis.get("hipoteca_vigente") or {}
+        _fecha_constitucion = _hip_info.get("fecha") or analysis.get("apertura")
+        _cuantia_ctl = _hip_info.get("cuantia_cop")
         story.append(body(
             "Estimacion referencial de la carga economica del gravamen activo. "
             "Calculado por metodo frances de amortizacion con tasa referencial NO VIS. "
-            "<b>No sustituye el extracto oficial del banco acreedor.</b>"
+            "No sustituye el extracto oficial del banco acreedor."
         ))
         story.append(Spacer(1, 4))
         carga = estimar_carga_hipotecaria(
             valor_inmueble=val_data.get("consolidado", 0),
-            fecha_constitucion=analysis.get("apertura", None),
+            fecha_constitucion=_fecha_constitucion,
             plazo_anos=20,
+            capital_original=_cuantia_ctl,  # cuantía del CTL si está declarada
         )
-        story.append(dt(generar_tabla_carga(carga, fmt_cop)))
+        # La fila 'Capital estimado' debe reflejar si la cuantía vino del CTL
+        filas_carga = generar_tabla_carga(carga, fmt_cop)
+        if _cuantia_ctl:
+            filas_carga = [
+                ("Capital del crédito (cuantía declarada en el CTL)",
+                 f"{fmt_cop(carga['capital_estimado'])} COP")
+                if f[0].startswith("Capital estimado") else f
+                for f in filas_carga
+            ]
+        story.append(dt(filas_carga))
         story.append(Spacer(1, 4))
         story.append(body(f"<i>{carga['advertencia']}</i>"))
     story.append(Spacer(1, 8))
