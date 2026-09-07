@@ -217,7 +217,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     predio_real = None
     _lat_geo = None
     _lon_geo = None
-    if analysis.get("codigo_catastral") or analysis.get("nupre"):
+    if (analysis.get("codigo_catastral") or analysis.get("nupre")) and not es_bogota:
+        # Bogotá NO publica capa predial consultable por NUPRE/código en abierto:
+        # el predio se resuelve por coordenadas (enriquecer_por_punto). Enviar el
+        # código bogotano al módulo de BAQ sería un error (CTL de otra ciudad).
         try:
             if es_medellin:
                 from catastro_predio_medellin import enriquecer_desde_ctl

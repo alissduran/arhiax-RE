@@ -52,6 +52,33 @@ A: FAMILIA GARCIA LOPEZ
 NRO TOTAL DE ANOTACIONES: *1*
 """
 
+# Fragmento REAL del CTL de Bogotá comprado por el usuario (folio 50C-1463431):
+# encabezado moderno 'Nro Matrícula:', código catastral de 18 dígitos pegado a
+# la siguiente etiqueta, NUPRE con prefijo 'AAA' y un folio HISTÓRICO citado en
+# la COMPLEMENTACION ('REGISTRADA AL FOLIO 050-0554696') que NO debe ganarle.
+_TEXTO_CTL_BOGOTA_REAL = """
+La validez de este documento podra verificarse en la pagina certificados.supernotariado.gov.co
+Certificado generado con el Pin No: 2609075062142575095Nro Matricula: 50C-1463431
+Pagina 1 TURNO: 2026-50C-1-644770
+Impreso el 7 de Septiembre de 2026 a las 08:59:37 AM
+"ESTE CERTIFICADO REFLEJA LA SITUACION JURIDICA DEL INMUEBLE
+HASTA LA FECHA Y HORA DE SU EXPEDICION"
+No tiene validez sin la firma del registrador en la ultima pagina
+CIRCULO REGISTRAL: 50C - BOGOTA ZONA CENTRO  DEPTO: BOGOTA D C  MUNICIPIO: BOGOTA, D.C.  VEREDA:  BOGOTA D. C.
+FECHA APERTURA: 17-09-1997  RADICACION: 1997-82939  CON: ESCRITURA  DE: 16-09-1997
+CODIGO CATASTRAL: 007202182500104001COD CATASTRAL ANT: SIN INFORMACION
+NUPRE: AAA0083SHNN
+ESTADO DEL FOLIO: ACTIVO
+DESCRIPCION: CABIDA Y LINDEROS
+Contenidos en ESCRITURA Nro 3822 de fecha 15-09-97 en NOTARIA 5 de SANTAFE DE BOGOTA APARTAMENTO 401
+COMPLEMENTACION:
+L.E.P.INGENIEROS LTDA ADQUIRIO ASI: PARTE POR COMPRA A RINCON ROJAS MARIA CRISTINA POR ESCRITURA 2105
+DE 2-08-94 NOTARIA 33 DE SANTAFE DE BOGOTA, REGISTRADA AL FOLIO 050-0554696 ESTA ADQUIRIO POR COMPRA
+ANOTACION: Nro 001 Fecha: 16-09-1997
+ESPECIFICACION: OTRO
+NRO TOTAL DE ANOTACIONES: *1*
+"""
+
 
 class TestCtlMedellin(unittest.TestCase):
 
@@ -129,6 +156,34 @@ class TestFechasNoSeConfundenConFolio(unittest.TestCase):
         from legal_analyzer import analizar_texto_certificado
         res = analizar_texto_certificado(_TEXTO_CTL_BOGOTA)
         self.assertEqual(res["folio"], "50C-1092514")  # no '20-01' de apertura
+
+
+class TestCtlBogotaRealComprado(unittest.TestCase):
+    """Regresión con el fragmento REAL del CTL de Bogotá comprado (50C-1463431):
+    encabezado moderno, código de 18 dígitos pegado, NUPRE 'AAA', y un folio
+    histórico citado en la COMPLEMENTACION que no debe ganarle a la etiqueta."""
+
+    def test_folio_principal_no_el_citado(self):
+        from legal_analyzer import analizar_texto_certificado
+        res = analizar_texto_certificado(_TEXTO_CTL_BOGOTA_REAL)
+        self.assertEqual(res["folio"], "50C-1463431")
+        self.assertNotEqual(res["folio"], "050-0554696")
+
+    def test_nupre_aaa_extraido(self):
+        from legal_analyzer import analizar_texto_certificado
+        res = analizar_texto_certificado(_TEXTO_CTL_BOGOTA_REAL)
+        self.assertEqual(res["nupre"], "AAA0083SHNN")
+
+    def test_codigo_catastral_18_digitos(self):
+        from legal_analyzer import analizar_texto_certificado
+        res = analizar_texto_certificado(_TEXTO_CTL_BOGOTA_REAL)
+        self.assertEqual(res["codigo_catastral"], "007202182500104001")
+
+    def test_circulo_recortado_sin_departamento(self):
+        from legal_analyzer import analizar_texto_certificado
+        res = analizar_texto_certificado(_TEXTO_CTL_BOGOTA_REAL)
+        self.assertEqual(res["circulo_registral"], "50C - BOGOTA ZONA CENTRO")
+        self.assertNotIn("DEPTO", res["circulo_registral"])
 
 
 class TestDiscrepanciaCirculoRegistral(unittest.TestCase):

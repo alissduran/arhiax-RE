@@ -79,6 +79,33 @@ def analizar_certificado(pdf_path):
         ]
         return res
 
+def _extraer_folio(texto):
+    """Extrae la matrícula inmobiliaria del texto de un CTL/SNR.
+
+    Colombia usa una matrícula por oficina de registro: Barranquilla '040-...',
+    Medellín '001-...' y Bogotá con sub-oficinas alfanuméricas '50C-...',
+    '50N-...', '50S-...'. El CTL moderno la etiqueta 'Nro Matrícula: 50C-...' y
+    el clásico 'MATRICULA INMOBILIARIA: 040-...'. Los folios que solo se CITAN
+    en el cuerpo (p. ej. 'REGISTRADA AL FOLIO 050-0554696' en la
+    COMPLEMENTACION de un CTL de Bogotá) no deben ganarle a la etiqueta.
+    Retorna el folio o None.
+    """
+    if not texto:
+        return None
+    # 1) Etiquetas de matrícula (moderna 'Nro Matrícula:' y clásica)
+    m = re.search(
+        r"(?:NRO\s+|No\.?\s+|N[°º]?\.?\s+|NUMERO\s+)?"
+        r"MATR[IÍ]CULA(?:\s+INMOBILIARIA)?\s*[:\-]?\s*"
+        r"([0-9]{2,3}[A-Z]?-\d{1,12})", texto, re.IGNORECASE)
+    if m:
+        return m.group(1)
+    # 2) Fallback sin etiqueta: exige >=4 dígitos tras el guion para no capturar
+    #    fechas (dd-mm-aaaa) ni turnos ('2026-50C-1-644770' -> '50C-1').
+    m2 = re.search(r"\b(\d{3}-\d{4,12})\b", texto) or \
+         re.search(r"\b(\d{2}[A-Z]-\d{4,12})\b", texto)
+    return m2.group(1) if m2 else None
+
+
 def analizar_texto_certificado(texto):
     """
     Parsea el texto de un Certificado de Libertad y Tradicion y extrae anotaciones,
@@ -113,22 +140,19 @@ def analizar_texto_certificado(texto):
         # 1. Extraer Folio. Colombia usa matrículas por oficina de registro:
         #    Barranquilla '040-...', Medellín '001-...' y Bogotá con sub-oficinas
         #    alfanuméricas '50C-...', '50N-...', '50S-...' (Zona Centro/Norte/Sur).
-        #    El patrón flexible solo se acepta anclado a la etiqueta del CTL o
-        #    con reglas que NO capturan fechas (dd-mm-aaaa) como folio.
-        m_folio = re.search(
-            r"(?:MATRICULA\s+INMOBILIARIA|MATR[IÍ]CULA\s+INMOBILIARIA)\s*[:\-]?\s*"
-            r"([0-9]{2,3}[A-Z]?-\d{1,12})", texto, re.IGNORECASE)
-        if not m_folio:
-            # Fallback sin etiqueta: folio numérico de 3 dígitos (≥3 tras el
-            # guion, para no confundir fechas 21-03-2001) o sub-oficina con letra.
-            m_folio = re.search(r"\b(\d{3}-\d{3,12})\b", texto) or \
-                      re.search(r"\b(\d{2}[A-Z]-\d{1,12})\b", texto)
+        #    El CTL moderno etiqueta 'Nro Matrícula: 50C-1463431' (encabezado) y el
+        #    clásico 'MATRICULA INMOBILIARIA: 040-...'; los folios históricos que
+        #    se CITAN dentro del texto (p. ej. 'REGISTRADA AL FOLIO 050-0554696'
+        #    en la COMPLEMENTACION) nunca deben ganarle a la etiqueta principal.
+        m_folio = _extraer_folio(texto)
         if m_folio:
-            res["folio"] = m_folio.group(1)
+            res["folio"] = m_folio
 
-        # 1b. Círculo registral real declarado en el CTL
+        # 1b. Círculo registral real declarado en el CTL (recortado en DEPTO/
+        #     MUNICIPIO/VEREDA que comparten la misma línea en los CTL de Bogotá)
         m_circ = re.search(
-            r"(?:CIRCULO\s+REGISTRAL|C[IÍ]RCULO\s+REGISTRAL)\s*[:\-]?\s*([^\n\r]{2,70})",
+            r"(?:CIRCULO\s+REGISTRAL|C[IÍ]RCULO\s+REGISTRAL)\s*[:\-]?\s*"
+            r"([0-9]{2,3}[A-Z]?[^\n\r]{0,45}?)(?=\s+DEPTO\b|\s+MUNICIPIO\b|\s+VEREDA\b|\n|$)",
             texto, re.IGNORECASE)
         if m_circ:
             res["circulo_registral"] = " ".join(m_circ.group(1).split()).strip(" -")
@@ -140,13 +164,18 @@ def analizar_texto_certificado(texto):
             res["apertura"] = m_apertura.group(1).strip()
 
         # 2b. Código catastral y NUPRE (fuente de verdad para el predio real)
-        m_cc = re.search(r"(?:CODIGO\s*CATASTRAL|C[OÓ]DIGO\s*CATASTRAL)\s*[:\-]?\s*(\d{20,30})", texto, re.IGNORECASE)
+        # El CTL de Bogotá trae códigos de 18+ dígitos y puede pegar la etiqueta
+        # siguiente ('COD CATASTRAL ANT') sin espacio: se acepta 15-30 dígitos.
+        m_cc = re.search(r"(?:CODIGO\s*CATASTRAL|C[OÓ]DIGO\s*CATASTRAL)\s*[:\-]?\s*(\d{15,30})", texto, re.IGNORECASE)
         if m_cc:
             res["codigo_catastral"] = m_cc.group(1)
         m_nupre = re.search(r"NUPRE\s*[:\-]?\s*([A-Z0-9]{8,40})", texto, re.IGNORECASE)
         if m_nupre:
             cand = m_nupre.group(1).strip()
-            if re.match(r"^(AFT|NPR|08001)", cand, re.IGNORECASE):
+            # El NUPRE es el identificador predial nacional: el prefijo varía por
+            # ciudad/gestor (AFT en BAQ, NPR nuevo, AAA en Bogotá...). Solo se
+            # valida que contenga dígitos (no es una palabra suelta del CTL).
+            if re.search(r"\d", cand) and len(cand) <= 15:
                 res["nupre"] = cand
 
         # 2c. Tipo de predio (URBANO/RURAL) y descripción (BODEGA/CASA/APARTAMENTO...)

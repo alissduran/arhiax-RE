@@ -271,17 +271,16 @@ def extraer_datos_de_pdf(pdf_path: str, ciudad: str = "barranquilla") -> dict:
                 except ValueError:
                     continue
 
-        # 2. Extraer Matrícula (Folio). Anclado a la etiqueta del CTL cuando es
-        # posible (acepta '040-...', '001-...' y '50C-/50N-/50S-...' de Bogotá);
-        # el fallback exige >=3 dígitos tras el guion para no capturar fechas.
-        m_folio = re.search(
-            r"(?:MATRICULA\s+INMOBILIARIA)\s*[:\-]?\s*([0-9]{2,3}[A-Z]?-\d{1,12})",
-            texto, re.IGNORECASE)
-        if not m_folio:
-            m_folio = re.search(r"\b(\d{3}-\d{3,12})\b", texto) or \
-                      re.search(r"\b(\d{2}[A-Z]-\d{1,12})\b", texto)
-        if m_folio:
-            datos["folio"] = m_folio.group(1)
+        # 2. Extraer Matrícula (Folio): misma lógica del analizador legal
+        # (acepta '040-...', '001-...' y '50C-/50N-/50S-...' de Bogotá; respeta
+        # la etiqueta principal del CTL y no los folios citados en el cuerpo).
+        try:
+            from legal_analyzer import _extraer_folio
+            folio_extraido = _extraer_folio(texto)
+        except Exception:
+            folio_extraido = None
+        if folio_extraido:
+            datos["folio"] = folio_extraido
 
         # 2b. Código catastral y NUPRE del CTL (fuente de verdad del predio real)
         try:
