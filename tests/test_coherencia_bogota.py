@@ -156,5 +156,57 @@ class TestEstratoYConstruccionBogota(unittest.TestCase):
             bog._q_bbox = orig
 
 
+class TestCoherenciaMedellin(unittest.TestCase):
+    """Regresión de la auditoría de Medellín (antes de comprar el CTL real):
+    coherencia semáforo/estructurabilidad y ruta de verificación con la
+    ciudad correcta (antes filtraba 'Barranquilla' en dictámenes de MED)."""
+
+    def test_ausencia_ctl_bloquea_estructurabilidad(self):
+        """La 08B decía 'SIN BLOQUEOS (VERDE)' con AUSENCIA DE CTL ALTO,
+        contradiciendo el resumen BLOQUEADO/ROJO del encabezado."""
+        from pdf_compiler import evaluar_estructurabilidad_fiduciaria
+        hallazgos = [("ALTO", None, None,
+                      "H-01 | AUSENCIA DE CERTIFICADO DE TRADICION Y LIBERTAD (CTL)",
+                      "SNR", "No se aporto el CTL", "BLOQUEO TOTAL")]
+        r = evaluar_estructurabilidad_fiduciaria(hallazgos)
+        self.assertEqual(r["semaforo"], "ROJO")
+        self.assertFalse(r["estructurable"])
+
+    def test_hipoteca_alto_bloquea(self):
+        from pdf_compiler import evaluar_estructurabilidad_fiduciaria
+        hallazgos = [("ALTO", None, None,
+                      "H-01 | GRAVAMEN: Hipoteca Vigente (Anot. 014)",
+                      "SNR", "hipoteca vigente", "bloqueo")]
+        r = evaluar_estructurabilidad_fiduciaria(hallazgos)
+        self.assertEqual(r["semaforo"], "ROJO")
+
+    def test_informativo_no_bloquea(self):
+        from pdf_compiler import evaluar_estructurabilidad_fiduciaria
+        hallazgos = [("INFORMATIVO", None, None,
+                      "H-01 | Zona Libre de Amenazas", "IDIGER", "sin afectacion", "favorable")]
+        r = evaluar_estructurabilidad_fiduciaria(hallazgos)
+        self.assertEqual(r["semaforo"], "VERDE")
+
+    def test_ruta_verificacion_con_ciudad(self):
+        """La ruta de riesgo geoespacial cita la ciudad del caso, no
+        'Barranquilla' (fuga que se veía en dictámenes de Medellín)."""
+        from ruta_verificacion import generar_ruta
+        ruta = generar_ruta([{"tipo": "riesgo_geoespacial"}],
+                            nombre_ciudad="Medellín")
+        self.assertIn("Medellín", ruta[0]["fuente"])
+        self.assertNotIn("Barranquilla", ruta[0]["fuente"])
+
+    def test_planes_parciales_med_bog_no_afirmados(self):
+        """'Planes Parciales: SIN AFECTACION' era una afirmación sin consulta
+        en MED/BOG -> ahora 'NO EVALUADO' (la fila BAQ sí se mantiene)."""
+        from dictamen_data import get_pot_summary_dt
+        filas_med = dict(get_pot_summary_dt("x", ciudad="medellin"))
+        filas_bog = dict(get_pot_summary_dt("x", ciudad="bogota"))
+        self.assertIn("NO EVALUADO", filas_med["Planes Parciales"])
+        self.assertIn("NO EVALUADO", filas_bog["Planes Parciales"])
+        filas_baq = dict(get_pot_summary_dt("x", ciudad="barranquilla"))
+        self.assertIn("SIN AFECTACION", filas_baq["Planes Parciales"].upper())
+
+
 if __name__ == "__main__":
     unittest.main()

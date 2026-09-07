@@ -46,9 +46,28 @@ def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
     BLOQUEOS_FIDUCIARIOS = {"hipoteca", "embargo", "afectacion", "patrimonio", "demanda", "usufructo", "medida cautelar"}
     bloqueos = []
     for h in hallazgos_list:
+        # INFORMATIVO (tradición limpia, zona libre...) nunca bloquea
+        if h[0] == "INFORMATIVO":
+            continue
         titulo = h[3].lower()
         descripcion = h[5].lower()
         implicacion = h[6].lower()
+        texto_completo = " | ".join([titulo, descripcion, implicacion])
+        # Negaciones explícitas: el hallazgo describe la AUSENCIA del bloqueo
+        if any(neg in texto_completo for neg in ("no se detectaron", "sin gravamenes",
+                                                 "sin gravámenes", "libre de gravamenes",
+                                                 "libre de gravámenes", "sin afectacion",
+                                                 "sin hipotecas", "no registra gravamenes")):
+            continue
+        if any(w in titulo for w in ("cancelada", "levantada", "extinguida", "resuelto")):
+            continue
+        # Regla de coherencia: un hallazgo de severidad ALTO es BLOQUEANTE por
+        # definición (hipoteca/embargo vigente, AUSENCIA DE CTL, exceso frente a
+        # licencia...) — antes la ausencia de CTL dejaba el semáforo VERDE,
+        # contradiciendo el resumen 'BLOQUEADO/ROJO'.
+        if h[0] == "ALTO":
+            bloqueos.append(h[3])
+            continue
         is_vigente = "vigente" in titulo or "vigente" in descripcion or "vigente" in implicacion
         is_bloqueo = any(term in titulo or term in descripcion for term in BLOQUEOS_FIDUCIARIOS)
         if is_vigente and is_bloqueo:
@@ -396,7 +415,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         if "INDUSTRIAL" in _dest_up or "BODEGA" in _desc_ctl:
             _tipologia_texto = "Bodega -- Uso Industrial (No Propiedad Horizontal)"
         elif "COMERCIAL" in _dest_up or "OFICINA" in _dest_up:
-            _tipologia_texto = f"Local/Uso Comercial -- {_predio_destino}"
+            # Evitar duplicación cuando el destino ya empieza con 'Comercial'
+            # (p. ej. 'Comercial y Servicios' -> 'Uso Comercial y Servicios').
+            _tipologia_texto = f"Uso {_predio_destino} (Según catastro)"
         else:
             _tipologia_texto = f"Uso {_predio_destino} (Según catastro)"
     elif "BODEGA" in _desc_ctl:
@@ -691,11 +712,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                                                      "libre de gravámenes", "sin afectacion",
                                                      "sin hipotecas", "no registra gravamenes")):
                 continue
+            if any(w in titulo for w in ("cancelada", "levantada", "extinguida", "resuelto")):
+                continue
+            # Regla de coherencia: severidad ALTO = BLOQUEANTE por definición
+            # (hipoteca/embargo vigente, AUSENCIA DE CTL, exceso de licencia...).
+            # Antes la ausencia de CTL dejaba el semáforo VERDE contradiciendo
+            # el resumen 'BLOQUEADO/ROJO' del encabezado.
+            if h[0] == "ALTO":
+                bloqueos.append(h[3])
+                continue
             # Solo se consideran bloqueos VIGENTES y no cancelados/resueltos
             is_vigente = "vigente" in titulo or "vigente" in descripcion or "vigente" in implicacion
             is_bloqueo = any(term in titulo or term in descripcion for term in BLOQUEOS_FIDUCIARIOS)
-            is_resuelto = any(w in titulo for w in ("cancelada", "levantada", "extinguida", "resuelto"))
-            if is_vigente and is_bloqueo and not is_resuelto:
+            if is_vigente and is_bloqueo:
                 bloqueos.append(h[3])
         if bloqueos:
             return {
@@ -859,6 +888,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         # Extraer el acreedor de la última hipoteca activa
         partes_hip = hipotecas_activas[-1][3]
         acreedor_snr = partes_hip.split("->")[-1].strip() if "->" in partes_hip else partes_hip
+    elif not path_certificado:
+        # Sin CTL no hay fuente registral: NO se afirma 'sin gravamenes' (regresión:
+        # un dictamen sin certificado decia 'SIN GRAVÁMENES ACTIVOS REGISTRADOS').
+        acreedor_snr = "PENDIENTE DE VERIFICACION (sin CTL adjuntado)"
     else:
         acreedor_snr = "SIN GRAVÁMENES ACTIVOS REGISTRADOS"
         
@@ -1282,21 +1315,39 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _cat_live = {"disponible": False, "error": f"motor no disponible: {e}"}
     story.append(sub("4.1B Verificación Catastral en Vivo"))
     if predio_real and predio_real.get("disponible") and not es_bogota:
-        # Si el CTL trajo código catastral/NUPRE y el predio se resolvió, esta es la
-        # verificación REAL del predio (no una coincidencia por bbox).
         _p4 = predio_real.get("predio") or {}
-        _cod4 = _p4.get("numero_predial_nacional") or _p4.get("numero_predial") or "N/D"
-        story.append(dt([
-            ("Estado", "CONSULTADA -- Predio resuelto por codigo catastral/NUPRE del CTL"),
-            ("Codigo catastral", _cod4),
-            ("NUPRE", _predio_nupre or _p4.get("nupre") or _p4.get("codigo_homologado") or "N/D"),
-            ("Destino economico", _predio_destino or "N/D"),
-            ("Condicion juridica", _predio_condicion or ("N/D (no expuesta en capas abiertas)" if es_medellin else "N/D")),
-            ("Area terreno (catastro)", f"{_predio_area_catastral:.2f} m2" if _predio_area_catastral else "N/D"),
-            ("Fuente en vivo", ("Servidormapas Alcaldia de Medellín (capa Uso del predio)"
-                                if es_medellin else
-                                "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)")),
-        ]))
+        # La resolución por punto (sin CTL/código) cae en el predio/sector más
+        # cercano y NO permite afirmar su NUPRE/código como propio: solo el CTL
+        # (código catastral/NUPRE) identifica el predio exacto.
+        _por_punto = predio_real.get("resolucion") == "por_punto_referencial" or \
+            not (analysis.get("codigo_catastral") or analysis.get("nupre"))
+        if _por_punto:
+            story.append(dt([
+                ("Estado", "CONSULTADA -- Entorno catastral resuelto por coordenadas (sector/predio mas cercano)"),
+                ("Codigo catastral", "Pendiente (se afirma solo con CTL: el codigo/NUPRE no se toma de un predio vecino)"),
+                ("NUPRE", "Pendiente (se afirma solo con CTL)"),
+                ("Destino economico", _predio_destino or "N/D"),
+                ("Estrato", _predio_estrato_catastral or "N/D"),
+                ("Condicion juridica", _predio_condicion or ("N/D (no expuesta en capas abiertas)" if es_medellin else "N/D")),
+                ("Fuente en vivo", ("Servidormapas Alcaldia de Medellín (capa Uso del predio)"
+                                    if es_medellin else
+                                    "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)")),
+            ]))
+        else:
+            # El CTL trajo código catastral/NUPRE y el predio se resolvió por
+            # código: verificación REAL del predio (no coincidencia por bbox).
+            _cod4 = _p4.get("numero_predial_nacional") or _p4.get("numero_predial") or "N/D"
+            story.append(dt([
+                ("Estado", "CONSULTADA -- Predio resuelto por codigo catastral/NUPRE del CTL"),
+                ("Codigo catastral", _cod4),
+                ("NUPRE", _predio_nupre or _p4.get("nupre") or _p4.get("codigo_homologado") or "N/D"),
+                ("Destino economico", _predio_destino or "N/D"),
+                ("Condicion juridica", _predio_condicion or ("N/D (no expuesta en capas abiertas)" if es_medellin else "N/D")),
+                ("Area terreno (catastro)", f"{_predio_area_catastral:.2f} m2" if _predio_area_catastral else "N/D"),
+                ("Fuente en vivo", ("Servidormapas Alcaldia de Medellín (capa Uso del predio)"
+                                    if es_medellin else
+                                    "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)")),
+            ]))
     elif es_bogota and predio_real and predio_real.get("disponible"):
         # Bogotá: sin capa predial con NUPRE en abierto; se reporta la consulta
         # por punto (lote, sector catastral, uso por manzana, estrato, UPZ...).
@@ -1462,7 +1513,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _nom_portal, _url_portal = link_oficial(ciudad)
         _nota_fuente = fuente_norma_texto(ciudad, _ent2)
         story.append(body(
-            f"<b>Fuente normativa:</b> {_nota_fuente}"
+            f"<b>Fuente normativa:</b> {_nota_fuente} "
             f"<link href='{_url_portal}'>{_nom_portal}</link>. La altura de la "
             "capa es referencial con la fecha de la norma: la licencia aprobada "
             "puede tener derechos adquiridos y la norma puede estar en revision; "
@@ -1689,10 +1740,28 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "(motor geoespacial no disponible o capas no encontradas). El resultado de riesgo "
             "debe considerarse NO EVALUADO y requiere verificacion geotecnica profesional."))
     elif am_eval.get("intersecta") or ri_eval.get("intersecta"):
-        story.append(alert_red(
-            f"<b>HALLAZGO ADVERSO:</b> El predio intersecta capas de amenaza/riesgo del POT de "
-            f"{_NOMBRE_CIUDAD} (ver detalle en la tabla anterior). Se requiere evaluacion geotecnica "
-            f"detallada y verificacion de restricciones para originacion hipotecaria."))
+        # Alerta proporcional al NIVEL real de la amenaza (regresión: una
+        # amenaza Baja no amerita 'HALLAZGO ADVERSO... evaluacion geotecnica
+        # detallada', que contradecia el hallazgo MEDIO de la sección 06).
+        _niv_05 = str((am_eval.get("nivel") if am_eval.get("intersecta") else None) or
+                      (ri_eval.get("nivel") if ri_eval.get("intersecta") else None) or "").upper()
+        if any(k in _niv_05 for k in ("MUY ALTA", "MUY ALTO", "ALTA", "ALTO")):
+            story.append(alert_red(
+                f"<b>HALLAZGO ADVERSO ({_niv_05}):</b> el predio intersecta capas de amenaza/riesgo "
+                f"del POT de {_NOMBRE_CIUDAD} (ver detalle en la tabla anterior). Se requiere "
+                f"evaluacion geotecnica detallada y verificacion de restricciones para originacion "
+                f"hipotecaria."))
+        elif any(k in _niv_05 for k in ("MEDIA", "MEDIO")):
+            story.append(alert_orange(
+                f"<b>HALLAZGO MEDIO ({_niv_05}):</b> el predio intersecta capas de amenaza/riesgo "
+                f"del POT de {_NOMBRE_CIUDAD} (ver detalle en la tabla anterior). Se recomienda "
+                f"evaluacion geotecnica complementaria."))
+        else:
+            story.append(alert_orange(
+                f"<b>AFECTACION DE NIVEL {_niv_05 or 'DETECTADA'}:</b> el predio intersecta capas de "
+                f"amenaza/riesgo del POT de {_NOMBRE_CIUDAD} (ver detalle en la tabla anterior). "
+                f"Se recomienda verificacion puntual por profesional competente en caso de "
+                f"intervencion fisica del predio."))
     else:
         story.append(alert_green(
             f"<b>HALLAZGO POSITIVO:</b> El cruce espacial contra las capas oficiales de riesgos de "
@@ -1889,7 +1958,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             hallazgos_ruta.append({"tipo": "embargo_vigente", "referencia": fuente})
         elif "riesgo" in titulo_lower or "amenaza" in titulo_lower or "geo" in titulo_lower:
             hallazgos_ruta.append({"tipo": "riesgo_geoespacial", "referencia": fuente})
-    ruta = generar_ruta(hallazgos_ruta)
+    ruta = generar_ruta(hallazgos_ruta, nombre_ciudad=_NOMBRE_CIUDAD)
     if ruta:
         story.append(body(
             "Los siguientes pasos deben ejecutarse en el orden indicado para cerrar los hallazgos "

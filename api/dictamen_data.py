@@ -398,8 +398,8 @@ def get_pot_summary_dt(barrio, ciudad="barranquilla", clase_suelo=None,
             ("Norma uso de suelo", f"{uso} (catastro en vivo)" if _v(uso_economico, "") else uso),
             ("Tratamiento urbanistico", f"{trat} (polígono {tipo_tratamiento})" if (_v(tratamiento, "") and tipo_tratamiento) else trat),
             ("Altura maxima segun tratamiento", "Sujeta a ficha normativa del polígono específico"),
-            ("Planes Parciales", "SIN AFECTACION DIRECTA REGISTRADA"),
-            ("Planes de Reordenamiento", "SIN AFECTACION DIRECTA REGISTRADA"),
+            ("Planes Parciales", "NO EVALUADO en capas abiertas (verificar en Planeación)"),
+            ("Planes de Reordenamiento", "NO EVALUADO en capas abiertas (verificar en Planeación)"),
             ("Fuente de capas", "Servidormapas Alcaldía de Medellín (consultas en vivo, Sprint 3)"),
         ]
     if es_bog:
@@ -411,8 +411,8 @@ def get_pot_summary_dt(barrio, ciudad="barranquilla", clase_suelo=None,
             ("Norma uso de suelo", f"{uso} (uso predominante por manzana, en vivo)" if _v(uso_economico, "") else uso),
             ("Unidad de Planeamiento Zonal (UPZ)", f"{upz_txt} (capa UPZ catastro distrital)" if _v(upz, "") else upz_txt),
             ("Altura maxima segun tratamiento", "Sujeta a ficha normativa del polígono específico (UPZ)"),
-            ("Planes Parciales", "SIN AFECTACION DIRECTA REGISTRADA"),
-            ("Planes de Reordenamiento", "SIN AFECTACION DIRECTA REGISTRADA"),
+            ("Planes Parciales", "NO EVALUADO en capas abiertas (verificar en la SDP)"),
+            ("Planes de Reordenamiento", "NO EVALUADO en capas abiertas (verificar en la SDP)"),
             ("Fuente de capas", "Catastro Distrital Bogotá (serviciosgis, consultas en vivo, Sprint 3)"),
         ]
     return [

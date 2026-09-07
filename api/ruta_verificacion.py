@@ -103,15 +103,15 @@ _CATALOGO_PASOS = [
         "trigger": "discrepancia_pot",
         "numero_base": 7,
         "descripcion": (
-            "Verificar con la Curaduría Urbana de Barranquilla la licencia de "
+            "Verificar con la Curaduría Urbana de {ciudad} la licencia de "
             "construcción del proyecto, confrontando el polígono de tratamiento "
             "urbanístico aplicable y la altura máxima permitida. Si existe "
             "discrepancia entre lo construido y la norma vigente, evaluar riesgo "
             "de contingencia urbanística con el curador competente."
         ),
-        "actor": "Curaduría Urbana / Planeación Distrital",
+        "actor": "Curaduría Urbana / Planeación de {ciudad}",
         "plazo": "15 días hábiles",
-        "fuente": "POT Barranquilla — Licencia de construcción",
+        "fuente": "POT {ciudad} — Licencia de construcción",
     },
     {
         "trigger": "riesgo_geoespacial",
@@ -125,7 +125,7 @@ _CATALOGO_PASOS = [
         ),
         "actor": "Ingeniero Geotécnico Certificado",
         "plazo": "20 días hábiles",
-        "fuente": "POT Barranquilla — Capas GeoJSON (evaluación ARHIAX)",
+        "fuente": "POT {ciudad} — Capas oficiales de gestión del riesgo (evaluación ARHIAX)",
     },
     {
         "trigger": "sarlaft_pendiente",
@@ -144,12 +144,15 @@ _CATALOGO_PASOS = [
 ]
 
 
-def generar_ruta(hallazgos):
+def generar_ruta(hallazgos, nombre_ciudad="Barranquilla"):
     """Genera la ruta de verificación a partir de los hallazgos activos.
 
     Args:
         hallazgos: Lista de dicts con al menos la key 'tipo'.
                    Ejemplo: [{"tipo": "hipoteca_vigente", "referencia": "Anot. 007"}]
+        nombre_ciudad: Nombre de la ciudad del caso (los pasos de norma
+                   urbanística se redactan con la ciudad correcta; antes
+                   'Barranquilla' se filtraba en dictámenes de otras ciudades).
 
     Returns:
         Lista de pasos ordenados (dicts). Lista vacía si no hay hallazgos
@@ -171,10 +174,10 @@ def generar_ruta(hallazgos):
             paso = {
                 "numero": numero_secuencial,
                 "trigger": trigger,
-                "descripcion": plantilla["descripcion"],
-                "actor": plantilla["actor"],
+                "descripcion": plantilla["descripcion"].format(ciudad=nombre_ciudad),
+                "actor": plantilla["actor"].format(ciudad=nombre_ciudad),
                 "plazo": plantilla["plazo"],
-                "fuente": plantilla["fuente"],
+                "fuente": plantilla["fuente"].format(ciudad=nombre_ciudad),
                 "referencia_hallazgo": referencias.get(trigger, ""),
             }
             pasos.append(paso)
