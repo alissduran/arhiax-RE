@@ -499,5 +499,67 @@ class TestSmokeApi(unittest.TestCase):
             importlib.reload(db_mod)
 
 
+class TestCiudadesNoOperativas(unittest.TestCase):
+    """Regresión (fix Cali): una ciudad configurada pero NO operativa (Cali)
+    jamás debe generar un dictamen con datos de otra ciudad. Antes se
+    normalizaba silenciosamente a Barranquilla (riesgo de desinformación)."""
+
+    def test_normalizar_ciudad_vacia_y_operativas(self):
+        from index import _normalizar_ciudad
+        self.assertEqual(_normalizar_ciudad(None), "barranquilla")
+        self.assertEqual(_normalizar_ciudad(""), "barranquilla")
+        self.assertEqual(_normalizar_ciudad("MEDELLIN"), "medellin")
+        self.assertEqual(_normalizar_ciudad("bogota"), "bogota")
+
+    def test_normalizar_ciudad_pendiente_cali_rechaza_400(self):
+        from fastapi import HTTPException
+        from index import _normalizar_ciudad
+        with self.assertRaises(HTTPException) as ctx:
+            _normalizar_ciudad("cali")
+        self.assertEqual(ctx.exception.status_code, 400)
+        self.assertIn("Cali", ctx.exception.detail)
+
+    def test_normalizar_ciudad_desconocida_fallback_baq(self):
+        from index import _normalizar_ciudad
+        # Valores raros (clientes viejos) siguen cayendo a BAQ retrocompatible
+        self.assertEqual(_normalizar_ciudad("xyz-raro"), "barranquilla")
+
+    def test_endpoint_generar_dictamen_rechaza_cali(self):
+        """Generar dictamen con ciudad=cali -> 400 (antes producía un dictamen
+        con datos/geocodificación de Barranquilla)."""
+        import asyncio
+        from fastapi import HTTPException
+        from index import generar_dictamen_stateless
+
+        async def _correr():
+            with self.assertRaises(HTTPException) as ctx:
+                await generar_dictamen_stateless(
+                    folio_matricula="040-123456", direccion=None, area=80.0,
+                    barrio=None, ciudad="cali", certificado=None,
+                    sombra_9am=None, sombra_3pm=None, mapa_satelital=None,
+                    async_=False, auth={"username": "admin", "rol": "admin"})
+            self.assertEqual(ctx.exception.status_code, 400)
+            self.assertIn("Cali", ctx.exception.detail)
+
+        asyncio.run(_correr())
+
+    def test_endpoint_gpv_f77_rechaza_cali(self):
+        """El GPV-F-77 con ciudad=cali -> 400 (un estudio de títulos de Cali no
+        puede elaborarse con datos registrales/catastrales de otra ciudad)."""
+        import asyncio
+        from fastapi import HTTPException
+        from index import generar_gpv_f77_endpoint
+
+        async def _correr():
+            with self.assertRaises(HTTPException) as ctx:
+                await generar_gpv_f77_endpoint(
+                    folio_matricula="040-123456", direccion=None, area=80.0,
+                    barrio=None, ciudad="cali", expediente=None,
+                    certificado=None, auth={"username": "admin", "rol": "admin"})
+            self.assertEqual(ctx.exception.status_code, 400)
+
+        asyncio.run(_correr())
+
+
 if __name__ == "__main__":
     unittest.main()

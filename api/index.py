@@ -158,6 +158,39 @@ def _sanitizar_folio(folio) -> str:
     return m.group(0) if m else "Pendiente"
 
 
+# Ciudades operativas del motor ARHIAX (Sprint 3). 'cali' está configurada en
+# ciudades.yaml pero NO está integrada en catastro/geocoder/valoración: ofrecerla
+# hoy generaría un dictamen con datos y geocodificación de Barranquilla sin
+# que el usuario lo note (riesgo de desinformación) -> se rechaza con 400.
+_CIUDADES_OPERATIVAS = ("barranquilla", "medellin", "bogota")
+_CIUDADES_PENDIENTES = {
+    "cali": "Cali aún no está operativa en el motor ARHIAX (integración de catastro y POT pendiente)",
+}
+
+
+def _normalizar_ciudad(ciudad) -> str:
+    """Normaliza la ciudad recibida a una operativa.
+
+    - Vacía/None -> 'barranquilla' (retrocompatibilidad).
+    - Operativa  -> se devuelve tal cual.
+    - Pendiente (p. ej. 'cali') -> HTTPException 400: jamás se produce un
+      dictamen de una ciudad con datos de otra.
+    - Desconocida -> 'barranquilla' (retrocompatibilidad con clientes viejos).
+    """
+    c = (ciudad or "").lower().strip()
+    if not c:
+        return "barranquilla"
+    if c in _CIUDADES_OPERATIVAS:
+        return c
+    if c in _CIUDADES_PENDIENTES:
+        raise HTTPException(
+            status_code=400,
+            detail=("{}: no se puede generar el dictamen. Por el momento "
+                    "seleccione Barranquilla, Medellín o Bogotá D.C.".format(
+                        _CIUDADES_PENDIENTES[c])))
+    return "barranquilla"
+
+
 def _validar_archivo_subido(file: UploadFile, img_type: str) -> None:
     """Valida firma mágica del archivo según el tipo de insumo (F-04)."""
     head = file.file.read(8)
@@ -707,10 +740,9 @@ async def generar_dictamen_stateless(
     async_: bool = Form(False),
     auth: dict = Depends(require_auth)
 ):
-    # Normalizar ciudad: solo soportadas (barranquilla/medellin); otras -> BAQ
-    ciudad = (ciudad or "barranquilla").lower().strip()
-    if ciudad not in ("barranquilla", "medellin", "bogota"):
-        ciudad = "barranquilla"
+    # Normalizar ciudad: solo soportadas (barranquilla/medellin/bogota); Cali
+    # (pendiente) se rechaza con 400 en vez de producir datos de otra ciudad.
+    ciudad = _normalizar_ciudad(ciudad)
     # Validar campos mínimos
     if not folio_matricula and not direccion:
         raise HTTPException(status_code=400, detail="Debe ingresar la matrícula inmobiliaria o la dirección.")
@@ -878,10 +910,10 @@ async def generar_gpv_f77_endpoint(
     certificado: UploadFile = File(None),
     auth: dict = Depends(require_auth)
 ):
-    # Normalizar ciudad: solo soportadas (barranquilla/medellin/bogota)
-    ciudad = (ciudad or "barranquilla").lower().strip()
-    if ciudad not in ("barranquilla", "medellin", "bogota"):
-        ciudad = "barranquilla"
+    # Normalizar ciudad: solo soportadas (barranquilla/medellin/bogota); Cali
+    # (pendiente) se rechaza con 400 (un Estudio de Títulos de Cali no puede
+    # elaborarse con datos registrales/catastrales de otra ciudad).
+    ciudad = _normalizar_ciudad(ciudad)
 
     # El GPV-F-77 es un Estudio de Títulos (instructivo GPV-I-20): el CTL del SNR
     # es la fuente registral obligatoria. Sin él no hay folio que estudiar.
@@ -1177,9 +1209,13 @@ async def worker_generar_pdf(request: Request):
     direccion = payload.get("direccion") or "Pendiente"
     area = float(payload.get("area") or 0)
     barrio = payload.get("barrio") or ""
-    ciudad = (payload.get("ciudad") or "barranquilla").lower().strip()
-    if ciudad not in ("barranquilla", "medellin", "bogota"):
-        ciudad = "barranquilla"
+    # Ciudad pendiente (Cali) -> job en error con mensaje claro; nunca se
+    # compila un dictamen de una ciudad con datos de otra.
+    try:
+        ciudad = _normalizar_ciudad(payload.get("ciudad"))
+    except HTTPException as _e_ciudad:
+        _actualizar_trabajo(job_id, "error", error=str(_e_ciudad.detail)[:300])
+        raise HTTPException(status_code=400, detail=str(_e_ciudad.detail))
     _ctl_adjuntado = bool(certificado_bytes)
 
     _cert_path = None

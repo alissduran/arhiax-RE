@@ -478,8 +478,8 @@
               <select id="input-ciudad" style="width: 100%; padding: 8px; font-size: 12px; border: 1px solid var(--color-border); border-radius: 3px; background: var(--color-white);">
                 <option value="barranquilla">Barranquilla</option>
                 <option value="medellin">Medellín</option>
-                <option value="cali">Cali</option>
                 <option value="bogota">Bogotá D.C.</option>
+                <option value="cali" disabled title="Próximamente: Cali aún no está operativa en el motor ARHIAX (catastro y POT pendientes de integración).">Cali — próximamente</option>
               </select>
             </div>
             <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="crearDictamen()">Iniciar Caso</button>
@@ -1254,6 +1254,14 @@
       }
 
       const formData = new FormData();
+      // Guard: casos marcados con una ciudad aún no operativa (p. ej. Cali,
+      // legacy del selector anterior) NO se envían: el servidor no debe
+      // producir un dictamen de una ciudad con datos de otra.
+      const ciudadCaso = (c.ciudad || 'barranquilla').toLowerCase();
+      if (['barranquilla', 'medellin', 'bogota'].indexOf(ciudadCaso) === -1) {
+        setEstado(`✗ Ciudad no operativa: "${c.ciudad}". El motor ARHIAX opera hoy en Barranquilla, Medellín y Bogotá D.C. Cree un nuevo caso con la ciudad correcta.`, 'var(--color-red-text)');
+        return;
+      }
       formData.append('folio_matricula', c.folio_matricula);
       formData.append('direccion', c.direccion);
       formData.append('area', c.area || '0');
@@ -1366,6 +1374,16 @@
       }
 
       const formData = new FormData();
+      // Guard: ciudades no operativas (Cali, legacy) no generan GPV-F-77 con
+      // datos registrales/catastrales de otra ciudad.
+      const ciudadCasoGpv = (c.ciudad || 'barranquilla').toLowerCase();
+      if (['barranquilla', 'medellin', 'bogota'].indexOf(ciudadCasoGpv) === -1) {
+        estadoDiv.innerHTML =
+          `✗ Ciudad no operativa: "${c.ciudad}". El motor ARHIAX opera hoy en ` +
+          'Barranquilla, Medellín y Bogotá D.C. Cree un nuevo caso con la ciudad correcta.';
+        estadoDiv.style.color = 'var(--color-red-text)';
+        return;
+      }
       formData.append('folio_matricula', c.folio_matricula || '');
       formData.append('direccion', c.direccion || '');
       formData.append('area', c.area || '0');
