@@ -286,7 +286,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
 
     # Mejora 5 (Sprint 3): licencia de construcción adjuntada (opcional). Se
     # analiza para confrontar lo LICENCIADO vs lo CONSTRUIDO vs la norma POT
-    # en la sección 4.3 (detecta exceso frente a la licencia, aunque la capa
+    # en la sección 6.3 (detecta exceso frente a la licencia, aunque la capa
     # POT no lo refleje). Nunca rompe: sin licencia o sin pisos identificados,
     # la confrontación se mantiene contra la norma del POT.
     licencia = None
@@ -743,7 +743,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Sprint 3 (edificabilidad): hallazgo H-URB cuando lo CONSTRUIDO en catastro
     # excede la ALTURA MÁXIMA normativa del polígono (POT por ciudad). Solo se
     # afirma cuando la capa oficial expone un número de pisos; de lo contrario
-    # la tabla 4.3 lo deja PENDIENTE/remisión oficial (nunca se inventa).
+    # la tabla 6.3 lo deja PENDIENTE/remisión oficial (nunca se inventa).
     try:
         from edificabilidad import hallazgo_exceso_altura
         _h_urb = hallazgo_exceso_altura(ciudad, _ent2, _predio_pisos)
@@ -967,7 +967,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Sprint Titulux: mapea el CTL real al modelo de pre-dictamen jurídico
     # determinista (TIT_B01..B05/VAL/TRX/SAG) y ejecuta el screening multifuente
     # (ONU/OFAC en vivo; UIAF pendiente por canal oficial) con degradación honesta.
-    # Nunca rompe el PDF: si falla, la sección 07C lo declara NO EVALUADO.
+    # Nunca rompe el PDF: si falla, la sección 05 lo declara NO EVALUADO.
     _listas_cache = os.environ.get("ARHIA_LISTAS_CACHE")
     if not _listas_cache:
         # Caché ESTABLE (no por-caso): en Vercel /tmp persiste entre invocaciones
@@ -1074,8 +1074,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     ]))
     story.append(Spacer(1, 8))
     
-    # ── 01B LOCALIZACION ────────────────────────────────────────
-    story.append(sec("01B - Localizacion Geografica del Inmueble"))
+    # ── 02 LOCALIZACION ────────────────────────────────────────
+    story.append(sec("02 - Localizacion Geografica del Inmueble"))
     story.append(hr())
     _sector_desc = (barrio if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL"
                     else "sector por verificar en campo")
@@ -1238,8 +1238,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         ))
     story.append(Spacer(1, 8))
     
-    # ── 01D ANALISIS DE EQUIPAMIENTO URBANO (POI) ────────────────
-    story.append(sec("01D - Analisis de Equipamiento Urbano y Puntos de Interes (POI)"))
+    # ── 03 ANALISIS DE EQUIPAMIENTO URBANO (POI) ────────────────
+    story.append(sec("03 - Analisis de Equipamiento Urbano y Puntos de Interes (POI)"))
     story.append(hr())
     _total_pois = sum(len(items) for items in pois.values())
     if _total_pois == 0:
@@ -1321,72 +1321,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(alert_green(get_cobertura_alert(barrio, ciudad=ciudad)))
     story.append(Spacer(1, 8))
     
-    # ── 02 RESUMEN HALLAZGOS ───────────────────────────────────
-    story.append(sec("02 - Resumen de Hallazgos"))
-    story.append(hr())
-    story.append(body(f"El motor ARHIAX identifico <b>{len(hallazgos)} hallazgos</b> sobre este activo."))
-    story.append(Spacer(1, 4))
-    
-    # Contar dinámicamente por severidad real de los hallazgos (etiqueta genérica:
-    # un ALTO puede ser registral, geoespacial o de otro origen; no se afirma
-    # "Gravamenes" si el hallazgo ALTO es de amenaza/riesgo).
-    n_alto = sum(1 for h in hallazgos if h[0] == "ALTO")
-    n_medio = sum(1 for h in hallazgos if h[0] == "MEDIO")
-    n_info = sum(1 for h in hallazgos if h[0] == "INFORMATIVO")
-    story.append(badge_table([
-        ("ALTO", str(n_alto), colors.HexColor("#FBE9E9"), C_ROJO),
-        ("MEDIO", str(n_medio), C_ALERTA_BG, C_NARANJA),
-        ("INFORMATIVO", str(n_info), C_OK_BG, C_VERDE),
-    ], s))
-    story.append(Spacer(1, 6))
-    # UX: identificar CUÁL hallazgo es cada uno (la persona que revisa el dictamen
-    # debe saber que el ALTO es la hipoteca y cuál es el INFORMATIVO sin esperar a
-    # la sección 06). Se listan títulos compactos por severidad.
-    if hallazgos:
-        _mapa_color = {
-            "ALTO": (C_ROJO, colors.HexColor("#FBE9E9")),
-            "MEDIO": (C_NARANJA, C_ALERTA_BG),
-            "INFORMATIVO": (C_VERDE, C_OK_BG),
-        }
-        _filas_resumen = [("Severidad", "Hallazgo identificado", "")]
-        for h in hallazgos:
-            sev_h = h[0] if h and h[0] in _mapa_color else "INFORMATIVO"
-            tc_h, bg_h = _mapa_color[sev_h]
-            titulo_h = (h[3] if len(h) > 3 else "") or ""
-            fuente_h = (h[4] if len(h) > 4 else "") or ""
-            p_sev = Paragraph(f"<b>{sev_h}</b>", ParagraphStyle(
-                "res_sev", fontName="Helvetica-Bold", fontSize=7.5,
-                textColor=tc_h, leading=10))
-            p_tit = Paragraph(titulo_h, ParagraphStyle(
-                "res_tit", fontName="Helvetica", fontSize=8,
-                textColor=colors.HexColor("#2D3748"), leading=10))
-            p_fu = Paragraph(f"<font size=6.5 color='#718096'>{fuente_h}</font>",
-                             ParagraphStyle("res_fu", fontName="Helvetica",
-                                            fontSize=6.5, leading=9))
-            _filas_resumen.append([p_sev, p_tit, p_fu])
-        _t_res = Table(_filas_resumen, colWidths=["12%", "68%", "20%"])
-        _t_res.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, 0), C_AZUL_OSC),
-            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-            ("ROWBACKGROUNDS", (0, 1), (-1, -1),
-             [colors.white, colors.HexColor("#F5F7FB")]),
-            ("GRID", (0, 0), (-1, -1), 0.4, C_BORDE),
-            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-            ("TOPPADDING", (0, 0), (-1, -1), 3.5),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 3.5),
-            ("LEFTPADDING", (0, 0), (-1, -1), 6),
-        ]))
-        story.append(KeepTogether([_t_res, Spacer(1, 4)]))
-    story.append(Spacer(1, 8))
-    
-    # ── 03 ANALISIS REGISTRAL ──────────────────────────────────
+    # ── 04 ANALISIS REGISTRAL ──────────────────────────────────
     # H-08/F-21: el título y el cuerpo distinguen si el CTL se procesó o no,
     # y nunca afirman consultas SNR en vivo que no ocurren.
     tiene_ctl = bool(db_record.get("certificado_path"))
     story.append(sec(
-        "03 - Analisis Registral SNR -- Cadena de Tradicion [CTL PROCESADO]"
+        "04 - Analisis Registral SNR -- Cadena de Tradicion [CTL PROCESADO]"
         if tiene_ctl else
-        "03 - Analisis Registral SNR -- Cadena de Tradicion [SIN CTL]"
+        "04 - Analisis Registral SNR -- Cadena de Tradicion [SIN CTL]"
     ))
     story.append(hr())
     if tiene_ctl:
@@ -1446,9 +1388,110 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "ARHIAX no realiza consultas automatizadas ni scraping al SNR; el CTL debe "
         "obtenerse por el canal oficial y adjuntarse al caso."))
     story.append(Spacer(1, 8))
-    
-    # ── 04 CATASTRAL Y POT [REAL] ──────────────────────────────
-    story.append(sec("04 - Analisis Catastral y Urbanistico"))
+
+    # ── 05 PRE-DICTAMEN JURIDICO (TITULUX · CONFIANZA PREDIAL) ──
+    story.append(sec("05 - Pre-dictamen juridico (Titulux)"))
+    story.append(hr())
+    story.append(body(
+        "<b>Que es esta seccion:</b> el motor <b>Titulux (ARHIAX Confianza Predial)</b> aplica un "
+        "pre-dictamen juridico determinista (reglas TIT/VAL/TRX/SAG) sobre el certificado de "
+        "libertad y tradicion analizado en la seccion 04. Presenta los hallazgos del expediente "
+        "(identidad, cronologia, titularidad, gravamenes y precio) y una conclusion preliminar, "
+        "siempre como insumo del profesional competente. El <b>screening SAGRILAFT</b> de los "
+        "nombres del caso se reporta en la seccion 09."))
+    story.append(Spacer(1, 6))
+
+    _ESTADO_ES = {
+        "OK": "Conforme", "OBSERVACION": "Observacion", "RIESGO": "Riesgo",
+        "INFORMATIVO": "Informativo", "INFORMACION_INSUFICIENTE": "Informacion insuficiente",
+        "INCONSISTENTE": "Inconsistente", "REQUIERE_REVISION": "Requiere revision",
+    }
+    _SEV_ES = {"baja": "Baja", "media": "Media", "alta": "Alta", "critica": "Critica"}
+    _VEREDICTO_ES = {
+        "PREANALISIS_INCOMPLETO": "Pre-analisis incompleto (screening pendiente)",
+        "BLOQUEO_PRECAUTORIO": "Bloqueo precautorio",
+        "REQUIERE_REVISION": "Requiere revision profesional",
+        "SIN_HALLAZGO_AUTOMATICO": "Sin hallazgo automatico (revisar por profesional)",
+    }
+
+    if not _titulux or not _titulux.get("disponible"):
+        _motivo = ""
+        if _titulux_skip:
+            _motivo = f": {_titulux_skip}"
+        elif _titulux and _titulux.get("error"):
+            _motivo = f" ({_titulux.get('error')})"
+        story.append(alert_orange(
+            "<b>Pre-dictamen juridico NO EVALUADO</b>" + _motivo + ". "
+            "El analisis juridico preliminar queda PENDIENTE; no se afirma resultado alguno."
+        ))
+    else:
+        # --- Hallazgos del expediente ---
+        story.append(sub("Hallazgos del expediente"))
+        _filas_h = [[Paragraph("<b>Regla</b>", s["header"]),
+                     Paragraph("<b>Verificacion</b>", s["header"]),
+                     Paragraph("<b>Estado</b>", s["header"]),
+                     Paragraph("<b>Severidad</b>", s["header"])]]
+        for h in _titulux.get("pre_dictamen", []):
+            _filas_h.append([
+                Paragraph(h.get("id", "") or "—", s["mono"]),
+                Paragraph(h.get("titulo", "") or "—", s["body"]),
+                Paragraph(_ESTADO_ES.get(h.get("estado"), h.get("estado", "")), s["value"]),
+                Paragraph(_SEV_ES.get(h.get("severidad"), h.get("severidad", "")), s["body"]),
+            ])
+        _t_h = Table(_filas_h, colWidths=["13%", "49%", "20%", "18%"])
+        _t_h.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), C_AZUL_OSC), ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F0F4FB")]),
+            ("GRID", (0, 0), (-1, -1), 0.4, C_BORDE),
+            ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("LEFTPADDING", (0, 0), (-1, -1), 5), ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        story.append(_t_h)
+        story.append(Spacer(1, 4))
+
+        # Detalle de hallazgos relevantes (riesgo/observación) con acción
+        _hall_detalle = [h for h in _titulux.get("pre_dictamen", [])
+                         if h.get("estado") in ("RIESGO", "OBSERVACION", "INCONSISTENTE",
+                                               "INFORMACION_INSUFICIENTE", "REQUIERE_REVISION")]
+        if _hall_detalle:
+            for h in _hall_detalle:
+                _desc = (h.get("descripcion") or "").strip()
+                _base = (h.get("base_legal") or "").strip()
+                _acc = (h.get("accion") or "").strip()
+                _txt = _desc
+                if _base:
+                    _txt += f" <i>Base legal: {_base}.</i>"
+                if _acc:
+                    _txt += f" <b>Accion sugerida:</b> {_acc}"
+                story.append(Paragraph(
+                    f"<b>{h.get('id')} — {h.get('titulo')}</b> "
+                    f"[{_ESTADO_ES.get(h.get('estado'), h.get('estado'))} · "
+                    f"{_SEV_ES.get(h.get('severidad'), h.get('severidad'))}]: {_txt}",
+                    ParagraphStyle("tith", parent=s["body"], fontSize=8, leading=11,
+                                   spaceBefore=3)))
+        story.append(Spacer(1, 6))
+
+        # --- Conclusión (autoría separada) ---
+        _conc = _titulux.get("conclusion") or {}
+        _ver = _conc.get("veredicto", "")
+        story.append(sub("Conclusion preliminar (autoria separada)"))
+        if _ver:
+            story.append(body(
+                f"<b>Veredicto del pre-analisis:</b> {_VEREDICTO_ES.get(_ver, _ver)}."
+            ))
+        if _conc.get("fundamento"):
+            story.append(body(_conc["fundamento"]))
+        if _conc.get("recomendaciones"):
+            _recs = "; ".join(_conc["recomendaciones"])
+            story.append(body(f"<b>Recomendaciones:</b> {_recs}"))
+        story.append(body(
+            "<i>Titulux es un PRE-dictamen. La conclusion profesional, el concepto de valor y la "
+            "decision de cumplimiento los emite y firma el profesional competente (abogado, "
+            "avaluador RAA, oficial de cumplimiento); el sistema solo prepara y senaliza.</i>"))
+    story.append(Spacer(1, 8))
+
+    # ── 06 CATASTRAL Y POT [REAL] ──────────────────────────────
+    story.append(sec("06 - Analisis Catastral y Urbanistico"))
     story.append(hr())
     if es_medellin:
         story.append(body(
@@ -1472,7 +1515,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "norma de uso, tratamientos urbanisticos) y estimaciones del modulo ARHIAX RE. "
             "<b>[FUENTE: CAPAS POT BARRANQUILLA - MODULO ARHIAX RE]</b>"))
     story.append(Spacer(1, 4))
-    story.append(sub("4.1 Datos Catastrales"))
+    story.append(sub("6.1 Datos Catastrales"))
     story.append(dt(get_catastral_dt(
         barrio, area,
         destino_economico=_predio_destino,
@@ -1487,7 +1530,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     )))
     story.append(Spacer(1, 4))
 
-    # ── 4.1B Verificación catastral EN VIVO (Sprint 3, I-6) ──
+    # ── 6.1B Verificación catastral EN VIVO (Sprint 3, I-6) ──
     # Consulta el catastro abierto con caché y timeout corto; nunca rompe el PDF:
     # si el servicio no responde, se declara NO DISPONIBLE.
     _cat_live = {"disponible": False}
@@ -1497,7 +1540,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _cat_live = verificar_catastro_barranquilla(lat, lon)
         except Exception as e:
             _cat_live = {"disponible": False, "error": f"motor no disponible: {e}"}
-    story.append(sub("4.1B Verificación Catastral en Vivo"))
+    story.append(sub("6.1B Verificación Catastral en Vivo"))
     if predio_real and predio_real.get("disponible") and not es_bogota:
         _p4 = predio_real.get("predio") or {}
         # La resolución por punto (sin CTL/código) cae en el predio/sector más
@@ -1562,7 +1605,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             f"se resolvió por código catastral/NUPRE. La información catastral de esta sección "
             f"debe verificarse antes de usarse en una decisión."))
     story.append(Spacer(1, 4))
-    story.append(sub("4.2 POT -- Cruce de Capas de Ordenamiento"))
+    story.append(sub("6.2 POT -- Cruce de Capas de Ordenamiento"))
     _trat_par = (str(_predio_tratamiento or "") if _predio_tratamiento else "")
     _clase_suelo_real = (_ent2.get("clase_suelo") or "").strip()
 
@@ -1637,7 +1680,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             f"especifico y la afectacion por riesgo."))
     elif _trat_par and not es_bogota:
         # Tratamiento real del polígono (Medellín/BAQ). Bogotá no expone
-        # tratamiento en abierto: la sección 4.3 remite a la ficha normativa SDP.
+        # tratamiento en abierto: la sección 6.3 remite a la ficha normativa SDP.
         story.append(alert_orange(
             f"<b>HALLAZGO MEDIO:</b> El tratamiento urbanistico oficial del poligono es "
             f"<b>{_trat_par}</b> ({_ent2.get('tipo_tratamiento') or 'POT'}). "
@@ -1648,7 +1691,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "con alturas variables. Verificar el cumplimiento de la norma urbanistica del poligono especifico del predio."))
     story.append(Spacer(1, 8))
 
-    # ── 4.3 EDIFICABILIDAD Y ALTURA MÁXIMA (Norma Urbanística + Licencia) ──
+    # ── 6.3 EDIFICABILIDAD Y ALTURA MÁXIMA (Norma Urbanística + Licencia) ──
     # Sprint 3: parámetros POT de edificabilidad por ciudad (tratamiento,
     # índice de construcción, densidad, altura máxima en pisos) confrontados
     # con lo ya construido según catastro. Detecta el caso de exceso de altura
@@ -1660,7 +1703,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         from edificabilidad import (filas_edificabilidad, filas_licencia,
                                     fuente_norma_texto, link_oficial,
                                     _confrontacion, confrontacion_con_licencia)
-        story.append(sub("4.3 Edificabilidad y Altura Maxima (Norma Urbanistica)"))
+        story.append(sub("6.3 Edificabilidad y Altura Maxima (Norma Urbanistica)"))
         _filas_edi = filas_edificabilidad(ciudad, _ent2, _predio_pisos)
         story.append(dt(_filas_edi))
         story.append(Spacer(1, 3))
@@ -1705,10 +1748,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "planeacion de la ciudad."))
         story.append(Spacer(1, 4))
     except Exception as _e_edi:
-        print(f"[PDF][EDIFICABILIDAD] seccion 4.3 no disponible: {_e_edi}")
+        print(f"[PDF][EDIFICABILIDAD] seccion 6.3 no disponible: {_e_edi}")
 
-    # ── 04B ESTIMACIÓN REFERENCIAL DE MERCADO (NO ES AVALÚO) ────
-    story.append(sec("04B - Estimación Referencial de Mercado (NO es avalúo)"))
+    # ── 07 ESTIMACIÓN REFERENCIAL DE MERCADO (NO ES AVALÚO) ────
+    story.append(sec("07 - Estimación Referencial de Mercado (NO es avalúo)"))
     story.append(hr())
     story.append(body(
         "Determinacion del valor comercial y rango de valor estimado del inmueble utilizando "
@@ -1777,8 +1820,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     ))
     story.append(Spacer(1, 8))
 
-    # ── 05 HIDROLOGICO [REAL] ──────────────────────────────────
-    story.append(sec("05 - Analisis Hidrologico y de Riesgos"))
+    # ── 08 HIDROLOGICO [REAL] ──────────────────────────────────
+    story.append(sec("08 - Analisis Hidrologico y de Riesgos"))
     story.append(hr())
     bbox_str = f"{lon-0.0025:.3f},{lat-0.0025:.3f},{lon+0.0025:.3f},{lat+0.0025:.3f}"
     am_eval = geo_eval.get('amenaza_remocion_masa', {})
@@ -1823,7 +1866,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             + "sobre cada capa. "
             f"<b>[FUENTE: {_fuente_riesgo.upper()} (EN VIVO)]</b>"))
         story.append(Spacer(1, 4))
-        story.append(sub("5.1 Inventario de Capas Consultadas"))
+        story.append(sub("8.1 Inventario de Capas Consultadas"))
         def _res_amenaza(dict_capa):
             if dict_capa and dict_capa.get("intersecta"):
                 return Paragraph(f"{dict_capa.get('nivel') or 'DETECTADA'}", s["alert_naranja"])
@@ -1869,7 +1912,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "con las coordenadas del predio sobre cada capa disponible. "
             "<b>[FUENTE: ALCALDIA BAQ - STRtree POT]</b>"))
         story.append(Spacer(1, 4))
-        story.append(sub("5.1 Inventario de Capas Consultadas"))
+        story.append(sub("8.1 Inventario de Capas Consultadas"))
         # Table showing each layer queried and result
         risk_audit = [
             [Paragraph("<b>Layer ID</b>",s["header"]),Paragraph("<b>Nombre de Capa</b>",s["header"]),
@@ -1926,7 +1969,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     elif am_eval.get("intersecta") or ri_eval.get("intersecta"):
         # Alerta proporcional al NIVEL real de la amenaza (regresión: una
         # amenaza Baja no amerita 'HALLAZGO ADVERSO... evaluacion geotecnica
-        # detallada', que contradecia el hallazgo MEDIO de la sección 06).
+        # detallada', que contradecia el hallazgo MEDIO de la sección 10).
         _niv_05 = str((am_eval.get("nivel") if am_eval.get("intersecta") else None) or
                       (ri_eval.get("nivel") if ri_eval.get("intersecta") else None) or "").upper()
         if any(k in _niv_05 for k in ("MUY ALTA", "MUY ALTO", "ALTA", "ALTO")):
@@ -1953,92 +1996,17 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "Favorable para suscripcion de seguros y originacion hipotecaria."))
     story.append(Spacer(1, 8))
     
-    # ── 06 HALLAZGOS CLASIFICADOS ──────────────────────────────
-    story.append(sec("06 - Hallazgos Clasificados por Severidad"))
+    # ── 09 CUMPLIMIENTO SAGRILAFT (FICHA ESTRUCTURAL + SCREENING EN VIVO) ──
+    story.append(sec("09 - Cumplimiento SAGRILAFT (ficha estructural + screening en vivo)"))
     story.append(hr())
-    # Nota en lenguaje claro: cómo leer la severidad (para cualquier lector)
     story.append(body(
-        "<b>Como leer esta seccion:</b> cada hallazgo senala un punto que merece atencion antes "
-        "de tomar una decision sobre el inmueble. <b>ALTO</b> (rojo) = condiciona o bloquea la "
-        "operacion hasta resolverlo (p. ej. pagar y cancelar una hipoteca). <b>MEDIO</b> (naranja) "
-        "= requiere una verificacion puntual por un profesional. <b>INFORMATIVO</b> (verde) = "
-        "situacion favorable o sin riesgo aparente. El hallazgo indica <b>a quien afecta y que "
-        "hacer</b>; no califica al propietario, sino al estado del inmueble."))
-    story.append(Spacer(1, 6))
-    
-    for sev, tc, bg, titulo, fuente, descripcion, implicacion in hallazgos:
-        sev_style = ParagraphStyle("sev_s", fontName="Helvetica-Bold", fontSize=8, textColor=tc, leading=11)
-        titulo_style = ParagraphStyle("tit_h", fontName="Helvetica-Bold", fontSize=9, textColor=C_AZUL_OSC, leading=12)
-        box_data = [
-            [Paragraph(f"<b>Severidad:</b> {sev}", sev_style),
-             Paragraph(f"<b>Fuente:</b> {fuente}",
-                       ParagraphStyle("fsrc", fontName="Helvetica", fontSize=7.5,
-                                      textColor=colors.HexColor("#718096"), alignment=TA_RIGHT, leading=11))],
-            [Paragraph(titulo, titulo_style), Paragraph("", s["body"])],
-            [Paragraph(f"<b>Descripcion:</b> {descripcion}", s["body"]), Paragraph("", s["body"])],
-            [Paragraph(f"<b>Implicacion operacional:</b> {implicacion}", s["body"]), Paragraph("", s["body"])],
-        ]
-        t = Table(box_data, colWidths=["70%", "30%"])
-        t.setStyle(TableStyle([
-            ("SPAN", (0,1), (1,1)), ("SPAN", (0,2), (1,2)), ("SPAN", (0,3), (1,3)),
-            ("BACKGROUND", (0,0), (-1,0), bg),
-            ("BACKGROUND", (0,1), (-1,1), colors.HexColor("#F7F8FC")),
-            ("BACKGROUND", (0,2), (-1,2), colors.white),
-            ("BACKGROUND", (0,3), (-1,3), colors.HexColor("#F7F8FC")),
-            ("GRID", (0,0), (-1,-1), 0.5, C_BORDE),
-            ("LINEAFTER", (0,0), (0,-1), 3, tc),
-            ("TOPPADDING", (0,0), (-1,-1), 5),
-            ("BOTTOMPADDING", (0,0), (-1,-1), 5),
-            ("LEFTPADDING", (0,0), (-1,-1), 8),
-        ]))
-        story.append(KeepTogether([t, Spacer(1, 6)]))
-    story.append(Spacer(1, 8))
-    
-    story.append(sec("07 - Score Actuarial Integrado"))
-    story.append(hr())
-    # Nota en lenguaje claro: cómo interpretar el score
-    story.append(body(
-        "<b>Como leer el score:</b> es un puntaje de 0 a 100 que resume el nivel de riesgo del "
-        "inmueble (100 = riesgo bajo). Combina cuatro frentes: Registral (gravámenes y "
-        "tradición), Juridico (titularidad), Hidrologico (amenazas) y Catastral (datos del "
-        "predio). <b>Importante:</b> si existe un hallazgo ALTO (por ejemplo, una hipoteca "
-        "vigente), el resultado integrado se marca <b>BLOQUEADO</b> aunque el número sea alto: "
-        "el puntaje no puede verse como favorable mientras haya una condicion que deba "
-        "resolverse primero."))
-    story.append(Spacer(1, 6))
-    # Score dinamico real (Sprint 2): motores conectados, sin valores hardcodeados (H-05/H-06)
-    val_data_area = dict(val_data)
-    val_data_area["area"] = area
-    score_result = calcular_score_actuarial(hallazgos, geo_eval, analysis, val_data_area)
-    colores_score = score_result["colores"]
-    story.append(badge_table([
-        ("Score Registral", f"{score_result['score_registral']:.0f} / 100", colores_score["registral"][1], colores_score["registral"][0]),
-        ("Score Hidrologico", f"{score_result['score_hidrologico']:.0f} / 100", colores_score["hidrologico"][1], colores_score["hidrologico"][0]),
-        ("Score Juridico", f"{score_result['score_juridico']:.0f} / 100", colores_score["juridico"][1], colores_score["juridico"][0]),
-        ("Score Integrado ARHIAX", f"{score_result['score_integrado']:.0f} / 100", colores_score["integrado"][1], colores_score["integrado"][0]),
-    ], s))
-    story.append(Spacer(1, 4))
-    detalle_score = []
-    for comp, nombre in [("registral", "Registral"), ("juridico", "Juridico"),
-                         ("hidrologico", "Hidrologico"), ("catastral", "Catastral")]:
-        detalle_score.append((
-            f"Score {nombre} ({score_result[f'score_{comp}']:.0f}/100)",
-            "; ".join(score_result["detalle"][comp])
-        ))
-    detalle_score.append(("Score Integrado", generar_narrativa_score(score_result)))
-    story.append(dt(detalle_score))
-    story.append(Spacer(1, 8))
-
-    # ── 07B FICHA SARLAFT ESTRUCTURAL (Sprint 2 Bloque B, conectado) ──
-    story.append(sec("07B - Ficha SARLAFT Estructural"))
-    story.append(hr())
-    # Nota en lenguaje claro: qué es y qué hace esta sección (actualizada con Titulux)
-    story.append(body(
-        "<b>Que es esta seccion:</b> deja listos los nombres de las personas y entidades del caso "
-        "(titular, banco acreedor, constructor) con su huella digital (hash) para trazabilidad. "
-        "<b>El cruce en vivo contra listas vinculantes (ONU/OFAC) y el pre-dictamen juridico se "
-        "presentan en la seccion 07C (Titulux).</b> El hash garantiza que los nombres entregados "
-        "no se alteren entre la generacion y el cruce."))
+        "<b>Que es esta seccion:</b> deja los nombres de las personas y entidades del caso "
+        "(titular, banco acreedor, constructor) con su huella digital (hash) para trazabilidad y "
+        "presenta el <b>screening en vivo</b> de esos nombres contra las listas restrictivas. "
+        "<b>ONU y OFAC se consultan en vivo</b> (feed oficial, copia local versionada por "
+        "SHA-256); la <b>lista UIAF</b> queda <b>PENDIENTE de consulta por canal oficial</b> y "
+        "nunca se simula. El hash garantiza que los nombres no se alteren entre la generacion y "
+        "el cruce."))
     story.append(Spacer(1, 6))
     ficha_sarlaft = generar_ficha_sarlaft(
         titulares=analysis.get("titulares", ""),
@@ -2050,32 +2018,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(dt(generar_tabla_sarlaft(ficha_sarlaft)))
     story.append(Spacer(1, 4))
     story.append(body(f"<b>Disclaimer:</b> {ficha_sarlaft['disclaimer']}"))
-    story.append(Spacer(1, 8))
-
-    # ── 07C TITULUX: PRE-DICTAMEN JURIDICO + SCREENING SAGRILAFT EN VIVO ──
-    story.append(sec("07C - Pre-dictamen juridico y Screening SAGRILAFT (Titulux)"))
-    story.append(hr())
-    story.append(body(
-        "<b>Que es esta seccion:</b> el motor <b>Titulux (ARHIAX Confianza Predial)</b> aplica un "
-        "pre-dictamen juridico determinista (reglas TIT/VAL/TRX/SAG) sobre el certificado de "
-        "libertad y tradicion, y ejecuta el <b>screening SAGRILAFT</b> de los nombres del caso "
-        "contra las listas restrictivas. <b>ONU y OFAC se consultan en vivo</b> (feed oficial, con "
-        "copia local versionada por SHA-256); la <b>lista UIAF</b>, que no tiene feed publico "
-        "limpio, queda <b>PENDIENTE de consulta por canal oficial</b> y nunca se simula."))
     story.append(Spacer(1, 6))
-
-    _ESTADO_ES = {
-        "OK": "Conforme", "OBSERVACION": "Observacion", "RIESGO": "Riesgo",
-        "INFORMATIVO": "Informativo", "INFORMACION_INSUFICIENTE": "Informacion insuficiente",
-        "INCONSISTENTE": "Inconsistente", "REQUIERE_REVISION": "Requiere revision",
-    }
-    _SEV_ES = {"baja": "Baja", "media": "Media", "alta": "Alta", "critica": "Critica"}
-    _VEREDICTO_ES = {
-        "PREANALISIS_INCOMPLETO": "Pre-analisis incompleto (screening pendiente)",
-        "BLOQUEO_PRECAUTORIO": "Bloqueo precautorio",
-        "REQUIERE_REVISION": "Requiere revision profesional",
-        "SIN_HALLAZGO_AUTOMATICO": "Sin hallazgo automatico (revisar por profesional)",
-    }
 
     if not _titulux or not _titulux.get("disponible"):
         _motivo = ""
@@ -2084,13 +2027,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         elif _titulux and _titulux.get("error"):
             _motivo = f" ({_titulux.get('error')})"
         story.append(alert_orange(
-            "<b>Titulux NO EVALUADO</b>" + _motivo + ". "
-            "La verificacion SAGRILAFT y el pre-dictamen juridico quedan PENDIENTES; "
-            "no se afirma resultado alguno."
+            "<b>Screening SAGRILAFT NO EVALUADO</b>" + _motivo + ". "
+            "El cruce contra listas restrictivas queda PENDIENTE; no se afirma resultado alguno."
         ))
     else:
         # --- Screening SAGRILAFT (resultado real con degradación honesta) ---
-        story.append(sub("07C.1 Screening SAGRILAFT de contrapartes"))
+        story.append(sub("Screening SAGRILAFT de contrapartes"))
         _filas_scr = [[Paragraph("<b>Sujeto</b>", s["header"]),
                        Paragraph("<b>Tipo</b>", s["header"]),
                        Paragraph("<b>Resultado</b>", s["header"]),
@@ -2145,75 +2087,144 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                 "consultadas en vivo (ONU/OFAC). El resultado no sustituye la verificacion final "
                 "del oficial de cumplimiento ni la consulta del canal UIAF."
             ))
-        story.append(Spacer(1, 6))
+    story.append(Spacer(1, 8))
 
-        # --- Pre-dictamen jurídico (hallazgos del expediente) ---
-        story.append(sub("07C.2 Pre-dictamen juridico (hallazgos del expediente)"))
-        _filas_h = [[Paragraph("<b>Regla</b>", s["header"]),
-                     Paragraph("<b>Verificacion</b>", s["header"]),
-                     Paragraph("<b>Estado</b>", s["header"]),
-                     Paragraph("<b>Severidad</b>", s["header"])]]
-        for h in _titulux.get("pre_dictamen", []):
-            _filas_h.append([
-                Paragraph(h.get("id", "") or "—", s["mono"]),
-                Paragraph(h.get("titulo", "") or "—", s["body"]),
-                Paragraph(_ESTADO_ES.get(h.get("estado"), h.get("estado", "")), s["value"]),
-                Paragraph(_SEV_ES.get(h.get("severidad"), h.get("severidad", "")), s["body"]),
-            ])
-        _t_h = Table(_filas_h, colWidths=["13%", "49%", "20%", "18%"])
-        _t_h.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, 0), C_AZUL_OSC), ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F0F4FB")]),
-            ("GRID", (0, 0), (-1, -1), 0.4, C_BORDE),
-            ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-            ("LEFTPADDING", (0, 0), (-1, -1), 5), ("VALIGN", (0, 0), (-1, -1), "TOP"),
+    # ── 10 HALLAZGOS CLASIFICADOS ──────────────────────────────
+    story.append(sec("10 - Hallazgos Clasificados por Severidad"))
+    story.append(hr())
+    # Nota en lenguaje claro: cómo leer la severidad (para cualquier lector)
+    story.append(body(
+        "<b>Como leer esta seccion:</b> cada hallazgo senala un punto que merece atencion antes "
+        "de tomar una decision sobre el inmueble. <b>ALTO</b> (rojo) = condiciona o bloquea la "
+        "operacion hasta resolverlo (p. ej. pagar y cancelar una hipoteca). <b>MEDIO</b> (naranja) "
+        "= requiere una verificacion puntual por un profesional. <b>INFORMATIVO</b> (verde) = "
+        "situacion favorable o sin riesgo aparente. El hallazgo indica <b>a quien afecta y que "
+        "hacer</b>; no califica al propietario, sino al estado del inmueble."))
+    story.append(Spacer(1, 6))
+    
+    for sev, tc, bg, titulo, fuente, descripcion, implicacion in hallazgos:
+        sev_style = ParagraphStyle("sev_s", fontName="Helvetica-Bold", fontSize=8, textColor=tc, leading=11)
+        titulo_style = ParagraphStyle("tit_h", fontName="Helvetica-Bold", fontSize=9, textColor=C_AZUL_OSC, leading=12)
+        box_data = [
+            [Paragraph(f"<b>Severidad:</b> {sev}", sev_style),
+             Paragraph(f"<b>Fuente:</b> {fuente}",
+                       ParagraphStyle("fsrc", fontName="Helvetica", fontSize=7.5,
+                                      textColor=colors.HexColor("#718096"), alignment=TA_RIGHT, leading=11))],
+            [Paragraph(titulo, titulo_style), Paragraph("", s["body"])],
+            [Paragraph(f"<b>Descripcion:</b> {descripcion}", s["body"]), Paragraph("", s["body"])],
+            [Paragraph(f"<b>Implicacion operacional:</b> {implicacion}", s["body"]), Paragraph("", s["body"])],
+        ]
+        t = Table(box_data, colWidths=["70%", "30%"])
+        t.setStyle(TableStyle([
+            ("SPAN", (0,1), (1,1)), ("SPAN", (0,2), (1,2)), ("SPAN", (0,3), (1,3)),
+            ("BACKGROUND", (0,0), (-1,0), bg),
+            ("BACKGROUND", (0,1), (-1,1), colors.HexColor("#F7F8FC")),
+            ("BACKGROUND", (0,2), (-1,2), colors.white),
+            ("BACKGROUND", (0,3), (-1,3), colors.HexColor("#F7F8FC")),
+            ("GRID", (0,0), (-1,-1), 0.5, C_BORDE),
+            ("LINEAFTER", (0,0), (0,-1), 3, tc),
+            ("TOPPADDING", (0,0), (-1,-1), 5),
+            ("BOTTOMPADDING", (0,0), (-1,-1), 5),
+            ("LEFTPADDING", (0,0), (-1,-1), 8),
         ]))
-        story.append(_t_h)
-        story.append(Spacer(1, 4))
-
-        # Detalle de hallazgos relevantes (riesgo/observación) con acción
-        _hall_detalle = [h for h in _titulux.get("pre_dictamen", [])
-                         if h.get("estado") in ("RIESGO", "OBSERVACION", "INCONSISTENTE",
-                                               "INFORMACION_INSUFICIENTE", "REQUIERE_REVISION")]
-        if _hall_detalle:
-            for h in _hall_detalle:
-                _desc = (h.get("descripcion") or "").strip()
-                _base = (h.get("base_legal") or "").strip()
-                _acc = (h.get("accion") or "").strip()
-                _txt = _desc
-                if _base:
-                    _txt += f" <i>Base legal: {_base}.</i>"
-                if _acc:
-                    _txt += f" <b>Accion sugerida:</b> {_acc}"
-                story.append(Paragraph(
-                    f"<b>{h.get('id')} — {h.get('titulo')}</b> "
-                    f"[{_ESTADO_ES.get(h.get('estado'), h.get('estado'))} · "
-                    f"{_SEV_ES.get(h.get('severidad'), h.get('severidad'))}]: {_txt}",
-                    ParagraphStyle("tith", parent=s["body"], fontSize=8, leading=11,
-                                   spaceBefore=3)))
-        story.append(Spacer(1, 6))
-
-        # --- Conclusión (autoría separada) ---
-        _conc = _titulux.get("conclusion") or {}
-        _ver = _conc.get("veredicto", "")
-        story.append(sub("07C.3 Conclusión preliminar (autoría separada)"))
-        if _ver:
-            story.append(body(
-                f"<b>Veredicto del pre-analisis:</b> {_VEREDICTO_ES.get(_ver, _ver)}."
-            ))
-        if _conc.get("fundamento"):
-            story.append(body(_conc["fundamento"]))
-        if _conc.get("recomendaciones"):
-            _recs = "; ".join(_conc["recomendaciones"])
-            story.append(body(f"<b>Recomendaciones:</b> {_recs}"))
-        story.append(body(
-            "<i>Titulux es un PRE-dictamen. La conclusion profesional, el concepto de valor y la "
-            "decision de cumplimiento los emite y firma el profesional competente (abogado, "
-            "avaluador RAA, oficial de cumplimiento); el sistema solo prepara y senaliza.</i>"))
+        story.append(KeepTogether([t, Spacer(1, 6)]))
     story.append(Spacer(1, 8))
     
-    # ── 08B GATE FIDUCIARIO + CARGAS ECONOMICAS (Sprint 1 Bloques 3+7) ───
-    story.append(sec("08B - Estructurabilidad Fiduciaria y Carga Economica"))
+    # ── 11 RESUMEN HALLAZGOS ───────────────────────────────────
+    story.append(sec("11 - Resumen de Hallazgos"))
+    story.append(hr())
+    story.append(body(f"El motor ARHIAX identifico <b>{len(hallazgos)} hallazgos</b> sobre este activo."))
+    story.append(Spacer(1, 4))
+    
+    # Contar dinámicamente por severidad real de los hallazgos (etiqueta genérica:
+    # un ALTO puede ser registral, geoespacial o de otro origen; no se afirma
+    # "Gravamenes" si el hallazgo ALTO es de amenaza/riesgo).
+    n_alto = sum(1 for h in hallazgos if h[0] == "ALTO")
+    n_medio = sum(1 for h in hallazgos if h[0] == "MEDIO")
+    n_info = sum(1 for h in hallazgos if h[0] == "INFORMATIVO")
+    story.append(badge_table([
+        ("ALTO", str(n_alto), colors.HexColor("#FBE9E9"), C_ROJO),
+        ("MEDIO", str(n_medio), C_ALERTA_BG, C_NARANJA),
+        ("INFORMATIVO", str(n_info), C_OK_BG, C_VERDE),
+    ], s))
+    story.append(Spacer(1, 6))
+    # UX: identificar CUÁL hallazgo es cada uno (la persona que revisa el dictamen
+    # debe saber que el ALTO es la hipoteca y cuál es el INFORMATIVO sin esperar a
+    # la sección 10). Se listan títulos compactos por severidad.
+    if hallazgos:
+        _mapa_color = {
+            "ALTO": (C_ROJO, colors.HexColor("#FBE9E9")),
+            "MEDIO": (C_NARANJA, C_ALERTA_BG),
+            "INFORMATIVO": (C_VERDE, C_OK_BG),
+        }
+        _filas_resumen = [("Severidad", "Hallazgo identificado", "")]
+        for h in hallazgos:
+            sev_h = h[0] if h and h[0] in _mapa_color else "INFORMATIVO"
+            tc_h, bg_h = _mapa_color[sev_h]
+            titulo_h = (h[3] if len(h) > 3 else "") or ""
+            fuente_h = (h[4] if len(h) > 4 else "") or ""
+            p_sev = Paragraph(f"<b>{sev_h}</b>", ParagraphStyle(
+                "res_sev", fontName="Helvetica-Bold", fontSize=7.5,
+                textColor=tc_h, leading=10))
+            p_tit = Paragraph(titulo_h, ParagraphStyle(
+                "res_tit", fontName="Helvetica", fontSize=8,
+                textColor=colors.HexColor("#2D3748"), leading=10))
+            p_fu = Paragraph(f"<font size=6.5 color='#718096'>{fuente_h}</font>",
+                             ParagraphStyle("res_fu", fontName="Helvetica",
+                                            fontSize=6.5, leading=9))
+            _filas_resumen.append([p_sev, p_tit, p_fu])
+        _t_res = Table(_filas_resumen, colWidths=["12%", "68%", "20%"])
+        _t_res.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), C_AZUL_OSC),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+             [colors.white, colors.HexColor("#F5F7FB")]),
+            ("GRID", (0, 0), (-1, -1), 0.4, C_BORDE),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("TOPPADDING", (0, 0), (-1, -1), 3.5),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 3.5),
+            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ]))
+        story.append(KeepTogether([_t_res, Spacer(1, 4)]))
+    story.append(Spacer(1, 8))
+    
+    story.append(sec("12 - Score Actuarial Integrado"))
+    story.append(hr())
+    # Nota en lenguaje claro: cómo interpretar el score
+    story.append(body(
+        "<b>Como leer el score:</b> es un puntaje de 0 a 100 que resume el nivel de riesgo del "
+        "inmueble (100 = riesgo bajo). Combina cuatro frentes: Registral (gravámenes y "
+        "tradición), Juridico (titularidad), Hidrologico (amenazas) y Catastral (datos del "
+        "predio). <b>Importante:</b> si existe un hallazgo ALTO (por ejemplo, una hipoteca "
+        "vigente), el resultado integrado se marca <b>BLOQUEADO</b> aunque el número sea alto: "
+        "el puntaje no puede verse como favorable mientras haya una condicion que deba "
+        "resolverse primero."))
+    story.append(Spacer(1, 6))
+    # Score dinamico real (Sprint 2): motores conectados, sin valores hardcodeados (H-05/H-06)
+    val_data_area = dict(val_data)
+    val_data_area["area"] = area
+    score_result = calcular_score_actuarial(hallazgos, geo_eval, analysis, val_data_area)
+    colores_score = score_result["colores"]
+    story.append(badge_table([
+        ("Score Registral", f"{score_result['score_registral']:.0f} / 100", colores_score["registral"][1], colores_score["registral"][0]),
+        ("Score Hidrologico", f"{score_result['score_hidrologico']:.0f} / 100", colores_score["hidrologico"][1], colores_score["hidrologico"][0]),
+        ("Score Juridico", f"{score_result['score_juridico']:.0f} / 100", colores_score["juridico"][1], colores_score["juridico"][0]),
+        ("Score Integrado ARHIAX", f"{score_result['score_integrado']:.0f} / 100", colores_score["integrado"][1], colores_score["integrado"][0]),
+    ], s))
+    story.append(Spacer(1, 4))
+    detalle_score = []
+    for comp, nombre in [("registral", "Registral"), ("juridico", "Juridico"),
+                         ("hidrologico", "Hidrologico"), ("catastral", "Catastral")]:
+        detalle_score.append((
+            f"Score {nombre} ({score_result[f'score_{comp}']:.0f}/100)",
+            "; ".join(score_result["detalle"][comp])
+        ))
+    detalle_score.append(("Score Integrado", generar_narrativa_score(score_result)))
+    story.append(dt(detalle_score))
+    story.append(Spacer(1, 8))
+
+    # ── 13 GATE FIDUCIARIO + CARGAS ECONOMICAS (Sprint 1 Bloques 3+7) ───
+    story.append(sec("13 - Estructurabilidad Fiduciaria y Carga Economica"))
     story.append(hr())
     res_fiel_08 = evaluar_estructurabilidad_fiduciaria(hallazgos)
 
@@ -2248,7 +2259,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         ))
         story.append(Spacer(1, 6))
 
-    # --- Bloque 3: Cargas economicas (integradas en seccion 08B) ---
+    # --- Bloque 3: Cargas economicas (integradas en seccion 13) ---
     hipotecas_activas_08b = [a for a in analysis.get("anotaciones", [])
                              if "Hipoteca" in a[2] and "CANCELADA" not in a[4]]
     if hipotecas_activas_08b:
@@ -2286,8 +2297,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         story.append(body(f"<i>{carga['advertencia']}</i>"))
     story.append(Spacer(1, 8))
 
-    # ── 08 RECOMENDACIONES ─────────────────────────────────────
-    story.append(sec("08 - Recomendaciones Operacionales"))
+    # ── 14 RECOMENDACIONES ─────────────────────────────────────
+    story.append(sec("14 - Recomendaciones Operacionales"))
     story.append(hr())
     for titulo, texto in recs:
         p_t = Paragraph(f"<b>{titulo}</b>", ParagraphStyle("rt",fontName="Helvetica-Bold",
@@ -2301,31 +2312,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         story.append(t)
         story.append(Spacer(1, 6))
     
-    # ── 09 PROVENANCE ──────────────────────────────────────────
-    story.append(sec("09 - Sello de Integridad del Insumo (Provenance)"))
-    story.append(hr())
-    prov_rows = [
-        [Paragraph("<b>HASH SHA-256</b>",s["mono"]),Paragraph(P_HASH,s["mono_hash"])],
-        [Paragraph("<b>TIMESTAMP</b>",s["mono"]),Paragraph(NOW_UTC.isoformat(),s["mono"])],
-        [Paragraph("<b>REFERENCIA</b>",s["mono"]),Paragraph(CERT_NUM,s["mono"])],
-        [Paragraph("<b>ALGORITMO</b>",s["mono"]),Paragraph("SHA-256 (integridad del contenido)",s["mono"])],
-    ]
-    tp = Table(prov_rows, colWidths=["30%","70%"])
-    tp.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,-1),C_NEGRO_MONO),
-        ("GRID",(0,0),(-1,-1),0.3,colors.HexColor("#1E3A5F")),
-        ("TOPPADDING",(0,0),(-1,-1),5),("BOTTOMPADDING",(0,0),(-1,-1),5),
-        ("LEFTPADDING",(0,0),(-1,-1),10)]))
-    story.append(tp)
-    story.append(Spacer(1, 8))
-    
-    # ── 10 ALCANCE ─────────────────────────────────────────────
-    story.append(sec("10 - Declaracion de Alcance"))
-    story.append(hr())
-    story.append(dt(get_alcance_dt(barrio, ciudad=ciudad)))
-    story.append(Spacer(1, 8))
-
-    # ── 11 RUTA DE VERIFICACION (Sprint 1 Bloque 4) ────────────
-    story.append(sec("11 - Ruta de Verificacion Profesional"))
+    # ── 15 RUTA DE VERIFICACION (Sprint 1 Bloque 4) ────────────
+    story.append(sec("15 - Ruta de Verificacion Profesional"))
     story.append(hr())
     # La ruta solo se arma con hallazgos que exigen ACCION (ALTO/MEDIO). Un
     # hallazgo INFORMATIVO (p. ej. 'Zona Libre de Amenazas y Riesgos') no debe
@@ -2393,6 +2381,29 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "No se detectaron condiciones pendientes de cierre en el analisis registral, "
             "juridico o geoespacial del folio."
         ))
+    story.append(Spacer(1, 8))
+    
+    # ── 16 ALCANCE ─────────────────────────────────────────────
+    story.append(sec("16 - Declaracion de Alcance"))
+    story.append(hr())
+    story.append(dt(get_alcance_dt(barrio, ciudad=ciudad)))
+    story.append(Spacer(1, 8))
+
+    # ── 17 PROVENANCE ──────────────────────────────────────────
+    story.append(sec("17 - Sello de Integridad del Insumo (Provenance)"))
+    story.append(hr())
+    prov_rows = [
+        [Paragraph("<b>HASH SHA-256</b>",s["mono"]),Paragraph(P_HASH,s["mono_hash"])],
+        [Paragraph("<b>TIMESTAMP</b>",s["mono"]),Paragraph(NOW_UTC.isoformat(),s["mono"])],
+        [Paragraph("<b>REFERENCIA</b>",s["mono"]),Paragraph(CERT_NUM,s["mono"])],
+        [Paragraph("<b>ALGORITMO</b>",s["mono"]),Paragraph("SHA-256 (integridad del contenido)",s["mono"])],
+    ]
+    tp = Table(prov_rows, colWidths=["30%","70%"])
+    tp.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,-1),C_NEGRO_MONO),
+        ("GRID",(0,0),(-1,-1),0.3,colors.HexColor("#1E3A5F")),
+        ("TOPPADDING",(0,0),(-1,-1),5),("BOTTOMPADDING",(0,0),(-1,-1),5),
+        ("LEFTPADDING",(0,0),(-1,-1),10)]))
+    story.append(tp)
     story.append(Spacer(1, 8))
     
     # ── ANEXO A: NOTA TECNICA GEODESICA ────────────────────────
@@ -2507,7 +2518,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(_marca)
     story.append(Spacer(1, 10))
     story.append(body(
-        "La seccion 07C de este dictamen fue preparada por <b>Titulux</b>, la capa de "
+        "Las secciones 05 (pre-dictamen juridico) y 09 (screening SAGRILAFT) de este dictamen fueron preparadas por <b>Titulux</b>, la capa de "
         "<b>confianza predial</b> de ARHIAX RE. Titulux estructura en un expediente unico: "
         "(1) el <b>pre-dictamen juridico</b> determinista sobre el certificado de libertad y "
         "tradicion (identidad, cronologia, titularidad, gravamenes, precio y pagos), y (2) el "
@@ -2525,7 +2536,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(body(
         "<i>Titulux no sustituye al abogado, al avaluador RAA ni al oficial de cumplimiento. "
         "Sus salidas son insumo preliminar de apoyo a la decision, sujeto a la verificacion "
-        "profesional descrita en la seccion 11 de este documento.</i>"))
+        "profesional descrita en la seccion 15 de este documento.</i>"))
     story.append(Spacer(1, 8))
 
     # ── CONTROLES DE CALIDAD SPRINT 0 ───────────────────────────

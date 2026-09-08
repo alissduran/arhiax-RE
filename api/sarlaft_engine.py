@@ -157,9 +157,11 @@ def generar_ficha_sarlaft(
         ),
         "plataformas_recomendadas": PLATAFORMAS_RECOMENDADAS,
         "disclaimer": (
-            "ARHIAX no tiene acceso a listas OFAC, ONU, UIAF ni WorldCheck. "
-            "Los hashes SHA-256 garantizan la trazabilidad y no-alteración de "
-            "los nombres auditados en este insumo. No constituye verificación SARLAFT."
+            "Los hashes SHA-256 garantizan la trazabilidad y no-alteración de los nombres "
+            "auditados. El screening en vivo (ONU/OFAC) lo ejecuta el motor Titulux y su "
+            "resultado se reporta en la sección 09 de este documento; la lista UIAF queda "
+            "pendiente de consulta por canal oficial. La verificación final la realiza el "
+            "oficial de cumplimiento en la plataforma autorizada de su institución."
         ),
     }
 
@@ -177,7 +179,7 @@ def generar_tabla_sarlaft(ficha: dict) -> list:
         estado_sujetos = "{} sujetos identificados".format(n_sujetos)
     filas = [
         ("Estado de verificación SARLAFT",
-         f"⚠ PENDIENTE VERIFICACIÓN EXTERNA — {estado_sujetos}"),
+         f"Estructural (nombres + hash) · screening ONU/OFAC en vivo (sección 09) · UIAF pendiente — {estado_sujetos}"),
         ("Hash de integridad de la ficha", ficha["hash_ficha"]),
         ("Timestamp de generación (UTC)", ficha["timestamp_utc"]),
     ]
