@@ -253,13 +253,33 @@ def ejecutar_titulux(
         resultado["error"] = f"No se pudo construir el caso Titulux: {e}"
         return resultado
 
-    # 1) Screening SAGRILAFT multifuente (en vivo, con degradación honesta).
+    # 1) Screening SAGRILAFT multifuente. Primero la caché persistente (Neon)
+    # para no re-descargar ONU/OFAC/UK (~54 MB) en cada generación; lo que falte
+    # se descarga/ingesta en vivo con degradación honesta y se persiste a Neon.
+    listas: Dict[str, Any] = {}
     try:
-        listas = obtener_listas(list(fuentes_activas), cache_dir=cache_dir,
-                                timeout=timeout_listas)
-    except Exception as e:  # noqa: BLE001
+        from listas_cache import leer_todas as _leer_cache_neon
+        listas = _leer_cache_neon(list(fuentes_activas))
+    except Exception:
         listas = {}
-        resultado["error"] = (resultado["error"] or "") + f"; listas: {e}"
+
+    _faltantes = [f for f in fuentes_activas if f not in listas]
+    if _faltantes:
+        try:
+            _obtenidas = obtener_listas(_faltantes, cache_dir=cache_dir,
+                                        timeout=timeout_listas)
+            listas.update(_obtenidas)
+            # Persistir solo las OPERATIVA (datos reales); nunca muestras.
+            _persistir = {f: _obtenidas[f] for f in _obtenidas
+                          if getattr(_obtenidas[f][0], "estado", "") == "OPERATIVA"}
+            if _persistir:
+                try:
+                    from listas_cache import escribir_todas as _escribir_cache_neon
+                    _escribir_cache_neon(_persistir)
+                except Exception:
+                    pass
+        except Exception as e:  # noqa: BLE001
+            resultado["error"] = (resultado["error"] or "") + f"; listas: {e}"
 
     # Estado por fuente según su política y resultado de descarga.
     estado_fuente: Dict[str, str] = {}
