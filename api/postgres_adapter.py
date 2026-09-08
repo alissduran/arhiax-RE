@@ -149,4 +149,17 @@ def init_postgres(conn) -> None:
     # QStash las recupere por job_id (no viajan en el payload de la cola).
     for col in ("sombra_9am", "sombra_3pm", "mapa_satelital"):
         cur.execute(f"ALTER TABLE trabajos_pdf ADD COLUMN IF NOT EXISTS {col} BYTEA")
+
+    # Documentos SARLAFT / debida diligencia adjuntos al caso (subidos por el
+    # usuario: UIAF, UE, PEP, extracto hipotecario, etc.).
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS documentos_caso (
+            id SERIAL PRIMARY KEY,
+            case_id INTEGER NOT NULL,
+            nombre TEXT NOT NULL,
+            tipo TEXT NOT NULL,
+            contenido BYTEA,
+            creado TEXT NOT NULL
+        )
+    """)
     conn.commit()

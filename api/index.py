@@ -639,6 +639,76 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
         "extraidos": extraidos
     }
 
+@app.post("/api/dictamenes/{case_id}/documentos")
+async def subir_documento_caso(
+    case_id: int,
+    nombre: str = Form(...),
+    tipo: str = Form("sarlaft"),
+    file: UploadFile = File(...),
+    auth: dict = Depends(require_auth)
+):
+    """Adjunta un documento SARLAFT / debida diligencia al caso (UIAF, UE, PEP,
+    extracto hipotecario, levantamiento, etc.). Lo sube el usuario después de
+    descargarlo, cuando el agente IA no puede obtenerlo automáticamente."""
+    contenido = file.file.read(MAX_UPLOAD_BYTES)
+    if not contenido:
+        raise HTTPException(status_code=400, detail="El archivo está vacío.")
+    import datetime
+    creado = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    tipo_limpio = (tipo or "sarlaft").strip() or "sarlaft"
+    nombre_limpio = (nombre or file.filename or "documento").strip()
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO documentos_caso (case_id, nombre, tipo, contenido, creado) "
+        "VALUES (?, ?, ?, ?, ?)",
+        (case_id, nombre_limpio, tipo_limpio, contenido, creado),
+    )
+    doc_id = cursor.lastrowid
+    conn.commit()
+    conn.close()
+    return {"id": doc_id, "case_id": case_id, "nombre": nombre_limpio,
+            "tipo": tipo_limpio, "creado": creado}
+
+
+@app.get("/api/dictamenes/{case_id}/documentos")
+async def listar_documentos_caso(case_id: int, auth: dict = Depends(require_auth)):
+    """Lista los documentos adjuntos al caso (sin el contenido binario)."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT id, nombre, tipo, creado FROM documentos_caso WHERE case_id = ? ORDER BY id",
+        (case_id,),
+    )
+    filas = cursor.fetchall()
+    conn.close()
+    return [
+        {"id": f["id"], "nombre": f["nombre"], "tipo": f["tipo"], "creado": f["creado"]}
+        for f in filas
+    ]
+
+
+@app.get("/api/dictamenes/{case_id}/documentos/{doc_id}")
+async def descargar_documento_caso(case_id: int, doc_id: int, auth: dict = Depends(require_auth)):
+    """Descarga el contenido binario de un documento adjunto."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT nombre, contenido FROM documentos_caso WHERE id = ? AND case_id = ?",
+        (doc_id, case_id),
+    )
+    fila = cursor.fetchone()
+    conn.close()
+    if not fila:
+        raise HTTPException(status_code=404, detail="Documento no encontrado.")
+    from fastapi.responses import Response
+    nombre_seguro = str(fila["nombre"]).replace('"', "").replace("\\", "")
+    return Response(
+        content=fila["contenido"],
+        media_type="application/octet-stream",
+        headers={"Content-Disposition": f'attachment; filename="{nombre_seguro}"'},
+    )
+
 @app.post("/api/dictamenes/{case_id}/update")
 def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: BackgroundTasks = None, auth: bool = Depends(require_auth)):
     conn = get_db_connection()

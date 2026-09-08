@@ -90,6 +90,19 @@ def init_db():
         except sqlite3.OperationalError:
             pass
 
+    # Documentos SARLAFT / debida diligencia adjuntos al caso (subidos por el
+    # usuario: UIAF, UE, PEP, extracto hipotecario, etc.).
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS documentos_caso (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            case_id INTEGER NOT NULL,
+            nombre TEXT NOT NULL,
+            tipo TEXT NOT NULL,
+            contenido BLOB,
+            creado TEXT NOT NULL
+        )
+    """)
+
     conn.commit()
     conn.close()
 

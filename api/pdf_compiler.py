@@ -2590,4 +2590,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     print(f"  Folio: {FOLIO}")
     print(f"  Hash SHA-256: {P_HASH}")
     print(f"  Timestamp: {NOW_UTC.isoformat()}")
+
+    # ── NOTIFICACIÓN: documentos SARLAFT pendientes (requieren humano) ──
+    # Envía un correo (Resend) con la lista de documentos que un agente IA no
+    # puede descargar (UIAF, UE, PEP, extracto hipotecario, etc.). Nunca rompe
+    # la generación: si Resend no está configurado o falla, se omite.
+    try:
+        from notificaciones import compilar_pendientes, enviar_correo_pendientes
+        _pendientes_doc = compilar_pendientes(_titulux or {}, hallazgos)
+        if _pendientes_doc:
+            _ok_mail = enviar_correo_pendientes(folio, _pendientes_doc)
+            print(f"[PDF][NOTIF] correo de pendientes enviado={_ok_mail} "
+                  f"n={len(_pendientes_doc)} -> {[p.get('id') for p in _pendientes_doc]}")
+    except Exception as _e_notif:
+        print(f"[PDF][NOTIF] no disponible: {_e_notif}")
+
     return cert_num, p_hash
