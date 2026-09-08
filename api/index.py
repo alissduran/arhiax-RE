@@ -253,7 +253,16 @@ def extraer_datos_de_pdf(pdf_path: str, ciudad: str = "barranquilla") -> dict:
                 texto += t
                 
         # 1. Extraer Área
+        # Regresión (CTL real 040-646406): el certificado del SNR escribe el área
+        # como 'AREA PRIVADA - METROS CUADRADOS: 58 CENTIMETROS CUADRADOS: 7500'
+        # (58 m2 + 7500 cm2 = 58.75 m2). Sin este patrón el dictamen dejaba el
+        # área en 0 y mostraba el área de TERRENO catastral (22.05) como si fuera
+        # la del apartamento.
         patrones_area = [
+            # 'AREA PRIVADA - METROS CUADRADOS: 58 CENTIMETROS CUADRADOS: 7500'
+            r"(?:área|area)\s+privada\s*[-–—:]?\s*"
+            r"metros\s+cuadrados\s*:?\s*(\d+(?:[.,]\d+)?)\s+"
+            r"centimetros\s+cuadrados\s*:?\s*(\d+(?:[.,]\d+)?)",
             r"(?:área|area)\s+(?:privada|construida)\s+(?:de\s+)?(\d+(?:[.,]\d+)?)\s*(?:m2|metros|mts|M2)",
             r"(?:cabida|superficie)\s+(?:de\s+)?(\d+(?:[.,]\d+)?)\s*(?:m2|metros|mts|M2)",
             r"(?:área|area)\s+(?:de\s+)?(\d+(?:[.,]\d+)?)\s*(?:m2|metros|mts|M2)",
@@ -261,15 +270,20 @@ def extraer_datos_de_pdf(pdf_path: str, ciudad: str = "barranquilla") -> dict:
         ]
         for patron in patrones_area:
             matches = re.findall(patron, texto, re.IGNORECASE)
-            if matches:
-                val_str = matches[0].replace(",", ".")
-                try:
-                    area_float = float(val_str)
-                    if 10 <= area_float <= 1000:
-                        datos["area"] = area_float
-                        break
-                except ValueError:
-                    continue
+            if not matches:
+                continue
+            try:
+                if isinstance(matches[0], tuple):  # metros + centimetros
+                    m_grp = matches[0]
+                    area_float = float(str(m_grp[0]).replace(",", ".")) + \
+                        float(str(m_grp[1]).replace(",", ".")) / 10000.0
+                else:
+                    area_float = float(str(matches[0]).replace(",", "."))
+                if 10 <= area_float <= 1000:
+                    datos["area"] = round(area_float, 2)
+                    break
+            except (ValueError, TypeError, IndexError):
+                continue
 
         # 2. Extraer Matrícula (Folio): misma lógica del analizador legal
         # (acepta '040-...', '001-...' y '50C-/50N-/50S-...' de Bogotá; respeta

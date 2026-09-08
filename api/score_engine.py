@@ -141,6 +141,9 @@ def calcular_score_actuarial(
         if "ALTA" in nivel_ri or "ALTO" in nivel_ri:
             score_hidrologico -= 15
             detalle_hidro.append(f"-15 pts: Área en riesgo ALTA")
+        elif "MEDIA" in nivel_ri or "MEDIO" in nivel_ri:
+            score_hidrologico -= 8
+            detalle_hidro.append(f"-8 pts: Área en riesgo MEDIA")
         else:
             score_hidrologico -= 5
             detalle_hidro.append(f"-5 pts: Área en riesgo BAJA")

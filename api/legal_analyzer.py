@@ -303,6 +303,31 @@ def analizar_texto_certificado(texto):
         # y "Anotación Nro: 0" (salvedades). Se normaliza ":" pegado al token.
         _texto_anot = re.sub(r"ANOTACI[OÓ]N\s*:", "ANOTACION ", texto, flags=re.IGNORECASE)
         _texto_anot = re.sub(r"Anotaci[oó]n\s+Nro\s*:", "ANOTACION ", _texto_anot, flags=re.IGNORECASE)
+        # Regresión (CTL real 040-646406, queja del usuario): la sección
+        # SALVEDADES del certificado ("Anotación Nro: 5 Nro corrección: 1...
+        # INSERCIÓN ACTO OMITIDO ART.59 LEY 1579/12") lista correcciones de
+        # anotaciones ANTERIORES, NO anotaciones nuevas del folio. El split las
+        # capturaba como anotaciones fantasma '005/007/008/006/000 OTRO N/D
+        # VIGENTE'. Todo lo posterior a 'SALVEDADES' no pertenece a la cadena
+        # de tradición: se descarta.
+        _corte_salvedades = re.search(
+            r"\bSALVEDADES\s*:?\s*\(?Informaci[oó]n Anterior o Corregida",
+            _texto_anot, re.IGNORECASE)
+        if _corte_salvedades:
+            _texto_anot = _texto_anot[:_corte_salvedades.start()]
+        else:
+            # Sin SALVEDADES: si hay un cierre 'NRO TOTAL DE ANOTACIONES: *N*' y
+            # después NO hay más anotaciones, cortar ahí (el texto posterior es
+            # el sello del registrador). Si el total aparece ANTES de más
+            # anotaciones (CTL fragmentados), se ignora y el parseo sigue.
+            _m_total = re.search(
+                r"NRO\s+TOTAL\s+DE\s+ANOTACIONES\s*:\s*\*?\d+\*?", _texto_anot,
+                re.IGNORECASE)
+            if _m_total:
+                _resto = _texto_anot[_m_total.end():]
+                if not re.search(r"(?:\r?\n|^)\s*ANOTACI[OÓ]N\s+(?:Nro|N[oO]?|:)?\s*\d+",
+                                 _resto, re.IGNORECASE):
+                    _texto_anot = _texto_anot[:_m_total.end()]
         anotaciones_raw = re.split(r"(?:\r?\n|^)\s*ANOTACI[OÓ]N\s+(?:Nro|N[oO]?|:)?\s*", _texto_anot, flags=re.IGNORECASE)
 
         

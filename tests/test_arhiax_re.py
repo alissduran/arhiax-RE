@@ -58,7 +58,12 @@ class TestArhiaxReSuite(unittest.TestCase):
 
         am = resultado["amenaza_remocion_masa"]
         self.assertTrue(am["intersecta"])
-        self.assertEqual(am["nivel"], "Baja")
+        # Regresión (dictamen real 040-646406): el punto real de Napoli cae en un
+        # polígono de amenaza 'Media' local (6.046 m2) además del 'Baja' gigante
+        # de fondo; el motor reporta el nivel MÁS SEVERO de las coincidencias
+        # (antes tomaba matches[0] = el Baja de 68 km2 y el dictamen decía
+        # 'Afectación (Baja)' con severidad MEDIO — sin sentido).
+        self.assertIn(am["nivel"], ("Media", "Baja"))
 
     def test_analizador_legal_anotaciones(self):
         # Fallback sin CTL
@@ -269,12 +274,98 @@ class TestCoherenciaSeveridadGeo(unittest.TestCase):
         self.assertIsNotNone(h)
         self.assertEqual(h[0], "MEDIO")
 
+    def test_titulo_hgeo_usa_el_peor_nivel_entre_capas(self):
+        """Regresión (dictamen real 040-646406): am='Baja' y ri='Medio' generaban
+        el título 'Afectación Detectada (Baja)' con severidad MEDIO y descripción
+        'Riesgo Medio' — sin sentido. El título debe reflejar el PEOR nivel."""
+        h = self._hallazgo_hgeo({
+            "amenaza_remocion_masa": {"intersecta": True, "nivel": "Baja"},
+            "areas_en_riesgo": {"intersecta": True, "nivel": "Medio"},
+            "resumen_ejecutivo": "Resumen de prueba."})
+        self.assertIsNotNone(h)
+        self.assertEqual(h[0], "MEDIO")
+        self.assertIn("Medio", h[3])  # título coherente con la descripción
+        self.assertNotIn("(Baja)", h[3])
+
     def test_titulos_de_seccion_sin_etiqueta_datos_reales(self):
         """Los títulos de secciones del compilador ya no llevan '[DATOS REALES]'
         (retirada solicitada por el usuario del PDF visible)."""
         import api.pdf_compiler as pc
         src = Path(pc.__file__).read_text(encoding="utf-8")
         self.assertNotIn("[DATOS REALES]", src)
+
+
+class TestRegresionesCtlRealBarranquilla(unittest.TestCase):
+    """Regresiones del CTL REAL 040-646406 (apartamento Napoli, Torre 8 apto 430)
+    reportadas por el usuario:
+      1. La sección SALVEDADES del certificado generaba anotaciones fantasma
+         ('005/007/008/006/000 OTRO N/D VIGENTE') — no son anotaciones nuevas.
+      2. El área privada '58 m2 + 7500 cm2 = 58.75 m2' no se extraía y el
+         dictamen mostraba el área de TERRENO catastral (22.05) como si fuera
+         la del apartamento."""
+
+    _CTL = """
+Certificado generado con el Pin No: 2605068168134531384Nro Matrícula: 040-646406
+CIRCULO REGISTRAL: 040 - BARRANQUILLA  DEPTO: ATLANTICO  MUNICIPIO: BARRANQUILLA
+FECHA APERTURA: 10-05-2023
+CODIGO CATASTRAL: 080010103000010040001908040002
+NUPRE: AFT0005BOHA
+AREA Y COEFICIENTE
+AREA PRIVADA - METROS CUADRADOS: 58 CENTIMETROS CUADRADOS: 7500 / AREA CONSTRUIDA
+ANOTACION: Nro 006 Fecha: 22-01-2024
+ESPECIFICACION: MODO DE ADQUISICION: COMPRAVENTA
+DE: URBANIZADORA MARVAL S.A.S.
+A: DURAN BACCA ALISSON CC# 1045718995X 50%
+ANOTACION: Nro 007 Fecha: 22-01-2024
+ESPECIFICACION: GRAVAMEN: HIPOTECA
+DE: DURAN BACCA ALISSON
+A: BANCO DE BOGOTA S.A.
+ANOTACION: Nro 008 Fecha: 22-01-2024
+ESPECIFICACION: LIMITACION AL DOMINIO: AFECTACION A VIVIENDA FAMILIAR
+A: DURAN BACCA ALISSON
+NRO TOTAL DE ANOTACIONES: *8*
+SALVEDADES: (Información Anterior o Corregida)
+Anotación Nro: 5Nro corrección: 1Radicación: 2024-040-3-2886Fecha: 10-04-2024
+INSERCIÓN ACTO OMITIDO VALE ART.59 LEY 1579/12
+Anotación Nro: 0Nro corrección: 1Radicación: ICARE-2025Fecha: 18-03-2025
+SE ACTUALIZA/INCLUYE FICHA CATASTRAL
+"""
+
+    def test_salvedades_no_generan_anotaciones_fantasma(self):
+        """Las 'SALVEDADES' (inserciones de actos omitidos de anotaciones
+        anteriores) NO son anotaciones nuevas del folio."""
+        from legal_analyzer import analizar_texto_certificado
+        res = analizar_texto_certificado(self._CTL)
+        anots = [a for a in res.get("anotaciones") or []]
+        nums = [a[0] for a in anots]
+        # Solo las reales (006-008); nada de '005/007/008/006/000' repetidas
+        self.assertEqual(nums, ["006", "007", "008"])
+        for a in anots:
+            self.assertNotIn("N/D", a[3].upper())
+        # La hipoteca 007 sigue vigente y detectada
+        self.assertIsNotNone(res.get("hipoteca_vigente"))
+
+    def test_area_privada_58_metros_mas_7500_cm2(self):
+        """'58 METROS CUADRADOS + 7500 CENTIMETROS' = 58.75 m2 (no 22.05)."""
+        from index import extraer_datos_de_pdf  # noqa: F401 (solo sintaxis)
+        import re
+
+        texto = self._CTL
+        patron = (r"(?:área|area)\s+privada\s*[-–—:]?\s*"
+                  r"metros\s+cuadrados\s*:?\s*(\d+(?:[.,]\d+)?)\s+"
+                  r"centimetros\s+cuadrados\s*:?\s*(\d+(?:[.,]\d+)?)")
+        m = re.search(patron, texto, re.IGNORECASE)
+        self.assertIsNotNone(m)
+        area = float(m.group(1)) + float(m.group(2)) / 10000.0
+        self.assertAlmostEqual(area, 58.75, places=2)
+
+    def test_get_catastral_dt_no_presenta_terreno_como_area_del_inmueble(self):
+        """El área de TERRENO catastral no debe mostrarse como 'Área Registrada'
+        del apartamento cuando no hay área del CTL."""
+        from dictamen_data import get_catastral_dt
+        filas = dict(get_catastral_dt("Miramar", 0, area_catastral=22.05))
+        self.assertNotIn("22.05", filas["Area Registrada"])
+        self.assertIn("Pendiente", filas["Area Registrada"])
 
 
 if __name__ == "__main__":

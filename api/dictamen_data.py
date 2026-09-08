@@ -370,9 +370,11 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
         constr_txt = tipo_construccion
     else:
         constr_txt = "Pendiente de verificacion"
-    area_reg_txt = f"{area:.2f} m2" if area else "Pendiente de verificacion"
-    if area_catastral and area_catastral != area:
-        area_reg_txt = f"{area:.2f} m2 (registral) / {area_catastral:.2f} m2 (catastral)" if area else f"{area_catastral:.2f} m2 (catastral)"
+    # Regresión (CTL real 040-646406): 'Área Registrada' es el área PRIVADA del
+    # inmueble que declara el CTL (apartamento 430: 58.75 m2). El área de TERRENO
+    # catastral (22.05 m2 del lote) NO es el área del apartamento: mostrarla como
+    # 'Área Registrada' confunde (la 4.1B ya la reporta como 'Área terreno').
+    area_reg_txt = f"{area:.2f} m2" if area else "Pendiente de verificación (requiere el área del CTL)"
     return [
         ("Area Registrada", area_reg_txt),
         ("Barrio catastral", barrio_clean),

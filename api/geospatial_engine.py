@@ -108,8 +108,23 @@ def evaluate_predio(lat: float, lon: float) -> dict:
                 matches.append(item)
                 
         if matches:
-            # Tomamos la de mayor severidad o la primera coincidencia
-            first = matches[0]
+            # Regresión (dictamen real 040-646406): el punto puede caer en varios
+            # polígonos de la MISMA capa (p. ej. un polígono 'Baja' gigante de
+            # fondo que cubre la ciudad y uno 'Media' local de 6.046 m2). Tomar
+            # matches[0] (orden del STRtree) reportaba 'Baja' y el dictamen decía
+            # 'Afectación Detectada (Baja)' con severidad MEDIO y 'Riesgo Medio'
+            # en la descripción — sin sentido. Se elige la coincidencia de MAYOR
+            # severidad (y, a igualdad, la de menor área = la más específica).
+            orden_severidad = {'muy alta': 4, 'muy alto': 4, 'alta': 3, 'alto': 3,
+                               'media': 2, 'medio': 2, 'baja': 1, 'bajo': 1,
+                               'desconocido': 0, 'sin amenaza identificada': 0,
+                               'sin riesgo identificado': 0, 'indeterminado': 0,
+                               'n/a': 0, 'na': 0, 'none': 0, '': 0}
+            def _clave(m):
+                nivel = str(m['level']).strip().lower()
+                return (orden_severidad.get(nivel, 0),
+                        -float(m.get('area_m2') or 0))  # menor área desempata
+            first = max(matches, key=_clave)
             return {
                 'intersecta': True,
                 'nivel': first['level'],

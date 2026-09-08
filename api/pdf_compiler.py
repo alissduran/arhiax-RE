@@ -176,11 +176,29 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
     hay_riesgo  = ri.get('intersecta', False)
 
     if hay_amenaza or hay_riesgo:
-        # Nivel SOLO de la capa que intersecta (am o ri): si una capa no
-        # intersecta su 'nivel' es None y no debe aparecer en el título
-        # (regresión: 'Detectada (Sin afectación)' con severidad MEDIO).
-        nivel_texto = ((am.get('nivel') if hay_amenaza else None) or
-                       (ri.get('nivel') if hay_riesgo else None) or 'Detectado')
+        # Nivel del título: el PEOR entre am y ri (no solo la primera capa que
+        # intersecta). Regresión (dictamen real 040-646406): am='Baja' y
+        # ri='Medio' producían 'Afectación Detectada (Baja)' con severidad MEDIO
+        # y descripción 'Riesgo Medio' — sin sentido. Si hay riesgo Medio, el
+        # título debe decirlo.
+        def _peor_nivel(*niveles):
+            orden = {'muy alta': 4, 'muy alto': 4, 'alta': 3, 'alto': 3,
+                     'media': 2, 'medio': 2, 'baja': 1, 'bajo': 1}
+            mejor = None
+            mejor_rank = 0
+            for n in niveles:
+                if not n:
+                    continue
+                rank = orden.get(str(n).strip().lower(), 0)
+                if rank >= mejor_rank:
+                    mejor_rank = rank
+                    mejor = n
+            return mejor
+
+        nivel_texto = _peor_nivel(
+            am.get('nivel') if hay_amenaza else None,
+            ri.get('nivel') if hay_riesgo else None,
+        ) or 'Detectado'
         clase_suelo = am.get('clase_suelo', ri.get('clase_suelo', 'N/A'))
         # Severidad coherente con el nivel real de la amenaza (fix inconsistencia)
         severidad, color_sev, color_bg, impl = _severidad_geo_desde_nivel(am, ri)
