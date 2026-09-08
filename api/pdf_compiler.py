@@ -966,7 +966,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── TITULUX (Confianza Predial): pre-dictamen + screening SAGRILAFT en vivo ──
     # Sprint Titulux: mapea el CTL real al modelo de pre-dictamen jurídico
     # determinista (TIT_B01..B05/VAL/TRX/SAG) y ejecuta el screening multifuente
-    # (ONU/OFAC en vivo; UIAF pendiente por canal oficial) con degradación honesta.
+    # (ONU/OFAC/UK en vivo; UIAF pendiente por canal oficial; UE por archivo) con degradación honesta.
     # Nunca rompe el PDF: si falla, la sección 05 lo declara NO EVALUADO.
     _listas_cache = os.environ.get("ARHIA_LISTAS_CACHE")
     if not _listas_cache:
@@ -990,9 +990,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _titulux = ejecutar_titulux(
                 analysis, db_record, val_data, geo_eval,
                 area_catastral=_predio_area_catastral,
-                fuentes_activas=("onu", "ofac", "uiaf"),
+                fuentes_activas=("onu", "ofac", "uiaf", "uk"),
                 cache_dir=_listas_cache,
-                timeout_listas=60,
+                timeout_listas=120,
             )
             print(f"[PDF][TITULUX] disponible={_titulux.get('disponible')} "
                   f"screening={_titulux.get('screening_agregado')} "
@@ -2003,7 +2003,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "<b>Que es esta seccion:</b> deja los nombres de las personas y entidades del caso "
         "(titular, banco acreedor, constructor) con su huella digital (hash) para trazabilidad y "
         "presenta el <b>screening en vivo</b> de esos nombres contra las listas restrictivas. "
-        "<b>ONU y OFAC se consultan en vivo</b> (feed oficial, copia local versionada por "
+        "<b>ONU, OFAC y UK se consultan en vivo</b> (feed oficial, copia local versionada por "
         "SHA-256); la <b>lista UIAF</b> queda <b>PENDIENTE de consulta por canal oficial</b> y "
         "nunca se simula. El hash garantiza que los nombres no se alteren entre la generacion y "
         "el cruce."))
@@ -2038,6 +2038,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                        Paragraph("<b>Resultado</b>", s["header"]),
                        Paragraph("<b>ONU</b>", s["header"]),
                        Paragraph("<b>OFAC</b>", s["header"]),
+                       Paragraph("<b>UK</b>", s["header"]),
                        Paragraph("<b>UIAF</b>", s["header"])]]
         _resultado_es = {
             "sinCoincidencia": "Sin coincidencia", "coincidencia": "COINCIDENCIA",
@@ -2054,9 +2055,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                 Paragraph(f"<b>{_res_es}</b>", s["value"]),
                 Paragraph(_por_fuente.get("onu", "—"), s["body"]),
                 Paragraph(_por_fuente.get("ofac", "—"), s["body"]),
+                Paragraph(_por_fuente.get("uk", "—"), s["body"]),
                 Paragraph(_por_fuente.get("uiaf", "—"), s["body"]),
             ])
-        _t_scr = Table(_filas_scr, colWidths=["28%", "14%", "18%", "14%", "14%", "12%"])
+        _t_scr = Table(_filas_scr, colWidths=["26%", "12%", "16%", "12%", "12%", "11%", "11%"])
         _t_scr.setStyle(TableStyle([
             ("BACKGROUND", (0, 0), (-1, 0), C_AZUL_OSC), ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
             ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F0F4FB")]),
@@ -2077,14 +2079,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _pend = ", ".join(str(f).upper() for f in _titulux["fuentes_pendientes"])
             story.append(alert_orange(
                 f"<b>Screening incompleto (degradacion honesta):</b> fuente(s) no consultada(s) en "
-                f"vivo: {_pend}. La consulta de la lista UIAF requiere canal oficial autorizado. "
-                f"El resultado de las fuentes consultadas NO cubre las pendientes; la operacion "
-                f"queda sujeta a completarlas."
+                f"vivo: {_pend}. La lista UIAF requiere canal oficial autorizado y la lista UE "
+                f"requiere ingesta del archivo XML oficial. El resultado de las fuentes consultadas "
+                f"NO cubre las pendientes; la operacion queda sujeta a completarlas."
             ))
         elif not _titulux.get("coincidencia"):
             story.append(alert_green(
                 "<b>Screening SAGRILAFT completado:</b> sin coincidencias en las fuentes "
-                "consultadas en vivo (ONU/OFAC). El resultado no sustituye la verificacion final "
+                "consultadas en vivo (ONU/OFAC/UK). El resultado no sustituye la verificacion final "
                 "del oficial de cumplimiento ni la consulta del canal UIAF."
             ))
     story.append(Spacer(1, 8))
@@ -2528,7 +2530,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(dt([
         ("Modulo", "Titulux — ARHIAX Confianza Predial"),
         ("Reglas de titulo", "TIT_B01..B05 · VAL_B01 · TRX_B01 · SAG_B01 (deterministas)"),
-        ("Screening", "ONU / OFAC en vivo (feed oficial, cache SHA-256) · UIAF por canal oficial"),
+        ("Screening", "ONU / OFAC / UK en vivo (feed oficial, cache SHA-256) · UIAF por canal oficial · UE por archivo"),
         ("Evidencia", "Envelope B18 + cadena HMAC por evento (trazabilidad 9.22)"),
         ("Autoría", "El sistema prepara y señaliza; concluye y firma el profesional competente"),
     ]))

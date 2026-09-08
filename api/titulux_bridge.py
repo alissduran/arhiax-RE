@@ -40,8 +40,11 @@ _TIPO_MAP = {
     "ACLARACION": "aclaracion",
 }
 
-# Fuentes cuya consulta en vivo es la base vinculante del screening (9.17).
-FUENTES_VINCULANTES_VIVO = ("onu", "ofac")
+# Fuentes vinculantes que requieren datos reales (OPERATIVA) para contar en el
+# screening. onu/ofac/uk se descargan en vivo (feed oficial); ue se ingesta por
+# archivo (su portal webgate bloquea la automatización con 403 anti-bot).
+FUENTES_VINCULANTES_VIVO = ("onu", "ofac", "uk")
+FUENTES_POR_FICHERO = ("ue",)
 # Fuentes sin feed público limpio: se reportan como pendientes por canal oficial.
 FUENTES_CANAL_OFICIAL = ("uiaf",)
 
@@ -214,7 +217,7 @@ def ejecutar_titulux(
     geo_eval: Optional[Dict[str, Any]] = None,
     *,
     area_catastral: float = 0.0,
-    fuentes_activas: Tuple[str, ...] = ("onu", "ofac", "uiaf"),
+    fuentes_activas: Tuple[str, ...] = ("onu", "ofac", "uiaf", "uk"),
     cache_dir: Optional[str] = None,
     timeout_listas: int = 90,
 ) -> Dict[str, Any]:
@@ -274,16 +277,17 @@ def ejecutar_titulux(
         if f in fuentes_activas:
             fuentes_pendientes.add(f)
 
-    # Fuentes vinculantes en vivo que degradaron a muestra (o faltan): pendientes.
-    for f in FUENTES_VINCULANTES_VIVO:
+    # Fuentes vinculantes (en vivo o por fichero) que no quedaron OPERATIVA:
+    # pendientes (no se acepta "sin coincidencia" contra una muestra sintética).
+    for f in FUENTES_VINCULANTES_VIVO + FUENTES_POR_FICHERO:
         if f not in fuentes_activas:
             continue
         if estado_fuente.get(f) != "OPERATIVA":
             fuentes_pendientes.add(f)
 
-    # Otras fuentes pedidas que no llegaron a OPERATIVA ni a canal oficial:
+    # Otras fuentes pedidas (muestra determinista) que no llegaron a OPERATIVA:
     for f in fuentes_activas:
-        if f in FUENTES_CANAL_OFICIAL:
+        if f in FUENTES_CANAL_OFICIAL or f in FUENTES_VINCULANTES_VIVO or f in FUENTES_POR_FICHERO:
             continue
         if estado_fuente.get(f) not in ("OPERATIVA", "SYNTHETIC_TEST_FIXTURE"):
             fuentes_pendientes.add(f)
