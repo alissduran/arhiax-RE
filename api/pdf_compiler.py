@@ -963,6 +963,44 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     def dt(rows):
         return data_table(rows, s)
     
+    # ── TITULUX (Confianza Predial): pre-dictamen + screening SAGRILAFT en vivo ──
+    # Sprint Titulux: mapea el CTL real al modelo de pre-dictamen jurídico
+    # determinista (TIT_B01..B05/VAL/TRX/SAG) y ejecuta el screening multifuente
+    # (ONU/OFAC en vivo; UIAF pendiente por canal oficial) con degradación honesta.
+    # Nunca rompe el PDF: si falla, la sección 07C lo declara NO EVALUADO.
+    _listas_cache = os.environ.get("ARHIA_LISTAS_CACHE")
+    if not _listas_cache:
+        # Caché ESTABLE (no por-caso): en Vercel /tmp persiste entre invocaciones
+        # sobre la misma instancia caliente (evita re-descargar ONU/OFAC ~18 MB);
+        # en local, un directorio escribible dentro de api/.
+        if os.environ.get("VERCEL") or not os.access(str(API_DIR), os.W_OK):
+            _listas_cache = "/tmp/arhia_listas"
+        else:
+            _listas_cache = str(API_DIR / "assets" / "cache_listas")
+    _titulux = None
+    _titulux_skip = None
+    if not path_certificado:
+        # Sin CTL no hay titular, acreedor ni anotaciones que pre-analizar ni
+        # sujetos que screeningar: descargar ONU/OFAC sería un desperdicio.
+        _titulux_skip = ("sin certificado de libertad y tradición (CTL) adjunto: no hay "
+                         "sujetos ni anotaciones que analizar.")
+    else:
+        try:
+            from titulux_bridge import ejecutar_titulux
+            _titulux = ejecutar_titulux(
+                analysis, db_record, val_data, geo_eval,
+                area_catastral=_predio_area_catastral,
+                fuentes_activas=("onu", "ofac", "uiaf"),
+                cache_dir=_listas_cache,
+                timeout_listas=60,
+            )
+            print(f"[PDF][TITULUX] disponible={_titulux.get('disponible')} "
+                  f"screening={_titulux.get('screening_agregado')} "
+                  f"pendientes={_titulux.get('fuentes_pendientes')}")
+        except Exception as _e_titulux:
+            print(f"[PDF][TITULUX] no disponible: {_e_titulux}")
+            _titulux = None
+    
     # ── DEFINICIÓN DE HALLAZGOS (Módulo de Datos) ──────────────────
     
     # ── BUILD STORY ─────────────────────────────────────────────
@@ -1994,14 +2032,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 07B FICHA SARLAFT ESTRUCTURAL (Sprint 2 Bloque B, conectado) ──
     story.append(sec("07B - Ficha SARLAFT Estructural"))
     story.append(hr())
-    # Nota en lenguaje claro: qué es y qué NO hace esta sección
+    # Nota en lenguaje claro: qué es y qué hace esta sección (actualizada con Titulux)
     story.append(body(
         "<b>Que es esta seccion:</b> deja listos los nombres de las personas y entidades del caso "
-        "(titular, banco acreedor, constructor) con su huella digital (hash), para que un "
-        "profesional los cruce contra las listas restrictivas de lavado de activos (UIAF, OFAC, "
-        "ONU). <b>En lenguaje claro: ARHIAX no ejecuta esa verificacion</b> porque requiere "
-        "acceso a las bases oficiales de pago/licencia; por eso el estado es PENDIENTE. El hash "
-        "garantiza que los nombres entregados no se alteren entre la generacion y el cruce."))
+        "(titular, banco acreedor, constructor) con su huella digital (hash) para trazabilidad. "
+        "<b>El cruce en vivo contra listas vinculantes (ONU/OFAC) y el pre-dictamen juridico se "
+        "presentan en la seccion 07C (Titulux).</b> El hash garantiza que los nombres entregados "
+        "no se alteren entre la generacion y el cruce."))
     story.append(Spacer(1, 6))
     ficha_sarlaft = generar_ficha_sarlaft(
         titulares=analysis.get("titulares", ""),
@@ -2013,6 +2050,166 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(dt(generar_tabla_sarlaft(ficha_sarlaft)))
     story.append(Spacer(1, 4))
     story.append(body(f"<b>Disclaimer:</b> {ficha_sarlaft['disclaimer']}"))
+    story.append(Spacer(1, 8))
+
+    # ── 07C TITULUX: PRE-DICTAMEN JURIDICO + SCREENING SAGRILAFT EN VIVO ──
+    story.append(sec("07C - Pre-dictamen juridico y Screening SAGRILAFT (Titulux)"))
+    story.append(hr())
+    story.append(body(
+        "<b>Que es esta seccion:</b> el motor <b>Titulux (ARHIAX Confianza Predial)</b> aplica un "
+        "pre-dictamen juridico determinista (reglas TIT/VAL/TRX/SAG) sobre el certificado de "
+        "libertad y tradicion, y ejecuta el <b>screening SAGRILAFT</b> de los nombres del caso "
+        "contra las listas restrictivas. <b>ONU y OFAC se consultan en vivo</b> (feed oficial, con "
+        "copia local versionada por SHA-256); la <b>lista UIAF</b>, que no tiene feed publico "
+        "limpio, queda <b>PENDIENTE de consulta por canal oficial</b> y nunca se simula."))
+    story.append(Spacer(1, 6))
+
+    _ESTADO_ES = {
+        "OK": "Conforme", "OBSERVACION": "Observacion", "RIESGO": "Riesgo",
+        "INFORMATIVO": "Informativo", "INFORMACION_INSUFICIENTE": "Informacion insuficiente",
+        "INCONSISTENTE": "Inconsistente", "REQUIERE_REVISION": "Requiere revision",
+    }
+    _SEV_ES = {"baja": "Baja", "media": "Media", "alta": "Alta", "critica": "Critica"}
+    _VEREDICTO_ES = {
+        "PREANALISIS_INCOMPLETO": "Pre-analisis incompleto (screening pendiente)",
+        "BLOQUEO_PRECAUTORIO": "Bloqueo precautorio",
+        "REQUIERE_REVISION": "Requiere revision profesional",
+        "SIN_HALLAZGO_AUTOMATICO": "Sin hallazgo automatico (revisar por profesional)",
+    }
+
+    if not _titulux or not _titulux.get("disponible"):
+        _motivo = ""
+        if _titulux_skip:
+            _motivo = f": {_titulux_skip}"
+        elif _titulux and _titulux.get("error"):
+            _motivo = f" ({_titulux.get('error')})"
+        story.append(alert_orange(
+            "<b>Titulux NO EVALUADO</b>" + _motivo + ". "
+            "La verificacion SAGRILAFT y el pre-dictamen juridico quedan PENDIENTES; "
+            "no se afirma resultado alguno."
+        ))
+    else:
+        # --- Screening SAGRILAFT (resultado real con degradación honesta) ---
+        story.append(sub("07C.1 Screening SAGRILAFT de contrapartes"))
+        _filas_scr = [[Paragraph("<b>Sujeto</b>", s["header"]),
+                       Paragraph("<b>Tipo</b>", s["header"]),
+                       Paragraph("<b>Resultado</b>", s["header"]),
+                       Paragraph("<b>ONU</b>", s["header"]),
+                       Paragraph("<b>OFAC</b>", s["header"]),
+                       Paragraph("<b>UIAF</b>", s["header"])]]
+        _resultado_es = {
+            "sinCoincidencia": "Sin coincidencia", "coincidencia": "COINCIDENCIA",
+            "candidato": "Candidato (revisar)", "revisionManual": "Revision manual",
+            "pendiente": "PENDIENTE",
+        }
+        for sc in _titulux.get("screening", []):
+            _por_fuente = {f["fuente"]: _resultado_es.get(f["resultado"], f["resultado"])
+                           for f in sc.get("fuentes", [])}
+            _res_es = _resultado_es.get(sc["resultado"], sc["resultado"])
+            _filas_scr.append([
+                Paragraph(sc["sujeto"] or "—", s["body"]),
+                Paragraph("Persona natural" if sc.get("tipo") == "natural" else "Entidad", s["body"]),
+                Paragraph(f"<b>{_res_es}</b>", s["value"]),
+                Paragraph(_por_fuente.get("onu", "—"), s["body"]),
+                Paragraph(_por_fuente.get("ofac", "—"), s["body"]),
+                Paragraph(_por_fuente.get("uiaf", "—"), s["body"]),
+            ])
+        _t_scr = Table(_filas_scr, colWidths=["28%", "14%", "18%", "14%", "14%", "12%"])
+        _t_scr.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), C_AZUL_OSC), ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F0F4FB")]),
+            ("GRID", (0, 0), (-1, -1), 0.4, C_BORDE),
+            ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("LEFTPADDING", (0, 0), (-1, -1), 5), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ]))
+        story.append(_t_scr)
+        story.append(Spacer(1, 4))
+
+        if _titulux.get("coincidencia"):
+            story.append(alert_red(
+                "<b>COINCIDENCIA DETECTADA en listas vinculantes.</b> Procede revision humana y "
+                "debida diligencia intensificada antes de decidir. El dictamen NO autoriza operar "
+                "con la contraparte coincidente."
+            ))
+        if _titulux.get("fuentes_pendientes"):
+            _pend = ", ".join(str(f).upper() for f in _titulux["fuentes_pendientes"])
+            story.append(alert_orange(
+                f"<b>Screening incompleto (degradacion honesta):</b> fuente(s) no consultada(s) en "
+                f"vivo: {_pend}. La consulta de la lista UIAF requiere canal oficial autorizado. "
+                f"El resultado de las fuentes consultadas NO cubre las pendientes; la operacion "
+                f"queda sujeta a completarlas."
+            ))
+        elif not _titulux.get("coincidencia"):
+            story.append(alert_green(
+                "<b>Screening SAGRILAFT completado:</b> sin coincidencias en las fuentes "
+                "consultadas en vivo (ONU/OFAC). El resultado no sustituye la verificacion final "
+                "del oficial de cumplimiento ni la consulta del canal UIAF."
+            ))
+        story.append(Spacer(1, 6))
+
+        # --- Pre-dictamen jurídico (hallazgos del expediente) ---
+        story.append(sub("07C.2 Pre-dictamen juridico (hallazgos del expediente)"))
+        _filas_h = [[Paragraph("<b>Regla</b>", s["header"]),
+                     Paragraph("<b>Verificacion</b>", s["header"]),
+                     Paragraph("<b>Estado</b>", s["header"]),
+                     Paragraph("<b>Severidad</b>", s["header"])]]
+        for h in _titulux.get("pre_dictamen", []):
+            _filas_h.append([
+                Paragraph(h.get("id", "") or "—", s["mono"]),
+                Paragraph(h.get("titulo", "") or "—", s["body"]),
+                Paragraph(_ESTADO_ES.get(h.get("estado"), h.get("estado", "")), s["value"]),
+                Paragraph(_SEV_ES.get(h.get("severidad"), h.get("severidad", "")), s["body"]),
+            ])
+        _t_h = Table(_filas_h, colWidths=["13%", "49%", "20%", "18%"])
+        _t_h.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), C_AZUL_OSC), ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F0F4FB")]),
+            ("GRID", (0, 0), (-1, -1), 0.4, C_BORDE),
+            ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("LEFTPADDING", (0, 0), (-1, -1), 5), ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        story.append(_t_h)
+        story.append(Spacer(1, 4))
+
+        # Detalle de hallazgos relevantes (riesgo/observación) con acción
+        _hall_detalle = [h for h in _titulux.get("pre_dictamen", [])
+                         if h.get("estado") in ("RIESGO", "OBSERVACION", "INCONSISTENTE",
+                                               "INFORMACION_INSUFICIENTE", "REQUIERE_REVISION")]
+        if _hall_detalle:
+            for h in _hall_detalle:
+                _desc = (h.get("descripcion") or "").strip()
+                _base = (h.get("base_legal") or "").strip()
+                _acc = (h.get("accion") or "").strip()
+                _txt = _desc
+                if _base:
+                    _txt += f" <i>Base legal: {_base}.</i>"
+                if _acc:
+                    _txt += f" <b>Accion sugerida:</b> {_acc}"
+                story.append(Paragraph(
+                    f"<b>{h.get('id')} — {h.get('titulo')}</b> "
+                    f"[{_ESTADO_ES.get(h.get('estado'), h.get('estado'))} · "
+                    f"{_SEV_ES.get(h.get('severidad'), h.get('severidad'))}]: {_txt}",
+                    ParagraphStyle("tith", parent=s["body"], fontSize=8, leading=11,
+                                   spaceBefore=3)))
+        story.append(Spacer(1, 6))
+
+        # --- Conclusión (autoría separada) ---
+        _conc = _titulux.get("conclusion") or {}
+        _ver = _conc.get("veredicto", "")
+        story.append(sub("07C.3 Conclusión preliminar (autoría separada)"))
+        if _ver:
+            story.append(body(
+                f"<b>Veredicto del pre-analisis:</b> {_VEREDICTO_ES.get(_ver, _ver)}."
+            ))
+        if _conc.get("fundamento"):
+            story.append(body(_conc["fundamento"]))
+        if _conc.get("recomendaciones"):
+            _recs = "; ".join(_conc["recomendaciones"])
+            story.append(body(f"<b>Recomendaciones:</b> {_recs}"))
+        story.append(body(
+            "<i>Titulux es un PRE-dictamen. La conclusion profesional, el concepto de valor y la "
+            "decision de cumplimiento los emite y firma el profesional competente (abogado, "
+            "avaluador RAA, oficial de cumplimiento); el sistema solo prepara y senaliza.</i>"))
     story.append(Spacer(1, 8))
     
     # ── 08B GATE FIDUCIARIO + CARGAS ECONOMICAS (Sprint 1 Bloques 3+7) ───
@@ -2290,6 +2487,47 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "urbanistico, de riesgos y catastral a escala predial. Para levantamientos topograficos "
         "o deslindes, se requiere trabajo de campo en CTM12 nativo."))
     
+    # ── PÁGINA DE MARCA TITULUX (Confianza Predial) ──────────────
+    story.append(PageBreak())
+    _marca = Table([[
+        Paragraph("TITULUX", ParagraphStyle("bm", fontName="Helvetica-Bold", fontSize=30,
+                   textColor=colors.HexColor("#10243F"), leading=34, alignment=1)),
+    ], [
+        Paragraph("ARHIAX <b>Confianza Predial</b>", ParagraphStyle("bs", fontName="Helvetica",
+                   fontSize=14, textColor=colors.HexColor("#2E5B8A"), leading=18, alignment=1)),
+    ], [
+        Paragraph("Motor de pre-dictamen jurídico-inmobiliario y screening SAGRILAFT",
+                   ParagraphStyle("bss", fontName="Helvetica-Oblique", fontSize=10,
+                   textColor=colors.HexColor("#4A6A8A"), leading=14, alignment=1)),
+    ]], colWidths=["100%"])
+    _marca.setStyle(TableStyle([
+        ("TOPPADDING", (0, 0), (-1, -1), 12), ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
+        ("LEFTPADDING", (0, 0), (-1, -1), 14), ("RIGHTPADDING", (0, 0), (-1, -1), 14),
+    ]))
+    story.append(_marca)
+    story.append(Spacer(1, 10))
+    story.append(body(
+        "La seccion 07C de este dictamen fue preparada por <b>Titulux</b>, la capa de "
+        "<b>confianza predial</b> de ARHIAX RE. Titulux estructura en un expediente unico: "
+        "(1) el <b>pre-dictamen juridico</b> determinista sobre el certificado de libertad y "
+        "tradicion (identidad, cronologia, titularidad, gravamenes, precio y pagos), y (2) el "
+        "<b>screening SAGRILAFT</b> de las contrapartes contra listas restrictivas "
+        "vinculantes, con degradacion honesta cuando una fuente no es consultable en vivo."))
+    story.append(Spacer(1, 6))
+    story.append(dt([
+        ("Modulo", "Titulux — ARHIAX Confianza Predial"),
+        ("Reglas de titulo", "TIT_B01..B05 · VAL_B01 · TRX_B01 · SAG_B01 (deterministas)"),
+        ("Screening", "ONU / OFAC en vivo (feed oficial, cache SHA-256) · UIAF por canal oficial"),
+        ("Evidencia", "Envelope B18 + cadena HMAC por evento (trazabilidad 9.22)"),
+        ("Autoría", "El sistema prepara y señaliza; concluye y firma el profesional competente"),
+    ]))
+    story.append(Spacer(1, 6))
+    story.append(body(
+        "<i>Titulux no sustituye al abogado, al avaluador RAA ni al oficial de cumplimiento. "
+        "Sus salidas son insumo preliminar de apoyo a la decision, sujeto a la verificacion "
+        "profesional descrita en la seccion 11 de este documento.</i>"))
+    story.append(Spacer(1, 8))
+
     # ── CONTROLES DE CALIDAD SPRINT 0 ───────────────────────────
     # M-13: los controles son advertencias (no asserts que tumben el PDF con 500).
     def ejecutar_controles_de_calidad():

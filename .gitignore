@@ -28,6 +28,9 @@ output_referencia/dictamen_napoli.pdf.tmp
 # Database and assets
 *.db
 api/assets/
+# Caché de listas restrictivas de Titulux (ONU/OFAC/UK descargadas en vivo)
+api/cache_listas/
+cache_listas/
 *map*.png
 *map*.html
 *.geojson
