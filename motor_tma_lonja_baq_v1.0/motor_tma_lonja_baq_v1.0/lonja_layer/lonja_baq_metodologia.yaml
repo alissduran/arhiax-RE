@@ -206,11 +206,16 @@ comparacion_mercado:
 # con las ZHG del IGAC o ajustarse según observación gremial.
 valor_suelo_por_sector:
   Miramar:
-    valor_central_m2: 4500000
-    rango_min_m2: 3800000
-    rango_max_m2: 5200000
-    vigencia: "Q2-2026"
-    fuente: "Observación gremial Lonja BAQ + ZHG IGAC referencial"
+    # Actualizado Q3-2026 con precio real de mercado verificado por el
+    # propietario en la constructora del proyecto (unidades ~58 m2 terminadas
+    # en venta ~$420.000.000 ≈ $7.1M/m2). El valor anterior ($4.5M/m2, Q2-2026)
+    # quedaba ~40% por debajo del mercado observado y el dictamen del folio real
+    # 040-646406 (Napoli, Torre 8 apto 430) subestimaba el inmueble.
+    valor_central_m2: 6800000
+    rango_min_m2: 5500000
+    rango_max_m2: 8000000
+    vigencia: "Q3-2026"
+    fuente: "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial"
   Riomar:
     valor_central_m2: 5200000
     rango_min_m2: 4500000

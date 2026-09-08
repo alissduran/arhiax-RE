@@ -388,10 +388,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
 
     # Barrio: 1) capa oficial POT (Barrios de la Alcaldía), 2) texto del CTL,
     # 3) registro. Se elimina el barrio de demostración como valor por defecto.
+    _barrio_desde_catastro = False
     if predio_real:
         _ent = predio_real.get("entorno") or {}
         if _ent.get("barrio"):
             barrio = _ent["barrio"]
+            # Regresión (CTL real 040-646406): 'Miramar'/'El Recreo' también son
+            # barrios REALES de Barranquilla que el catastro en vivo resuelve por
+            # código/NUPRE. Solo el demo sin CTL debe descartarse; el barrio que
+            # viene del catastro del predio real se conserva SIEMPRE.
+            _barrio_desde_catastro = True
         else:
             barrio = ""
     else:
@@ -399,7 +405,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             barrio = analysis["barrio"]
         else:
             barrio = db_record.get('barrio', '') or ''
-    if not barrio or barrio.lower() in ("pendiente", "miramar", "el recreo", "recreo", "desconocido"):
+    if not _barrio_desde_catastro and (not barrio or
+            barrio.lower() in ("pendiente", "miramar", "el recreo", "recreo", "desconocido")):
         # Si el CTL se analizó (tiene código catastral) pero no aportó barrio,
         # NO se afirma el demo: queda pendiente de verificación.
         if path_certificado and (analysis.get("codigo_catastral") or analysis.get("nupre")):
