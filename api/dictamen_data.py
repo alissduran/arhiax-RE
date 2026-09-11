@@ -313,8 +313,8 @@ def get_alcance_dt(barrio, ciudad="barranquilla"):
             ("Riesgos/Amenazas Medellín", "EJECUTADA -- Capas de gestión del riesgo DAGRD consultadas en vivo"),
             ("Integracion WFS-IGAC", "PLANIFICADA -- En desarrollo para consulta en vivo (ver roadmap)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
-            ("Verificacion SARLAFT", "NO EJECUTADA -- Requiere cruce de listas restrictivas en plataforma externa"),
-            ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013)"),
+            ("Verificacion SARLAFT", "EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial"),
+            ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
         ]
     if es_bog:
         return [
@@ -324,8 +324,8 @@ def get_alcance_dt(barrio, ciudad="barranquilla"):
             ("Riesgos/Amenazas Bogotá", "EJECUTADA -- Capas IDIGER consultadas en vivo (mov. masa, sismos, geotecnia)"),
             ("Detalle predial (NUPRE/destino por predio)", "NO DISPONIBLE EN ABIERTO -- El catastro distrital no expone capa predial con NUPRE; el destino es uso predominante por manzana (referencial)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
-            ("Verificacion SARLAFT", "NO EJECUTADA -- Requiere cruce de listas restrictivas en plataforma externa"),
-            ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013)"),
+            ("Verificacion SARLAFT", "EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial"),
+            ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
         ]
     return [
         ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),

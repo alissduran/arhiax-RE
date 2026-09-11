@@ -786,8 +786,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "automaticamente por el motor ARHIAX a partir de fuentes publicas (SNR, "
         "geoportales municipales, catastro, OpenStreetMap y bases abiertas). No "
         "constituye estudio de titulos, concepto juridico ni avaluo comercial en los "
-        "terminos de la Ley 1673 de 2013 ni de las normas de metodologia valuatoria "
-        "vigentes. Es un insumo preliminar sujeto a verificacion por profesional del "
+        "terminos de la Ley 1673 de 2013 ni de la Resolucion IGAC 941 de 2026 "
+        "(que deroga la Resolucion 620 de 2008). Es un insumo preliminar sujeto a "
+        "verificacion por profesional del "
         "derecho con tarjeta profesional vigente y/o avaluador inscrito en el RAA. "
         "Ninguna decision de credito, garantia o compraventa debe adoptarse con base "
         "exclusiva en este documento."
@@ -1758,6 +1759,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "metodologia valuatoria consolidada automatica (ponderacion de Comparacion de Mercado M1 "
         "y Capitalizacion de Rentas M3). El Metodo de Costo de Reposicion M2 fue calibrado "
         "segun metodologia valuatoria consolidada con parametros de mercado y costos de construccion vigentes. "
+        "ARHIAX opera como <b>asistente de conformidad valuatoria</b> (Resolucion IGAC 941 de 2026): "
+        "sugiere y compara; la seleccion definitiva del metodo, los supuestos, el valor y la firma "
+        "son del avaluador inscrito en el RAA. "
         "<b>[FUENTE: ESTIMACIÓN REFERENCIAL DE MERCADO ARHIAX (AUTOMÁTICA)]</b>"
     ))
     story.append(Spacer(1, 4))
@@ -1816,7 +1820,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 4))
     story.append(body(
         "Esta estimacion es referencial y de caracter automatico. <b>No sustituye un avaluo comercial</b> "
-        "elaborado por avaluador inscrito en el RAA conforme a la Ley 1673 de 2013 y las metodologias valuatorias vigentes."
+        "elaborado por avaluador inscrito en el RAA conforme a la Ley 1673 de 2013 y la Resolucion "
+        "IGAC 941 de 2026 (que deroga la Resolucion 620 de 2008). Los metodos M1/M2/M3 mostrados son "
+        "hipotesis de parametrizacion sujetas a validacion del avaluador competente."
     ))
     story.append(Spacer(1, 8))
 
