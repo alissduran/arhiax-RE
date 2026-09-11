@@ -16,10 +16,15 @@ C_BORDE = colors.HexColor("#E2E8F0")
 C_NEGRO_MONO = colors.HexColor("#0A1424")
 
 
-def get_valuation(area_construida_m2, barrio, estrato=4):
+def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1"):
     """
     Retorna la valoracion tecnica de mercado consolidando M1, M2 y M3
     segun los parametros declarados en el YAML de la Lonja de Barranquilla.
+
+    Regla de negocio (Resolucion IGAC 941/2026, regla confirmada en reunion):
+      - Propiedad horizontal terminada -> metodo principal M1 (comparacion de
+        mercado, 100%); M3 es el caso EXCEPCIONAL (solo con renta demostrable).
+    metodo_principal: "m1" (default) | "m3" (excepcional, renta demostrable).
     """
     import yaml
     from pathlib import Path
@@ -68,9 +73,9 @@ def get_valuation(area_construida_m2, barrio, estrato=4):
     except Exception as e:
         print(f"[VALUATION][WARN] Fallo de integracion YAML, usando fallbacks: {e}")
 
-    # M1: Comparacion de Mercado
-    val_consolidado = int(area_construida_m2 * val_m2_mercado)
-    m1_total_central = int(val_consolidado * 1.02)
+    # M1: Comparacion de Mercado (metodo principal para PH terminada, 100%)
+    m1_base = int(area_construida_m2 * val_m2_mercado)
+    m1_total_central = int(m1_base * 1.02)
     
     # Canon de arriendo mensual (tasa implicita del sector)
     # Renta tipica mensual estimada: ~0.55% del valor por m2
@@ -83,7 +88,9 @@ def get_valuation(area_construida_m2, barrio, estrato=4):
     costo_construccion_base = 2800000 # multifamiliar tipico
     valor_lote_m2 = int(val_m2_mercado * 0.30) # 30% del valor total es el lote
     m2_total_central = int(area_construida_m2 * (costo_construccion_base * factor_costos * 0.85 + valor_lote_m2))
-    
+
+    # Valor consolidado segun metodo principal: PH -> M1 (100%); excepcional -> M3.
+    val_consolidado = m3_total_central if metodo_principal == "m3" else m1_base
     val_consolidado = int(round(val_consolidado, -4))
     m1_total_central = int(round(m1_total_central, -4))
     m3_total_central = int(round(m3_total_central, -4))
@@ -99,6 +106,7 @@ def get_valuation(area_construida_m2, barrio, estrato=4):
         "m1": m1_total_central,
         "m2": m2_total_central,
         "m3": m3_total_central,
+        "metodo_principal": metodo_principal,
         "m1_m2": int(m1_total_central / area_construida_m2) if area_construida_m2 else 0,
         "m3_m2": int(m3_total_central / area_construida_m2) if area_construida_m2 else 0,
         "canon_mensual": canon_mensual,
@@ -293,12 +301,18 @@ def get_analisis_registral_text(barrio):
 
 def get_valoracion_alert(barrio, val_data, fmt_cop):
     barrio_clean = barrio.strip().title() if barrio else "el sector"
+    metodo = (val_data.get("metodo_principal") or "m1").lower()
+    if metodo == "m3":
+        metodo_txt = ("el método de capitalización de rentas (M3) como caso excepcional, "
+                      "según la renta demostrable del inmueble")
+    else:
+        metodo_txt = ("el método de comparación de mercado (M1) como método principal para "
+                      "propiedad horizontal terminada")
     return (
-        f"<b>SINTESIS DE VALORACION:</b> La estimación comercial consolidada de "
-        f"<b>{fmt_cop(val_data['consolidado'])} COP</b> responde a la metodología valuatoria "
-        f"consolidada del modulo ARHIAX (M1 · M2 · M3), "
-        f"integrando el método de comparación de mercado (M1) calibrado por sector geoeconómico ({barrio_clean}) "
-        f"y el método de capitalización de rentas (M3) según la tasa de rentabilidad neta de la tipología."
+        f"<b>SINTESIS DE VALORACION:</b> La estimación comercial de "
+        f"<b>{fmt_cop(val_data['consolidado'])} COP</b> responde a {metodo_txt}, "
+        f"calibrado por sector geoeconómico ({barrio_clean}). "
+        f"Regla IGAC 941/2026: PH = 100% M1; M3 solo en casos excepcionales."
     )
 
 def get_alcance_dt(barrio, ciudad="barranquilla"):

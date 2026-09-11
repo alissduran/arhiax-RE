@@ -521,7 +521,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         estrato = int(str(estrato).replace("No_Aplica", "4").split("_")[0])
     except Exception:
         estrato = 4
-    val_data = get_valuation(area, barrio, estrato)
+    # Metodo principal de valoracion (IGAC 941/2026): PH -> M1 (100%); M3 solo
+    # excepcional (renta demostrable). El caso puede forzarlo via metodo_avaluo.
+    _metodo_principal = (db_record.get("metodo_avaluo") or "m1").strip().lower()
+    if _metodo_principal not in ("m1", "m3"):
+        _metodo_principal = "m1"
+    val_data = get_valuation(area, barrio, estrato, metodo_principal=_metodo_principal)
     res_avaluo = val_data
     
     # Cargar hallazgos y recomendaciones dinamicas del analizador legal
@@ -1755,10 +1760,11 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(sec("07 - Estimación Referencial de Mercado (NO es avalúo)"))
     story.append(hr())
     story.append(body(
-        "Determinacion del valor comercial y rango de valor estimado del inmueble utilizando "
-        "metodologia valuatoria consolidada automatica (ponderacion de Comparacion de Mercado M1 "
-        "y Capitalizacion de Rentas M3). El Metodo de Costo de Reposicion M2 fue calibrado "
-        "segun metodologia valuatoria consolidada con parametros de mercado y costos de construccion vigentes. "
+        "Determinacion del valor comercial y rango de valor estimado del inmueble. "
+        "Para propiedad horizontal terminada el metodo principal es <b>Comparacion de Mercado M1 "
+        "(100%)</b>; <b>Capitalizacion de Rentas M3</b> se usa solo en casos excepcionales con "
+        "renta demostrable (Regla IGAC 941/2026). El Metodo de Costo de Reposicion M2 se calibra "
+        "segun parametros de mercado y costos de construccion vigentes. "
         "ARHIAX opera como <b>asistente de conformidad valuatoria</b> (Resolucion IGAC 941 de 2026): "
         "sugiere y compara; la seleccion definitiva del metodo, los supuestos, el valor y la firma "
         "son del avaluador inscrito en el RAA. "
@@ -1782,9 +1788,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             ("Valor central estimado (referencial)", f"<b>{fmt_cop(res_avaluo['consolidado'])} COP</b> (Equivalente a {fmt_cop(res_avaluo['consolidado']/area_calc)} / m2)"),
             ("Banda Baja al 80% (P10)", f"{fmt_cop(res_avaluo['banda_baja'])} COP ({fmt_cop(res_avaluo['banda_baja']/area_calc)} / m2)"),
             ("Banda Alta al 80% (P90)", f"{fmt_cop(res_avaluo['banda_alta'])} COP ({fmt_cop(res_avaluo['banda_alta']/area_calc)} / m2)"),
-            ("M1 - Comparacion de Mercado (70%)", f"{fmt_cop(res_avaluo['m1'])} COP (Lector dominante, ofertas ajustadas del sector)"),
+            ("M1 - Comparacion de Mercado (100%)", f"{fmt_cop(res_avaluo['m1'])} COP (Metodo principal para propiedad horizontal terminada)"),
             ("M2 - Costo de Reposicion (0%)", f"{fmt_cop(res_avaluo['m2'])} COP (Costo fisico directo + lote de terreno)"),
-            ("M3 - Capitalizacion de Rentas (30%)", f"{fmt_cop(res_avaluo['m3'])} COP (Validacion por renta mensual de {fmt_cop(res_avaluo['canon_mensual'])} con Cap Rate {res_avaluo['cap_rate']*100:.2f}% neto)"),
+            ("M3 - Capitalizacion de Rentas (excepcional)", f"{fmt_cop(res_avaluo['m3'])} COP (Caso excepcional con renta demostrable de {fmt_cop(res_avaluo['canon_mensual'])} con Cap Rate {res_avaluo['cap_rate']*100:.2f}% neto)"),
             ("Canon de Renta Estimado", f"{fmt_cop(res_avaluo['canon_mensual'])} COP mensual (Cap Rate {res_avaluo['cap_rate']*100:.2f}% neto aplicado)"),
             ("Vigencia de la estimación referencial", "6 meses a partir de la expedicion del dictamen"),
         ]))
