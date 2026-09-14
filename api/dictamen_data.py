@@ -18,19 +18,16 @@ C_NEGRO_MONO = colors.HexColor("#0A1424")
 
 def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1"):
     """
-    Retorna la valoracion tecnica de mercado consolidando los metodos de
-    comparacion (mercado), renta (capitalizacion de ingresos) y costo, segun
+    Retorna la valoracion tecnica de mercado consolidando M1 (comparacion de
+    mercado), M2 (costo de reposicion) y M3 (capitalizacion de rentas), segun
     los parametros declarados en el YAML de la Lonja de Barranquilla.
 
-    Conformidad IGAC 941/2026: la norma define CUATRO metodos (comparacion o
-    de mercado, renta o capitalizacion de ingresos, costo y tecnica residual)
-    SIN jerarquia entre ellos. La seleccion del metodo debe obedecer a las
-    caracteristicas fisicas, juridicas y economicas del inmueble y a la
-    disponibilidad/calidad de la informacion, con justificacion tecnica del
-    avaluador (Art. 13.9.a). El parametro metodo_principal es un DEFAULT
-    interno referencial de ARHIAX, NO una regla normativa; la decision final
-    del metodo y la firma son del avaluador inscrito en el RAA.
-    metodo_principal: "m1" (comparacion o de mercado) | "m3" (renta/capitalizacion).
+    Regla de negocio (practica de la LONJA de Barranquilla, no de la Resolucion
+    IGAC 941/2026): propiedad horizontal terminada -> metodo principal M1
+    (comparacion de mercado, 100%); M3 (capitalizacion de rentas) solo en casos
+    excepcionales con renta demostrable. La seleccion definitiva del metodo y la
+    firma son del avaluador inscrito en el RAA.
+    metodo_principal: "m1" (default) | "m3" (excepcional, renta demostrable).
     """
     import yaml
     from pathlib import Path
@@ -95,7 +92,7 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1"):
     valor_lote_m2 = int(val_m2_mercado * 0.30) # 30% del valor total es el lote
     m2_total_central = int(area_construida_m2 * (costo_construccion_base * factor_costos * 0.85 + valor_lote_m2))
 
-    # Valor consolidado segun metodo principal (default interno referencial): m1 o m3.
+    # Valor consolidado segun metodo principal (practica Lonja): PH -> M1 (100%); excepcional -> M3.
     val_consolidado = m3_total_central if metodo_principal == "m3" else m1_base
     val_consolidado = int(round(val_consolidado, -4))
     m1_total_central = int(round(m1_total_central, -4))
@@ -309,15 +306,16 @@ def get_valoracion_alert(barrio, val_data, fmt_cop):
     barrio_clean = barrio.strip().title() if barrio else "el sector"
     metodo = (val_data.get("metodo_principal") or "m1").lower()
     if metodo == "m3":
-        metodo_txt = "el método de renta o capitalización de ingresos"
+        metodo_txt = ("el método de capitalización de rentas (M3) como caso excepcional, "
+                      "según la renta demostrable del inmueble")
     else:
-        metodo_txt = "el método de comparación o de mercado"
+        metodo_txt = ("el método de comparación de mercado (M1) como método principal para "
+                      "propiedad horizontal terminada")
     return (
-        f"<b>SINTESIS DE VALORACION:</b> La estimación comercial referencial de "
+        f"<b>SINTESIS DE VALORACION:</b> La estimación comercial de "
         f"<b>{fmt_cop(val_data['consolidado'])} COP</b> responde a {metodo_txt}, "
         f"calibrado por sector geoeconómico ({barrio_clean}). "
-        f"Selección de método sujeta a justificación técnica del avaluador "
-        f"(Art. 13.9, Res. IGAC 941/2026)."
+        f"Práctica de la Lonja de Barranquilla: PH = 100% M1; M3 solo excepcional."
     )
 
 def get_alcance_dt(barrio, ciudad="barranquilla"):
