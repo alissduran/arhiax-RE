@@ -37,6 +37,71 @@ OVERPASS_PRESUPUESTO_TOTAL = 120.0
 
 CATEGORIAS = ["Salud", "Educacion", "Comercio", "Recreacion"]
 
+# ── Respaldo Photon (komoot) ────────────────────────────────────────────────
+# Overpass público bloquea/limita con frecuencia las IPs de DATACENTER (Vercel
+# corre en AWS): puede funcionar desde una red residencial y devolver 504/429
+# desde producción. Photon es una API pública SIN clave, estable y tolerante a
+# datacenter, así que se usa como respaldo cuando Overpass no trae datos.
+PHOTON_URL = "https://photon.komoot.io/api/"
+# (término de búsqueda, etiqueta OSM que DEBE tener el resultado, etiqueta a mostrar).
+# El filtro osm_tag es imprescindible: sin él Photon busca por NOMBRE y devuelve
+# falsos positivos (medidos: "ParkTool", una marca de herramientas, aparecía como
+# "Parque"; "Clínica de Ropa", una tienda, como "Clínica"). Eso sería desinformación.
+PHOTON_TAGS = {
+    "Salud": [("hospital", "amenity:hospital", "Salud (Hospital)"),
+              ("clinic", "amenity:clinic", "Salud (Clinica)")],
+    "Educacion": [("school", "amenity:school", "Educacion (Colegio)"),
+                  ("kindergarten", "amenity:kindergarten", "Educacion (Jardin)"),
+                  ("university", "amenity:university", "Educacion (Universidad)")],
+    "Comercio": [("supermarket", "shop:supermarket", "Comercio (Supermercado)"),
+                 ("mall", "shop:mall", "Comercio (Centro comercial)")],
+    "Recreacion": [("park", "leisure:park", "Recreacion (Parque)")],
+}
+
+
+def _pois_desde_photon(lat, lon, radius=2000, timeout=8.0):
+    """Respaldo de POIs vía Photon. Devuelve la MISMA estructura que
+    get_nearby_pois, o None si Photon tampoco respondió (nunca inventa datos)."""
+    resultado = {c: [] for c in CATEGORIAS}
+    hubo_respuesta = False
+    headers = {"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
+    for categoria, tags in PHOTON_TAGS.items():
+        vistos = set()
+        for termino, osm_tag, etiqueta in tags:
+            try:
+                r = requests.get(PHOTON_URL, params={
+                    "q": termino, "lat": lat, "lon": lon, "limit": 15,
+                    "osm_tag": osm_tag,
+                }, headers=headers, timeout=timeout)
+                if r.status_code != 200:
+                    continue
+                hubo_respuesta = True
+                for f in (r.json() or {}).get("features", []):
+                    props = f.get("properties") or {}
+                    nombre = props.get("name")
+                    coords = (f.get("geometry") or {}).get("coordinates") or []
+                    if not nombre or len(coords) != 2:
+                        continue
+                    # Verificación extra del tipo: el resultado debe traer la
+                    # etiqueta OSM pedida (defensa contra falsos positivos).
+                    _tag_real = f"{props.get('osm_key')}:{props.get('osm_value')}"
+                    if props.get("osm_key") and _tag_real != osm_tag:
+                        continue
+                    plon, plat = coords[0], coords[1]
+                    dist = haversine(lat, lon, plat, plon)
+                    if dist > radius or nombre.lower() in vistos:
+                        continue
+                    vistos.add(nombre.lower())
+                    resultado[categoria].append(
+                        {"name": nombre, "distance": dist, "type": etiqueta})
+            except Exception:
+                continue
+        resultado[categoria] = sorted(
+            resultado[categoria], key=lambda x: x["distance"])[:3]
+    if not hubo_respuesta:
+        return None
+    return resultado
+
 
 def _cache_dir():
     d = os.environ.get("ARHIA_POI_CACHE")
@@ -163,6 +228,7 @@ def get_nearby_pois(lat, lon, radius=2000):
                                          stream=True)
                 if response.status_code != 200:
                     response.close()
+                    print(f"[POI] {overpass_url} HTTP {response.status_code}")
                     break  # error HTTP (p. ej. 429/504): pasar al siguiente espejo
                 _trozos = []
                 for _trozo in response.iter_content(8192):
@@ -238,10 +304,24 @@ def get_nearby_pois(lat, lon, radius=2000):
                     time.sleep(1.0)  # backoff corto y reintentar el mismo espejo
                     continue
                 break  # agotado el reintento: siguiente espejo
-            except Exception:
+            except Exception as _e:
+                print(f"[POI] {overpass_url} fallo: {str(_e)[:60]}")
                 break  # error no-timeout: siguiente espejo
 
-    # OSM no disponible en ningún espejo (con reintentos): categorías vacías.
+    # Overpass no trajo datos (todos los espejos caídos/limitados). Respaldo
+    # Photon antes de declarar la sección como NO DISPONIBLE.
+    try:
+        respaldo = _pois_desde_photon(lat, lon, radius=radius)
+    except Exception as _e_ph:
+        print(f"[POI][PHOTON] sin respaldo: {str(_e_ph)[:60]}")
+        respaldo = None
+    if respaldo and any(respaldo.values()):
+        _POI_CACHE[clave] = (ahora, respaldo)
+        _escribir_disco(clave, respaldo)
+        return respaldo
+
+    print("[POI] SIN DATOS: Overpass y Photon no respondieron "
+          "(la seccion 03 se declara NO DISPONIBLE)")
     resultado = vacio()
     _POI_CACHE[clave] = (ahora, resultado)
     return resultado

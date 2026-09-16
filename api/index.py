@@ -1258,6 +1258,67 @@ def refrescar_listas_screening(auth: dict = Depends(require_admin)):
     return calentar_cache_listas(("onu", "ofac", "uk"), cache_dir=cache_dir, timeout=45)
 
 
+@app.get("/api/v1/diagnostico/poi")
+def diagnostico_poi(lat: float, lon: float, auth: dict = Depends(require_admin)):
+    """Diagnóstico de las fuentes de POIs DESDE el entorno desplegado. Solo admin.
+
+    Existe porque Overpass público bloquea/limita con frecuencia las IPs de
+    DATACENTER (Vercel corre en AWS): una prueba desde una red residencial puede
+    funcionar y produccion fallar igual. Este endpoint reporta, para las
+    coordenadas dadas, el estado y el tiempo de cada espejo Overpass y del
+    respaldo Photon, más el resultado real del motor de POIs.
+    """
+    import time as _t
+
+    import requests as _rq
+    from poi_engine import OVERPASS_ENDPOINTS, get_nearby_pois
+
+    _consulta = (
+        '[out:json][timeout:10];'
+        f'node["amenity"="hospital"](around:500,{lat},{lon});'
+        'out center 5;'
+    )
+    _ua = {"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
+    overpass = []
+    for _url in OVERPASS_ENDPOINTS:
+        _t0 = _t.time()
+        try:
+            _r = _rq.post(_url, data={"data": _consulta}, headers=_ua, timeout=15)
+            overpass.append({
+                "espejo": _url, "http": _r.status_code,
+                "segundos": round(_t.time() - _t0, 1),
+                "elementos": len((_r.json() or {}).get("elements", []))
+                if _r.status_code == 200 else None,
+            })
+        except Exception as _e:  # noqa: BLE001
+            overpass.append({"espejo": _url, "http": None,
+                             "segundos": round(_t.time() - _t0, 1),
+                             "error": str(_e)[:80]})
+
+    _tp = _t.time()
+    try:
+        _rp = _rq.get("https://photon.komoot.io/api/", params={
+            "q": "hospital", "lat": lat, "lon": lon, "limit": 3,
+            "osm_tag": "amenity:hospital"}, headers=_ua, timeout=15)
+        photon = {"http": _rp.status_code, "segundos": round(_t.time() - _tp, 1),
+                  "features": len((_rp.json() or {}).get("features", []))}
+    except Exception as _e2:  # noqa: BLE001
+        photon = {"error": str(_e2)[:80], "segundos": round(_t.time() - _tp, 1)}
+
+    _tm = _t.time()
+    _pois = get_nearby_pois(lat, lon, radius=2000)
+    return {
+        "coordenadas": {"lat": lat, "lon": lon},
+        "overpass": overpass,
+        "photon_respaldo": photon,
+        "motor_poi": {
+            "segundos": round(_t.time() - _tm, 1),
+            "total": sum(len(v) for v in _pois.values()),
+            "por_categoria": {k: len(v) for k, v in _pois.items()},
+        },
+    }
+
+
 def _verificar_firma_qstash(request: Request, body_bytes: bytes) -> bool:
     """Valida el JWT del header 'Upstash-Signature' (QStash v2 firma con JWT HS256
     usando la signing key del workspace)."""
