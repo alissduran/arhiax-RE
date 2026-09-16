@@ -12,24 +12,28 @@ import requests
 _POI_CACHE = {}
 _POI_TTL = 6 * 3600  # 6 horas: los POIs de OSM cambian poco
 
-# Endpoints Overpass (públicos), ordenados por velocidad/estabilidad medida
-# (mail.ru ~9s, api.de ~13s, con 143 elementos devueltos en Barranquilla). Se
-# prueban en orden hasta obtener respuesta con datos; ante timeout se reintenta
-# una vez. Un 200 SIN elementos se trata como réplica incompleta y se pasa al
-# siguiente espejo (no se acepta "sin equipamientos" por un único espejo vacío).
+# Endpoints Overpass (públicos) que ALGUNA VEZ respondieron con datos, medidos
+# en vivo. Los espejos públicos son BEST-EFFORT y fluctúan hora a hora: en la
+# misma sesión se midió overpass-api.de OK (10 s) y luego HTTP 504; mail.ru 504
+# y luego OK con 189 elementos (27 s). Por eso se listan los tres utilizables y
+# se prueban en orden hasta que uno conteste (el presupuesto total los reparte).
+# Descartados por inútiles: overpass.osm.ch (0 elementos en Colombia),
+# overpass.osm.jp (404), overpass.openstreetmap.ru (inalcanzable),
+# overpass.private.coffee (504 constante).
 OVERPASS_ENDPOINTS = [
-    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
     "https://overpass-api.de/api/interpreter",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
-    "https://overpass.private.coffee/api/interpreter",
 ]
-OVERPASS_TIMEOUT = 6.0
-OVERPASS_REINTENTOS = 1  # reintentos extra por endpoint tras un timeout
-# Presupuesto TOTAL de la fase de POIs (segundos). En Vercel Hobby la función
-# completa tiene 60 s: sin este tope, 4 espejos x (timeout + reintento) podían
-# consumir ~96 s y matar la generación del dictamen. Al agotarse, se devuelven
-# las categorías vacías (el dictamen las declara NO DISPONIBLES, nunca inventa).
-OVERPASS_PRESUPUESTO_TOTAL = 12.0
+# Tiempos MEDIDOS de una consulta real de 2 km: 10-46 s según el espejo y su
+# carga. Un timeout corto corta respuestas válidas y deja la sección 03 VACÍA
+# (regresión real que reportó el usuario). Con Vercel Pro hay 300 s de función.
+OVERPASS_TIMEOUT = 40.0
+OVERPASS_REINTENTOS = 0  # sin reintento del mismo espejo: el presupuesto da para 3
+# Presupuesto TOTAL (TOPE DURO de tiempo real) de la fase de POIs, en segundos:
+# 3 espejos x 40 s. Al agotarse se devuelven categorías VACÍAS (el dictamen las
+# declara NO DISPONIBLES: nunca inventa POIs ni distancias).
+OVERPASS_PRESUPUESTO_TOTAL = 120.0
 
 CATEGORIAS = ["Salud", "Educacion", "Comercio", "Recreacion"]
 
@@ -113,7 +117,7 @@ def get_nearby_pois(lat, lon, radius=2000):
       node["leisure"~"park|playground"](around:{radius}, {lat}, {lon});
       way["leisure"~"park|playground"](around:{radius}, {lat}, {lon});
     );
-    out center;
+    out center 200;
     """
 
     def vacio():
@@ -144,11 +148,32 @@ def get_nearby_pois(lat, lon, radius=2000):
             if time.time() >= _limite_total:
                 break
             try:
+                # Timeout ADAPTATIVO: nunca pedir más tiempo del que queda.
+                _restante = _limite_total - time.time()
+                if _restante <= 1.0:
+                    break
+                _timeout_req = max(3.0, min(OVERPASS_TIMEOUT, _restante))
+                # stream=True + lectura por bloques: da un TOPE DURO de tiempo
+                # real. El timeout de requests es POR OPERACIÓN DE SOCKET, no
+                # total: un servidor que envía lento tardaba 36 s pese a un
+                # timeout de 25 s (medido) y se comía el presupuesto de la
+                # función serverless.
                 response = requests.post(overpass_url, data={"data": query},
-                                         headers=headers, timeout=OVERPASS_TIMEOUT)
+                                         headers=headers, timeout=_timeout_req,
+                                         stream=True)
                 if response.status_code != 200:
-                    break  # error HTTP: pasar al siguiente espejo
-                data = response.json()
+                    response.close()
+                    break  # error HTTP (p. ej. 429/504): pasar al siguiente espejo
+                _trozos = []
+                for _trozo in response.iter_content(8192):
+                    _trozos.append(_trozo)
+                    # Plazo ABSOLUTO de la fase (no desde el inicio de lectura):
+                    # si no, cabeceras lentas + lectura lenta sumaban ~35 s.
+                    if time.time() > _limite_total:
+                        response.close()
+                        raise TimeoutError("presupuesto de POIs agotado en la lectura")
+                response.close()
+                data = json.loads(b"".join(_trozos).decode("utf-8", "replace"))
                 elements = data.get("elements", [])
 
                 # Un 200 SIN elementos puede ser una réplica incompleta (p. ej.

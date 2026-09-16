@@ -1030,7 +1030,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                 area_catastral=_predio_area_catastral,
                 fuentes_activas=("onu", "ofac", "uiaf", "uk"),
                 cache_dir=_listas_cache,
-                timeout_listas=15,
+                timeout_listas=90,
             )
             print(f"[PDF][TITULUX] disponible={_titulux.get('disponible')} "
                   f"screening={_titulux.get('screening_agregado')} "
