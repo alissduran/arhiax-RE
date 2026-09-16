@@ -226,7 +226,7 @@ def _nominatim_query(query, ciudad="Barranquilla"):
         url = "https://nominatim.openstreetmap.org/search?{}".format(params)
         req = urllib.request.Request(url, headers={"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"})
 
-        with urllib.request.urlopen(req, timeout=8) as resp:
+        with urllib.request.urlopen(req, timeout=5) as resp:
             data = json.loads(resp.read().decode("utf-8"))
 
         for item in data:

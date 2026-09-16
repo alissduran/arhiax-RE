@@ -416,3 +416,68 @@ def ejecutar_titulux(
     resultado["screening_agregado"] = agregado
     resultado["disponible"] = True
     return resultado
+
+
+def calentar_cache_listas(fuentes=("onu", "ofac", "uk"), cache_dir=None,
+                          timeout: int = 45) -> Dict[str, Any]:
+    """Descarga las listas de screening y las persiste en la caché Neon.
+
+    Pensado para un endpoint administrativo. En Vercel Hobby la función completa
+    tiene 60 s, así que la generación del dictamen NO puede gastar ese tiempo
+    bajando ~54 MB (ONU/OFAC/UK). Ejecutado aparte (una vez al día; la caché
+    dura 24 h), el screening del dictamen corre contra la caché y no consume el
+    presupuesto de la generación.
+
+    Postura honesta: solo se persisten listas con estado OPERATIVA (datos
+    reales); las muestras/ficheros nunca se cachean como si fueran oficiales.
+    """
+    res: Dict[str, Any] = {
+        "fuentes": list(fuentes), "descargadas": [], "persistidas": [],
+        "estados": {}, "ok": False, "error": None,
+    }
+    from arhia_sag_screen.ingest.listas import obtener_listas as _obtener
+
+    try:
+        from listas_cache import leer_todas as _leer
+        ya = _leer(list(fuentes)) or {}
+    except Exception as e:  # noqa: BLE001
+        ya = {}
+        res["error"] = f"cache no disponible: {e}"[:300]
+
+    for f in ya:
+        res["estados"][f] = "EN CACHE"
+
+    faltantes = [f for f in fuentes if f not in ya]
+    if not faltantes:
+        res["ok"] = True
+        return res
+
+    try:
+        obtenidas = _obtener(faltantes, cache_dir=cache_dir, timeout=timeout)
+    except Exception as e:  # noqa: BLE001
+        res["error"] = f"descarga: {e}"[:300]
+        return res
+
+    for f, par in (obtenidas or {}).items():
+        try:
+            estado = getattr(par[0], "estado", "") or "DESCONOCIDO"
+        except Exception:  # noqa: BLE001
+            estado = "DESCONOCIDO"
+        res["estados"][f] = estado
+        if estado == "OPERATIVA":
+            res["descargadas"].append(f)
+
+    _persistir = {f: v for f, v in (obtenidas or {}).items()
+                  if getattr(v[0], "estado", "") == "OPERATIVA"}
+    if _persistir:
+        try:
+            from listas_cache import escribir_todas as _escribir
+            _escribir(_persistir)
+            res["persistidas"] = sorted(_persistir.keys())
+            res["ok"] = True
+        except Exception as e:  # noqa: BLE001
+            res["error"] = f"persistencia: {e}"[:300]
+    elif not res["error"]:
+        res["error"] = ("ninguna fuente quedó OPERATIVA (sin datos reales que cachear; "
+                        "se reintentará en la próxima generación)")
+    return res

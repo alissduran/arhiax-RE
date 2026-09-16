@@ -23,8 +23,13 @@ OVERPASS_ENDPOINTS = [
     "https://overpass.kumi.systems/api/interpreter",
     "https://overpass.private.coffee/api/interpreter",
 ]
-OVERPASS_TIMEOUT = 12.0
+OVERPASS_TIMEOUT = 6.0
 OVERPASS_REINTENTOS = 1  # reintentos extra por endpoint tras un timeout
+# Presupuesto TOTAL de la fase de POIs (segundos). En Vercel Hobby la función
+# completa tiene 60 s: sin este tope, 4 espejos x (timeout + reintento) podían
+# consumir ~96 s y matar la generación del dictamen. Al agotarse, se devuelven
+# las categorías vacías (el dictamen las declara NO DISPONIBLES, nunca inventa).
+OVERPASS_PRESUPUESTO_TOTAL = 12.0
 
 CATEGORIAS = ["Salud", "Educacion", "Comercio", "Recreacion"]
 
@@ -130,9 +135,14 @@ def get_nearby_pois(lat, lon, radius=2000):
         return disco
 
     headers = {"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
+    _limite_total = time.time() + OVERPASS_PRESUPUESTO_TOTAL
 
     for overpass_url in OVERPASS_ENDPOINTS:
+        if time.time() >= _limite_total:
+            break  # presupuesto total agotado: no seguir castigando la función
         for intento in range(OVERPASS_REINTENTOS + 1):
+            if time.time() >= _limite_total:
+                break
             try:
                 response = requests.post(overpass_url, data={"data": query},
                                          headers=headers, timeout=OVERPASS_TIMEOUT)
@@ -194,7 +204,12 @@ def get_nearby_pois(lat, lon, radius=2000):
                 return pois_categorized
 
             except (requests.exceptions.Timeout, TimeoutError):
-                if intento < OVPASS_REINTENTOS:
+                # BUG corregido: aquí se comparaba contra una constante MAL
+                # ESCRITA (le faltaba "ER" al nombre de OVERPASS_REINTENTOS). Con
+                # el nombre roto, CADA timeout de Overpass lanzaba NameError y
+                # tumbaba la generación completa del dictamen (el usuario veía
+                # "se queda pensando" y nunca salía el PDF).
+                if intento < OVERPASS_REINTENTOS and time.time() < _limite_total:
                     time.sleep(1.0)  # backoff corto y reintentar el mismo espejo
                     continue
                 break  # agotado el reintento: siguiente espejo

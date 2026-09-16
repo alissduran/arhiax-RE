@@ -791,8 +791,18 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         print(f"[PDF][LICENCIA] hallazgo H-LIC no disponible: {_e_lic}")
     # ──────────────────────────────────────────────────────────────────────────────
 
-    pois = get_nearby_pois(lat, lon, radius=2000)
-    generate_maps(lat, lon, pois, poi_map_png, poi_map_html, inmueble_label=f"Predio {barrio}" if barrio else "Inmueble", direccion=direccion)
+    # POIs y mapa son enriquecimiento OPCIONAL: si Overpass o el mapa fallan
+    # (timeout, error de red), el dictamen DEBE generarse igual y declarar los
+    # POIs como no disponibles. Antes, una excepción aquí tumbaba TODO el PDF.
+    try:
+        pois = get_nearby_pois(lat, lon, radius=2000)
+    except Exception as _e_poi:
+        print(f"[PDF][POI] no disponible: {_e_poi}")
+        pois = {c: [] for c in ("Salud", "Educacion", "Comercio", "Recreacion")}
+    try:
+        generate_maps(lat, lon, pois, poi_map_png, poi_map_html, inmueble_label=f"Predio {barrio}" if barrio else "Inmueble", direccion=direccion)
+    except Exception as _e_mapa:
+        print(f"[PDF][MAPA] no disponible: {_e_mapa}")
 
     
     def fmt_cop(val):
@@ -1020,7 +1030,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                 area_catastral=_predio_area_catastral,
                 fuentes_activas=("onu", "ofac", "uiaf", "uk"),
                 cache_dir=_listas_cache,
-                timeout_listas=90,
+                timeout_listas=15,
             )
             print(f"[PDF][TITULUX] disponible={_titulux.get('disponible')} "
                   f"screening={_titulux.get('screening_agregado')} "

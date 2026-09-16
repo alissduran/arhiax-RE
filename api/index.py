@@ -1236,6 +1236,28 @@ def estado_cola_pdf(auth: dict = Depends(require_admin)):
     return estado_cola()
 
 
+@app.post("/api/v1/listas/refrescar")
+def refrescar_listas_screening(auth: dict = Depends(require_admin)):
+    """Descarga y cachea en Neon las listas de screening (ONU/OFAC/UK). Solo admin.
+
+    Por qué existe: en Vercel Hobby cada invocación tiene 60 s, y bajar ~54 MB de
+    listas dentro de la generación del dictamen consumía todo el presupuesto
+    (la función se mataba y el PDF nunca salía). Ejecutado APARTE —una vez al
+    día, la caché dura 24 h— el screening del dictamen corre contra la caché y
+    la generación se mantiene rápida.
+    """
+    try:
+        from titulux_bridge import calentar_cache_listas
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail=f"Motor de listas no disponible: {e}")
+    cache_dir = os.environ.get("ARHIA_LISTAS_CACHE") or (
+        "/tmp/arhia_listas"
+        if (os.environ.get("VERCEL") or not os.access(str(API_DIR), os.W_OK))
+        else str(API_DIR / "assets" / "cache_listas")
+    )
+    return calentar_cache_listas(("onu", "ofac", "uk"), cache_dir=cache_dir, timeout=45)
+
+
 def _verificar_firma_qstash(request: Request, body_bytes: bytes) -> bool:
     """Valida el JWT del header 'Upstash-Signature' (QStash v2 firma con JWT HS256
     usando la signing key del workspace)."""
