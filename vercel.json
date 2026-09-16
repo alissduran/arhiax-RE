@@ -34,5 +34,10 @@
       "source": "/(.*)",
       "destination": "/public/$1"
     }
-  ]
+  ],
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 300
+    }
+  }
 }
