@@ -214,13 +214,24 @@ def _inject_geospatial_hallazgo(hallazgos: list, geo_eval: dict, barrio: str,
         severidad   = "INFORMATIVO"
         color_sev   = rl_colors.HexColor("#1A6B3A")
         color_bg    = rl_colors.HexColor("#EBF5EE")
-        titulo = "H-GEO | Zona Libre de Amenazas y Riesgos (Evaluación Dinámica POT)"
         fuente = fuente_pot
-        desc = (
-            f"El motor geoespacial ARHIAX cruzó las coordenadas del predio contra las capas oficiales del POT de {nombre_ciudad}. "
-            f"Resultado: Sin intersección en amenaza por remoción en masa ni en áreas en riesgo. {resumen}"
-        )
-        impl = "Favorable para suscripción de seguros y originación hipotecaria sin recargos ambientales. Evaluación computada en tiempo real."
+        if "no evaluado" in resumen.lower() or "pendiente" in resumen.lower():
+            # Ciudad sin capas de riesgo resueltas (p. ej. Pasto sin endpoint en
+            # vivo): NO se afirma "zona libre de amenazas" (seria desinformación);
+            # se declara NO EVALUADO de forma honesta.
+            titulo = "H-GEO | Amenaza/Riesgo NO EVALUADO (Pendiente de fuente oficial)"
+            desc = (
+                f"No se evaluaron las capas de amenaza/riesgo del predio en {nombre_ciudad}. {resumen}"
+            )
+            impl = ("Verificación de amenazas y riesgos pendiente de fuente oficial; "
+                    "no se afirma ausencia de riesgo sin haberse evaluado.")
+        else:
+            titulo = "H-GEO | Zona Libre de Amenazas y Riesgos (Evaluación Dinámica POT)"
+            desc = (
+                f"El motor geoespacial ARHIAX cruzó las coordenadas del predio contra las capas oficiales del POT de {nombre_ciudad}. "
+                f"Resultado: Sin intersección en amenaza por remoción en masa ni en áreas en riesgo. {resumen}"
+            )
+            impl = "Favorable para suscripción de seguros y originación hipotecaria sin recargos ambientales. Evaluación computada en tiempo real."
 
     nuevo_hallazgo = (severidad, color_sev, color_bg, titulo, fuente, desc, impl)
 
@@ -258,10 +269,11 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Ciudad del predio (Sprint 3: barranquilla activa; medellin y bogota en
     # expansión). Controla qué catastro/POT se consulta y qué textos se imprimen.
     ciudad = (db_record.get('ciudad') or 'barranquilla').lower().strip()
-    if ciudad not in ('barranquilla', 'medellin', 'bogota'):
+    if ciudad not in ('barranquilla', 'medellin', 'bogota', 'pasto'):
         ciudad = 'barranquilla'
     es_medellin = ciudad == 'medellin'
     es_bogota = ciudad == 'bogota'
+    es_pasto = ciudad == 'pasto'
     from config import get_ciudad
     cfg_ciudad = get_ciudad(ciudad)
     if es_bogota:
@@ -272,6 +284,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _NOMBRE_CIUDAD = cfg_ciudad.get('nombre', 'Medellín')
         _CIRCULO = cfg_ciudad.get('codigo_circulo', '001')
         _COD_DANE = cfg_ciudad.get('codigo_dane', '05001')
+    elif es_pasto:
+        _NOMBRE_CIUDAD = cfg_ciudad.get('nombre', 'Pasto')
+        _CIRCULO = cfg_ciudad.get('codigo_circulo', '052')
+        _COD_DANE = cfg_ciudad.get('codigo_dane', '52001')
     else:
         _NOMBRE_CIUDAD = cfg_ciudad.get('nombre', 'Barranquilla')
         _CIRCULO = cfg_ciudad.get('codigo_circulo', '040')
@@ -311,7 +327,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     predio_real = None
     _lat_geo = None
     _lon_geo = None
-    if (analysis.get("codigo_catastral") or analysis.get("nupre")) and not es_bogota:
+    if (analysis.get("codigo_catastral") or analysis.get("nupre")) and not es_bogota and not es_pasto:
         # Bogotá NO publica capa predial consultable por NUPRE/código en abierto:
         # el predio se resuelve por coordenadas (enriquecer_por_punto). Enviar el
         # código bogotano al módulo de BAQ sería un error (CTL de otra ciudad).
@@ -528,7 +544,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     _metodo_principal = (db_record.get("metodo_avaluo") or "m1").strip().lower()
     if _metodo_principal not in ("m1", "m3"):
         _metodo_principal = "m1"
-    val_data = get_valuation(area, barrio, estrato, metodo_principal=_metodo_principal)
+    val_data = get_valuation(area, barrio, estrato, metodo_principal=_metodo_principal, ciudad=ciudad)
     res_avaluo = val_data
     
     # Cargar hallazgos y recomendaciones dinamicas del analizador legal
@@ -614,6 +630,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                 coords = (4.7110, -74.0721)
             elif es_medellin:
                 coords = (6.2442, -75.5812)
+            elif es_pasto:
+                coords = (1.2136, -77.2811)
             else:
                 coords = (10.9685, -74.7813)
             lat, lon = coords
@@ -712,7 +730,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             ),
         }
     else:
-        if es_bogota or es_medellin:
+        if es_bogota or es_medellin or es_pasto:
             # El predio NO se resolvió en el catastro de la ciudad: el motor
             # empaquetado de Barranquilla NO debe evaluar coordenadas de otra
             # ciudad (regresión: un caso de Bogotá sin predio resuelto cruzaba
@@ -739,6 +757,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _fuente_geo = "IDIGER Bogotá -- emergencias/gestionriesgos (en vivo)"
     elif es_medellin:
         _fuente_geo = "Servidormapas Medellín -- VC_Gestion_Riesgo (DAGRD, en vivo)"
+    elif es_pasto:
+        _fuente_geo = "PENDIENTE -- sin capas de gestión del riesgo en vivo para Pasto (Nariño)"
     else:
         _fuente_geo = "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)"
     hallazgos = _inject_geospatial_hallazgo(
@@ -1516,6 +1536,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             f"uso económico por manzana, estrato, UPZ, localidad, clasificación de suelo Decreto "
             f"555/2021, valor de referencia) y estimaciones del modulo ARHIAX RE. "
             f"<b>[FUENTE: CATASTRO DISTRITAL BOGOTÁ - EN VIVO]</b>"))
+    elif es_pasto:
+        story.append(body(
+            "Analisis de informacion catastral y urbanistica del predio en Pasto (Nariño). La "
+            "geocodificacion del predio se resuelve por OSM/Nominatim y el equipamiento urbano por "
+            "OpenStreetMap/Overpass; la capa catastral, el POT y la estratificacion locales NO tienen "
+            "aun un endpoint institucional verificado en vivo, por lo que se declaran PENDIENTES de "
+            "consulta oficial en la Alcaldia de Pasto / Planeacion (nunca se rellenan con datos de "
+            "otra ciudad). <b>[FUENTE: OSM/NOMINATIM + OVERPASS - CATASTRO/POT PASTO PENDIENTE]</b>"))
     else:
         story.append(body(
             "Analisis de informacion catastral y urbanistica del predio a partir de las capas "
@@ -1542,7 +1570,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Consulta el catastro abierto con caché y timeout corto; nunca rompe el PDF:
     # si el servicio no responde, se declara NO DISPONIBLE.
     _cat_live = {"disponible": False}
-    if not es_medellin and not es_bogota:
+    if not es_medellin and not es_bogota and not es_pasto:
         try:
             from integrations.catastro_live import verificar_catastro_barranquilla
             _cat_live = verificar_catastro_barranquilla(lat, lon)
@@ -1621,7 +1649,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Barranquilla (no aplica a otras ciudades: se evitaba afirmar datos de BAQ
     # en un dictamen de Bogotá). Se muestra el resumen POT con los VALORES
     # reales consultados en vivo (o PENDIENTE honesto si el servicio no llegó).
-    if es_bogota or es_medellin:
+    if es_bogota or es_medellin or es_pasto:
         _resumen_pot = get_pot_summary_dt(
             barrio, ciudad=ciudad,
             clase_suelo=_ent2.get("clase_suelo"),
@@ -1633,7 +1661,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         )
         story.append(dt(_resumen_pot))
         story.append(Spacer(1, 3))
-        if not (_clase_suelo_real or _ent2.get("uso_economico")
+        if es_pasto:
+            story.append(alert_orange(
+                "<b>Integración territorial de Pasto en evaluación:</b> la capa catastral, el POT "
+                "y la estratificación oficiales de Pasto aún no tienen un endpoint institucional "
+                "verificado en vivo. Los campos urbanísticos quedan PENDIENTES de consulta oficial "
+                "en la Alcaldía de Pasto / Planeación."))
+        elif not (_clase_suelo_real or _ent2.get("uso_economico")
                 or _ent2.get("upz") or _trat_par):
             story.append(alert_orange(
                 "<b>Consulta POT en vivo sin valores:</b> el geoportal de "
@@ -1761,17 +1795,30 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 07 ESTIMACIÓN REFERENCIAL DE MERCADO (NO ES AVALÚO) ────
     story.append(sec("07 - Estimación Referencial de Mercado (NO es avalúo)"))
     story.append(hr())
-    story.append(body(
-        "Determinacion del valor comercial y rango de valor estimado del inmueble. "
-        "Para propiedad horizontal terminada el metodo principal es <b>Comparacion de Mercado M1 "
-        "(100%)</b>; <b>Capitalizacion de Rentas M3</b> se usa solo en casos excepcionales con "
-        "renta demostrable (practica de la Lonja de Barranquilla). El Metodo de Costo de "
-        "Reposicion M2 se calibra segun parametros de mercado y costos de construccion vigentes. "
-        "ARHIAX opera como <b>asistente de conformidad valuatoria</b>: "
-        "sugiere y compara; la seleccion definitiva del metodo, los supuestos, el valor y la firma "
-        "son del avaluador inscrito en el RAA. "
-        "<b>[FUENTE: ESTIMACIÓN REFERENCIAL DE MERCADO ARHIAX (AUTOMÁTICA)]</b>"
-    ))
+    if es_pasto:
+        story.append(body(
+            "Determinacion del valor comercial y rango de valor estimado del inmueble. Para Pasto "
+            "aun no hay una metodologia local verificada (Lonja/IGAC): la estimacion se calcula con "
+            "una <b>referencia generica por estrato</b> y NO con los parametros de la Lonja de "
+            "Barranquilla (aplicarlos seria desinformacion). El metodo principal para propiedad "
+            "horizontal terminada es <b>Comparacion de Mercado M1</b>; <b>Capitalizacion de Rentas "
+            "M3</b> solo excepcional. ARHIAX opera como <b>asistente de conformidad valuatoria</b>: "
+            "la seleccion definitiva del metodo, los supuestos, el valor y la firma son del avaluador "
+            "inscrito en el RAA. "
+            "<b>[FUENTE: ESTIMACIÓN REFERENCIAL GENERICA POR ESTRATO - SIN METODOLOGIA LOCAL PASTO]</b>"
+        ))
+    else:
+        story.append(body(
+            "Determinacion del valor comercial y rango de valor estimado del inmueble. "
+            "Para propiedad horizontal terminada el metodo principal es <b>Comparacion de Mercado M1 "
+            "(100%)</b>; <b>Capitalizacion de Rentas M3</b> se usa solo en casos excepcionales con "
+            "renta demostrable (practica de la Lonja de Barranquilla). El Metodo de Costo de "
+            "Reposicion M2 se calibra segun parametros de mercado y costos de construccion vigentes. "
+            "ARHIAX opera como <b>asistente de conformidad valuatoria</b>: "
+            "sugiere y compara; la seleccion definitiva del metodo, los supuestos, el valor y la firma "
+            "son del avaluador inscrito en el RAA. "
+            "<b>[FUENTE: ESTIMACIÓN REFERENCIAL DE MERCADO ARHIAX (AUTOMÁTICA)]</b>"
+        ))
     story.append(Spacer(1, 4))
     
     area_calc = area if area > 0 else 1.0
@@ -1823,7 +1870,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         ]))
         story.append(t_scale)
         story.append(Spacer(1, 4))
-        story.append(alert_green(get_valoracion_alert(barrio, val_data, fmt_cop)))
+        story.append(alert_green(get_valoracion_alert(barrio, val_data, fmt_cop, ciudad=ciudad)))
 
     story.append(Spacer(1, 4))
     story.append(body(
@@ -1919,6 +1966,24 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _geo_fallo = False
         if (predio_real and (predio_real.get("amenazas") or {}).get("disponible") is False):
             _geo_fallo = True
+    elif es_pasto:
+        # Pasto: sin capas oficiales de gestión del riesgo con endpoint en vivo
+        # verificado. NO se cruzan las capas del POT de Barranquilla (desinformación).
+        story.append(body(
+            "Verificacion de amenazas y riesgos en Pasto (Nariño): sin capas oficiales de gestión "
+            "del riesgo con endpoint en vivo verificado a la fecha. La evaluación geotécnica y de "
+            "riesgos queda <b>PENDIENTE</b> de consulta oficial (Alcaldía de Pasto / gestión del "
+            "riesgo). NO se aplican las capas del POT de Barranquilla a un predio de otra ciudad. "
+            "<b>[FUENTE: PENDIENTE -- SIN CAPAS DE RIESGO EN VIVO PARA PASTO]</b>"))
+        story.append(Spacer(1, 4))
+        story.append(dt([
+            ("Fuente de datos", "PENDIENTE -- sin capas de riesgo en vivo verificadas para Pasto"),
+            ("Metodo de cruce", "No ejecutado (sin fuente oficial verificada)"),
+            ("Coordenadas (WGS84)", f"{lat:.5f}, {lon:.5f}"),
+            ("Total capas evaluadas", "0 (pendiente de integración)"),
+        ]))
+        story.append(Spacer(1, 4))
+        _geo_fallo = True
     else:
         story.append(body(
             "Consulta en vivo contra <b>todas las capas</b> del servicio riesgos/amenazas/MapServer "

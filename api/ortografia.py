@@ -85,7 +85,7 @@ _CORRECCIONES = {
     "curaduria": "curaduría", "curadurias": "curadurías",
     "poligono": "polígono", "poligonos": "polígonos",
     "hectareas": "hectáreas", "centimetros": "centímetros",
-    "bogota": "bogotá", "medellin": "medellín",
+    "bogota": "bogotá", "medellin": "medellín", "narino": "nariño",
     "especifico": "específico", "especifica": "específica", "especificos": "específicos", "especificas": "específicas",
     "urbanistico": "urbanístico", "urbanistica": "urbanística", "urbanisticos": "urbanísticos", "urbanisticas": "urbanísticas",
     "fisico": "físico", "fisica": "física", "fisicos": "físicos", "fisicas": "físicas",

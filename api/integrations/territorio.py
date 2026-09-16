@@ -9,6 +9,7 @@ devuelve un resultado UNIFORME con trazabilidad:
     medellin     -> ArcGIS REST POT (servidormapas, capa ClasificacionSuelo)
     cali         -> GeoServer WFS (IDESC: barrios/sectores + clasificación de suelo)
     bogota       -> EN EVALUACIÓN (catastro 503 puntual; IDECA federado; CEL sin API)
+    pasto        -> EN EVALUACIÓN (sin endpoint de catastro/POT verificado en vivo aún)
 
 Postura honesta: nunca afirma datos que no obtuvo; si el servicio no responde,
 disponible=False y el llamador (dictamen/endpoint) lo declara.
@@ -154,10 +155,24 @@ def _verificar_bogota(lat: float, lon: float, res: dict) -> dict:
     return res
 
 
+def _verificar_pasto(lat: float, lon: float, res: dict) -> dict:
+    # Pasto aún no tiene un endpoint institucional de catastro/POT verificado en
+    # vivo (GetCapabilities / ?f=json). Se declara HONESTAMENTE no disponible:
+    # nunca se rellena con capas de otra ciudad.
+    res["disponible"] = False
+    res["error"] = (
+        "Pasto (Nariño) en evaluación: sin endpoint de catastro/POT verificado en vivo. "
+        "La geocodificación (OSM/Nominatim) y los puntos de interés sí operan; la "
+        "verificación catastral queda pendiente de una fuente institucional.")
+    res["fuente"] = {"nombre": "Alcaldía de Pasto (geoportal de trámites)",
+                     "estado": "PENDIENTE VERIFICACIÓN EN VIVO"}
+    return res
+
+
 def verificar_territorio(lat: float, lon: float, ciudad: str = "barranquilla") -> dict[str, Any]:
     """Verificación territorial en vivo de la ciudad indicada (con caché por celda)."""
     ciudad = (ciudad or "barranquilla").lower().strip()
-    if ciudad not in ("barranquilla", "medellin", "cali", "bogota"):
+    if ciudad not in ("barranquilla", "medellin", "cali", "bogota", "pasto"):
         return {"ciudad": ciudad, "disponible": False, "error": "Ciudad no soportada.",
                 "features": [], "total_features": 0, "resumen": None, "fuente": {}}
 
@@ -178,6 +193,8 @@ def verificar_territorio(lat: float, lon: float, ciudad: str = "barranquilla") -
             res = _verificar_cali(lat, lon, res)
         elif ciudad == "bogota":
             res = _verificar_bogota(lat, lon, res)
+        elif ciudad == "pasto":
+            res = _verificar_pasto(lat, lon, res)
     except Exception as e:
         res["error"] = str(e)[:120]
 

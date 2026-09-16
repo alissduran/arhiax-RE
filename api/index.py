@@ -166,7 +166,10 @@ def _sanitizar_folio(folio) -> str:
 # ciudades.yaml pero NO está integrada en catastro/geocoder/valoración: ofrecerla
 # hoy generaría un dictamen con datos y geocodificación de Barranquilla sin
 # que el usuario lo note (riesgo de desinformación) -> se rechaza con 400.
-_CIUDADES_OPERATIVAS = ("barranquilla", "medellin", "bogota")
+# 'pasto' es seleccionable: geocodificación (OSM/Nominatim) y POI operan para
+# cualquier ciudad; catastro/POT/valoración local se declaran PENDIENTES de
+# fuente en vivo (nunca se rellenan con datos de Barranquilla).
+_CIUDADES_OPERATIVAS = ("barranquilla", "medellin", "bogota", "pasto")
 _CIUDADES_PENDIENTES = {
     "cali": "Cali aún no está operativa en el motor ARHIAX (integración de catastro y POT pendiente)",
 }
@@ -190,7 +193,7 @@ def _normalizar_ciudad(ciudad) -> str:
         raise HTTPException(
             status_code=400,
             detail=("{}: no se puede generar el dictamen. Por el momento "
-                    "seleccione Barranquilla, Medellín o Bogotá D.C.".format(
+                    "seleccione Barranquilla, Medellín, Bogotá D.C. o Pasto.".format(
                         _CIUDADES_PENDIENTES[c])))
     return "barranquilla"
 
@@ -239,11 +242,12 @@ def extraer_datos_de_pdf(pdf_path: str, ciudad: str = "barranquilla") -> dict:
     el catastro abierto de la ciudad indicada y sus datos oficiales (dirección,
     coordenadas, destino) prevalecen sobre cualquier inferencia.
 
-    ciudad: 'barranquilla' (datosabiertos) | 'medellin' (servidormapas) | 'bogota' (serviciosgis).
+    ciudad: 'barranquilla' (datosabiertos) | 'medellin' (servidormapas) | 'bogota' (serviciosgis) | 'pasto' (geocodificación OSM; catastro en vivo pendiente).
     """
     datos = {"area": None, "folio": None, "barrio": None, "direccion": None}
     es_medellin = "medellin" in (ciudad or "").lower()
     es_bogota = "bogota" in (ciudad or "").lower()
+    es_pasto = "pasto" in (ciudad or "").lower()
     try:
         reader = pypdf.PdfReader(pdf_path)
         texto = ""
@@ -315,7 +319,7 @@ def extraer_datos_de_pdf(pdf_path: str, ciudad: str = "barranquilla") -> dict:
                 if es_medellin:
                     from catastro_predio_medellin import enriquecer_desde_ctl as _enr
                     _r = _enr(datos["codigo_catastral"], datos["nupre"])
-                elif not es_bogota:
+                elif not es_bogota and not es_pasto:
                     from catastro_predio import enriquecer_desde_ctl as _enr
                     _r = _enr(datos["codigo_catastral"], datos["nupre"])
                 else:
@@ -468,11 +472,11 @@ def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks
     barrio = ""
     estrato = 4
     # Persistencia multi-ciudad: el caso guarda la ciudad elegida en el portal
-    # (barranquilla/medellin/bogota) para que al sincronizar con Neon se genere
-    # el dictamen de la ciudad correcta (regresión: un caso de Bogotá guardado
-    # sin ciudad se recargaba como Barranquilla).
+    # (barranquilla/medellin/bogota/pasto) para que al sincronizar con Neon se
+    # genere el dictamen de la ciudad correcta (regresión: un caso de Bogotá
+    # guardado sin ciudad se recargaba como Barranquilla).
     ciudad = (payload.get("ciudad") or "barranquilla").lower().strip()
-    if ciudad not in ("barranquilla", "medellin", "bogota"):
+    if ciudad not in ("barranquilla", "medellin", "bogota", "pasto"):
         ciudad = "barranquilla"
     
     # Si no se provee folio pero se provee dirección, intentar resolverlo automáticamente
@@ -746,7 +750,7 @@ def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: B
     # Persistencia multi-ciudad: mantener/actualizar la ciudad del caso (puede
     # llegar del payload cuando el usuario la cambia en el portal).
     ciudad = (payload.get("ciudad") or dictamen.get("ciudad") or "barranquilla").lower().strip()
-    if ciudad not in ("barranquilla", "medellin", "bogota"):
+    if ciudad not in ("barranquilla", "medellin", "bogota", "pasto"):
         ciudad = "barranquilla"
 
     # El valor consolidado solo se actualiza si el área ya existe (extraída por certificado)
@@ -849,7 +853,7 @@ async def generar_dictamen_stateless(
     async_: bool = Form(False),
     auth: dict = Depends(require_auth)
 ):
-    # Normalizar ciudad: solo soportadas (barranquilla/medellin/bogota); Cali
+    # Normalizar ciudad: solo soportadas (barranquilla/medellin/bogota/pasto); Cali
     # (pendiente) se rechaza con 400 en vez de producir datos de otra ciudad.
     ciudad = _normalizar_ciudad(ciudad)
     # Validar campos mínimos
@@ -1033,7 +1037,7 @@ async def generar_gpv_f77_endpoint(
     certificado: UploadFile = File(None),
     auth: dict = Depends(require_auth)
 ):
-    # Normalizar ciudad: solo soportadas (barranquilla/medellin/bogota); Cali
+    # Normalizar ciudad: solo soportadas (barranquilla/medellin/bogota/pasto); Cali
     # (pendiente) se rechaza con 400 (un Estudio de Títulos de Cali no puede
     # elaborarse con datos registrales/catastrales de otra ciudad).
     ciudad = _normalizar_ciudad(ciudad)

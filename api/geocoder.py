@@ -31,6 +31,7 @@ from address_normalizer import normalize_address_colombia, limpiar_direccion_con
 CENTROIDE_BAQ = (10.9685, -74.7813)
 CENTROIDE_MED = (6.2442, -75.5812)
 CENTROIDE_BOG = (4.7110, -74.0721)
+CENTROIDE_PAS = (1.2136, -77.2811)   # Pasto (Nariño) — Plaza de Nariño
 
 # Cache en memoria: (ciudad, direccion normalizada) -> (lat, lon)
 _GEOCODE_CACHE = {}
@@ -39,6 +40,7 @@ _GEOCODE_CACHE = {}
 _BBOX_BAQ = (10.85, 11.10, -74.95, -74.65)          # (lat_min, lat_max, lon_min, lon_max)
 _BBOX_MED = (5.98, 6.50, -75.80, -75.30)            # Valle de Aburrá amplio
 _BBOX_BOG = (4.45, 4.85, -74.25, -73.90)            # Bogotá D.C. + sabana cercana
+_BBOX_PAS = (1.05, 1.40, -77.45, -77.05)            # Pasto + corregimientos (Nariño)
 
 
 def _es_medellin(ciudad: str) -> bool:
@@ -51,11 +53,18 @@ def _es_bogota(ciudad: str) -> bool:
     return "bogota" in c or "bogotá" in c or c in ("bog", "dc", "bogota dc")
 
 
+def _es_pasto(ciudad: str) -> bool:
+    c = (ciudad or "").lower().strip()
+    return "pasto" in c or "nariño" in c or "narino" in c or c in ("pas", "san juan de pasto")
+
+
 def _centroide(ciudad: str):
     if _es_medellin(ciudad):
         return CENTROIDE_MED
     if _es_bogota(ciudad):
         return CENTROIDE_BOG
+    if _es_pasto(ciudad):
+        return CENTROIDE_PAS
     return CENTROIDE_BAQ
 
 
@@ -64,6 +73,8 @@ def _bbox(ciudad: str):
         return _BBOX_MED
     if _es_bogota(ciudad):
         return _BBOX_BOG
+    if _es_pasto(ciudad):
+        return _BBOX_PAS
     return _BBOX_BAQ
 
 
@@ -141,6 +152,8 @@ def geocodificar_direccion(direccion, ciudad="Barranquilla"):
         nombre_ciudad = "Medellín"
     elif _es_bogota(ciudad):
         nombre_ciudad = "Bogotá"
+    elif _es_pasto(ciudad):
+        nombre_ciudad = "Pasto"
     else:
         nombre_ciudad = "Barranquilla"
     intentos = [
@@ -195,6 +208,8 @@ def _nominatim_query(query, ciudad="Barranquilla"):
         nodo_generico = (6.2518405, -75.5635890)   # nodo ciudad de Medellín
     elif _es_bogota(ciudad):
         nodo_generico = (4.7110, -74.0721)          # nodo Bogotá D.C.
+    elif _es_pasto(ciudad):
+        nodo_generico = (1.2136, -77.2811)          # nodo ciudad de Pasto (Nariño)
     else:
         nodo_generico = (11.0101922, -74.8231794)  # nodo de Barranquilla
     lat_min, lat_max, lon_min, lon_max = _bbox(ciudad)

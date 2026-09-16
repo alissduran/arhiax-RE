@@ -34,6 +34,7 @@ _CIUDAD_ADMIN = {
     "barranquilla": ("Atlántico", "Barranquilla"),
     "medellin": ("Antioquia", "Medellín"),
     "bogota": ("Bogotá D.C.", "Bogotá D.C."),
+    "pasto": ("Nariño", "Pasto"),
 }
 
 _PLANTILLA = "GPV-F-77_Estudio_Titulos_Art276_Ley1955_2019.docx"

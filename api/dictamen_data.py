@@ -16,11 +16,15 @@ C_BORDE = colors.HexColor("#E2E8F0")
 C_NEGRO_MONO = colors.HexColor("#0A1424")
 
 
-def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1"):
+def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1", ciudad="barranquilla"):
     """
     Retorna la valoracion tecnica de mercado consolidando M1 (comparacion de
-    mercado), M2 (costo de reposicion) y M3 (capitalizacion de rentas), segun
-    los parametros declarados en el YAML de la Lonja de Barranquilla.
+    mercado), M2 (costo de reposicion) y M3 (capitalizacion de rentas).
+
+    Para Barranquilla usa el YAML de la Lonja (metodologia local). Para ciudades
+    SIN metodologia local verificada (p. ej. Pasto/Nariño) NO se aplica la Lonja
+    de Barranquilla (seria desinformacion): se usa una referencia generica por
+    estrato y se marca metodologia_local=False para que el dictamen lo declare.
 
     Regla de negocio (practica de la LONJA de Barranquilla, no de la Resolucion
     IGAC 941/2026): propiedad horizontal terminada -> metodo principal M1
@@ -32,49 +36,56 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1"):
     import yaml
     from pathlib import Path
     
-    # Resolver ruta de la metodologia de la Lonja
-    base_dir = Path(__file__).resolve().parent
-    yaml_path = base_dir.parent / "motor_tma_lonja_baq_v1.0" / "motor_tma_lonja_baq_v1.0" / "lonja_layer" / "lonja_baq_metodologia.yaml"
-    
     # Parámetros por defecto en caso de falla de carga
     cap_rate_neto = 0.0485
     val_m2_mercado = 5200000
     factor_costos = 1.2576
-    
-    try:
-        if yaml_path.exists():
-            with open(yaml_path, 'r', encoding='utf-8') as f:
-                yml = yaml.safe_load(f)
-            
-            # 1. Obtener valor del suelo por sector o fallback
-            valores_suelo = yml.get("valor_suelo_por_sector", {})
-            # Normalizar nombre de barrio para búsqueda en las claves del YAML
-            barrio_key = barrio.replace(" ", "_").strip().title()
-            
-            # Buscar coincidencia exacta o parcial
-            sector_match = None
-            for k in valores_suelo.keys():
-                if k.lower() == barrio_key.lower() or k.lower() in barrio.lower():
-                    sector_match = k
-                    break
+    es_pasto = "pasto" in (ciudad or "").lower()
+
+    if es_pasto:
+        # Sin metodologia local de Pasto verificada: referencia generica por
+        # estrato (NO se aplica la Lonja de Barranquilla). metodologia_local=False
+        # para que el dictamen lo declare como referencia generica nacional.
+        estrato_map = {3: 3800000, 4: 5200000, 5: 6500000, 6: 7800000}
+        val_m2_mercado = estrato_map.get(int(estrato), 5200000)
+    else:
+        # Resolver ruta de la metodologia de la Lonja de Barranquilla
+        base_dir = Path(__file__).resolve().parent
+        yaml_path = base_dir.parent / "motor_tma_lonja_baq_v1.0" / "motor_tma_lonja_baq_v1.0" / "lonja_layer" / "lonja_baq_metodologia.yaml"
+        try:
+            if yaml_path.exists():
+                with open(yaml_path, 'r', encoding='utf-8') as f:
+                    yml = yaml.safe_load(f)
+                
+                # 1. Obtener valor del suelo por sector o fallback
+                valores_suelo = yml.get("valor_suelo_por_sector", {})
+                # Normalizar nombre de barrio para búsqueda en las claves del YAML
+                barrio_key = barrio.replace(" ", "_").strip().title()
+                
+                # Buscar coincidencia exacta o parcial
+                sector_match = None
+                for k in valores_suelo.keys():
+                    if k.lower() == barrio_key.lower() or k.lower() in barrio.lower():
+                        sector_match = k
+                        break
+                        
+                if sector_match:
+                    val_m2_mercado = valores_suelo[sector_match].get("valor_central_m2", 5200000)
+                else:
+                    # Fallback por estrato
+                    estrato_map = {3: 3800000, 4: 5200000, 5: 6500000, 6: 7800000}
+                    val_m2_mercado = estrato_map.get(int(estrato), 5200000)
                     
-            if sector_match:
-                val_m2_mercado = valores_suelo[sector_match].get("valor_central_m2", 5200000)
-            else:
-                # Fallback por estrato
-                estrato_map = {3: 3800000, 4: 5200000, 5: 6500000, 6: 7800000}
-                val_m2_mercado = estrato_map.get(int(estrato), 5200000)
-                
-            # 2. Cap Rate (M3)
-            tasas_tip = yml.get("capitalizacion_rentas", {}).get("tasas_por_tipologia", {})
-            estrato_key = f"apto_NO_VIS_estrato_{estrato}"
-            if estrato_key in tasas_tip:
-                cap_rate_neto = tasas_tip[estrato_key].get("tasa_central", 0.0485)
-                
-            # 3. Factor de costos (M2)
-            factor_costos = yml.get("costos_construccion", {}).get("factor_actualizacion", 1.2576)
-    except Exception as e:
-        print(f"[VALUATION][WARN] Fallo de integracion YAML, usando fallbacks: {e}")
+                # 2. Cap Rate (M3)
+                tasas_tip = yml.get("capitalizacion_rentas", {}).get("tasas_por_tipologia", {})
+                estrato_key = f"apto_NO_VIS_estrato_{estrato}"
+                if estrato_key in tasas_tip:
+                    cap_rate_neto = tasas_tip[estrato_key].get("tasa_central", 0.0485)
+                    
+                # 3. Factor de costos (M2)
+                factor_costos = yml.get("costos_construccion", {}).get("factor_actualizacion", 1.2576)
+        except Exception as e:
+            print(f"[VALUATION][WARN] Fallo de integracion YAML, usando fallbacks: {e}")
 
     # M1: Comparacion de Mercado (metodo principal para PH terminada, 100%)
     m1_base = int(area_construida_m2 * val_m2_mercado)
@@ -113,7 +124,8 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1"):
         "m1_m2": int(m1_total_central / area_construida_m2) if area_construida_m2 else 0,
         "m3_m2": int(m3_total_central / area_construida_m2) if area_construida_m2 else 0,
         "canon_mensual": canon_mensual,
-        "cap_rate": cap_rate_neto
+        "cap_rate": cap_rate_neto,
+        "metodologia_local": not es_pasto,
     }
 
 
@@ -284,6 +296,8 @@ def get_cobertura_alert(barrio, ciudad="barranquilla"):
         nombre_ciudad = "Medellín"
     elif "bogota" in c or "bogotá" in c:
         nombre_ciudad = "Bogotá D.C."
+    elif "pasto" in c or "nariño" in c or "narino" in c:
+        nombre_ciudad = "Pasto (Nariño)"
     else:
         nombre_ciudad = "Barranquilla"
     # 'Bogotá D.C.' ya termina en punto: no duplicar el punto de la frase
@@ -302,7 +316,7 @@ def get_analisis_registral_text(barrio):
         "o limitaciones identificadas se reflejan en la tabla de hallazgos periciales del presente dictamen."
     )
 
-def get_valoracion_alert(barrio, val_data, fmt_cop):
+def get_valoracion_alert(barrio, val_data, fmt_cop, ciudad="barranquilla"):
     barrio_clean = barrio.strip().title() if barrio else "el sector"
     metodo = (val_data.get("metodo_principal") or "m1").lower()
     if metodo == "m3":
@@ -311,17 +325,25 @@ def get_valoracion_alert(barrio, val_data, fmt_cop):
     else:
         metodo_txt = ("el método de comparación de mercado (M1) como método principal para "
                       "propiedad horizontal terminada")
+    # Pasto: sin metodología local verificada, la estimación es referencia genérica
+    # por estrato (nunca la Lonja de Barranquilla).
+    if "pasto" in (ciudad or "").lower():
+        metodo_ref = ("Referencia genérica por estrato (sin metodología local de Pasto "
+                      "verificada): valor sujeto a validación del avaluador RAA.")
+    else:
+        metodo_ref = "Práctica de la Lonja de Barranquilla: PH = 100% M1; M3 solo excepcional."
     return (
         f"<b>SINTESIS DE VALORACION:</b> La estimación comercial de "
         f"<b>{fmt_cop(val_data['consolidado'])} COP</b> responde a {metodo_txt}, "
         f"calibrado por sector geoeconómico ({barrio_clean}). "
-        f"Práctica de la Lonja de Barranquilla: PH = 100% M1; M3 solo excepcional."
+        f"{metodo_ref}"
     )
 
 def get_alcance_dt(barrio, ciudad="barranquilla"):
     # F-21: alcance honesto — no se afirman integraciones que no existen.
     es_med = "medellin" in (ciudad or "").lower()
     es_bog = "bogota" in (ciudad or "").lower()
+    es_pas = "pasto" in (ciudad or "").lower()
     if es_med:
         return [
             ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
@@ -344,6 +366,18 @@ def get_alcance_dt(barrio, ciudad="barranquilla"):
             ("Verificacion SARLAFT", "EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial"),
             ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
         ]
+    if es_pas:
+        return [
+            ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
+            ("Geocodificacion del predio", "EJECUTADA -- OSM/Nominatim (coordenadas en Pasto)"),
+            ("Equipamiento urbano (POI)", "EJECUTADA -- OpenStreetMap/Overpass (radio 2 km)"),
+            ("Capa catastral Pasto", "PENDIENTE -- Sin endpoint institucional verificado en vivo"),
+            ("POT/Ordenamiento Pasto", "PENDIENTE -- Requiere fuente oficial (Planeación Pasto)"),
+            ("Riesgos/Amenazas Pasto", "PENDIENTE -- Capas de gestión del riesgo sin endpoint verificado"),
+            ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
+            ("Verificacion SARLAFT", "EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial"),
+            ("Estimacion referencial", "REFERENCIA GENERICA POR ESTRATO -- No usa metodología local; no sustituye avalúo RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
+        ]
     return [
         ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
         ("Capa catastral BAQ", "REFERENCIAL -- Estimacion del modulo ARHIAX RE (sin consulta en vivo)"),
@@ -362,12 +396,16 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
     barrio_clean = barrio.strip().title() if barrio else "Pendiente de verificacion"
     es_med = "medellin" in (ciudad or "").lower()
     es_bog = "bogota" in (ciudad or "").lower()
+    es_pas = "pasto" in (ciudad or "").lower()
     if es_bog:
         gc_nombre = "Bogotá"
         gc_sigla = "GC-BOG"
     elif es_med:
         gc_nombre = "Medellín"
         gc_sigla = "GC-MED"
+    elif es_pas:
+        gc_nombre = "Pasto"
+        gc_sigla = "GC-PAS"
     else:
         gc_nombre = "Barranquilla"
         gc_sigla = "GC-BAQ"
@@ -411,6 +449,7 @@ def get_pot_summary_dt(barrio, ciudad="barranquilla", clase_suelo=None,
     afirma un valor genérico como si fuera del predio)."""
     es_med = "medellin" in (ciudad or "").lower()
     es_bog = "bogota" in (ciudad or "").lower()
+    es_pas = "pasto" in (ciudad or "").lower()
 
     def _v(valor, pendiente):
         valor = (valor or "").strip()
@@ -441,6 +480,16 @@ def get_pot_summary_dt(barrio, ciudad="barranquilla", clase_suelo=None,
             ("Planes Parciales", "NO EVALUADO en capas abiertas (verificar en la SDP)"),
             ("Planes de Reordenamiento", "NO EVALUADO en capas abiertas (verificar en la SDP)"),
             ("Fuente de capas", "Catastro Distrital Bogotá (serviciosgis, consultas en vivo, Sprint 3)"),
+        ]
+    if es_pas:
+        return [
+            ("Clasificacion del suelo", "PENDIENTE (POT Pasto sin fuente en vivo verificada)"),
+            ("Norma uso de suelo", "PENDIENTE (consulta en Planeación Pasto)"),
+            ("Tratamiento urbanistico", "PENDIENTE (consulta en Planeación Pasto)"),
+            ("Altura maxima segun tratamiento", "Sujeta a ficha normativa del POT Pasto"),
+            ("Planes Parciales", "NO EVALUADO (verificar en Planeación Pasto)"),
+            ("Planes de Reordenamiento", "NO EVALUADO (verificar en Planeación Pasto)"),
+            ("Fuente de capas", "Pasto (Nariño) -- sin capas POT en vivo verificadas; consulta oficial requerida"),
         ]
     return [
         ("Clasificacion del suelo", "SUELO URBANO (POT Barranquilla - Confirmado)"),

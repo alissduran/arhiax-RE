@@ -39,6 +39,8 @@ _PORTAL_OFICIAL = {
                  "https://www.medellin.gov.co/servidormapas"),
     "bogota": ("SDP / Mapas Bogotá",
                "https://mapas.bogota.gov.co"),
+    "pasto": ("Alcaldía de Pasto / Planeación",
+              "https://www.pasto.gov.co"),
 }
 
 
@@ -85,6 +87,11 @@ def altura_permitida(ciudad, ent2):
         # la ficha normativa de la UPZ (SDP). Nunca se inventa un número.
         return None, "ficha_upz", None
 
+    if ciudad == "pasto":
+        # Sin capa abierta de pisos máximos en Pasto: la altura se fija en la
+        # ficha normativa del POT (Planeación). Nunca se inventa un número.
+        return None, "ficha_pot", None
+
     # Barranquilla (default)
     am = (e.get("altura_maxima") or "").strip()
     if not am or am.upper() in _NA:
@@ -126,6 +133,12 @@ def filas_edificabilidad(ciudad, ent2, pisos_construidos):
         filas.append(("Tratamiento / suelo (Decreto 555/2021)", _trat_bog_txt))
         filas.append(("Altura normativa máxima",
                       "Ficha normativa de la UPZ (SDP) — consulta oficial requerida"))
+    elif ciudad == "pasto":
+        filas.append(("Comuna / corregimiento", e.get("comuna") or "N/D"))
+        filas.append(("Tratamiento / suelo (POT Pasto)",
+                      "Consulta en Planeación Pasto (sin capa en vivo verificada)"))
+        filas.append(("Altura normativa máxima",
+                      "Ficha normativa del POT Pasto (Planeación) — consulta oficial requerida"))
     else:
         filas.append(("Tratamiento urbanístico",
                       (e.get("tratamiento") or "N/D") +
@@ -161,6 +174,10 @@ def _confrontacion(ciudad, ent2, pisos_construidos):
             return "pendiente", (
                 "No se compara: la altura permitida requiere la ficha normativa "
                 "de la UPZ (SDP) / consulta urbanística oficial")
+        if tipo == "ficha_pot":
+            return "pendiente", (
+                "No se compara: la altura permitida requiere la ficha normativa "
+                "del POT Pasto (Planeación) / consulta urbanística oficial")
         if tipo == "plan_parcial":
             return "pendiente", (
                 "No se compara: la altura la define el Plan Parcial del polígono "
@@ -191,7 +208,7 @@ def hallazgo_exceso_altura(ciudad, ent2, pisos_construidos):
     if not permitido or not construidos or construidos <= permitido:
         return None
     nombre = {"barranquilla": "Barranquilla", "medellin": "Medellín",
-              "bogota": "Bogotá D.C."}.get((ciudad or "").lower(), "la ciudad")
+              "bogota": "Bogotá D.C.", "pasto": "Pasto"}.get((ciudad or "").lower(), "la ciudad")
     return (
         "ALTO",
         colors.HexColor("#D92C2C"),
@@ -293,7 +310,7 @@ def hallazgo_exceso_licencia(ciudad, ent2, pisos_construidos, lic):
     if not pisos_lic or not construidos or construidos <= pisos_lic:
         return None
     nombre = {"barranquilla": "Barranquilla", "medellin": "Medellín",
-              "bogota": "Bogotá D.C."}.get((ciudad or "").lower(), "la ciudad")
+              "bogota": "Bogotá D.C.", "pasto": "Pasto"}.get((ciudad or "").lower(), "la ciudad")
     num_lic = (lic.get("numero_licencia") or "licencia adjuntada").strip()
     return (
         "ALTO",
@@ -325,6 +342,9 @@ def fuente_norma_texto(ciudad, ent2=None):
     if ciudad == "bogota":
         return ("POT Bogotá Decreto 555 de 2021 -- la altura se fija por ficha "
                 "normativa de la UPZ (SDP). Consulta oficial: ")
+    if ciudad == "pasto":
+        return ("POT de Pasto (Nariño) -- sin capa de altura en abierto verificada; "
+                "la altura se fija por ficha normativa (Planeación). Consulta oficial: ")
     return ("POT Barranquilla -- capa oficial 'Tratamientos urbanísticos' "
             "(datos abiertos Alcaldía). Consulta oficial: ")
 

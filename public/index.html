@@ -479,6 +479,7 @@
                 <option value="barranquilla">Barranquilla</option>
                 <option value="medellin">Medellín</option>
                 <option value="bogota">Bogotá D.C.</option>
+                <option value="pasto">Pasto (Nariño)</option>
                 <option value="cali" disabled title="Próximamente: Cali aún no está operativa en el motor ARHIAX (catastro y POT pendientes de integración).">Cali — próximamente</option>
               </select>
             </div>
@@ -1403,8 +1404,8 @@
       // legacy del selector anterior) NO se envían: el servidor no debe
       // producir un dictamen de una ciudad con datos de otra.
       const ciudadCaso = (c.ciudad || 'barranquilla').toLowerCase();
-      if (['barranquilla', 'medellin', 'bogota'].indexOf(ciudadCaso) === -1) {
-        setEstado(`✗ Ciudad no operativa: "${c.ciudad}". El motor ARHIAX opera hoy en Barranquilla, Medellín y Bogotá D.C. Cree un nuevo caso con la ciudad correcta.`, 'var(--color-red-text)');
+      if (['barranquilla', 'medellin', 'bogota', 'pasto'].indexOf(ciudadCaso) === -1) {
+        setEstado(`✗ Ciudad no operativa: "${c.ciudad}". El motor ARHIAX opera hoy en Barranquilla, Medellín, Bogotá D.C. y Pasto. Cree un nuevo caso con la ciudad correcta.`, 'var(--color-red-text)');
         return;
       }
       formData.append('folio_matricula', c.folio_matricula);
@@ -1523,10 +1524,10 @@
       // Guard: ciudades no operativas (Cali, legacy) no generan GPV-F-77 con
       // datos registrales/catastrales de otra ciudad.
       const ciudadCasoGpv = (c.ciudad || 'barranquilla').toLowerCase();
-      if (['barranquilla', 'medellin', 'bogota'].indexOf(ciudadCasoGpv) === -1) {
+      if (['barranquilla', 'medellin', 'bogota', 'pasto'].indexOf(ciudadCasoGpv) === -1) {
         estadoDiv.innerHTML =
           `✗ Ciudad no operativa: "${c.ciudad}". El motor ARHIAX opera hoy en ` +
-          'Barranquilla, Medellín y Bogotá D.C. Cree un nuevo caso con la ciudad correcta.';
+          'Barranquilla, Medellín, Bogotá D.C. y Pasto. Cree un nuevo caso con la ciudad correcta.';
         estadoDiv.style.color = 'var(--color-red-text)';
         return;
       }

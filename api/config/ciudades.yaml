@@ -85,6 +85,23 @@ ciudades:
     valoracion: {}
     estado: "ACTIVO (catastro distrital + POT via servidormapas, Sprint 3)"
 
+  pasto:
+    nombre: "Pasto"
+    departamento: "Nariño"
+    codigo_circulo: "052"       # Círculo registral Pasto (SNR) — confirmar con CTL real de la ciudad
+    codigo_dane: "52001"
+    centroide: { lat: 1.2136, lon: -77.2811 }
+    capas_pot_empaquetadas: false
+    arcgis:
+      # Geoportal de trámites "Sí Pasto a un Clic" (Alcaldía de Pasto). Sin endpoint
+      # REST/WFS de catastro/POT verificado en vivo a la fecha: queda PENDIENTE de
+      # verificación (GetCapabilities/?f=json) antes de marcar "VERIFICADO EN VIVO".
+      geoportal: "https://www.pastovivedigital.gov.co"
+      portal_municipal: "https://www.pasto.gov.co"
+      estado: "EN EVALUACIÓN 2026-09 -- geocodificación (OSM/Nominatim) y POI operativos; catastro/POT en vivo sin endpoint verificado aún"
+    valoracion: {}
+    estado: "EN EVALUACIÓN (ciudad seleccionable; catastro/POT/valoración local pendientes de fuente en vivo verificada)"
+
   cali:
     nombre: "Cali"
     codigo_circulo: "031"
