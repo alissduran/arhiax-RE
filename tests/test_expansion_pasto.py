@@ -33,7 +33,7 @@ class TestPastoConfig(unittest.TestCase):
         self.assertEqual(cfg.get("nombre"), "Pasto")
         self.assertEqual(cfg.get("departamento"), "Nariño")
         self.assertEqual(cfg.get("codigo_dane"), "52001")
-        self.assertEqual(cfg.get("codigo_circulo"), "052")
+        self.assertEqual(cfg.get("codigo_circulo"), "240")
         self.assertEqual(cfg.get("centroide"), {"lat": 1.2136, "lon": -77.2811})
 
     def test_listar_ciudades_incluye_pasto(self):
@@ -54,6 +54,15 @@ class TestPastoNormalizacion(unittest.TestCase):
         from fastapi import HTTPException
         with self.assertRaises(HTTPException):
             _normalizar_ciudad("cali")
+
+    def test_circulo_registral_240_no_es_discrepancia(self):
+        """Un folio real de Pasto (240-211101) NO debe marcarse como de otro círculo."""
+        from pdf_compiler import _detectar_discrepancia_circulo
+        _, discrepante = _detectar_discrepancia_circulo("240-211101", "240", "240")
+        self.assertFalse(discrepante)
+        # Un folio de Barranquilla en un caso de Pasto SÍ debe advertirse
+        _, discrepante_baq = _detectar_discrepancia_circulo("040-646406", "040", "240")
+        self.assertTrue(discrepante_baq)
 
 
 class TestPastoGeocoder(unittest.TestCase):

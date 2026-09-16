@@ -88,7 +88,7 @@ ciudades:
   pasto:
     nombre: "Pasto"
     departamento: "Nariño"
-    codigo_circulo: "052"       # Círculo registral Pasto (SNR) — confirmar con CTL real de la ciudad
+    codigo_circulo: "240"       # Círculo registral Pasto (ORIP Pasto, Nariño) — verificado contra folios reales (240-211101, 240-51477)
     codigo_dane: "52001"
     centroide: { lat: 1.2136, lon: -77.2811 }
     capas_pot_empaquetadas: false

@@ -1435,7 +1435,10 @@
           setEstado('⏳ Generando dictamen en segundo plano (cola QStash)…');
           const jobId = data.job_id;
           let intentos = 0;
-          while (intentos < 30) {  // hasta ~2.5 min
+          // El worker puede tardar varios minutos (consultas en vivo + screening
+          // SAGRILAFT con descarga de listas). Se espera hasta ~6.5 min para no
+          // rendirse antes que el servidor (maxDuration 300 s en vercel.json).
+          while (intentos < 78) {
             await new Promise(r => setTimeout(r, 5000));
             intentos++;
             try {
@@ -1463,7 +1466,17 @@
               // error de red puntual: seguir reintentando
             }
           }
-          throw new Error('Tiempo de espera agotado (2.5 min). Intente nuevamente.');
+          // Última consulta: el trabajo pudo quedar "listo" justo al agotarse la espera
+          try {
+            const rFinal = await apiFetch(`/api/v1/pdf/trabajos/${jobId}`);
+            if ((rFinal.headers.get('content-type') || '').includes('application/pdf')) {
+              guardarBlob(await rFinal.blob());
+              return;
+            }
+          } catch (e) { /* se ignora: abajo se informa al usuario */ }
+          throw new Error('El dictamen sigue generándose en el servidor (tardó más de lo esperado). ' +
+            'Espera ~1 minuto y vuelve a generar: la segunda vez es mucho más rápida porque las ' +
+            'listas de screening ya quedaron en caché.');
         }
 
         // 3) Cola no disponible: fallback a generación SÍNCRONA (sin async_)
