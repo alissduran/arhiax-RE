@@ -185,6 +185,56 @@ class TestPastoTerritorio(unittest.TestCase):
         self.assertIsNone(f("PEMP - Conservacion contextual"))
         self.assertIsNone(f(None))
 
+    def test_estado_independiente_por_capa_match(self):
+        """Bug E/F: cada capa declara su estado (MATCH_EXACT cuando hay datos)."""
+        def _get(url, params=None, **_k):
+            # Enrutar por servicio y capa (los ids se repiten entre servicios).
+            if "Norma_Urbanistica" in url and "/1/query" in url:
+                return _FakeResp(200, {"features": [{"attributes": _RIESGOS}]})
+            if "Norma_Urbanistica" in url and "/2/query" in url:
+                return _FakeResp(200, {"features": [{"attributes": _TRATAMIENTOS}]})
+            if "Norma_Urbanistica" in url and "/28/query" in url:
+                return _FakeResp(200, {"features": [{"attributes": _AREAS}]})
+            if "Estratificacion" in url and "/4/query" in url:
+                return _FakeResp(200, {"features": [{"attributes": _PREDIOS}]})
+            return _FakeResp(200, {"features": []})
+        self.mod.requests.get = _get
+        res = self.mod.consultar_pasto(lat=1.2136, lon=-77.2811)
+        capas = res["capas"]
+        self.assertEqual(capas["tratamientos_urbanisticos"]["estado"], "MATCH_EXACT")
+        self.assertEqual(capas["riesgos_urbano"]["estado"], "MATCH_EXACT")
+        self.assertEqual(capas["predios_estratificacion"]["estado"], "MATCH_EXACT")
+
+    def test_estado_independiente_por_capa_sin_coincidencia(self):
+        """Sin coincidencia en el punto: las capas principales declaran NO_MATCH."""
+        self.mod.requests.get = self._router({
+            self.mod.CAPA_TRATAMIENTOS: None,
+            self.mod.CAPA_AREAS_ACTIVIDAD: None,
+            self.mod.CAPA_RIESGOS_URBANO: None,
+            self.mod.CAPA_PREDIOS: None,
+        })
+        res = self.mod.consultar_pasto(lat=99.0, lon=-77.0)
+        self.assertEqual(res["capas"]["tratamientos_urbanisticos"]["estado"], "NO_MATCH")
+        self.assertEqual(res["capas"]["riesgos_urbano"]["estado"], "NO_MATCH")
+
+    def test_estado_independiente_por_capa_servicio_caido(self):
+        """Servicio caído: SOURCE_UNAVAILABLE (no 'sin coincidencia')."""
+        self.mod.requests.get = lambda *a, **k: _FakeResp(503)
+        res = self.mod.consultar_pasto(lat=1.2136, lon=-77.2811)
+        self.assertFalse(res["disponible"])
+        self.assertEqual(res["capas"]["tratamientos_urbanisticos"]["estado"],
+                         "SOURCE_UNAVAILABLE")
+
+    def test_estado_capa_pre_not_applicable_por_codigo(self):
+        """Resolución por código NO consulta la capa de polígonos -> NOT_APPLICABLE."""
+        def _get(url, params=None, **_k):
+            if "/34/query" in url:
+                return _FakeResp(200, {"features": [{"attributes": _PREDIOS}]})
+            return _FakeResp(200, {"features": [{"attributes": _TRATAMIENTOS}]})
+        self.mod.requests.get = _get
+        res = self.mod.consultar_pasto(codigo_predial="520010102000000770901900000000")
+        self.assertEqual(res["capas"]["predios_estratificacion"]["estado"], "NOT_APPLICABLE")
+
 
 if __name__ == "__main__":
     unittest.main()

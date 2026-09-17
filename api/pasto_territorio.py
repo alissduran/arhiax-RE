@@ -101,6 +101,24 @@ def _valor_riesgo(v) -> Optional[str]:
     return s
 
 
+def _estado_capa(filas: Optional[List[dict]]) -> str:
+    """Estado independiente por capa (bug E/F): distingue los fallos.
+
+    Semántica exigida por el modelo canónico:
+      * None            -> SOURCE_UNAVAILABLE (HTTP != 200, timeout o error ArcGIS)
+      * []              -> NO_MATCH (consultado, sin coincidencia)
+      * filas sin valor -> NULL_VALUE (respondió pero atributos vacíos)
+      * filas con valor -> MATCH_EXACT
+    """
+    if filas is None:
+        return "SOURCE_UNAVAILABLE"
+    if not filas:
+        return "NO_MATCH"
+    if any(any(v for v in (f or {}).values()) for f in filas):
+        return "MATCH_EXACT"
+    return "NULL_VALUE"
+
+
 def _query(srv: str, capa: int, *, lat: float = None, lon: float = None,
            where: str = None, distancia_m: float = None,
            timeout: float = TIMEOUT) -> Optional[List[dict]]:
@@ -367,6 +385,20 @@ def consultar_pasto(*, lat: float = None, lon: float = None,
             "url": BASE,
             "estado": "PENDIENTE",
         },
+        # Estado independiente por capa (bug E/F). Default = SOURCE_UNAVAILABLE;
+        # se sobrescribe al final con el estado real de cada capa consultada.
+        "capas": {
+            "tratamientos_urbanisticos": {"capa": CAPA_TRATAMIENTOS,
+                                          "estado": "SOURCE_UNAVAILABLE"},
+            "areas_de_actividad": {"capa": CAPA_AREAS_ACTIVIDAD,
+                                   "estado": "SOURCE_UNAVAILABLE"},
+            "riesgos_urbano": {"capa": CAPA_RIESGOS_URBANO,
+                               "estado": "SOURCE_UNAVAILABLE"},
+            "predios_estratificacion": {"capa": CAPA_PREDIOS,
+                                        "estado": "SOURCE_UNAVAILABLE"},
+            "dpa_barrios_comunas": {"estado": "SOURCE_UNAVAILABLE"},
+            "tablas_estratificacion": {"estado": "SOURCE_UNAVAILABLE"},
+        },
     }
     if lat is None and not _limpio(codigo_predial):
         res["fuente"]["estado"] = "sin coordenadas ni codigo predial"
@@ -496,6 +528,32 @@ def consultar_pasto(*, lat: float = None, lon: float = None,
     res["fuente"]["estado"] = ("CONSULTADA EN VIVO (Geoportal Municipal de Pasto)"
                               if _hay_datos else
                               "CONSULTADA -- sin coincidencia en el punto del predio")
+
+    # ── Estado independiente por capa (bug E/F) ────────────────────────────────
+    # Cada capa del geoportal declara su propio estado para que el dictamen y la
+    # Declaración de Alcance puedan decir "esta capa respondió con coincidencia,
+    # esta otra no, esta dio error" sin colapsar todo en un único 'CONSULTADA'.
+    res["capas"] = {
+        "tratamientos_urbanisticos": {"capa": CAPA_TRATAMIENTOS,
+                                      "estado": _estado_capa(trat)},
+        "areas_de_actividad": {"capa": CAPA_AREAS_ACTIVIDAD,
+                               "estado": _estado_capa(act)},
+        "riesgos_urbano": {"capa": CAPA_RIESGOS_URBANO,
+                           "estado": _estado_capa(rie)},
+        "predios_estratificacion": {
+            "capa": CAPA_PREDIOS,
+            "estado": "NOT_APPLICABLE" if pre is None else _estado_capa(pre),
+        },
+        "dpa_barrios_comunas": {
+            "estado": ("MATCH_EXACT" if (_dpa.get("barrio") or _dpa.get("comuna"))
+                       else "NO_MATCH"),
+        },
+        "tablas_estratificacion": {
+            "estado": ("MATCH_EXACT" if (_est.get("estrato") or _est.get("nomenclatura_oficial")
+                                         or _est.get("barrio_tabla") or _est.get("comuna_tabla"))
+                       else "NO_MATCH"),
+        },
+    }
 
     _CACHE[clave] = (ahora, res)
     return res
