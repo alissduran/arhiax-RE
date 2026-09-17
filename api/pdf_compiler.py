@@ -3054,6 +3054,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "folio": folio,
             "analysis": analysis,
             "comuna_mostrada": _localidad_txt,
+            "hallazgos": hallazgos,
+            "titulux": _titulux,
         }
         _informe_gate = ejecutar_gate(_contexto_gate)
         print(f"[PDF][GATE] ok={_informe_gate['ok']} "

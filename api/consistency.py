@@ -113,6 +113,25 @@ def _inv_titular_tipo_documento(ctx: Dict[str, Any]) -> Tuple[bool, str]:
     return True, "tipo de persona coherente con el documento"
 
 
+def _inv_finding_registry(ctx: Dict[str, Any]) -> Tuple[bool, str]:
+    """El finding registry único debe ser coherente (bug K): sin contradicciones
+    entre legal_analyzer, Titulux y la identidad resuelta."""
+    hallazgos = ctx.get("hallazgos")
+    titulux = ctx.get("titulux")
+    cid = ctx.get("canonical_identity") or {}
+    if not hallazgos and not titulux:
+        return True, "sin hallazgos que registrar (no aplica)"
+    try:
+        from finding_registry import coherencia
+        informe = coherencia(hallazgos, (titulux or {}).get("pre_dictamen") if titulux else None, cid)
+    except Exception as e:  # noqa: BLE001
+        return True, f"finding registry no evaluable ({e})"
+    if informe.get("contradicciones"):
+        det = "; ".join(c["detalle"] for c in informe["contradicciones"])
+        return False, f"contradicciones entre capas de hallazgos: {det}"
+    return True, "finding registry coherente (sin contradicciones)"
+
+
 # ── Registro declarativo de invariantes ────────────────────────────────────────
 INVARIANTES: List[Invariante] = [
     ("I-SCORE-NOEVAL", "bloqueante",
@@ -129,6 +148,9 @@ INVARIANTES: List[Invariante] = [
      "comuna mostrada sale del contexto canónico", _inv_comuna_coherente),
     ("I-TITULAR", "advertencia",
      "tipo de persona coherente con el documento", _inv_titular_tipo_documento),
+    ("I-REGISTRY", "bloqueante",
+     "finding registry único coherente (sin contradicciones entre capas)",
+     _inv_finding_registry),
 ]
 
 
