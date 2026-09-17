@@ -124,6 +124,15 @@ def calcular_score_actuarial(
     am = geo_eval.get("amenaza_remocion_masa", {})
     ri = geo_eval.get("areas_en_riesgo", {})
 
+    # NO_EVALUADO != SIN_RIESGO. La componente que no se pudo evaluar NO debe
+    # informar 100/100 (regresión: H-GEO 'NO EVALUADO' convivía con 'Score
+    # Hidrológico 100/100'). Se resuelve ANTES de aplicar penalizaciones para que
+    # el valor final sea NULO, no 100.
+    _evaluado = geo_eval.get("evaluado")
+    if _evaluado is None:
+        _resumen_geo = (geo_eval.get("resumen_ejecutivo") or "").lower()
+        _evaluado = not ("no evaluado" in _resumen_geo or "pendiente" in _resumen_geo)
+
     if am.get("intersecta"):
         nivel_am = str(am.get("nivel", "")).upper()
         if "ALTA" in nivel_am or "ALTO" in nivel_am:
@@ -149,20 +158,15 @@ def calcular_score_actuarial(
             detalle_hidro.append(f"-5 pts: Área en riesgo BAJA")
 
     if not am.get("intersecta") and not ri.get("intersecta"):
-        # Regla explícita: NO_EVALUADO != SIN_RIESGO. Una componente que no se
-        # pudo evaluar NO debe informar 100/100 como si se hubiera verificado que
-        # no hay amenaza. Se usa la marca explícita geo_eval['evaluado'] y, por
-        # compatibilidad, el texto del resumen.
-        _evaluado = geo_eval.get("evaluado")
-        if _evaluado is None:
-            _resumen_geo = (geo_eval.get("resumen_ejecutivo") or "").lower()
-            _evaluado = not ("no evaluado" in _resumen_geo or "pendiente" in _resumen_geo)
         if _evaluado:
             detalle_hidro.append("Sin afectación en las capas de riesgo consultadas — Score pleno")
         else:
             detalle_hidro.append("Amenaza/riesgo NO EVALUADO (sin fuente en vivo) — componente no calificable")
 
-    score_hidrologico = max(0, min(100, score_hidrologico))
+    if not _evaluado:
+        score_hidrologico = None
+    else:
+        score_hidrologico = max(0, min(100, score_hidrologico))
 
     # ── Score Catastral (base 100) ────────────────────────────────────────────
     score_catastral = 100.0
@@ -183,41 +187,59 @@ def calcular_score_actuarial(
     score_catastral = max(0, min(100, score_catastral))
 
     # ── Score Integrado ponderado ─────────────────────────────────────────────
-    score_integrado = round(
-        score_registral  * 0.40 +
-        score_juridico   * 0.30 +
-        score_hidrologico * 0.20 +
-        score_catastral  * 0.10,
-        1
-    )
+    # Una componente no evaluada (None) NO puede contribuir al integrado. Se
+    # renormalizan los pesos sobre las componentes disponibles y se documenta la
+    # exclusión; si TODAS son None, el integrado es None (no calificable).
+    _comp = [("registral", score_registral, 0.40),
+             ("juridico", score_juridico, 0.30),
+             ("hidrologico", score_hidrologico, 0.20),
+             ("catastral", score_catastral, 0.10)]
+    _disp = [(n, v, w) for (n, v, w) in _comp if v is not None]
+    _peso_disp = sum(w for _, _, w in _disp)
+    _excluidas = [n for (n, v, _w) in _comp if v is None]
+    if _peso_disp <= 0:
+        score_integrado = None
+    else:
+        score_integrado = round(sum(v * w / _peso_disp for _, v, w in _disp), 1)
 
     # Coherencia con el semáforo del resumen: un hallazgo ALTO es BLOQUEANTE y
     # el score integrado NO puede declarar perfil EXCELENTE/FAVORABLE con un
     # bloqueante activo (antes: inicio 'BLOQUEADO/ROJO' vs. fin 'Score 95.8
     # EXCELENTE'). Se topa el integrado a zona ELEVADO.
     bloqueado = _tiene_alto
-    if bloqueado:
+    if bloqueado and score_integrado is not None:
         score_integrado = min(score_integrado, 55.0)
-        # Los parciales se mantienen como están; solo el integrado y su etiqueta
-        # reflejan el bloqueo cualitativo.
 
-    # Colores para el score integrado
-    tc_int, bg_int, etiqueta_int = color_score(score_integrado)
+    cobertura_insuficiente = bool(_excluidas)
+    if score_integrado is None:
+        etiqueta_int = "NO CALIFICABLE (cobertura insuficiente)"
+        tc_int, bg_int = rl_colors.HexColor("#7F8C8D"), rl_colors.HexColor("#F2F3F5")
+    else:
+        tc_int, bg_int, etiqueta_int = color_score(score_integrado)
     if bloqueado:
         etiqueta_int = "BLOQUEADO"
+
+    def _f(v):
+        return round(v, 1) if v is not None else None
+
+    def _c(v):
+        return color_score(v) if v is not None else (rl_colors.HexColor("#7F8C8D"),
+                                                     rl_colors.HexColor("#F2F3F5"), "NO EVALUADO")
 
     return {
         "score_registral":   round(score_registral, 1),
         "score_juridico":    round(score_juridico, 1),
-        "score_hidrologico": round(score_hidrologico, 1),
+        "score_hidrologico": _f(score_hidrologico),
         "score_catastral":   round(score_catastral, 1),
         "score_integrado":   score_integrado,
         "etiqueta":          etiqueta_int,
         "bloqueado":         bloqueado,
+        "cobertura_insuficiente": cobertura_insuficiente,
+        "componentes_excluidas": _excluidas,
         "colores": {
             "registral":   color_score(score_registral),
             "juridico":    color_score(score_juridico),
-            "hidrologico": color_score(score_hidrologico),
+            "hidrologico": _c(score_hidrologico),
             "catastral":   color_score(score_catastral),
             "integrado":   (tc_int, bg_int, etiqueta_int),
         },

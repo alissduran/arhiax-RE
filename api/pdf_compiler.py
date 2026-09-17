@@ -2590,18 +2590,25 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     val_data_area["area"] = area
     score_result = calcular_score_actuarial(hallazgos, geo_eval, analysis, val_data_area)
     colores_score = score_result["colores"]
+
+    def _fmt_score(v):
+        """Score textual: 'N/A' cuando la componente no fue calificable (None),
+        en vez de estampar '100/100' o reventar el formato sobre un None."""
+        return "N/A" if v is None else f"{v:.0f} / 100"
+
     story.append(badge_table([
-        ("Score Registral", f"{score_result['score_registral']:.0f} / 100", colores_score["registral"][1], colores_score["registral"][0]),
-        ("Score Hidrologico", f"{score_result['score_hidrologico']:.0f} / 100", colores_score["hidrologico"][1], colores_score["hidrologico"][0]),
-        ("Score Juridico", f"{score_result['score_juridico']:.0f} / 100", colores_score["juridico"][1], colores_score["juridico"][0]),
-        ("Score Integrado ARHIAX", f"{score_result['score_integrado']:.0f} / 100", colores_score["integrado"][1], colores_score["integrado"][0]),
+        ("Score Registral", _fmt_score(score_result['score_registral']), colores_score["registral"][1], colores_score["registral"][0]),
+        ("Score Hidrologico", _fmt_score(score_result['score_hidrologico']), colores_score["hidrologico"][1], colores_score["hidrologico"][0]),
+        ("Score Juridico", _fmt_score(score_result['score_juridico']), colores_score["juridico"][1], colores_score["juridico"][0]),
+        ("Score Integrado ARHIAX", _fmt_score(score_result['score_integrado']), colores_score["integrado"][1], colores_score["integrado"][0]),
     ], s))
     story.append(Spacer(1, 4))
     detalle_score = []
     for comp, nombre in [("registral", "Registral"), ("juridico", "Juridico"),
                          ("hidrologico", "Hidrologico"), ("catastral", "Catastral")]:
+        _v = score_result[f'score_{comp}']
         detalle_score.append((
-            f"Score {nombre} ({score_result[f'score_{comp}']:.0f}/100)",
+            f"Score {nombre} ({_fmt_score(_v).replace(' / 100','')}/100)",
             "; ".join(score_result["detalle"][comp])
         ))
     detalle_score.append(("Score Integrado", generar_narrativa_score(score_result)))
