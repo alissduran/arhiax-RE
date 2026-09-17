@@ -387,11 +387,43 @@ def get_valoracion_alert(barrio, val_data, fmt_cop, ciudad="barranquilla"):
         f"{metodo_ref}"
     )
 
-def get_alcance_dt(barrio, ciudad="barranquilla"):
+def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
     # F-21: alcance honesto — no se afirman integraciones que no existen.
+    # Bug H: si llegan `receipts` (estado real de la ejecución), las filas de
+    # geocodificación/POI/GIS/volcán/SARLAFT reflejan lo que REALMENTE corrió,
+    # no una afirmación estática "EJECUTADA EN VIVO".
     es_med = "medellin" in (ciudad or "").lower()
     es_bog = "bogota" in (ciudad or "").lower()
     es_pas = "pasto" in (ciudad or "").lower()
+
+    _gis = ((receipts or {}).get("gis") or {})
+    _capas = _gis.get("capas") or {}
+    _fuente_gis = _gis.get("estado_fuente") or ""
+    _volc = (receipts or {}).get("riesgo_volcanico") or {}
+    _poi = (receipts or {}).get("poi") or {}
+    _sag = (receipts or {}).get("sarlaft") or {}
+
+    def _estado_capa(clave, default):
+        if not receipts or clave not in _capas:
+            return default
+        det = _capas[clave]
+        estado = det.get("estado") if isinstance(det, dict) else det
+        if estado == "MATCH_EXACT":
+            return "EJECUTADA EN VIVO -- capa con coincidencia para el predio"
+        if estado == "NO_MATCH":
+            return "CONSULTADA -- sin coincidencia para este predio (verificar en el geoportal)"
+        if estado == "SOURCE_UNAVAILABLE":
+            return "NO DISPONIBLE -- el servicio no respondió en esta generación"
+        return f"ESTADO {estado}"
+
+    def _sarlaft_txt(default):
+        if not receipts:
+            return default
+        if _sag.get("completo"):
+            return f"EJECUTADA EN VIVO -- screening {_sag.get('agregado') or 'completo'}"
+        return ("INCOMPLETA -- fuentes pendientes: "
+                + ", ".join(_sag.get("fuentes_pendientes") or ["?"]))
+
     if es_med:
         return [
             ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
@@ -400,7 +432,7 @@ def get_alcance_dt(barrio, ciudad="barranquilla"):
             ("Riesgos/Amenazas Medellín", "EJECUTADA -- Capas de gestión del riesgo DAGRD consultadas en vivo"),
             ("Integracion WFS-IGAC", "PLANIFICADA -- En desarrollo para consulta en vivo (ver roadmap)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
-            ("Verificacion SARLAFT", "EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial"),
+            ("Verificacion SARLAFT", _sarlaft_txt("EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial")),
             ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
         ]
     if es_bog:
@@ -411,20 +443,32 @@ def get_alcance_dt(barrio, ciudad="barranquilla"):
             ("Riesgos/Amenazas Bogotá", "EJECUTADA -- Capas IDIGER consultadas en vivo (mov. masa, sismos, geotecnia)"),
             ("Detalle predial (NUPRE/destino por predio)", "NO DISPONIBLE EN ABIERTO -- El catastro distrital no expone capa predial con NUPRE; el destino es uso predominante por manzana (referencial)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
-            ("Verificacion SARLAFT", "EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial"),
+            ("Verificacion SARLAFT", _sarlaft_txt("EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial")),
             ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
         ]
     if es_pas:
         return [
             ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
             ("Geocodificacion del predio", "EJECUTADA -- OSM/Nominatim (coordenadas en Pasto)"),
-            ("Equipamiento urbano (POI)", "EJECUTADA -- OpenStreetMap/Overpass con respaldo Photon (radio 2 km)"),
-            ("Capa catastral Pasto (NUPRE, areas)", "EJECUTADA EN VIVO -- Geoportal Municipal de Pasto (Planeacion)"),
-            ("POT/Ordenamiento Pasto", "EJECUTADA EN VIVO -- Clase de suelo, area de actividad, tratamiento y edificabilidad por predio"),
-            ("Riesgo volcanico (Volcan Galeras)", "EJECUTADA EN VIVO -- Mapa oficial de amenaza volcanica del SGC"),
-            ("Riesgos municipales por predio", "EJECUTADA EN VIVO -- Riesgo volcanico, inundacion, remocion en masa, subsidencia y ZAVA (geoportal de Pasto)"),
+            ("Equipamiento urbano (POI)", ("CONSULTADO -- OpenStreetMap/Overpass (respaldo Photon)"
+                                           if _poi.get("disponible") else
+                                           "NO DISPONIBLE -- Overpass/Photon no respondieron en esta generación")
+             if receipts else "EJECUTADA -- OpenStreetMap/Overpass con respaldo Photon (radio 2 km)"),
+            ("Capa catastral Pasto (NUPRE, areas)",
+             _estado_capa("predios_estratificacion", "EJECUTADA EN VIVO -- Geoportal Municipal de Pasto (Planeacion)")
+             if receipts else "EJECUTADA EN VIVO -- Geoportal Municipal de Pasto (Planeacion)"),
+            ("POT/Ordenamiento Pasto",
+             _estado_capa("tratamientos_urbanisticos", "EJECUTADA EN VIVO -- Clase de suelo, area de actividad, tratamiento y edificabilidad por predio")
+             if receipts else "EJECUTADA EN VIVO -- Clase de suelo, area de actividad, tratamiento y edificabilidad por predio"),
+            ("Riesgo volcanico (Volcan Galeras)",
+             ("EJECUTADA EN VIVO -- SGC " + (_volc.get("nivel") or "N/D")) if _volc.get("disponible")
+             else "NO DISPONIBLE -- el mapa SGC no respondió en esta generación"
+             if receipts else "EJECUTADA EN VIVO -- Mapa oficial de amenaza volcanica del SGC"),
+            ("Riesgos municipales por predio",
+             _estado_capa("riesgos_urbano", "EJECUTADA EN VIVO -- Riesgo volcanico, inundacion, remocion en masa, subsidencia y ZAVA (geoportal de Pasto)")
+             if receipts else "EJECUTADA EN VIVO -- Riesgo volcanico, inundacion, remocion en masa, subsidencia y ZAVA (geoportal de Pasto)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
-            ("Verificacion SARLAFT", "EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial"),
+            ("Verificacion SARLAFT", _sarlaft_txt("EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial")),
             ("Estimacion referencial", "REFERENCIA GENERICA POR ESTRATO -- No usa metodología local; no sustituye avalúo RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
         ]
     return [

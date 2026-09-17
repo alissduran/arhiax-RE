@@ -2825,9 +2825,28 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 8))
     
     # ── 16 ALCANCE ─────────────────────────────────────────────
+    # Receipts de ejecución REALES (bug H): la declaración de alcance y la traza
+    # técnica reflejan lo que corrió en ESTA generación, no texto estático.
+    try:
+        from receipts import build_execution_receipts, receipt_rows
+        from versioning import version_blob as _version_blob
+        _receipts = build_execution_receipts(
+            ciudad=ciudad, predio_real=predio_real, volcan=_volcan, pois=pois,
+            titulux=_titulux, geo_eval=geo_eval, canonical_identity=canonical_identity,
+            versionado=_version_blob(), lat=lat, lon=lon,
+            ctl_adjuntado=bool(path_certificado),
+        )
+    except Exception as _e_rec:
+        _receipts = None
+        print(f"[PDF][RECEIPTS] no disponible: {_e_rec}")
+
     story.append(sec("16 - Declaracion de Alcance"))
     story.append(hr())
-    story.append(dt(get_alcance_dt(barrio, ciudad=ciudad)))
+    story.append(dt(get_alcance_dt(barrio, ciudad=ciudad, receipts=_receipts)))
+    story.append(Spacer(1, 6))
+    # Traza técnica de ejecución (Case → Technical Trace)
+    story.append(sub("16.B Traza tecnica de ejecucion (receipts)"))
+    story.append(dt(receipt_rows(_receipts)))
     story.append(Spacer(1, 8))
 
     # ── 17 PROVENANCE ──────────────────────────────────────────
