@@ -3002,6 +3002,34 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     
     ejecutar_controles_de_calidad()
 
+    # ── PRE_RENDER_CONSISTENCY_GATE ──────────────────────────────────────────
+    # Invariantes automáticas que impiden emitir un dictus inconsistente (p. ej.
+    # NO EVALUADO con score 100/100, o IDENTITY_CONFLICT afirmando datos de un
+    # predio vecino). Bloqueante -> lanza InconsistenciaBloqueante y NO se emite.
+    try:
+        from consistency import ejecutar_gate, InconsistenciaBloqueante
+        _contexto_gate = {
+            "geo_eval": geo_eval,
+            "score_result": score_result,
+            "canonical_identity": canonical_identity,
+            "administrative_context": administrative_context,
+            "predio_real": predio_real,
+            "folio": folio,
+            "analysis": analysis,
+            "comuna_mostrada": _localidad_txt,
+        }
+        _informe_gate = ejecutar_gate(_contexto_gate)
+        print(f"[PDF][GATE] ok={_informe_gate['ok']} "
+              f"bloqueantes={len(_informe_gate['bloqueantes'])} "
+              f"advertencias={len(_informe_gate['advertencias'])}")
+        for _w in _informe_gate["advertencias"]:
+            print(f"[PDF][GATE][WARN] {_w['codigo']}: {_w['detalle']}")
+    except InconsistenciaBloqueante:
+        raise
+    except Exception as _e_gate:
+        # El gate nunca debe tumbar el PDF por un fallo propio: solo se registra.
+        print(f"[PDF][GATE] no evaluable: {_e_gate}")
+
     # ── BUILD PDF ──────────────────────────────────────────────
     # Un único documento: dictamen + anexos juntos.
     doc = SimpleDocTemplate(OUTPUT, pagesize=letter,
