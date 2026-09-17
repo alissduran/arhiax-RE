@@ -401,6 +401,47 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             predio_real = None
 
     folio = analysis["folio"] if analysis["folio"] != "040-XXXXXX" else (db_record.get('folio_matricula', '040-XXXXXX') or '040-XXXXXX')
+
+    # ── IDENTIDAD PREDIAL (Pasto): el CTL manda, no la proximidad ────────────
+    # Auditoría 2026-09-17 del caso 240-211101: el geoportal de Pasto devuelve
+    # 15 predios DISTINTOS a 30 m del punto (y el punto cae en un vacío de
+    # topología: sin `distance` no devuelve nada). Por eso resolver por
+    # coordenadas y quedarse con el más cercano puede tomar el predio de un
+    # VECINO. Regla: si el predio se resolvió por COORDENADAS y la matrícula que
+    # publica el municipio NO coincide con el folio del CTL, la identidad NO está
+    # resuelta: se descarta el dato predial y se emite IDENTITY_CONFLICT.
+    _identidad = {"estado": None, "detalle": None}
+    if es_pasto and predio_real:
+        _mat_muni = str(((predio_real.get("predio") or {}).get("matricula_inmobiliaria")) or "").strip()
+        _folio_caso = str(folio or "").strip()
+        _folio_norm = _folio_caso.replace(" ", "")
+        _mat_norm = _mat_muni.replace(" ", "")
+        _resuelto_por_codigo = bool(analysis.get("codigo_catastral") or analysis.get("nupre"))
+        if _mat_norm and _folio_norm and _mat_norm != _folio_norm:
+            _identidad = {
+                "estado": "IDENTITY_CONFLICT",
+                "detalle": ("El CTL del caso corresponde al folio {}. El catastro municipal de Pasto "
+                            "reporta {} para el predio resuelto por {}.").format(
+                                _folio_caso, _mat_muni,
+                                "el codigo catastral/NUPRE del CTL" if _resuelto_por_codigo
+                                else "coordenadas"),
+            }
+            if not _resuelto_por_codigo:
+                # Proximidad + matrícula distinta = NO se afirma el predio.
+                predio_real = None
+        elif _mat_norm and _folio_norm and not _resuelto_por_codigo:
+            _identidad = {
+                "estado": "MATCH_EXACT",
+                "detalle": ("La matricula del municipio ({}) coincide con el folio del CTL: "
+                            "identidad predial confirmada.").format(_mat_muni),
+            }
+        elif not _mat_norm:
+            _identidad = {
+                "estado": "IDENTIDAD_PREDIAL_NO_RESUELTA",
+                "detalle": ("El catastro municipal no publica matricula inmobiliaria para el predio "
+                            "resuelto; la identidad se apoya en {}.").format(
+                                "el codigo del CTL" if _resuelto_por_codigo else "las coordenadas"),
+            }
     # Dirección: 1) oficial catastral resuelta (código o punto), 2) del CTL
     # analizado, 3) del registro. Nunca se inventa.
     if predio_real and predio_real.get("direccion_oficial"):
@@ -573,6 +614,25 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Cargar hallazgos y recomendaciones dinamicas del analizador legal
     hallazgos = list(analysis["hallazgos"])
     recs = list(analysis["recs"])
+
+    # Hallazgo de IDENTIDAD PREDIAL (ver el bloque de resolución arriba). Se
+    # emite aquí porque `hallazgos` ya existe. Un conflicto de identidad es
+    # BLOQUEANTE: impide afirmar la normativa del predio.
+    if _identidad.get("estado") == "IDENTITY_CONFLICT":
+        hallazgos.append((
+            "ALTO", C_ROJO, C_RIESGO_BG,
+            "H-IDENT | Conflicto de identidad predial (CTL vs catastro municipal)",
+            "SNR (CTL) vs Geoportal Municipal de Pasto",
+            _identidad["detalle"] + " El predio del catastro municipal puede ser un VECINO "
+            "(el municipio devuelve 15 predios distintos en un radio de 30 m), por lo que NO se "
+            "afirman sus datos normativos como si fueran del inmueble del caso.",
+            "Verificar la matricula y el folio de matricula antes de decidir: confrontar el CTL con "
+            "el certificado catastral del municipio y con la escritura. Si la matricula correcta es "
+            "la del municipio, actualizar el caso; si es la del CTL, el municipio tiene el dato "
+            "desactualizado y debe corregirse en Catastro Municipal."))
+    elif _identidad.get("estado") == "IDENTIDAD_PREDIAL_NO_RESUELTA":
+        recs.append("Verificar la identidad predial con el certificado catastral municipal: el "
+                    "geoportal de Pasto no publica matricula inmobiliaria para este predio.")
 
     # ── Mejora 2 (Sprint 3): coherencia círculo registral del CTL vs. ciudad ──
     # Los folios SNR pertenecen a una oficina de registro: Barranquilla '040',

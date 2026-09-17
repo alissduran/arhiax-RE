@@ -85,6 +85,13 @@ class TestPastoTerritorio(unittest.TestCase):
     def _router(self, mapa):
         """mapa: {id de capa: atributos o None}. None -> sin coincidencia."""
         def _get(url, params=None, **_k):
+            # Los ids se repiten entre servicios (la capa 1 es 'Consulta de
+            # riesgos urbano' en Norma_Urbanistica y 'Barrios' en
+            # Division_politico_administrativa), así que este mapa solo enruta el
+            # servicio de Norma; DPA y Estratificación devuelven vacío.
+            if ("Division_politico_administrativa" in url
+                    or "/Estratificacion/" in url):
+                return _FakeResp(200, {"features": []})
             for lid, attrs in mapa.items():
                 if f"/{lid}/query" in url:
                     if attrs is None:

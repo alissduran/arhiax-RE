@@ -41,11 +41,21 @@ import requests
 BASE = "https://geoportal.pasto.gov.co/server/rest/services"
 SRV_NORMA = f"{BASE}/Planeacion/Norma_Urbanistica_Riesgo_Suelo/MapServer"
 SRV_ESTRATO = f"{BASE}/Planeacion/Estratificacion/MapServer"
+SRV_DPA = f"{BASE}/Planeacion/Division_politico_administrativa/MapServer"
 
 CAPA_TRATAMIENTOS = 2
 CAPA_AREAS_ACTIVIDAD = 28
 CAPA_RIESGOS_URBANO = 1
 CAPA_PREDIOS = 4          # Estratificacion -> códigos prediales
+# DPA (auditoría 2026-09-17): capa 1 = Barrios, capa 2 = Comunas. OJO: la capa de
+# Barrios NO tiene campo 'barrio'; el nombre vive en el campo **`sector`**.
+CAPA_DPA_BARRIOS = 1
+CAPA_DPA_COMUNAS = 2
+# Tablas de Estratificación: la table 1 se une por codigo_predial_nacional (30
+# dígitos) y la table 2 por codigo_predial_corto (15). El estrato NO está en la
+# capa predial; hay que traerlo de estas tablas.
+TABLA_NOMENCLATURA = 1
+TABLA_ESTRATO = 2
 
 TIMEOUT = 15.0
 TTL_CACHE = 3600
@@ -139,6 +149,103 @@ def _pisos_de_edificabilidad(txt: Optional[str]) -> Optional[int]:
     import re
     m = re.search(r"(\d{1,2})\s*pisos?", str(txt), re.IGNORECASE)
     return int(m.group(1)) if m else None
+
+
+def _barrio_y_comuna(lat: float, lon: float) -> Dict[str, Any]:
+    """Barrio y comuna OFICIALES (División Político-Administrativa municipal).
+
+    OJO (auditoría 2026-09-17): en la capa de Barrios **no existe el campo
+    `barrio`**; el nombre vive en el campo **`sector`**. Un conector que busque
+    `barrio` falla en silencio. En Comunas el valor viene como "Comuna 1".
+    """
+    out: Dict[str, Any] = {"barrio": None, "comuna": None,
+                           "fuente": "Division_politico_administrativa (DPA)"}
+    if lat is None or lon is None:
+        return out
+    for capa, campo, clave, dist in (
+            (CAPA_DPA_BARRIOS, "sector", "barrio", None),
+            (CAPA_DPA_BARRIOS, "sector", "barrio", 30),
+            (CAPA_DPA_COMUNAS, "comuna", "comuna", None),
+            (CAPA_DPA_COMUNAS, "comuna", "comuna", 30)):
+        if out.get(clave):
+            continue
+        filas = _query(SRV_DPA, capa, lat=lat, lon=lon, distancia_m=dist) or []
+        if filas:
+            v = _limpio(filas[0].get(campo))
+            if v:
+                out[clave] = v
+    return out
+
+
+def _estrato_y_nomenclatura(nupre: Optional[str],
+                            codigo_corto: Optional[str] = None) -> Dict[str, Any]:
+    """Estrato y nomenclatura OFICIALES desde las TABLAS de Estratificación.
+
+    El estrato NO está en la capa predial: vive en `Estratificacion` table 1
+    (une por `codigo_predial_nacional`, 30 dígitos) y table 2 (une por
+    `codigo_predial_corto`, 15 dígitos). `Barrios.estrato` es NULL en toda la
+    capa, así que no sirve como fuente.
+    """
+    out: Dict[str, Any] = {"estrato": None, "nomenclatura_oficial": None,
+                           "barrio_tabla": None, "comuna_tabla": None,
+                           "fuente": "Estratificacion (tablas 1 y 2)"}
+    fila = None
+    if nupre:
+        fila = (_query(SRV_ESTRATO, TABLA_NOMENCLATURA,
+                       where="codigo_predial_nacional='%s'" % nupre) or [None])[0]
+    if fila is None and codigo_corto:
+        fila = (_query(SRV_ESTRATO, TABLA_NOMENCLATURA,
+                       where="codigo_predial_corto='%s'" % codigo_corto) or [None])[0]
+    if fila:
+        out["estrato"] = _limpio(fila.get("estrato"))
+        out["nomenclatura_oficial"] = (_limpio(fila.get("nomenclatura_igac"))
+                                       or _limpio(fila.get("nomenclatura_secretaria_de_plan")))
+        out["barrio_tabla"] = _limpio(fila.get("barrio"))
+        out["comuna_tabla"] = _limpio(fila.get("comuna"))
+    if not out["estrato"] and codigo_corto:
+        f2 = _query(SRV_ESTRATO, TABLA_ESTRATO,
+                    where="codigo_predial_corto='%s'" % codigo_corto)
+        if f2:
+            out["estrato"] = _limpio(f2[0].get("estrato"))
+    return out
+
+
+def _centroide_del_predio(nupre: str) -> Optional[tuple]:
+    """Centroide del polígono del predio a partir de su NUPRE.
+
+    Necesario porque barrio y comuna son capas de POLÍGONO: si ARHIAX resuelve el
+    predio por código (lo correcto) no tiene coordenadas con las que consultarlas.
+    Se pide la geometría en WGS84 (outSR=4326) y se calcula el centroide del
+    primer anillo. Devuelve (lat, lon) o None.
+    """
+    if not nupre:
+        return None
+    try:
+        r = requests.get(
+            f"{SRV_ESTRATO}/{CAPA_PREDIOS}/query",
+            params={"where": "codigo_predial_nacional='%s'" % nupre,
+                    "outFields": "objectid", "returnGeometry": "true",
+                    "outSR": "4326", "f": "json"},
+            headers=_UA, timeout=TIMEOUT)
+        if r.status_code != 200:
+            return None
+        data = r.json() or {}
+        if data.get("error"):
+            return None
+        feats = data.get("features") or []
+        if not feats:
+            return None
+        anillos = (feats[0].get("geometry") or {}).get("rings") or []
+        if not anillos or not anillos[0]:
+            return None
+        anillo = anillos[0]
+        xs = [p[0] for p in anillo if len(p) >= 2]
+        ys = [p[1] for p in anillo if len(p) >= 2]
+        if not xs or not ys:
+            return None
+        return (sum(ys) / len(ys), sum(xs) / len(xs))
+    except Exception:
+        return None
 
 
 def consultar_pasto(*, lat: float = None, lon: float = None,
@@ -264,10 +371,44 @@ def consultar_pasto(*, lat: float = None, lon: float = None,
         if v:
             riesgos[campo] = v
     res["riesgos"] = riesgos
+
+    # ── Cierre de variables que estaban en PENDIENTE/N/D ──────────────────────
+    # Barrio, comuna, estrato y nomenclatura oficial: la auditoría 2026-09-17
+    # demostró que EXISTEN en fuentes oficiales del municipio (DPA y tablas de
+    # Estratificación) y que ARHIAX no las consultaba.
+    # Si se resolvió por CÓDIGO no hay coordenadas: se obtienen del centroide del
+    # propio polígono para poder cruzar las capas de POLÍGONO (barrio/comuna).
+    _lat_dpa, _lon_dpa = lat, lon
+    if _lat_dpa is None and cod_nac:
+        _centro = _centroide_del_predio(cod_nac)
+        if _centro:
+            _lat_dpa, _lon_dpa = _centro
+            res["predio"]["centroide"] = {"lat": round(_centro[0], 7),
+                                          "lon": round(_centro[1], 7)}
+    _dpa = _barrio_y_comuna(_lat_dpa, _lon_dpa)
+    if _dpa.get("barrio"):
+        res["entorno"]["barrio"] = _dpa["barrio"]
+    if _dpa.get("comuna"):
+        res["entorno"]["comuna"] = _dpa["comuna"]
+    else:
+        res["entorno"]["comuna"] = res["entorno"].get("comuna") or None
+    _est = _estrato_y_nomenclatura(cod_nac, (res["predio"] or {}).get("codigo_predial_corto"))
+    if _est.get("estrato"):
+        res["entorno"]["estrato"] = _est["estrato"]
+    if _est.get("nomenclatura_oficial") and not (res["predio"] or {}).get("direccion_oficial"):
+        res["predio"]["direccion_oficial"] = _est["nomenclatura_oficial"]
+    if not res["entorno"].get("comuna") and _est.get("comuna_tabla"):
+        res["entorno"]["comuna"] = _est["comuna_tabla"]
+    if not res["entorno"].get("barrio") and _est.get("barrio_tabla"):
+        res["entorno"]["barrio"] = _est["barrio_tabla"]
+    res["entorno"]["fuente_administrativa"] = _dpa.get("fuente")
+    res["entorno"]["fuente_estrato"] = _est.get("fuente") if _est.get("estrato") else None
     # OJO: un dict con todas las claves en None NO es "tener datos". Se comprueban
     # los VALORES, no que el dict sea no vacío (un punto fuera del municipio deja
     # predio/entorno llenos de None y antes se reportaba como "consultada").
-    _hay_datos = (any(res["predio"].values()) or any(res["entorno"].values())
+    # Se excluyen las claves de PROCEDENCIA (fuente_*): son metadatos, no datos.
+    _hay_datos = (any(v for k, v in res["predio"].items() if not k.startswith("fuente"))
+                  or any(v for k, v in res["entorno"].items() if not k.startswith("fuente"))
                   or bool(riesgos))
     res["fuente"]["estado"] = ("CONSULTADA EN VIVO (Geoportal Municipal de Pasto)"
                               if _hay_datos else
