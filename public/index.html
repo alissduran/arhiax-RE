@@ -458,28 +458,30 @@
             Cuentas definidas por variables de entorno: <code>ARHIAX_ADMIN_USER/PASSWORD</code> (admin) y <code>ARHIAX_OPERADOR_USER/PASSWORD</code> (operador).
           </div>
         </div>
-        <div style="grid-column: 1 / -1;">
-          <div style="color: var(--color-gold); margin-bottom: 6px;">Mantenimiento y diagnóstico</div>
-          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <label style="font-size: 11px; color: #ccc;">Lat
+        <div style="grid-column: 1 / -1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; padding: 14px 16px;">
+          <div style="color: var(--color-gold); font-weight: 700; font-size: 13px; margin-bottom: 10px;">
+            Mantenimiento y diagnóstico
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <label style="font-size: 11px; color: #D8DEE9;">Lat
               <input id="diag-lat" type="text" value="1.2136"
-                     style="width: 92px; padding: 3px 6px; margin-left: 4px; border-radius: 3px; border: 1px solid #555; background: rgba(255,255,255,.08); color: #fff;">
+                     style="width: 100px; padding: 5px 8px; margin-left: 5px; border-radius: 3px; border: 1px solid #5A6B8C; background: rgba(255,255,255,.12); color: #FFFFFF; font-size: 12px;">
             </label>
-            <label style="font-size: 11px; color: #ccc;">Lon
+            <label style="font-size: 11px; color: #D8DEE9;">Lon
               <input id="diag-lon" type="text" value="-77.2811"
-                     style="width: 92px; padding: 3px 6px; margin-left: 4px; border-radius: 3px; border: 1px solid #555; background: rgba(255,255,255,.08); color: #fff;">
+                     style="width: 100px; padding: 5px 8px; margin-left: 5px; border-radius: 3px; border: 1px solid #5A6B8C; background: rgba(255,255,255,.12); color: #FFFFFF; font-size: 12px;">
             </label>
-            <button class="btn-secondary" style="color: var(--color-gold); border-color: var(--color-gold); padding: 5px 10px;"
+            <button class="btn-secondary" style="color: #F2D68C; border-color: #F2D68C; padding: 7px 14px; font-size: 12px;"
                     onclick="diagnosticarPoi()">Diagnóstico de equipamientos (POI)</button>
-            <button class="btn-secondary" style="color: var(--color-gold); border-color: var(--color-gold); padding: 5px 10px;"
+            <button class="btn-secondary" style="color: #F2D68C; border-color: #F2D68C; padding: 7px 14px; font-size: 12px;"
                     onclick="refrescarListasScreening()">Actualizar listas de screening</button>
           </div>
-          <div style="margin-top: 6px; font-size: 10px; color: #aaa;">
-            El diagnóstico consulta <b>desde el servidor</b> cada espejo de OpenStreetMap y el respaldo Photon:
-            sirve para saber si el proveedor está bloqueando las consultas de equipamientos.
+          <div style="margin-top: 10px; font-size: 12px; line-height: 1.55; color: #C9D3E0;">
+            El diagnóstico consulta <b style="color: #FFFFFF;">desde el servidor</b> cada espejo de OpenStreetMap
+            y el respaldo Photon: sirve para saber si el proveedor está bloqueando las consultas de equipamientos.
             Las coordenadas por defecto son el centro de Pasto; cámbialas por las del predio si quieres.
           </div>
-          <pre id="admin-mantenimiento" style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 4px; font-size: 10px; white-space: pre-wrap; max-height: 260px; overflow-y: auto; margin-top: 8px;">Sin ejecutar.</pre>
+          <pre id="admin-mantenimiento" style="background: rgba(0,0,0,0.30); color: #E8EDF4; border: 1px solid rgba(255,255,255,0.12); padding: 12px; border-radius: 4px; font-size: 12px; line-height: 1.5; white-space: pre-wrap; max-height: 300px; overflow-y: auto; margin-top: 10px;">Sin ejecutar todavía. Usa uno de los botones de arriba.</pre>
         </div>
       </div>
     </div>
@@ -887,19 +889,100 @@
       }
     }
 
+    // Convierte el diagnóstico técnico en un texto que se entiende sin saber JSON.
+    function _resumenDiagnosticoPoi(d) {
+      const L = [];
+      L.push('DIAGNÓSTICO DE EQUIPAMIENTOS  (medido desde el servidor)');
+      L.push('='.repeat(58));
+      L.push('');
+      L.push('1) OpenStreetMap / Overpass  (fuente principal)');
+      const ov = d.overpass || [];
+      if (!ov.length) L.push('   sin espejos configurados');
+      ov.forEach(function (m) {
+        const espejo = String(m.espejo || '').replace('https://', '').split('/')[0];
+        if (m.http === 200) {
+          L.push('   OK     ' + espejo + ': ' + m.elementos + ' elementos en ' + m.segundos + ' s');
+        } else if (m.http) {
+          const pista = m.http === 429 ? '  (nos está limitando la frecuencia)'
+            : m.http === 504 ? '  (caído o bloqueando al proveedor)'
+            : m.http === 404 ? '  (dirección incorrecta)' : '';
+          L.push('   FALLA  ' + espejo + ': HTTP ' + m.http + ' en ' + m.segundos + ' s' + pista);
+        } else {
+          L.push('   FALLA  ' + espejo + ': sin respuesta (' + m.segundos + ' s) ' + (m.error || ''));
+        }
+      });
+      L.push('');
+      L.push('2) Photon  (respaldo automático)');
+      const p = d.photon_respaldo || {};
+      if (p.http === 200) {
+        L.push('   OK     HTTP 200, ' + p.features + ' resultados en ' + p.segundos + ' s');
+      } else {
+        L.push('   FALLA  ' + (p.error || ('HTTP ' + p.http)) + ' en ' + p.segundos + ' s');
+      }
+      L.push('');
+      L.push('3) Resultado final del motor de equipamientos');
+      const m = d.motor_poi || {};
+      L.push('   ' + (m.total || 0) + ' equipamientos encontrados en ' + m.segundos + ' s');
+      if (m.por_categoria) {
+        L.push('   ' + Object.keys(m.por_categoria)
+          .map(function (k) { return k + ': ' + m.por_categoria[k]; }).join('   |   '));
+      }
+      L.push('');
+      L.push('CÓMO LEERLO:');
+      L.push('   · Si TODOS los espejos Overpass fallan (504/429) y Photon da OK,');
+      L.push('     el proveedor está bloqueando a Vercel y el respaldo lo cubre.');
+      L.push('   · Si el total es 0, ninguna fuente respondió: la sección 03 saldrá');
+      L.push('     como NO DISPONIBLE (honesto, no se inventan datos).');
+      L.push('');
+      L.push('--- detalle técnico (por si hay que reportarlo) ---');
+      L.push(JSON.stringify(d, null, 2));
+      return L.join('\n');
+    }
+
+    function _resumenListas(d) {
+      const L = [];
+      L.push('ACTUALIZACIÓN DE LISTAS DE SCREENING');
+      L.push('='.repeat(58));
+      L.push('');
+      L.push(d.ok ? 'RESULTADO: listas disponibles en caché (duran 24 h).'
+                  : 'RESULTADO: no se pudo dejar todo en caché.');
+      L.push('');
+      if (d.estados) {
+        Object.keys(d.estados).forEach(function (f) {
+          L.push('   ' + f.toUpperCase() + ': ' + d.estados[f]);
+        });
+      }
+      if (d.persistidas && d.persistidas.length) {
+        L.push('');
+        L.push('   Guardadas: ' + d.persistidas.join(', ').toUpperCase());
+      }
+      if (d.error) {
+        L.push('');
+        L.push('   Detalle: ' + d.error);
+      }
+      L.push('');
+      L.push('Con esto el dictamen ya no gasta su tiempo bajando ~54 MB:');
+      L.push('el screening SAGRILAFT correrá contra la caché.');
+      L.push('');
+      L.push('--- detalle técnico ---');
+      L.push(JSON.stringify(d, null, 2));
+      return L.join('\n');
+    }
+
     async function diagnosticarPoi() {
       // Prueba DESDE EL SERVIDOR cada espejo de OpenStreetMap y el respaldo
       // Photon: distingue "el proveedor bloquea las consultas" de "sin datos".
       const out = document.getElementById('admin-mantenimiento');
       const lat = (document.getElementById('diag-lat').value || '').trim();
       const lon = (document.getElementById('diag-lon').value || '').trim();
-      out.textContent = 'Consultando OpenStreetMap y Photon desde el servidor… (puede tardar hasta ~1 minuto)';
+      out.textContent = 'Consultando OpenStreetMap y Photon desde el servidor...\n'
+        + 'Puede tardar hasta ~1 minuto (prueba los espejos uno por uno).';
       try {
         const r = await apiFetch(`/api/v1/diagnostico/poi?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`);
         if (!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0, 200)}`);
-        out.textContent = JSON.stringify(await r.json(), null, 2);
+        out.textContent = _resumenDiagnosticoPoi(await r.json());
       } catch (e) {
-        out.textContent = 'Error: ' + e.message;
+        out.textContent = 'Error al consultar el diagnóstico: ' + e.message;
       }
     }
 
@@ -907,13 +990,14 @@
       // Descarga ONU/OFAC/UK y las deja en caché (24 h): así el screening del
       // dictamen no gasta su tiempo bajando ~54 MB.
       const out = document.getElementById('admin-mantenimiento');
-      out.textContent = 'Descargando listas ONU/OFAC/UK y guardándolas en caché… (puede tardar)';
+      out.textContent = 'Descargando listas ONU/OFAC/UK y guardándolas en caché...\n'
+        + 'Puede tardar un par de minutos. No cierres esta página.';
       try {
         const r = await apiFetch('/api/v1/listas/refrescar', { method: 'POST' });
         if (!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0, 200)}`);
-        out.textContent = JSON.stringify(await r.json(), null, 2);
+        out.textContent = _resumenListas(await r.json());
       } catch (e) {
-        out.textContent = 'Error: ' + e.message;
+        out.textContent = 'Error al actualizar las listas: ' + e.message;
       }
     }
 
