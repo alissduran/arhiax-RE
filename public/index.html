@@ -657,6 +657,10 @@
   </div>
 
   <script>
+    // Marcador de versión: se muestra en la barra de sesión para poder
+    // confirmar QUÉ versión del portal está cargando el navegador (si no
+    // coincide con la última publicada, hay caché del navegador de por medio).
+    const ARHIAX_BUILD = "2026-09-16.diag-poi";
     let activeToken = localStorage.getItem("arhiax_token");
     let activeUsername = localStorage.getItem("arhiax_username") || "admin";
     let activeRol = localStorage.getItem("arhiax_rol") || "admin";
@@ -786,7 +790,7 @@
     async function showPortal() {
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('main-portal').style.display = 'block';
-      document.getElementById('session-info').textContent = `Sesión: ${activeUsername} · ${activeRol === 'admin' ? 'Administrador' : 'Operador'}`;
+      document.getElementById('session-info').textContent = `Sesión: ${activeUsername} · ${activeRol === 'admin' ? 'Administrador' : 'Operador'} · ${ARHIAX_BUILD}`;
       document.getElementById('btn-admin').style.display = (activeRol === 'admin') ? 'inline-block' : 'none';
       cargarDictamenes();
       // Persistencia Neon: fusionar la lista local con los casos del servidor
