@@ -471,6 +471,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _mat_norm = _mat_muni.replace(" ", "")
         _nupre_usado = str(((predio_real.get("predio") or {}).get("numero_predial_nacional")) or "").strip()
         _resuelto_por_codigo = bool(analysis.get("codigo_catastral") or analysis.get("nupre"))
+        _resuelto_por_nom = bool(_nom and _nupre_usado and _nupre_usado == (_nom or {}).get("nupre"))
         # 0) Prioridad máxima: el NUPRE que resolvió la DIRECCIÓN del CTL frente al
         #    que resolvió el código/coordenadas. Si no coinciden, el motor analizó
         #    otro predio (regresión real: K 26 8 28 13 en vez de K 26 21 47 AP 101).
@@ -497,18 +498,35 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             if not _resuelto_por_codigo:
                 # Proximidad + matrícula distinta = NO se afirma el predio.
                 predio_real = None
-        elif _mat_norm and _folio_norm and not _resuelto_por_codigo:
+        elif _mat_norm and _folio_norm and _mat_norm == _folio_norm:
+            # La matrícula municipal coincide con el folio: identidad confirmada.
             _identidad = {
                 "estado": "MATCH_EXACT",
                 "detalle": ("La matricula del municipio ({}) coincide con el folio del CTL: "
                             "identidad predial confirmada.").format(_mat_muni),
             }
+        elif _resuelto_por_nom:
+            # Resuelto por la DIRECCIÓN del CTL (nomenclatura municipal). Para una
+            # UNIDAD de PH el geoportal NO publica matrícula (solo la tabla de
+            # nomenclatura la contiene): es una resolución VÁLIDA, no "no resuelta".
+            _identidad = {
+                "estado": "MATCH_BY_NOMENCLATURA",
+                "detalle": ("Identidad resuelta por la DIRECCION del CTL (nomenclatura municipal, "
+                            "NUPRE {}). El geoportal no publica matricula para la unidad de PH.").format(
+                                _nupre_usado),
+            }
+        elif _resuelto_por_codigo:
+            _identidad = {
+                "estado": "MATCH_BY_PREDIAL_CODE",
+                "detalle": ("Identidad resuelta por el codigo/NUPRE del CTL ({}). El geoportal no "
+                            "publica matricula para este predio.").format(_nupre_usado),
+            }
         elif not _mat_norm:
+            # Solo la proximidad (coordenadas) y sin matrícula: NO confirmada.
             _identidad = {
                 "estado": "IDENTIDAD_PREDIAL_NO_RESUELTA",
-                "detalle": ("El catastro municipal no publica matricula inmobiliaria para el predio "
-                            "resuelto; la identidad se apoya en {}.").format(
-                                "el codigo del CTL" if _resuelto_por_codigo else "las coordenadas"),
+                "detalle": ("El catastro municipal no publica matricula inmobiliaria y el predio se "
+                            "resolvio por coordenadas (proximidad): identidad NO confirmada."),
             }
     # Dirección: 1) oficial catastral resuelta (código o punto), 2) del CTL
     # analizado, 3) del registro. Nunca se inventa.
