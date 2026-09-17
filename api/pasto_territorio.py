@@ -248,6 +248,89 @@ def _centroide_del_predio(nupre: str) -> Optional[tuple]:
         return None
 
 
+def _tokens_direccion(direccion: str):
+    """Extrae (grupos numéricos de la nomenclatura, número de unidad) de una
+    dirección colombiana.
+
+    'CARRERA 26 Nº 21 - 55'          -> (['26','21','55'], None)
+    'KR 26 # 21 - 47 APTO 101'       -> (['26','21','47'], '101')
+    'K 26 21 47 AP 101'              -> (['26','21','47'], '101')
+    """
+    import re
+    if not direccion:
+        return [], None
+    txt = str(direccion).upper()
+    unidad = None
+    m_u = re.search(r"(?:APTO|APARTAMENTO|AP|UNIDAD|UND|INT|INTERIOR|CASA|CS)\s*[:.]?\s*(\d{1,4})", txt)
+    if m_u:
+        unidad = m_u.group(1)
+    cuerpo = txt[:m_u.start()] if m_u else txt
+    # Se descartan los números de vía que son parte del nombre (p. ej. '26 ESTE')
+    cuerpo = re.sub(r"\b(ESTE|OESTE|NORTE|SUR|E|O|N|S|BIS|A|B|C|D)\b", " ", cuerpo)
+    toks = []
+    for m in re.finditer(r"(\d{1,4})", cuerpo):
+        n = m.group(1)
+        if n and n != "0":
+            toks.append(n)
+    return toks, unidad
+
+
+def nupre_por_nomenclatura(direccion: str, max_candidatos: int = 6) -> list:
+    """Resuelve el NUPRE municipal a partir de una DIRECCIÓN/NOMENCLATURA.
+
+    Es la ÚNICA vía que encuentra las **unidades de propiedad horizontal**, que no
+    están en las capas de polígono: la tabla de nomenclatura sí las contiene
+    (p. ej. `K 26 21 47 AP 101`). Auditoría 2026-09-17: sin esto, ARHIAX resolvía
+    por coordenadas y tomaba un predio vecino.
+
+    Devuelve una lista de candidatos ordenada por coincidencia (primero el que
+    coincide con la unidad declarada) con: nupre, nomenclatura, es_ph, estrato,
+    comuna, area_construida, coincide_unidad.
+    """
+    toks, unidad = _tokens_direccion(direccion)
+    if len(toks) < 3:
+        return []
+    patron = "%s %s %s" % (toks[0], toks[-2], toks[-1])
+    campos = ("objectid,codigo_predial_nacional,codigo_predial_corto,"
+              "nomenclatura_igac,nomenclatura_secretaria_de_plan,"
+              "uso_propiedad_horizontal,estrato,comuna,area_construida,"
+              "numero_de_placa")
+    candidatos = []
+    for columna in ("nomenclatura_igac", "nomenclatura_secretaria_de_plan",
+                    "nomenclatura_no_estandarizada"):
+        filas = _query(SRV_ESTRATO, TABLA_NOMENCLATURA,
+                       where="%s LIKE '%%%s%%'" % (columna, patron),
+                       timeout=TIMEOUT) or []
+        for f in filas:
+            nom = _limpio(f.get(columna)) or ""
+            nupre = _limpio(f.get("codigo_predial_nacional"))
+            if not nupre:
+                continue
+            coincide = bool(unidad) and (unidad in nom)
+            candidatos.append({
+                "nupre": nupre,
+                "nomenclatura": nom,
+                "columna_match": columna,
+                "es_ph": bool(_limpio(f.get("uso_propiedad_horizontal"))),
+                "uso_ph": _limpio(f.get("uso_propiedad_horizontal")),
+                "estrato": _limpio(f.get("estrato")),
+                "comuna": _limpio(f.get("comuna")),
+                "area_construida": _limpio(f.get("area_construida")),
+                "coincide_unidad": coincide,
+                "entrada": direccion,
+                "patron_buscado": patron,
+                "unidad_buscada": unidad,
+            })
+    # Unicidad por NUPRE, priorizando la coincidencia de unidad
+    vistos, unicos = set(), []
+    for c in sorted(candidatos, key=lambda x: (not x["coincide_unidad"],)):
+        if c["nupre"] in vistos:
+            continue
+        vistos.add(c["nupre"])
+        unicos.append(c)
+    return unicos[:max_candidatos]
+
+
 def consultar_pasto(*, lat: float = None, lon: float = None,
                     codigo_predial: str = None) -> Dict[str, Any]:
     """Datos territoriales de un predio de Pasto, por punto o por código.

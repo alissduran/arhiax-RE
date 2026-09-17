@@ -327,6 +327,59 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     predio_real = None
     _lat_geo = None
     _lon_geo = None
+    # ── PASTO: la DIRECCIÓN DEL CTL manda (resolución por nomenclatura) ──────
+    # Las UNIDADES DE PROPIEDAD HORIZONTAL no existen en las capas de polígono;
+    # la única fuente que las contiene es la tabla de nomenclatura municipal. Si
+    # se resuelve por coordenadas, el motor puede tomar un predio VECINO
+    # (auditoría 2026-09-17: analizó `K 26 8 28 13` en vez de `K 26 21 47 AP
+    # 101`). El CTL suele traer DOS nomenclaturas (edificio y unidad): se prueban
+    # todas y se prioriza la que coincide con el número de apartamento.
+    _nom = None            # mejor candidato por nomenclatura (dict) o None
+    _cands_nom = []
+    if es_pasto:
+        try:
+            from pasto_territorio import nupre_por_nomenclatura
+            _textos = [analysis.get("direccion"), db_record.get("direccion"),
+                       analysis.get("descripcion_ctl")]
+            _desc = str(analysis.get("descripcion_ctl") or "").upper()
+            for _m in re.finditer(
+                    r"((?:CARRERA|CRA|KR|K|CALLE|CL|CLL|AVENIDA|AV|DIAGONAL|DG|TRANSVERSAL|TV)"
+                    r"\s*\.?\s*\d{1,4}[A-Z]?\s*(?:N[º°]?|#)?\s*\d{1,4}\s*[-–]?\s*\d{0,4}"
+                    r"(?:\s*(?:APTO|APARTAMENTO|AP|UNIDAD|UND|INT|INTERIOR|CASA|CS)"
+                    r"\s*[:.]?\s*\d{1,4})?)", _desc):
+                _textos.append(_m.group(1))
+            _vistos_nom = set()
+            for _t in [x for x in _textos if x]:
+                for _c in nupre_por_nomenclatura(_t):
+                    if _c["nupre"] in _vistos_nom:
+                        continue
+                    _vistos_nom.add(_c["nupre"])
+                    _cands_nom.append(_c)
+            print(f"[PDF][PASTO:NOMENCLATURA] {len(_cands_nom)} candidato(s) por direccion del CTL")
+        except Exception as _e_nom:
+            print(f"[PDF][PASTO:NOMENCLATURA] no disponible: {_e_nom}")
+        # Se prefiere el candidato cuya nomenclatura contiene el APTO/unidad
+        # declarada en el CTL; si no hay coincidencia de unidad, solo se acepta
+        # cuando la dirección apunta a un único predio (nunca se elige al azar).
+        for _c in _cands_nom:
+            if _c["coincide_unidad"]:
+                _nom = _c
+                break
+        if _nom is None and len(_cands_nom) == 1:
+            _nom = _cands_nom[0]
+
+    if es_pasto and _nom:
+        # La dirección del CTL resolvió un predio: ESA es la identidad autoritativa.
+        try:
+            from pasto_territorio import consultar_pasto as _cp_nom
+            _r_nom = _cp_nom(codigo_predial=_nom["nupre"])
+            if _r_nom.get("disponible"):
+                predio_real = _r_nom
+                print(f"[PDF][PASTO:NOMENCLATURA] predio del CTL resuelto: {_nom['nupre']} "
+                      f"({_nom['nomenclatura']!r})")
+        except Exception as _e_nom2:
+            print(f"[PDF][PASTO:NOMENCLATURA] no se pudo cargar el predio: {_e_nom2}")
+
     if es_pasto and (analysis.get("codigo_catastral") or analysis.get("nupre")):
         # Pasto: el geoportal municipal publica la base predial consultable por
         # código (NUPRE), así que el predio se resuelve EXACTAMENTE como en BAQ.
@@ -416,8 +469,23 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _folio_caso = str(folio or "").strip()
         _folio_norm = _folio_caso.replace(" ", "")
         _mat_norm = _mat_muni.replace(" ", "")
+        _nupre_usado = str(((predio_real.get("predio") or {}).get("numero_predial_nacional")) or "").strip()
         _resuelto_por_codigo = bool(analysis.get("codigo_catastral") or analysis.get("nupre"))
-        if _mat_norm and _folio_norm and _mat_norm != _folio_norm:
+        # 0) Prioridad máxima: el NUPRE que resolvió la DIRECCIÓN del CTL frente al
+        #    que resolvió el código/coordenadas. Si no coinciden, el motor analizó
+        #    otro predio (regresión real: K 26 8 28 13 en vez de K 26 21 47 AP 101).
+        if _nom and _nupre_usado and _nupre_usado != _nom["nupre"]:
+            _identidad = {
+                "estado": "IDENTITY_CONFLICT",
+                "detalle": ("La DIRECCION del CTL apunta al predio {} ({}), pero el dictamen "
+                            "resolvio el predio {} ({}). Coinciden las vias pero NO el predio.").format(
+                                _nom["nupre"], _nom["nomenclatura"], _nupre_usado,
+                                ((predio_real.get("predio") or {}).get("direccion_oficial")
+                                 or "sin direccion municipal")),
+            }
+            if not _resuelto_por_codigo:
+                predio_real = None
+        elif _mat_norm and _folio_norm and _mat_norm != _folio_norm:
             _identidad = {
                 "estado": "IDENTITY_CONFLICT",
                 "detalle": ("El CTL del caso corresponde al folio {}. El catastro municipal de Pasto "
@@ -631,8 +699,11 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "la del municipio, actualizar el caso; si es la del CTL, el municipio tiene el dato "
             "desactualizado y debe corregirse en Catastro Municipal."))
     elif _identidad.get("estado") == "IDENTIDAD_PREDIAL_NO_RESUELTA":
-        recs.append("Verificar la identidad predial con el certificado catastral municipal: el "
-                    "geoportal de Pasto no publica matricula inmobiliaria para este predio.")
+        # `recs` es una lista de tuplas (titulo, texto): un string suelto rompía
+        # el render de recomendaciones ('too many values to unpack').
+        recs.append(("Identidad predial",
+                     "Verificar la identidad del predio con el certificado catastral municipal: "
+                     "el geoportal de Pasto no publica matricula inmobiliaria para este predio."))
 
     # ── Mejora 2 (Sprint 3): coherencia círculo registral del CTL vs. ciudad ──
     # Los folios SNR pertenecen a una oficina de registro: Barranquilla '040',
