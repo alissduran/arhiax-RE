@@ -109,6 +109,35 @@ Predio confirmado: **`objectid 37231`** (idéntico en `Estratificacion/4`, `Mapa
 | Propietario | `UNIDAD ADMINISTRATIVA DEL SISTEMA`; cédula `Sin información` | `Estratificacion/4` | exacto | Media |
 | Avalúo IGAC | **NULL** | `.avaluo_igac` | — | `DATO_REALMENTE_NULO` |
 
+### 2.0 ⚠ HALLAZGO DECISIVO: EL DICTAMEN ANALIZÓ UN PREDIO QUE NO ES EL DE LA DIRECCIÓN REPORTADA
+
+El usuario aportó la dirección real del inmueble: **`CARRERA 26 Nº 21-55`**. Al buscarla en la nomenclatura municipal apareció un predio **distinto** al que ARHIAX analizó:
+
+| | Dirección municipal | NUPRE | Área construida | Manzana |
+|---|---|---|---|---|
+| **Dirección del usuario** | **`K 26 21 55 AP 201`** | `520010102000000440902900000**117**` | **102** m² | `...044` |
+| **NUPRE usado por ARHIAX** | `K 26 8 28 13` | `520010102000000470014000000000` | 295 m² (terreno 126) | `...047` |
+| Matrícula del CTL | **no existe en el geoportal** | — | — | — |
+
+**Son manzanas distintas (`044` vs `047`), con placas distintas (`21-55` vs `8-28`) sobre la misma vía.**
+
+Comportamiento de cada uno en el geoportal:
+
+- **El predio de la dirección del usuario** (`...0440902900000117`) aparece **solo en la tabla de nomenclatura** (`Estratificacion/1`: `nomenclatura_igac = "K 26 21 55 AP 201"`, estrato `3`, comuna `Comuna 1`, código corto `010200440117902`). **No existe** en la capa predial (`Estratificacion/4`), ni en tratamientos (`Norma/2`), ni en áreas de actividad (`Norma/28`), ni en riesgos (`Norma/1`). Es una **unidad de propiedad horizontal** (`AP 201`) que no está en las capas de polígono.
+- **El predio del NUPRE usado por ARHIAX** (`...470014000000000`) existe en **todas** las capas, con `Suelo de proteccion`, **ZAVA T-269/2015** y `CMA no construible`.
+
+**CONSECUENCIA CRÍTICA:** las conclusiones normativas y de riesgo del dictamen — **ZAVA, `Suelo de proteccion`, `CMA no construible`, amenaza ALTA por lahares del Galeras** — pertenecen a **Carrera 26 #8-28**, y **NO se pueden atribuir al inmueble del usuario** hasta resolver la identidad. Es exactamente el caso que la regla `IDENTITY_CONFLICT` debe bloquear.
+
+**Causa probable (no concluyente sin el CTL):** el NUPRE pudo llegar (a) del propio CTL, o (b) de una resolución **por coordenadas** a partir de la dirección incompleta "CRA # 26" — que geocodificó a un punto de la vía y devolvió uno de los **13–15 predios vecinos** a 30 m. La segunda hipótesis explica también que ARHIAX capturara solo la vía.
+
+**Acción humana requerida (bloqueante):**
+1. Leer en el CTL el campo **"código catastral / número predial"** y compararlo con `520010102000000470014000000000`. Si no coincide, el dictamen analizó otro predio.
+2. Pedir en Catastro Municipal el certificado catastral de **Carrera 26 #21-55** y comprobar si su NUPRE es `...0440902900000117`.
+3. Cotejar la **matrícula `240-211101`** con la ORIP Pasto (el geoportal no la contiene).
+4. **No tomar decisiones de crédito con el dictamen actual** mientras la identidad no esté resuelta.
+
+**Regla que esto impone a ARHIAX (implementada):** además de contrastar la matrícula, el sistema debe **resolver la nomenclatura del CTL/entrada contra la nomenclatura municipal** y, si apunta a un NUPRE distinto del utilizado, emitir `IDENTITY_CONFLICT` y **no afirmar normativa predial**.
+
 ### 2.1 Dato de máximo impacto para la decisión de crédito
 
 El predio está en **ZAVA (Zona de Amenaza Volcánica Alta) por sentencia T-269 de 2015**, con tratamiento **`Suelo de proteccion`** y código morfológico de alturas **`CMA no construible`**. Consecuencia: **no es edificable** y está sujeto a restricción por amenaza volcánica. Cualquier avalúo, garantía o promesa de compraventa debe tratar esto como **restricción crítica**, no como un campo más.
