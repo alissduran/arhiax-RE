@@ -16,7 +16,30 @@ C_BORDE = colors.HexColor("#E2E8F0")
 C_NEGRO_MONO = colors.HexColor("#0A1424")
 
 
-def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1", ciudad="barranquilla"):
+def precondiciones_valoracion(clase_suelo=None, destino=None, tipologia=None):
+    """Precondiciones de valoración por tipología (bug L).
+
+    La comparación de mercado (M1) y la capitalización de rentas (M3) NO proceden
+    sobre ciertos predios: suelo de protección, no construible o rural. Antes
+    ARHIAX valoraba por comparables un predio "Suelo de proteccion / no
+    construible" como si fuera un apartamento terminado (regresión del caso
+    240-211101 que analizó el predio vecino). Devuelve procede=False + motivo.
+    """
+    cs = (clase_suelo or "").strip().lower()
+    dst = (destino or "").strip().lower()
+    tip = (tipologia or "").strip().lower()
+    if "proteccion" in cs or "protección" in cs:
+        return {"procede": False, "motivo": "clase de suelo de protección"}
+    if "no construible" in dst or "no edificable" in dst \
+            or "no construible" in tip or "no edificable" in tip:
+        return {"procede": False, "motivo": "predio no construible"}
+    if cs == "rural" or ("rural" in dst and "urbano" not in dst):
+        return {"procede": False, "motivo": "suelo rural (no comparación urbana)"}
+    return {"procede": True, "motivo": None}
+
+
+def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
+                  ciudad="barranquilla", clase_suelo=None, destino=None, tipologia=None):
     """
     Retorna la valoracion tecnica de mercado consolidando M1 (comparacion de
     mercado), M2 (costo de reposicion) y M3 (capitalizacion de rentas).
@@ -32,6 +55,11 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1", 
     excepcionales con renta demostrable. La seleccion definitiva del metodo y la
     firma son del avaluador inscrito en el RAA.
     metodo_principal: "m1" (default) | "m3" (excepcional, renta demostrable).
+
+    Precondiciones por tipología (bug L): si el predio NO admite comparación de
+    mercado (suelo de protección / no construible / rural), se devuelve
+    metodologia_aplica=False con consolidado=0 y motivo_no_aplica; el dictamen NO
+    estampa un valor de mercado sobre un predio que no lo tiene.
     """
     import yaml
     from pathlib import Path
@@ -41,6 +69,24 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1", 
     val_m2_mercado = 5200000
     factor_costos = 1.2576
     es_pasto = "pasto" in (ciudad or "").lower()
+
+    # ── Precondición por tipología (bug L) ──
+    _pre = precondiciones_valoracion(clase_suelo=clase_suelo, destino=destino,
+                                     tipologia=tipologia)
+    if not _pre["procede"]:
+        return {
+            "consolidado": 0,
+            "banda_baja": 0,
+            "banda_alta": 0,
+            "m1": 0, "m2": 0, "m3": 0,
+            "metodo_principal": metodo_principal,
+            "m1_m2": 0, "m3_m2": 0,
+            "canon_mensual": 0,
+            "cap_rate": cap_rate_neto,
+            "metodologia_local": not es_pasto,
+            "metodologia_aplica": False,
+            "motivo_no_aplica": _pre["motivo"],
+        }
 
     if es_pasto:
         # Sin metodologia local de Pasto verificada: referencia generica por
@@ -126,6 +172,8 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1", 
         "canon_mensual": canon_mensual,
         "cap_rate": cap_rate_neto,
         "metodologia_local": not es_pasto,
+        "metodologia_aplica": True,
+        "motivo_no_aplica": None,
     }
 
 

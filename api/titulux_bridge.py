@@ -28,9 +28,13 @@ import re
 from typing import Any, Dict, Optional, Tuple
 
 # ── Mapeo de tipo de anotación del analizador legal → tipo Titulux ────────────
+# Bug J: hipoteca, embargo, MEDIDA CAUTELAR y gravamen genérico son categorías
+# DISTINTAS (no se funden en un único 'gravamen').
 _TIPO_MAP = {
     "GRAVAMEN: HIPOTECA": "hipoteca",
     "GRAVAMEN: EMBARGO": "embargo",
+    "MEDIDA CAUTELAR": "medida_cautelar",
+    "GRAVAMEN": "gravamen",
     "LIMITACION: AFECTACION VIVIENDA": "afectacion",
     "LIMITACION: PATRIMONIO FAMILIA": "limitacion",
     "LIMITACION: PATRIMONIO": "limitacion",
@@ -57,6 +61,11 @@ def _tipo_titulux(tipo_legal: str) -> str:
         return "hipoteca"
     if "EMBARGO" in t:
         return "embargo"
+    if "MEDIDA CAUTELAR" in t or "INSCRIPCION DE DEMANDA" in t \
+            or "PROHIBICION" in t or "COMISO" in t or "EXTINCION DE DOMINIO" in t:
+        return "medida_cautelar"
+    if "SERVIDUMBRE" in t or "USUFRUCTO" in t or "GRAVAMEN" in t:
+        return "gravamen"
     if "AFECTACION" in t or "VIVIENDA" in t:
         return "afectacion"
     if "PATRIMONIO" in t:

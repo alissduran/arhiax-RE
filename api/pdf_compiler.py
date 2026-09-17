@@ -697,7 +697,11 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     _metodo_principal = (db_record.get("metodo_avaluo") or "m1").strip().lower()
     if _metodo_principal not in ("m1", "m3"):
         _metodo_principal = "m1"
-    val_data = get_valuation(area, barrio, estrato, metodo_principal=_metodo_principal, ciudad=ciudad)
+    # Precondiciones de valoración por tipología (bug L): un predio de suelo de
+    # protección / no construible / rural NO se valora por comparación de mercado.
+    val_data = get_valuation(area, barrio, estrato, metodo_principal=_metodo_principal,
+                             ciudad=ciudad, clase_suelo=_ent2.get("clase_suelo"),
+                             destino=_predio_destino, tipologia=_tipologia_texto)
     res_avaluo = val_data
     
     # Cargar hallazgos y recomendaciones dinamicas del analizador legal
@@ -1079,7 +1083,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     )
     
     BLOQUEOS_FIDUCIARIOS = {
-        "hipoteca", "embargo", "afectacion", "patrimonio", "demanda", "usufructo", "medida cautelar"
+        "hipoteca", "embargo", "afectacion", "patrimonio", "demanda", "usufructo",
+        "medida cautelar", "gravamen", "servidumbre", "prohibicion", "comiso",
+        "extincion de dominio",
     }
     
     def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
@@ -1357,7 +1363,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         ("Codigo catastral", f"{_predio_codigo} (GC-{_NOMBRE_CIUDAD.upper()[:3]})" if _predio_codigo else "Pendiente consulta catastral"),
         ("Titulares vigentes", titulares_val),
         ("Modalidad de adquisicion", "Compraventa registrada en CTL" if len(analysis.get("anotaciones", [])) > 0 else "Sujeto a verificacion SNR"),
-        ("Valor Comercial Consolidado", f"{fmt_cop(res_avaluo['consolidado'])} COP (Banda: {fmt_cop(res_avaluo['banda_baja'])} -- {fmt_cop(res_avaluo['banda_alta'])})"),
+        ("Valor Comercial Consolidado",
+         "NO PROCEDE ({})".format(res_avaluo.get('motivo_no_aplica') or "tipologia no valuada")
+         if res_avaluo.get('metodologia_aplica') is False
+         else f"{fmt_cop(res_avaluo['consolidado'])} COP (Banda: {fmt_cop(res_avaluo['banda_baja'])} -- {fmt_cop(res_avaluo['banda_alta'])})"),
         ("Constructor / Enajenante", constructor_val),
         ("Acreedor hipotecario (SNR)", acreedor_snr),
         ("Acreedor hipotecario (REAL)", acreedor_snr),
@@ -2106,8 +2115,17 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 4))
     
     area_calc = area if area > 0 else 1.0
-    tiene_valor = area > 0 and (res_avaluo.get('consolidado') or 0) > 0
-    if not tiene_valor:
+    # Precondición por tipología (bug L): suelo de protección / no construible /
+    # rural NO se valora por comparación de mercado -> aviso claro, nunca $0.
+    if res_avaluo.get('metodologia_aplica') is False:
+        story.append(alert_orange(
+            "<b>VALORACION NO PROCEDE POR TIPOLOGIA:</b> {} La comparacion de mercado (M1) y la "
+            "capitalizacion de rentas (M3) no aplican a este predio, por lo que ARHIAX NO estampa "
+            "un valor referencial de mercado sobre el inmueble. La valoracion definitiva, si "
+            "procede, la debe determinar un avaluador inscrito en el RAA con la metodologia "
+            "adecuada a la tipologia.".format(res_avaluo.get('motivo_no_aplica') or "")))
+        story.append(Spacer(1, 6))
+    elif not (area > 0 and (res_avaluo.get('consolidado') or 0) > 0):
         # Sin metraje: la estimación de mercado no es calculable -> aviso claro,
         # nunca una tabla de valores $0 que parezca información real.
         story.append(alert_orange(

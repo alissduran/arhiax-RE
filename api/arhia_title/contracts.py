@@ -1,4 +1,4 @@
-﻿"""Contratos del dominio de títulos (pre-dictamen jurídico-inmobiliario)."""
+"""Contratos del dominio de títulos (pre-dictamen jurídico-inmobiliario)."""
 from dataclasses import dataclass
 from typing import Optional, Tuple
 
@@ -13,7 +13,7 @@ class Evidencia:
 @dataclass(frozen=True)
 class Anotacion:
     numero: int
-    tipo: str           # compraventa | hipoteca | embargo | cancelacion | limitacion | afectacion | aclaracion | otro
+    tipo: str           # compraventa | hipoteca | embargo | medida_cautelar | gravamen | cancelacion | limitacion | afectacion | aclaracion | otro
     fecha: str          # ISO
     instrumento: str = ""
     titular: str = ""   # adquiriente en compraventa

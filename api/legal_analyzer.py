@@ -364,8 +364,19 @@ def analizar_texto_certificado(texto):
                 tipo_anot = "OTRO: Aclaracion"
             elif "HIPOTECA" in sup:
                 tipo_anot = "GRAVAMEN: Hipoteca"
-            elif "EMBARGO" in sup or "MEDIDA CAUTELAR" in sup:
+            elif "EMBARGO" in sup and "MEDIDA CAUTELAR" not in sup:
                 tipo_anot = "GRAVAMEN: Embargo"
+            # Medida cautelar DISTINTA del embargo (bug J): inscripción de demanda,
+            # prohibición de enajenar, comiso o extinción de dominio no son embargos.
+            elif ("MEDIDA CAUTELAR" in sup or "INSCRIPCION DE DEMANDA" in sup
+                  or "PROHIBICION" in sup or "PROHIBICIÓN" in sup or "COMISO" in sup
+                  or "EXTINCION DE DOMINIO" in sup):
+                tipo_anot = "MEDIDA CAUTELAR"
+            # Gravamen genérico distinto de hipoteca/embargo (servidumbre, usufructo,
+            # u otro gravamen no clasificado). Va DESPUÉS de hipoteca/embargo para no
+            # capturar "GRAVAMEN: HIPOTECA" / "GRAVAMEN: EMBARGO" como genérico.
+            elif "SERVIDUMBRE" in sup or "USUFRUCTO" in sup or "GRAVAMEN" in sup:
+                tipo_anot = "GRAVAMEN"
             elif "AFECTACION" in sup or "VIVIENDA FAMILIAR" in sup:
                 tipo_anot = "LIMITACION: Afectacion Vivienda"
             elif "PATRIMONIO" in sup and "INEMBARGABLE" in sup:
@@ -539,8 +550,15 @@ def analizar_texto_certificado(texto):
             return m.group(1) if m else None
 
         for item in parsed_anotaciones:
-            if "GRAVAMEN" in item["tipo"] and "CANCELADA" not in item["estado"]:
-                es_hipoteca = "Hipoteca" in item["tipo"]
+            _tipo_an = item["tipo"]
+            # Cargas/graves separados por CATEGORÍA (bug J): hipoteca, embargo,
+            # medida cautelar y gravamen genérico se distinguen (no se funden).
+            _es_carga = ("GRAVAMEN" in _tipo_an or _tipo_an == "MEDIDA CAUTELAR") \
+                and "CANCELADA" not in item["estado"]
+            if _es_carga:
+                es_hipoteca = "Hipoteca" in _tipo_an
+                es_embargo = "Embargo" in _tipo_an
+                es_cautelar = _tipo_an == "MEDIDA CAUTELAR"
                 acreedor = _acreedor_de(item)
                 cuantia = _cuantia_de(item)
                 fecha = item.get("fecha") or "N/D"
@@ -564,26 +582,57 @@ def analizar_texto_certificado(texto):
                         "apartamento hasta que el gravamen se levante.".format(
                             acreedor if acreedor else "el banco acreedor")
                     )
-                else:
-                    titulo = "H-0{} | {} vigente (Anot. {})".format(h_idx, item['tipo'], item['num'])
+                elif es_embargo:
+                    titulo = "H-0{} | Embargo vigente{} (Anot. {})".format(
+                        h_idx, extra_acr, item['num'])
                     desc = (
-                        "El folio registra {} inscrito el {} (anot. {}){}".format(
-                            item['tipo'].lower(), fecha, item['num'], extra_acr) + ". "
-                        "En lenguaje claro: existe una orden o carga registrada que limita la libre "
-                        "disposicion del inmueble y debe resolverse antes de cualquier operacion."
+                        "El folio registra un EMBARGO VIGENTE inscrito el {} (anot. {}){}".format(
+                            fecha, item['num'], extra_acr) + ". "
+                        "En lenguaje claro: una autoridad judicial ha ordenado retener o impedir "
+                        "la disposicion del inmueble. El embargo NO transfiere la propiedad, pero "
+                        "bloquea cualquier venta o gravamen mientras este vigente."
                     )
                     impl = (
-                        "Se requiere gestionar el levantamiento del gravamen (pago, orden judicial "
-                        "o acuerdo con la entidad acreedora) y su cancelacion en el registro antes "
-                        "de vender o estructurar garantias sobre el inmueble."
+                        "Se requiere el levantamiento del embargo mediante orden judicial (pago de "
+                        "la obligacion, caución o terminación del proceso) y su cancelacion en el "
+                        "registro antes de disponer o gravar el inmueble."
+                    )
+                elif es_cautelar:
+                    titulo = "H-0{} | Medida cautelar vigente (Anot. {})".format(
+                        h_idx, item['num'])
+                    desc = (
+                        "El folio registra una MEDIDA CAUTELAR VIGENTE inscrita el {} (anot. {}): "
+                        "{}. En lenguaje claro: existe una orden judicial (p. ej. inscripcion de "
+                        "demanda, prohibicion de enajenar, comiso o extincion de dominio) que "
+                        "restringe la libre disposicion del inmueble.".format(
+                            fecha, item['num'], (item.get('texto') or '')[:120])
+                    )
+                    impl = (
+                        "La medida cautelar restringe la disposicion del inmueble hasta su "
+                        "levantamiento por orden judicial. Verificar el proceso que la origina y "
+                        "tramitar su cancelacion antes de cualquier operacion."
+                    )
+                else:
+                    # Gravamen genérico (servidumbre, usufructo u otro).
+                    titulo = "H-0{} | Gravamen vigente (Anot. {})".format(h_idx, item['num'])
+                    desc = (
+                        "El folio registra un GRAVAMEN VIGENTE inscrito el {} (anot. {}): {}. "
+                        "En lenguaje claro: existe una carga real (p. ej. servidumbre o usufructo) "
+                        "que limita el dominio o su uso y debe tenerse en cuenta.".format(
+                            fecha, item['num'], (item.get('texto') or '')[:120])
+                    )
+                    impl = (
+                        "Verificar la naturaleza del gravamen y su vigencia; segun el caso, "
+                        "tramitar su cancelacion o asumirlo como carga real que acompanara al "
+                        "inmueble en cualquier operacion."
                     )
                 res["hallazgos"].append(("ALTO", C_ROJO, C_RIESGO_BG, titulo,
                                          "SNR Registral", desc, impl))
                 res["recs"].append((
-                    "R-0{} | Cancelacion de gravamen Anot. {}".format(h_idx, item['num']),
-                    "Tramitar con {} la cancelacion del gravamen (pago/paz y salvo) y registrarla "
-                    "en el folio SNR para dejar el inmueble libre de cargas.".format(
-                        acreedor if acreedor else "la entidad acreedora")
+                    "R-0{} | Cancelacion/levantamiento Anot. {}".format(h_idx, item['num']),
+                    "Tramitar con {} el levantamiento o cancelacion de la carga y registrarla "
+                    "en el folio SNR para dejar el inmueble libre.".format(
+                        acreedor if acreedor else "la autoridad/entidad competente")
                 ))
                 h_idx += 1
             elif "LIMITACION" in item["tipo"] and "CANCELADA" not in item["estado"]:

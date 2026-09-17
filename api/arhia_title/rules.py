@@ -140,7 +140,9 @@ def titularidad(caso):
 def _base_gravamen(tipo):
     return {
         "hipoteca": "Código Civil arts. 2432 y ss. (hipoteca); Ley 1579/2012. La carga exige cancelación para liberar el inmueble.",
-        "embargo": "Medida cautelar (arts. 593, 601 C.G.P.); Ley 1579/2012. El embargo restringe la disponibilidad del bien.",
+        "embargo": "Medida cautelar de embargo (arts. 593, 601 C.G.P.); Ley 1579/2012. El embargo restringe la disponibilidad del bien.",
+        "medida_cautelar": "Medida cautelar (inscripción de demanda, prohibición de enajenar, comiso, extinción de dominio — arts. 590 y ss. C.G.P.); Ley 1579/2012.",
+        "gravamen": "Gravamen real (servidumbre, usufructo u otro — Código Civil arts. 823 y ss., 879 y ss.); Ley 1579/2012.",
         "afectacion": "Afectación/limitación al dominio (norma especial, p. ej. vivienda familiar — Ley 258/1996; patrimonio familiar).",
         "limitacion": "Limitación al dominio por la norma aplicable (p. ej. afectación a vivienda familiar, patrimonio inembargable).",
     }.get(tipo, "Carga o limitación registrada; Ley 1579/2012.")
@@ -149,7 +151,8 @@ def _base_gravamen(tipo):
 def gravamenes(caso):
     h = []
     for a in caso.anotaciones:
-        if a.tipo in ("hipoteca", "embargo", "limitacion", "afectacion") and a.estado == "vigente":
+        if a.tipo in ("hipoteca", "embargo", "medida_cautelar", "gravamen",
+                      "limitacion", "afectacion") and a.estado == "vigente":
             h.append(Hallazgo(f"TIT_B04-{a.numero}", f"Gravamen vigente: {a.tipo}", "RIESGO", "alta",
                 f"Anotación {a.numero}: {a.tipo} vigente — {a.detalle or a.instrumento}.",
                 base_legal=_base_gravamen(a.tipo),
