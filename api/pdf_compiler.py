@@ -2041,25 +2041,28 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         # Pasto YA tiene capas propias en vivo: riesgos municipales por predio
         # (geoportal de Planeación) + mapa oficial de amenaza volcánica del SGC.
         _riesgos_muni = (predio_real or {}).get("riesgos") or {}
-        if _riesgos_muni:
+        _estado_fuente_pasto = ((predio_real or {}).get("fuente") or {}).get("estado", "")
+        if predio_real and _estado_fuente_pasto.startswith("CONSULTADA"):
             story.append(body(
                 "Riesgos evaluados EN VIVO en el <b>geoportal del Municipio de Pasto</b> "
                 "(capa 'Consulta de riesgos urbano', por predio) y en el <b>mapa oficial de amenaza "
-                "volcánica del Servicio Geológico Colombiano</b>. "
+                "volcánica del Servicio Geológico Colombiano</b>. Se muestra el resultado de CADA "
+                "peligro cruzado: 'No aplica' significa que el municipio evaluó el predio y ese "
+                "peligro no le aplica. "
                 "<b>[FUENTE: GEOPORTAL MUNICIPAL DE PASTO + SGC - EN VIVO]</b>"))
             story.append(Spacer(1, 4))
-            story.append(dt([
-                (etiqueta, valor) for etiqueta, valor in (
-                    ("Riesgo volcanico (POT Pasto)", _riesgos_muni.get("riesgo_volcanico_ea27")),
-                    ("Zona de amenaza volcanica ZAVA (T-269/2015)", _riesgos_muni.get("zava_t_269_de_2015")),
-                    ("Flujos de lodo", _riesgos_muni.get("flujos_de_lodo_ea22")),
-                    ("Restricciones por flujos de lodo", _riesgos_muni.get("restricciones_por_lujos_de_lodo")),
-                    ("Remocion en masa", _riesgos_muni.get("remocion_en_masa_ea19")),
-                    ("Inundacion", _riesgos_muni.get("inundacion_ea23")),
-                    ("Subsidencia", _riesgos_muni.get("subsidencia_ea29")),
-                    ("Servidumbre de lineas de alta tension", _riesgos_muni.get("servidumbre_de_lineas_de_alta_t")),
-                ) if valor
-            ] + [("Fuente", "Geoportal Municipal de Pasto -- capa de riesgos urbanos (en vivo)")]))
+            try:
+                from pasto_territorio import CAMPOS_RIESGO as _CAMPOS_RIESGO
+            except Exception:  # noqa: BLE001
+                _CAMPOS_RIESGO = []
+            # TODAS las filas, siempre: si un peligro no aparece en la capa se dice
+            # 'NO REGISTRA' en vez de omitir la fila (omitirla parecía que nunca se
+            # cruzó, queja real del usuario).
+            _filas_rie = [(etiqueta, _riesgos_muni.get(campo) or "NO REGISTRA en la capa municipal")
+                          for campo, etiqueta in _CAMPOS_RIESGO]
+            _filas_rie.append(
+                ("Fuente", "Geoportal Municipal de Pasto -- capa 'Consulta de riesgos urbano' (en vivo)"))
+            story.append(dt(_filas_rie))
         else:
             story.append(body(
                 "Verificacion de amenazas y riesgos en Pasto (Nariño): el geoportal municipal no devolvio "

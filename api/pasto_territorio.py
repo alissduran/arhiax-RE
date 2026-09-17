@@ -54,17 +54,21 @@ _CACHE: Dict[tuple, tuple] = {}
 
 # Campos de riesgo por predio (capa 1) y su etiqueta legible
 CAMPOS_RIESGO = [
-    ("riesgo_volcanico_ea27", "Riesgo volcanico"),
-    ("zava_t_269_de_2015", "Zona de amenaza volcanica (ZAVA, sentencia T-269/2015)"),
-    ("flujos_de_lodo_ea22", "Flujos de lodo"),
+    ("riesgo_volcanico_ea27", "Riesgo volcanico (POT Pasto)"),
+    ("zava_t_269_de_2015", "Zona de amenaza volcanica ZAVA (sentencia T-269/2015)"),
+    ("flujos_de_lodo_ea22", "Amenaza por flujos de lodo"),
     ("restricciones_por_lujos_de_lodo", "Restricciones por flujos de lodo"),
-    ("remocion_en_masa_ea19", "Remocion en masa"),
-    ("inundacion_ea23", "Inundacion"),
-    ("subsidencia_ea29", "Subsidencia"),
+    ("remocion_en_masa_ea19", "Amenaza por remocion en masa"),
+    ("inundacion_ea23", "Amenaza por inundacion (areas afectadas y en riesgo)"),
+    ("subsidencia_ea29", "Amenaza por subsidencia"),
     ("servidumbre_de_lineas_de_alta_t", "Servidumbre de lineas de alta tension"),
 ]
 
-_NA = ("", None, "sin informacion", "sin información", "n/a", "no aplica", "none")
+_NA = ("", None, "sin informacion", "sin información", "n/a", "none")
+# En RIESGOS, "No aplica" es una RESPUESTA VÁLIDA y valiosa (el municipio evaluó
+# el predio contra ese peligro y no aplica). Descartarla hacía desaparecer la
+# fila del dictamen y parecía que el cruce nunca se hizo.
+_NA_RIESGO = ("", None, "sin informacion", "sin información")
 
 
 def _limpio(v) -> Optional[str]:
@@ -73,6 +77,16 @@ def _limpio(v) -> Optional[str]:
         return None
     s = str(v).strip()
     if not s or s.lower() in _NA:
+        return None
+    return s
+
+
+def _valor_riesgo(v) -> Optional[str]:
+    """Como _limpio pero CONSERVA 'No aplica' (respuesta válida en riesgos)."""
+    if v is None:
+        return None
+    s = str(v).strip()
+    if s.lower() in _NA_RIESGO:
         return None
     return s
 
@@ -246,7 +260,7 @@ def consultar_pasto(*, lat: float = None, lon: float = None,
 
     riesgos: Dict[str, Any] = {}
     for campo, etiqueta in CAMPOS_RIESGO:
-        v = _limpio(r0.get(campo))
+        v = _valor_riesgo(r0.get(campo))
         if v:
             riesgos[campo] = v
     res["riesgos"] = riesgos
