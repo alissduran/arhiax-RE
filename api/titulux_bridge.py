@@ -121,17 +121,33 @@ def construir_caso_titulux(
     geo_eval: Optional[Dict[str, Any]] = None,
     *,
     area_catastral: float = 0.0,
+    identidad: Optional[Dict[str, Any]] = None,
 ) -> Any:
     """Construye el `Caso` de Titulux desde el análisis del CTL real.
 
     Es un `informe_base` (no una operación de compraventa): VAL_B01 y TRX_B01 no
     aplican (no hay precio pactado ni pagos), coherente con no inventar datos de
     operación que el CTL no aporta.
+
+    `identidad` (modelo canónico canonical_property_identity) es la fuente
+    autoritativa de folio/NUPRE/código/titular. Sin ella Titulux derivaba el
+    código solo del CTL crudo y, si el CTL no traía código aunque el motor SÍ
+    había resuelto el NUPRE por nomenclatura, emitía un TIT_B01 falso de
+    "falta folio/código catastral" (bug A).
     """
     from arhia_title.contracts import Anotacion, Avaluo, Caso, Parte, Predio
 
-    folio = analysis.get("folio") or db_record.get("folio_matricula") or "040-XXXXXX"
-    codigo = analysis.get("codigo_catastral") or ""
+    identidad = identidad or {}
+    folio = (identidad.get("folio_snr")
+             or analysis.get("folio")
+             or db_record.get("folio_matricula") or "040-XXXXXX")
+    # Código canónico: NUPRE resuelto > código anterior > código corto > CTL crudo.
+    codigo = (identidad.get("nupre")
+              or identidad.get("codigo_anterior")
+              or identidad.get("codigo_corto")
+              or analysis.get("codigo_catastral")
+              or analysis.get("nupre")
+              or "")
     direccion = analysis.get("direccion") or db_record.get("direccion") or ""
     area_registral = float(db_record.get("area") or 0.0)
     if area_catastral is None:
@@ -153,10 +169,21 @@ def construir_caso_titulux(
             detalle=detalle, estado=estado,
         ))
 
-    nombre_tit, tipo_doc, num_doc = _nombre_documento(analysis.get("titulares") or "")
+    # Titular: el modelo canónico recupera nombre + DOCUMENTO + tipo de persona
+    # desde el CTL (la extracción del analizador pierde el 'CC 87070538' y Titulux
+    # clasificaba a la persona natural como 'juridica' sin documento — bug I).
+    _titular_can = (identidad.get("titular") or {}) if identidad else {}
+    nombre_tit = (_titular_can.get("nombre")
+                  or _nombre_documento(analysis.get("titulares") or "")[0])
+    tipo_doc = _titular_can.get("tipo_documento")
+    num_doc = _titular_can.get("numero_documento")
+    if not tipo_doc or not num_doc:
+        _nombre_doc = _nombre_documento(analysis.get("titulares") or "")
+        tipo_doc = tipo_doc or _nombre_doc[1]
+        num_doc = num_doc or _nombre_doc[2]
     partes = []
     if nombre_tit:
-        partes.append(Parte("titular", nombre_tit, tipo_doc, num_doc))
+        partes.append(Parte("titular", nombre_tit, tipo_doc or "", num_doc or ""))
     hip = analysis.get("hipoteca_vigente") or {}
     acreedor = (hip.get("acreedor") or analysis.get("acreedor_snr") or "").strip()
     if acreedor and len(acreedor) >= 4:
@@ -187,15 +214,38 @@ def construir_caso_titulux(
     )
 
 
-def _sujetos_del_caso(caso) -> list:
-    """Sujetos a screening: titular y acreedor (si existen)."""
+def _sujetos_del_caso(caso, identidad: Optional[Dict[str, Any]] = None) -> list:
+    """Sujetos a screening: titular y acreedor (si existen).
+
+    El tipo ('natural'/'juridica') sale del DOCUMENTO del sujeto, no de un
+    default NIT. Un titular sin documento queda 'natural' como sujeto a
+    identificar por nombre (nunca se le asigna una calidad jurídica que no
+    tiene — bug I: NATURAL_PERSON en SAGRILAFT).
+    """
     from arhia_sag_screen.contracts import Contraparte
+    identidad = identidad or {}
+    _titular_can = identidad.get("titular") or {}
     out = []
     for p in caso.partes:
-        doc_t = p.tipo_documento or "nit"
+        doc_t = p.tipo_documento or ""
+        if p.rol == "titular":
+            tipo_persona = _titular_can.get("tipo_persona")
+            doc_t = doc_t or _titular_can.get("tipo_documento") or ""
+        else:
+            tipo_persona = None
+        if tipo_persona == "NATURAL_PERSON":
+            tipo = "natural"
+        elif tipo_persona == "LEGAL_ENTITY":
+            tipo = "juridica"
+        elif doc_t in ("cc", "ce", "ti", "rc", "pasaporte"):
+            tipo = "natural"
+        elif doc_t in ("nit",):
+            tipo = "juridica"
+        else:
+            tipo = "natural"  # sin documento: persona física a identificar por nombre
         out.append(Contraparte(
             f"{p.rol}-{p.numero_documento or p.nombre}",
-            "natural" if doc_t == "cc" else "juridica",
+            tipo,
             p.nombre, doc_t, p.numero_documento,
         ))
     return out
@@ -217,6 +267,7 @@ def ejecutar_titulux(
     geo_eval: Optional[Dict[str, Any]] = None,
     *,
     area_catastral: float = 0.0,
+    identidad: Optional[Dict[str, Any]] = None,
     fuentes_activas: Tuple[str, ...] = ("onu", "ofac", "uiaf", "uk"),
     cache_dir: Optional[str] = None,
     timeout_listas: int = 90,
@@ -248,7 +299,8 @@ def ejecutar_titulux(
 
     try:
         caso = construir_caso_titulux(analysis, db_record, val_data, geo_eval,
-                                      area_catastral=area_catastral)
+                                      area_catastral=area_catastral,
+                                      identidad=identidad)
     except Exception as e:  # noqa: BLE001
         resultado["error"] = f"No se pudo construir el caso Titulux: {e}"
         return resultado
@@ -288,7 +340,7 @@ def ejecutar_titulux(
         estado = getattr(lv, "estado", "") or ""
         estado_fuente[f] = estado
 
-    sujetos = _sujetos_del_caso(caso)
+    sujetos = _sujetos_del_caso(caso, identidad)
     screening_por_sujeto = []
     fuentes_pendientes = set()
 

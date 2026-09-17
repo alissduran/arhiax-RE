@@ -1581,9 +1581,17 @@ def status_endpoint(auth: dict = Depends(require_admin)):
         }
     elif isinstance(cache, dict) and "error" in cache:
         geo["error"] = cache["error"]
+    # Versionado de plataforma (matriz de versiones + SHA de git) — observable
+    # por API para auditar qué código está desplegado.
+    try:
+        from versioning import version_blob
+        _versiones = version_blob()
+    except Exception as e:
+        _versiones = {"error": str(e)[:120]}
     return {
         "api": "ARHIAX RE",
-        "version": "2026.09",
+        "version": _versiones.get("ARHIAX_RE_VERSION", "2026.09"),
+        "versionado": _versiones,
         "timestamp": datetime.now().isoformat(),
         "motor_geoespacial": geo,
         "ciudades": listar_ciudades(),

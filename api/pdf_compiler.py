@@ -669,6 +669,27 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         estrato = int(str(estrato).replace("No_Aplica", "4").split("_")[0])
     except Exception:
         estrato = 4
+
+    # ── Modelo canónico (identidad predial + contexto administrativo) ──────────
+    # Fuente autoritativa ÚNICA consumida por Titulux, GIS, valoración, scoring y
+    # el renderer. Antes cada módulo derivaba "su" folio/NUPRE/matrícula/comuna, lo
+    # que producía contradicciones (TIT_B01 "falta folio/código" teniendo NUPRE
+    # resuelto; comuna "N/D" en localización vs "Comuna 1" en el geoportal).
+    try:
+        from canonical import build_canonical_property_identity, build_administrative_context
+        canonical_identity = build_canonical_property_identity(
+            analysis=analysis, folio=folio, predio_real=predio_real, nom=_nom,
+            identidad=_identidad, ciudad=ciudad)
+        administrative_context = build_administrative_context(
+            ciudad=ciudad, predio_real=predio_real, nom=_nom,
+            barrio=barrio, estrato=estrato)
+    except Exception as _e_canon:
+        # El modelo canónico es aditivo: si falla, el dictamen NO debe caerse.
+        canonical_identity = {"estado": "NO_RECORD", "folio_snr": folio,
+                              "nupre": None, "titular": {}}
+        administrative_context = {"ciudad": ciudad, "comuna": None,
+                                  "barrio": barrio, "estrato": estrato}
+        print(f"[PDF][CANONICAL] no disponible: {_e_canon}")
     # Metodo principal de valoracion (practica de la Lonja de Barranquilla, no
     # de la Res. IGAC 941): "m1" = comparacion de mercado (100% para PH terminada);
     # "m3" = capitalizacion de rentas (caso excepcional con renta demostrable).
@@ -1186,6 +1207,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     s = build_styles()
     s["header"] = ParagraphStyle("h_style", parent=s["label"], textColor=colors.white)
     
+    # ── Versionado visible en el pie de cada página ─────────────────────────
+    # Imprime ARHIAX_RE_VERSION + SHA + versiones de motor, para auditar QUÉ
+    # código produjo este dictamen (corta la disputa "¿llegó a producción?").
+    try:
+        from versioning import version_line as _version_line
+        _VERSION_PIE = _version_line()
+    except Exception:
+        _VERSION_PIE = "ARHIAX RE (version no disponible)"
+
     def on_page(canvas, doc):
         canvas.saveState()
         canvas.setFillColor(colors.HexColor("#F0F4FB"))
@@ -1194,6 +1224,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         canvas.setFillColor(colors.HexColor("#718096"))
         canvas.drawString(40, 20, corregir_es(
             f"ARHIAX Informe Base LAI | Folio {FOLIO} | {CERT_NUM} | {SCOPE_DISCLAIMER_FOOTER}"))
+        canvas.drawString(40, 11, corregir_es(_VERSION_PIE))
         canvas.drawRightString(letter[0]-40, 20, f"Pag. {doc.page}")
         canvas.restoreState()
     
@@ -1250,6 +1281,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _titulux = ejecutar_titulux(
                 analysis, db_record, val_data, geo_eval,
                 area_catastral=_predio_area_catastral,
+                identidad=canonical_identity,
                 fuentes_activas=("onu", "ofac", "uiaf", "uk"),
                 cache_dir=_listas_cache,
                 timeout_listas=90,
@@ -1363,13 +1395,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         except Exception as img_err:
             print(f"Warning: could not load MAP_IMG: {img_err}")
     story.append(Spacer(1, 6))
-    _localidad_txt = None
-    if es_medellin:
-        _localidad_txt = _ent2.get("comuna")
-    elif es_bogota:
-        _localidad_txt = _ent2.get("localidad")
-    else:
-        _localidad_txt = _ent2.get("localidad") if _ent2 else None
+    # Comuna/Localidad desde el MODELO CANÓNICO (misma fuente que Titulux y GIS):
+    # antes Pasto leía _ent2['localidad'] (campo que su geoportal no expone) y
+    # mostraba "N/D" teniendo la "Comuna 1" resuelta en el entorno (bug B).
+    _localidad_txt = administrative_context.get("comuna") or _ent2.get("comuna")
+    if es_bogota:
+        _localidad_txt = _ent2.get("localidad") or _localidad_txt
     _filas_localizacion = [
         ("Coordenadas WGS84", f"Lat: {lat:.5f} N | Lon: {lon:.5f} W"),
         ("Sector urbano", f"{_NOMBRE_CIUDAD} / {barrio}" if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else f"{_NOMBRE_CIUDAD} (sector por verificar)"),

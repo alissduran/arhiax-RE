@@ -163,5 +163,44 @@ class TestEjecutarTituluxDeterminista(unittest.TestCase):
         self.assertIn("disponible", res)
 
 
+class TestIdentidadCanonicaEnTitulux(unittest.TestCase):
+    """Bug A (TIT_B01 falso 'falta folio/código') y bug I (NATURAL_PERSON)."""
+
+    def test_codigo_canonico_evita_tit_b01(self):
+        """Con NUPRE canónico resuelto, Titulux NO emite 'falta folio/código'."""
+        from titulux_bridge import construir_caso_titulux
+        analysis = dict(_ANALYSIS)
+        analysis["codigo_catastral"] = None   # CTL sin código crudo
+        analysis["nupre"] = None
+        identidad = {"folio_snr": "240-211101",
+                     "nupre": "520010102000000440902900000116",
+                     "titular": {"nombre": "CABRERA VIVEROS JUAN SEBASTIAN",
+                                 "tipo_documento": "cc",
+                                 "numero_documento": "87070538",
+                                 "tipo_persona": "NATURAL_PERSON"}}
+        caso = construir_caso_titulux(analysis, _DB, _VAL, area_catastral=76.0,
+                                      identidad=identidad)
+        self.assertEqual(caso.predio.codigo_catastral, "520010102000000440902900000116")
+        self.assertEqual(caso.predio.folio_matricula, "240-211101")
+        # La regla TIT_B01 solo emite "falta folio/código" si ambos están vacíos.
+        from arhia_title.rules import identidad_inmueble
+        h = identidad_inmueble(caso)
+        self.assertFalse(any("falta folio de matrícula o código" in x.descripcion for x in h))
+
+    def test_titular_natural_no_se_clasifica_juridica(self):
+        """Bug I: titular con CC se screeninga como persona NATURAL (no jurídica)."""
+        from titulux_bridge import _sujetos_del_caso, construir_caso_titulux
+        identidad = {"titular": {"nombre": "CABRERA VIVEROS JUAN SEBASTIAN",
+                                 "tipo_documento": "cc",
+                                 "numero_documento": "87070538",
+                                 "tipo_persona": "NATURAL_PERSON"}}
+        caso = construir_caso_titulux(_ANALYSIS, _DB, _VAL, identidad=identidad)
+        sujetos = _sujetos_del_caso(caso, identidad)
+        titular = next(s for s in sujetos if "titular" in s.contraparte_id)
+        self.assertEqual(titular.tipo, "natural")
+        self.assertEqual(titular.tipo_documento, "cc")
+        self.assertEqual(titular.numero_documento, "87070538")
+
+
 if __name__ == "__main__":
     unittest.main()
