@@ -370,10 +370,11 @@ def get_alcance_dt(barrio, ciudad="barranquilla"):
         return [
             ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
             ("Geocodificacion del predio", "EJECUTADA -- OSM/Nominatim (coordenadas en Pasto)"),
-            ("Equipamiento urbano (POI)", "EJECUTADA -- OpenStreetMap/Overpass (radio 2 km)"),
+            ("Equipamiento urbano (POI)", "EJECUTADA -- OpenStreetMap/Overpass con respaldo Photon (radio 2 km)"),
             ("Capa catastral Pasto", "PENDIENTE -- Sin endpoint institucional verificado en vivo"),
             ("POT/Ordenamiento Pasto", "PENDIENTE -- Requiere fuente oficial (Planeación Pasto)"),
-            ("Riesgos/Amenazas Pasto", "PENDIENTE -- Capas de gestión del riesgo sin endpoint verificado"),
+            ("Riesgo volcanico (Volcan Galeras)", "EJECUTADA EN VIVO -- Mapa oficial de amenaza volcanica del SGC (Servicio Geologico Colombiano)"),
+            ("Riesgos/Amenazas municipales Pasto", "PENDIENTE -- Capas municipales de gestion del riesgo sin endpoint verificado"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
             ("Verificacion SARLAFT", "EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial"),
             ("Estimacion referencial", "REFERENCIA GENERICA POR ESTRATO -- No usa metodología local; no sustituye avalúo RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),

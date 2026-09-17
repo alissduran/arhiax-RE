@@ -767,6 +767,23 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         nombre_ciudad=_NOMBRE_CIUDAD,
     )
 
+    # ── Riesgo volcánico (SGC, EN VIVO) ───────────────────────────────────────
+    # El mapa oficial de amenaza volcánica del Servicio Geológico Colombiano
+    # cubre los volcanes activos del país. En Pasto es determinante: el Galeras
+    # está a ~9 km y su sector norte cae en amenaza ALTA por lahares (medido en
+    # vivo). Nunca rompe el PDF: si el servicio no responde queda PENDIENTE.
+    _volcan = {"disponible": False, "zonas": [], "nivel": "NO EVALUADO"}
+    try:
+        from riesgo_volcanico import verificar_riesgo_volcanico, hallazgo_volcanico
+        _volcan = verificar_riesgo_volcanico(lat, lon)
+        _h_vol = hallazgo_volcanico(_volcan)
+        if _h_vol:
+            hallazgos.append(_h_vol)
+        print(f"[PDF][VOLCAN] disponible={_volcan.get('disponible')} "
+              f"nivel={_volcan.get('nivel')} zonas={len(_volcan.get('zonas') or [])}")
+    except Exception as _e_vol:
+        print(f"[PDF][VOLCAN] no disponible: {_e_vol}")
+
     # Sprint 3 (edificabilidad): hallazgo H-URB cuando lo CONSTRUIDO en catastro
     # excede la ALTURA MÁXIMA normativa del polígono (POT por ciudad). Solo se
     # afirma cuando la capa oficial expone un número de pisos; de lo contrario
@@ -2083,8 +2100,38 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             f"<b>HALLAZGO POSITIVO:</b> El cruce espacial contra las capas oficiales de riesgos de "
             f"{_NOMBRE_CIUDAD} no detecto interseccion de poligonos de amenaza con el predio. "
             "Favorable para suscripcion de seguros y originacion hipotecaria."))
+    # ── 8.2 Riesgo volcánico (SGC — mapa oficial de amenaza) ──
+    # Aplica a los volcanes activos de Colombia (Galeras en Pasto, Ruiz en
+    # Manizales, Puracé en Popayán, Chiles-Cerro Negro en Ipiales...).
+    story.append(sub("8.2 Riesgo Volcanico (SGC -- mapa oficial de amenaza)"))
+    try:
+        from riesgo_volcanico import filas_riesgo_volcanico as _filas_vol
+        story.append(dt(_filas_vol(_volcan)))
+    except Exception as _e_fv:
+        print(f"[PDF][VOLCAN] filas no disponibles: {_e_fv}")
+        story.append(dt([("Riesgo volcanico (SGC)",
+                          "NO DISPONIBLE -- modulo no disponible al generar el dictamen")]))
+    _nivel_vol = (_volcan or {}).get("nivel")
+    if _nivel_vol == "ALTO":
+        story.append(alert_red(
+            "<b>H-VOL | Amenaza volcanica ALTA:</b> el predio esta dentro de una zona de amenaza "
+            "alta del mapa oficial del SGC (ver tabla). Verificar el plan de contingencia "
+            "municipal: condiciona uso del suelo, polizas de seguros y originacion de credito."))
+    elif _nivel_vol == "MEDIO":
+        story.append(alert_orange(
+            "<b>H-VOL | Amenaza volcanica MEDIA:</b> el predio esta dentro de una zona de amenaza "
+            "media del mapa oficial del SGC (ver tabla). Documentar en el expediente de credito."))
+    elif _nivel_vol == "BAJO":
+        story.append(alert_green(
+            "<b>H-VOL | Amenaza volcanica BAJA:</b> el predio se ubica en zona de amenaza baja del "
+            "mapa oficial del SGC (caida de ceniza). Sin restriccion adicional, con seguimiento "
+            "del plan de contingencia municipal."))
+    else:
+        story.append(alert_orange(
+            "<b>Riesgo volcanico NO EVALUADO:</b> el servicio del SGC no respondio al generar el "
+            "dictamen. No se asume ausencia de amenaza: verificar en sgc.gov.co."))
     story.append(Spacer(1, 8))
-    
+
     # ── 09 CUMPLIMIENTO SAGRILAFT (FICHA ESTRUCTURAL + SCREENING EN VIVO) ──
     story.append(sec("09 - Cumplimiento SAGRILAFT (ficha estructural + screening en vivo)"))
     story.append(hr())
