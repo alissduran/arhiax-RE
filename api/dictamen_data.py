@@ -512,10 +512,9 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
         else:
             destino_txt = f"{destino_economico} (Capa Predio {gc_sigla}, en vivo)"
     elif es_pas:
-        # El geoportal de Pasto SI publica el uso del predio: si no llegó, se dice
-        # que la fuente no lo trajo (no que 'falta consultar el catastro').
-        destino_txt = ("NO REGISTRA en la capa de areas de actividad del POT Pasto "
-                       "(verificar en Planeacion Municipal)")
+        # El geoportal de Pasto SI publica el uso del predio: si no llegó, se
+        # declara PENDIENTE (sin el texto 'NO REGISTRA', retirado del informe).
+        destino_txt = "PENDIENTE DE VERIFICACION"
     else:
         destino_txt = "PENDIENTE DE VERIFICACION (Requiere consulta catastral del predio)"
     condicion_txt = condicion if condicion else "Pendiente de verificacion"
@@ -524,8 +523,7 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
     elif tipo_construccion:
         constr_txt = tipo_construccion
     elif es_pas:
-        constr_txt = ("NO REGISTRA en el geoportal municipal (no publica tipo de "
-                      "construccion: verificar en Catastro Municipal)")
+        constr_txt = "PENDIENTE DE VERIFICACION"
     else:
         constr_txt = "Pendiente de verificacion"
     # Estrato: la AUSENCIA del dato NO implica uso no residencial. Antes, sin
@@ -546,8 +544,7 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
         if _no_resid:
             estrato_txt = "No aplica (uso no residencial declarado)"
         elif es_pas:
-            estrato_txt = ("NO REGISTRA -- el geoportal municipal no informa estrato "
-                           "para este predio (verificar en Catastro Municipal)")
+            estrato_txt = "PENDIENTE DE VERIFICACION"
         else:
             estrato_txt = "No aplica (uso no residencial)"
     # Regresión (CTL real 040-646406): 'Área Registrada' es el área PRIVADA del

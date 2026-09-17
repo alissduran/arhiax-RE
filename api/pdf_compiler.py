@@ -2304,10 +2304,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                 from pasto_territorio import CAMPOS_RIESGO as _CAMPOS_RIESGO
             except Exception:  # noqa: BLE001
                 _CAMPOS_RIESGO = []
-            # TODAS las filas, siempre: si un peligro no aparece en la capa se dice
-            # 'NO REGISTRA' en vez de omitir la fila (omitirla parecía que nunca se
-            # cruzó, queja real del usuario).
-            _filas_rie = [(etiqueta, _riesgos_muni.get(campo) or "NO REGISTRA en la capa municipal")
+            # TODAS las filas, siempre: si un peligro no aparece en la capa se
+            # declara PENDIENTE (texto 'NO REGISTRA' retirado del informe).
+            _filas_rie = [(etiqueta, _riesgos_muni.get(campo) or "PENDIENTE DE VERIFICACION")
                           for campo, etiqueta in _CAMPOS_RIESGO]
             _filas_rie.append(
                 ("Fuente", "Geoportal Municipal de Pasto -- capa 'Consulta de riesgos urbano' (en vivo)"))
