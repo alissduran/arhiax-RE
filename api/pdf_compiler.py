@@ -753,7 +753,55 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             ),
         }
     else:
-        if es_bogota or es_medellin or es_pasto:
+        # ── Pasto: los riesgos municipales YA se consultan en vivo ──────────
+        # Antes se caía en el 'NO EVALUADO' genérico SIN mirar si la capa
+        # municipal había respondido: el dictamen decía a la vez "riesgos
+        # consultados en vivo" y "H-GEO no evaluado", y el score hidrológico
+        # salía 100/100 sobre un riesgo que nunca se evaluó. Ahora geo_eval se
+        # construye con los datos REALES del geoportal de Pasto.
+        _riesgos_pasto = ((predio_real or {}).get("riesgos") or {}) if es_pasto else {}
+        if es_pasto and _riesgos_pasto:
+            def _afecta(campo):
+                v = str(_riesgos_pasto.get(campo) or "").strip().lower()
+                return bool(v) and v not in ("no aplica", "sin informacion", "sin información", "n/a")
+
+            _mm_p = _afecta("remocion_en_masa_ea19")
+            _ri_p = any(_afecta(c) for c in ("inundacion_ea23", "subsidencia_ea29",
+                                             "flujos_de_lodo_ea22",
+                                             "restricciones_por_lujos_de_lodo"))
+            _det_p = []
+            for _campo, _etq in (("riesgo_volcanico_ea27", "riesgo volcanico"),
+                                 ("remocion_en_masa_ea19", "remocion en masa"),
+                                 ("inundacion_ea23", "inundacion"),
+                                 ("subsidencia_ea29", "subsidencia"),
+                                 ("flujos_de_lodo_ea22", "flujos de lodo"),
+                                 ("zava_t_269_de_2015", "ZAVA T-269/2015")):
+                _v = _riesgos_pasto.get(_campo)
+                if _v:
+                    _det_p.append(f"{_etq}: {_v}")
+            geo_eval = {
+                "amenaza_remocion_masa": {
+                    "intersecta": _mm_p,
+                    "nivel": _riesgos_pasto.get("remocion_en_masa_ea19") if _mm_p else None,
+                    "clase_suelo": (_ent2.get("clase_suelo") or "Urbano"),
+                    "area_poligono_m2": 0, "objectid": None,
+                    "color_hex": "#D92C2C" if _mm_p else "#7F8C8D",
+                },
+                "areas_en_riesgo": {
+                    "intersecta": _ri_p,
+                    "nivel": ", ".join(_det_p) if _det_p else None,
+                    "clase_suelo": (_ent2.get("clase_suelo") or "Urbano"),
+                    "area_poligono_m2": 0, "objectid": None,
+                    "color_hex": "#F08C2B" if _ri_p else "#7F8C8D",
+                },
+                "resumen_ejecutivo": (
+                    "EVALUADO EN VIVO con el geoportal del Municipio de Pasto "
+                    "(capa 'Consulta de riesgos urbano', resultado POR PREDIO): "
+                    + ("; ".join(_det_p) if _det_p else "la capa no devolvio campos de riesgo") + "."
+                ),
+                "evaluado": True,
+            }
+        elif es_bogota or es_medellin or es_pasto:
             # El predio NO se resolvió en el catastro de la ciudad: el motor
             # empaquetado de Barranquilla NO debe evaluar coordenadas de otra
             # ciudad (regresión: un caso de Bogotá sin predio resuelto cruzaba
@@ -769,10 +817,11 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                                     "area_poligono_m2": 0, "objectid": None,
                                     "color_hex": "#7F8C8D"},
                 "resumen_ejecutivo": (
-                    "NO EVALUADO: no se resolvió el predio en el catastro de {} "
+                    "NO EVALUADO: no se pudo resolver el predio en el geoportal de {} "
                     "al momento de generar el dictamen; la verificación de amenazas/"
                     "riesgos queda PENDIENTE (no se aplicó el motor de otra ciudad)."
                 ).format(_NOMBRE_CIUDAD),
+                "evaluado": False,
             }
         else:
             geo_eval = get_geospatial_evaluation(lat, lon)
@@ -781,7 +830,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     elif es_medellin:
         _fuente_geo = "Servidormapas Medellín -- VC_Gestion_Riesgo (DAGRD, en vivo)"
     elif es_pasto:
-        _fuente_geo = "PENDIENTE -- sin capas de gestión del riesgo en vivo para Pasto (Nariño)"
+        _fuente_geo = ("Geoportal Municipal de Pasto -- capa 'Consulta de riesgos urbano' (en vivo)"
+                       if geo_eval.get("evaluado")
+                       else "PENDIENTE -- el geoportal de Pasto no devolvio la capa de riesgos")
     else:
         _fuente_geo = "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)"
     hallazgos = _inject_geospatial_hallazgo(

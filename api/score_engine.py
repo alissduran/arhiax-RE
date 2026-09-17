@@ -149,13 +149,18 @@ def calcular_score_actuarial(
             detalle_hidro.append(f"-5 pts: Área en riesgo BAJA")
 
     if not am.get("intersecta") and not ri.get("intersecta"):
-        # Ciudad sin capas de riesgo resueltas (NO EVALUADO): NO se afirma
-        # "sin afectación" ni "score pleno" sin haberse evaluado (desinformación).
-        resumen_geo = (geo_eval.get("resumen_ejecutivo") or "").lower()
-        if "no evaluado" in resumen_geo or "pendiente" in resumen_geo:
-            detalle_hidro.append("Amenaza/riesgo NO EVALUADO (sin fuente en vivo) — componente no calificable")
+        # Regla explícita: NO_EVALUADO != SIN_RIESGO. Una componente que no se
+        # pudo evaluar NO debe informar 100/100 como si se hubiera verificado que
+        # no hay amenaza. Se usa la marca explícita geo_eval['evaluado'] y, por
+        # compatibilidad, el texto del resumen.
+        _evaluado = geo_eval.get("evaluado")
+        if _evaluado is None:
+            _resumen_geo = (geo_eval.get("resumen_ejecutivo") or "").lower()
+            _evaluado = not ("no evaluado" in _resumen_geo or "pendiente" in _resumen_geo)
+        if _evaluado:
+            detalle_hidro.append("Sin afectación en las capas de riesgo consultadas — Score pleno")
         else:
-            detalle_hidro.append("Sin afectación en capas POT — Score pleno")
+            detalle_hidro.append("Amenaza/riesgo NO EVALUADO (sin fuente en vivo) — componente no calificable")
 
     score_hidrologico = max(0, min(100, score_hidrologico))
 
