@@ -477,6 +477,11 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _predio_comuna = _ent2.get("localidad")
         else:
             _predio_destino = _p.get("destino_economico")
+            # Pasto: el geoportal no expone 'destino economico catastral' como tal,
+            # pero SI el area de actividad del POT (que es el uso normativo del
+            # predio). Se usa para no mostrar "PENDIENTE" teniendo el dato.
+            if not _predio_destino and es_pasto:
+                _predio_destino = _ent2.get("area_actividad") or _ent2.get("uso_economico")
             # Medellín no expone condición jurídica en las capas abiertas (queda
             # PENDIENTE); Barranquilla la trae del servicio temático 'condicion'.
             _predio_condicion = (predio_real.get("condicion") or {}).get("condicion_juridica")
@@ -517,7 +522,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _cond_ctl = inferir_condicion_juridica(
                 analysis.get("texto_ctl"), analysis.get("descripcion_ctl"))
             if _cond_ctl:
-                _predio_condicion = _cond_ctl
+                # Se distingue el ORIGEN: en la tabla catastral no debe parecer un
+                # dato del catastro algo que se infirio del CTL. Los geoportales
+                # (Bogota, Medellin y Pasto) no publican condicion juridica.
+                _predio_condicion = f"{_cond_ctl} (inferido del CTL adjunto)"
         except Exception as _e_cond:
             print(f"[PDF][CONDICION] inferencia desde CTL no disponible: {_e_cond}")
 
