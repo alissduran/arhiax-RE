@@ -88,8 +88,15 @@ def altura_permitida(ciudad, ent2):
         return None, "ficha_upz", None
 
     if ciudad == "pasto":
-        # Sin capa abierta de pisos máximos en Pasto: la altura se fija en la
-        # ficha normativa del POT (Planeación). Nunca se inventa un número.
+        # El geoportal de Pasto publica la edificabilidad por predio en
+        # 'tratamiento_urbanistico' (p. ej. "PEMP - 4 pisos - 11,20 metros"):
+        # pasto_territorio la parsea y la deja en entorno['altura_maxima'].
+        p = _parse_pisos(e.get("altura_maxima"))
+        if p:
+            return p, "pisos", "Hasta {} pisos (POT Pasto)".format(p)
+        txt = (e.get("edificabilidad_texto") or "").strip()
+        if txt and txt.upper() not in _NA:
+            return None, "texto", txt
         return None, "ficha_pot", None
 
     # Barranquilla (default)

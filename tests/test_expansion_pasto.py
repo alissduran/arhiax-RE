@@ -99,13 +99,18 @@ class TestPastoValuacion(unittest.TestCase):
 
 class TestPastoDictamenData(unittest.TestCase):
 
-    def test_alcance_pasto_honesto(self):
+    def test_alcance_pasto_en_vivo(self):
+        """Pasto ya tiene catastro/POT/volcán EN VIVO (antes eran PENDIENTES)."""
         from dictamen_data import get_alcance_dt
         filas = get_alcance_dt("Centro", ciudad="pasto")
         d = dict(filas)
-        self.assertIn("Capa catastral Pasto", d)
-        self.assertIn("PENDIENTE", d["Capa catastral Pasto"])
-        self.assertIn("EJECUTADA", d["Geocodificacion del predio"])
+        cat = next(v for k, v in filas if "catastral" in k.lower())
+        pot = next(v for k, v in filas if "POT" in k)
+        vol = next(v for k, v in filas if "volcan" in k.lower())
+        for etiqueta, valor in (("catastro", cat), ("POT", pot), ("volcan", vol)):
+            self.assertIn("EN VIVO", valor, f"{etiqueta} deberia declararse EN VIVO")
+        # Lo que sigue honestamente pendiente:
+        self.assertIn("PENDIENTE", d["Datos registrales SNR"])
 
     def test_pot_summary_pasto_pendiente(self):
         from dictamen_data import get_pot_summary_dt
@@ -142,11 +147,51 @@ class TestPastoGpvYTerritorio(unittest.TestCase):
         from gpv_f77 import _CIUDAD_ADMIN
         self.assertEqual(_CIUDAD_ADMIN["pasto"], ("Nariño", "Pasto"))
 
-    def test_territorio_pasto_honesto(self):
-        from integrations.territorio import verificar_territorio
-        res = verificar_territorio(1.2136, -77.2811, "pasto")
-        self.assertFalse(res.get("disponible"))
-        self.assertIn("Pasto", res.get("error") or "")
+    def test_territorio_pasto_usa_el_geoportal_municipal(self):
+        """El dispatcher territorial de Pasto consulta el geoportal municipal
+        (antes declaraba 'sin endpoint verificado')."""
+        import pasto_territorio
+        from integrations import territorio as mod_terr
+
+        orig = pasto_territorio.consultar_pasto
+        try:
+            pasto_territorio.consultar_pasto = lambda **_k: {
+                "disponible": True,
+                "predio": {"numero_predial_nacional": "520010102000000770901900000000"},
+                "entorno": {"tratamiento": "PEMP - Conservacion contextual",
+                            "edificabilidad_texto": "PEMP - 4 pisos - 11,20 metros",
+                            "clase_suelo": "Urbano"},
+                "fuente": {"nombre": "Geoportal Municipal de Pasto",
+                           "estado": "CONSULTADA EN VIVO (Geoportal Municipal de Pasto)"},
+            }
+            mod_terr._CACHE.clear()
+            res = mod_terr.verificar_territorio(1.2136, -77.2811, "pasto")
+            self.assertTrue(res["disponible"])
+            self.assertIn("Pasto", res["resumen"])
+            self.assertIn("520010102000000770901900000000", res["resumen"])
+        finally:
+            pasto_territorio.consultar_pasto = orig
+            mod_terr._CACHE.clear()
+
+    def test_territorio_pasto_honesto_si_el_geoportal_falla(self):
+        """Si el geoportal no responde, se declara NO DISPONIBLE (nunca se inventa)."""
+        import pasto_territorio
+        from integrations import territorio as mod_terr
+
+        orig = pasto_territorio.consultar_pasto
+        try:
+            pasto_territorio.consultar_pasto = lambda **_k: {
+                "disponible": False,
+                "fuente": {"nombre": "Geoportal Municipal de Pasto",
+                           "estado": "NO DISPONIBLE -- el geoportal de Pasto no respondio"},
+            }
+            mod_terr._CACHE.clear()
+            res = mod_terr.verificar_territorio(1.2136, -77.2811, "pasto")
+            self.assertFalse(res["disponible"])
+            self.assertIn("Pasto", res.get("error") or "")
+        finally:
+            pasto_territorio.consultar_pasto = orig
+            mod_terr._CACHE.clear()
 
 
 class TestPastoScoreNoEvaluado(unittest.TestCase):

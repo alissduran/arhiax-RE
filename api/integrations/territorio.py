@@ -156,16 +156,55 @@ def _verificar_bogota(lat: float, lon: float, res: dict) -> dict:
 
 
 def _verificar_pasto(lat: float, lon: float, res: dict) -> dict:
-    # Pasto aún no tiene un endpoint institucional de catastro/POT verificado en
-    # vivo (GetCapabilities / ?f=json). Se declara HONESTAMENTE no disponible:
-    # nunca se rellena con capas de otra ciudad.
-    res["disponible"] = False
-    res["error"] = (
-        "Pasto (Nariño) en evaluación: sin endpoint de catastro/POT verificado en vivo. "
-        "La geocodificación (OSM/Nominatim) y los puntos de interés sí operan; la "
-        "verificación catastral queda pendiente de una fuente institucional.")
-    res["fuente"] = {"nombre": "Alcaldía de Pasto (geoportal de trámites)",
-                     "estado": "PENDIENTE VERIFICACIÓN EN VIVO"}
+    """Verificación territorial EN VIVO en el Geoportal Municipal de Pasto.
+
+    Se descubrió y verificó (2026-09-16) que el municipio publica su base
+    catastral y la normativa del POT por predio en
+    geoportal.pasto.gov.co/server/rest/services/Planeacion: NUPRE, tratamiento
+    urbanístico, edificabilidad (pisos y metros), clase de suelo, área de
+    actividad y riesgo volcánico por predio.
+    """
+    from pasto_territorio import consultar_pasto
+    try:
+        datos = consultar_pasto(lat=lat, lon=lon)
+    except Exception as e:  # noqa: BLE001 — nunca rompe el dictamen
+        res["error"] = f"Geoportal de Pasto no disponible: {str(e)[:80]}"
+        res["fuente"] = {"nombre": "Geoportal Municipal de Pasto",
+                         "estado": "PENDIENTE VERIFICACIÓN"}
+        return res
+
+    res["fuente"] = datos.get("fuente") or {}
+    if not datos.get("disponible"):
+        res["error"] = (datos.get("fuente") or {}).get("estado") or \
+            "El geoportal de Pasto no respondió al consultar el predio."
+        return res
+
+    predio = datos.get("predio") or {}
+    entorno = datos.get("entorno") or {}
+    nupre = predio.get("numero_predial_nacional")
+    res["disponible"] = True
+    res["total_features"] = 1 if (nupre or entorno) else 0
+    res["features"] = ([{
+        "properties": {
+            "nupre": nupre,
+            "tratamiento": entorno.get("tratamiento"),
+            "edificabilidad": entorno.get("edificabilidad_texto"),
+            "clase_suelo": entorno.get("clase_suelo"),
+        }
+    }] if (nupre or entorno) else [])
+
+    partes = []
+    if nupre:
+        partes.append(f"NUPRE: {nupre}")
+    if entorno.get("tratamiento"):
+        partes.append(f"tratamiento: {entorno['tratamiento']}")
+    if entorno.get("edificabilidad_texto"):
+        partes.append(f"edificabilidad: {entorno['edificabilidad_texto']}")
+    if entorno.get("clase_suelo"):
+        partes.append(f"suelo: {entorno['clase_suelo']}")
+    res["resumen"] = ("Geoportal Municipal de Pasto consultado en vivo"
+                      + (f" ({'; '.join(partes)})" if partes else
+                         " (sin coincidencia de predio en el punto)"))
     return res
 
 

@@ -93,14 +93,24 @@ ciudades:
     centroide: { lat: 1.2136, lon: -77.2811 }
     capas_pot_empaquetadas: false
     arcgis:
-      # Geoportal de trámites "Sí Pasto a un Clic" (Alcaldía de Pasto). Sin endpoint
-      # REST/WFS de catastro/POT verificado en vivo a la fecha: queda PENDIENTE de
-      # verificación (GetCapabilities/?f=json) antes de marcar "VERIFICADO EN VIVO".
-      geoportal: "https://www.pastovivedigital.gov.co"
-      portal_municipal: "https://www.pasto.gov.co"
-      estado: "EN EVALUACIÓN 2026-09 -- geocodificación (OSM/Nominatim) y POI operativos; catastro/POT en vivo sin endpoint verificado aún"
+      # Geoportal Municipal de Pasto (ArcGIS Server). Descubierto y verificado
+      # EN VIVO 2026-09-16: publica la base catastral y la normativa del POT por
+      # predio. OJO: la ruta es /server/rest/services (no /arcgis/rest/services).
+      geoportal: "https://geoportal.pasto.gov.co/server/rest/services"
+      planeacion: "https://geoportal.pasto.gov.co/server/rest/services/Planeacion"
+      srv_norma: "https://geoportal.pasto.gov.co/server/rest/services/Planeacion/Norma_Urbanistica_Riesgo_Suelo/MapServer"
+      srv_estratificacion: "https://geoportal.pasto.gov.co/server/rest/services/Planeacion/Estratificacion/MapServer"
+      srv_riesgos: "https://geoportal.pasto.gov.co/server/rest/services/Planeacion/Riesgos/MapServer"
+      srv_base_registro: "https://geoportal.pasto.gov.co/server/rest/services/Planeacion/Mapa_base_registro_de_descargas/MapServer"
+      capas:
+        tratamientos_urbanisticos: 2      # tratamiento + edificabilidad (pisos/metros)
+        areas_de_actividad: 28            # clase de suelo, area de actividad, ZAVA
+        consulta_riesgos_urbano: 1        # riesgo volcanico, inundacion, remocion, subsidencia
+        predios_estratificacion: 4        # codigos prediales (NUPRE)
+        predios_urbanos_base: 35          # base predial urbana (IGAC 2021)
+      estado: "VERIFICADO EN VIVO 2026-09-16 (NUPRE, tratamiento, edificabilidad, clase de suelo y riesgo volcanico por predio)"
     valoracion: {}
-    estado: "EN EVALUACIÓN (ciudad seleccionable; catastro/POT/valoración local pendientes de fuente en vivo verificada)"
+    estado: "ACTIVO (geoportal municipal de Pasto en vivo)"
 
   cali:
     nombre: "Cali"
@@ -122,6 +132,15 @@ ciudades:
 
 # Servicios nacionales (IGAC/IDEAM/ICDE/datos.gov.co) — Fase 1/2
 nacionales:
+  sgc:
+    # Mapa OFICIAL de amenaza volcánica (Galeras en Pasto, Ruiz en Manizales,
+    # Purace en Popayan, Chiles-Cerro Negro en Ipiales...). Verificado en vivo
+    # 2026-09-16: devuelve volcan, grado (Alta/Media/Baja) y fenomeno por punto.
+    amenaza_volcanica: "https://srvags.sgc.gov.co/arcgis/rest/services/Amenaza_Volcanica/Amenaza_Volcanica/MapServer"
+    capa_integrada: 19
+    capa_consolidada: 64
+    catalogo: "https://srvags.sgc.gov.co/arcgis/rest/services"
+    estado: "VERIFICADO EN VIVO 2026-09-16 (riesgo volcanico por predio)"
   igac:
     catalogo: "https://mapas.igac.gov.co/server/rest/services"
     cartografia_wms: "https://mapas.igac.gov.co/server/rest/services/carto/ProductosCartograficosVigentes/MapServer/WMSServer"

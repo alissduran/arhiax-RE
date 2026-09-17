@@ -371,10 +371,10 @@ def get_alcance_dt(barrio, ciudad="barranquilla"):
             ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
             ("Geocodificacion del predio", "EJECUTADA -- OSM/Nominatim (coordenadas en Pasto)"),
             ("Equipamiento urbano (POI)", "EJECUTADA -- OpenStreetMap/Overpass con respaldo Photon (radio 2 km)"),
-            ("Capa catastral Pasto", "PENDIENTE -- Sin endpoint institucional verificado en vivo"),
-            ("POT/Ordenamiento Pasto", "PENDIENTE -- Requiere fuente oficial (Planeación Pasto)"),
-            ("Riesgo volcanico (Volcan Galeras)", "EJECUTADA EN VIVO -- Mapa oficial de amenaza volcanica del SGC (Servicio Geologico Colombiano)"),
-            ("Riesgos/Amenazas municipales Pasto", "PENDIENTE -- Capas municipales de gestion del riesgo sin endpoint verificado"),
+            ("Capa catastral Pasto (NUPRE, areas)", "EJECUTADA EN VIVO -- Geoportal Municipal de Pasto (Planeacion)"),
+            ("POT/Ordenamiento Pasto", "EJECUTADA EN VIVO -- Clase de suelo, area de actividad, tratamiento y edificabilidad por predio"),
+            ("Riesgo volcanico (Volcan Galeras)", "EJECUTADA EN VIVO -- Mapa oficial de amenaza volcanica del SGC"),
+            ("Riesgos municipales por predio", "EJECUTADA EN VIVO -- Riesgo volcanico, inundacion, remocion en masa, subsidencia y ZAVA (geoportal de Pasto)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
             ("Verificacion SARLAFT", "EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial"),
             ("Estimacion referencial", "REFERENCIA GENERICA POR ESTRATO -- No usa metodología local; no sustituye avalúo RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
@@ -483,14 +483,27 @@ def get_pot_summary_dt(barrio, ciudad="barranquilla", clase_suelo=None,
             ("Fuente de capas", "Catastro Distrital Bogotá (serviciosgis, consultas en vivo, Sprint 3)"),
         ]
     if es_pas:
+        # Pasto: el geoportal municipal publica la normativa del POT por predio
+        # (tratamiento, edificabilidad, clase de suelo, area de actividad).
+        _suelo = _v(clase_suelo, "")
+        _uso = _v(uso_economico, "")
+        _trat = _v(tratamiento, "")
         return [
-            ("Clasificacion del suelo", "PENDIENTE (POT Pasto sin fuente en vivo verificada)"),
-            ("Norma uso de suelo", "PENDIENTE (consulta en Planeación Pasto)"),
-            ("Tratamiento urbanistico", "PENDIENTE (consulta en Planeación Pasto)"),
-            ("Altura maxima segun tratamiento", "Sujeta a ficha normativa del POT Pasto"),
-            ("Planes Parciales", "NO EVALUADO (verificar en Planeación Pasto)"),
-            ("Planes de Reordenamiento", "NO EVALUADO (verificar en Planeación Pasto)"),
-            ("Fuente de capas", "Pasto (Nariño) -- sin capas POT en vivo verificadas; consulta oficial requerida"),
+            ("Clasificacion del suelo",
+             f"{_suelo} (POT Pasto, en vivo)" if _suelo
+             else "PENDIENTE (consulta en vivo no disponible)"),
+            ("Norma uso de suelo",
+             f"{_uso} (area de actividad, POT Pasto en vivo)" if _uso
+             else "PENDIENTE (consulta en vivo no disponible)"),
+            ("Tratamiento urbanistico",
+             (f"{_trat} (poligono {tipo_tratamiento})" if tipo_tratamiento else _trat)
+             if _trat else "PENDIENTE (consulta en vivo no disponible)"),
+            ("Altura maxima segun tratamiento",
+             "Ver tabla 'Edificabilidad' (capa de tratamientos del POT Pasto)"),
+            ("Planes Parciales", "NO EVALUADO en capas abiertas (verificar en Planeacion Pasto)"),
+            ("Planes de Reordenamiento", "NO EVALUADO en capas abiertas (verificar en Planeacion Pasto)"),
+            ("Fuente de capas",
+             "Geoportal Municipal de Pasto -- Planeacion (consultas en vivo)"),
         ]
     return [
         ("Clasificacion del suelo", "SUELO URBANO (POT Barranquilla - Confirmado)"),

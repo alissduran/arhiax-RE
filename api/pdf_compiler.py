@@ -327,7 +327,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     predio_real = None
     _lat_geo = None
     _lon_geo = None
-    if (analysis.get("codigo_catastral") or analysis.get("nupre")) and not es_bogota and not es_pasto:
+    if es_pasto and (analysis.get("codigo_catastral") or analysis.get("nupre")):
+        # Pasto: el geoportal municipal publica la base predial consultable por
+        # código (NUPRE), así que el predio se resuelve EXACTAMENTE como en BAQ.
+        try:
+            from pasto_territorio import consultar_pasto
+            _r = consultar_pasto(codigo_predial=analysis.get("codigo_catastral")
+                                 or analysis.get("nupre"))
+            if _r.get("disponible"):
+                predio_real = _r
+        except Exception as e:
+            print(f"[PDF][PASTO:CODIGO] enriquecimiento no disponible: {e}")
+            predio_real = None
+    elif (analysis.get("codigo_catastral") or analysis.get("nupre")) and not es_bogota:
         # Bogotá NO publica capa predial consultable por NUPRE/código en abierto:
         # el predio se resuelve por coordenadas (enriquecer_por_punto). Enviar el
         # código bogotano al módulo de BAQ sería un error (CTL de otra ciudad).
@@ -343,7 +355,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         except Exception as e:
             print(f"[PDF][CATASTRO-PREDIO:{ciudad}] enriquecimiento no disponible: {e}")
             predio_real = None
-    if predio_real is None and (es_medellin or es_bogota):
+    if predio_real is None and (es_medellin or es_bogota or es_pasto):
         # Sin código en el CTL (o sin CTL): geocodificar la dirección y resolver
         # por coordenadas el entorno catastral real de la ciudad.
         try:
@@ -376,6 +388,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                         print(f"[PDF][CATASTRO-BOG:PLACA] placa no disponible: {_e_placa}")
                     from catastro_predio_bogota import enriquecer_por_punto as _enr_punto
                     _r = _enr_punto(_lat_geo, _lon_geo, codigo_lote=_cod_lote_bog)
+                elif es_pasto:
+                    from pasto_territorio import consultar_pasto
+                    _r = consultar_pasto(lat=_lat_geo, lon=_lon_geo)
                 else:
                     from catastro_predio_medellin import enriquecer_por_punto as _enr_punto
                     _r = _enr_punto(_lat_geo, _lon_geo)
@@ -1565,12 +1580,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             f"<b>[FUENTE: CATASTRO DISTRITAL BOGOTÁ - EN VIVO]</b>"))
     elif es_pasto:
         story.append(body(
-            "Analisis de informacion catastral y urbanistica del predio en Pasto (Nariño). La "
-            "geocodificacion del predio se resuelve por OSM/Nominatim y el equipamiento urbano por "
-            "OpenStreetMap/Overpass; la capa catastral, el POT y la estratificacion locales NO tienen "
-            "aun un endpoint institucional verificado en vivo, por lo que se declaran PENDIENTES de "
-            "consulta oficial en la Alcaldia de Pasto / Planeacion (nunca se rellenan con datos de "
-            "otra ciudad). <b>[FUENTE: OSM/NOMINATIM + OVERPASS - CATASTRO/POT PASTO PENDIENTE]</b>"))
+            "Analisis de informacion catastral y urbanistica del predio a partir de la base predial y la "
+            "normativa del POT que el Municipio de Pasto publica EN VIVO en su geoportal (NUPRE, direccion "
+            "catastral, clase de suelo, area de actividad, tratamiento urbanistico, edificabilidad en pisos "
+            "y metros, y riesgo por predio), complementado con la geocodificacion OSM/Nominatim, el "
+            "equipamiento urbano por OpenStreetMap (con respaldo Photon) y el mapa oficial de amenaza "
+            "volcanica del Servicio Geologico Colombiano. "
+            "<b>[FUENTE: GEOPORTAL MUNICIPAL DE PASTO (PLANEACION) - EN VIVO]</b>"))
     else:
         story.append(body(
             "Analisis de informacion catastral y urbanistica del predio a partir de las capas "
@@ -1597,6 +1613,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Consulta el catastro abierto con caché y timeout corto; nunca rompe el PDF:
     # si el servicio no responde, se declara NO DISPONIBLE.
     _cat_live = {"disponible": False}
+    # Fuente real del catastro según la ciudad (evita afirmar "Barranquilla" en un
+    # dictamen de Pasto o Medellín).
+    if es_medellin:
+        _fuente_catastro = "Servidormapas Alcaldia de Medellín (capa Uso del predio)"
+    elif es_pasto:
+        _fuente_catastro = ("Geoportal Municipal de Pasto -- Planeacion "
+                            "(base predial y POT, consulta en vivo)")
+    else:
+        _fuente_catastro = "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)"
     if not es_medellin and not es_bogota and not es_pasto:
         try:
             from integrations.catastro_live import verificar_catastro_barranquilla
@@ -1612,17 +1637,29 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _por_punto = predio_real.get("resolucion") == "por_punto_referencial" or \
             not (analysis.get("codigo_catastral") or analysis.get("nupre"))
         if _por_punto:
-            story.append(dt([
+            _filas_pp = [
                 ("Estado", "CONSULTADA -- Entorno catastral resuelto por coordenadas (sector/predio mas cercano)"),
                 ("Codigo catastral", "Pendiente (se afirma solo con CTL: el codigo/NUPRE no se toma de un predio vecino)"),
                 ("NUPRE", "Pendiente (se afirma solo con CTL)"),
                 ("Destino economico", _predio_destino or "N/D"),
                 ("Estrato", _predio_estrato_catastral or "N/D"),
                 ("Condicion juridica", _predio_condicion or ("N/D (no expuesta en capas abiertas)" if es_medellin else "N/D")),
-                ("Fuente en vivo", ("Servidormapas Alcaldia de Medellín (capa Uso del predio)"
-                                    if es_medellin else
-                                    "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)")),
-            ]))
+                ("Fuente en vivo", _fuente_catastro),
+            ]
+            if es_pasto:
+                # El Municipio de Pasto SI publica matricula inmobiliaria y
+                # direccion catastral oficial del predio: se muestran como datos
+                # del municipio para que el analista los cruce con el CTL del caso
+                # (sin CTL no se AFIRMA que sea el mismo predio del caso).
+                _mat_muni = (_p4.get("matricula_inmobiliaria") or "").strip()
+                if _mat_muni:
+                    _filas_pp.append(("Matricula inmobiliaria (municipio)", _mat_muni))
+                if _p4.get("direccion_oficial"):
+                    _filas_pp.append(("Direccion catastral oficial (municipio)", _p4["direccion_oficial"]))
+                if _p4.get("numero_predial_nacional"):
+                    _filas_pp.append(("NUPRE del predio del punto (municipio)",
+                                      _p4["numero_predial_nacional"]))
+            story.append(dt(_filas_pp))
         else:
             # El CTL trajo código catastral/NUPRE y el predio se resolvió por
             # código: verificación REAL del predio (no coincidencia por bbox).
@@ -1634,9 +1671,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                 ("Destino economico", _predio_destino or "N/D"),
                 ("Condicion juridica", _predio_condicion or ("N/D (no expuesta en capas abiertas)" if es_medellin else "N/D")),
                 ("Area terreno (catastro)", f"{_predio_area_catastral:.2f} m2" if _predio_area_catastral else "N/D"),
-                ("Fuente en vivo", ("Servidormapas Alcaldia de Medellín (capa Uso del predio)"
-                                    if es_medellin else
-                                    "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)")),
+                ("Fuente en vivo", _fuente_catastro),
             ]))
     elif es_bogota and predio_real and predio_real.get("disponible"):
         # Bogotá: sin capa predial con NUPRE en abierto; se reporta la consulta
@@ -1689,11 +1724,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         story.append(dt(_resumen_pot))
         story.append(Spacer(1, 3))
         if es_pasto:
-            story.append(alert_orange(
-                "<b>Integración territorial de Pasto en evaluación:</b> la capa catastral, el POT "
-                "y la estratificación oficiales de Pasto aún no tienen un endpoint institucional "
-                "verificado en vivo. Los campos urbanísticos quedan PENDIENTES de consulta oficial "
-                "en la Alcaldía de Pasto / Planeación."))
+            # Pasto tiene geoportal en vivo: solo se advierte si NO se pudo consultar.
+            if not (_clase_suelo_real or _ent2.get("tratamiento") or _ent2.get("area_actividad")):
+                story.append(alert_orange(
+                    "<b>Geoportal de Pasto sin datos para este predio:</b> el servicio de Planeacion "
+                    "respondio pero el punto no coincidio con un predio de la base. Verificar la "
+                    "direccion/coordenadas o consultar directamente en la Alcaldia de Pasto."))
         elif not (_clase_suelo_real or _ent2.get("uso_economico")
                 or _ent2.get("upz") or _trat_par):
             story.append(alert_orange(
@@ -1994,23 +2030,41 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         if (predio_real and (predio_real.get("amenazas") or {}).get("disponible") is False):
             _geo_fallo = True
     elif es_pasto:
-        # Pasto: sin capas oficiales de gestión del riesgo con endpoint en vivo
-        # verificado. NO se cruzan las capas del POT de Barranquilla (desinformación).
-        story.append(body(
-            "Verificacion de amenazas y riesgos en Pasto (Nariño): sin capas oficiales de gestión "
-            "del riesgo con endpoint en vivo verificado a la fecha. La evaluación geotécnica y de "
-            "riesgos queda <b>PENDIENTE</b> de consulta oficial (Alcaldía de Pasto / gestión del "
-            "riesgo). NO se aplican las capas del POT de Barranquilla a un predio de otra ciudad. "
-            "<b>[FUENTE: PENDIENTE -- SIN CAPAS DE RIESGO EN VIVO PARA PASTO]</b>"))
+        # Pasto YA tiene capas propias en vivo: riesgos municipales por predio
+        # (geoportal de Planeación) + mapa oficial de amenaza volcánica del SGC.
+        _riesgos_muni = (predio_real or {}).get("riesgos") or {}
+        if _riesgos_muni:
+            story.append(body(
+                "Riesgos evaluados EN VIVO en el <b>geoportal del Municipio de Pasto</b> "
+                "(capa 'Consulta de riesgos urbano', por predio) y en el <b>mapa oficial de amenaza "
+                "volcánica del Servicio Geológico Colombiano</b>. "
+                "<b>[FUENTE: GEOPORTAL MUNICIPAL DE PASTO + SGC - EN VIVO]</b>"))
+            story.append(Spacer(1, 4))
+            story.append(dt([
+                (etiqueta, valor) for etiqueta, valor in (
+                    ("Riesgo volcanico (POT Pasto)", _riesgos_muni.get("riesgo_volcanico_ea27")),
+                    ("Zona de amenaza volcanica ZAVA (T-269/2015)", _riesgos_muni.get("zava_t_269_de_2015")),
+                    ("Flujos de lodo", _riesgos_muni.get("flujos_de_lodo_ea22")),
+                    ("Restricciones por flujos de lodo", _riesgos_muni.get("restricciones_por_lujos_de_lodo")),
+                    ("Remocion en masa", _riesgos_muni.get("remocion_en_masa_ea19")),
+                    ("Inundacion", _riesgos_muni.get("inundacion_ea23")),
+                    ("Subsidencia", _riesgos_muni.get("subsidencia_ea29")),
+                    ("Servidumbre de lineas de alta tension", _riesgos_muni.get("servidumbre_de_lineas_de_alta_t")),
+                ) if valor
+            ] + [("Fuente", "Geoportal Municipal de Pasto -- capa de riesgos urbanos (en vivo)")]))
+        else:
+            story.append(body(
+                "Verificacion de amenazas y riesgos en Pasto (Nariño): el geoportal municipal no devolvio "
+                "la capa de riesgos para el punto del predio, por lo que queda <b>PENDIENTE</b> de consulta "
+                "oficial. NO se aplican las capas del POT de Barranquilla a un predio de otra ciudad. "
+                "<b>[FUENTE: PENDIENTE -- RIESGOS MUNICIPALES NO CONSULTADOS]</b>"))
         story.append(Spacer(1, 4))
         story.append(dt([
-            ("Fuente de datos", "PENDIENTE -- sin capas de riesgo en vivo verificadas para Pasto"),
-            ("Metodo de cruce", "No ejecutado (sin fuente oficial verificada)"),
             ("Coordenadas (WGS84)", f"{lat:.5f}, {lon:.5f}"),
-            ("Total capas evaluadas", "0 (pendiente de integración)"),
+            ("Riesgo volcanico (SGC)", (_volcan or {}).get("nivel") or "NO EVALUADO"),
         ]))
         story.append(Spacer(1, 4))
-        _geo_fallo = True
+        _geo_fallo = not _riesgos_muni
     else:
         story.append(body(
             "Consulta en vivo contra <b>todas las capas</b> del servicio riesgos/amenazas/MapServer "
