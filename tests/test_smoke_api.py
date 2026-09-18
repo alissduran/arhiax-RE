@@ -570,6 +570,7 @@ class TestCiudadesNoOperativas(unittest.TestCase):
         import sqlite3
         from pathlib import Path as _P
         import index as index_mod
+        import database as db_mod
 
         tmp = _P(ROOT_DIR) / "tmp_db_test" / "delete_test.db"
         tmp.parent.mkdir(parents=True, exist_ok=True)
@@ -594,8 +595,11 @@ class TestCiudadesNoOperativas(unittest.TestCase):
         conn.commit()
         conn.close()
 
-        orig_get_db = index_mod.get_db_connection
-        index_mod.get_db_connection = lambda: _conectar_elim(tmp)
+        # SLICE-001: el endpoint delega en CaseService→CaseRepository, que obtiene
+        # la conexión de `database.get_db_connection` (no de index). Se parchea la
+        # fábrica canónica de conexión.
+        orig_get_db = db_mod.get_db_connection
+        db_mod.get_db_connection = lambda: _conectar_elim(tmp)
         try:
             # Caso inexistente (id local del navegador, nunca creado en el server):
             # responde success y NO lanza HTTPException 404.
@@ -612,7 +616,7 @@ class TestCiudadesNoOperativas(unittest.TestCase):
             self.assertEqual(cursor.fetchone()["n"], 0)
             c_verif.close()
         finally:
-            index_mod.get_db_connection = orig_get_db
+            db_mod.get_db_connection = orig_get_db
             if tmp.exists():
                 tmp.unlink(missing_ok=True)
 

@@ -431,20 +431,10 @@ def admin_usuarios(auth: dict = Depends(require_admin)):
     ]}
 
 @app.get("/api/dictamenes")
-def list_dictamenes(auth: bool = Depends(require_auth)):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM dictamenes ORDER BY id DESC")
-    rows = cursor.fetchall()
-    conn.close()
-    # No exponer rutas internas del filesystem al cliente (F-13)
-    resultado = []
-    for row in rows:
-        d = dict(row)
-        d.pop("pdf_path", None)
-        d.pop("certificado_path", None)
-        resultado.append(d)
-    return resultado
+def list_dictamenes(auth: dict = Depends(require_auth)):
+    from case_service import list_cases
+    # Fuente canónica: Postgres/Neon (o SQLite local). El frontend lee de aquí.
+    return list_cases()
 
 def resolver_matricula_por_direccion(direccion: str) -> tuple:
     """
@@ -482,78 +472,53 @@ def resolve_matricula_endpoint(direccion: str, auth: bool = Depends(require_auth
         raise HTTPException(status_code=500, detail="No fue posible resolver la matrícula. Intente nuevamente.")
 
 @app.post("/api/dictamenes")
-def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks = None, auth: bool = Depends(require_auth)):
-    folio = payload.get("folio_matricula", "").strip()
-    direccion = payload.get("direccion", "").strip()
-    
-    # Validar que al menos uno de los dos campos principales exista
+def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks = None, auth: dict = Depends(require_auth)):
+    from case_service import create_case, ValidationError
+    folio = (payload.get("folio_matricula") or "").strip()
+    direccion = (payload.get("direccion") or "").strip()
+
     if not folio and not direccion:
         raise HTTPException(status_code=400, detail="Debe ingresar la matrícula inmobiliaria o la dirección del predio.")
-        
-    # Asignar barrio y estrato iniciales. El barrio de demostración ("Miramar")
-    # NUNCA es el valor por defecto: se resuelve del CTL/catastro o queda pendiente.
+
     barrio = ""
     estrato = 4
-    # Persistencia multi-ciudad: el caso guarda la ciudad elegida en el portal
-    # (barranquilla/medellin/bogota/pasto) para que al sincronizar con Neon se
-    # genere el dictamen de la ciudad correcta (regresión: un caso de Bogotá
-    # guardado sin ciudad se recargaba como Barranquilla).
     ciudad = (payload.get("ciudad") or "barranquilla").lower().strip()
     if ciudad not in ("barranquilla", "medellin", "bogota", "pasto"):
         ciudad = "barranquilla"
-    
-    # Si no se provee folio pero se provee dirección, intentar resolverlo automáticamente
+
     if not folio and direccion and direccion.lower() != "pendiente":
         folio, barrio, estrato = resolver_matricula_por_direccion(direccion)
-        
-    # Si falta alguno, poner placeholders temporales
+
     if not folio:
         folio = "Pendiente"
     if not direccion:
         direccion = "Pendiente"
-        
     if "recreo" in direccion.lower():
         barrio = "El Recreo"
-        
-    # El área e inicialización de valor estimado quedan en 0.0 y 0 hasta que se procese el Certificado
-    area = 0.0
-    valor_estimado = 0
-    
-    fecha_creacion = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     acreedor_real = payload.get("acreedor_real", None)
-    
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO dictamenes (folio_matricula, direccion, barrio, estrato, area, estado, valor_consolidado, fecha_creacion, ciudad)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (folio, direccion, barrio, estrato, area, "PENDIENTE_IMAGENES", valor_estimado, fecha_creacion, ciudad))
-    conn.commit()
-    new_id = cursor.lastrowid
-    # Guardar acreedor_real si fue declarado
-    if acreedor_real:
-        try:
-            cursor.execute("UPDATE dictamenes SET acreedor_real = ? WHERE id = ?", (acreedor_real, new_id))
-            conn.commit()
-        except Exception:
-            pass  # la columna puede no existir aun
-    conn.close()
-    
+    username = auth.get("username") if isinstance(auth, dict) else None
+    try:
+        caso = create_case(folio_matricula=folio, direccion=direccion, barrio=barrio,
+                           estrato=estrato, area=0.0, ciudad=ciudad,
+                           acreedor_real=acreedor_real, created_by=username)
+    except ValidationError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    new_id = caso["id"]
     # Crear carpeta física para guardar imágenes de este caso
     case_dir = ASSETS_DIR / f"case_{new_id}"
     case_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Lanzar la automatización de sombras con coordenadas geocodificadas reales
+
     if background_tasks:
         try:
             from solar_automation import capturar_sombras_playwright
-            # Geocodificar la dirección real del predio (no hardcodeado por barrio)
             lat_solar, lon_solar = geocodificar_direccion(direccion if direccion != "Pendiente" else barrio)
             background_tasks.add_task(capturar_sombras_playwright, lat_solar, lon_solar, new_id, str(case_dir))
         except Exception as e:
             print(f"[ERROR] No se pudo lanzar la tarea de automatización de sombras: {e}")
-            
-    return {"id": new_id, "folio_matricula": folio, "direccion": direccion, "barrio": barrio, "estado": "PENDIENTE_IMAGENES"}
+
+    return caso
 
 @app.post("/api/dictamenes/{case_id}/upload/{img_type}")
 async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...), auth: bool = Depends(require_auth)):
@@ -737,28 +702,21 @@ async def descargar_documento_caso(case_id: int, doc_id: int, auth: dict = Depen
     )
 
 @app.post("/api/dictamenes/{case_id}/update")
-def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: BackgroundTasks = None, auth: bool = Depends(require_auth)):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
-    row = cursor.fetchone()
-    
-    if not row:
-        conn.close()
+def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: BackgroundTasks = None, auth: dict = Depends(require_auth)):
+    from case_service import get_case, update_case
+
+    dictamen = get_case(case_id)
+    if not dictamen:
         raise HTTPException(status_code=404, detail="Caso no encontrado.")
-        
-    dictamen = dict(row)
-    
-    # Obtener valores del payload
+
     folio = payload.get("folio_matricula", dictamen["folio_matricula"])
     direccion = payload.get("direccion", dictamen["direccion"])
-    
+
     # Si la dirección cambia, recalcular el barrio de forma inteligente
-    barrio = dictamen["barrio"]
+    barrio = dictamen.get("barrio") or ""
     direccion_cambiada = False
     if direccion and direccion != dictamen["direccion"]:
         direccion_cambiada = True
-        # Bloque C: inferir barrio desde geocodificacion real en lugar de if/else manual
         try:
             from geocoder import geocodificar_desde_ctl
             geo = geocodificar_desde_ctl(direccion)
@@ -767,84 +725,85 @@ def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: B
         except Exception:
             if "recreo" in direccion.lower():
                 barrio = "El Recreo"
-    
-    acreedor_real = payload.get("acreedor_real", dictamen.get("acreedor_real", None))
 
-    # Persistencia multi-ciudad: mantener/actualizar la ciudad del caso (puede
-    # llegar del payload cuando el usuario la cambia en el portal).
+    acreedor_real = payload.get("acreedor_real", dictamen.get("acreedor_real", None))
     ciudad = (payload.get("ciudad") or dictamen.get("ciudad") or "barranquilla").lower().strip()
     if ciudad not in ("barranquilla", "medellin", "bogota", "pasto"):
         ciudad = "barranquilla"
 
-    # El valor consolidado solo se actualiza si el área ya existe (extraída por certificado)
-    area = dictamen["area"]
-    valor_consolidado = dictamen["valor_consolidado"]
-    if area is not None:
+    area = dictamen.get("area") or 0
+    valor_consolidado = dictamen.get("valor_consolidado") or 0
+    if area:
         valor_m2 = 6887625 if "miramar" in barrio.lower() else 5146666
         valor_consolidado = int(round(valor_m2 * area, -4))
-    
-    cursor.execute("""
-        UPDATE dictamenes 
-        SET folio_matricula = ?, direccion = ?, barrio = ?, valor_consolidado = ?, ciudad = ?
-        WHERE id = ?
-    """, (folio, direccion, barrio, valor_consolidado, ciudad, case_id))
-        
-    conn.commit()
-    
+
+    username = auth.get("username") if isinstance(auth, dict) else None
+    # Persistencia canónica de los campos del Case vía CaseService.
+    dictamen = update_case(case_id, {
+        "folio_matricula": folio, "direccion": direccion, "barrio": barrio,
+        "valor_consolidado": valor_consolidado, "ciudad": ciudad,
+        "acreedor_real": acreedor_real,
+    }, updated_by=username)
+    if dictamen is None:
+        raise HTTPException(status_code=404, detail="Caso no encontrado.")
+
     case_dir = ASSETS_DIR / f"case_{case_id}"
-    
-    # Lanzar la automatización de sombras con coordenadas geocodificadas reales
+
+    # ── Side-effects de GENERACIÓN (deferred a SLICE-005/006): reset de sombras
+    # y trigger de compilación del PDF. La persistencia del Case ya se hizo. ──
     if direccion_cambiada and background_tasks:
         try:
             from solar_automation import capturar_sombras_playwright
-            # Usar geocoder universal en lugar del dict hardcodeado
             lat_solar, lon_solar = geocodificar_direccion(direccion)
-            
-            # Resetear banderas de sombras cargadas antes de relanzar
-            cursor.execute("UPDATE dictamenes SET sombra_9am_cargada = 0, sombra_3pm_cargada = 0 WHERE id = ?", (case_id,))
-            conn.commit()
-            
+            _conn = get_db_connection()
+            try:
+                _cur = _conn.cursor()
+                _cur.execute("UPDATE dictamenes SET sombra_9am_cargada = 0, sombra_3pm_cargada = 0 WHERE id = ?", (case_id,))
+                _conn.commit()
+            finally:
+                _conn.close()
             background_tasks.add_task(capturar_sombras_playwright, lat_solar, lon_solar, case_id, str(case_dir))
         except Exception as e:
             print(f"[ERROR] No se pudo relanzar la automatización de sombras en update: {e}")
 
-    # Re-verificar si ya se puede compilar
-    cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
-    row = cursor.fetchone()
-    dictamen = dict(row)
-    
-    if (dictamen["sombra_9am_cargada"] and dictamen["sombra_3pm_cargada"] and 
-        dictamen["mapa_cargado"] and dictamen["area"] is not None and dictamen["area"] > 0):
-        
+    # Re-verificar si ya se puede compilar (requiere la fila COMPLETA con rutas internas).
+    _conn = get_db_connection()
+    try:
+        _cur = _conn.cursor()
+        _cur.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
+        _row = _cur.fetchone()
+    finally:
+        _conn.close()
+    dictamen_full = dict(_row) if _row else dictamen
+
+    if (dictamen_full.get("sombra_9am_cargada") and dictamen_full.get("sombra_3pm_cargada") and
+            dictamen_full.get("mapa_cargado") and dictamen_full.get("area") is not None and
+            dictamen_full.get("area") > 0):
         case_dir = ASSETS_DIR / f"case_{case_id}"
-        pdf_filename = f"ARHIAX_Dictamen_{_sanitizar_folio(dictamen['folio_matricula'])}_final.pdf"
+        pdf_filename = f"ARHIAX_Dictamen_{_sanitizar_folio(dictamen_full['folio_matricula'])}_final.pdf"
         pdf_output_path = case_dir / pdf_filename
-        
         try:
-            compile_pdf(dictamen, str(pdf_output_path))
-            cursor.execute("UPDATE dictamenes SET estado = 'COMPLETADO', pdf_path = ? WHERE id = ?", 
-                           (str(pdf_output_path), case_id))
-            conn.commit()
-            dictamen["estado"] = "COMPLETADO"
+            compile_pdf(dictamen_full, str(pdf_output_path))
+            update_case(case_id, {"estado": "COMPLETADO"}, updated_by=username)
+            _conn = get_db_connection()
+            try:
+                _cur = _conn.cursor()
+                _cur.execute("UPDATE dictamenes SET pdf_path = ? WHERE id = ?", (str(pdf_output_path), case_id))
+                _conn.commit()
+            finally:
+                _conn.close()
+            dictamen = get_case(case_id) or dictamen
         except Exception as e:
-            conn.close()
             print(f"[ERROR] compilar PDF del dictamen {case_id}: {e}")
             raise HTTPException(status_code=500, detail="Error al compilar el PDF del dictamen. Verifique los insumos e intente nuevamente.")
-            
-    conn.close()
+
     return dictamen
 
 @app.delete("/api/dictamenes/{case_id}")
 def delete_dictamen(case_id: int, auth: dict = Depends(require_admin)):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
-    row = cursor.fetchone()
-
-    if row:
-        cursor.execute("DELETE FROM dictamenes WHERE id = ?", (case_id,))
-        conn.commit()
-        conn.close()
+    from case_service import delete_case
+    eliminado = delete_case(case_id)
+    if eliminado:
         # Eliminar físicamente los archivos asociados al caso
         case_dir = ASSETS_DIR / f"case_{case_id}"
         if case_dir.exists() and case_dir.is_dir():
@@ -854,11 +813,8 @@ def delete_dictamen(case_id: int, auth: dict = Depends(require_admin)):
                 print(f"Error al eliminar la carpeta del caso {case_id}: {e}")
         return {"success": True, "message": f"Caso {case_id} eliminado exitosamente."}
 
-    conn.close()
-    # DELETE idempotente: el caso puede existir SOLO en el navegador (la lista del
-    # portal vive en localStorage; si el POST de creación falló se usó un id local
-    # `Date.now()`, y en Vercel sin Neon la BD /tmp es efímera). No es un error que
-    # bloquee: el frontend debe poder limpiar su lista local igualmente.
+    # DELETE idempotente: un id que no existe en el servidor (p. ej. un id local
+    # creado cuando el POST falló) no es un error que bloquee la limpieza del portal.
     return {"success": True, "message": f"Caso {case_id} no existía en el servidor (se omite).", "ya_inexistente": True}
 
 @app.post("/api/dictamenes/generar")

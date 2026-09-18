@@ -25,6 +25,11 @@ SLICE-005/006 son los más invasivos (tocan `pdf_compiler.py`); se dejan al fina
 
 ## SLICE-001 — Canonical Case Persistence (especificación completa)
 
+> **STATUS: IMPLEMENTED / TESTED** (ver `docs/SLICES.md` final y `tests/test_slice001_case.py`).
+> Capas: `case_service.py` (application), `case_repository.py` (persistence), `migrations.py`
+> (schema versionado), endpoints `index.py`, frontend `public/index.html` (localStorage ya no
+> es autoritativo). Pendiente de VERIFIED (evidencia E2E manual con un despliegue Neon).
+
 ### Goal
 Un usuario autenticado crea/lee/actualiza un Case y, al recargar el navegador,
 ve el MISMO Case desde la fuente canónica (servidor/Neon), sin estado divergente

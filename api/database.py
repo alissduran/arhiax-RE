@@ -29,9 +29,8 @@ DB_PATH = _resolver_db_path()
 _ES_POSTGRES = DB_PATH.startswith(("postgres://", "postgresql://"))
 
 
-def init_db():
-    """Crea/migra el esquema SQLite (solo para DSN local o /tmp)."""
-    conn = sqlite3.connect(str(DB_PATH))
+def init_db_on(conn):
+    """Crea el esquema base SQLite sobre una conexión ya abierta (idempotente)."""
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -104,7 +103,16 @@ def init_db():
     """)
 
     conn.commit()
-    conn.close()
+
+
+def init_db():
+    """Crea/migra el esquema SQLite (solo para DSN local o /tmp). Retenido por
+    compatibilidad (tests); el flujo normal usa `migrations.ensure_migrated`."""
+    conn = sqlite3.connect(str(DB_PATH))
+    try:
+        init_db_on(conn)
+    finally:
+        conn.close()
 
 
 def get_db_connection():
@@ -112,14 +120,17 @@ def get_db_connection():
 
     - DSN postgres (Neon): despacha a api/postgres_adapter (psycopg).
     - En otro caso: SQLite local o /tmp.
+
+    El esquema se garantiza vía migraciones versionadas (migrations.ensure_migrated),
+    ejecutadas UNA vez por DSN/proceso — no DDL en cada conexión normal.
     """
     if _ES_POSTGRES:
-        from postgres_adapter import conectar_postgres, init_postgres
+        from postgres_adapter import conectar_postgres
         conn = conectar_postgres(DB_PATH)
-        init_postgres(conn)
-        return conn
+    else:
+        conn = sqlite3.connect(str(DB_PATH))
+        conn.row_factory = sqlite3.Row
 
-    init_db()
-    conn = sqlite3.connect(str(DB_PATH))
-    conn.row_factory = sqlite3.Row
+    from migrations import ensure_migrated
+    ensure_migrated(conn)
     return conn

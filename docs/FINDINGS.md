@@ -139,11 +139,11 @@ FIXED
 ## FINDING-005
 
 Classification:
-SECURITY (TECH_DEBT — registrado, no resuelto en esta sesión)
+SECURITY (TECH_DEBT — resuelto en SLICE-001)
 
 Observation:
-`api/arhia_sag_screen/evidence/envelope.py` resuelve la clave HMAC de evidencia
-(`ARHIA_HMAC_KEY`) con un UUID aleatorio por proceso si la variable no está definida.
+`api/arhia_sag_screen/evidence/envelope.py` resolvía la clave HMAC de evidencia con un
+UUID aleatorio por proceso si la variable no estaba definida.
 
 Evidence:
 `api/arhia_sag_screen/evidence/envelope.py` (función `_key()`).
@@ -152,18 +152,17 @@ Root cause:
 Clave no determinista por diseño de demo.
 
 Impact:
-Los sobres de evidencia HMAC no son verificables entre instancias/despliegues si no
-se fija la clave. No es parte del blocker de autenticación (no es credencial de login).
+Los sobres de evidencia HMAC no eran verificables entre instancias/despliegues.
 
 Fix:
-(No aplicado en esta sesión — fuera del alcance del blocker.) En producción definir
-`ARHIA_HMAC_KEY` estable y gestionada fuera del código.
+SLICE-001: `ARHIAX_EVIDENCE_HMAC_KEY` (independiente del secreto de auth) obligatoria en
+producción (fail-closed); en dev/test clave sintética estable. Se retiró `uuid4()` por proceso.
 
 Verification:
-N/A (registrado).
+`tests/test_slice001_case.py` (TestEvidenceHmac: estable, desde env, fail-closed prod).
 
 Status:
-OPEN
+RESOLVED
 
 ---
 
@@ -220,7 +219,8 @@ Recommended treatment:
 SLICE-001: mover la fuente de verdad al servidor; `localStorage` pasa a cache/sesión.
 
 Status:
-OPEN
+RESOLVED (SLICE-001: `cargarDictamenes` obtiene la lista de `GET /api/dictamenes`;
+`localStorage` ya no guarda `arhiax_cases`; la sesión sigue en `localStorage`.)
 
 ---
 
@@ -246,7 +246,8 @@ Recommended treatment:
 ADR-003: migraciones versionadas (`schema_migrations` + scripts ordenados), aplicadas una vez por despliegue.
 
 Status:
-OPEN
+RESOLVED (SLICE-001: `api/migrations.py` con `schema_migrations`, secuencia `001_initial`
++ `002_case_canonical_state`, runner idempotente cacheado por DSN.)
 
 ---
 
@@ -378,6 +379,59 @@ Mover a variable de entorno (`ARHIAX_NOTIFY_EMAIL`) sin fallback personal.
 
 Status:
 OPEN
+
+---
+
+## FINDING-014
+
+Classification:
+TECH_DEBT
+
+Observation:
+`public/index.html` conserva `sincronizarCasosConServidor()` con `return;` anticipado
+(código muerto tras SLICE-001), y la función aún referencia `localStorage["arhiax_cases"]`
+en su cuerpo no ejecutado.
+
+Evidence:
+`public/index.html` (función `sincronizarCasosConServidor`).
+
+Hypothesis:
+Resto del antiguo flujo offline-first; no se ejecuta (early-return), pero confunde.
+
+Impact:
+Mantenibilidad (código muerto); sin impacto funcional.
+
+Recommended treatment:
+Eliminar la función en un cleanup posterior (no en SLICE-001 para no tocar más superficie).
+
+Status:
+OPEN
+
+---
+
+## FINDING-015
+
+Classification:
+TECH_DEBT
+
+Observation:
+`api/listas_cache.py` crea su tabla (`listas_cache`) con `CREATE TABLE IF NOT EXISTS` en
+cada `_conn()`; no está versionada en `migrations.py`.
+
+Evidence:
+`api/listas_cache.py:_crear_tabla`.
+
+Hypothesis:
+Mismo patrón pre-SLICE-001 (DDL por conexión) aún presente en la caché de listas.
+
+Impact:
+Overhead por conexión; fuera del alcance de SLICE-001 (Case persistence).
+
+Recommended treatment:
+Mover `listas_cache` a una migración versionada en un slice posterior.
+
+Status:
+OPEN (deferred)
 
 ---
 

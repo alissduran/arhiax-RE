@@ -1,8 +1,9 @@
 """Construcción de eventos de evidencia (envelope B18/B03, 9.22) con cadena encadenada.
 
 Corrección P0-5 de la auditoría:
-  - La clave HMAC NO está fija en el código: se lee de `ARHIA_HMAC_KEY`; si no se define, se genera
-    una clave aleatoria por proceso (demo) y se registra un aviso.
+  - La clave HMAC NO está fija en el código: se lee de `ARHIAX_EVIDENCE_HMAC_KEY` (o el legado
+    `ARHIA_HMAC_KEY`); en producción es obligatoria (fail-closed) y en dev/test usa una clave
+    sintética estable (no aleatoria por proceso).
   - `hmacChain` se calcula sobre el **envelope completo canónico** (no solo el payload).
   - Se añaden `event_id` (único), `previous_hash` y `chain_hash` (hash encadenado sobre el envelope
     completo + hash anterior), de modo que los eventos no puedan reordenarse/duplicarse sin detección.
@@ -17,15 +18,28 @@ from ..contracts import ResultadoConsulta
 from .versioning import hmac_hex, sha256_hex
 
 
+_DEV_EVIDENCE_KEY = "dev-only-not-a-real-secret"
+
+
 def _key():
-    k = os.environ.get("ARHIA_HMAC_KEY")
+    """Clave de integridad de evidencia (independiente del secreto de autenticación).
+
+    - Producción: debe provenir del entorno (ARHIAX_EVIDENCE_HMAC_KEY) y ser estable;
+      si falta, falla cerrada (no se genera evidencia no verificable entre procesos).
+    - Dev/test: clave sintética inequívoca (estable, NO aleatoria por proceso).
+    """
+    k = (os.environ.get("ARHIAX_EVIDENCE_HMAC_KEY")
+         or os.environ.get("ARHIA_HMAC_KEY") or "").strip()
     if k:
         return k
-    # Clave aleatoria por proceso (demo). En producción: KMS/HSM + rotación, fuera del código.
-    return uuid.uuid4().hex
+    if os.environ.get("VERCEL") or (os.environ.get("ARHIAX_ENV") or "").strip().lower() in ("prod", "production"):
+        raise RuntimeError(
+            "FALTA_CONFIGURACION_DE_SEGURIDAD: ARHIAX_EVIDENCE_HMAC_KEY es obligatorio en producción "
+            "(clave de integridad de evidencia, independiente del secreto de autenticación).")
+    return _DEV_EVIDENCE_KEY
 
 
-DEFAULT_HMAC_KEY = None  # se resuelve por proceso (ya no hay clave fija pública en el código)
+DEFAULT_HMAC_KEY = None  # sentinel: build_event resuelve vía _key()
 
 
 def _canonical(d):

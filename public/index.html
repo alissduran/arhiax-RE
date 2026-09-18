@@ -667,8 +667,9 @@
     let activeUsername = localStorage.getItem("arhiax_username") || "admin";
     let activeRol = localStorage.getItem("arhiax_rol") || "admin";
     
-    // Usar LocalStorage para mantener el listado de casos de forma persistente y evitar fallos de contenedores serverless
-    let dictamenes = JSON.parse(localStorage.getItem("arhiax_cases") || "[]");
+    // SLICE-001: la lista de casos es canónica en el servidor (Neon/Postgres).
+    // Se inicializa vacía y se carga vía GET /api/dictamenes (cargarDictamenes).
+    let dictamenes = [];
     let selectedCaseId = null;
     
     // Almacenamiento local de los archivos seleccionados en memoria para subirlos juntos stateless
@@ -794,11 +795,8 @@
       document.getElementById('main-portal').style.display = 'block';
       document.getElementById('session-info').textContent = `Sesión: ${activeUsername} · ${activeRol === 'admin' ? 'Administrador' : 'Operador'} · ${ARHIAX_BUILD}`;
       document.getElementById('btn-admin').style.display = (activeRol === 'admin') ? 'inline-block' : 'none';
+      // SLICE-001: el servidor (Neon/Postgres) es la fuente canónica de casos.
       cargarDictamenes();
-      // Persistencia Neon: fusionar la lista local con los casos del servidor
-      // (la lista vive en localStorage, pero el servidor con Neon persiste los
-      // casos; al abrir el portal se reconcilian ambos lados).
-      sincronizarCasosConServidor();
     }
 
     // ── Sincronización con el servidor (Neon/Postgres) ────────────────────────
@@ -809,6 +807,9 @@
     //      servidor no respondió) se crean en el servidor para que persistan.
     // Nunca elimina nada local; degrada silencioso si no hay conexión.
     async function sincronizarCasosConServidor() {
+      // SLICE-001: RETIRADO — el servidor es la fuente canónica de casos
+      // (cargarDictamenes obtiene la lista directamente del servidor).
+      return;
       try {
         const resp = await apiFetch('/api/dictamenes');
         if (!resp.ok) return;
@@ -1024,8 +1025,22 @@
       }
     }
 
-    function cargarDictamenes() {
-      dictamenes = JSON.parse(localStorage.getItem("arhiax_cases") || "[]");
+    async function cargarDictamenes() {
+      // SLICE-001: la lista canónica de casos viene del servidor (GET /api/dictamenes),
+      // NO de localStorage. localStorage queda solo para sesión/preferencias.
+      try {
+        const resp = await apiFetch('/api/dictamenes');
+        if (resp.ok) {
+          const serverCases = await resp.json();
+          dictamenes = Array.isArray(serverCases) ? serverCases : [];
+        } else {
+          dictamenes = [];
+          console.warn('No se pudieron cargar los casos del servidor (HTTP ' + resp.status + ').');
+        }
+      } catch (e) {
+        console.error('Error al cargar casos del servidor:', e);
+        dictamenes = [];
+      }
       renderDictamenesList();
       if (dictamenes.length > 0 && !selectedCaseId) {
         selectCase(dictamenes[0].id);
@@ -1075,51 +1090,41 @@
 
       showLoading(true);
       const resolvedFolio = folio;
-
-      // H-09: crear el caso en el servidor para que upload/update/delete usen un id real
-      // (si el servidor no responde, se degrada a id local para no bloquear el flujo)
-      let serverId = Date.now();
       const ciudadForm = document.getElementById('input-ciudad').value || 'barranquilla';
+
+      // SLICE-001: crear SIEMPRE en el servidor (fuente canónica). Si el POST
+      // falla, NO se crea un id local ni se guarda en localStorage (no fake success).
+      let created = null;
       try {
         const resCreate = await apiFetch('/api/dictamenes', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ folio_matricula: resolvedFolio, direccion: 'Pendiente', ciudad: ciudadForm })
         });
-        if (resCreate.ok) {
-          const created = await resCreate.json();
-          if (created.id) serverId = created.id;
+        if (!resCreate.ok) {
+          const errMsg = await resCreate.text().catch(() => '');
+          alert("No se pudo crear el caso en el servidor: " + (errMsg || ('HTTP ' + resCreate.status)));
+          showLoading(false);
+          return;
         }
+        created = await resCreate.json();
       } catch (err) {
-        console.warn('No se pudo crear el caso en el servidor; se usará id local.', err);
+        console.error("Error al crear el caso:", err);
+        alert("Error de conexión al crear el caso. No se guardó (el servidor es la fuente canónica).");
+        showLoading(false);
+        return;
       }
 
-      const newCase = {
-        id: serverId,
-        folio_matricula: resolvedFolio,
-        direccion: "Pendiente",
-        area: null,
-        barrio: "",
-        ciudad: ciudadForm,
-        certificado_cargado: 0,
-        licencia_cargada: 0,
-        sombra_9am_cargada: 0,
-        sombra_3pm_cargada: 0,
-        mapa_cargado: 0
-      };
+      dictamenes.unshift(created);
 
-      // Guardar en localStorage
-      dictamenes.unshift(newCase);
-      localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
-      
       // Limpiar formulario
       document.getElementById('input-folio').value = "";
-
       // Reiniciar archivos temporales para este nuevo caso
       limpiarInputsDeArchivos();
 
-      cargarDictamenes();
-      selectCase(newCase.id);
+      await cargarDictamenes();
+      selectCase(created.id);
+      showLoading(false);
     }
 
     function limpiarInputsDeArchivos() {
@@ -1295,7 +1300,8 @@
         else if (imgType === 'sombra_3pm') c.sombra_3pm_cargada = 1;
         else if (imgType === 'mapa_satelital') c.mapa_cargado = 1;
         
-        localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+        // SLICE-001: el estado del caso se persiste en el servidor (upload endpoint);
+        // sin escritura en localStorage.
         actualizarAvisoSinCtl();
         selectCase(selectedCaseId);
       }
@@ -1317,7 +1323,7 @@
       const c = dictamenes.find(item => item.id === selectedCaseId);
       if (c) {
         c.licencia_cargada = 1;
-        localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+        // SLICE-001: sin escritura en localStorage (licencia viaja con la generación).
       }
       const span = document.getElementById('span-licencia');
       if (span) span.textContent = "Cargado (PDF)";
@@ -1363,7 +1369,7 @@
             c.folio_matricula = updatedCaseData.folio_matricula;
             c.direccion = updatedCaseData.direccion;
             c.barrio = updatedCaseData.barrio;
-            localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
+            // SLICE-001: sin escritura en localStorage (el servidor es canónico).
           }
           cancelarEditarDatos();
           selectCase(selectedCaseId);
@@ -1391,21 +1397,13 @@
           method: 'DELETE'
         });
 
-        // Se elimina el caso local SIEMPRE: la lista vive en localStorage y el
-        // servidor puede no conocer el id (caso creado localmente con id Date.now()
-        // cuando el POST falló, o BD efímera en Vercel). Un 404 del servidor no
-        // debe impedir limpiar la lista del navegador.
-        const borrable = response.ok || response.status === 404;
-        let aviso = null;
-        if (!response.ok && response.status !== 404) {
-          aviso = (await response.text().catch(() => '')) || `HTTP ${response.status}`;
-        }
-
-        if (borrable) {
+        // SLICE-001: el servidor es la fuente canónica. Un 404 es idempotente
+        // (el caso no existía en el servidor); cualquier otro error NO debe
+        // aparentar éxito (no se elimina en memoria si el DELETE falló).
+        if (response.ok || response.status === 404) {
           dictamenes = dictamenes.filter(item => item.id !== id);
-          localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
 
-          // Limpiar insumos persistidos de este caso en IndexedDB
+          // Limpiar insumos persistidos de este caso en IndexedDB (cache binaria local)
           for (const t of ['certificado', 'sombra_9am', 'sombra_3pm', 'mapa_satelital']) {
             idbBorrar(_keyInsumo(id, t));
           }
@@ -1415,28 +1413,14 @@
             document.getElementById('detail-panel').style.display = 'none';
           }
 
-          cargarDictamenes();
-          if (aviso) {
-            alert("Caso eliminado de este dispositivo. Nota del servidor: " + aviso);
-          }
+          await cargarDictamenes();
         } else {
-          alert("Error al eliminar caso del servidor: " + aviso);
+          const aviso = (await response.text().catch(() => '')) || `HTTP ${response.status}`;
+          alert("No se pudo eliminar el caso en el servidor: " + aviso);
         }
       } catch (err) {
-        // Sin conexión: el caso sigue borrándose de la lista local (la fuente de
-        // verdad del portal es localStorage; el servidor es un espejo opcional).
         console.error("Error de conexión al eliminar caso:", err);
-        dictamenes = dictamenes.filter(item => item.id !== id);
-        localStorage.setItem("arhiax_cases", JSON.stringify(dictamenes));
-        for (const t of ['certificado', 'sombra_9am', 'sombra_3pm', 'mapa_satelital']) {
-          idbBorrar(_keyInsumo(id, t));
-        }
-        if (selectedCaseId === id) {
-          selectedCaseId = null;
-          document.getElementById('detail-panel').style.display = 'none';
-        }
-        cargarDictamenes();
-        alert("Sin conexión al servidor: el caso se eliminó solo de este dispositivo.");
+        alert("Error de conexión al eliminar caso. El caso NO se eliminó (el servidor es la fuente canónica).");
       } finally {
         showLoading(false);
       }

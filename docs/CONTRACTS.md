@@ -90,6 +90,24 @@ Clasificación: `EXPLICIT CONTRACT` (tipado/dataclass/enum o endpoint documentad
 - `arhia_sag_screen/contracts.py`: `Contraparte`, `ListaVersion`, `RegistroNormalizado`, `ResultadoConsulta`, `Accionista`, `RegistroJuridico`, `BeneficiarioFinal`.
 - `arhia_expediente/expediente.py`: `FichaIntegridad`, `Expediente`; `conclusion.py`: `Conclusion`.
 
+## SLICE-001 — Canonical Case Persistence (contratos nuevos)
+
+| Contract | Type | Evidence |
+| --- | --- | --- |
+| `case_service.create_case(*, folio_matricula, direccion, barrio, estrato, area, ciudad, acreedor_real, created_by) → dict` | EXPLICIT | `api/case_service.py` |
+| `case_service.get_case/list_cases/update_case/delete_case` | EXPLICIT | `api/case_service.py` |
+| `case_repository.CaseRepository` (insert/get/list/update/delete + `_row_to_case` que NO expone `pdf_path`/`certificado_path`) | EXPLICIT | `api/case_repository.py` |
+| `migrations.run_migrations(conn)` + `ensure_migrated(conn)` (versionado, idempotente) | EXPLICIT | `api/migrations.py` |
+| `ARHIAX_EVIDENCE_HMAC_KEY` (clave de evidencia, independiente del secreto de auth) | EXPLICIT | `arhia_sag_screen/evidence/envelope.py` |
+
+Campo canónico del Case (derivado del schema + API + frontend + domain model):
+- REQUIRED: `id`, `folio_matricula`, `direccion`, `barrio`, `estrato`, `estado`.
+- OPTIONAL: `area`, `valor_consolidado`, `ciudad`, `acreedor_real`, `lat`, `lon`, `fuente_geocod`.
+- DERIVED: `fecha_creacion`.
+- LEGACY (insumo/generación, no canónico del Case): `sombra_9am_cargada`, `sombra_3pm_cargada`,
+  `mapa_cargado`, `certificado_cargado`, `certificado_path`, `pdf_path`.
+- AUDIT (metadata, no ownership): `created_by`, `updated_by`.
+
 ## Contratos implícitos más frágiles (candidatos a formalizar)
 
 1. `db_record` hacia `compile_pdf` (dict con claves asumidas).

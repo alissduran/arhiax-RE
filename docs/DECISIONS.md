@@ -116,3 +116,12 @@ REQUIRED_BEFORE_SLICE  (antes de cualquier slice que emita/verifique evidencia H
 ```
 
 **Status:** DECIDED (opción 1 o 2; elegir 2 si se quiere una sola fuente de secreto). Sin cambio de código en esta sesión.
+
+> **Actualización SLICE-001:** ADR-004 se implementó como **opción 1**: variable de entorno
+> `ARHIAX_EVIDENCE_HMAC_KEY` (independiente del secreto de autenticación, NO derivada de
+> `ARHIAX_AUTH_SECRET`). En producción es obligatoria (fail-closed); en dev/test usa una clave
+> sintética estable. Se retiró la generación `uuid4()` por proceso. Evidencia: `arhia_sag_screen/evidence/envelope.py` + tests en `tests/test_slice001_case.py`.
+
+> **Decisión de ownership (SLICE-001):** `created_by` / `updated_by` son metadatos de auditoría
+> (`created_by != ownership`). NO se usan para ocultar ni restringir casos; se preserva la semántica
+> actual de "usuarios autenticados trabajan sobre el conjunto compartido de casos". Sin multi-tenancy.
