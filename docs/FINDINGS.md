@@ -435,6 +435,66 @@ OPEN (deferred)
 
 ---
 
+## FINDING-016
+
+Classification:
+IDENTITY_REGRESSION
+
+Observation:
+`api/legal_analyzer.py` descarta la unidad/edificio de la dirección del CTL
+(`re.split` sobre `APARTAMENTO|APTO|AP|EDIFICIO|TORRE|...`), de modo que
+`"TV 43 # 100-50 TO 8 AP 430"` se convierte en `"TV 43 # 100-50"`.
+
+Evidence:
+`api/legal_analyzer.py:289-299`; commit `f247a20` "Direccion oficial: preferir la
+DIRECCION CATASTRAL del CTL (Bogota real)". Caso 040-646406 (ver docs/forensics/040-646406/).
+
+Hypothesis:
+La pérdida de la unidad degrada la resolución catastral (5 features) y, aguas abajo,
+el barrio/destino/estrato, lo que reduce el precio/m² de 6.8M a 5.2M.
+
+Impact:
+Identidad de unidad PH no preservada; valoración referencial cae ~24% por cambio de
+contexto (no por algoritmo).
+
+Recommended treatment:
+Reconstruir la unidad (torre/apartamento) como parte de la identidad canónica del
+inmueble sin descartarla en la extracción; definir fuente autoritativa por atributo.
+
+Status:
+OPEN (root cause parcialmente confirmada; requiere CTL real + traza catastral)
+
+---
+
+## FINDING-017
+
+Classification:
+REPORTING_ONLY_BUG
+
+Observation:
+El dictus anterior mostraba "Ponderación M1 70% / M3 30%", pero el consolidado en
+código siempre fue `área × precio/m²` (M1 100%). El cambio a "M1 100% / M3 excepcional"
+es una corrección de la ETIQUETA, no de la fórmula.
+
+Evidence:
+`git show 0a078c0^:api/dictamen_data.py` (consolidado = `int(area × val_m2)`, sin
+70/30) y `git show e58eefd` (fórmula `m3 if metodo=="m3" else m1_base`, solo cambia
+el comentario). Ver docs/forensics/040-646406/VALUATION_DIFF.md.
+
+Hypothesis:
+La etiqueta 70/30 nunca correspondió a la fórmula real; era texto de presentación.
+
+Impact:
+Confusión al comparar dictus; sin impacto en el valor calculado.
+
+Recommended treatment:
+Unificar la etiqueta de ponderación con la fórmula real y documentarlo.
+
+Status:
+OPEN
+
+---
+
 ## EXTERNAL ACTIONS REQUIRED (rotación y configuración)
 
 Estas acciones NO pueden ejecutarse desde el código y requieren intervención humana.
