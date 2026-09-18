@@ -196,6 +196,191 @@ OPEN (informativo)
 
 ---
 
+## FINDING-007
+
+Classification:
+TECH_DEBT
+
+Observation:
+El frontend trata `localStorage` (`arhiax_cases`) como fuente de verdad de la lista de
+casos, mientras el backend persiste en Neon/Postgres.
+
+Evidence:
+`public/index.html` (inicialización de `dictamenes` desde `localStorage`; comentario
+explícito "la fuente de verdad del portal es localStorage; el servidor es un espejo opcional").
+
+Hypothesis:
+Divergencia de estado entre cliente y servidor (casos creados en el servidor que no
+aparecen si `localStorage` está desincronizado, y viceversa).
+
+Impact:
+Dos fuentes de verdad para el mismo agregado; riesgo de pérdida/duplicación de casos.
+
+Recommended treatment:
+SLICE-001: mover la fuente de verdad al servidor; `localStorage` pasa a cache/sesión.
+
+Status:
+OPEN
+
+---
+
+## FINDING-008
+
+Classification:
+TECH_DEBT
+
+Observation:
+El esquema se crea/migra en CADA conexión (`CREATE TABLE IF NOT EXISTS` +
+`ALTER TABLE ADD COLUMN` idempotente) y el DDL está duplicado entre SQLite y Postgres.
+
+Evidence:
+`api/database.py:init_db()` y `api/postgres_adapter.py:init_postgres()`.
+
+Hypothesis:
+Sin versionado de esquema, cualquier cambio futuro es frágil y propenso a drift entre dialectos.
+
+Impact:
+Overhead por conexión; dos fuentes de DDL; sin trazabilidad de migraciones.
+
+Recommended treatment:
+ADR-003: migraciones versionadas (`schema_migrations` + scripts ordenados), aplicadas una vez por despliegue.
+
+Status:
+OPEN
+
+---
+
+## FINDING-009
+
+Classification:
+TECH_DEBT
+
+Observation:
+No existe ownership de caso: la tabla `dictamenes` no tiene `owner_id`/`created_by` y
+`GET /api/dictamenes` devuelve todos los casos sin filtrar por usuario.
+
+Evidence:
+DDL de `dictamenes` (`database.py` / `postgres_adapter.py`); `list_dictamenes` en `api/index.py`.
+
+Hypothesis:
+Todos los usuarios autenticados comparten los mismos casos; no hay aislamiento.
+
+Impact:
+Fuga de datos entre usuarios/roles si hay más de un operador.
+
+Recommended treatment:
+ADR-002: mínimo `created_by` + filtrado por rol; multi-tenancy queda como decisión de producto.
+
+Status:
+NEEDS_DECISION
+
+---
+
+## FINDING-010
+
+Classification:
+TECH_DEBT
+
+Observation:
+Los hallazgos conviven en dos representaciones: tuplas heterogéneas de 6/7 elementos
+(pipeline del dictamen) y el dataclass `Hallazgo` (Titulux).
+
+Evidence:
+`api/legal_analyzer.py` / `api/pdf_compiler.py` (tuplas) vs `api/arhia_title/contracts.py` (dataclass).
+
+Hypothesis:
+La forma de tupla es frágil (índices posicionales) y dificulta el contrato único de hallazgo.
+
+Impact:
+Acoplamiento implícito; riesgo de "too many values to unpack" (ya ocurrió).
+
+Recommended treatment:
+SLICE-003: tipar hallazgos hacia `Hallazgo` (o un contrato único), conservando la tupla como adaptador temporal.
+
+Status:
+OPEN
+
+---
+
+## FINDING-011
+
+Classification:
+TECH_DEBT
+
+Observation:
+`api/pdf_compiler.py` concentra dominio + orquestación + infraestructura + presentación
+(~3100 líneas, ~20 imports, side effects de red/PDF/email).
+
+Evidence:
+`api/pdf_compiler.py` (función `compile_pdf`).
+
+Hypothesis:
+Es el punto de mayor acoplamiento; dificulta testear y evolucionar el dictamen.
+
+Impact:
+Riesgo de regresión al tocar cualquier capacidad del dictamen.
+
+Recommended treatment:
+Strangler por slices (SLICE-002..005): extraer identidad, hallazgos/gate, receipts y render
+sin reescribir el orquestador.
+
+Status:
+OPEN
+
+---
+
+## FINDING-012
+
+Classification:
+DOC_DEBT
+
+Observation:
+`README_PLAN.md` lista variables de entorno con "✅ CONFIGURADA" sin distinguir de forma
+explícita obligatorias de opcionales en producción (parcialmente aclarado en el Security Baseline).
+
+Evidence:
+`README_PLAN.md` (tabla de variables).
+
+Hypothesis:
+Ambigüedad de configuración para un nuevo despliegue.
+
+Impact:
+Configuración incorrecta (p. ej. omitir un secreto obligatorio) en producción.
+
+Recommended treatment:
+Documentar matriz obligatorio/opcional por entorno (completar en docs).
+
+Status:
+OPEN
+
+---
+
+## FINDING-013
+
+Classification:
+TECH_DEBT
+
+Observation:
+`api/notificaciones.py` tiene una dirección de correo personal hardcodeada como
+destinatario por defecto (`_DESTINATARIO_DEFAULT`).
+
+Evidence:
+`api/notificaciones.py` (constante `_DESTINATARIO_DEFAULT`).
+
+Hypothesis:
+PII en código; el destinatario real debería venir de configuración.
+
+Impact:
+Correos dirigidos a una persona fija; PII versionada.
+
+Recommended treatment:
+Mover a variable de entorno (`ARHIAX_NOTIFY_EMAIL`) sin fallback personal.
+
+Status:
+OPEN
+
+---
+
 ## EXTERNAL ACTIONS REQUIRED (rotación y configuración)
 
 Estas acciones NO pueden ejecutarse desde el código y requieren intervención humana.

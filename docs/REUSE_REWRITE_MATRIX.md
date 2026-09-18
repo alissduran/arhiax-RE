@@ -1,0 +1,40 @@
+# ARHIAX RE — Reuse / Rewrite Matrix
+
+Clasificación por responsabilidad, cohesión, testabilidad y dependencia (no por
+tamaño de archivo). Categorías: `KEEP` / `WRAP` / `REFACTOR` / `REPLACE` / `DEFER` / `UNKNOWN`.
+
+| Component | Current responsibility | Evidence | Classification | Why | Future boundary | Risk |
+| --------- | ---------------------- | -------- | -------------- | --- | --------------- | ---- |
+| `api/index.py` | API FastAPI: auth, CRUD de casos, upload, generación, worker QStash, monitoreo | ~30 endpoints, HMAC auth, roles, rate limit; tests de auth | REFACTOR | Hub que mezcla interfaces + orquestación + acceso a BD directo. El mecanismo de auth y los endpoints funcionan (KEEP), pero hay que extraer los use-cases y el acceso a datos. | `Interfaces` + `Application` (rutas finas → servicios). Persistencia vía repositorio. | MEDIO (alto acoplamiento; extraer sin romper endpoints) |
+| `api/pdf_compiler.py` | Orquestador monolítico del dictamen (identidad→GIS→valoración→scoring→Titulux→gate→PDF) | ~3100 líneas; orquesta ~20 módulos; tests parciales | REFACTOR | Conocimiento valioso y VERIFICADO (caso 240-211101), pero mezcla dominio + infraestructura + presentación. Extraer por fases (strangler), no reescribir. | `Application` (use-case "generar dictamen") que consume servicios de dominio. | ALTO (es el corazón; refactor gradual con gate de regresión) |
+| `api/database.py` | Resolución de DSN + `init_db()` SQLite + despacho a Postgres | schema `dictamenes`, `trabajos_pdf`, `documentos_caso`; `get_db_connection()` | REFACTOR | Funciona, pero crea/esquema en cada conexión sin versionado. Separar "conexión" de "migración". | `Persistence` (connection factory + migrations). | MEDIO |
+| `api/postgres_adapter.py` | Adaptador sqlite3→psycopg (`?`→`%s`, `lastrowid`→RETURNING) | clase `_ConnCompat`/`_CursorCompat`; `init_postgres()` | WRAP | Cumple (traduce la API sin reescribir endpoints). Mantener como capa de compatibilidad; formalizar contrato de conexión. | `Persistence` (adapter detrás de una interfaz de repositorio). | BAJO |
+| `api/canonical.py` | `canonical_property_identity` + `administrative_context` + trazabilidad | builders puros; tests (`test_canonical.py`) | KEEP | Fuente autoritativa de identidad, pura y testeada. Es el contrato de identidad correcto. | `Domain` (agregado de identidad predial). | BAJO |
+| `api/consistency.py` | Invariantes + `PRE_RENDER_CONSISTENCY_GATE` | 8 invariantes; tests (`test_consistency.py`) | KEEP | Gate determinista que impide dictus inconsistente. | `Domain` (invariantes) / `Application` (gate). | BAJO |
+| `api/finding_registry.py` | Registro único de hallazgos + detección de contradicciones | normalización + `coherencia()`; tests | KEEP | Centraliza la coherencia de hallazgos entre capas. | `Domain` (finding registry). | BAJO |
+| `api/receipts.py` | Execution receipts (traza técnica por fuente) | `build_execution_receipts()` + `receipt_rows()`; tests | KEEP | Trazabilidad por ejecución, pura y testeada. | `Evidence / Observability`. | BAJO |
+| `api/versioning.py` | Matriz de versiones + git SHA | constantes + `version_blob()`; tests | KEEP | Observabilidad de despliegue. | `Evidence / Observability`. | BAJO |
+| `api/legal_analyzer.py` | Análisis del CTL (folio, titulares, anotaciones, gravámenes, PH) | regex/NLP; ~750 líneas; tests | KEEP (WRAP parcial) | Reglas registrales valiosas y testeadas. Extraer a parser → modelo tipado, pero conservar las reglas. | `Domain` (registral / folio). | MEDIO (parsing frágil por regex) |
+| `api/titulux_bridge.py` | Traduce CTL→Caso Titulux y ejecuta pre-dictamen + screening | `construir_caso_titulux`, `ejecutar_titulux`; tests | WRAP | Orquesta 3 paquetes (`arhia_title/sag_screen/expediente`). Mantener como anti-corruption layer. | `Application` (use-case pre-dictamen). | BAJO |
+| `api/arhia_title/` | Pre-dictamen jurídico (reglas TIT_B01..B05, VAL_B01, TRX_B01) | dataclasses + reglas puras | KEEP | Reglas deterministas con base legal, ya aisladas y testeables. | `Domain` (títulos). | BAJO |
+| `api/arhia_sag_screen/` | Screening SAGRILAFT/PTEE (listas, matcher, KYB, SIREL, evidence) | paquete con contracts + ingest + match + kyb + evidence | KEEP | Dominio de cumplimiento ya modularizado con contratos (`Contraparte`, `ListaVersion`, `RegistroNormalizado`). | `Domain` (SAGRILAFT) + `Infrastructure` (ingest). | BAJO |
+| `api/arhia_expediente/` | Expediente de confianza (títulos + integridad + conclusión) | `Expediente`, `FichaIntegridad`, `concluir` | KEEP | Unifica capas y emite conclusión determinista con autoría separada. | `Domain` (expediente). | BAJO |
+| `api/dictamen_data.py` | Datos del dictamen (valoración Lonja, alcance, catastro, POT) | `get_valuation`, `get_*_dt`; tests | REFACTOR | Mezcla datos de presentación con lógica de valoración. Separar valoración (dominio) de textos/tablas (presentación). | `Domain` (valoración) + `Presentation` (tablas). | MEDIO |
+| `api/score_engine.py` | Score actuarial LAI v1.0 (registral/jurídico/hidrológico/catastral) | `calcular_score_actuarial`; tests | KEEP | Regla de scoring determinista y testeada (incluye NOT_EVALUATED→null). | `Domain` (scoring). | BAJO |
+| `api/carga_economica.py` | Carga hipotecaria (amortización francesa, LTV) | `estimar_carga_hipotecaria`; tests | KEEP | Regla financiera determinista. | `Domain` (carga). | BAJO |
+| `api/edificabilidad.py` / `licencia_analyzer.py` / `solar_engine.py` / `geospatial_engine.py` | Reglas POT/edificabilidad/licencia/sombras/geospatial | funciones + tests parciales | KEEP | Reglas de dominio específicas. | `Domain` (urbano/geospatial). | BAJO-MEDIO |
+| `api/integrations/*` + `api/pasto_territorio.py` + `api/riesgo_volcanico.py` + `api/catastro_predio*.py` + `api/geocoder*.py` | Adapters GIS por ciudad + geocodificación + POI | queries ArcGIS/WFS/Overpass/Photon; tests | WRAP | Son infraestructura externa con contratos implícitos (dicts). Formalizar "Source" + "SourceState" + receipts. | `Infrastructure` (adapters) detrás de puertos. | MEDIO (red, esquemas cambiantes) |
+| `public/index.html` | Frontend SPA (login, bandeja, subida, generación) | `fetch` a API, `localStorage`, `indexedDB` | REFACTOR | Funciona, pero la lista de casos usa `localStorage` como fuente de verdad (divergencia con Neon). Mover a servidor canónico. | `Presentation` (cliente) con estado de sesión en server. | ALTO (divergencia de estado) |
+| `tests/` | Suite (257 offline + network) | `tests/*.py` | KEEP | Amplia y verde; es la red de seguridad del refactor. | `Testing`. | BAJO |
+| CI (`.github/workflows/ci.yml`) | compileall + pip-audit + pytest offline | workflow | KEEP | Verificación reproducible. | `Tooling`. | BAJO |
+| `motor_tma_lonja_baq_v1.0/` | Motor TMA + capa Lonja (valoración corporativa) | sub-repo + YAML metodología | DEFER | Es un paquete externo (metodología Lonja) ya versionado; no es el núcleo del refactor. | `Domain` (valoración) si se integra. | BAJO (no tocar ahora) |
+| Duplicados históricos (`dictamen_napoli.py`, `dictamen_040314248.py`, `build_pdf*.py`, `ARHIAX RE files/`, `.zip`, `.rar`, PDFs de referencia) | Artefactos históricos / generación por caso | archivos en raíz y subcarpetas | DEFER | No se borran en esta fase; se archivan de forma controlada tras confirmar que no se importan/ejecutan. | n/a. | BAJO (no importados por la app) |
+| `api/gpv_f77.py` | Estudio de Títulos GPV-F-77 (DOCX) | `generar_docx_gpv_f77`; tests | KEEP | Generador DOCX oficial, testeado. | `Presentation`. | BAJO |
+
+### Resumen de conteo
+- KEEP: canonical, consistency, finding_registry, receipts, versioning, legal_analyzer, arhia_title, arhia_sag_screen, arhia_expediente, score_engine, carga_economica, edificabilidad/licencia/solar/geospatial, tests, CI, gpv_f77.
+- WRAP: postgres_adapter, titulux_bridge, city integrations/GIS/geocoder/POI.
+- REFACTOR: index.py, pdf_compiler.py, database.py, dictamen_data.py, public/index.html.
+- DEFER: motor_tma_lonja_baq, duplicados históricos.
+- REPLACE: ninguno identificado como irrecuperable.
+- UNKNOWN: ninguno crítico.
