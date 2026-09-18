@@ -120,11 +120,9 @@ Investigación de endpoints reales: `docs/auditorias/` + informe `informe_geoser
 | `QSTASH_CURRENT_SIGNING_KEY` / `QSTASH_NEXT_SIGNING_KEY` | Claves para verificar la firma JWT del worker | ✅ **CONFIGURADAS** |
 | `ARHIAX_TMP_DIR` | Directorio temporal para tests/worker (default `/tmp`) | Opcional (dev) |
 
-**Credenciales de acceso al portal** (producción):
-- **Admin**: usuario `admin` · contraseña `Arhiax-dWAsDUqMEQIW`
-- **Operador** (creada para pruebas): usuario `operador` · contraseña `Arhiax-op-s9Kx2vLmQ7` (cambiar en producción real)
+**Credenciales de acceso al portal** (producción): se configuran en las variables de entorno de Vercel (`ARHIAX_ADMIN_USER`, `ARHIAX_ADMIN_PASSWORD`, `ARHIAX_OPERADOR_USER`, `ARHIAX_OPERADOR_PASSWORD`). Nunca se versionan en el repositorio.
 
-> Los valores de desarrollo que aparecen en `api/index.py` como fallback solo se usan si no hay variables de entorno. En producción, Vercel inyecta las variables configuradas.
+> En desarrollo/test se usan valores SINTÉTICOS inequívocos (ver `api/index.py`); en producción las variables son obligatorias y la aplicación falla si faltan.
 
 ## 📁 Estructura del módulo API
 

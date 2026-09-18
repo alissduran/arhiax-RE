@@ -69,19 +69,42 @@ app.add_middleware(
 
 DEFAULT_YAML_PATH = Path(LONJA_LAYER) / "lonja_baq_metodologia.yaml"
 
-# ---- Autenticación real con roles (backlog: panel de administración) ----
-# Credenciales desde variables de entorno (Vercel env vars). El fallback solo
-# existe para desarrollo local.
-ACCESS_PASSWORD = os.environ.get("ARHIAX_ACCESS_PASSWORD", "Sinergia2026")  # contraseña global = cuenta admin (retrocompat)
-AUTH_SECRET = os.environ.get("ARHIAX_AUTH_SECRET", "cambiar-este-secreto-en-produccion")
+# ---- Autenticación real con roles ----
+# Credenciales desde variables de entorno. En producción (Vercel) los secretos
+# son OBLIGATORIOS y la app FALLA EXPLÍCITAMENTE si faltan (fail-closed): nunca
+# arranca con credenciales conocidas de desarrollo. En desarrollo/test se usan
+# valores SINTÉTICOS inequívocos (no son credenciales reales utilizables).
+_IS_PROD = bool(os.environ.get("VERCEL")) or \
+    (os.environ.get("ARHIAX_ENV") or "").strip().lower() in ("prod", "production")
+
+_DEV_AUTH_SECRET = "dev-only-not-a-real-secret"
+_DEV_ACCESS_PASSWORD = "dev-only-not-a-real-password"
+
+if _IS_PROD:
+    AUTH_SECRET = (os.environ.get("ARHIAX_AUTH_SECRET") or "").strip()
+    if not AUTH_SECRET:
+        raise RuntimeError(
+            "FALTA_CONFIGURACION_DE_SEGURIDAD: ARHIAX_AUTH_SECRET es obligatorio en producción. "
+            "Defina una clave aleatoria fuerte en las variables de entorno (Vercel).")
+    ACCESS_PASSWORD = (os.environ.get("ARHIAX_ACCESS_PASSWORD") or "").strip()
+    _admin_password = (os.environ.get("ARHIAX_ADMIN_PASSWORD") or "").strip() or ACCESS_PASSWORD
+    if not _admin_password:
+        raise RuntimeError(
+            "FALTA_CONFIGURACION_DE_SEGURIDAD: ARHIAX_ADMIN_PASSWORD (o ARHIAX_ACCESS_PASSWORD) "
+            "es obligatorio en producción.")
+else:
+    AUTH_SECRET = (os.environ.get("ARHIAX_AUTH_SECRET") or "").strip() or _DEV_AUTH_SECRET
+    ACCESS_PASSWORD = (os.environ.get("ARHIAX_ACCESS_PASSWORD") or "").strip() or _DEV_ACCESS_PASSWORD
+    _admin_password = (os.environ.get("ARHIAX_ADMIN_PASSWORD") or "").strip() or ACCESS_PASSWORD
+
 TOKEN_TTL_HOURS = int(os.environ.get("ARHIAX_TOKEN_TTL_HOURS", "8"))
 
 # Usuarios con rol, definidos por env vars (persisten en Vercel):
-#   ARHIAX_ADMIN_USER / ARHIAX_ADMIN_PASSWORD        -> rol 'admin' (default: admin / ACCESS_PASSWORD)
+#   ARHIAX_ADMIN_USER / ARHIAX_ADMIN_PASSWORD        -> rol 'admin'
 #   ARHIAX_OPERADOR_USER / ARHIAX_OPERADOR_PASSWORD  -> rol 'operador' (opcional)
 _USUARIOS = {}  # username.lower() -> (password, rol)
 _USUARIOS[os.environ.get("ARHIAX_ADMIN_USER", "admin").strip().lower()] = (
-    os.environ.get("ARHIAX_ADMIN_PASSWORD") or ACCESS_PASSWORD, "admin")
+    _admin_password, "admin")
 _op_user = os.environ.get("ARHIAX_OPERADOR_USER", "").strip().lower()
 _op_pass = os.environ.get("ARHIAX_OPERADOR_PASSWORD", "").strip()
 if _op_user and _op_pass:

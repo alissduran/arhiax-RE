@@ -46,7 +46,8 @@ class TestSmokeApi(unittest.TestCase):
         autocontenido para no depender de httpx/TestClient)."""
         from fastapi import HTTPException
         from index import login
-        r = login({"password": "Sinergia2026"})
+        # Contraseña SINTÉTICA de desarrollo/test (nunca una credencial real).
+        r = login({"password": "dev-only-not-a-real-password"})
         self.assertTrue(r.get("success"))
         self.assertTrue(r.get("token"))
 
@@ -95,7 +96,7 @@ class TestSmokeApi(unittest.TestCase):
     def test_login_por_usuario_con_rol(self):
         from fastapi import HTTPException
         from index import login
-        r = login({"username": "admin", "password": "Sinergia2026"})
+        r = login({"username": "admin", "password": "dev-only-not-a-real-password"})
         self.assertEqual(r["rol"], "admin")
         self.assertEqual(r["username"], "admin")
         # Usuario inexistente -> 401
