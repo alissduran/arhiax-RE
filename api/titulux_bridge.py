@@ -150,8 +150,11 @@ def construir_caso_titulux(
     folio = (identidad.get("folio_snr")
              or analysis.get("folio")
              or db_record.get("folio_matricula") or "040-XXXXXX")
-    # Código canónico: NUPRE resuelto > código anterior > código corto > CTL crudo.
+    # Código canónico: NUPRE > código catastral > anterior > corto > CTL crudo.
+    # (03D.1: 'nupre' y 'codigo_catastral' son identificadores distintos; se
+    #  conservan separados y ambos sirven como código para Titulux.)
     codigo = (identidad.get("nupre")
+              or identidad.get("codigo_catastral")
               or identidad.get("codigo_anterior")
               or identidad.get("codigo_corto")
               or analysis.get("codigo_catastral")

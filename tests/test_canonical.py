@@ -87,7 +87,10 @@ class TestBuildCanonicalIdentity(unittest.TestCase):
             predio_real=_PREDIO, nom=_NOM, identidad={"estado": None},
             ciudad="pasto")
         self.assertEqual(cid["estado"], ESTADO_MATCH_EXACT)
-        self.assertEqual(cid["nupre"], "520010102000000440902900000116")
+        # 03D.1 / BLOCKER C: el número predial nacional (30 dígitos) es CÓDIGO
+        # CATASTRAL, no NUPRE. El NUPRE alfanumérico (AFT...) es un campo aparte.
+        self.assertEqual(cid["codigo_catastral"], "520010102000000440902900000116")
+        self.assertIsNone(cid["nupre"])
         self.assertEqual(cid["folio_snr"], "240-211101")
         self.assertEqual(cid["titular"]["tipo_persona"], "NATURAL_PERSON")
 

@@ -83,16 +83,20 @@ def detectar_contradicciones(
     reg = normalizar_hallazgos(hallazgos) + normalizar_titulux(titulux)
     contradicciones: List[Dict[str, Any]] = []
 
+    # Cualquier identificador resuelto (NUPRE alfanumérico o código catastral)
+    # invalida el "falta folio/código" (03D.1: identificadores separados).
     nupre = (canonical_identity or {}).get("nupre")
+    codigo = (canonical_identity or {}).get("codigo_catastral")
+    identificador = nupre or codigo
 
-    # TIT_B01 "falta folio/código" vs NUPRE resuelto (regresión de bug A)
+    # TIT_B01 "falta folio/código" vs identificador resuelto (regresión de bug A)
     for f in reg:
         if f.get("id") == "TIT_B01" and f.get("origen") == "titulux":
-            if nupre and ("falta folio de matrícula o código" in (f.get("descripcion") or "")
-                          or "falta" in (f.get("titulo") or "").lower()):
+            if identificador and ("falta folio de matrícula o código" in (f.get("descripcion") or "")
+                                  or "falta" in (f.get("titulo") or "").lower()):
                 contradicciones.append({
                     "codigo": "FR-TITB01-NUPRE",
-                    "detalle": f"Titulux TIT_B01 dice 'falta folio/código' pero hay NUPRE resuelto ({nupre})",
+                    "detalle": f"Titulux TIT_B01 dice 'falta folio/código' pero hay identificador resuelto ({identificador})",
                 })
 
     # TIT_B04 "sin gravámenes" vs gravamen vigente del analizador legal

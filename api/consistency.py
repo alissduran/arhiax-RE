@@ -68,15 +68,21 @@ def _inv_norecord_no_evaluado(ctx: Dict[str, Any]) -> Tuple[bool, str]:
 
 
 def _inv_nupre_coherente(ctx: Dict[str, Any]) -> Tuple[bool, str]:
-    """El NUPRE canónico y el del predio resuelto no pueden divergir."""
+    """NUPRE y código catastral canónicos se comparan contra SU propio campo
+    del predio resuelto (03D.1 / BLOCKER C): identificadores distintos no se
+    mezclan — el número predial nacional nunca se compara con el NUPRE."""
     cid = ctx.get("canonical_identity") or {}
     predio = ctx.get("predio_real") or {}
     p = predio.get("predio") or {}
     nupre_canon = cid.get("nupre")
-    nupre_predio = p.get("numero_predial_nacional") or p.get("nupre")
+    codigo_canon = cid.get("codigo_catastral")
+    nupre_predio = p.get("codigo_homologado") or p.get("nupre")
+    codigo_predio = p.get("numero_predial_nacional")
     if nupre_canon and nupre_predio and nupre_canon != nupre_predio:
         return False, f"NUPRE canonico {nupre_canon} != NUPRE del predio {nupre_predio}"
-    return True, "NUPRE canonico y del predio resuelto coinciden"
+    if codigo_canon and codigo_predio and codigo_canon != codigo_predio:
+        return False, f"codigo catastral canonico {codigo_canon} != numero predial del predio {codigo_predio}"
+    return True, "NUPRE y codigo catastral canonicos coinciden con el predio resuelto"
 
 
 def _inv_matricula_coherente(ctx: Dict[str, Any]) -> Tuple[bool, str]:

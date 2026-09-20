@@ -173,7 +173,7 @@ class TestIdentidadCanonicaEnTitulux(unittest.TestCase):
         analysis["codigo_catastral"] = None   # CTL sin código crudo
         analysis["nupre"] = None
         identidad = {"folio_snr": "240-211101",
-                     "nupre": "520010102000000440902900000116",
+                     "codigo_catastral": "520010102000000440902900000116",
                      "titular": {"nombre": "CABRERA VIVEROS JUAN SEBASTIAN",
                                  "tipo_documento": "cc",
                                  "numero_documento": "87070538",

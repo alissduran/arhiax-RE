@@ -65,6 +65,7 @@ def build_execution_receipts(
         "identidad": {
             "estado": (canonical_identity or {}).get("estado"),
             "nupre": (canonical_identity or {}).get("nupre"),
+            "codigo_catastral": (canonical_identity or {}).get("codigo_catastral"),
             "folio_snr": (canonical_identity or {}).get("folio_snr"),
         },
         "gis": {
@@ -106,8 +107,12 @@ def receipt_rows(receipts: Optional[Dict[str, Any]]) -> List[Tuple[str, str]]:
                       ver.get("RULESET_VERSION") or "-"])))
     filas.append(("CTL adjuntado", "SÍ" if receipts.get("ctl_adjuntado") else "NO"))
     ident = receipts.get("identidad") or {}
-    filas.append(("Identidad predial", f"{ident.get('estado') or 'NO_RECORD'}"
-                  + (f" · NUPRE {ident.get('nupre')}" if ident.get('nupre') else "")))
+    _detalle_ident = [ident.get("estado") or "NO_RECORD"]
+    if ident.get("nupre"):
+        _detalle_ident.append(f"NUPRE {ident['nupre']}")
+    if ident.get("codigo_catastral"):
+        _detalle_ident.append(f"Código catastral {ident['codigo_catastral']}")
+    filas.append(("Identidad predial", " · ".join(_detalle_ident)))
     gis = receipts.get("gis") or {}
     if gis.get("estado_fuente"):
         filas.append(("Geoportal (fuente)", gis["estado_fuente"]))

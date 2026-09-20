@@ -348,13 +348,20 @@ def consultar_direccion_y_punto(globalid_predio: str = None, codigo_catastral: s
 # ── 3. Construcción (capa 310): tipo, pisos, altura ──────────────────────────
 
 def consultar_construccion(lat: float, lon: float) -> dict[str, Any]:
-    """Consulta la capa 310 (Construcción) por el punto del predio."""
+    """Consulta la capa 310 (Construcción) por el punto del predio.
+
+    Clasificación features[0] (03D.1): SAFE_SINGLE_LAYER. La capa 310 es la
+    huella de la construcción; el punto del predio interseca una única
+    construcción. El dato proviene SOLO de geometría (resolution_method=spatial):
+    no debe presentarse como un dato exacto del predio resuelto por código.
+    """
     cache_key = f"const|{round(lat, 5)}|{round(lon, 5)}"
     cached = _cache_get(cache_key)
     if cached is not None:
         return cached
     res = {"disponible": False, "error": "sin construcción", "tipo_construccion": None,
-           "total_pisos": None, "altura_total_construccion": None, "area_construida": None}
+           "total_pisos": None, "altura_total_construccion": None, "area_construida": None,
+           "resolution_method": "spatial"}
     r = _query_punto(BASE_CATASTRO, CAPA_CONSTRUCCION, lon, lat,
                      "tipo_construccion,total_pisos,total_sotanos,total_mezanines,total_semisotanos,"
                      "altura_total_construccion,st_area(shape),local_id,estado_construccion")
@@ -376,41 +383,50 @@ def consultar_construccion(lat: float, lon: float) -> dict[str, Any]:
 # ── 4. Condición jurídica y destino económico vigente (servicios por año) ────
 
 def consultar_condicion_destino(codigo_catastral: str = None, lat: float = None, lon: float = None) -> dict[str, Any]:
-    """Consulta los servicios temáticos (condición 2025, destino 2026) por terreno."""
+    """Consulta los servicios temáticos (condición 2025, destino 2026) por terreno.
+
+    Precedencia (03D.1 / BLOCKER #10): la relación EXACTA terreno/catastro
+    (lookup por identificador) tiene prioridad sobre la intersección de punto.
+    Solo cuando no existe identificador exacto se recurre al fallback espacial,
+    y en ese caso se marca resolution_method='spatial' (no debe parecer un dato
+    exacto del predio). Clasificación features[0]: VALUATION_CRITICAL (destino y
+    condición jurídica alimentan tipología y precondiciones de valoración).
+    """
     cache_key = f"cond|{codigo_catastral}|{round(lat or 0, 5)}|{round(lon or 0, 5)}"
     cached = _cache_get(cache_key)
     if cached is not None:
         return cached
-    res = {"disponible": False, "condicion_juridica": None, "destino_vigente": None, "error": None}
+    res = {"disponible": False, "condicion_juridica": None, "destino_vigente": None,
+           "error": None, "resolution_method": None}
 
-    # Servicios temáticos se consultan por intersección de punto (terreno del predio)
-    if lat is not None and lon is not None:
-        r_cond = _query_punto(
-            "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
-            5, lon, lat, "terreno,condicion,anio")
+    _cond_srv = "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer"
+    _dest_srv = "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer"
+
+    # 1º — lookup EXACTO por identificador catastral (terreno = código).
+    if codigo_catastral:
+        r_cond = _query_capa(_cond_srv, 5, f"terreno='{codigo_catastral}'", "terreno,condicion,anio")
         if r_cond.get("features"):
-            p = r_cond["features"][0].get("properties", {})
-            res["condicion_juridica"] = p.get("condicion")
-        r_dest = _query_punto(
-            "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
-            5, lon, lat, "terreno,destino,anio")
+            res["condicion_juridica"] = r_cond["features"][0].get("properties", {}).get("condicion")
+        r_dest = _query_capa(_dest_srv, 5, f"terreno='{codigo_catastral}'", "terreno,destino,anio")
         if r_dest.get("features"):
-            p = r_dest["features"][0].get("properties", {})
-            res["destino_vigente"] = p.get("destino")
-    # Fallback por terreno (código catastral exacto)
-    if codigo_catastral and (res["condicion_juridica"] is None or res["destino_vigente"] is None):
+            res["destino_vigente"] = r_dest["features"][0].get("properties", {}).get("destino")
+        if res["condicion_juridica"] is not None or res["destino_vigente"] is not None:
+            res["resolution_method"] = "exact_identifier"
+
+    # 2º — fallback ESPACIAL por intersección de punto (solo lo que falte).
+    if lat is not None and lon is not None and \
+            (res["condicion_juridica"] is None or res["destino_vigente"] is None):
         if res["condicion_juridica"] is None:
-            r_cond = _query_capa(
-                "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
-                5, f"terreno='{codigo_catastral}'", "terreno,condicion,anio")
+            r_cond = _query_punto(_cond_srv, 5, lon, lat, "terreno,condicion,anio")
             if r_cond.get("features"):
                 res["condicion_juridica"] = r_cond["features"][0].get("properties", {}).get("condicion")
         if res["destino_vigente"] is None:
-            r_dest = _query_capa(
-                "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
-                5, f"terreno='{codigo_catastral}'", "terreno,destino,anio")
+            r_dest = _query_punto(_dest_srv, 5, lon, lat, "terreno,destino,anio")
             if r_dest.get("features"):
                 res["destino_vigente"] = r_dest["features"][0].get("properties", {}).get("destino")
+        if res["resolution_method"] is None and \
+                (res["condicion_juridica"] is not None or res["destino_vigente"] is not None):
+            res["resolution_method"] = "spatial"
 
     res["disponible"] = bool(res["condicion_juridica"] is not None or res["destino_vigente"] is not None)
     if not res["disponible"]:
@@ -421,49 +437,91 @@ def consultar_condicion_destino(codigo_catastral: str = None, lat: float = None,
 
 # ── 5. Barrio / localidad / estrato / tratamiento oficiales (POT Alcaldía) ───
 
+def _consolidar_valor(features: list, key: str) -> tuple:
+    """Consolida el valor de un campo entre features de una capa (03D.1).
+
+    Devuelve (valor, status):
+      - (valor, None) si todas expresan el mismo valor no vacío (consolidable).
+      - (None, "AMBIGUOUS_CONTEXT") si discrepan (NO se elige la primera).
+      - (None, None) si no hay valores.
+    """
+    unicos = []
+    for f in features or []:
+        v = (f.get("properties") or {}).get(key)
+        if v not in (None, "") and v not in unicos:
+            unicos.append(v)
+    if not unicos:
+        return None, None
+    if len(unicos) == 1:
+        return unicos[0], None
+    return None, "AMBIGUOUS_CONTEXT"
+
+
 def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
     """Consulta barrio, localidad, estrato y tratamiento urbanístico por punto.
 
     Capas POT oficiales de la Alcaldía (unidadesadministrativas → Barrios,
     estratificación por manzanas, planeación → tratamientos). Esta es la fuente
     con NOMBRE del barrio (p. ej. 'Barrio Abajo'), no inferencias de OSM.
+
+    Clasificación features[0] (03D.1): SPATIAL_CONTEXT. Barrio/estrato/tratamiento
+    son contexto espacial y pueden provenir legítimamente de capas poligonales,
+    PERO si una capa devuelve features incompatibles NO se elige silenciosamente
+    la primera: se consolida solo cuando coinciden, y si discrepan se marca
+    AMBIGUOUS_CONTEXT (el valor relevante queda None, no se afirma).
     """
     cache_key = f"entorno|{round(lat, 5)}|{round(lon, 5)}"
     cached = _cache_get(cache_key)
     if cached is not None:
         return cached
     res = {"disponible": False, "error": None, "barrio": None, "localidad": None,
-           "estrato": None, "tratamiento": None, "pieza_urbana": None}
+           "estrato": None, "tratamiento": None, "pieza_urbana": None,
+           "context_status": None}
+    _ambiguos = []
 
     r_barrios = _query_punto(
         f"{BASE_ORDENAMIENTO}/unidadesadministrativas/MapServer", 1, lon, lat,
         "nombre_barrio,identificador,localidad,nombre_pieza")
     if r_barrios.get("features"):
-        p = r_barrios["features"][0].get("properties", {})
-        res["barrio"] = p.get("nombre_barrio")
-        res["identificador_barrio"] = p.get("identificador")
-        res["localidad"] = p.get("localidad")
-        res["pieza_urbana"] = p.get("nombre_pieza")
+        feats = r_barrios["features"]
+        barrio, status = _consolidar_valor(feats, "nombre_barrio")
+        res["barrio"] = barrio
+        if status:
+            _ambiguos.append("barrio")
+        else:
+            res["identificador_barrio"] = (feats[0].get("properties") or {}).get("identificador")
+            res["localidad"] = (feats[0].get("properties") or {}).get("localidad")
+            res["pieza_urbana"] = (feats[0].get("properties") or {}).get("nombre_pieza")
 
     r_est = _query_punto(
         f"{BASE_ORDENAMIENTO}/estratificacion/MapServer", 1, lon, lat,
         "estratificacion,nombre_barrio,codigo_manzana")
     if r_est.get("features"):
-        p = r_est["features"][0].get("properties", {})
-        res["estrato"] = p.get("estratificacion")
-        if not res["barrio"]:
-            res["barrio"] = p.get("nombre_barrio")
-        res["codigo_manzana"] = p.get("codigo_manzana")
+        feats = r_est["features"]
+        estrato, status = _consolidar_valor(feats, "estratificacion")
+        res["estrato"] = estrato
+        if status:
+            _ambiguos.append("estrato")
+        else:
+            if not res["barrio"]:
+                res["barrio"] = (feats[0].get("properties") or {}).get("nombre_barrio")
+            res["codigo_manzana"] = (feats[0].get("properties") or {}).get("codigo_manzana")
 
     r_trat = _query_punto(
         f"{BASE_ORDENAMIENTO}/planeacion/MapServer", 4, lon, lat,
         "tratamiento,tipo_tratamiento,altura_maxima")
     if r_trat.get("features"):
-        p = r_trat["features"][0].get("properties", {})
-        res["tratamiento"] = p.get("tratamiento")
-        res["tipo_tratamiento"] = p.get("tipo_tratamiento")
-        res["altura_maxima"] = p.get("altura_maxima")
+        feats = r_trat["features"]
+        tratamiento, status = _consolidar_valor(feats, "tratamiento")
+        res["tratamiento"] = tratamiento
+        if status:
+            _ambiguos.append("tratamiento")
+        else:
+            res["tipo_tratamiento"] = (feats[0].get("properties") or {}).get("tipo_tratamiento")
+            res["altura_maxima"] = (feats[0].get("properties") or {}).get("altura_maxima")
 
+    if _ambiguos:
+        res["context_status"] = "AMBIGUOUS_CONTEXT"
     res["disponible"] = bool(res["barrio"] or res["estrato"] or res["tratamiento"])
     if not res["disponible"]:
         res["error"] = "entorno sin coincidencia en capas POT"

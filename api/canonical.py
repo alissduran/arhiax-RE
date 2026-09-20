@@ -37,6 +37,23 @@ ESTADO_MULTIPLE_MATCHES = "MULTIPLE_MATCHES"
 ESTADO_IDENTITY_CONFLICT = "IDENTITY_CONFLICT"
 ESTADO_NO_RECORD = "NO_RECORD"
 
+# ── Confianza de identidad NORMALIZADA (única autoridad para el gate) ─────────
+# Semántica mínima estable e independiente del vocabulario de cada ciudad. El
+# gate de valoración (PH) y la trazabilidad consumen ESTOS valores, nunca los
+# strings crudos del resolver (EXACT/PARTIAL/...) ni del orquestador por ciudad.
+# (03D.1: `None`/`PARTIAL`/`AMBIGUOUS`/`UNRESOLVED`/`SPATIAL_CONTEXT_ONLY` NO
+#  pueden convertirse silenciosamente en autorización para valorar una unidad PH.)
+RESOLUTION_VERIFIED_UNIT = "VERIFIED_UNIT_IDENTITY"  # unidad específica verificada
+RESOLUTION_PARTIAL = "PARTIAL_IDENTITY"              # candidato único sin match exacto
+RESOLUTION_CONTEXT_ONLY = "CONTEXT_ONLY"             # solo contexto espacial (sin registro predial)
+RESOLUTION_AMBIGUOUS = "AMBIGUOUS"                   # varios candidatos, ninguno exacto
+RESOLUTION_UNRESOLVED = "UNRESOLVED"                 # sin registro / sin resolver
+RESOLUTION_CONFLICT = "CONFLICT"                     # conflicto de identidad
+
+# Estados del orquestador (Pasto) que equivalen a identidad VERIFICADA por
+# identificador exacto o matrícula coincidente (no por proximidad).
+_ESTADOS_VERIFICADOS = ("MATCH_EXACT", "MATCH_BY_NOMENCLATURA", "MATCH_BY_PREDIAL_CODE")
+
 # ── Semántica de fallo por capa (GIS adapters, bug E/F) ───────────────────────
 CAPA_MATCH_EXACT = "MATCH_EXACT"
 CAPA_NO_MATCH = "NO_MATCH"
@@ -196,6 +213,112 @@ def _primero(*vals):
     return None
 
 
+def _es_numero_predial(v: Any) -> bool:
+    """True si el identificador tiene forma de número predial nacional (solo
+    dígitos, 15-30): permite distinguirlo de un NUPRE alfanumérico (AFT...)."""
+    s = str(v or "").strip()
+    return bool(re.fullmatch(r"\d{15,30}", s))
+
+
+def _resolver_status(predio_real: Optional[Dict[str, Any]]) -> Optional[str]:
+    """Lee el resolution_status del resolver catastral (BAQ), normalizado.
+
+    Puede vivir en `predio_real["predio"]["resolution_status"]` (BAQ) o en el
+    nivel raíz. Devuelve None si el resolver de la ciudad no lo publica.
+    """
+    if not predio_real:
+        return None
+    s = (predio_real.get("predio") or {}).get("resolution_status")
+    if s in (None, ""):
+        s = predio_real.get("resolution_status")
+    return s or None
+
+
+def _estado_y_confianza(*, estado_identidad: Optional[str],
+                        predio_real: Optional[Dict[str, Any]],
+                        resolver_status: Optional[str],
+                        resolucion: Optional[str],
+                        metodo_resolucion: Optional[str],
+                        matricula_coincide: bool) -> tuple:
+    """Devuelve (estado, resolution_confidence) normalizados (03D.1).
+
+    Reglas en orden de prioridad:
+      1. conflicto explícito                         -> CONFLICT
+      2. sin predio resuelto                         -> NO_RECORD / UNRESOLVED
+      3. matrícula municipal == folio SNR            -> MATCH_EXACT / VERIFIED_UNIT
+      4. resolver exacto por código/NUPRE            -> VERIFIED_UNIT
+      5. estado del orquestador (Pasto) MATCH_*      -> VERIFIED_UNIT
+      6. resolver PARTIAL                            -> PARTIAL (NO se promueve)
+      7. resolver AMBIGUOUS                          -> AMBIGUOUS
+      8. resolver UNRESOLVED                         -> UNRESOLVED
+      9. solo espacial (punto / geometría)           -> CONTEXT_ONLY
+     10. sin señal verificable                       -> UNRESOLVED (fail-closed)
+
+    `estado` conserva la granularidad legada (ESTADO_*); `resolution_confidence`
+    es la semántica normalizada ÚNICA que consume el gate de valoración.
+    """
+    if estado_identidad == ESTADO_IDENTITY_CONFLICT:
+        return ESTADO_IDENTITY_CONFLICT, RESOLUTION_CONFLICT
+    if predio_real is None:
+        return ESTADO_NO_RECORD, RESOLUTION_UNRESOLVED
+    if matricula_coincide:
+        return ESTADO_MATCH_EXACT, RESOLUTION_VERIFIED_UNIT
+    if resolver_status == "EXACT":
+        estado = ESTADO_MATCH_BY_NUPRE if metodo_resolucion == "nupre" \
+            else ESTADO_MATCH_BY_PREDIAL_CODE
+        return estado, RESOLUTION_VERIFIED_UNIT
+    if estado_identidad in _ESTADOS_VERIFICADOS:
+        return estado_identidad, RESOLUTION_VERIFIED_UNIT
+    if resolver_status == "PARTIAL":
+        return ESTADO_MULTIPLE_MATCHES, RESOLUTION_PARTIAL
+    if resolver_status == "AMBIGUOUS":
+        return ESTADO_MULTIPLE_MATCHES, RESOLUTION_AMBIGUOUS
+    if resolver_status == "UNRESOLVED":
+        return ESTADO_NO_MATCH, RESOLUTION_UNRESOLVED
+    if resolucion in ("por_punto", "por_punto_referencial") \
+            or estado_identidad == "IDENTIDAD_PREDIAL_NO_RESUELTA":
+        return ESTADO_MATCH_BY_GEOMETRY, RESOLUTION_CONTEXT_ONLY
+    if metodo_resolucion == "nomenclatura_ct":
+        return ESTADO_MATCH_BY_NOMENCLATURA, RESOLUTION_VERIFIED_UNIT
+    if metodo_resolucion == "geometria":
+        return ESTADO_MATCH_BY_GEOMETRY, RESOLUTION_CONTEXT_ONLY
+    # Sin señal verificable (ciudad sin resolver_status ni estado del orquestador):
+    # NO se afirma identidad por el solo hecho de tener NUPRE/código en el CTL.
+    return ESTADO_NO_MATCH, RESOLUTION_UNRESOLVED
+
+
+def _match_status(*, valor, resolver_status: Optional[str],
+                  matricula_coincide: bool, estado_identidad: Optional[str],
+                  es_espacial: bool) -> str:
+    """Match status por identificador (03D.1): trazabilidad value/source/status."""
+    if not valor:
+        return "UNRESOLVED"
+    if resolver_status in ("EXACT", "PARTIAL", "AMBIGUOUS", "UNRESOLVED"):
+        return resolver_status
+    if matricula_coincide:
+        return "EXACT"
+    if estado_identidad in _ESTADOS_VERIFICADOS:
+        return "VERIFIED"
+    if es_espacial or estado_identidad == "IDENTIDAD_PREDIAL_NO_RESUELTA":
+        return "CONTEXT_ONLY"
+    return "RESUELTO"
+
+
+def unidad_ph_no_resuelta(canonical_identity: Optional[Dict[str, Any]]) -> bool:
+    """Gate de valoración PH (03D.1, única autoridad = identidad canónica).
+
+    Devuelve True (bloquear estimación de mercado) cuando hay evidencia de
+    UNIDAD PH (torre/apartamento/unidad) y su identidad NO está verificada.
+    Solo VERIFIED_UNIT_IDENTITY autoriza valorar. None / PARTIAL / AMBIGUOUS /
+    UNRESOLVED / CONTEXT_ONLY / CONFLICT -> bloqueado (fail-closed).
+    """
+    cid = canonical_identity or {}
+    presente = bool(cid.get("torre") or cid.get("apartamento") or cid.get("unidad"))
+    if not presente:
+        return False
+    return cid.get("resolution_confidence") != RESOLUTION_VERIFIED_UNIT
+
+
 def build_canonical_property_identity(
     *,
     analysis: Dict[str, Any],
@@ -220,11 +343,36 @@ def build_canonical_property_identity(
     """
     predio = (predio_real or {}).get("predio") or {}
 
-    nupre_resuelto = _primero(
-        predio.get("numero_predial_nacional"),
-        predio.get("nupre"),
-        (nom or {}).get("nupre"),
+    # ── Separación de identificadores (03D.1 / BLOCKER C) ──────────────────────
+    # 'nupre' y 'codigo_catastral' son identificadores DISTINTOS que nunca se
+    # mezclan: número predial nacional (15-30 dígitos) vs NUPRE alfanumérico
+    # (AFT.../NPR.../AAA...). Algunos geoportales (Pasto) nombran 'nupre' al
+    # número predial; se detecta por su forma (solo dígitos) y se reclasifica a
+    # codigo_catastral para no guardar un número predial dentro de 'nupre'.
+    _p_nupre = predio.get("nupre")
+    if _es_numero_predial(_p_nupre):
+        _p_nupre = None
+    _a_nupre = analysis.get("nupre")
+    if _es_numero_predial(_a_nupre):
+        _a_nupre = None
+    _nom_nupre = (nom or {}).get("nupre")
+
+    nupre = _primero(
+        predio.get("codigo_homologado"),
+        _p_nupre,
+        _a_nupre,
     )
+    if _nom_nupre and not _es_numero_predial(_nom_nupre):
+        nupre = _primero(nupre, _nom_nupre)
+
+    codigo_catastral = _primero(
+        predio.get("numero_predial_nacional"),
+        predio.get("numero_predial"),
+        analysis.get("codigo_catastral"),
+    )
+    if _es_numero_predial(_nom_nupre):
+        codigo_catastral = _primero(codigo_catastral, _nom_nupre)
+
     codigo_anterior = predio.get("codigo_predial_anterior")
     codigo_corto = predio.get("codigo_predial_corto")
     matricula_municipal = _primero(
@@ -238,41 +386,38 @@ def build_canonical_property_identity(
 
     # ── Inferir método de resolución si no se pasó ──
     if metodo_resolucion is None:
-        if nom and nupre_resuelto and nupre_resuelto == (nom or {}).get("nupre"):
+        if nom and codigo_catastral and codigo_catastral == (nom or {}).get("nupre"):
             metodo_resolucion = "nomenclatura_ct"
-        elif analysis.get("nupre"):
+        elif nupre:
             metodo_resolucion = "nupre"
-        elif analysis.get("codigo_catastral"):
+        elif codigo_catastral:
             metodo_resolucion = "codigo_predial"
         elif predio_real is not None:
             metodo_resolucion = "geometria"
         else:
             metodo_resolucion = None
 
-    # ── Estado de resolución ──
-    estado = None
+    # ── Estado + confianza normalizada (03D.1) ──────────────────────────────────
     detalle_identidad = (identidad or {}).get("detalle")
-    if identidad and identidad.get("estado") == ESTADO_IDENTITY_CONFLICT:
-        estado = ESTADO_IDENTITY_CONFLICT
-    elif predio_real is None:
-        estado = ESTADO_NO_RECORD
-    elif metodo_resolucion == "nupre":
-        estado = ESTADO_MATCH_BY_NUPRE
-    elif metodo_resolucion == "codigo_predial":
-        estado = ESTADO_MATCH_BY_PREDIAL_CODE
-    elif metodo_resolucion == "nomenclatura_ct":
-        estado = ESTADO_MATCH_BY_NOMENCLATURA
-    elif metodo_resolucion == "geometria":
-        estado = ESTADO_MATCH_BY_GEOMETRY
-    else:
-        estado = ESTADO_NO_MATCH
+    estado_identidad = (identidad or {}).get("estado")
+    resolver_status = _resolver_status(predio_real)
+    resolucion = (predio_real or {}).get("resolucion")
 
-    # MATCH_EXACT cuando la matrícula municipal coincide con el folio SNR.
-    if estado not in (ESTADO_IDENTITY_CONFLICT, ESTADO_NO_RECORD):
-        _m_muni = (matricula_municipal or "").replace(" ", "")
-        _f = (folio or "").replace(" ", "")
-        if _m_muni and _f and _m_muni == _f:
-            estado = ESTADO_MATCH_EXACT
+    _m_muni = (matricula_municipal or "").replace(" ", "")
+    _f = (str(folio) or "").replace(" ", "")
+    matricula_coincide = bool(_m_muni and _f and _m_muni == _f)
+
+    estado, resolution_confidence = _estado_y_confianza(
+        estado_identidad=estado_identidad,
+        predio_real=predio_real,
+        resolver_status=resolver_status,
+        resolucion=resolucion,
+        metodo_resolucion=metodo_resolucion,
+        matricula_coincide=matricula_coincide,
+    )
+
+    es_espacial = (resolucion in ("por_punto", "por_punto_referencial")
+                   or metodo_resolucion == "geometria")
 
     titular = extraer_titular_canonico(analysis)
 
@@ -285,10 +430,40 @@ def build_canonical_property_identity(
         if isinstance(_cond, str) and "PROPIEDAD HORIZONTAL" in _cond.upper():
             ph = True
 
+    # Identificadores con trazabilidad (value/source/match_status) — 03D.1.
+    identificadores = {
+        "nupre": {
+            "value": nupre,
+            "source": ("geoportal municipal (codigo_homologado)"
+                       if (predio.get("codigo_homologado") or _p_nupre)
+                       else ("CTL (NUPRE)" if _a_nupre else None)),
+            "match_status": _match_status(
+                valor=nupre, resolver_status=resolver_status,
+                matricula_coincide=matricula_coincide,
+                estado_identidad=estado_identidad, es_espacial=es_espacial),
+        },
+        "codigo_catastral": {
+            "value": codigo_catastral,
+            "source": ("geoportal municipal (numero_predial_nacional)"
+                       if predio.get("numero_predial_nacional")
+                       else ("CTL (CODIGO CATASTRAL)" if analysis.get("codigo_catastral")
+                             else ("nomenclatura municipal" if _es_numero_predial(_nom_nupre) else None))),
+            "match_status": _match_status(
+                valor=codigo_catastral, resolver_status=resolver_status,
+                matricula_coincide=matricula_coincide,
+                estado_identidad=estado_identidad, es_espacial=es_espacial),
+        },
+    }
+
     trazas: Dict[str, Any] = {}
     trazas["nupre"] = _traza(
-        "geoportal municipal (codigo_predial_nacional)" if nupre_resuelto else "no disponible",
-        "RESUELTO" if nupre_resuelto else "NULL_VALUE",
+        "geoportal municipal (codigo_homologado)" if nupre else "no disponible",
+        "RESUELTO" if nupre else "NULL_VALUE",
+        metodo=metodo_resolucion,
+    )
+    trazas["codigo_catastral"] = _traza(
+        "geoportal municipal (numero_predial_nacional)" if codigo_catastral else "no disponible",
+        "RESUELTO" if codigo_catastral else "NULL_VALUE",
         metodo=metodo_resolucion,
     )
     trazas["matricula_snr"] = _traza(
@@ -307,9 +482,15 @@ def build_canonical_property_identity(
     return {
         "estado": estado,
         "metodo_resolucion": metodo_resolucion,
+        # 03D.1: trazabilidad normalizada (resolver -> canonical -> gate).
+        "resolution_status": resolver_status,
+        "resolution_method": metodo_resolucion,
+        "resolution_confidence": resolution_confidence,
         "ciudad": ciudad,
         "folio_snr": folio or None,
-        "nupre": nupre_resuelto,
+        "nupre": nupre,
+        "codigo_catastral": codigo_catastral,
+        "identificadores": identificadores,
         "codigo_anterior": codigo_anterior,
         "codigo_corto": codigo_corto,
         "matricula_municipal": matricula_municipal,

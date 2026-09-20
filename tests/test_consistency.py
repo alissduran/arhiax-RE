@@ -18,7 +18,8 @@ def _ctx_aceptacion():
         "canonical_identity": {
             "estado": "MATCH_EXACT",
             "folio_snr": "240-211101",
-            "nupre": "520010102000000440902900000116",
+            "codigo_catastral": "520010102000000440902900000116",
+            "nupre": None,
             "matricula_municipal": "240-211101",
             "titular": {"nombre": "CABRERA VIVEROS JUAN SEBASTIAN",
                         "tipo_documento": "cc",
@@ -64,10 +65,22 @@ class TestConsistencyGate(unittest.TestCase):
         with self.assertRaises(InconsistenciaBloqueante):
             ejecutar_gate(ctx)
 
-    def test_nupre_divergente_bloquea(self):
+    def test_codigo_catastral_divergente_bloquea(self):
+        """El código catastral canónico y el número predial del predio resuelto
+        se comparan contra su propio campo (03D.1): divergencia -> bloquear."""
         from consistency import ejecutar_gate, InconsistenciaBloqueante
         ctx = _ctx_aceptacion()
-        ctx["predio_real"] = {"predio": {"numero_predial_nacional": "OTRO_NUPRE"}}
+        ctx["predio_real"] = {"predio": {"numero_predial_nacional": "OTRO_CODIGO"}}
+        with self.assertRaises(InconsistenciaBloqueante):
+            ejecutar_gate(ctx)
+
+    def test_nupre_divergente_bloquea(self):
+        """El NUPRE canónico alfanumérico y el NUPRE del predio resuelto se
+        comparan contra su propio campo (03D.1): divergencia -> bloquear."""
+        from consistency import ejecutar_gate, InconsistenciaBloqueante
+        ctx = _ctx_aceptacion()
+        ctx["canonical_identity"]["nupre"] = "AFT0040BBHC"
+        ctx["predio_real"] = {"predio": {"codigo_homologado": "AFTOTRA"}}
         with self.assertRaises(InconsistenciaBloqueante):
             ejecutar_gate(ctx)
 

@@ -26,7 +26,8 @@ def _receipts():
                  "fuentes_pendientes": []},
         geo_eval={"evaluado": True},
         canonical_identity={"estado": "MATCH_BY_NOMENCLATURA",
-                            "nupre": "520010102000000440902900000116",
+                            "codigo_catastral": "520010102000000440902900000116",
+                            "nupre": None,
                             "folio_snr": "240-211101"},
         versionado={"ARHIAX_RE_VERSION": "1.4.0", "GIT_COMMIT_SHA": "abc123",
                     "DICTUS_ENGINE_VERSION": "1.4.0", "GIS_ADAPTER_VERSION": "1.2.0",
@@ -39,7 +40,8 @@ class TestBuildExecutionReceipts(unittest.TestCase):
 
     def test_receipts_reflejan_estado_real(self):
         r = _receipts()
-        self.assertEqual(r["identidad"]["nupre"], "520010102000000440902900000116")
+        self.assertEqual(r["identidad"]["codigo_catastral"], "520010102000000440902900000116")
+        self.assertIsNone(r["identidad"]["nupre"])
         self.assertTrue(r["riesgo_volcanico"]["disponible"])
         self.assertTrue(r["sarlaft"]["completo"])
         self.assertTrue(r["poi"]["disponible"])

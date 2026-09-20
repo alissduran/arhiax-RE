@@ -37,6 +37,7 @@ from map_generator import generate_maps
 from address_normalizer import normalize_address_colombia
 
 from dictamen_data import get_valuation, get_hallazgos, get_recs, get_identificacion_dt, get_localizacion_dt, get_cobertura_alert, get_analisis_registral_text, get_catastral_dt, get_pot_summary_dt, get_valoracion_alert, get_alcance_dt, get_geospatial_evaluation
+from canonical import unidad_ph_no_resuelta
 from carga_economica import estimar_carga_hipotecaria, generar_tabla_carga
 from ruta_verificacion import generar_ruta, generar_tabla_ruta
 from score_engine import calcular_score_actuarial, generar_narrativa_score, color_score
@@ -703,8 +704,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             barrio=barrio, estrato=estrato)
     except Exception as _e_canon:
         # El modelo canónico es aditivo: si falla, el dictamen NO debe caerse.
+        # Fail-closed (03D.1): sin confianza canónica, una unidad PH NO se valora.
         canonical_identity = {"estado": "NO_RECORD", "folio_snr": folio,
-                              "nupre": None, "titular": {}}
+                              "nupre": None, "titular": {},
+                              "resolution_confidence": "UNRESOLVED"}
         administrative_context = {"ciudad": ciudad, "comuna": None,
                                   "barrio": barrio, "estrato": estrato}
         print(f"[PDF][CANONICAL] no disponible: {_e_canon}")
@@ -720,11 +723,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Remediation 03D: si hay evidencia de UNIDAD PH (torre/apartamento/unidad) pero
     # la resolución catastral NO la resolvió en EXACTA, NO se emite estimación de
     # mercado de precisión aparente.
-    _unidad_ph_presente = bool(canonical_identity.get("torre")
-                               or canonical_identity.get("apartamento")
-                               or canonical_identity.get("unidad"))
-    _res_status = ((predio_real or {}).get("predio") or {}).get("resolution_status")
-    _unidad_ph_no_resuelta = _unidad_ph_presente and (_res_status not in (None, "EXACT", "PARTIAL"))
+    # Remediation 03D.1: el gate de valoración de una UNIDAD PH consume la
+    # confianza NORMALIZADA del modelo canónico (única autoridad), NO el
+    # resolution_status crudo del resolver. Solo VERIFIED_UNIT_IDENTITY autoriza
+    # emitir estimación de mercado; None / PARTIAL / AMBIGUOUS / UNRESOLVED /
+    # CONTEXT_ONLY / CONFLICT bloquean (fail-closed).
+    _unidad_ph_no_resuelta = unidad_ph_no_resuelta(canonical_identity)
     val_data = get_valuation(area, barrio, estrato, metodo_principal=_metodo_principal,
                              ciudad=ciudad, clase_suelo=_ent2.get("clase_suelo"),
                              destino=_predio_destino, tipologia=_tipologia_texto,

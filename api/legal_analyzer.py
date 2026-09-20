@@ -274,7 +274,9 @@ def analizar_texto_certificado(texto):
         # El CTL de Bogotá distingue la DIRECCION CATASTRAL oficial (p. ej.
         # '2) DG 61B 20 04 AP 401 (DIRECCION CATASTRAL)') junto a otras placas
         # registrales ('AVENIDA (CALLE) 63 20-04/CARRERA 20 61-55...'): se
-        # prefiere la CATASTRAL y se descarta la unidad (AP/EDIFICIO/PH).
+        # prefiere la CATASTRAL. Remediation 03D: la dirección COMPLETA se
+        # preserva (incluida la unidad AP/TO/EDIFICIO); la base sin unidad se
+        # DERIVA en direccion_base (no se descarta la unidad).
         _dir_oficial = None
         idx_di = texto.upper().find("DIRECCION DEL INMUEBLE")
         if idx_di >= 0:
