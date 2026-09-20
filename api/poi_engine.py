@@ -60,12 +60,17 @@ PHOTON_TAGS = {
 
 
 def _pois_desde_photon(lat, lon, radius=2000, timeout=8.0, categorias=None):
-    """Respaldo de POIs vía Photon. Devuelve un dict {categoria: [poi]} SOLO para
-    las categorías pedidas (fallback PER-CATEGORY, 03F), o None si Photon tampoco
-    respondió (nunca inventa datos). Cada POI lleva source=PHOTON_OSM."""
+    """Respaldo de POIs vía Photon (fallback PER-CATEGORY, 03F).
+
+    Devuelve (resultado, ok_cats):
+      - resultado: dict {categoria: [poi]} para las categorías pedidas.
+      - ok_cats: set de categorías donde Photon respondió 200 al menos una vez
+        (permite distinguir NO_MATCH de SOURCE_UNAVAILABLE en 03F.1).
+    Cada POI lleva source=PHOTON_OSM. Nunca inventa datos.
+    """
     categorias = list(categorias or CATEGORIAS)
     resultado = {c: [] for c in categorias}
-    hubo_respuesta = False
+    ok_cats = set()
     headers = {"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
     for categoria in categorias:
         vistos = set()
@@ -77,7 +82,7 @@ def _pois_desde_photon(lat, lon, radius=2000, timeout=8.0, categorias=None):
                 }, headers=headers, timeout=timeout)
                 if r.status_code != 200:
                     continue
-                hubo_respuesta = True
+                ok_cats.add(categoria)
                 for f in (r.json() or {}).get("features", []):
                     props = f.get("properties") or {}
                     nombre = props.get("name")
@@ -101,9 +106,7 @@ def _pois_desde_photon(lat, lon, radius=2000, timeout=8.0, categorias=None):
                 continue
         resultado[categoria] = sorted(
             resultado[categoria], key=lambda x: x["distance"])[:3]
-    if not hubo_respuesta:
-        return None
-    return resultado
+    return resultado, ok_cats
 
 
 def _cache_dir():
@@ -193,27 +196,75 @@ def poi_category_status(pois):
     """Estado por categoría (03F): AVAILABLE si hay POIs; NO_MATCH si vacía.
 
     Una lista vacía NO se interpreta como 'no existen parques': puede ser
-    fallo de la fuente (SOURCE_UNAVAILABLE se decide en el llamador, cuando
-    TODAS las categorías quedaron vacías).
+    fallo de la fuente. El estado SOURCE_UNAVAILABLE se computa en
+    `get_poi_result` (que sí conoce si las fuentes respondieron).
     """
     return {c: ("AVAILABLE" if (pois or {}).get(c) else "NO_MATCH") for c in CATEGORIAS}
 
 
-def get_nearby_pois(lat, lon, radius=2000):
+def poi_source_label(pois):
+    """Etiqueta de fuente de la sección 03 (03F.1), derivada de los POI
+    efectivamente renderizados (no una constante).
+
+    Devuelve:
+      - "OpenStreetMap / Overpass API"  (solo OSM_OVERPASS)
+      - "OpenStreetMap vía Photon"      (solo PHOTON_OSM)
+      - "OpenStreetMap / Overpass + Photon" (mixto)
+      - None si no hay POIs.
     """
-    Consulta la API Overpass de OpenStreetMap para obtener hospitales, colegios,
-    centros comerciales y parques en un radio dado, con las coordenadas REALES
-    del predio geocodificado.
+    fuentes = set()
+    for items in (pois or {}).values():
+        for p in items or []:
+            src = p.get("source")
+            if src:
+                fuentes.add(src)
+    if fuentes == {"OSM_OVERPASS"}:
+        return "OpenStreetMap / Overpass API"
+    if fuentes == {"PHOTON_OSM"}:
+        return "OpenStreetMap vía Photon"
+    if fuentes == {"OSM_OVERPASS", "PHOTON_OSM"}:
+        return "OpenStreetMap / Overpass + Photon"
+    if not fuentes:
+        return None
+    return "OpenStreetMap"
 
-    Tolerancia: prueba varios espejos Overpass en orden (el más rápido primero),
-    reintenta una vez ante timeout y usa caché (memoria + disco) de 6 h por
-    predio. Postura honesta: SIEMPRE devuelve datos de OSM o listas VACÍAS.
-    Nunca inventa POIs ni distancias. Si OSM no responde tras probar todos los
-    espejos (con reintentos), devuelve las 4 categorías vacías y el dictamen lo
-    declara como datos no disponibles.
 
-    Retorna un dict {Salud, Educacion, Comercio, Recreacion} con listas de
-    {"name", "distance", "type"} ordenadas por distancia (máx 3 por categoría).
+def compute_poi_category_status(items, overpass_ok=False, photon_ok_cats=None):
+    """Estado por categoría (03F.1): AVAILABLE / NO_MATCH / SOURCE_UNAVAILABLE.
+
+    - AVAILABLE: hay POIs.
+    - NO_MATCH: la fuente respondió correctamente y no encontró elementos
+      compatibles (Overpass respondió, o Photon respondió para esa categoría).
+    - SOURCE_UNAVAILABLE: ninguna fuente completó una consulta confiable.
+    """
+    photon_ok_cats = photon_ok_cats or set()
+    status = {}
+    for c in CATEGORIAS:
+        if (items or {}).get(c):
+            status[c] = "AVAILABLE"
+        elif overpass_ok or c in photon_ok_cats:
+            status[c] = "NO_MATCH"
+        else:
+            status[c] = "SOURCE_UNAVAILABLE"
+    return status
+
+
+def get_poi_result(lat, lon, radius=2000):
+    """
+    Consulta POIs (Overpass + Photon) y devuelve un POIResult (03F.1):
+
+        {
+          "items":             {categoria: [poi]}  (cada poi con name/distance/type/source)
+          "category_status":   {categoria: AVAILABLE|NO_MATCH|SOURCE_UNAVAILABLE|NOT_EVALUATED}
+          "sources_attempted": [fuente, ...]
+          "sources_succeeded": [fuente, ...]
+        }
+
+    NO_MATCH      = la fuente respondió correctamente y no encontró elementos compatibles.
+    SOURCE_UNAVAILABLE = no se pudo completar una consulta confiable para esa categoría.
+
+    Tolerancia de Overpass (espejos, timeout, presupuesto) y caché (memoria+disco)
+    conservadas. Postura honesta: nunca inventa POIs ni distancias.
     """
     query = f"""
     [out:json][timeout:20];
@@ -230,30 +281,35 @@ def get_nearby_pois(lat, lon, radius=2000):
     out center 200;
     """
 
-    def vacio():
-        return {c: [] for c in CATEGORIAS}
-
     clave = _clave(lat, lon, radius)
     ahora = time.time()
 
     # 1) Caché en memoria (misma instancia, más rápida)
     if clave in _POI_CACHE:
         ts, cached = _POI_CACHE[clave]
-        if ahora - ts < _POI_TTL:
+        if ahora - ts < _POI_TTL and isinstance(cached, dict) and "items" in cached:
             return cached
 
     # 2) Caché en disco (persiste entre invocaciones de la instancia caliente)
     disco = _leer_disco(clave)
-    if disco is not None:
+    if isinstance(disco, dict) and "items" in disco:
         _POI_CACHE[clave] = (ahora, disco)
         return disco
 
     headers = {"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
     _limite_total = time.time() + OVERPASS_PRESUPUESTO_TOTAL
 
+    pois_categorized = {c: [] for c in CATEGORIAS}
+    overpass_ok = False
+    photon_ok_cats = set()
+    sources_attempted = set()
+    sources_succeeded = set()
+
     for overpass_url in OVERPASS_ENDPOINTS:
         if time.time() >= _limite_total:
             break  # presupuesto total agotado: no seguir castigando la función
+        sources_attempted.add("OSM_OVERPASS")
+        _got_elements = False
         for intento in range(OVERPASS_REINTENTOS + 1):
             if time.time() >= _limite_total:
                 break
@@ -263,11 +319,6 @@ def get_nearby_pois(lat, lon, radius=2000):
                 if _restante <= 1.0:
                     break
                 _timeout_req = max(3.0, min(OVERPASS_TIMEOUT, _restante))
-                # stream=True + lectura por bloques: da un TOPE DURO de tiempo
-                # real. El timeout de requests es POR OPERACIÓN DE SOCKET, no
-                # total: un servidor que envía lento tardaba 36 s pese a un
-                # timeout de 25 s (medido) y se comía el presupuesto de la
-                # función serverless.
                 response = requests.post(overpass_url, data={"data": query},
                                          headers=headers, timeout=_timeout_req,
                                          stream=True)
@@ -278,8 +329,6 @@ def get_nearby_pois(lat, lon, radius=2000):
                 _trozos = []
                 for _trozo in response.iter_content(8192):
                     _trozos.append(_trozo)
-                    # Plazo ABSOLUTO de la fase (no desde el inicio de lectura):
-                    # si no, cabeceras lentas + lectura lenta sumaban ~35 s.
                     if time.time() > _limite_total:
                         response.close()
                         raise TimeoutError("presupuesto de POIs agotado en la lectura")
@@ -287,37 +336,28 @@ def get_nearby_pois(lat, lon, radius=2000):
                 data = json.loads(b"".join(_trozos).decode("utf-8", "replace"))
                 elements = data.get("elements", [])
 
-                # Un 200 SIN elementos puede ser una réplica incompleta (p. ej.
-                # sin datos de la región) o una zona realmente sin POIs. Se
-                # prueba el siguiente espejo antes de asumir "sin equipamientos";
-                # solo si TODOS devuelven vacío se retorna vacío (honesto).
+                # Un 200 SIN elementos puede ser una réplica incompleta: probar
+                # el siguiente espejo antes de asumir "sin equipamientos".
                 if not elements:
                     break
 
-                pois_categorized = {c: [] for c in CATEGORIAS}
+                overpass_ok = True
+                sources_succeeded.add("OSM_OVERPASS")
 
                 for elem in elements:
                     tags = elem.get("tags", {})
                     name = tags.get("name")
                     if not name:
                         continue
-
-                    # Obtener coordenadas del centro del elemento
                     elem_lat = elem.get("lat") or elem.get("center", {}).get("lat")
                     elem_lon = elem.get("lon") or elem.get("center", {}).get("lon")
                     if not elem_lat or not elem_lon:
                         continue
-
                     dist = haversine(lat, lon, elem_lat, elem_lon)
-
-                    # Clasificación
                     amenity = tags.get("amenity")
                     shop = tags.get("shop")
                     leisure = tags.get("leisure")
-
-                    poi_info = {"name": name, "distance": dist,
-                                "source": "OSM_OVERPASS"}
-
+                    poi_info = {"name": name, "distance": dist, "source": "OSM_OVERPASS"}
                     if amenity in ["hospital", "clinic", "doctors"]:
                         poi_info["type"] = "Salud (" + amenity.capitalize() + ")"
                         pois_categorized["Salud"].append(poi_info)
@@ -331,57 +371,62 @@ def get_nearby_pois(lat, lon, radius=2000):
                         poi_info["type"] = "Recreacion (" + leisure.capitalize() + ")"
                         pois_categorized["Recreacion"].append(poi_info)
 
-                # Ordenar cada categoría por distancia y truncar a los 3 más cercanos
                 for cat in pois_categorized:
                     pois_categorized[cat] = sorted(pois_categorized[cat],
                                                    key=lambda x: x["distance"])[:3]
-
-                # 03F: Overpass puede responder parcialmente (algunas categorías
-                # vacías). Se completa POR CATEGORÍA con Photon (solo las
-                # faltantes), sin devolver temprano ni inventar POIs.
-                _faltantes = [c for c in CATEGORIAS if not pois_categorized.get(c)]
-                if _faltantes:
-                    try:
-                        _ph = _pois_desde_photon(lat, lon, radius=radius,
-                                                 categorias=_faltantes)
-                    except Exception as _e_ph:
-                        print(f"[POI][PHOTON] sin respaldo por categoria: {str(_e_ph)[:60]}")
-                        _ph = None
-                    if _ph:
-                        pois_categorized = merge_poi_sources(pois_categorized, _ph)
-
-                _POI_CACHE[clave] = (ahora, pois_categorized)
-                _escribir_disco(clave, pois_categorized)
-                return pois_categorized
+                _got_elements = True
+                break  # éxito: salir del bucle de reintentos
 
             except (requests.exceptions.Timeout, TimeoutError):
-                # BUG corregido: aquí se comparaba contra una constante MAL
-                # ESCRITA (le faltaba "ER" al nombre de OVERPASS_REINTENTOS). Con
-                # el nombre roto, CADA timeout de Overpass lanzaba NameError y
-                # tumbaba la generación completa del dictamen (el usuario veía
-                # "se queda pensando" y nunca salía el PDF).
                 if intento < OVERPASS_REINTENTOS and time.time() < _limite_total:
-                    time.sleep(1.0)  # backoff corto y reintentar el mismo espejo
+                    time.sleep(1.0)
                     continue
-                break  # agotado el reintento: siguiente espejo
+                break
             except Exception as _e:
                 print(f"[POI] {overpass_url} fallo: {str(_e)[:60]}")
-                break  # error no-timeout: siguiente espejo
+                break
 
-    # Overpass no trajo datos (todos los espejos caídos/limitados). Respaldo
-    # Photon antes de declarar la sección como NO DISPONIBLE.
-    try:
-        respaldo = _pois_desde_photon(lat, lon, radius=radius)
-    except Exception as _e_ph:
-        print(f"[POI][PHOTON] sin respaldo: {str(_e_ph)[:60]}")
-        respaldo = None
-    if respaldo and any(respaldo.values()):
-        _POI_CACHE[clave] = (ahora, respaldo)
-        _escribir_disco(clave, respaldo)
-        return respaldo
+        if _got_elements:
+            break  # éxito Overpass: salir del bucle de espejos
 
-    print("[POI] SIN DATOS: Overpass y Photon no respondieron "
-          "(la seccion 03 se declara NO DISPONIBLE)")
-    resultado = vacio()
-    _POI_CACHE[clave] = (ahora, resultado)
-    return resultado
+    # Completar categorías faltantes con Photon (03F: fallback per-category).
+    _faltantes = [c for c in CATEGORIAS if not pois_categorized.get(c)]
+    if _faltantes:
+        sources_attempted.add("PHOTON_OSM")
+        try:
+            _ph, _ph_ok = _pois_desde_photon(lat, lon, radius=radius,
+                                             categorias=_faltantes)
+            photon_ok_cats |= (_ph_ok or set())
+            if any((_ph or {}).values()):
+                sources_succeeded.add("PHOTON_OSM")
+            if _ph:
+                pois_categorized = merge_poi_sources(pois_categorized, _ph)
+        except Exception as _e_ph:
+            print(f"[POI][PHOTON] sin respaldo por categoria: {str(_e_ph)[:60]}")
+
+    # Estado por categoría (03F.1): distinguir NO_MATCH de SOURCE_UNAVAILABLE.
+    category_status = compute_poi_category_status(
+        pois_categorized, overpass_ok=overpass_ok, photon_ok_cats=photon_ok_cats)
+
+    if not any(pois_categorized.values()):
+        print("[POI] SIN DATOS: Overpass y Photon no respondieron "
+              "(la seccion 03 se declara NO DISPONIBLE)")
+
+    result = {
+        "items": pois_categorized,
+        "category_status": category_status,
+        "sources_attempted": sorted(sources_attempted),
+        "sources_succeeded": sorted(sources_succeeded),
+    }
+    _POI_CACHE[clave] = (ahora, result)
+    _escribir_disco(clave, result)
+    return result
+
+
+def get_nearby_pois(lat, lon, radius=2000):
+    """Adapter backward-compatible: devuelve solo `items` ({categoria: [poi]}).
+
+    Los consumidores que necesiten el estado por categoría y la metadata de
+    ejecución deben usar `get_poi_result`.
+    """
+    return get_poi_result(lat, lon, radius=radius)["items"]

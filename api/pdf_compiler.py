@@ -32,7 +32,7 @@ from reportlab.lib.units import cm
 from reportlab.platypus import Image as RLImage
 from dictamen_part1_styles import *
 from solar_engine import get_solar_position, analyze_facade_exposure
-from poi_engine import get_nearby_pois
+from poi_engine import get_nearby_pois, get_poi_result, poi_source_label
 from map_generator import generate_maps
 from address_normalizer import normalize_address_colombia
 
@@ -1076,10 +1076,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # (timeout, error de red), el dictamen DEBE generarse igual y declarar los
     # POIs como no disponibles. Antes, una excepción aquí tumbaba TODO el PDF.
     try:
-        pois = get_nearby_pois(lat, lon, radius=2000)
+        _poi_result = get_poi_result(lat, lon, radius=2000)
+        pois = _poi_result["items"]
+        _poi_status = _poi_result["category_status"]
     except Exception as _e_poi:
         print(f"[PDF][POI] no disponible: {_e_poi}")
         pois = {c: [] for c in ("Salud", "Educacion", "Comercio", "Recreacion")}
+        _poi_status = {c: "SOURCE_UNAVAILABLE"
+                       for c in ("Salud", "Educacion", "Comercio", "Recreacion")}
     try:
         generate_maps(lat, lon, pois, poi_map_png, poi_map_html, inmueble_label=f"Predio {barrio}" if barrio else "Inmueble", direccion=direccion)
     except Exception as _e_mapa:
@@ -1583,12 +1587,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "momento de generar el dictamen, por lo que esta seccion no reporta equipamientos. "
             "No se incluyen datos no verificados; reintente la generacion o verifique en campo."))
     else:
+        # 03F.1: la fuente se deriva de los POI realmente renderizados (no una
+        # constante): Overpass, Photon o mixto.
+        _fuente_poi = poi_source_label(pois) or "OpenStreetMap"
         story.append(body(
             f"Analisis de accesibilidad y cobertura de equipamientos urbanos en un radio de <b>2.0 km</b> "
             f"en torno a las coordenadas del predio (Lat: {lat:.5f}, Lon: {lon:.5f}). "
             f"Los datos fueron extraidos de la base geografica de "
             f"OpenStreetMap (OSM) y ordenados por proximidad geodesica real. "
-            "<b>[FUENTE: OPENSTREETMAP OVERPASS API]</b>"
+            f"<b>[FUENTE: {_fuente_poi}]</b>"
         ))
     story.append(Spacer(1, 4))
     
@@ -1652,7 +1659,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             print(f"Warning: could not load POI_MAP_PNG: {img_err}")
         story.append(Spacer(1, 6))
     
-    story.append(alert_green(get_cobertura_alert(barrio, ciudad=ciudad, pois=pois)))
+    story.append(alert_green(get_cobertura_alert(barrio, ciudad=ciudad, pois=pois,
+                                                 poi_status=_poi_status)))
     story.append(Spacer(1, 8))
     
     # ── 04 ANALISIS REGISTRAL ──────────────────────────────────
@@ -2873,6 +2881,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             versionado=_version_blob(), lat=lat, lon=lon,
             ctl_adjuntado=bool(path_certificado),
             catastro_live=_cat_live,
+            poi_status=_poi_status,
         )
     except Exception as _e_rec:
         _receipts = None

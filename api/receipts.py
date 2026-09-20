@@ -56,6 +56,7 @@ def build_execution_receipts(
     lon: Optional[float],
     ctl_adjuntado: bool,
     catastro_live: Optional[Dict[str, Any]] = None,
+    poi_status: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Compila los receipts REALES de esta ejecución (sin red, ya resueltos)."""
     capas = (predio_real or {}).get("capas") or {}
@@ -95,13 +96,16 @@ def build_execution_receipts(
             "nivel": (volcan or {}).get("nivel"),
         },
         "geo_evaluado": bool((geo_eval or {}).get("evaluado")),
-        # 03F: receipt por categoría (status + count), no una simple lista.
+        # 03F.1: receipt por categoría (status + count). El status respeta la
+        # metadata de ejecución (AVAILABLE / NO_MATCH / SOURCE_UNAVAILABLE) si
+        # está disponible; sin ella degrada a NO_MATCH (lista vacía).
         "poi": {
             "disponible": bool(pois and any(pois.get(c) for c in pois)),
             "categorias": {
-                c: {"status": ("AVAILABLE" if (pois or {}).get(c) else "NO_MATCH"),
+                c: {"status": ((poi_status or {}).get(c)
+                               or ("AVAILABLE" if (pois or {}).get(c) else "NO_MATCH")),
                     "count": len((pois or {}).get(c) or [])}
-                for c in sorted((pois or {}).keys())
+                for c in sorted(set((pois or {}).keys()) | set((poi_status or {}).keys()))
             },
         },
         "sarlaft": {
@@ -148,9 +152,27 @@ def receipt_rows(receipts: Optional[Dict[str, Any]]) -> List[Tuple[str, str]]:
                   ("CONSULTADO · " + (vol.get("nivel") or "N/D")) if vol.get("disponible")
                   else "NO DISPONIBLE / PENDIENTE"))
     poi = receipts.get("poi") or {}
-    filas.append(("Equipamiento urbano (POI)",
-                  ("CONSULTADO (" + ", ".join(poi.get("categorias") or []) + ")")
-                  if poi.get("disponible") else "NO DISPONIBLE"))
+    # 03F.1: mostrar el estado REAL por categoría (NO presentar NO_MATCH como
+    # CONSULTADO CON RESULTADO, ni hacer join sobre las claves del dict).
+    _poi_cats = poi.get("categorias") or {}
+    _poi_partes = []
+    for _c in sorted(_poi_cats.keys()):
+        _det = _poi_cats[_c] if isinstance(_poi_cats[_c], dict) else {"status": str(_poi_cats[_c])}
+        _st = _det.get("status")
+        _cnt = _det.get("count", 0)
+        if _st == "AVAILABLE":
+            _poi_partes.append(f"{_c} AVAILABLE ({_cnt})")
+        elif _st == "NO_MATCH":
+            _poi_partes.append(f"{_c} NO_MATCH")
+        elif _st == "SOURCE_UNAVAILABLE":
+            _poi_partes.append(f"{_c} SOURCE_UNAVAILABLE")
+        else:
+            _poi_partes.append(f"{_c} {_st or 'NOT_EVALUATED'}")
+    if poi.get("disponible"):
+        _poi_txt = "CONSULTADO · " + "; ".join(_poi_partes)
+    else:
+        _poi_txt = "NO DISPONIBLE" + ((" · " + "; ".join(_poi_partes)) if _poi_partes else "")
+    filas.append(("Equipamiento urbano (POI)", _poi_txt))
     sag = receipts.get("sarlaft") or {}
     filas.append(("Screening SARLAFT",
                   ("COMPLETO · " + (sag.get("agregado") or "")) if sag.get("completo")

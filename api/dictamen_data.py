@@ -343,7 +343,7 @@ def get_localizacion_dt(barrio, lat, lon):
         ("Equipamientos cercanos", "Equipamientos institucionales, comerciales y asistenciales en radio 2.0 km"),
     ]
 
-def get_cobertura_alert(barrio, ciudad="barranquilla", pois=None):
+def get_cobertura_alert(barrio, ciudad="barranquilla", pois=None, poi_status=None):
     barrio_clean = barrio.strip().title() if barrio else "el sector"
     c = (ciudad or "").lower()
     if "medellin" in c or "medellín" in c:
@@ -357,30 +357,43 @@ def get_cobertura_alert(barrio, ciudad="barranquilla", pois=None):
     # 'Bogotá D.C.' ya termina en punto: no duplicar el punto de la frase
     punto = "" if nombre_ciudad.endswith(".") else "."
 
-    # 03F: la narrativa se construye desde los resultados REALES de POI, no de
-    # una lista fija. No afirmar categorías que no se verificaron.
-    if pois is not None:
+    # 03F/03F.1: la narrativa se construye desde el estado REAL por categoría.
+    # Distingue NO_MATCH (fuente respondió, 0 resultados) de SOURCE_UNAVAILABLE
+    # (no se pudo completar la consulta). No afirmar categorías no verificadas.
+    if pois is not None or poi_status is not None:
         _cats = ("Salud", "Educacion", "Comercio", "Recreacion")
-        _disp = [c for c in _cats if (pois or {}).get(c)]
-        _falt = [c for c in _cats if not (pois or {}).get(c)]
-        if not _disp:
+        _disp, _no_match, _src_unavail = [], [], []
+        for _c in _cats:
+            st = (poi_status or {}).get(_c)
+            if st is None:
+                st = "AVAILABLE" if (pois or {}).get(_c) else "NO_MATCH"
+            if st == "AVAILABLE":
+                _disp.append(_c)
+            elif st == "SOURCE_UNAVAILABLE":
+                _src_unavail.append(_c)
+            elif st == "NO_MATCH":
+                _no_match.append(_c)
+        _partes = []
+        if _disp:
+            _partes.append(
+                f"En un radio de 2.0 km en torno al inmueble en <b>{barrio_clean}</b> "
+                f"({nombre_ciudad}{punto}) se verificaron equipamientos de "
+                f"<b>{', '.join(_disp).lower()}</b>.")
+        for _c in _no_match:
+            _partes.append(f"No se encontraron equipamientos verificables de "
+                           f"{_c.lower()} dentro del radio consultado.")
+        for _c in _src_unavail:
+            _partes.append(f"No fue posible completar la consulta de equipamientos "
+                           f"de {_c.lower()} durante esta ejecución.")
+        if not _partes:
             return (
                 f"<b>EVALUACION DE COBERTURA:</b> No se verificaron equipamientos urbanos "
                 f"en un radio de 2.0 km en torno al inmueble en <b>{barrio_clean}</b> "
-                f"({nombre_ciudad}): las fuentes consultadas (OpenStreetMap/Overpass y "
-                f"Photon) no devolvieron resultados verificables en esta ejecución. "
-                f"No se incluyen equipamientos no verificados."
+                f"({nombre_ciudad}): las fuentes consultadas no devolvieron resultados "
+                f"verificables en esta ejecución. No se incluyen equipamientos no verificados."
             )
-        texto = (
-            f"<b>EVALUACION DE COBERTURA:</b> En un radio de 2.0 km en torno al inmueble "
-            f"en <b>{barrio_clean}</b> ({nombre_ciudad}{punto}) se verificaron equipamientos de "
-            f"<b>{', '.join(_disp).lower()}</b>. "
-        )
-        if _falt:
-            texto += (f"Categorías sin resultados verificables en las fuentes consultadas: "
-                      f"{', '.join(_falt).lower()}. ")
-        texto += "La accesibilidad peatonal y vehicular queda sujeta a verificación de campo."
-        return texto
+        _partes.append("La accesibilidad peatonal y vehicular queda sujeta a verificación de campo.")
+        return "<b>EVALUACION DE COBERTURA:</b> " + " ".join(_partes)
 
     # Sin datos de POI (legacy): no afirmar categorías específicas.
     return (
