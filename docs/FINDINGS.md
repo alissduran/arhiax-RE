@@ -495,6 +495,64 @@ OPEN
 
 ---
 
+## FINDING-018
+
+Classification:
+CATASTRO_RESOLUTION_REGRESSION
+
+Observation:
+`api/catastro_predio.py` selecciona la feature catastral con `features[0]` (la primera,
+sin scoring de coincidencia) y limita la consulta con `resultRecordCount=5`.
+
+Evidence:
+`api/catastro_predio.py` líneas 105-143 (`_query_capa`/`_query_punto`, `max_features=5`),
+217, 323, 353, 359, 368, 374, 403, 413, 423 (`features[0]`).
+
+Hypothesis:
+Cuando el lookup exacto por código/NUPRE falla, el fallback espacial devuelve hasta 5
+features (edificio + vecinos) y `features[0]` elige una arbitraria → barrio/destino/
+estrato degradados → precio/m² cae.
+
+Impact:
+Identidad catastral no determinista; valoración dependiente del orden de features.
+
+Recommended treatment:
+Añadir criterio de identidad (código/NUPRE/dirección) y scoring antes de elegir feature.
+(No arreglar en fase forense.)
+
+Status:
+OPEN
+
+---
+
+## FINDING-019
+
+Classification:
+TECH_DEBT
+
+Observation:
+`canonical_property_identity` no distingue estructuralmente edificio / predio matriz /
+unidad PH: no tiene campos `torre` / `apartamento` / `unidad`; la unidad vive solo en
+`nomenclatura` (string), que `legal_analyzer` descarta.
+
+Evidence:
+`api/canonical.py`; `api/legal_analyzer.py:289-299`.
+
+Hypothesis:
+Sin campos estructurados de unidad, el sistema no puede representar
+`SAME_BUILDING_DIFFERENT_UNIT` y degrada la identidad al perder el complemento de dirección.
+
+Impact:
+Riesgo de valorar la torre/edificio en vez de la unidad; identidad de unidad inestable.
+
+Recommended treatment:
+Evaluar añadir `torre`/`apartamento`/`unidad`/`coeficiente` a la identidad canónica.
+
+Status:
+OPEN
+
+---
+
 ## EXTERNAL ACTIONS REQUIRED (rotación y configuración)
 
 Estas acciones NO pueden ejecutarse desde el código y requieren intervención humana.
