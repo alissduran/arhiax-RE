@@ -37,7 +37,7 @@ from map_generator import generate_maps
 from address_normalizer import normalize_address_colombia
 
 from dictamen_data import get_valuation, get_hallazgos, get_recs, get_identificacion_dt, get_localizacion_dt, get_cobertura_alert, get_analisis_registral_text, get_catastral_dt, get_pot_summary_dt, get_valoracion_alert, get_alcance_dt, get_geospatial_evaluation
-from canonical import unidad_ph_no_resuelta
+from canonical import can_value_property
 from carga_economica import estimar_carga_hipotecaria, generar_tabla_carga
 from ruta_verificacion import generar_ruta, generar_tabla_ruta
 from score_engine import calcular_score_actuarial, generar_narrativa_score, color_score
@@ -674,10 +674,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     elif "BODEGA" in _desc_ctl:
         _tipologia_texto = "Bodega -- Uso Industrial (No Propiedad Horizontal)"
     if _tipologia_texto is None:
-        # Solo el caso demo explícito (sin CTL, barrio Miramar legado) conserva la
-        # tipología de demostración; un predio real SIN datos catastrales queda
-        # PENDIENTE (nunca se asume PH/Habitacional).
-        if is_miramar and not path_certificado:
+        # 03D.2: la PH detectada desde el CTL (condición jurídica / coeficiente /
+        # apartamento) se refleja en la tipología, aunque el catastro no haya
+        # resuelto el predio; sin evidencia queda PENDIENTE (nunca se asume PH).
+        if "Propiedad Horizontal" in str(_predio_condicion or ""):
+            _tipologia_texto = "Apartamento -- Propiedad Horizontal (inferido del CTL)"
+        elif is_miramar and not path_certificado:
             _tipologia_texto = "Apartamento -- Propiedad Horizontal (NO VIS)"
         else:
             _tipologia_texto = "PENDIENTE DE VERIFICACION (Requiere consulta catastral)"
@@ -723,12 +725,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Remediation 03D: si hay evidencia de UNIDAD PH (torre/apartamento/unidad) pero
     # la resolución catastral NO la resolvió en EXACTA, NO se emite estimación de
     # mercado de precisión aparente.
-    # Remediation 03D.1: el gate de valoración de una UNIDAD PH consume la
-    # confianza NORMALIZADA del modelo canónico (única autoridad), NO el
-    # resolution_status crudo del resolver. Solo VERIFIED_UNIT_IDENTITY autoriza
-    # emitir estimación de mercado; None / PARTIAL / AMBIGUOUS / UNRESOLVED /
-    # CONTEXT_ONLY / CONFLICT bloquean (fail-closed).
-    _unidad_ph_no_resuelta = unidad_ph_no_resuelta(canonical_identity)
+    # Remediation 03D.2: la autorización de valoración es UNA sola decisión
+    # (can_value_property) basada en detección de PH + confianza de identidad
+    # canónica. Solo VERIFIED_UNIT_IDENTITY autoriza valorar una unidad PH;
+    # NO_RECORD / PARTIAL / AMBIGUOUS / CONTEXT_ONLY / CONFLICT / None bloquean
+    # (fail-closed). Invariante: UNRESOLVED + PH + VALUATION EMITTED = INVALID.
+    _valuation_authorization = can_value_property(canonical_identity)
+    _unidad_ph_no_resuelta = not _valuation_authorization["allowed"]
     val_data = get_valuation(area, barrio, estrato, metodo_principal=_metodo_principal,
                              ciudad=ciudad, clase_suelo=_ent2.get("clase_suelo"),
                              destino=_predio_destino, tipologia=_tipologia_texto,
@@ -1883,6 +1886,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                             "(base predial y POT, consulta en vivo)")
     else:
         _fuente_catastro = "Catastro abierto Alcaldia de Barranquilla (capa Predio GC-BAQ)"
+    _cat_live = {"disponible": False, "numero_predial": None, "error": None, "fuente": {}}
     if not es_medellin and not es_bogota and not es_pasto:
         try:
             from integrations.catastro_live import verificar_catastro_barranquilla
@@ -1952,7 +1956,11 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _fuente_url = _cat_live.get("fuente", {}).get("url", "N/D")
         story.append(dt([
             ("Estado", "CONSULTADA (servicio abierto Alcaldía de Barranquilla)"),
-            ("NUPRE catastral", _cat_live.get("nupre") or "N/D"),
+            # 03D.2: 'name' del terreno es el número predial nacional, no un NUPRE.
+            # Se reporta como CÓDIGO CATASTRAL referencial (intersección espacial
+            # por bbox), no como el identificador exacto del caso.
+            ("Codigo catastral (terreno, referencia espacial)",
+             _cat_live.get("numero_predial") or "N/D"),
             ("Features terreno / datos adicionales",
              f"{_cat_live.get('total_features_terreno', 0)} / {_cat_live.get('total_features_datos', 0)}"),
             ("Fuente en vivo", _fuente_url),
@@ -2864,6 +2872,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             titulux=_titulux, geo_eval=geo_eval, canonical_identity=canonical_identity,
             versionado=_version_blob(), lat=lat, lon=lon,
             ctl_adjuntado=bool(path_certificado),
+            catastro_live=_cat_live,
         )
     except Exception as _e_rec:
         _receipts = None
@@ -3085,6 +3094,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "comuna_mostrada": _localidad_txt,
             "hallazgos": hallazgos,
             "titulux": _titulux,
+            "valuation_authorization": _valuation_authorization,
+            "res_avaluo": res_avaluo,
         }
         _informe_gate = ejecutar_gate(_contexto_gate)
         print(f"[PDF][GATE] ok={_informe_gate['ok']} "

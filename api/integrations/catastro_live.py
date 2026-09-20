@@ -6,9 +6,13 @@ Consulta el catastro abierto de Barranquilla (ArcGIS REST "catastro/datosabierto
 para el BBOX del predio, con CACHÉ por celda (~3 decimales ≈ 110 m) y TTL de 1 hora
 para no saturar el servicio público.
 
-Nunca lanza: devuelve un dict con disponible/nupre/total_features/fuente/error.
-El dictamen usa este resultado para mostrar "CONSULTADA" o "NO DISPONIBLE" sin
-afirmar datos que no se obtuvieron.
+Nunca lanza: devuelve un dict con disponible/numero_predial/total_features/
+fuente/error. El dictamen usa este resultado para mostrar "CONSULTADA" o
+"NO DISPONIBLE" sin afirmar datos que no se obtuvieron.
+
+Nota (03D.2): 'numero_predial' es el número predial nacional del terreno
+intersección (bbox, aprox. espacial), NO un NUPRE alfanumérico ni el
+identificador exacto del caso.
 """
 
 from __future__ import annotations
@@ -44,7 +48,10 @@ def verificar_catastro_barranquilla(lat: float, lon: float) -> dict[str, Any]:
             return res
 
     bbox = (lon - BUFFER, lat - BUFFER, lon + BUFFER, lat + BUFFER)
-    res: dict[str, Any] = {"disponible": False, "nupre": None,
+    # 03D.2: el atributo 'name' del terreno es el NÚMERO PREDIAL NACIONAL (código
+    # catastral de 30 dígitos), NO un NUPRE alfanumérico. Se nombra el campo con
+    # su semántica real para no presentar un número predial como 'NUPRE'.
+    res: dict[str, Any] = {"disponible": False, "numero_predial": None,
                            "total_features_terreno": 0, "total_features_datos": 0,
                            "error": None, "fuente": {}}
     try:
@@ -63,7 +70,7 @@ def verificar_catastro_barranquilla(lat: float, lon: float) -> dict[str, Any]:
 
     if r_t.get("features"):
         f0 = r_t["features"][0].get("properties", {})
-        res["nupre"] = f0.get("name") or None
+        res["numero_predial"] = f0.get("name") or None
 
     _CACHE[celda] = (ahora, res)
     return res

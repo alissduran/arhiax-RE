@@ -304,19 +304,102 @@ def _match_status(*, valor, resolver_status: Optional[str],
     return "RESUELTO"
 
 
-def unidad_ph_no_resuelta(canonical_identity: Optional[Dict[str, Any]]) -> bool:
-    """Gate de valoración PH (03D.1, única autoridad = identidad canónica).
+def _es_unidad_ph(cid: Dict[str, Any], ctx: Optional[Dict[str, Any]] = None) -> bool:
+    """True si el activo es una UNIDAD de PH (03D.2).
 
-    Devuelve True (bloquear estimación de mercado) cuando hay evidencia de
-    UNIDAD PH (torre/apartamento/unidad) y su identidad NO está verificada.
-    Solo VERIFIED_UNIT_IDENTITY autoriza valorar. None / PARTIAL / AMBIGUOUS /
-    UNRESOLVED / CONTEXT_ONLY / CONFLICT -> bloqueado (fail-closed).
+    Señales (cualquiera basta): 'propiedad_horizontal' canónico True, o
+    marcadores de unidad extraídos (torre/apartamento/unidad). La ausencia de
+    marcadores de unidad NO desciende la exigencia de identidad.
+    """
+    if cid.get("propiedad_horizontal") is True:
+        return True
+    if ctx and ctx.get("propiedad_horizontal") is True:
+        return True
+    return bool(cid.get("torre") or cid.get("apartamento") or cid.get("unidad"))
+
+
+def _detectar_ph(*, analysis: Dict[str, Any],
+                 predio_real: Optional[Dict[str, Any]],
+                 nom: Optional[Dict[str, Any]]) -> Optional[bool]:
+    """Detección canónica de PH (03D.2): True / False / None (sin inventar).
+
+    Evidencia autoritativa en orden de precedencia:
+      1. candidato por nomenclatura (es_ph explícito del geoportal)
+      2. condición jurídica del catastro (PROPIEDAD HORIZONTAL / NO ...)
+      3. inferencia del CTL/SNR (inferir_condicion_juridica)
+      4. marcadores de unidad extraídos (torre/apartamento/unidad)
+      5. marcadores en dirección/descripción (APARTAMENTO/CONJUNTO/TORRE/...)
+
+    Regla dura (03D.2): la AUSENCIA de extracción de torre/apartamento NO es
+    evidencia de No PH. Sin evidencia positiva ni negativa se devuelve None.
+    """
+    # 1) nomenclatura municipal (explícito)
+    if nom and nom.get("es_ph") is not None:
+        return bool(nom.get("es_ph"))
+    # 2) condición jurídica catastral
+    _cond = ((predio_real or {}).get("condicion") or {}).get("condicion_juridica")
+    if isinstance(_cond, str):
+        _cu = _cond.upper()
+        if "NO PROPIEDAD HORIZONTAL" in _cu:
+            return False
+        if "PROPIEDAD HORIZONTAL" in _cu:
+            return True
+    # 3) inferencia del CTL/SNR (fuente registral, todas las ciudades)
+    from legal_analyzer import inferir_condicion_juridica
+    _cond_ctl = inferir_condicion_juridica(
+        analysis.get("texto_ctl"), analysis.get("descripcion_ctl"))
+    if _cond_ctl:
+        return "NO PROPIEDAD" not in _cond_ctl.upper()
+    # 4) marcadores de unidad extraídos
+    if analysis.get("torre") or analysis.get("apartamento") or analysis.get("unidad"):
+        return True
+    # 5) marcadores en dirección / descripción / nomenclatura
+    _texto = " ".join([
+        str(analysis.get("direccion") or ""),
+        str(analysis.get("descripcion_ctl") or ""),
+        str((nom or {}).get("nomenclatura") or ""),
+    ]).upper()
+    for _m in ("APARTAMENTO", "APTO", "CONJUNTO", "EDIFICIO", "TORRE",
+               "UNIDAD", "P.H.", "PROPIEDAD HORIZONTAL"):
+        if _m in _texto:
+            return True
+    return None
+
+
+def can_value_property(canonical_identity: Optional[Dict[str, Any]],
+                       property_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Autorización ÚNICA de valoración (03D.2).
+
+    Devuelve {"allowed": bool, "reason": str|None, "identity_level": str}.
+      * No PH (o sin evidencia de PH): procede (allowed=True); las precondiciones
+        de tipología (suelo de protección / no construible / rural) son aparte.
+      * PH: solo procede con identidad VERIFIED_UNIT_IDENTITY. NO_RECORD,
+        NO_MATCH, PARTIAL, AMBIGUOUS, MULTIPLE_MATCHES, MATCH_BY_GEOMETRY,
+        SPATIAL_CONTEXT_ONLY, IDENTITY_CONFLICT, UNKNOWN o None -> bloqueado.
     """
     cid = canonical_identity or {}
-    presente = bool(cid.get("torre") or cid.get("apartamento") or cid.get("unidad"))
-    if not presente:
-        return False
-    return cid.get("resolution_confidence") != RESOLUTION_VERIFIED_UNIT
+    es_ph = _es_unidad_ph(cid, property_context)
+    conf = cid.get("resolution_confidence")
+    nivel = conf or "UNKNOWN"
+    if not es_ph:
+        return {"allowed": True, "reason": None, "identity_level": nivel}
+    if conf == RESOLUTION_VERIFIED_UNIT:
+        return {"allowed": True, "reason": None,
+                "identity_level": RESOLUTION_VERIFIED_UNIT}
+    return {"allowed": False,
+            "reason": "Identidad de la unidad inmobiliaria PH no resuelta de forma inequívoca.",
+            "identity_level": nivel}
+
+
+def unidad_ph_no_resuelta(canonical_identity: Optional[Dict[str, Any]]) -> bool:
+    """Gate de valoración PH (03D.1/03D.2, única autoridad = identidad canónica).
+
+    Devuelve True (bloquear estimación de mercado) cuando el activo es una
+    UNIDAD PH y su identidad NO está verificada. Solo VERIFIED_UNIT_IDENTITY
+    autoriza valorar. None / PARTIAL / AMBIGUOUS / UNRESOLVED / CONTEXT_ONLY /
+    CONFLICT -> bloqueado (fail-closed).
+    """
+    return not can_value_property(canonical_identity)["allowed"]
 
 
 def build_canonical_property_identity(
@@ -421,14 +504,10 @@ def build_canonical_property_identity(
 
     titular = extraer_titular_canonico(analysis)
 
-    # Propiedad horizontal: del candidato por nomenclatura o inferida del CTL.
-    ph = None
-    if nom and nom.get("es_ph") is not None:
-        ph = bool(nom.get("es_ph"))
-    elif predio_real is not None:
-        _cond = (predio_real.get("condicion") or {}).get("condicion_juridica")
-        if isinstance(_cond, str) and "PROPIEDAD HORIZONTAL" in _cond.upper():
-            ph = True
+    # Propiedad horizontal (is_property_horizontal, 03D.2): detección canónica
+    # multi-fuente. La ausencia de torre/apartamento extraídos NO es evidencia
+    # de No PH (el parser pudo no encontrarlos).
+    ph = _detectar_ph(analysis=analysis, predio_real=predio_real, nom=nom)
 
     # Identificadores con trazabilidad (value/source/match_status) — 03D.1.
     identificadores = {

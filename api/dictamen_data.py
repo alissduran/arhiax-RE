@@ -430,9 +430,27 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
         return ("INCOMPLETA -- fuentes pendientes: "
                 + ", ".join(_sag.get("fuentes_pendientes") or ["?"]))
 
+    def _snr_txt():
+        """03D.2: la fila SNR refleja si el CTL está adjuntado (fuente única:
+        receipts.ctl_adjuntado). No puede contradecir al capítulo 16.B."""
+        if (receipts or {}).get("ctl_adjuntado"):
+            return "PROCESADO -- CTL adjuntado (anotaciones del folio extraídas del certificado)"
+        return "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"
+
+    def _catastro_txt(exacto, espacial, no_disp, legacy):
+        """03D.2: estado de ejecución catastral desde receipts (fuente única)."""
+        _cat = ((receipts or {}).get("catastro") or {})
+        if _cat.get("exacto"):
+            return exacto
+        if _cat.get("espacial"):
+            return espacial
+        if receipts and not _cat.get("consultado"):
+            return no_disp
+        return legacy
+
     if es_med:
         return [
-            ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
+            ("Datos registrales SNR", _snr_txt()),
             ("Capa catastral Medellín", "CONSULTADA EN VIVO -- Uso del predio (servidormapas Alcaldía)"),
             ("POT/Ordenamiento Medellín", "EJECUTADA -- Clasificación de suelo y tratamientos consultados en vivo"),
             ("Riesgos/Amenazas Medellín", "EJECUTADA -- Capas de gestión del riesgo DAGRD consultadas en vivo"),
@@ -443,7 +461,7 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
         ]
     if es_bog:
         return [
-            ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
+            ("Datos registrales SNR", _snr_txt()),
             ("Capa catastral Bogotá", "CONSULTADA EN VIVO -- Lote, sector, uso por manzana (serviciosgis catastro distrital)"),
             ("POT/Ordenamiento Bogotá", "EJECUTADA -- Suelo Decreto 555/2021, UPZ y localidad consultados en vivo"),
             ("Riesgos/Amenazas Bogotá", "EJECUTADA -- Capas IDIGER consultadas en vivo (mov. masa, sismos, geotecnia)"),
@@ -454,7 +472,7 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
         ]
     if es_pas:
         return [
-            ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
+            ("Datos registrales SNR", _snr_txt()),
             ("Geocodificacion del predio", "EJECUTADA -- OSM/Nominatim (coordenadas en Pasto)"),
             ("Equipamiento urbano (POI)", ("CONSULTADO -- OpenStreetMap/Overpass (respaldo Photon)"
                                            if _poi.get("disponible") else
@@ -478,8 +496,13 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
             ("Estimacion referencial", "REFERENCIA GENERICA POR ESTRATO -- No usa metodología local; no sustituye avalúo RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
         ]
     return [
-        ("Datos registrales SNR", "PENDIENTE -- Requiere CTL del predio (las anotaciones se procesan si se adjunta)"),
-        ("Capa catastral BAQ", "REFERENCIAL -- Estimacion del modulo ARHIAX RE (sin consulta en vivo)"),
+        ("Datos registrales SNR", _snr_txt()),
+        ("Capa catastral BAQ",
+         _catastro_txt(
+             "CONSULTADA EN VIVO -- Predio resuelto por codigo/NUPRE del CTL",
+             "CONSULTADA EN VIVO -- Interseccion espacial (bbox) sin identificacion exacta del predio",
+             "NO DISPONIBLE -- el servicio abierto no respondio en esta generacion",
+             "REFERENCIAL -- Estimacion del modulo ARHIAX RE (sin consulta en vivo verificada)")),
         ("POT/Ordenamiento BAQ", "EJECUTADA -- Cruce espacial sobre capas POT empaquetadas"),
         ("Riesgos/Amenazas BAQ", "EJECUTADA -- Cruce espacial STRtree contra capas de amenaza y riesgo"),
         ("Integracion WFS-IGAC", "PLANIFICADA -- En desarrollo para consulta en vivo (ver roadmap)"),

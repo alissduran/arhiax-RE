@@ -138,6 +138,24 @@ def _inv_finding_registry(ctx: Dict[str, Any]) -> Tuple[bool, str]:
     return True, "finding registry coherente (sin contradicciones)"
 
 
+def _inv_valuation_coherente(ctx: Dict[str, Any]) -> Tuple[bool, str]:
+    """03D.2: valoración emitida solo si la autorización de identidad lo permite.
+
+    Invariante: UNRESOLVED + PH + VALUATION EMITTED = INVALID. Si hay un valor
+    consolidado > 0 sin autorización, o si PH-no-resuelta terminó con
+    metodologia_aplica=True, el estado del sistema es inválido.
+    """
+    auth = ctx.get("valuation_authorization") or {}
+    avaluo = ctx.get("res_avaluo") or {}
+    consolidado = (avaluo.get("consolidado") or 0)
+    if consolidado > 0 and auth.get("allowed") is not True:
+        return False, (f"valor consolidado {consolidado} emitido sin autorización "
+                       f"(identity_level={auth.get('identity_level')})")
+    if auth.get("allowed") is False and avaluo.get("metodologia_aplica") is not False:
+        return False, "PH con identidad no resuelta pero valoración emitida (metodologia_aplica=True)"
+    return True, "valoración coherente con la autorización de identidad (03D.2)"
+
+
 # ── Registro declarativo de invariantes ────────────────────────────────────────
 INVARIANTES: List[Invariante] = [
     ("I-SCORE-NOEVAL", "bloqueante",
@@ -157,6 +175,9 @@ INVARIANTES: List[Invariante] = [
     ("I-REGISTRY", "bloqueante",
      "finding registry único coherente (sin contradicciones entre capas)",
      _inv_finding_registry),
+    ("I-VALUATION", "bloqueante",
+     "valoración emitida solo si la autorización de identidad lo permite (03D.2)",
+     _inv_valuation_coherente),
 ]
 
 

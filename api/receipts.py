@@ -53,15 +53,25 @@ def build_execution_receipts(
     lat: Optional[float],
     lon: Optional[float],
     ctl_adjuntado: bool,
+    catastro_live: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Compila los receipts REALES de esta ejecución (sin red, ya resueltos)."""
     capas = (predio_real or {}).get("capas") or {}
     fuente_gis = ((predio_real or {}).get("fuente") or {}).get("estado")
+    _exacto = bool(predio_real and predio_real.get("disponible"))
+    _espacial = bool((catastro_live or {}).get("disponible")) and not _exacto
     return {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "ciudad": ciudad,
         "versionado": dict(versionado or {}),
         "ctl_adjuntado": bool(ctl_adjuntado),
+        # 03D.2: estado de ejecución catastral ÚNICO (exacto vs espacial) para que
+        # los capítulos 06 y 16 no reconstruyan estados divergentes.
+        "catastro": {
+            "consultado": _exacto or _espacial,
+            "exacto": _exacto,
+            "espacial": _espacial,
+        },
         "identidad": {
             "estado": (canonical_identity or {}).get("estado"),
             "nupre": (canonical_identity or {}).get("nupre"),

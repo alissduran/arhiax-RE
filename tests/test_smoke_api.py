@@ -436,13 +436,14 @@ class TestSmokeApi(unittest.TestCase):
             cl._CACHE.clear()
             r1 = cl.verificar_catastro_barranquilla(10.99386, -74.79261)
             self.assertTrue(r1["disponible"])
-            self.assertEqual(r1["nupre"], "0800TESTNUPRE")
+            # 03D.2: el atributo del terreno es un número predial, no un NUPRE.
+            self.assertEqual(r1["numero_predial"], "0800TESTNUPRE")
             self.assertIn("fuente", r1)
             n_llamadas = len(llamadas)
             # Segunda llamada con la misma celda: debe venir del caché (sin red)
             r2 = cl.verificar_catastro_barranquilla(10.99386, -74.79261)
             self.assertEqual(len(llamadas), n_llamadas)
-            self.assertEqual(r2["nupre"], "0800TESTNUPRE")
+            self.assertEqual(r2["numero_predial"], "0800TESTNUPRE")
         finally:
             cl.query_layer_bbox = original
             cl._CACHE.clear()
