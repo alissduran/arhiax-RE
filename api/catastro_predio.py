@@ -208,14 +208,26 @@ def _seleccionar_predio(resultados: list, codigo: str, nupre: str) -> tuple:
 def consultar_predio_por_codigo(codigo_catastral: str = None, nupre: str = None) -> dict[str, Any]:
     """Consulta la capa 500 (Predio) por número predial nacional o NUPRE.
 
+    Precedencia obligatoria (03G):
+      A. exact codigo_catastral (numero_predial_nacional)
+      B. exact NUPRE (codigo_homologado)
+      C/D. exact numero_predial_anterior / otros identificadores (si aplica)
+      E. SOLO entonces prefix/fuzzy fallback
+      F. contexto espacial último (no aquí)
+
+    PROHIBIDO: `exact code → fuzzy code produce candidatos → salta exact NUPRE`.
+    Los identificadores EXACTOS se agotan ANTES de cualquier consulta fuzzy.
+
     Retorna (si encuentra): destino_economico, tipo_predio, estrato, estado_fmi,
-    area_catastral_terreno, codigo_homologado, numero_predial_nacional, globalid.
+    area_catastral_terreno, codigo_homologado, numero_predial_nacional, globalid,
+    resolution_status, resolution_method y resolution_trace (evidencia por query).
     Nunca lanza.
     """
     codigo = (codigo_catastral or "").strip()
     nupre = (nupre or "").strip()
     if not codigo and not nupre:
-        return {"disponible": False, "error": "sin código catastral ni NUPRE"}
+        return {"disponible": False, "error": "sin código catastral ni NUPRE",
+                "resolution_status": "UNRESOLVED", "resolution_trace": []}
 
     cache_key = f"predio|{codigo}|{nupre}"
     cached = _cache_get(cache_key)
@@ -225,6 +237,8 @@ def consultar_predio_por_codigo(codigo_catastral: str = None, nupre: str = None)
     res: dict[str, Any] = {
         "disponible": False, "error": "predio no encontrado en capa 500",
         "resolution_status": "UNRESOLVED",
+        "resolution_method": None,
+        "resolution_trace": [],
         "codigo_catastral": codigo or None, "nupre": nupre or None,
         "destino_economico": None, "tipo_predio": None, "estrato": None,
         "estado_fmi": None, "area_catastral_terreno": None, "globalid": None,
@@ -235,24 +249,79 @@ def consultar_predio_por_codigo(codigo_catastral: str = None, nupre: str = None)
               "destinacion_economica,tipo_predio,estrato,estado_fmi,"
               "area_catastral_terreno,globalid,tipo_vivienda")
 
-    # 1er intento: número predial nacional exacto (30 dígitos del CTL)
-    resultados = []
+    trace = []
+    exactos = []    # resultados de identificadores EXACTOS
+    fallback = []   # resultados de prefix/fuzzy (solo si ningún exacto resuelve)
+
+    # A. exact codigo_catastral
     if re.fullmatch(r"\d{20,30}", codigo):
         r = _query_capa(BASE_CATASTRO, CAPA_PREDIO,
                         f"numero_predial_nacional='{codigo}'", campos)
-        resultados.append(r)
-        if not (r.get("features")):
-            # fallback: prefijo (la capa puede recortar ceros finales)
-            r2 = _query_capa(BASE_CATASTRO, CAPA_PREDIO,
-                             f"numero_predial_nacional LIKE '{codigo[:24]}%'", campos)
-            resultados.append(r2)
-    # 2º intento: NUPRE alfanumérico (codigo_homologado p. ej. AFT0040BBHC)
-    if nupre and not any(r.get("features") for r in resultados):
+        exactos.append(r)
+        trace.append({
+            "query": "A_exact_codigo", "field": "numero_predial_nacional",
+            "operator": "=", "value": codigo,
+            "source_disponible": bool(r.get("disponible")),
+            "error": r.get("error"),
+            "candidate_count": len(r.get("features") or []),
+            "returned_nacional": [f.get("properties", {}).get("numero_predial_nacional")
+                                  for f in (r.get("features") or [])],
+        })
+
+    # B. exact NUPRE (codigo_homologado, p. ej. AFT0005BOHA)
+    if nupre:
         r3 = _query_capa(BASE_CATASTRO, CAPA_PREDIO,
                          f"codigo_homologado='{nupre}'", campos)
-        resultados.append(r3)
+        exactos.append(r3)
+        trace.append({
+            "query": "B_exact_nupre", "field": "codigo_homologado",
+            "operator": "=", "value": nupre,
+            "source_disponible": bool(r3.get("disponible")),
+            "error": r3.get("error"),
+            "candidate_count": len(r3.get("features") or []),
+            "returned_homologado": [f.get("properties", {}).get("codigo_homologado")
+                                    for f in (r3.get("features") or [])],
+        })
 
+    # C/D. exact numero_predial_anterior / otros identificadores: el resolver no
+    # recibe esos identificadores del CTL en esta firma, así que no aplican.
+
+    # E. prefix/fuzzy fallback — SOLO si ningún identificador exacto produjo
+    # candidatos (03G: nunca saltar un exacto por culpa del fuzzy).
+    if not any(r.get("features") for r in exactos) and re.fullmatch(r"\d{20,30}", codigo):
+        r2 = _query_capa(BASE_CATASTRO, CAPA_PREDIO,
+                         f"numero_predial_nacional LIKE '{codigo[:24]}%'", campos)
+        fallback.append(r2)
+        trace.append({
+            "query": "E_prefix_codigo", "field": "numero_predial_nacional",
+            "operator": "LIKE", "value": f"{codigo[:24]}%",
+            "source_disponible": bool(r2.get("disponible")),
+            "error": r2.get("error"),
+            "candidate_count": len(r2.get("features") or []),
+            "returned_nacional": [f.get("properties", {}).get("numero_predial_nacional")
+                                  for f in (r2.get("features") or [])],
+        })
+
+    resultados = exactos + fallback
     feature, resolution_status = _seleccionar_predio(resultados, codigo, nupre)
+
+    resolution_method = None
+    if feature is not None:
+        p0 = feature.get("properties", {})
+        if resolution_status == "EXACT":
+            if (p0.get("numero_predial_nacional") or "").strip() == codigo:
+                resolution_method = "codigo_catastral"
+            elif nupre and (p0.get("codigo_homologado") or "").strip() == nupre:
+                resolution_method = "nupre"
+        elif resolution_status == "PARTIAL":
+            resolution_method = "prefix_unico_candidato"
+
+    trace.append({
+        "query": "seleccion", "resolution_status": resolution_status,
+        "resolution_method": resolution_method,
+    })
+    res["resolution_trace"] = trace
+    res["resolution_method"] = resolution_method
 
     if not feature:
         res["resolution_status"] = resolution_status
@@ -265,6 +334,7 @@ def consultar_predio_por_codigo(codigo_catastral: str = None, nupre: str = None)
         "disponible": True,
         "error": None,
         "resolution_status": resolution_status,
+        "resolution_method": resolution_method,
         "numero_predial_nacional": p.get("numero_predial_nacional") or codigo or None,
         "numero_predial_anterior": p.get("numero_predial_anterior"),
         "nupre": p.get("codigo_homologado") or nupre or None,
