@@ -166,6 +166,76 @@ class TestIdentifierConsistency(unittest.TestCase):
         self.assertEqual(r["catastro"]["espacial"], True)
 
 
+class TestReceiptExactness(unittest.TestCase):
+    """03D.2A #1: catastro.exacto deriva de la confianza canónica, no de
+    predio_real.disponible. Solo VERIFIED_UNIT_IDENTITY es exacto."""
+
+    def _receipt(self, confidence, predio_real=None):
+        from receipts import build_execution_receipts
+        return build_execution_receipts(
+            ciudad="barranquilla",
+            predio_real=predio_real or {"disponible": True, "predio": {}},
+            volcan={}, pois={}, titulux={}, geo_eval={},
+            canonical_identity={"estado": "X", "resolution_confidence": confidence,
+                                "nupre": None, "codigo_catastral": None},
+            versionado={}, lat=10.987, lon=-74.811, ctl_adjuntado=True,
+            catastro_live={"disponible": False})
+
+    def test_A_verified_es_exacto(self):
+        self.assertIs(self._receipt("VERIFIED_UNIT_IDENTITY")["catastro"]["exacto"], True)
+
+    def test_B_partial_no_exacto(self):
+        self.assertIs(self._receipt("PARTIAL_IDENTITY")["catastro"]["exacto"], False)
+
+    def test_C_context_only_no_exacto(self):
+        self.assertIs(self._receipt("CONTEXT_ONLY")["catastro"]["exacto"], False)
+
+    def test_D_unresolved_no_exacto(self):
+        self.assertIs(self._receipt("UNRESOLVED")["catastro"]["exacto"], False)
+
+    def test_conflict_no_exacto(self):
+        self.assertIs(self._receipt("CONFLICT")["catastro"]["exacto"], False)
+
+
+class TestCatastroLiveMultiFeature(unittest.TestCase):
+    """03D.2A #2: el BBOX no publica features[0] como identidad cuando hay
+    múltiples predios."""
+
+    def _run(self, terreno_features):
+        import api.integrations.catastro_live as cl
+        original = cl.query_layer_bbox
+        try:
+            def stub(url, capa, bbox, **kwargs):
+                if capa == 315:
+                    return {"disponible": True, "features": terreno_features,
+                            "total_features": len(terreno_features),
+                            "error": None, "fuente": {"url": "stub"}}
+                return {"disponible": True, "features": [], "total_features": 0,
+                        "error": None, "fuente": {"url": "stub"}}
+            cl.query_layer_bbox = stub
+            cl._CACHE.clear()
+            return cl.verificar_catastro_barranquilla(10.987, -74.811)
+        finally:
+            cl.query_layer_bbox = original
+            cl._CACHE.clear()
+
+    def test_un_solo_predio_expone_numero_referencial(self):
+        r = self._run([{"properties": {"name": "080010103000010040001908040002"}}])
+        self.assertEqual(r["candidate_count"], 1)
+        self.assertEqual(r["numero_predial"], "080010103000010040001908040002")
+        self.assertIs(r["multiples_candidatos"], False)
+
+    def test_multiples_predios_no_exponen_identidad(self):
+        r = self._run([
+            {"properties": {"name": "080010103000010040001908040002"}},
+            {"properties": {"name": "080010103000009280001900000000"}},
+        ])
+        self.assertEqual(r["candidate_count"], 2)
+        self.assertIsNone(r["numero_predial"])
+        self.assertIs(r["multiples_candidatos"], True)
+        self.assertIn("canónico", r["nota"])
+
+
 class TestValuationInvariant(unittest.TestCase):
     """#21: valuation.consolidado > 0 implica autorización; PH no resuelta => 0."""
 

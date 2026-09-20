@@ -37,8 +37,9 @@ def _celda(lat: float, lon: float) -> tuple:
 def verificar_catastro_barranquilla(lat: float, lon: float) -> dict[str, Any]:
     """Verificación catastral EN VIVO del predio contra el catastro abierto.
 
-    Retorna dict con: disponible, nupre, total_features_terreno,
-    total_features_datos, error, fuente (URL + timestamp). Con caché por celda.
+    Retorna dict con: disponible, numero_predial, candidate_count,
+    multiples_candidatos, total_features_terreno, total_features_datos, error,
+    fuente (URL + timestamp). Con caché por celda.
     """
     celda = _celda(lat, lon)
     ahora = time.time()
@@ -51,9 +52,13 @@ def verificar_catastro_barranquilla(lat: float, lon: float) -> dict[str, Any]:
     # 03D.2: el atributo 'name' del terreno es el NÚMERO PREDIAL NACIONAL (código
     # catastral de 30 dígitos), NO un NUPRE alfanumérico. Se nombra el campo con
     # su semántica real para no presentar un número predial como 'NUPRE'.
+    # 03D.2A: el BBOX es CONTEXTO, no identidad. Solo si hay UN único predio en el
+    # bbox se expone su número como referencia espacial; con varios candidatos se
+    # anula (la identidad exacta pertenece al resolver canónico).
     res: dict[str, Any] = {"disponible": False, "numero_predial": None,
                            "total_features_terreno": 0, "total_features_datos": 0,
-                           "error": None, "fuente": {}}
+                           "candidate_count": 0, "multiples_candidatos": False,
+                           "nota": None, "error": None, "fuente": {}}
     try:
         r_t = query_layer_bbox(f"{BASE}/MapServer", 315, bbox, max_features=5, timeout=TIMEOUT)
         r_d = query_layer_bbox(f"{BASE}/FeatureServer", 545, bbox, max_features=5, timeout=TIMEOUT)
@@ -68,9 +73,16 @@ def verificar_catastro_barranquilla(lat: float, lon: float) -> dict[str, Any]:
     res["error"] = r_t.get("error") or r_d.get("error")
     res["fuente"] = r_t.get("fuente") or r_d.get("fuente") or {}
 
-    if r_t.get("features"):
+    _cand = len(r_t.get("features") or [])
+    res["candidate_count"] = _cand
+    if _cand == 1:
         f0 = r_t["features"][0].get("properties", {})
         res["numero_predial"] = f0.get("name") or None
+    elif _cand > 1:
+        res["numero_predial"] = None
+        res["multiples_candidatos"] = True
+        res["nota"] = ("múltiples predios en el bbox; no se selecciona identidad "
+                       "(la identidad exacta pertenece al resolver canónico)")
 
     _CACHE[celda] = (ahora, res)
     return res

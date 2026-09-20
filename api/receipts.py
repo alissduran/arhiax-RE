@@ -14,6 +14,8 @@ from __future__ import annotations
 import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
+from canonical import RESOLUTION_VERIFIED_UNIT
+
 # Estados de capa legibles (alineados con pasto_territorio._estado_capa).
 _ESTADO_LEGIBLE = {
     "MATCH_EXACT": "CON COINCIDENCIA (datos del predio)",
@@ -58,8 +60,14 @@ def build_execution_receipts(
     """Compila los receipts REALES de esta ejecución (sin red, ya resueltos)."""
     capas = (predio_real or {}).get("capas") or {}
     fuente_gis = ((predio_real or {}).get("fuente") or {}).get("estado")
-    _exacto = bool(predio_real and predio_real.get("disponible"))
-    _espacial = bool((catastro_live or {}).get("disponible")) and not _exacto
+    # 03D.2A: 'exacto' deriva de la SEMÁNTICA NORMALIZADA de resolución de la
+    # identidad canónica, NO de predio_real.disponible (que puede ser PARTIAL /
+    # CONTEXT_ONLY / AMBIGUOUS / bbox). Solo VERIFIED_UNIT_IDENTITY es exacto.
+    _confianza = (canonical_identity or {}).get("resolution_confidence")
+    _exacto = _confianza == RESOLUTION_VERIFIED_UNIT
+    _consultado = bool((predio_real and predio_real.get("disponible"))
+                       or (catastro_live or {}).get("disponible"))
+    _espacial = _consultado and not _exacto
     return {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "ciudad": ciudad,
