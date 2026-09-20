@@ -59,15 +59,17 @@ PHOTON_TAGS = {
 }
 
 
-def _pois_desde_photon(lat, lon, radius=2000, timeout=8.0):
-    """Respaldo de POIs vía Photon. Devuelve la MISMA estructura que
-    get_nearby_pois, o None si Photon tampoco respondió (nunca inventa datos)."""
-    resultado = {c: [] for c in CATEGORIAS}
+def _pois_desde_photon(lat, lon, radius=2000, timeout=8.0, categorias=None):
+    """Respaldo de POIs vía Photon. Devuelve un dict {categoria: [poi]} SOLO para
+    las categorías pedidas (fallback PER-CATEGORY, 03F), o None si Photon tampoco
+    respondió (nunca inventa datos). Cada POI lleva source=PHOTON_OSM."""
+    categorias = list(categorias or CATEGORIAS)
+    resultado = {c: [] for c in categorias}
     hubo_respuesta = False
     headers = {"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
-    for categoria, tags in PHOTON_TAGS.items():
+    for categoria in categorias:
         vistos = set()
-        for termino, osm_tag, etiqueta in tags:
+        for termino, osm_tag, etiqueta in PHOTON_TAGS.get(categoria, []):
             try:
                 r = requests.get(PHOTON_URL, params={
                     "q": termino, "lat": lat, "lon": lon, "limit": 15,
@@ -93,7 +95,8 @@ def _pois_desde_photon(lat, lon, radius=2000, timeout=8.0):
                         continue
                     vistos.add(nombre.lower())
                     resultado[categoria].append(
-                        {"name": nombre, "distance": dist, "type": etiqueta})
+                        {"name": nombre, "distance": dist, "type": etiqueta,
+                         "source": "PHOTON_OSM"})
             except Exception:
                 continue
         resultado[categoria] = sorted(
@@ -152,6 +155,48 @@ def haversine(lat1, lon1, lat2, lon2):
          math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) ** 2)
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     return round(R * c * 1000.0, 1)
+
+
+def _norm_name(name):
+    return " ".join(str(name or "").strip().lower().split())
+
+
+def merge_poi_sources(overpass_pois, photon_pois, max_por_categoria=3):
+    """Combina por categoría (03F): Overpass válido + Photon solo para faltantes.
+
+    1. preserva los resultados válidos de Overpass por categoría;
+    2. rellena SOLO las categorías faltantes con Photon;
+    3. deduplica por nombre normalizado (no mostrar dos veces el mismo lugar);
+    4. ordena por distancia y limita a `max_por_categoria`.
+
+    Devuelve un dict {categoria: [poi]} con cada POI = {name, distance, type, source}.
+    """
+    merged = {}
+    for cat in CATEGORIAS:
+        ov = list(overpass_pois.get(cat) or [])
+        ph = list(photon_pois.get(cat) or [])
+        origen = ov if ov else ph
+        vistos = set()
+        unicos = []
+        for p in sorted(origen, key=lambda x: (x.get("distance") is None, x.get("distance") or 0.0)):
+            clave = _norm_name(p.get("name"))
+            if clave and clave in vistos:
+                continue
+            if clave:
+                vistos.add(clave)
+            unicos.append(p)
+        merged[cat] = unicos[:max_por_categoria]
+    return merged
+
+
+def poi_category_status(pois):
+    """Estado por categoría (03F): AVAILABLE si hay POIs; NO_MATCH si vacía.
+
+    Una lista vacía NO se interpreta como 'no existen parques': puede ser
+    fallo de la fuente (SOURCE_UNAVAILABLE se decide en el llamador, cuando
+    TODAS las categorías quedaron vacías).
+    """
+    return {c: ("AVAILABLE" if (pois or {}).get(c) else "NO_MATCH") for c in CATEGORIAS}
 
 
 def get_nearby_pois(lat, lon, radius=2000):
@@ -270,7 +315,8 @@ def get_nearby_pois(lat, lon, radius=2000):
                     shop = tags.get("shop")
                     leisure = tags.get("leisure")
 
-                    poi_info = {"name": name, "distance": dist}
+                    poi_info = {"name": name, "distance": dist,
+                                "source": "OSM_OVERPASS"}
 
                     if amenity in ["hospital", "clinic", "doctors"]:
                         poi_info["type"] = "Salud (" + amenity.capitalize() + ")"
@@ -289,6 +335,20 @@ def get_nearby_pois(lat, lon, radius=2000):
                 for cat in pois_categorized:
                     pois_categorized[cat] = sorted(pois_categorized[cat],
                                                    key=lambda x: x["distance"])[:3]
+
+                # 03F: Overpass puede responder parcialmente (algunas categorías
+                # vacías). Se completa POR CATEGORÍA con Photon (solo las
+                # faltantes), sin devolver temprano ni inventar POIs.
+                _faltantes = [c for c in CATEGORIAS if not pois_categorized.get(c)]
+                if _faltantes:
+                    try:
+                        _ph = _pois_desde_photon(lat, lon, radius=radius,
+                                                 categorias=_faltantes)
+                    except Exception as _e_ph:
+                        print(f"[POI][PHOTON] sin respaldo por categoria: {str(_e_ph)[:60]}")
+                        _ph = None
+                    if _ph:
+                        pois_categorized = merge_poi_sources(pois_categorized, _ph)
 
                 _POI_CACHE[clave] = (ahora, pois_categorized)
                 _escribir_disco(clave, pois_categorized)

@@ -95,9 +95,14 @@ def build_execution_receipts(
             "nivel": (volcan or {}).get("nivel"),
         },
         "geo_evaluado": bool((geo_eval or {}).get("evaluado")),
+        # 03F: receipt por categoría (status + count), no una simple lista.
         "poi": {
             "disponible": bool(pois and any(pois.get(c) for c in pois)),
-            "categorias": sorted([c for c in (pois or {}) if pois.get(c)]),
+            "categorias": {
+                c: {"status": ("AVAILABLE" if (pois or {}).get(c) else "NO_MATCH"),
+                    "count": len((pois or {}).get(c) or [])}
+                for c in sorted((pois or {}).keys())
+            },
         },
         "sarlaft": {
             "completo": (titulux or {}).get("screening_completo"),

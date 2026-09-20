@@ -93,9 +93,12 @@ def estimar_carga_hipotecaria(
             es_estimacion:              True siempre (recordatorio).
             advertencia:                Texto de disclaimer.
     """
-    # M-06: validación de inputs (evita TypeError con None y división por cero)
-    if not isinstance(valor_inmueble, (int, float)) or valor_inmueble <= 0:
-        valor_inmueble = 0.0
+    # M-06: validación de inputs (evita TypeError con None y división por cero).
+    # 03F: UNKNOWN != ZERO. Sin valor inmobiliario habilitado NO se fabrica $0
+    # (que parecería una deuda real): se devuelve available=False con campos None.
+    _valor_ok = isinstance(valor_inmueble, (int, float)) and valor_inmueble > 0
+    _capital_ok = isinstance(capital_original, (int, float)) and capital_original > 0
+
     if not isinstance(plazo_anos, (int, float)) or plazo_anos <= 0:
         plazo_anos = None
     if tasa_anual is not None and (
@@ -106,8 +109,26 @@ def estimar_carga_hipotecaria(
 
     tasa_ea = tasa_anual if tasa_anual is not None else TASA_REFERENCIAL_ANUAL
     plazo = plazo_anos if plazo_anos is not None else PLAZO_TIPICO_ANOS
-    capital = capital_original if capital_original is not None else \
-              int(valor_inmueble * LTV_TIPICO)
+
+    if not _valor_ok and not _capital_ok:
+        # UNKNOWN: sin valor del inmueble ni cuantía del CTL -> nada estimable.
+        return {
+            "available": False,
+            "capital_estimado": None,
+            "saldo_estimado": None,
+            "cuota_mensual_orientativa": None,
+            "ltv_estimado": None,
+            "plazo_original_anos": plazo,
+            "plazo_restante_anos": None,
+            "cuotas_pagadas": 0,
+            "tasa_anual_usada": tasa_ea,
+            "es_estimacion": True,
+            "advertencia": ("No existe una estimación de valor inmobiliario "
+                            "habilitada para esta ejecución."),
+        }
+
+    valor = valor_inmueble if _valor_ok else 0.0
+    capital = capital_original if _capital_ok else int(valor * LTV_TIPICO)
 
     n_cuotas_total = plazo * 12
     tm = _tasa_mensual(tasa_ea)
@@ -140,13 +161,15 @@ def estimar_carga_hipotecaria(
 
     saldo = _saldo_en_periodo(capital, tm, n_cuotas_total, cuotas_pagadas)
     cuota = _cuota_pago_igual(capital, tm, n_cuotas_total)
-    ltv = saldo / valor_inmueble if valor_inmueble > 0 else 0.0
+    # LTV requiere el valor del inmueble: sin él es NO CALCULABLE (no 0%).
+    ltv = saldo / valor if _valor_ok else None
 
     return {
+        "available": True,
         "capital_estimado": int(round(capital, -3)),
         "saldo_estimado": int(round(saldo, -3)),
         "cuota_mensual_orientativa": int(round(cuota, -3)),
-        "ltv_estimado": round(ltv, 4),
+        "ltv_estimado": round(ltv, 4) if ltv is not None else None,
         "plazo_original_anos": plazo,
         "plazo_restante_anos": round(plazo_restante, 1),
         "cuotas_pagadas": cuotas_pagadas,
@@ -171,21 +194,33 @@ def generar_tabla_carga(resultado, fmt_cop):
     Returns:
         List of (label, valor) tuples para data_table().
     """
-    ltv_pct = f"{resultado['ltv_estimado'] * 100:.1f}%"
-    semaforo_ltv = (
-        "ALTO RIESGO (>80%)" if resultado["ltv_estimado"] > 0.80 else
-        "MODERADO (60-80%)" if resultado["ltv_estimado"] > 0.60 else
-        "BAJO (<60%)"
-    )
+    # 03F: UNKNOWN != ZERO. Sin base de valor se declara NO ESTIMABLE / NO
+    # CALCULABLE, nunca $0 (que parecería una deuda real de cero).
+    if resultado.get("available") is False:
+        return [
+            ("Capital estimado del crédito", "NO ESTIMABLE"),
+            ("Saldo insoluto estimado (hoy)", "NO ESTIMABLE"),
+            ("Cuota mensual orientativa", "NO ESTIMABLE"),
+            ("LTV estimado", "NO CALCULABLE"),
+            ("Motivo", resultado.get("advertencia") or "valor inmobiliario no disponible"),
+        ]
+
+    def _fmt(v):
+        return "NO ESTIMABLE" if v is None else f"{fmt_cop(v)} COP"
+
+    _ltv = resultado.get("ltv_estimado")
+    ltv_txt = ("NO CALCULABLE" if _ltv is None else
+               f"{_ltv * 100:.1f}% — " + (
+                   "ALTO RIESGO (>80%)" if _ltv > 0.80 else
+                   "MODERADO (60-80%)" if _ltv > 0.60 else
+                   "BAJO (<60%)"))
     return [
         ("Capital estimado del crédito",
-         f"{fmt_cop(resultado['capital_estimado'])} COP (LTV típico {LTV_TIPICO*100:.0f}%)"),
-        ("Saldo insoluto estimado (hoy)",
-         f"{fmt_cop(resultado['saldo_estimado'])} COP"),
-        ("Cuota mensual orientativa",
-         f"{fmt_cop(resultado['cuota_mensual_orientativa'])} COP"),
-        ("LTV estimado",
-         f"{ltv_pct} — {semaforo_ltv}"),
+         _fmt(resultado["capital_estimado"]) + (f" (LTV típico {LTV_TIPICO*100:.0f}%)"
+                                                 if resultado.get("capital_estimado") is not None else "")),
+        ("Saldo insoluto estimado (hoy)", _fmt(resultado["saldo_estimado"])),
+        ("Cuota mensual orientativa", _fmt(resultado["cuota_mensual_orientativa"])),
+        ("LTV estimado", ltv_txt),
         ("Tasa de referencia usada",
          f"{resultado['tasa_anual_usada']*100:.2f}% EA (referencial DTF+spread)"),
         ("Plazo original / Cuotas pagadas",

@@ -1652,7 +1652,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             print(f"Warning: could not load POI_MAP_PNG: {img_err}")
         story.append(Spacer(1, 6))
     
-    story.append(alert_green(get_cobertura_alert(barrio, ciudad=ciudad)))
+    story.append(alert_green(get_cobertura_alert(barrio, ciudad=ciudad, pois=pois)))
     story.append(Spacer(1, 8))
     
     # ── 04 ANALISIS REGISTRAL ──────────────────────────────────

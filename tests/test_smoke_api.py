@@ -202,7 +202,9 @@ class TestSmokeApi(unittest.TestCase):
         from carga_economica import estimar_carga_hipotecaria
         r1 = estimar_carga_hipotecaria(None, None, plazo_anos=0, tasa_anual=12.5)
         self.assertIn("saldo_estimado", r1)
-        self.assertGreaterEqual(r1["ltv_estimado"], 0)
+        # 03F: UNKNOWN != ZERO: sin base de valor no se fabrica LTV 0.
+        self.assertIs(r1["available"], False)
+        self.assertIsNone(r1["ltv_estimado"])
         r2 = estimar_carga_hipotecaria(200000000, "10 de mayo de 2023")
         self.assertGreaterEqual(r2["ltv_estimado"], 0)
         self.assertGreaterEqual(r2["saldo_estimado"], 0)

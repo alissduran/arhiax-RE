@@ -343,7 +343,7 @@ def get_localizacion_dt(barrio, lat, lon):
         ("Equipamientos cercanos", "Equipamientos institucionales, comerciales y asistenciales en radio 2.0 km"),
     ]
 
-def get_cobertura_alert(barrio, ciudad="barranquilla"):
+def get_cobertura_alert(barrio, ciudad="barranquilla", pois=None):
     barrio_clean = barrio.strip().title() if barrio else "el sector"
     c = (ciudad or "").lower()
     if "medellin" in c or "medellín" in c:
@@ -356,11 +356,38 @@ def get_cobertura_alert(barrio, ciudad="barranquilla"):
         nombre_ciudad = "Barranquilla"
     # 'Bogotá D.C.' ya termina en punto: no duplicar el punto de la frase
     punto = "" if nombre_ciudad.endswith(".") else "."
+
+    # 03F: la narrativa se construye desde los resultados REALES de POI, no de
+    # una lista fija. No afirmar categorías que no se verificaron.
+    if pois is not None:
+        _cats = ("Salud", "Educacion", "Comercio", "Recreacion")
+        _disp = [c for c in _cats if (pois or {}).get(c)]
+        _falt = [c for c in _cats if not (pois or {}).get(c)]
+        if not _disp:
+            return (
+                f"<b>EVALUACION DE COBERTURA:</b> No se verificaron equipamientos urbanos "
+                f"en un radio de 2.0 km en torno al inmueble en <b>{barrio_clean}</b> "
+                f"({nombre_ciudad}): las fuentes consultadas (OpenStreetMap/Overpass y "
+                f"Photon) no devolvieron resultados verificables en esta ejecución. "
+                f"No se incluyen equipamientos no verificados."
+            )
+        texto = (
+            f"<b>EVALUACION DE COBERTURA:</b> En un radio de 2.0 km en torno al inmueble "
+            f"en <b>{barrio_clean}</b> ({nombre_ciudad}{punto}) se verificaron equipamientos de "
+            f"<b>{', '.join(_disp).lower()}</b>. "
+        )
+        if _falt:
+            texto += (f"Categorías sin resultados verificables en las fuentes consultadas: "
+                      f"{', '.join(_falt).lower()}. ")
+        texto += "La accesibilidad peatonal y vehicular queda sujeta a verificación de campo."
+        return texto
+
+    # Sin datos de POI (legacy): no afirmar categorías específicas.
     return (
         f"<b>EVALUACION DE COBERTURA:</b> El inmueble ubicado en <b>{barrio_clean}</b> cuenta con una calificacion "
         f"de conectividad y equipamiento <b>SATISFACTORIA</b> dentro del perimetro urbano de {nombre_ciudad}{punto} "
-        f"El radio de amortiguacion de 2.0 km concentra equipamientos de comercio, salud, educacion y recreacion, "
-        f"garantizando accesibilidad peatonal y vehicular bajo el estandar de proximidad urbana."
+        f"La verificación de equipamientos de comercio, salud, educacion y recreacion en el radio de 2.0 km queda "
+        f"sujeta a confirmación de campo."
     )
 
 def get_analisis_registral_text(barrio):
