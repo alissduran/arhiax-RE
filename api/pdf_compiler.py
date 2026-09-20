@@ -717,9 +717,18 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _metodo_principal = "m1"
     # Precondiciones de valoración por tipología (bug L): un predio de suelo de
     # protección / no construible / rural NO se valora por comparación de mercado.
+    # Remediation 03D: si hay evidencia de UNIDAD PH (torre/apartamento/unidad) pero
+    # la resolución catastral NO la resolvió en EXACTA, NO se emite estimación de
+    # mercado de precisión aparente.
+    _unidad_ph_presente = bool(canonical_identity.get("torre")
+                               or canonical_identity.get("apartamento")
+                               or canonical_identity.get("unidad"))
+    _res_status = ((predio_real or {}).get("predio") or {}).get("resolution_status")
+    _unidad_ph_no_resuelta = _unidad_ph_presente and (_res_status not in (None, "EXACT", "PARTIAL"))
     val_data = get_valuation(area, barrio, estrato, metodo_principal=_metodo_principal,
                              ciudad=ciudad, clase_suelo=_ent2.get("clase_suelo"),
-                             destino=_predio_destino, tipologia=_tipologia_texto)
+                             destino=_predio_destino, tipologia=_tipologia_texto,
+                             unidad_ph_no_resuelta=_unidad_ph_no_resuelta)
     res_avaluo = val_data
     
     # Cargar hallazgos y recomendaciones dinamicas del analizador legal
@@ -2137,11 +2146,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # rural NO se valora por comparación de mercado -> aviso claro, nunca $0.
     if res_avaluo.get('metodologia_aplica') is False:
         story.append(alert_orange(
-            "<b>VALORACION NO PROCEDE POR TIPOLOGIA:</b> {} La comparacion de mercado (M1) y la "
-            "capitalizacion de rentas (M3) no aplican a este predio, por lo que ARHIAX NO estampa "
-            "un valor referencial de mercado sobre el inmueble. La valoracion definitiva, si "
-            "procede, la debe determinar un avaluador inscrito en el RAA con la metodologia "
-            "adecuada a la tipologia.".format(res_avaluo.get('motivo_no_aplica') or "")))
+            "<b>ESTIMACION REFERENCIAL NO EMITIDA:</b> {} ARHIAX NO estampa un valor referencial "
+            "de mercado sobre el inmueble. La valoracion definitiva, si procede, la debe "
+            "determinar un avaluador inscrito en el RAA.".format(
+                res_avaluo.get('motivo_no_aplica') or "")))
         story.append(Spacer(1, 6))
     elif not (area > 0 and (res_avaluo.get('consolidado') or 0) > 0):
         # Sin metraje: la estimación de mercado no es calculable -> aviso claro,

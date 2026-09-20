@@ -202,6 +202,11 @@ def analizar_texto_certificado(texto):
         # (p. ej. '001 - MEDELLIN', '050 - BOGOTA D.C. ZONA CENTRO'). Permite
         # detectar un CTL de otra ciudad adjuntado por error al caso.
         "circulo_registral": None,
+        # Remediation 03D: dirección base + unidad PH (sin pérdida de especificidad).
+        "direccion_base": None,
+        "torre": None,
+        "apartamento": None,
+        "unidad": None,
     }
 
     if not texto:
@@ -287,16 +292,21 @@ def analizar_texto_certificado(texto):
                 if m_prim:
                     _dir_oficial = m_prim.group(1)
         if _dir_oficial:
-            # Descartar unidad/edificio: 'DG 61B 20 04 AP 401' -> 'DG 61B 20 04'
-            _dir_oficial = re.split(
-                r"\s+(?:APARTAMENTO|APTO|AP\b|EDIFICIO|TORRE|CASA\b|CONJUNTO|BLOQUE|"
-                r"PISO|OFICINA|LOCAL|UNIDAD|PH\b|P\.H\.)\b", _dir_oficial)[0]
-            _dir_oficial = re.sub(r"\(?\s*DIRECCION CATASTRAL\s*\)?", "", _dir_oficial)
-            _dir_oficial = " ".join(_dir_oficial.split()).strip(" .,;/")
+            # Remediation 03D: NO destruir la unidad. La dirección COMPLETA se
+            # preserva (direccion_raw) y se DERIVA la base + torre/apartamento.
+            _dir_full = re.sub(r"\(?\s*DIRECCION CATASTRAL\s*\)?", "", _dir_oficial)
+            _dir_full = " ".join(_dir_full.split()).strip(" .,;/")
             if (re.search(r"\b(CL|CLL|CALLE|CRA|KR|CARRERA|TV|AV|AVENIDA|DG|DIAGONAL|AK)\b",
-                          _dir_oficial, re.IGNORECASE)
-                    and re.search(r"\d", _dir_oficial)):
-                res["direccion"] = _dir_oficial
+                          _dir_full, re.IGNORECASE)
+                    and re.search(r"\d", _dir_full)):
+                res["direccion"] = _dir_full
+                # Derivación no destructiva de la base y la unidad inmobiliaria.
+                from unidad_inmobiliaria import extraer_unidad
+                _unidad = extraer_unidad(_dir_full)
+                res["direccion_base"] = _unidad["direccion_base"]
+                res["torre"] = _unidad["torre"]
+                res["apartamento"] = _unidad["apartamento"]
+                res["unidad"] = _unidad["unidad"]
 
         # Parsear Anotaciones - Requiere que ANOTACION este en una nueva linea.
         # El CTL real usa indistintamente "ANOTACION: Nro 001", "ANOTACION Nro 002"

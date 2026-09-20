@@ -221,8 +221,10 @@ class TestCondicionJuridicaDesdeCtl(unittest.TestCase):
         """Regresión (dictamen real): el CTL de Bogotá trae varias placas en el
         bloque del inmueble ('AVENIDA (CALLE)63 20-04/CARRERA 20 61-55' y la
         oficial 'DG 61B 20 04 AP 401 (DIRECCION CATASTRAL)'). Se debe extraer la
-        DIRECCION CATASTRAL y descartar la unidad, no la placa registral
-        alternativa (que se geocodificaba en un punto equivocado)."""
+        DIRECCION CATASTRAL (no la placa registral alternativa, que se
+        geocodificaba en un punto equivocado). Remediation 03D: la dirección
+        COMPLETA se preserva (incluye la unidad AP 401); la base sin unidad se
+        DERIVA en direccion_base para integraciones externas, sin destruirla."""
         from legal_analyzer import analizar_texto_certificado
         from geocoder import extraer_direccion_de_ctl
         bloque = ("DIRECCION DEL INMUEBLE\nTipo Predio: URBANO\n"
@@ -231,7 +233,11 @@ class TestCondicionJuridicaDesdeCtl(unittest.TestCase):
                   "2) DG 61B 20 04 AP 401 (DIRECCION CATASTRAL)\n"
                   "DETERMINACION DEL INMUEBLE:")
         res = analizar_texto_certificado(bloque)
-        self.assertEqual(res["direccion"], "DG 61B 20 04")
+        # La dirección completa (con unidad) se preserva: no se descarta el AP 401.
+        self.assertEqual(res["direccion"], "DG 61B 20 04 AP 401")
+        self.assertEqual(res["direccion_base"], "DG 61B 20 04")
+        self.assertEqual(res["apartamento"], "401")
+        # El geocodificador sigue usando la base sin unidad para el punto.
         self.assertEqual(extraer_direccion_de_ctl(bloque), "DG 61B 20 04")
         # El normalizador de Bogotá acepta el formato catastral sin guion
         from geocoder_catastral_bogota import normalizar_direccion_bogota

@@ -16,15 +16,19 @@ C_BORDE = colors.HexColor("#E2E8F0")
 C_NEGRO_MONO = colors.HexColor("#0A1424")
 
 
-def precondiciones_valoracion(clase_suelo=None, destino=None, tipologia=None):
-    """Precondiciones de valoración por tipología (bug L).
+def precondiciones_valoracion(clase_suelo=None, destino=None, tipologia=None,
+                              unidad_ph_no_resuelta=False):
+    """Precondiciones de valoración por tipología (bug L) e identidad (03D).
 
     La comparación de mercado (M1) y la capitalización de rentas (M3) NO proceden
-    sobre ciertos predios: suelo de protección, no construible o rural. Antes
-    ARHIAX valoraba por comparables un predio "Suelo de proteccion / no
-    construible" como si fuera un apartamento terminado (regresión del caso
-    240-211101 que analizó el predio vecino). Devuelve procede=False + motivo.
+    sobre ciertos predios: suelo de protección, no construible o rural. Tampoco
+    procede emitir una estimación de mercado de una UNIDAD PH cuya identidad no
+    está suficientemente resuelta (remediación forense 040-646406). Devuelve
+    procede=False + motivo.
     """
+    if unidad_ph_no_resuelta:
+        return {"procede": False,
+                "motivo": "identidad predial de la unidad PH insuficientemente resuelta"}
     cs = (clase_suelo or "").strip().lower()
     dst = (destino or "").strip().lower()
     tip = (tipologia or "").strip().lower()
@@ -39,7 +43,8 @@ def precondiciones_valoracion(clase_suelo=None, destino=None, tipologia=None):
 
 
 def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
-                  ciudad="barranquilla", clase_suelo=None, destino=None, tipologia=None):
+                  ciudad="barranquilla", clase_suelo=None, destino=None, tipologia=None,
+                  unidad_ph_no_resuelta=False):
     """
     Retorna la valoracion tecnica de mercado consolidando M1 (comparacion de
     mercado), M2 (costo de reposicion) y M3 (capitalizacion de rentas).
@@ -70,9 +75,10 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
     factor_costos = 1.2576
     es_pasto = "pasto" in (ciudad or "").lower()
 
-    # ── Precondición por tipología (bug L) ──
+    # ── Precondición por tipología (bug L) e identidad de unidad PH (03D) ──
     _pre = precondiciones_valoracion(clase_suelo=clase_suelo, destino=destino,
-                                     tipologia=tipologia)
+                                     tipologia=tipologia,
+                                     unidad_ph_no_resuelta=unidad_ph_no_resuelta)
     if not _pre["procede"]:
         return {
             "consolidado": 0,

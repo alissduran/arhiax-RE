@@ -314,6 +314,12 @@ def build_canonical_property_identity(
         "codigo_corto": codigo_corto,
         "matricula_municipal": matricula_municipal,
         "nomenclatura": nomenclatura,
+        # Remediation 03D: dirección raw + base + unidad PH (sin pérdida de especificidad).
+        "direccion_raw": analysis.get("direccion"),
+        "direccion_base": analysis.get("direccion_base") or analysis.get("direccion"),
+        "torre": analysis.get("torre"),
+        "apartamento": analysis.get("apartamento"),
+        "unidad": analysis.get("unidad"),
         "titular": titular,
         "propiedad_horizontal": ph,
         "detalle": detalle_identidad,

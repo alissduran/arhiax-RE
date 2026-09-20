@@ -142,11 +142,14 @@ class TestValorEstableConDireccionCatastralDelCtl(unittest.TestCase):
 
     def test_analisis_extrae_la_catastral_no_la_alternativa(self):
         """Del bloque DIRECCION DEL INMUEBLE con placa alternativa + catastral,
-        el analizador elige 'DG 61B 20 04' (etiqueta DIRECCION CATASTRAL)."""
+        el analizador elige la DIRECCION CATASTRAL y preserva la unidad
+        ('DG 61B 20 04 AP 401'), derivando la base sin unidad en direccion_base."""
         from legal_analyzer import analizar_texto_certificado
         txt = _CTL_CON_DIRECCION_CATASTRAL
         res = analizar_texto_certificado(txt)
-        self.assertEqual(res.get("direccion"), "DG 61B 20 04")
+        self.assertEqual(res.get("direccion"), "DG 61B 20 04 AP 401")
+        self.assertEqual(res.get("direccion_base"), "DG 61B 20 04")
+        self.assertEqual(res.get("apartamento"), "401")
         self.assertNotIn("61-55", res.get("direccion") or "")
 
     def test_valor_estrato4_no_cambia_por_la_placa_del_formulario(self):

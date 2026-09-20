@@ -165,6 +165,46 @@ def _centro_punto(feature: dict) -> Optional[tuple]:
 
 # ── 1. Predio por código catastral / NUPRE (capa 500) ────────────────────────
 
+def _seleccionar_predio(resultados: list, codigo: str, nupre: str) -> tuple:
+    """Selección EXPLÍCITA de la feature del predio (sin `features[0]` arbitrario).
+
+    Reglas discretas y explicables:
+      1. match exacto por código catastral -> decisive
+      2. match exacto por NUPRE (codigo_homologado) -> decisive
+      3. un único candidato -> PARTIAL
+      4. varios candidatos sin match exacto -> AMBIGUOUS (NO elegir arbitrario)
+
+    Devuelve (feature, resolution_status) con status en
+    {EXACT, PARTIAL, AMBIGUOUS, UNRESOLVED}.
+    """
+    todas = []
+    for r in resultados or []:
+        todas.extend(r.get("features") or [])
+
+    if not todas:
+        return None, "UNRESOLVED"
+
+    codigo_n = (codigo or "").strip()
+    nupre_n = (nupre or "").strip()
+
+    if codigo_n:
+        for f in todas:
+            p = f.get("properties", {})
+            if (p.get("numero_predial_nacional") or "").strip() == codigo_n:
+                return f, "EXACT"
+
+    if nupre_n:
+        for f in todas:
+            p = f.get("properties", {})
+            if (p.get("codigo_homologado") or "").strip() == nupre_n:
+                return f, "EXACT"
+
+    if len(todas) == 1:
+        return todas[0], "PARTIAL"
+
+    return None, "AMBIGUOUS"
+
+
 def consultar_predio_por_codigo(codigo_catastral: str = None, nupre: str = None) -> dict[str, Any]:
     """Consulta la capa 500 (Predio) por número predial nacional o NUPRE.
 
@@ -184,6 +224,7 @@ def consultar_predio_por_codigo(codigo_catastral: str = None, nupre: str = None)
 
     res: dict[str, Any] = {
         "disponible": False, "error": "predio no encontrado en capa 500",
+        "resolution_status": "UNRESOLVED",
         "codigo_catastral": codigo or None, "nupre": nupre or None,
         "destino_economico": None, "tipo_predio": None, "estrato": None,
         "estado_fmi": None, "area_catastral_terreno": None, "globalid": None,
@@ -211,14 +252,11 @@ def consultar_predio_por_codigo(codigo_catastral: str = None, nupre: str = None)
                          f"codigo_homologado='{nupre}'", campos)
         resultados.append(r3)
 
-    feature = None
-    for r in resultados:
-        if r.get("features"):
-            feature = r["features"][0]
-            break
+    feature, resolution_status = _seleccionar_predio(resultados, codigo, nupre)
 
     if not feature:
-        res["error"] = "predio no encontrado en capa 500 (código/NUPRE sin coincidencia)"
+        res["resolution_status"] = resolution_status
+        res["error"] = f"predio no resuelto (resolution_status={resolution_status})"
         _cache_set(cache_key, res)
         return res
 
@@ -226,6 +264,7 @@ def consultar_predio_por_codigo(codigo_catastral: str = None, nupre: str = None)
     res.update({
         "disponible": True,
         "error": None,
+        "resolution_status": resolution_status,
         "numero_predial_nacional": p.get("numero_predial_nacional") or codigo or None,
         "numero_predial_anterior": p.get("numero_predial_anterior"),
         "nupre": p.get("codigo_homologado") or nupre or None,
