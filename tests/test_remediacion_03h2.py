@@ -177,5 +177,124 @@ class TestNegativos(unittest.TestCase):
         self.assertEqual(out["altura_status"], STATUS_CONFLICT)
 
 
+class TestAutoridadUrbanaUnica(unittest.TestCase):
+    """#4: el render 6.2/6.3 y el MarketContext consumen la MISMA verdad."""
+
+    def _oficial(self, **over):
+        out = resolve_official_urban_context(
+            ciudad="barranquilla", lat=10.9870, lon=-74.8115,
+            coordinate_source=COORD_OFFICIAL_ADDRESS_GEOCODE,
+            consultar_entorno=lambda lat, lon: dict(_URBANO_GOLDEN))
+        out.update(over)
+        return out
+
+    def test_capa500_vacia_se_llena_con_contexto_oficial(self):
+        from pdf_compiler import _merge_contexto_urbano_oficial
+        ent, trat = _merge_contexto_urbano_oficial({}, self._oficial(), None)
+        self.assertEqual(ent["tratamiento"], "Consolidación")
+        self.assertEqual(ent["altura_maxima"], "11")
+        self.assertEqual(ent["estrato"], "4")
+        # La autoridad POT del render ya NO queda vacía: no cae al texto genérico.
+        self.assertEqual(trat, "Consolidación")
+
+    def test_no_pisa_lo_que_ya_traia_la_capa500(self):
+        from pdf_compiler import _merge_contexto_urbano_oficial
+        ent, trat = _merge_contexto_urbano_oficial(
+            {"tratamiento": "Renovación Urbana", "barrio": "Barrio L500"},
+            self._oficial(), "Renovación Urbana")
+        self.assertEqual(ent["tratamiento"], "Renovación Urbana")
+        self.assertEqual(ent["barrio"], "Barrio L500")
+        self.assertEqual(trat, "Renovación Urbana")
+
+    def test_ambiguo_no_se_afirma_en_el_render(self):
+        from pdf_compiler import _merge_contexto_urbano_oficial
+        oficial = self._oficial(
+            tratamiento=None, tratamiento_status=STATUS_CONFLICT,
+            altura_maxima=None, altura_status=STATUS_CONFLICT,
+            context_status="AMBIGUOUS_CONTEXT")
+        ent, trat = _merge_contexto_urbano_oficial({}, oficial, None)
+        self.assertIsNone(ent.get("tratamiento"))
+        self.assertIsNone(ent.get("altura_maxima"))
+        self.assertIsNone(trat)
+
+    def test_sin_contexto_oficial_no_toca_el_entorno(self):
+        from pdf_compiler import _merge_contexto_urbano_oficial
+        ent, trat = _merge_contexto_urbano_oficial(
+            {"clase_suelo": "Urbano"},
+            {"context_status": STATUS_SOURCE_UNAVAILABLE}, None)
+        self.assertEqual(ent, {"clase_suelo": "Urbano"})
+        self.assertIsNone(trat)
+
+
+class TestBuildingContextPorCoordenadas(unittest.TestCase):
+    """#5: contexto de EDIFICIO por coordenadas autorizadas (no es identidad)."""
+
+    _ARGS = dict(lat=10.9870, lon=-74.8115,
+                 es_medellin=False, es_bogota=False, es_pasto=False)
+
+    def test_no_consulta_sin_coordenada_autorizada(self):
+        from unittest import mock
+        import catastro_predio
+        from pdf_compiler import _building_context_por_coordenadas
+        with mock.patch.object(catastro_predio, "consultar_construccion") as m:
+            out = _building_context_por_coordenadas(
+                coordinate_verified=False,
+                construction_status="NOT_EVALUATED", **self._ARGS)
+        self.assertEqual(out, {})
+        m.assert_not_called()
+
+    def test_no_consulta_si_la_capa500_ya_respondio(self):
+        from unittest import mock
+        import catastro_predio
+        from pdf_compiler import _building_context_por_coordenadas
+        with mock.patch.object(catastro_predio, "consultar_construccion") as m:
+            out = _building_context_por_coordenadas(
+                coordinate_verified=True,
+                construction_status="AVAILABLE", **self._ARGS)
+        self.assertEqual(out, {})
+        m.assert_not_called()
+
+    def test_consulta_con_coordenada_autorizada(self):
+        from unittest import mock
+        import catastro_predio
+        from pdf_compiler import _building_context_por_coordenadas
+        _r = {"disponible": True, "tipo_construccion": "PH", "total_pisos": 12,
+              "construction_status": "AVAILABLE"}
+        with mock.patch.object(catastro_predio, "consultar_construccion",
+                               return_value=dict(_r)) as m:
+            out = _building_context_por_coordenadas(
+                coordinate_verified=True,
+                construction_status="NOT_EVALUATED", **self._ARGS)
+        self.assertEqual(out["construction_status"], "AVAILABLE")
+        self.assertEqual(out["total_pisos"], 12)
+        m.assert_called_once_with(10.9870, -74.8115)
+
+    def test_fuente_caida_no_inventa(self):
+        from unittest import mock
+        import catastro_predio
+        from pdf_compiler import _building_context_por_coordenadas
+        with mock.patch.object(catastro_predio, "consultar_construccion",
+                               side_effect=RuntimeError("sin red")):
+            out = _building_context_por_coordenadas(
+                coordinate_verified=True,
+                construction_status="NOT_EVALUATED", **self._ARGS)
+        # {} -> el llamador conserva NOT_EVALUATED (nunca "sin edificación").
+        self.assertEqual(out, {})
+
+    def test_ciudades_con_capa_propia_no_se_consultan(self):
+        from unittest import mock
+        import catastro_predio
+        from pdf_compiler import _building_context_por_coordenadas
+        for _flag in ("es_medellin", "es_bogota", "es_pasto"):
+            args = dict(self._ARGS)
+            args[_flag] = True
+            with mock.patch.object(catastro_predio, "consultar_construccion") as m:
+                out = _building_context_por_coordenadas(
+                    coordinate_verified=True,
+                    construction_status="NOT_EVALUATED", **args)
+            self.assertEqual(out, {})
+            m.assert_not_called()
+
+
 if __name__ == "__main__":
     unittest.main()

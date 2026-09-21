@@ -266,6 +266,79 @@ def _direccion_para_geocodificar(analysis, db_record):
     return (db_record.get("direccion") or "").strip()
 
 
+# ── 03H.2: AUTORIDAD URBANA ÚNICA del render (6.2/6.3) ────────────────────────
+_STATUS_VERIFIED_OFFICIAL = "VERIFIED_OFFICIAL"
+
+
+def _merge_contexto_urbano_oficial(entorno, oficial, predio_tratamiento=None):
+    """Fusiona el contexto urbano OFICIAL en el entorno que consume el render.
+
+    Motivo (03H.2 #4): el render 6.2/6.3 leía `_ent2` (capa 500) mientras el
+    MarketContext leía el contexto oficial, produciendo DOS verdades — cuando la
+    capa 500 no resolvía, el dictamen mostraba N/D/sin norma aunque el contexto
+    oficial sí tuviera el dato.
+
+    Regla de honestidad: SOLO se propaga lo que la capa oficial marcó como
+    VERIFIED_OFFICIAL. Los campos en `campos_ambiguos` / STATUS_CONFLICT NO se
+    afirman (no se convierten en dato del dictamen).
+    """
+    _ent = dict(entorno or {}) if isinstance(entorno, dict) else {}
+    if not isinstance(oficial, dict):
+        return _ent, predio_tratamiento
+    if oficial.get("context_status") not in ("OK", "AMBIGUOUS_CONTEXT"):
+        return _ent, predio_tratamiento
+
+    if (oficial.get("barrio")
+            and oficial.get("barrio_status") == _STATUS_VERIFIED_OFFICIAL):
+        _ent.setdefault("barrio", oficial.get("barrio"))
+    if (oficial.get("estrato") not in (None, "")
+            and oficial.get("estrato_status") == _STATUS_VERIFIED_OFFICIAL):
+        _ent.setdefault("estrato", oficial.get("estrato"))
+    if (oficial.get("tratamiento")
+            and oficial.get("tratamiento_status") == _STATUS_VERIFIED_OFFICIAL):
+        # _predio_tratamiento es la autoridad del bloque POT del render: si la
+        # capa 500 no lo trajo, se toma del contexto OFICIAL verificado (misma
+        # capa normativa) en vez del texto genérico de respaldo.
+        if not predio_tratamiento:
+            predio_tratamiento = oficial.get("tratamiento")
+        _ent.setdefault("tratamiento", oficial.get("tratamiento"))
+        if oficial.get("tipo_tratamiento"):
+            _ent.setdefault("tipo_tratamiento", oficial.get("tipo_tratamiento"))
+        if oficial.get("altura_maxima") not in (None, ""):
+            _ent.setdefault("altura_maxima", oficial.get("altura_maxima"))
+    for _k in ("localidad", "pieza_urbana", "codigo_manzana"):
+        _v = oficial.get(_k)
+        if _v not in (None, ""):
+            _ent.setdefault(_k, _v)
+    return _ent, predio_tratamiento
+
+
+# ── 03H.2: BUILDING_SPATIAL_CONTEXT por coordenadas AUTORIZADAS ───────────────
+def _building_context_por_coordenadas(*, lat, lon, coordinate_verified,
+                                      construction_status, es_medellin,
+                                      es_bogota, es_pasto):
+    """Consulta la capa de construcción SOLO con coordenadas autorizadas.
+
+    Es BUILDING_SPATIAL_CONTEXT, no identidad: permite saber si el edificio
+    existe y qué tipología tiene, y JAMÁS cambia la unidad (AP 430 sigue siendo
+    AP 430). Se omite si la capa 500 ya aportó construcción, si la coordenada no
+    está autorizada, o en ciudades con su propia capa (Medellín/Bogotá/Pasto).
+    Devuelve {} cuando no aplica (nunca inventa datos).
+    """
+    if construction_status != "NOT_EVALUATED":
+        return {}
+    if not coordinate_verified or lat is None or lon is None:
+        return {}
+    if es_medellin or es_bogota or es_pasto:
+        return {}
+    try:
+        from catastro_predio import consultar_construccion
+        return consultar_construccion(lat, lon) or {}
+    except Exception as _e_bc:
+        print(f"[PDF][BUILDING_CONTEXT] no disponible: {_e_bc}")
+        return {}
+
+
 def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Ciudad del predio (Sprint 3: barranquilla activa; medellin y bogota en
     # expansión). Controla qué catastro/POT se consulta y qué textos se imprimen.
@@ -821,6 +894,30 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                            "estrato": None, "estrato_status": _STATUS_UNRESOLVED,
                            "context_status": _STATUS_SOURCE_UNAVAILABLE}
         print(f"[PDF][OFFICIAL_CONTEXT] no disponible: {_e_oc}")
+
+    # ── 03H.2: BUILDING CONTEXT (capa 310) por coordenadas AUTORIZADAS ─────────
+    # Es BUILDING_SPATIAL_CONTEXT, NO identidad de unidad: jamás cambia AP 430.
+    # Solo se consulta si la capa 500 no aportó construcción.
+    _const_ctx = _building_context_por_coordenadas(
+        lat=lat, lon=lon,
+        coordinate_verified=bool(_ubicacion.get("coordinate_source_verified")),
+        construction_status=_construction_status,
+        es_medellin=es_medellin, es_bogota=es_bogota, es_pasto=es_pasto)
+    if _const_ctx:
+        _construction_status = (_const_ctx.get("construction_status")
+                                or "NOT_EVALUATED")
+        if _const_ctx.get("disponible"):
+            _predio_tipo_construccion = (_predio_tipo_construccion
+                                         or _const_ctx.get("tipo_construccion"))
+            _predio_pisos = _predio_pisos or _const_ctx.get("total_pisos")
+        print(f"[PDF][BUILDING_CONTEXT] status={_construction_status}")
+
+    # ── 03H.2: AUTORIDAD URBANA ÚNICA para el render (6.2/6.3) ─────────────────
+    # Evita "dos verdades": 6.3 leía _ent2 mientras el MarketContext leía el
+    # contexto OFICIAL. Solo se propaga lo VERIFICADO por la capa oficial: los
+    # campos ambiguos (campos_ambiguos / CONFLICT) NO se afirman como datos.
+    _ent2, _predio_tratamiento = _merge_contexto_urbano_oficial(
+        _ent2, _oficial_urbano, _predio_tratamiento)
 
     # ── 03H: contexto de mercado (MarketContext) ───────────────────────────────
     # Identidad y contexto son dos problemas distintos. El contexto se construye
