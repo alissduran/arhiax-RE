@@ -130,7 +130,7 @@ Coherencia relacionada: la tipología ya no dice "inferido del CTL" cuando la
 condición PH vino del servicio catastral (ahora "(condición catastral)", con
 `tipologia_status = VERIFIED_CATASTRAL`).
 
-## Tests (H) — 29 casos en `tests/test_remediacion_03h2a.py`
+## Tests (H) — 33 casos en `tests/test_remediacion_03h2a.py`
 
 Los 11 tests bloqueantes del prompt, todos verdes:
 
@@ -151,9 +151,11 @@ Los 11 tests bloqueantes del prompt, todos verdes:
 
 Además: E2E del Golden con capas oficiales sustituidas por fixtures
 (`TestGoldenPdf`, escenario real de la ejecución: capa 500 sin respuesta →
-identidad por registro oficial de adopción), y E2E con **todas** las fuentes
-caídas (`TestGoldenSinFuentes`) que exige degradación honesta a PENDIENTE con
-causa y valoración bloqueada.
+identidad por registro oficial de adopción), E2E con **todas** las fuentes caídas
+(`TestGoldenSinFuentes`) que exige degradación honesta a PENDIENTE con causa y
+valoración bloqueada, y E2E con **solo NUPRE** (`TestGoldenSoloNupre`): el predio
+se resuelve por `codigo_homologado`, nunca se envía `terreno='AFT...'` y el
+destino/condición llegan etiquetados como *contexto espacial*.
 
 ## Golden (I) — estado
 

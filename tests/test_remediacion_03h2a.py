@@ -524,7 +524,7 @@ class TestEstratoSemantico(_Base):
 
 # ── I. Golden E2E (capas oficiales sustituidas por fixtures) ─────────────────
 
-def _compilar_golden(tmp_name="pdf_03h2a.pdf", **fuentes_kw):
+def _compilar_golden(tmp_name="pdf_03h2a.pdf", sin_codigo=False, **fuentes_kw):
     """Compila el PDF del caso Golden con las capas oficiales mockeadas."""
     import shutil
     import catastro_predio
@@ -542,7 +542,8 @@ def _compilar_golden(tmp_name="pdf_03h2a.pdf", **fuentes_kw):
     analysis = dict(analizar_certificado(None))
     analysis.update({
         "folio": "040-646406", "direccion": GOLDEN_DIRECCION,
-        "codigo_catastral": GOLDEN_CODIGO, "nupre": GOLDEN_NUPRE,
+        "codigo_catastral": None if sin_codigo else GOLDEN_CODIGO,
+        "nupre": GOLDEN_NUPRE,
         "descripcion_ctl": ("APARTAMENTO 430 TORRE 8 CONJUNTO NAPOLI MIRAMAR "
                             "PROPIEDAD HORIZONTAL"),
         "texto_ctl": "APARTAMENTO 430 - PROPIEDAD HORIZONTAL",
@@ -691,6 +692,98 @@ class TestGoldenSinFuentes(_Base):
     def test_valoracion_bloqueada_con_motivo(self):
         self.assertIn("valoración no autorizada", self.txt)
         self.assertNotIn("6.800.000", self.txt)
+
+
+class TestGoldenSoloNupre(_Base):
+    """E (H #7) en el pipeline completo: sin código catastral, solo NUPRE AFT...
+
+    El predio se resuelve por su propia ruta (codigo_homologado, 03G) y el
+    NUNCA se envía `terreno='AFT...'`. Como no hay identificador predial, el
+    destino/condición solo pueden venir del CONTEXTO ESPACIAL y así se etiquetan.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        import catastro_predio
+        import geocoder
+        import legal_analyzer
+        import pdf_compiler
+        import integrations.catastro_live as catastro_live
+        from legal_analyzer import analizar_certificado
+
+        cls.fuentes = FuentesMock(destino_capa500=None)
+        out_dir = ROOT / "tmp_pdf_03h2a"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        out_pdf = out_dir / "pdf_solo_nupre.pdf"
+        analysis = dict(analizar_certificado(None))
+        analysis.update({
+            "folio": "040-646406", "direccion": GOLDEN_DIRECCION,
+            "codigo_catastral": None, "nupre": GOLDEN_NUPRE,
+            "texto_ctl": "APARTAMENTO 430 - PROPIEDAD HORIZONTAL",
+            "descripcion_ctl": "APARTAMENTO 430 PROPIEDAD HORIZONTAL",
+        })
+        record = {
+            "id": 1, "folio_matricula": "040-646406",
+            "direccion": GOLDEN_DIRECCION, "barrio": "Miramar", "estrato": 4,
+            "area": 58.75, "sombra_9am_cargada": 0, "sombra_3pm_cargada": 0,
+            "mapa_cargado": 0, "certificado_path": None,
+            "ciudad": "barranquilla",
+        }
+        catastro_predio._CACHE.clear()
+        with mock.patch.object(legal_analyzer, "analizar_certificado",
+                               return_value=analysis), \
+                mock.patch.object(catastro_predio, "_query_capa",
+                                  side_effect=cls.fuentes.query_capa), \
+                mock.patch.object(catastro_predio, "_query_punto",
+                                  side_effect=cls.fuentes.query_punto), \
+                mock.patch.object(geocoder, "geocodificar_direccion",
+                                  lambda d, ciudad=None: (GOLDEN_LAT, GOLDEN_LON)), \
+                mock.patch.object(pdf_compiler, "generate_maps",
+                                  lambda *a, **k: None), \
+                mock.patch.object(catastro_live, "verificar_catastro_barranquilla",
+                                  lambda *a, **k: {"disponible": False,
+                                                   "numero_predial": None,
+                                                   "error": "servicio sin respuesta",
+                                                   "fuente": {}}), \
+                mock.patch.object(pdf_compiler, "get_poi_result",
+                                  lambda *a, **k: {
+                                      "items": {c: [] for c in (
+                                          "Salud", "Educacion", "Comercio",
+                                          "Recreacion")},
+                                      "category_status": {c: "NO_MATCH" for c in (
+                                          "Salud", "Educacion", "Comercio",
+                                          "Recreacion")},
+                                      "sources_attempted": 1,
+                                      "sources_succeeded": 1}):
+            pdf_compiler.compile_pdf(record, str(out_pdf), assets_dir=out_dir)
+        cls.txt = _texto_pdf(out_pdf.read_bytes())
+        import shutil
+        shutil.rmtree(out_dir, ignore_errors=True)
+
+    def test_nupre_nunca_va_como_terreno(self):
+        self.assertFalse(
+            any("terreno='AFT" in w for w in self.fuentes.wheres_terreno),
+            f"el NUPRE se envió como número predial: {self.fuentes.wheres_terreno}")
+
+    def test_destino_solo_por_contexto_espacial(self):
+        _i = self.txt.index("destino económico catastral")
+        _frag = self.txt[_i:_i + 180]
+        self.assertIn("habitacional", _frag)
+        self.assertIn("contexto espacial", _frag)
+        self.assertNotIn("identificador exacto", _frag)
+        self.assertNotIn("capa predio", _frag)
+
+    def test_identidad_y_barrio_no_se_inventan(self):
+        # El NUPRE sí identifica por su propia ruta (capa 500 / registro).
+        self.assertIn("aft0005boha", self.txt)
+        self.assertIn("miramar", self.txt)
+
+    def test_sin_codigo_la_condicion_espacial_no_se_disfraza_de_exacta(self):
+        _i = self.txt.index("condición jurídica")
+        _frag = self.txt[_i:_i + 120]
+        self.assertIn("propiedad horizontal", _frag)
+        # La condición se resuelve por punto: 6.1 no lleva etiqueta de capa/exacto.
+        self.assertNotIn("inferido del ctl", _frag)
 
 
 if __name__ == "__main__":
