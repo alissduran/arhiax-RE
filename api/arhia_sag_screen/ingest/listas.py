@@ -156,9 +156,14 @@ def obtener_listas(fuentes=None, *, cache_dir: Optional[str] = None,
                    force_refresh: bool = False, timeout: int = 180):
     """Devuelve {fuente: (ListaVersion, registros)} para cada fuente configurada.
 
-    - 'live': se intenta descargar (con caché); si falla -> muestra.
-    - 'fichero': usa el cache (archivo ya ingerido); si no hay -> muestra.
-    - resto: muestra determinista versionada.
+    - 'live': se intenta descargar (con caché); si falla, la fuente NO se incluye.
+    - 'fichero': usa el cache (archivo ya ingerido); si no hay, NO se incluye.
+    - 'fuera_de_alcance': no es fuente de screening y se omite.
+
+    03S.1: se eliminó el fallback a "muestra sintética". Un registro de prueba
+    NO es evidencia de screening: si la fuente no se puede adquirir, la fuente
+    simplemente no aparece (el consumidor la reporta como no disponible). Los
+    datos sintéticos viven en `tests/fixtures/` (§12).
     """
     keys = fuentes or list(FUENTES)
     out = {}
@@ -168,18 +173,19 @@ def obtener_listas(fuentes=None, *, cache_dir: Optional[str] = None,
         if cat is None:
             continue
         politica = cat.get("politica")
+        if politica == "fuera_de_alcance":
+            continue
         if politica == "fichero":
             cached = _leer_cache(cache, f)
             if cached is not None:
                 out[f] = cached
-                continue
-        elif politica == "live":
+            continue
+        if politica == "live":
             try:
-                lista, regs = obtener_lista(f, cache_dir=cache_dir, force_refresh=force_refresh, timeout=timeout)
+                lista, regs = obtener_lista(f, cache_dir=cache_dir,
+                                            force_refresh=force_refresh,
+                                            timeout=timeout)
                 out[f] = (lista, list(regs))
-                continue
             except ListaNoDisponible:
-                pass
-        muestra = list(cat.get("muestra", ()))
-        out[f] = (_versionar_muestra(f, muestra), muestra)
+                continue
     return out

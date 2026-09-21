@@ -1714,15 +1714,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     def dt(rows):
         return data_table(rows, s)
     
-    # ── TITULUX (Confianza Predial): pre-dictamen + screening SAGRILAFT en vivo ──
+    # ── TITULUX (Confianza Predial): pre-dictamen + screening de contrapartes ──
     # Sprint Titulux: mapea el CTL real al modelo de pre-dictamen jurídico
     # determinista (TIT_B01..B05/VAL/TRX/SAG) y ejecuta el screening multifuente
-    # (ONU/OFAC/UK en vivo; UIAF pendiente por canal oficial; UE por archivo) con degradación honesta.
+    # (UN/OFAC SDN/UK Sanctions List con snapshot versionado) con degradación honesta.
     # Nunca rompe el PDF: si falla, la sección 05 lo declara NO EVALUADO.
     _listas_cache = os.environ.get("ARHIA_LISTAS_CACHE")
     if not _listas_cache:
         # Caché ESTABLE (no por-caso): en Vercel /tmp persiste entre invocaciones
-        # sobre la misma instancia caliente (evita re-descargar ONU/OFAC ~18 MB);
+        # sobre la misma instancia caliente (evita re-descargar ~52 MB);
         # en local, un directorio escribible dentro de api/.
         if os.environ.get("VERCEL") or not os.access(str(API_DIR), os.W_OK):
             _listas_cache = "/tmp/arhia_listas"
@@ -1732,7 +1732,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     _titulux_skip = None
     if not path_certificado:
         # Sin CTL no hay titular, acreedor ni anotaciones que pre-analizar ni
-        # sujetos que screeningar: descargar ONU/OFAC sería un desperdicio.
+        # sujetos que screeningar: descargar las listas sería un desperdicio.
         _titulux_skip = ("sin certificado de libertad y tradición (CTL) adjunto: no hay "
                          "sujetos ni anotaciones que analizar.")
     else:
@@ -2160,7 +2160,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "pre-dictamen juridico determinista (reglas TIT/VAL/TRX/SAG) sobre el certificado de "
         "libertad y tradicion analizado en la seccion 04. Presenta los hallazgos del expediente "
         "(identidad, cronologia, titularidad, gravamenes y precio) y una conclusion preliminar, "
-        "siempre como insumo del profesional competente. El <b>screening SAGRILAFT</b> de los "
+        "siempre como insumo del profesional competente. El <b>screening de contrapartes</b> de los "
         "nombres del caso se reporta en la seccion 09."))
     story.append(Spacer(1, 6))
 
@@ -2911,69 +2911,129 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "dictamen. No se asume ausencia de amenaza: verificar en sgc.gov.co."))
     story.append(Spacer(1, 8))
 
-    # ── 09 CUMPLIMIENTO SAGRILAFT (FICHA ESTRUCTURAL + SCREENING EN VIVO) ──
-    story.append(sec("09 - Cumplimiento SAGRILAFT (ficha estructural + screening en vivo)"))
+    # ── 09 SCREENING DE CONTRAPARTES Y DEBIDA DILIGENCIA (03S.1) ──
+    # Capa de verdad del screening: sujetos canónicos → fuentes oficiales →
+    # snapshots versionados → matching determinista → evidencia. Un único
+    # `ScreeningSummary` alimenta 05, 09, 16 y 16.B (no puede haber un capítulo
+    # que diga "screening ejecutado" y otro "no ejecutado").
+    from sanctions.contracts import (
+        RESULT_SOURCE_UNAVAILABLE, RESULT_NOT_SCREENED, result_label,
+        freshness_label, SCREENING_NOT_EXECUTED, SCREENING_COMPLETE,
+    )
+    from sanctions.engine import (
+        summary_desde_dict, sigla, SCOPE_NOTE,
+    )
+    from sanctions import legal as _legal_sanciones
+
+    _summary = summary_desde_dict((_titulux or {}).get("screening_summary"))
+    story.append(sec("09 - Screening de Contrapartes y Debida Diligencia"))
     story.append(hr())
+    story.append(sub("Apoyo automatizado al proceso LA/FT/SAGRILAFT"))
     story.append(body(
-        "<b>Que es esta seccion:</b> deja los nombres de las personas y entidades del caso "
-        "(titular, banco acreedor, constructor) con su huella digital (hash) para trazabilidad y "
-        "presenta el <b>screening en vivo</b> de esos nombres contra las listas restrictivas. "
-        "<b>ONU, OFAC y UK se consultan en vivo</b> (feed oficial, copia local versionada por "
-        "SHA-256); la <b>lista UIAF</b> queda <b>PENDIENTE de consulta por canal oficial</b> y "
-        "nunca se simula. El hash garantiza que los nombres no se alteren entre la generacion y "
-        "el cruce."))
+        "<b>Qué es esta sección:</b> identifica a las contrapartes del caso con su "
+        "documento y su rol, las consulta contra listas de sanciones OFICIALES y deja "
+        "la evidencia versionada de cada consulta (quién, contra qué fuente, qué "
+        "versión, cuándo, con qué identificadores, con qué algoritmo y con qué "
+        "resultado). <b>No declara cumplimiento normativo</b> ni determina si una parte "
+        "es sujeto obligado: eso es una decisión jurídica y del oficial de cumplimiento."))
+    if _summary is not None and _summary.sources:
+        story.append(body(
+            "<b>Fuentes configuradas:</b> "
+            + ", ".join(sigla(s) for s in _summary.sources)
+            + ". <b>Alcance de cobertura:</b> "
+            + str((_summary.extra or {}).get("cobertura") or "—")
+            + ". <b>Semántica del hash:</b> cada hash SHA-256 sella un artefacto "
+            "(sujeto, snapshot de la lista, consulta, envelope de evidencia) y prueba "
+            "integridad y reproducibilidad; <b>no</b> prueba que la información de origen "
+            "sea verdadera."))
     story.append(Spacer(1, 6))
+    _subjects_para_ficha = (_summary.subjects if _summary is not None
+                            else ())
     ficha_sarlaft = generar_ficha_sarlaft(
         titulares=analysis.get("titulares", ""),
         acreedor_snr=analysis.get("acreedor_snr"),
         acreedor_real=analysis.get("acreedor_real"),
         constructor=analysis.get("constructor"),
         folio=folio,
+        subjects=_subjects_para_ficha,
+        screening_status=(_summary.status if _summary is not None else None),
+        screening_label=(_summary.etiqueta if _summary is not None else None),
+        sources=tuple(sigla(s) for s in (_summary.sources if _summary is not None else ())),
+        subjects_declared=(_summary.subjects_declared if _summary is not None else None),
+        subjects_screened=(_summary.subjects_screened if _summary is not None else None),
+        subjects_not_screened=(_summary.subjects_not_screened if _summary is not None else None),
     )
     story.append(dt(generar_tabla_sarlaft(ficha_sarlaft)))
     story.append(Spacer(1, 4))
     story.append(body(f"<b>Disclaimer:</b> {ficha_sarlaft['disclaimer']}"))
+    story.append(Spacer(1, 4))
+    story.append(body(
+        "<b>Base legal (referencia):</b> "
+        + _legal_sanciones.base_legal("SAG_IDENTIFICACION_CONTRAPARTES",
+                                      "SAG_LISTAS_VINCULANTES",
+                                      "SAG_EVIDENCIA_TRAZABILIDAD")
+        + ". Los numerales concretos no se citan mientras no se verifiquen contra el "
+        "texto oficial vigente."))
     story.append(Spacer(1, 6))
 
-    if not _titulux or not _titulux.get("disponible"):
+    if _summary is None or not _summary.executed:
         _motivo = ""
         if _titulux_skip:
             _motivo = f": {_titulux_skip}"
+        elif _summary is not None and _summary.reason:
+            _motivo = f" ({_summary.reason})"
         elif _titulux and _titulux.get("error"):
             _motivo = f" ({_titulux.get('error')})"
         story.append(alert_orange(
-            "<b>Screening SAGRILAFT NO EVALUADO</b>" + _motivo + ". "
-            "El cruce contra listas restrictivas queda PENDIENTE; no se afirma resultado alguno."
-        ))
+            "<b>Screening de contrapartes NO EJECUTADO</b>" + _motivo + ". "
+            "No se afirma resultado alguno de listas restrictivas."))
     else:
-        # --- Screening SAGRILAFT (resultado real con degradación honesta) ---
-        story.append(sub("Screening SAGRILAFT de contrapartes"))
-        _filas_scr = [[Paragraph("<b>Sujeto</b>", s["header"]),
-                       Paragraph("<b>Tipo</b>", s["header"]),
-                       Paragraph("<b>Resultado</b>", s["header"]),
-                       Paragraph("<b>ONU</b>", s["header"]),
-                       Paragraph("<b>OFAC</b>", s["header"]),
-                       Paragraph("<b>UK</b>", s["header"]),
-                       Paragraph("<b>UIAF</b>", s["header"])]]
-        _resultado_es = {
-            "sinCoincidencia": "Sin coincidencia", "coincidencia": "COINCIDENCIA",
-            "candidato": "Candidato (revisar)", "revisionManual": "Revision manual",
-            "pendiente": "PENDIENTE",
-        }
-        for sc in _titulux.get("screening", []):
-            _por_fuente = {f["fuente"]: _resultado_es.get(f["resultado"], f["resultado"])
-                           for f in sc.get("fuentes", [])}
-            _res_es = _resultado_es.get(sc["resultado"], sc["resultado"])
-            _filas_scr.append([
-                Paragraph(sc["sujeto"] or "—", s["body"]),
-                Paragraph("Persona natural" if sc.get("tipo") == "natural" else "Entidad", s["body"]),
-                Paragraph(f"<b>{_res_es}</b>", s["value"]),
-                Paragraph(_por_fuente.get("onu", "—"), s["body"]),
-                Paragraph(_por_fuente.get("ofac", "—"), s["body"]),
-                Paragraph(_por_fuente.get("uk", "—"), s["body"]),
-                Paragraph(_por_fuente.get("uiaf", "—"), s["body"]),
-            ])
-        _t_scr = Table(_filas_scr, colWidths=["26%", "12%", "16%", "12%", "12%", "11%", "11%"])
+        # --- Screening de contrapartes (resultado real, con degradación honesta) ---
+        story.append(sub("09.1 Resultado por contraparte y fuente"))
+        _fuentes_tabla = list(_summary.sources)
+        _cab = [Paragraph("<b>Sujeto</b>", s["header"]),
+                Paragraph("<b>Tipo</b>", s["header"]),
+                Paragraph("<b>Documento</b>", s["header"]),
+                Paragraph("<b>Rol</b>", s["header"])]
+        for _sid in _fuentes_tabla:
+            _cab.append(Paragraph(f"<b>{sigla(_sid)}</b>", s["header"]))
+        _cab.append(Paragraph("<b>Resultado</b>", s["header"]))
+        _filas_scr = [_cab]
+        _PERSONA_TXT = {"NATURAL_PERSON": "Natural", "LEGAL_ENTITY": "Jurídica",
+                        "UNKNOWN": "No determinado"}
+        for _env in _summary.subjects:
+            _outs = {o.source_id: o for o in _summary.outcomes_de(_env.subject_id)}
+            _celdas = [
+                Paragraph(_env.canonical_name or "—", s["body"]),
+                Paragraph(_PERSONA_TXT.get(_env.person_type, "No determinado"), s["body"]),
+                Paragraph(" ".join(x for x in ((_env.document_type or "").upper(),
+                                               _env.document_number or "") if x) or "N/D",
+                          s["body"]),
+                Paragraph(" / ".join(_env.roles) or "—", s["body"]),
+            ]
+            for _sid in _fuentes_tabla:
+                _o = _outs.get(_sid)
+                if _o is None:
+                    _celdas.append(Paragraph("—", s["body"]))
+                    continue
+                _cached = _o.freshness in ("CACHED_FRESH", "STALE_ALLOWED")
+                _celdas.append(Paragraph(result_label(_o.result, cached=_cached), s["body"]))
+            # Resultado del sujeto: el peor entre fuentes (nunca "sin coincidencia"
+            # si alguna fuente no se pudo consultar).
+            _concluyentes = [o for o in _outs.values()
+                             if o.result not in (RESULT_SOURCE_UNAVAILABLE, RESULT_NOT_SCREENED)]
+            if not _concluyentes:
+                _res_sujeto = "NO CONSULTADO"
+            else:
+                _peor_o = sorted(_concluyentes, key=lambda o: {
+                    "EXACT_MATCH": 0, "STRONG_MATCH": 1, "POTENTIAL_MATCH": 2,
+                    "REVIEW_REQUIRED": 3, "NO_MATCH": 4}.get(o.result, 5))[0]
+                _res_sujeto = result_label(_peor_o.result)
+            _celdas.append(Paragraph(f"<b>{_res_sujeto}</b>", s["value"]))
+            _filas_scr.append(_celdas)
+        _ancho_fuente = max(8, int(24 / max(1, len(_fuentes_tabla))))
+        _anchos = ["24%", "9%", "14%", "14%"] + [f"{_ancho_fuente}%"] * len(_fuentes_tabla) + ["13%"]
+        _t_scr = Table(_filas_scr, colWidths=_anchos, repeatRows=1)
         _t_scr.setStyle(TableStyle([
             ("BACKGROUND", (0, 0), (-1, 0), C_AZUL_OSC), ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
             ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F0F4FB")]),
@@ -2984,26 +3044,71 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         story.append(_t_scr)
         story.append(Spacer(1, 4))
 
-        if _titulux.get("coincidencia"):
+        # Procedencia por fuente: versión, fecha y hash del artefacto consultado.
+        story.append(sub("09.2 Versión y procedencia de cada fuente consultada"))
+        _filas_prov = [[Paragraph("<b>Fuente</b>", s["header"]),
+                        Paragraph("<b>Autoridad</b>", s["header"]),
+                        Paragraph("<b>Obtención</b>", s["header"]),
+                        Paragraph("<b>Fecha efectiva</b>", s["header"]),
+                        Paragraph("<b>Registros</b>", s["header"]),
+                        Paragraph("<b>SHA-256</b>", s["header"])]]
+        for _sid in _fuentes_tabla:
+            _snap = _summary.snapshot(_sid)
+            if _snap is None:
+                continue
+            _filas_prov.append([
+                Paragraph(f"<b>{sigla(_sid)}</b><br/>{_sid}", s["body"]),
+                Paragraph(_snap.authority or "—", s["body"]),
+                Paragraph(freshness_label(_snap.freshness), s["body"]),
+                Paragraph(_snap.effective_date or "no declarada por la fuente", s["body"]),
+                Paragraph(str(_snap.record_count), s["value"]),
+                Paragraph((_snap.sha256 or "")[:16] or "—", s["mono"]),
+            ])
+        _t_prov = Table(_filas_prov, colWidths=["16%", "24%", "22%", "17%", "8%", "13%"],
+                        repeatRows=1)
+        _t_prov.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), C_AZUL_OSC), ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F0F4FB")]),
+            ("GRID", (0, 0), (-1, -1), 0.4, C_BORDE),
+            ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ("LEFTPADDING", (0, 0), (-1, -1), 5), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ]))
+        story.append(_t_prov)
+        story.append(Spacer(1, 4))
+        story.append(body(
+            "<b>Algoritmo de cotejo:</b> " + (_summary.algorithm_version or "—")
+            + " · <b>Umbrales:</b> nombre exacto + atributo corroborante = coincidencia; "
+            "nombre difuso ≥0.90 = candidato (revisión humana); ≥0.80 = revisión manual. "
+            "<b>Un cotejo solo por nombre difuso nunca confirma una coincidencia.</b>"))
+        story.append(Spacer(1, 4))
+
+        if _summary.matched_subjects:
             story.append(alert_red(
-                "<b>COINCIDENCIA DETECTADA en listas vinculantes.</b> Procede revision humana y "
-                "debida diligencia intensificada antes de decidir. El dictamen NO autoriza operar "
-                "con la contraparte coincidente."
-            ))
-        if _titulux.get("fuentes_pendientes"):
-            _pend = ", ".join(str(f).upper() for f in _titulux["fuentes_pendientes"])
+                "<b>COINCIDENCIA EN LISTAS DE SANCIONES.</b> Procede revisión humana y "
+                "debida diligencia intensificada antes de decidir. El dictamen NO autoriza "
+                "operar con la contraparte coincidente y no califica a la persona: "
+                "identifica un registro que debe verificarse."))
+        elif _summary.review_required_subjects:
             story.append(alert_orange(
-                f"<b>Screening incompleto (degradacion honesta):</b> fuente(s) no consultada(s) en "
-                f"vivo: {_pend}. La lista UIAF requiere canal oficial autorizado y la lista UE "
-                f"requiere ingesta del archivo XML oficial. El resultado de las fuentes consultadas "
-                f"NO cubre las pendientes; la operacion queda sujeta a completarlas."
-            ))
-        elif not _titulux.get("coincidencia"):
+                "<b>REVISIÓN REQUERIDA:</b> hay candidatos que exigen verificación humana "
+                "(homónimos, identificadores incompatibles o coincidencia parcial de nombre). "
+                "La coincidencia por nombre NO confirma una designación."))
+        if _summary.sources_unavailable:
+            story.append(alert_orange(
+                "<b>Screening INCOMPLETO (degradación honesta):</b> fuente(s) no disponible(s) "
+                "en esta ejecución: "
+                + ", ".join(sigla(s) for s in _summary.sources_unavailable)
+                + ". El resultado de las fuentes consultadas NO cubre las no disponibles; no "
+                "puede afirmarse ausencia de coincidencia en las fuentes faltantes."))
+        if _summary.status == SCREENING_COMPLETE:
             story.append(alert_green(
-                "<b>Screening SAGRILAFT completado:</b> sin coincidencias en las fuentes "
-                "consultadas en vivo (ONU/OFAC/UK). El resultado no sustituye la verificacion final "
-                "del oficial de cumplimiento ni la consulta del canal UIAF."
-            ))
+                "<b>Screening completo:</b> " + (_summary.reason or "")
+                + " El resultado no sustituye la validación del oficial de cumplimiento."))
+        else:
+            story.append(alert_orange(
+                "<b>Estado del screening:</b> " + _summary.etiqueta + ". "
+                + (_summary.reason or "")))
+        story.append(body(f"<i>{SCOPE_NOTE}</i>"))
     story.append(Spacer(1, 8))
 
     # ── 10 HALLAZGOS CLASIFICADOS ──────────────────────────────
@@ -3452,7 +3557,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         Paragraph("ARHIAX <b>Confianza Predial</b>", ParagraphStyle("bs", fontName="Helvetica",
                    fontSize=14, textColor=colors.HexColor("#2E5B8A"), leading=18, alignment=1)),
     ], [
-        Paragraph("Motor de pre-dictamen jurídico-inmobiliario y screening SAGRILAFT",
+        Paragraph("Motor de pre-dictamen jurídico-inmobiliario y screening de contrapartes",
                    ParagraphStyle("bss", fontName="Helvetica-Oblique", fontSize=10,
                    textColor=colors.HexColor("#4A6A8A"), leading=14, alignment=1)),
     ]], colWidths=["100%"])
@@ -3463,18 +3568,18 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(_marca)
     story.append(Spacer(1, 10))
     story.append(body(
-        "Las secciones 05 (pre-dictamen juridico) y 09 (screening SAGRILAFT) de este dictamen fueron preparadas por <b>Titulux</b>, la capa de "
+        "Las secciones 05 (pre-dictamen juridico) y 09 (screening de contrapartes) de este dictamen fueron preparadas por <b>Titulux</b>, la capa de "
         "<b>confianza predial</b> de ARHIAX RE. Titulux estructura en un expediente unico: "
         "(1) el <b>pre-dictamen juridico</b> determinista sobre el certificado de libertad y "
         "tradicion (identidad, cronologia, titularidad, gravamenes, precio y pagos), y (2) el "
-        "<b>screening SAGRILAFT</b> de las contrapartes contra listas restrictivas "
+        "<b>screening de contrapartes</b> contra listas oficiales de sanciones "
         "vinculantes, con degradacion honesta cuando una fuente no es consultable en vivo."))
     story.append(Spacer(1, 6))
     story.append(dt([
         ("Modulo", "Titulux — ARHIAX Confianza Predial"),
         ("Reglas de titulo", "TIT_B01..B05 · VAL_B01 · TRX_B01 · SAG_B01 (deterministas)"),
-        ("Screening", "ONU / OFAC / UK en vivo (feed oficial, cache SHA-256) · UIAF por canal oficial · UE por archivo"),
-        ("Evidencia", "Envelope B18 + cadena HMAC por evento (trazabilidad 9.22)"),
+        ("Screening", "UN Consolidated · OFAC SDN · UK Sanctions List — snapshot oficial versionado por SHA-256"),
+        ("Evidencia", "Envelope B18 + cadena HMAC por evento (subject/snapshot/query/evidence hash)"),
         ("Autoría", "El sistema prepara y señaliza; concluye y firma el profesional competente"),
     ]))
     story.append(Spacer(1, 6))
@@ -3568,7 +3673,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
 
     # ── NOTIFICACIÓN: documentos SARLAFT pendientes (requieren humano) ──
     # Envía un correo (Resend) con la lista de documentos que un agente IA no
-    # puede descargar (UIAF, UE, PEP, extracto hipotecario, etc.). Nunca rompe
+    # puede descargar (UE por archivo, beneficiario final, extracto hipotecario, etc.). Nunca rompe
     # la generación: si Resend no está configurado o falla, se omite.
     try:
         from notificaciones import compilar_pendientes, enviar_correo_pendientes

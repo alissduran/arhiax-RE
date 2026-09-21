@@ -50,7 +50,7 @@ def concluir(expediente: Expediente, integridad: FichaIntegridad, *,
              firmantes: Optional[Tuple[dict, ...]] = None,
              ficha_ptee=None,  # FichaPtee (kyb.ptee) — riesgo de corrupción/soborno
              ficha_uso_suelo=None,  # FichaUsoSuelo (kyb.uso_suelo) — polígono POT
-             base: str = "Circular 100-000020 (Cap. IX) + Ley 1579/2012 + Código Civil") -> Conclusion:
+             base: str = "Circular Externa 100-000020 del 2 de julio de 2026 (CBJ) + Ley 1579/2012 + Código Civil") -> Conclusion:
     """Simula la conclusión del profesional autorizado para el dictamen completo."""
     riesgos, observaciones = _clasificar(expediente.hallazgos)
     screening = integridad.screening
@@ -71,7 +71,7 @@ def concluir(expediente: Expediente, integridad: FichaIntegridad, *,
     # 1) Coincidencia en screening (contraparte o BF) -> bloqueo precautorio
     elif screening == "coincidencia" or integridad.bf_coincidencia:
         veredicto = "BLOQUEO_PRECAUTORIO"
-        fundamento = ("Coincidencia en screening de listas vinculantes (9.17), sea de la contraparte "
+        fundamento = ("Coincidencia en screening de listas de sanciones, sea de la contraparte "
                       "o de un beneficiario final: antes de decidir procede revisión humana y debida "
                       "diligencia intensificada.")
         recomendaciones = tuple(h.accion for h in expediente.hallazgos if h.accion and h.responsable in ("abogado", "sistema"))
@@ -104,7 +104,7 @@ def concluir(expediente: Expediente, integridad: FichaIntegridad, *,
         fundamento = ("La operación presenta características inusuales (posible LA/FT, señales detectadas). "
                       "Procede con análisis del oficial de cumplimiento y diligencias ampliadas antes del cierre.")
         recomendaciones = ("Revisar origen de fondos y relación del pagador.", "Verificar justificación de la divergencia de valor.",
-                           "Registrar la evidencia del análisis (9.22) y, si procede, reporte a la UIAF.")
+                           "Registrar la evidencia del análisis y, si procede, presentar el reporte por el canal oficial (UIAF/SIREL).")
     # 3b) Riesgo de corrupción alto (sin soborno directo) -> requiere revisión
     elif ficha_ptee is not None and ficha_ptee.riesgo_corrupcion == "alto":
         veredicto = "REQUIERE_REVISION"

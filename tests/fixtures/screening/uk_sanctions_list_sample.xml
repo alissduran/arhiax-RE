@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FIXTURE SANITIZADO 03S.1 — estructura OFICIAL de la UK Sanctions List
+     (FCDO, https://sanctionslist.fcdo.gov.uk/docs/UK-Sanctions-List.xml).
+     Nombres ficticios: prueban el PARSER, no son evidencia de screening. -->
+<Designations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateGenerated>21/09/2026</DateGenerated>
+  <Designation>
+    <LastUpdated>04/08/2026</LastUpdated>
+    <DateDesignated>29/06/2012</DateDesignated>
+    <UniqueID>AFG0001</UniqueID>
+    <OFSIGroupID>12703</OFSIGroupID>
+    <UNReferenceNumber>TAe.010</UNReferenceNumber>
+    <Names>
+      <Name>
+        <Name6>HAJI KHAIRULLAH HAJI SATTAR MONEY EXCHANGE</Name6>
+        <NameType>Primary Name</NameType>
+      </Name>
+      <Name>
+        <Name6>Haji Alim Hawala</Name6>
+        <NameType>Alias</NameType>
+      </Name>
+    </Names>
+    <RegimeName>The Afghanistan (Sanctions) (EU Exit) Regulations 2020</RegimeName>
+    <IndividualEntityShip>Entity</IndividualEntityShip>
+    <DesignationSource>UN</DesignationSource>
+    <SanctionsImposed>Asset freeze</SanctionsImposed>
+  </Designation>
+  <Designation>
+    <LastUpdated>14/04/2026</LastUpdated>
+    <DateDesignated>25/01/2001</DateDesignated>
+    <UniqueID>AFG0006</UniqueID>
+    <OFSIGroupID>7172</OFSIGroupID>
+    <UNReferenceNumber>TAi.002</UNReferenceNumber>
+    <Names>
+      <Name>
+        <Name1>MOHAMMAD</Name1>
+        <Name2>HASSAN</Name2>
+        <Name6>AKHUND</Name6>
+        <NameType>Primary Name</NameType>
+      </Name>
+    </Names>
+    <RegimeName>The Afghanistan (Sanctions) (EU Exit) Regulations 2020</RegimeName>
+    <IndividualEntityShip>Individual</IndividualEntityShip>
+    <DesignationSource>UN</DesignationSource>
+    <SanctionsImposed>Asset freeze|Travel Ban</SanctionsImposed>
+    <IndividualDetails>
+      <Individual>
+        <DOBs>
+          <DOB>dd/mm/1945</DOB>
+          <DOB>dd/mm/1946</DOB>
+        </DOBs>
+        <Passports>
+          <Passport>
+            <PassportNumber>AF1234567</PassportNumber>
+          </Passport>
+        </Passports>
+      </Individual>
+    </IndividualDetails>
+  </Designation>
+</Designations>

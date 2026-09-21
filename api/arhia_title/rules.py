@@ -238,13 +238,31 @@ def amenazas_pot(caso):
     ]
 
 
+def _tipo_titular_txt(caso) -> str:
+    """Tipo de la contraparte según su DOCUMENTO (nunca se asume)."""
+    _tit = next((p for p in getattr(caso, "partes", ()) if getattr(p, "rol", "") == "titular"), None)
+    _doc = (getattr(_tit, "tipo_documento", "") or "").lower() if _tit is not None else ""
+    if _doc == "nit":
+        return "persona jurídica"
+    if _doc in ("cc", "ce", "ti", "rc", "pasaporte", "nuip"):
+        return "persona natural"
+    return "contraparte sin tipo de documento declarado"
+
+
 def verificacion_sarlaft(caso):
+    try:
+        from sanctions.legal import cita as _cita_legal
+        _base = _cita_legal("SAG_LISTAS_VINCULANTES")
+    except Exception:  # noqa: BLE001
+        _base = "Circular Externa 100-000020 del 2 de julio de 2026 (CBJ)"
     if caso.sarlaft_estado == "pendiente":
-        return [Hallazgo("SAG_B01", "Verificación SARLAFT", "OBSERVACION", "media",
-            f"El titular (persona jurídica) no ha sido screeningado en listas restrictivas.",
-            base_legal="Circular 100-000020 (Cap. IX — SAGRILAFT/PTEE): screening de listas vinculantes + beneficiario final; Ley 1581.",
-            implicacion="Cumplimiento pendiente: sin screening + beneficiario final documentado, la operación no queda trazable y puede incumplir el deber de identificación.",
-            regla="SAG_B01", accion="Ejecutar screening (listas ONU/OFAC/UIAF) con fuente versionada y documentar evidencia + beneficiario final.", responsable="abogado")]
+        return [Hallazgo("SAG_B01", "Screening de contrapartes en listas", "OBSERVACION", "media",
+            f"El screening de listas de sanciones de la contraparte ({_tipo_titular_txt(caso)}) "
+            f"está PENDIENTE o INCOMPLETO en esta ejecución.",
+            base_legal=_base + " + Ley 1581.",
+            implicacion="Cumplimiento pendiente: sin screening completo y evidencia versionada, la verificación de contrapartes no queda trazable.",
+            regla="SAG_B01", accion="Completar el screening contra las fuentes oficiales de sanciones con snapshot versionado y documentar la evidencia.", responsable="abogado")]
     if caso.sarlaft_estado == "verificado":
-        return [Hallazgo("SAG_B01", "Verificación SARLAFT", "OK", "baja", "Screening ejecutado y evidencia de la versión de lista.", regla="SAG_B01")]
+        return [Hallazgo("SAG_B01", "Screening de contrapartes en listas", "OK", "baja",
+                         "Screening ejecutado con evidencia de la versión de cada fuente.", regla="SAG_B01")]
     return []

@@ -1,87 +1,98 @@
-"""Catálogo multifuente de listas para el screening SARLAFT/SAGRILAFT+PTEE.
+"""Catálogo de fuentes del subsistema de screening (LEGADO, 03S.1).
 
-La circular (Cap. IX) exige consultar **listas vinculantes**. ONU y OFAC son el baseline
-internacional; el set completo incluye UIAF (lista cautelar/vinculante colombiana), UE, Reino
-Unido (HMT/OFSI), PEP (servidores públicos) e Interpol.
+AVISO 03S.1 — este catálogo NO es la autoridad de fuentes vigentes. La autoridad
+es `sanctions.registry` (SourceRegistry), que declara:
 
-`politica` indica cómo se obtiene la fuente:
-  - "live"   -> se intenta descargar y parsear el feed oficial (ONU, OFAC).
-  - "muestra"-> no hay feed limpio/publico fiable (UIAF, UE, UK, PEP, Interpol); se usa una
-               muestra determinista versionada, documentando que el conector oficial es aparte.
-Cada fuente aporta una `muestra` (RegistroNormalizado) para que el screening sea completo y
-versionado aunque la fuente no sea consumible en vivo.
+  * UN_CONSOLIDATED   — ONU, lista consolidada del Consejo de Seguridad (CURRENT)
+  * OFAC_SDN          — OFAC Sanctions List Service, SDN (CURRENT)
+  * UK_SANCTIONS_LIST — UK Sanctions List FCDO (CURRENT)  ← migración 03S.1
+  * UK_OFSI_CONLIST_HISTORICAL — ConList.xml (HISTORICAL, solo reproducibilidad)
+  * UIAF_SIREL        — REGULATORY_REPORTING, FUERA del screening
+  * EU_CONSOLIDATED   — OPCIONAL / OFFICIAL_FILE_REQUIRED
+
+Aislamiento de datos de demostración (§12 del prompt 03S.1): los registros
+sintéticos de las listas de prueba YA NO viven en el módulo productivo; se
+movieron a `tests/fixtures/screening/muestras_sinteticas.json`.
+Este módulo no contiene ningún registro de lista: solo metadatos de catálogo.
+Regla: SYNTHETIC_TEST_FIXTURE != SCREENING EVIDENCE.
 """
-from ..contracts import RegistroNormalizado
 
 ONU_XML = "https://scsanctions.un.org/resources/xml/en/consolidated.xml"
-OFAC_XML = "https://www.treasury.gov/ofac/downloads/sdn.xml"
-UK_XML = "https://ofsistorage.blob.core.windows.net/publishlive/2022format/ConList.xml"
+# OFAC Sanctions List Service (endpoint oficial vigente de exportación SDN).
+OFAC_XML = "https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.XML"
+# UK: fuente vigente (UK Sanctions List, FCDO). El antiguo ConList.xml de OFSI
+# queda como HISTORICAL_SOURCE para reproducibilidad de dictámenes históricos.
+UK_XML = "https://sanctionslist.fcdo.gov.uk/docs/UK-Sanctions-List.xml"
+UK_OFSI_LEGACY_XML = ("https://ofsistorage.blob.core.windows.net/publishlive/"
+                      "2022format/ConList.xml")
 
-
-def _r(id, nombre, alias=(), tid=None, num=None, fuente="", version=""):
-    return RegistroNormalizado(id=id, nombre=nombre, alias=alias, tipo_documento=tid,
-                               numero_documento=num, fuente=fuente, lista_version=version)
-
-
+# `politica`:
+#   "live"    -> descarga del feed oficial (ONU, OFAC, UK).
+#   "fichero" -> ingesta del archivo oficial (UE); el portal bloquea la descarga.
+#   "fuera_de_alcance" -> NO es fuente de screening (UIAF/SIREL, PEP).
 FUENTES = {
     "onu": {
         "nombre": "ONU — Security Council Consolidated List",
         "url": ONU_XML, "formato": "xml", "parser": "onu", "politica": "live",
-        "descripcion": "Lista consolidada del Consejo de Seguridad de la ONU (personal y entidades).",
-        "muestra": (),
+        "categoria": "SANCTIONS_LIST", "source_id": "UN_CONSOLIDATED",
+        "descripcion": "Lista consolidada del Consejo de Seguridad de la ONU (personas y entidades).",
     },
     "ofac": {
         "nombre": "OFAC — Specially Designated Nationals (SDN)",
         "url": OFAC_XML, "formato": "xml", "parser": "ofac", "politica": "live",
-        "descripcion": "Sanciones de EE.UU. (SDN) — OFAC.",
-        "muestra": (),
+        "categoria": "SANCTIONS_LIST", "source_id": "OFAC_SDN",
+        "descripcion": "Sanciones de EE.UU. (SDN) — OFAC Sanctions List Service. Solo SDN: "
+                       "no cubre las listas no-SDN consolidadas.",
     },
-    "uiaf": {
-        "nombre": "UIAF — Lista vinculante / cautelar (Colombia)",
-        "url": "", "formato": "csv", "parser": "generic", "politica": "muestra",
-        "descripcion": "Lista cautelar/vinculante difundida por la UIAF. En producción se integra por "
-                       "el canal oficial (usuario autorizado); aquí se usa una muestra determinista.",
-        "muestra": (_r("uiaf-001", "JORGE ALIRIO GONZALEZ", ("J. GONZALEZ",), "cc", "98520011", "uiaf"),
-                    _r("uiaf-002", "FACTORIA PACIFICO SAS", ("FACTORIA PACIFICO",), "nit", "800999887", "uiaf")),
+    "uk": {
+        "nombre": "UK — UK Sanctions List (FCDO/OFSI)",
+        "url": UK_XML, "formato": "xml", "parser": "uk_sanctions_list",
+        "politica": "live", "categoria": "SANCTIONS_LIST",
+        "source_id": "UK_SANCTIONS_LIST",
+        "descripcion": "Lista única de sanciones del Reino Unido. Sustituye al consolidated "
+                       "list del Tesoro (ConList.xml), que queda como fuente histórica.",
     },
     "ue": {
         "nombre": "UE — Consolidated Sanctions List (DG FISMA / FSF, XML 1.1)",
         "url": "https://webgate.ec.europa.eu/fsd/fsf/public/files/xmlFullSanctionsList_1_1/content",
         "url_mirror": "https://sankcijas.fid.gov.lv/files/xmlFullSanctionsList_1_1.xml",
         "formato": "xml", "parser": "ue", "politica": "fichero",
-        "origin": "EU_DG_FISMA", "channel": "OFFICIAL_CRAWLER_OR_INSTITUTIONAL_MIRROR", "authority": "INSTITUTIONAL",
-        "descripcion": "Lista consolidada de sanciones de la UE (DG FISMA/FSF, XML 1.1). webgate bloquea "
-                       "el acceso automatizado (403 anti-bot) y el mirror devuelve HTML; por eso se "
-                       "**ingesta el XML** (vía crawler oficial de FSF / mirror / carga manual) con "
-                       "`ingestar_fichero('ue', ruta.xml)` y se versiona/cachea.",
-        "muestra": (_r("ue-001", "PETROLEOS NORTE S.L.", (), "nit", "B12345678", "ue"),
-                    _r("ue-002", "VIKTOR KRUPIN", (), "pasaporte", "TR1234567", "ue")),
+        "categoria": "SANCTIONS_LIST", "source_id": "EU_CONSOLIDATED",
+        "origin": "EU_DG_FISMA", "channel": "OFFICIAL_CRAWLER_OR_INSTITUTIONAL_MIRROR",
+        "authority": "INSTITUTIONAL",
+        "descripcion": "OPCIONAL en 03S.1 (OFFICIAL_FILE_REQUIRED): se ingesta el XML oficial "
+                       "con `ingestar_fichero('ue', ruta.xml)` y se versiona.",
     },
-    "uk": {
-        "nombre": "UK — OFSI / HMT Sanctions List",
-        "url": UK_XML, "formato": "xml", "parser": "uk", "politica": "live",
-        "descripcion": "Lista de sanciones financieras del Reino Unido (OFSI/HMT). XML grande (~54 MB) "
-                       "parseado por streaming; se cachea versionado.",
-        "muestra": (_r("uk-001", "MARIANO KOVAC", ("MARIAN KOVAC",), "pasaporte", "UK7654321", "uk"),
-                    _r("uk-002", "CARBON MINING LTD", (), "nit", "GB99887766", "uk")),
+    "uiaf": {
+        "nombre": "UIAF — canal de reporte regulatorio (SIREL)",
+        "url": "", "formato": "", "parser": "none", "politica": "fuera_de_alcance",
+        "categoria": "REGULATORY_REPORTING", "source_id": "UIAF_SIREL",
+        "descripcion": "UIAF/SIREL NO es una lista de screening: es el canal de reporte del "
+                       "sujeto obligado. Fuera de alcance en 03S.1 (03S.x Regulatory Reporting).",
+    },
+    "uk_ofsi_legacy": {
+        "nombre": "UK — OFSI Consolidated List (ConList.xml) — HISTÓRICO",
+        "url": UK_OFSI_LEGACY_XML, "formato": "xml", "parser": "uk",
+        "politica": "fuera_de_alcance", "categoria": "SANCTIONS_LIST",
+        "source_id": "UK_OFSI_CONLIST_HISTORICAL",
+        "descripcion": "HISTORICAL_SOURCE: solo para reproducir dictámenes históricos. "
+                       "PROHIBIDO como fuente vigente de UK.",
     },
     "pep": {
         "nombre": "PEP — Personas Expuestas Políticamente (Colombia)",
-        "url": "", "formato": "csv", "parser": "generic", "politica": "muestra",
-        "descripcion": "Servidores públicos / PEP (Procuraduría, Contraloría, registros oficiales). "
-                       "En producción se alimenta del registro de servidores públicos.",
-        "muestra": (_r("pep-001", "RODRIGO CASTRO RAMOS", ("R. CASTRO",), "cc", "72110033", "pep"),
-                    _r("pep-002", "MARTA LUCIA VALENCIA", (), "cc", "43009988", "pep")),
-    },
-    "interpol": {
-        "nombre": "Interpol — Red Notices",
-        "url": "", "formato": "xml", "parser": "generic", "politica": "muestra",
-        "descripcion": "Notificaciones rojas de Interpol (LA/FT, terrorismo).",
-        "muestra": (_r("int-001", "ALEXEI SMIRNOV", (), "pasaporte", "IN554433", "interpol"),
-                    _r("int-002", "LA UNION CARTEL", ("UNION CARTEL",), "nit", "IN110099", "interpol")),
+        "url": "", "formato": "", "parser": "none", "politica": "fuera_de_alcance",
+        "categoria": "PEP_REGISTRY", "source_id": "PEP_COLOMBIA",
+        "descripcion": "PEP avanzado fuera de 03S.1: se declara, no se simula.",
     },
 }
 
 
 def lista_de_fuentes():
     return list(FUENTES)
+
+
+def fuentes_de_screening():
+    """Claves de fuentes que SÍ cuentan como evidencia de screening."""
+    return [k for k, v in FUENTES.items()
+            if v.get("categoria") == "SANCTIONS_LIST"
+            and v.get("politica") in ("live", "fichero")]

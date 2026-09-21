@@ -1,0 +1,26 @@
+{
+  "_aviso": "SYNTHETIC_TEST_FIXTURE — datos de PRUEBA, no evidencia de screening. NO pueden entrar en una ejecución productiva ni citarse en un dictamen. Se conservan aquí (fuera de api/) porque los registros uiaf-001/ue-001/pep-001/int-001 vivían en el módulo productivo y podían confundirse con datos vinculantes.",
+  "_origen": "api/arhia_sag_screen/ingest/sources.py (03S.1 — aislamiento de datos de demostración)",
+  "fuentes": {
+    "uiaf": [
+      {"id": "uiaf-001", "nombre": "JORGE ALIRIO GONZALEZ", "alias": ["J. GONZALEZ"], "tipo_documento": "cc", "numero_documento": "98520011", "fuente": "uiaf"},
+      {"id": "uiaf-002", "nombre": "FACTORIA PACIFICO SAS", "alias": ["FACTORIA PACIFICO"], "tipo_documento": "nit", "numero_documento": "800999887", "fuente": "uiaf"}
+    ],
+    "ue": [
+      {"id": "ue-001", "nombre": "PETROLEOS NORTE S.L.", "alias": [], "tipo_documento": "nit", "numero_documento": "B12345678", "fuente": "ue"},
+      {"id": "ue-002", "nombre": "VIKTOR KRUPIN", "alias": [], "tipo_documento": "pasaporte", "numero_documento": "TR1234567", "fuente": "ue"}
+    ],
+    "uk": [
+      {"id": "uk-001", "nombre": "MARIANO KOVAC", "alias": ["MARIAN KOVAC"], "tipo_documento": "pasaporte", "numero_documento": "UK7654321", "fuente": "uk"},
+      {"id": "uk-002", "nombre": "CARBON MINING LTD", "alias": [], "tipo_documento": "nit", "numero_documento": "GB99887766", "fuente": "uk"}
+    ],
+    "pep": [
+      {"id": "pep-001", "nombre": "RODRIGO CASTRO RAMOS", "alias": ["R. CASTRO"], "tipo_documento": "cc", "numero_documento": "72110033", "fuente": "pep"},
+      {"id": "pep-002", "nombre": "MARTA LUCIA VALENCIA", "alias": [], "tipo_documento": "cc", "numero_documento": "43009988", "fuente": "pep"}
+    ],
+    "interpol": [
+      {"id": "int-001", "nombre": "ALEXEI SMIRNOV", "alias": [], "tipo_documento": "pasaporte", "numero_documento": "IN554433", "fuente": "interpol"},
+      {"id": "int-002", "nombre": "LA UNION CARTEL", "alias": ["UNION CARTEL"], "tipo_documento": "nit", "numero_documento": "IN110099", "fuente": "interpol"}
+    ]
+  }
+}

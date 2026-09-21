@@ -10,6 +10,15 @@ from arhia_title.contracts import Hallazgo
 from arhia_title.rules import ejecutar as ejecutar_titulos
 
 
+def _CBJ(*requirement_ids: str) -> str:
+    """Base legal citada desde el mapeo verificado (SIN numerales no verificados)."""
+    try:
+        from sanctions.legal import base_legal
+        return base_legal(*requirement_ids)
+    except Exception:  # noqa: BLE001
+        return "Circular Externa 100-000020 del 2 de julio de 2026 (CBJ — Supersociedades)"
+
+
 @dataclass(frozen=True)
 class FichaIntegridad:
     screening: str = ""      # ok | coincidencia | pendiente | revisionManual
@@ -49,50 +58,50 @@ PREGUNTAS = {
 
 def _hallazgo_integridad(integridad):
     h = []
-    if integridad.sarlaft == "pendiente" or integridad.screening == "pendiente":
+    if integridad.sarlaft in ("pendiente", "incompleto") or integridad.screening == "pendiente":
         h.append(Hallazgo("EXP-INT-1", "Verificación SARLAFT / screening", "OBSERVACION", "media",
             "Screening de listas y verificación SARLAFT pendientes de validar en plataforma externa.",
-            base_legal="Circular 100-000020 (Cap. IX): screening de listas (9.17) + beneficiario final + evidencia (9.22).",
+            base_legal=_CBJ("SAG_LISTAS_VINCULANTES", "SAG_BENEFICIARIO_FINAL", "SAG_EVIDENCIA_TRAZABILIDAD"),
             implicacion="Cumplimiento pendiente: la operación no queda trazable sin screening + beneficiario final documentados.",
-            regla="EXP-INT", accion="Ejecutar screening (ONU/OFAC/UIAF) y registrar beneficiario final.", responsable="abogado"))
+            regla="EXP-INT", accion="Ejecutar el screening contra las fuentes oficiales de sanciones y registrar beneficiario final.", responsable="abogado"))
     if integridad.screening == "coincidencia":
         h.append(Hallazgo("EXP-INT-0", "Coincidencia en listas", "RIESGO", "alta",
             "Se detectó coincidencia en screening; requiere revisión humana y DD intensificada.",
-            base_legal="Circular 100-000020 (9.17): coincidencia -> DD intensificada.",
+            base_legal=_CBJ("SAG_LISTAS_VINCULANTES"),
             implicacion="Riesgo elevado; la operación requiere diligencia ampliada.", regla="EXP-INT", responsable="abogado"))
     if integridad.bf_coincidencia:
         h.append(Hallazgo("EXP-INT-0-BF", "Coincidencia de beneficiario final en listas", "RIESGO", "alta",
             "Un beneficiario final (persona natural) coincide en alguna lista vinculante.",
-            base_legal="Circular 100-000020 (9.15.1/9.17): identificación del BF y screening; coincidencia -> DD intensificada.",
+            base_legal=_CBJ("SAG_BENEFICIARIO_FINAL", "SAG_LISTAS_VINCULANTES"),
             implicacion="Riesgo elevado: el beneficiario final está en una lista; requiere revisión y, en su caso, reporte.",
             regla="EXP-INT", responsable="cumplimiento"))
     if integridad.regimen:
         h.append(Hallazgo("EXP-INT-2", "Régimen estimado: " + integridad.regimen, "INFORMATIVO", "baja",
             "Sujeto obligado estimado en régimen " + integridad.regimen + " por tamaño (proxy).",
-            base_legal="Circular 100-000020 (Cap. IX): umbrales por régimen (pleno/RMM).",
+            base_legal=_CBJ("SAG_SUJETO_OBLIGADO"),
             implicacion="Determina la carga de cumplimiento aplicable.", regla="EXP-INT", responsable="abogado"))
     if integridad.beneficiario_final:
         h.append(Hallazgo("EXP-INT-3", "Beneficiario final identificado", "OK", "baja",
             "Beneficiario final: " + integridad.beneficiario_final + ".",
-            base_legal="Circular 100-000020 (9.15.1): beneficiario final ≥5% + regla subsidiaria.",
+            base_legal=_CBJ("SAG_BENEFICIARIO_FINAL"),
             implicacion="La identidad del dueño real está establecida; alimenta el screening.", regla="EXP-INT", responsable="sistema"))
     if integridad.perfil:
         h.append(Hallazgo("EXP-INT-4", "Perfil de riesgo de la contraparte: " + integridad.perfil, "INFORMATIVO", "baja",
             "Perfil " + integridad.perfil + " asignado por el motor (screening, beneficiario final, señales, dimensiones).",
-            base_legal="Circular 100-000020 (9.14.1): matriz de riesgo liga perfil a intensidad de DD.",
+            base_legal=_CBJ("SAG_IDENTIFICACION_CONTRAPARTES"),
             implicacion="Determina la profundidad de la debida diligencia y las medidas de control.", regla="EXP-INT", responsable="sistema"))
     if integridad.operacion_inusual:
         h.append(Hallazgo("EXP-INT-5", "Operación inusual (posible LA/FT)", "RIESGO", "alta",
             "La operación presenta características inusuales; se recomienda análisis del oficial de cumplimiento."
             + (" Señales: " + "; ".join(integridad.senales) + "." if integridad.senales else ""),
-            base_legal="Circular 100-000020 (9.19): identificar operaciones inusuales/sospechosas; (9.20) señales de alerta.",
+            base_legal=_CBJ("SAG_OPERACIONES_INUSUALES"),
             implicacion="Procede análisis humano y, si procede, reporte a la UIAF; la operación no debe cerrarse sin que el oficial de cumplimiento se pronuncie.",
-            regla="EXP-INT", accion="Revisar origen de fondos, señales y relación con la operación; registrar la evidencia (9.22).",
+            regla="EXP-INT", accion="Revisar origen de fondos, señales y relación con la operación; registrar la evidencia.",
             responsable="cumplimiento"))
     if integridad.dd_requerida:
         h.append(Hallazgo("EXP-INT-6", "Debida diligencia requerida/vencida", "OBSERVACION", "media",
             "El calendario de DD marca actualización requerida o vencida para la contraparte.",
-            base_legal="Circular 100-000020 (9.15/9.17): calendario de DD por perfil (1/2 años; inmediata ante señales).",
+            base_legal=_CBJ("SAG_IDENTIFICACION_CONTRAPARTES", "SAG_LISTAS_VINCULANTES"),
             implicacion="Actualizar la debida diligencia antes del cierre para no incumplir el deber de identificación.",
             regla="EXP-INT", accion="Ejecutar la DD y registrar la actualización con evidencia.", responsable="cumplimiento"))
     return h

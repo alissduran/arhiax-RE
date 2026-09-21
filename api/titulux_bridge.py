@@ -24,6 +24,7 @@ resultado honesto con screening PENDIENTE y hallazgos vacíos (NO EVALUADO).
 from __future__ import annotations
 
 import datetime
+import os
 import re
 from typing import Any, Dict, Optional, Tuple
 
@@ -44,13 +45,28 @@ _TIPO_MAP = {
     "ACLARACION": "aclaracion",
 }
 
-# Fuentes vinculantes que requieren datos reales (OPERATIVA) para contar en el
-# screening. onu/ofac/uk se descargan en vivo (feed oficial); ue se ingesta por
-# archivo (su portal webgate bloquea la automatización con 403 anti-bot).
-FUENTES_VINCULANTES_VIVO = ("onu", "ofac", "uk")
-FUENTES_POR_FICHERO = ("ue",)
-# Fuentes sin feed público limpio: se reportan como pendientes por canal oficial.
-FUENTES_CANAL_OFICIAL = ("uiaf",)
+# Fuentes de screening VIGENTES (03S.1): ids del SourceRegistry de `sanctions`.
+# UIAF queda FUERA del screening (es canal de reporte regulatorio, §10/§11).
+FUENTES_VINCULANTES_VIVO = ("UN_CONSOLIDATED", "OFAC_SDN", "UK_SANCTIONS_LIST")
+FUENTES_POR_FICHERO = ("EU_CONSOLIDATED",)
+FUENTES_CANAL_OFICIAL = ()  # legado: UIAF/SIREL ya no es fuente de screening
+
+
+def _source_ids(fuentes_activas) -> tuple:
+    """Traduce claves (legado 'onu'/'ofac'/'uk' o source_id) a source_id vigentes."""
+    from sanctions.registry import current_source_id
+    out = []
+    for f in (fuentes_activas or FUENTES_VINCULANTES_VIVO):
+        sid = current_source_id(f)
+        if sid and sid not in out:
+            out.append(sid)
+    return tuple(out)
+
+
+def _permitir_descarga_default() -> bool:
+    """La suite offline fija ARHIAX_SCREENING_OFFLINE=1 y NO debe tocar la red."""
+    return (os.environ.get("ARHIAX_SCREENING_OFFLINE") or "").strip().lower() \
+        not in ("1", "true", "yes", "si", "sí")
 
 
 def _tipo_titulux(tipo_legal: str) -> str:
@@ -131,6 +147,7 @@ def construir_caso_titulux(
     *,
     area_catastral: float = 0.0,
     identidad: Optional[Dict[str, Any]] = None,
+    sarlaft_estado: Optional[str] = None,
 ) -> Any:
     """Construye el `Caso` de Titulux desde el análisis del CTL real.
 
@@ -222,7 +239,10 @@ def construir_caso_titulux(
                       area_registral=area_registral, area_catastral=area_catastral),
         partes=tuple(partes), anotaciones=tuple(anotaciones),
         avaluo=avaluo, titular=nombre_tit or (analysis.get("titulares") or ""),
-        amenazas=tuple(amenazas), sarlaft_estado="pendiente",
+        amenazas=tuple(amenazas),
+        # 03S.1: el estado del screening NO se asume: lo aporta el motor de
+        # screening (pendiente por defecto si aún no corrió).
+        sarlaft_estado=(sarlaft_estado or "pendiente"),
     )
 
 
@@ -263,13 +283,75 @@ def _sujetos_del_caso(caso, identidad: Optional[Dict[str, Any]] = None) -> list:
     return out
 
 
-# Severidad ordinal para el agregado de screening.
+# Severidad ordinal para el agregado de screening (vocabulario LEGADO).
 _ORDEN = {"coincidencia": 4, "candidato": 3, "revisionManual": 2,
           "sinCoincidencia": 1, "pendiente": 0}
 
 
 def _peor(a: str, b: str) -> str:
     return a if _ORDEN.get(a, 0) >= _ORDEN.get(b, 0) else b
+
+
+# Mapeo estado 03S.1 → vocabulario legado (consumido por expediente/conclusion
+# y por los capítulos del dictamen).
+_LEGADO_POR_RESULTADO = {
+    "EXACT_MATCH": "coincidencia",
+    "STRONG_MATCH": "coincidencia",
+    "POTENTIAL_MATCH": "candidato",
+    "REVIEW_REQUIRED": "revisionManual",
+    "NO_MATCH": "sinCoincidencia",
+    "SOURCE_UNAVAILABLE": "pendiente",
+    "NOT_SCREENED": "pendiente",
+}
+
+
+def _agregado_legado(summary) -> str:
+    """Vocabulario legado derivado del estado canónico del screening."""
+    peor = "sinCoincidencia"
+    for o in summary.outcomes:
+        peor = _peor(peor, _LEGADO_POR_RESULTADO.get(o.result, "pendiente"))
+    if summary.status in ("SCREENING_PARTIAL", "SCREENING_NOT_EXECUTED"):
+        peor = "pendiente"
+    return peor
+
+
+def _screening_legado(summary) -> list:
+    """Vista legada por sujeto (compatibilidad de consumidores), derivada del
+    resumen único. La autoridad es `screening_summary`."""
+    from sanctions.engine import sigla
+
+    out = []
+    for e in summary.subjects:
+        fuentes = []
+        peor = "sinCoincidencia"
+        for o in summary.outcomes_de(e.subject_id):
+            legado = _LEGADO_POR_RESULTADO.get(o.result, "pendiente")
+            peor = _peor(peor, legado)
+            fuentes.append({
+                "fuente": o.source_id,
+                "fuente_sigla": sigla(o.source_id),
+                "resultado": legado,
+                "resultado_canonico": o.result,
+                "estado": o.freshness,
+                "version": o.snapshot_sha256[:16],
+                "freshness": o.freshness,
+                "score": o.score,
+                "coincidencia_id": (o.matched_record_ids[0] if o.matched_record_ids else None),
+                "motivos": list(o.matching_reasons),
+                "snapshot_id": o.snapshot_id,
+            })
+        out.append({
+            "sujeto": e.canonical_name, "tipo": ("natural" if e.person_type == "NATURAL_PERSON"
+                                                 else ("juridica" if e.person_type == "LEGAL_ENTITY"
+                                                       else "unknown")),
+            "sujeto_id": e.subject_id, "person_type": e.person_type,
+            "documento": " ".join(x for x in ((e.document_type or "").upper(),
+                                              e.document_number or "") if x) or "N/D",
+            "roles": list(e.roles), "participacion": e.participation,
+            "resultado": peor, "fuentes": fuentes,
+            "completo": (summary.status == "SCREENING_COMPLETE"),
+        })
+    return out
 
 
 def ejecutar_titulux(
@@ -280,9 +362,11 @@ def ejecutar_titulux(
     *,
     area_catastral: float = 0.0,
     identidad: Optional[Dict[str, Any]] = None,
-    fuentes_activas: Tuple[str, ...] = ("onu", "ofac", "uiaf", "uk"),
+    fuentes_activas: Tuple[str, ...] = FUENTES_VINCULANTES_VIVO,
     cache_dir: Optional[str] = None,
     timeout_listas: int = 90,
+    permitir_descarga: Optional[bool] = None,
+    force_refresh: bool = False,
 ) -> Dict[str, Any]:
     """Ejecuta el pre-dictamen Titulux + screening SAGRILAFT sobre el CTL real.
 
@@ -301,131 +385,51 @@ def ejecutar_titulux(
         "screening_completo": False, "coincidencia": False,
     }
     try:
-        from arhia_sag_screen.ingest.listas import obtener_listas
-        from arhia_sag_screen.match.matcher import consultar
         from arhia_expediente.expediente import FichaIntegridad, construir
         from arhia_expediente.conclusion import concluir
     except Exception as e:  # noqa: BLE001
         resultado["error"] = f"Titulux no disponible: {e}"
         return resultado
 
+    if permitir_descarga is None:
+        permitir_descarga = _permitir_descarga_default()
+
+    # 1) Screening de contrapartes (03S.1) — PRIMERO: su resultado determina el
+    #    estado SARLAFT del caso y el veredicto, y es la ÚNICA verdad que
+    #    consumen los capítulos 05/09/16/16.B y los receipts.
+    #    SUJETOS CANÓNICOS → FUENTES OFICIALES → SNAPSHOTS → MATCHING → EVIDENCIA.
+    from sanctions.engine import ejecutar_screening, summary_a_dict
+
+    _source_ids_activos = _source_ids(fuentes_activas)
+    summary = ejecutar_screening(
+        analysis=analysis, identidad=identidad,
+        source_ids=_source_ids_activos or FUENTES_VINCULANTES_VIVO,
+        cache_dir=cache_dir, timeout=timeout_listas,
+        force_refresh=bool(force_refresh),
+        permitir_descarga=bool(permitir_descarga),
+        ciudad=str(db_record.get("ciudad") or "barranquilla"))
+    resultado["screening_summary"] = summary_a_dict(summary)
+    _sarlaft_estado = ("verificado" if summary.status == "SCREENING_COMPLETE"
+                       else "pendiente")
+
     try:
         caso = construir_caso_titulux(analysis, db_record, val_data, geo_eval,
                                       area_catastral=area_catastral,
-                                      identidad=identidad)
+                                      identidad=identidad,
+                                      sarlaft_estado=_sarlaft_estado)
     except Exception as e:  # noqa: BLE001
         resultado["error"] = f"No se pudo construir el caso Titulux: {e}"
         return resultado
 
-    # 1) Screening SAGRILAFT multifuente. Primero la caché persistente (Neon)
-    # para no re-descargar ONU/OFAC/UK (~54 MB) en cada generación; lo que falte
-    # se descarga/ingesta en vivo con degradación honesta y se persiste a Neon.
-    listas: Dict[str, Any] = {}
-    try:
-        from listas_cache import leer_todas as _leer_cache_neon
-        listas = _leer_cache_neon(list(fuentes_activas))
-    except Exception:
-        listas = {}
-
-    _faltantes = [f for f in fuentes_activas if f not in listas]
-    if _faltantes:
-        try:
-            _obtenidas = obtener_listas(_faltantes, cache_dir=cache_dir,
-                                        timeout=timeout_listas)
-            listas.update(_obtenidas)
-            # Persistir solo las OPERATIVA (datos reales); nunca muestras.
-            _persistir = {f: _obtenidas[f] for f in _obtenidas
-                          if getattr(_obtenidas[f][0], "estado", "") == "OPERATIVA"}
-            if _persistir:
-                try:
-                    from listas_cache import escribir_todas as _escribir_cache_neon
-                    _escribir_cache_neon(_persistir)
-                except Exception:
-                    pass
-        except Exception as e:  # noqa: BLE001
-            resultado["error"] = (resultado["error"] or "") + f"; listas: {e}"
-
-    # Estado por fuente según su política y resultado de descarga.
-    estado_fuente: Dict[str, str] = {}
-    for f in listas:
-        lv = listas[f][0]
-        estado = getattr(lv, "estado", "") or ""
-        estado_fuente[f] = estado
-
-    sujetos = _sujetos_del_caso(caso, identidad)
-    screening_por_sujeto = []
-    fuentes_pendientes = set()
-
-    # Fuentes de canal oficial (sin feed público limpio): pendientes, no se simulan.
-    for f in FUENTES_CANAL_OFICIAL:
-        if f in fuentes_activas:
-            fuentes_pendientes.add(f)
-
-    # Fuentes vinculantes (en vivo o por fichero) que no quedaron OPERATIVA:
-    # pendientes (no se acepta "sin coincidencia" contra una muestra sintética).
-    for f in FUENTES_VINCULANTES_VIVO + FUENTES_POR_FICHERO:
-        if f not in fuentes_activas:
-            continue
-        if estado_fuente.get(f) != "OPERATIVA":
-            fuentes_pendientes.add(f)
-
-    # Otras fuentes pedidas (muestra determinista) que no llegaron a OPERATIVA:
-    for f in fuentes_activas:
-        if f in FUENTES_CANAL_OFICIAL or f in FUENTES_VINCULANTES_VIVO or f in FUENTES_POR_FICHERO:
-            continue
-        if estado_fuente.get(f) not in ("OPERATIVA", "SYNTHETIC_TEST_FIXTURE"):
-            fuentes_pendientes.add(f)
-
-    screening_completo = not fuentes_pendientes
-    coincidencia_total = False
-
-    for cp in sujetos:
-        res_fuentes = []
-        peor = "sinCoincidencia"
-        for f in sorted(listas):
-            lv, regs = listas[f]
-            estado = getattr(lv, "estado", "") or ""
-            if estado != "OPERATIVA":
-                # Muestra sintética o fuente no vinculante: NO es evidencia de
-                # "sin coincidencia"; se reporta aparte.
-                res_fuentes.append({
-                    "fuente": f, "resultado": "pendiente",
-                    "estado": estado, "version": getattr(lv, "version", ""),
-                    "nota": "muestra no vinculante / canal oficial requerido",
-                })
-                continue
-            try:
-                r = consultar(cp, regs, f, getattr(lv, "version", ""),
-                              getattr(lv, "hash", ""))
-                res_fuentes.append({
-                    "fuente": f, "resultado": r.resultado,
-                    "estado": estado, "version": getattr(lv, "version", ""),
-                    "score": round(float(r.score), 4),
-                    "coincidencia_id": r.coincidencia_id,
-                })
-                peor = _peor(peor, r.resultado)
-            except Exception:  # noqa: BLE001
-                res_fuentes.append({
-                    "fuente": f, "resultado": "pendiente",
-                    "estado": estado, "version": getattr(lv, "version", ""),
-                    "nota": "error en la consulta",
-                })
-                fuentes_pendientes.add(f)
-        if peor == "coincidencia":
-            coincidencia_total = True
-        screening_por_sujeto.append({
-            "sujeto": cp.nombre, "tipo": cp.tipo, "resultado": peor,
-            "fuentes": res_fuentes,
-            "completo": (peor != "pendiente" and not fuentes_pendientes),
-        })
-
-    screening_completo = screening_completo and not fuentes_pendientes
-    # Agregado del screening (peor entre sujetos).
-    agregado = "sinCoincidencia"
-    for s in screening_por_sujeto:
-        agregado = _peor(agregado, s["resultado"])
-    if not screening_completo:
-        agregado = "pendiente"
+    sujetos = list(summary.subjects)
+    screening_por_sujeto = _screening_legado(summary)
+    fuentes_pendientes = set(summary.sources_unavailable)
+    _revision = any(o.result in ("POTENTIAL_MATCH", "STRONG_MATCH", "REVIEW_REQUIRED",
+                                 "EXACT_MATCH") for o in summary.outcomes)
+    coincidencia_total = bool(summary.matched_subjects) or any(
+        o.result == "STRONG_MATCH" for o in summary.outcomes)
+    screening_completo = summary.cobertura_completa
+    agregado = _agregado_legado(summary)
 
     # 2) Integridad + expediente + conclusión (determinista, autoría separada).
     conclusion = None
@@ -439,14 +443,17 @@ def ejecutar_titulux(
         fuentes_pend = tuple(sorted(fuentes_pendientes))
         integridad = FichaIntegridad(
             screening=screening_ficha,
-            regimen="no_obligado",           # persona natural (titular) + acreedor; sin persona jurídica registrada
-            sarlaft="verificado" if screening_completo else "pendiente",
+            # 03S.1 (§28): el dictamen NO determina si una parte es sujeto
+            # obligado ni su régimen (decisión jurídica aparte). No se afirma.
+            regimen="",
+            # Se declara lo que REALMENTE ocurrió: el screening se completó o no.
+            sarlaft=("completo" if screening_completo else "incompleto"),
             perfil=perfil,
             screening_completo=screening_completo,
             fuentes_no_disponibles=fuentes_pend,
             screening_por_fuente=tuple(
-                {"fuente": x["fuente"], "resultado": x["resultado"],
-                 "listaVersion": x.get("version", "")}
+                {"fuente": x["fuente"], "resultado": x["resultado_canonico"],
+                 "listaVersion": x.get("version", ""), "freshness": x.get("freshness", "")}
                 for s in screening_por_sujeto for x in s["fuentes"]
             ),
         )
@@ -482,66 +489,52 @@ def ejecutar_titulux(
     return resultado
 
 
-def calentar_cache_listas(fuentes=("onu", "ofac", "uk"), cache_dir=None,
+def calentar_cache_listas(fuentes=FUENTES_VINCULANTES_VIVO, cache_dir=None,
                           timeout: int = 45) -> Dict[str, Any]:
-    """Descarga las listas de screening y las persiste en la caché Neon.
+    """Descarga las fuentes de screening y las versiona como SNAPSHOTS.
 
     Pensado para un endpoint administrativo. En Vercel Hobby la función completa
     tiene 60 s, así que la generación del dictamen NO puede gastar ese tiempo
-    bajando ~54 MB (ONU/OFAC/UK). Ejecutado aparte (una vez al día; la caché
-    dura 24 h), el screening del dictamen corre contra la caché y no consume el
-    presupuesto de la generación.
+    bajando ~52 MB (ONU/OFAC/UKSL). Ejecutado aparte (una vez al día; el TTL de
+    los snapshots es 24 h), el screening del dictamen corre contra los snapshots
+    versionados y no consume el presupuesto de la generación.
 
-    Postura honesta: solo se persisten listas con estado OPERATIVA (datos
-    reales); las muestras/ficheros nunca se cachean como si fueran oficiales.
+    Postura honesta (03S.1): cada descarga se guarda como snapshot por
+    (source_id, sha256) SIN borrar los anteriores; solo se aceptan fuentes
+    OPERATIVA (datos reales). Nunca se cachea una muestra como si fuera oficial.
     """
+    from sanctions.acquire import adquirir_fuente
+    from sanctions.registry import current_source_id
+    from sanctions.snapshots import SnapshotStore
+
+    ids = [sid for sid in (current_source_id(f) for f in (fuentes or
+                                                          FUENTES_VINCULANTES_VIVO))
+           if sid]
+    store = SnapshotStore(cache_dir=cache_dir)
     res: Dict[str, Any] = {
-        "fuentes": list(fuentes), "descargadas": [], "persistidas": [],
-        "estados": {}, "ok": False, "error": None,
+        "fuentes": ids, "descargadas": [], "persistidas": [], "estados": {},
+        "detalle": {}, "ok": False, "error": None,
     }
-    from arhia_sag_screen.ingest.listas import obtener_listas as _obtener
-
-    try:
-        from listas_cache import leer_todas as _leer
-        ya = _leer(list(fuentes)) or {}
-    except Exception as e:  # noqa: BLE001
-        ya = {}
-        res["error"] = f"cache no disponible: {e}"[:300]
-
-    for f in ya:
-        res["estados"][f] = "EN CACHE"
-
-    faltantes = [f for f in fuentes if f not in ya]
-    if not faltantes:
-        res["ok"] = True
-        return res
-
-    try:
-        obtenidas = _obtener(faltantes, cache_dir=cache_dir, timeout=timeout)
-    except Exception as e:  # noqa: BLE001
-        res["error"] = f"descarga: {e}"[:300]
-        return res
-
-    for f, par in (obtenidas or {}).items():
+    for sid in ids:
         try:
-            estado = getattr(par[0], "estado", "") or "DESCONOCIDO"
-        except Exception:  # noqa: BLE001
-            estado = "DESCONOCIDO"
-        res["estados"][f] = estado
-        if estado == "OPERATIVA":
-            res["descargadas"].append(f)
-
-    _persistir = {f: v for f, v in (obtenidas or {}).items()
-                  if getattr(v[0], "estado", "") == "OPERATIVA"}
-    if _persistir:
-        try:
-            from listas_cache import escribir_todas as _escribir
-            _escribir(_persistir)
-            res["persistidas"] = sorted(_persistir.keys())
-            res["ok"] = True
+            snap, regs = adquirir_fuente(sid, store=store, timeout=timeout,
+                                         force_refresh=True)
         except Exception as e:  # noqa: BLE001
-            res["error"] = f"persistencia: {e}"[:300]
-    elif not res["error"]:
-        res["error"] = ("ninguna fuente quedó OPERATIVA (sin datos reales que cachear; "
-                        "se reintentará en la próxima generación)")
+            res["estados"][sid] = "ERROR"
+            res["detalle"][sid] = {"error": f"{type(e).__name__}: {str(e)[:160]}"}
+            continue
+        res["estados"][sid] = snap.acquisition_status
+        res["detalle"][sid] = {
+            "acquisition_status": snap.acquisition_status,
+            "freshness": snap.freshness, "effective_date": snap.effective_date,
+            "record_count": snap.record_count, "sha256": snap.sha256,
+            "parser_version": snap.parser_version, "error": snap.error,
+        }
+        if snap.acquisition_status == "OPERATIVA":
+            res["descargadas"].append(sid)
+            res["persistidas"].append(sid)
+    res["ok"] = bool(res["descargadas"])
+    if not res["ok"]:
+        res["error"] = ("ninguna fuente quedó OPERATIVA (sin datos reales que "
+                        "versionar; se reintentará en la próxima ejecución)")
     return res

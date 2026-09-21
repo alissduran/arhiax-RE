@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- FIXTURE SANITIZADO 03S.1 — estructura OFICIAL de la lista consolidada de la
+     ONU (https://scsanctions.un.org/resources/xml/en/consolidated.xml).
+     Los nombres son ficticios y solo prueban el PARSER, no son evidencia. -->
+<CONSOLIDATED_LIST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" dateGenerated="2026-09-19T23:00:03.787Z">
+  <INDIVIDUALS>
+    <INDIVIDUAL>
+      <DATAID>9000001</DATAID>
+      <VERSIONNUM>1</VERSIONNUM>
+      <FIRST_NAME>IVAN</FIRST_NAME>
+      <SECOND_NAME>PETROV</SECOND_NAME>
+      <UN_LIST_TYPE>TESTPROG</UN_LIST_TYPE>
+      <REFERENCE_NUMBER>TPi.001</REFERENCE_NUMBER>
+      <LISTED_ON>2012-12-31</LISTED_ON>
+      <INDIVIDUAL_ALIAS>
+        <QUALITY>a.k.a.</QUALITY>
+        <ALIAS_NAME>IVAN PETROVICH</ALIAS_NAME>
+      </INDIVIDUAL_ALIAS>
+      <INDIVIDUAL_DATE_OF_BIRTH>
+        <TYPE_OF_DATE>EXACT</TYPE_OF_DATE>
+        <DATE>1965-04-12</DATE>
+      </INDIVIDUAL_DATE_OF_BIRTH>
+      <INDIVIDUAL_DOCUMENT>
+        <TYPE_OF_DOCUMENT>Passport</TYPE_OF_DOCUMENT>
+        <NUMBER>PA998877</NUMBER>
+      </INDIVIDUAL_DOCUMENT>
+    </INDIVIDUAL>
+  </INDIVIDUALS>
+  <ENTITIES>
+    <ENTITY>
+      <DATAID>9000002</DATAID>
+      <VERSIONNUM>1</VERSIONNUM>
+      <FIRST_NAME>FACTORIA DE PRUEBA SAS</FIRST_NAME>
+      <UN_LIST_TYPE>TESTPROG</UN_LIST_TYPE>
+      <REFERENCE_NUMBER>TPe.001</REFERENCE_NUMBER>
+      <ENTITY_ALIAS>
+        <QUALITY>a.k.a.</QUALITY>
+        <ALIAS_NAME>FACTORIA PRUEBA</ALIAS_NAME>
+      </ENTITY_ALIAS>
+    </ENTITY>
+  </ENTITIES>
+</CONSOLIDATED_LIST>

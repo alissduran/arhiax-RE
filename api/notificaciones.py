@@ -2,9 +2,8 @@
 """
 ARHIAX RE — Notificaciones por correo de documentos SARLAFT pendientes (Resend)
 
-Cuando el screening SAGRILAFT detecta insumos que un agente IA NO puede
-descargar (UIAF por canal oficial, UE por archivo manual, PEP, beneficiario
-final) o la ruta de verificación exige documentos humanos (extracto hipotecario,
+Cuando el screening de contrapartes detecta insumos que un agente IA NO puede
+descargar (UE por archivo manual, beneficiario final) o la ruta de verificación exige documentos humanos (extracto hipotecario,
 levantamiento de afectación, etc.), este módulo envía un correo al responsable
 con la lista exacta y las instrucciones para obtener cada documento.
 
@@ -27,11 +26,6 @@ _DESTINATARIO_DEFAULT = "alissduran@gmail.com"
 
 # Catálogo de documentos que requieren acción humana (el agente IA no los baja).
 _DOCUMENTOS: Dict[str, Dict[str, str]] = {
-    "uiaf": {
-        "documento": "Lista UIAF (vinculante/cautelar de Colombia)",
-        "por_que": "No tiene feed público: solo se consulta por el canal oficial autorizado.",
-        "como": "Consultar en www.uiaf.gov.co con las credenciales institucionales y anexar el acta/resultado.",
-    },
     "ue": {
         "documento": "Lista UE — Consolidated Sanctions List (XML)",
         "por_que": "El portal webgate bloquea la descarga automática (403 anti-bot).",
@@ -75,7 +69,7 @@ def compilar_pendientes(titulux: Dict[str, Any], hallazgos) -> List[Dict[str, st
     pendientes: List[Dict[str, str]] = []
     vistos: set = set()
 
-    # 1) Fuentes del screening SARLAFT (UIAF, UE, etc.).
+    # 1) Fuentes del screening (UE por archivo; UIAF NO es fuente de screening).
     for f in (titulux or {}).get("fuentes_pendientes", []):
         clave = str(f).lower()
         if clave in _DOCUMENTOS and clave not in vistos:

@@ -1,38 +1,44 @@
 # -*- coding: utf-8 -*-
-"""
-ARHIAX RE — Motor SARLAFT Estructural
-Bloque B Sprint 2
+"""ARHIAX RE — Ficha estructural de contrapartes (screening)
 
-Genera una ficha SARLAFT auditada con hashes de integridad para cada
-sujeto vinculado al activo (titulares, acreedor, constructor).
+Genera la ficha auditable de los sujetos del caso (titular, acreedor,
+constructor/enajenante) con huella de integridad por sujeto.
 
-ALCANCE DECLARADO:
-Este módulo NO accede a listas restrictivas externas (OFAC, ONU, UIAF,
-WorldCheck). Genera la ficha estructural que el oficial de cumplimiento
-debe usar como insumo para ejecutar la verificación en la plataforma
-autorizada de su institución.
+03S.1 (Sanctions Screening Truth Layer):
+  * Los sujetos de la ficha son EXACTAMENTE los mismos `SubjectEnvelope` que se
+    screeningan (invariante §5): la ficha no puede decir "3 sujetos" y la tabla
+    de screening mostrar 2.
+  * El tipo de persona se declara (natural / jurídica / no determinado) y nunca
+    se inventa.
+  * UIAF NO es una fuente de screening: es canal de REPORTE regulatorio y no se
+    imprime como lista ni como resultado.
+  * La semántica de los hashes se declara con precisión: sellan artefactos
+    (integridad y reproducibilidad), NO certifican que la información de origen
+    sea verdadera.
 
 Postura: honesta y auditada. No fingir verificación que no se hace.
 """
 
-import hashlib
 import datetime
+import hashlib
 import re
 import unicodedata
 
+# Semántica de hash (§21): qué sella cada hash y qué NO prueba.
+SEMANTICA_HASH = (
+    "Cada hash SHA-256 sella un ARTEFACTO concreto: el sujeto canónico, el snapshot "
+    "de la lista oficial, la consulta y el envelope de evidencia. Prueban integridad "
+    "y reproducibilidad (que el artefacto no cambió y que la consulta puede repetirse "
+    "contra la misma versión); NO prueban que la información de origen sea verdadera "
+    "ni equivalen a una verificación del oficial de cumplimiento."
+)
 
-# ── Constantes ────────────────────────────────────────────────────────────────
+NO_ES_SANCIONES = (
+    "UIAF/SIREL no es una lista de screening: es el canal de reporte regulatorio del "
+    "sujeto obligado y se atiende por el canal oficial autorizado. No se imprime como "
+    "fuente de screening ni se simula su resultado."
+)
 
-PLATAFORMAS_RECOMENDADAS = [
-    "UIAF Colombia — https://www.uiaf.gov.co",
-    "Listas OFAC (US Treasury) — https://ofac.treasury.gov/sdn-list",
-    "Listas ONU — https://www.un.org/securitycouncil/sanctions/materials",
-    "WorldCheck / Refinitiv (suscripción institucional)",
-    "Comisión de Regulación — Lista PEP DIAN/RUES",
-]
-
-
-# ── Normalización de nombres ──────────────────────────────────────────────────
 
 def _normalizar_nombre(nombre: str) -> str:
     """Normaliza un nombre para hashing consistente:
@@ -58,7 +64,47 @@ def _hash_nombre(nombre: str) -> str:
     return hashlib.sha256(norm.encode("utf-8")).hexdigest()[:16].upper()
 
 
-# ── Motor principal ───────────────────────────────────────────────────────────
+_PERSONA_TXT = {
+    "NATURAL_PERSON": "Persona natural",
+    "LEGAL_ENTITY": "Persona jurídica",
+    "UNKNOWN": "No determinado",
+}
+
+
+def _sujetos_desde_envelopes(subjects):
+    """Ficha por sujeto desde los envelopes canónicos (misma fuente que la tabla)."""
+    out = []
+    for e in subjects:
+        _doc = " ".join(x for x in (
+            (e.document_type or "").upper(), e.document_number or "") if x).strip()
+        out.append({
+            "rol": " / ".join(e.roles) or "PARTE",
+            "nombre_declarado": e.canonical_name,
+            "nombre_normalizado": _normalizar_nombre(e.canonical_name),
+            "hash_sha256_16": _hash_nombre(e.canonical_name),
+            "tipo_persona": e.person_type,
+            "tipo_persona_txt": _PERSONA_TXT.get(e.person_type, "No determinado"),
+            "identificacion": _doc or "N/D",
+            "participacion": e.participation,
+            "motivo": e.reason_for_screening,
+            "identidad_confianza": e.identity_confidence,
+            "advertencias": list(e.identity_warnings),
+            "estado_verificacion": ("SCREENINGADO" if e.screened
+                                    else "NO SCREENINGADO: "
+                                         + (e.not_screened_reason or "sin motivo declarado")),
+        })
+    return out
+
+
+def _sujetos_desde_texto(titulares, acreedor_snr, acreedor_real, constructor):
+    """Camino LEGADO (sin envelopes): mantiene compatibilidad con llamadas viejas."""
+    from sanctions.subjects import build_subject_envelopes
+    analysis = {
+        "titulares": titulares or "", "acreedor_snr": acreedor_snr,
+        "acreedor_real": acreedor_real, "constructor": constructor,
+    }
+    return _sujetos_desde_envelopes(build_subject_envelopes(analysis, {}))
+
 
 def generar_ficha_sarlaft(
     titulares: str,
@@ -66,130 +112,93 @@ def generar_ficha_sarlaft(
     acreedor_real: str = None,
     constructor: str = None,
     folio: str = "N/D",
+    *,
+    subjects=None,
+    screening_status: str = None,
+    screening_label: str = None,
+    sources=None,
+    subjects_declared: int = None,
+    subjects_screened: int = None,
+    subjects_not_screened: int = None,
 ) -> dict:
-    """Genera la ficha SARLAFT estructural para todos los sujetos vinculados.
+    """Ficha estructural de contrapartes (insumo del screening).
 
-    Args:
-        titulares:    String con nombres de los titulares (separados por +).
-        acreedor_snr: Nombre del acreedor según el SNR.
-        acreedor_real: Nombre del acreedor real declarado.
-        constructor:  Nombre del constructor/enajenante original.
-        folio:        Matrícula inmobiliaria del activo.
-
-    Returns:
-        Dict con: sujetos (list), timestamp, folio, estado, instrucciones.
+    `subjects` (SubjectEnvelope) es la vía canónica: la ficha y la tabla de
+    screening comparten el mismo set. Sin envelopes, se resuelven desde los
+    textos del CTL con el mismo parser (compatibilidad).
     """
     timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z")
-    sujetos = []
+    if subjects is not None:
+        sujetos = _sujetos_desde_envelopes(subjects)
+    else:
+        sujetos = _sujetos_desde_texto(titulares, acreedor_snr, acreedor_real, constructor)
 
-    # Procesar titulares (pueden venir como "Nombre1 + Nombre2")
-    if titulares and "PENDIENTE" not in str(titulares).upper():
-        for nombre_raw in re.split(r"\+|,|;", str(titulares)):
-            nombre = nombre_raw.strip()
-            if not nombre:
-                continue
-            # Separar nombre de CC si viene concatenado (ej. "Nombre (CC 123)")
-            cc_match = re.search(r"\(CC\s*([\d\.]+)\)", nombre)
-            cc = cc_match.group(1) if cc_match else None
-            nombre_limpio = re.sub(r"\(CC.*?\)", "", nombre).strip()
-            sujetos.append({
-                "rol": "TITULAR",
-                "nombre_declarado": nombre_limpio,
-                "nombre_normalizado": _normalizar_nombre(nombre_limpio),
-                "hash_sha256_16": _hash_nombre(nombre_limpio),
-                "identificacion": cc or "N/D",
-                "estado_verificacion": "PENDIENTE_PLATAFORMA_EXTERNA",
-            })
-
-    # Acreedor SNR
-    if acreedor_snr:
-        sujetos.append({
-            "rol": "ACREEDOR_SNR",
-            "nombre_declarado": acreedor_snr,
-            "nombre_normalizado": _normalizar_nombre(acreedor_snr),
-            "hash_sha256_16": _hash_nombre(acreedor_snr),
-            "identificacion": "N/D",
-            "estado_verificacion": "PENDIENTE_PLATAFORMA_EXTERNA",
-        })
-
-    # Acreedor real (si difiere)
-    if acreedor_real and acreedor_real != acreedor_snr:
-        sujetos.append({
-            "rol": "ACREEDOR_REAL_DECLARADO",
-            "nombre_declarado": acreedor_real,
-            "nombre_normalizado": _normalizar_nombre(acreedor_real),
-            "hash_sha256_16": _hash_nombre(acreedor_real),
-            "identificacion": "N/D",
-            "estado_verificacion": "PENDIENTE_PLATAFORMA_EXTERNA",
-        })
-
-    # Constructor
-    if constructor and constructor != "N/D":
-        nombre_const = re.sub(r"\(NIT.*?\)", "", str(constructor)).strip()
-        sujetos.append({
-            "rol": "CONSTRUCTOR_ENAJENANTE",
-            "nombre_declarado": nombre_const,
-            "nombre_normalizado": _normalizar_nombre(nombre_const),
-            "hash_sha256_16": _hash_nombre(nombre_const),
-            "identificacion": "N/D",
-            "estado_verificacion": "PENDIENTE_PLATAFORMA_EXTERNA",
-        })
-
-    # Hash de la ficha completa (integridad)
+    # Hash de la ficha completa (integridad del artefacto "ficha").
     ficha_raw = folio + timestamp + "".join(s["hash_sha256_16"] for s in sujetos)
     hash_ficha = hashlib.sha256(ficha_raw.encode("utf-8")).hexdigest()[:24].upper()
 
+    n = len(sujetos)
+    estado_screening = screening_label or "NO EJECUTADO"
+    if screening_status and not screening_label:
+        estado_screening = screening_status
     return {
         "folio": folio,
         "timestamp_utc": timestamp,
-        "total_sujetos": len(sujetos),
+        "total_sujetos": n,
         "sujetos": sujetos,
         "hash_ficha": hash_ficha,
+        "screening_status": screening_status,
+        "screening_label": estado_screening,
+        "subjects_declared": (n if subjects_declared is None else int(subjects_declared)),
+        "subjects_screened": subjects_screened,
+        "subjects_not_screened": subjects_not_screened,
+        "sources": list(sources or ()),
         "estado_global": (
-            "PENDIENTE_VERIFICACION_EXTERNA" if sujetos else "SIN_SUJETOS_IDENTIFICADOS"
-        ),
+            "SUJETOS IDENTIFICADOS -- resultado de screening: " + estado_screening
+            if sujetos else "SIN_SUJETOS_IDENTIFICADOS"),
         "instruccion_oficial_cumplimiento": (
             "Esta ficha es un insumo estructural de carácter automático generado "
-            "por el motor ARHIAX. El oficial de cumplimiento DEBE ejecutar la "
-            "verificación de cada sujeto contra las listas restrictivas vigentes "
-            "en la plataforma autorizada de su institución antes de tomar cualquier "
-            "decisión de crédito, garantía o transferencia."
+            "por el motor ARHIAX. El oficial de cumplimiento DEBE validar el "
+            "resultado del screening y las contrapartes en la plataforma autorizada "
+            "de su institución antes de tomar cualquier decisión de crédito, "
+            "garantía o transferencia."
         ),
-        "plataformas_recomendadas": PLATAFORMAS_RECOMENDADAS,
-        "disclaimer": (
-            "Los hashes SHA-256 garantizan la trazabilidad y no-alteración de los nombres "
-            "auditados. El screening en vivo (ONU/OFAC/UK) lo ejecuta el motor Titulux y su "
-            "resultado se reporta en la sección 09 de este documento; la lista UIAF queda "
-            "pendiente de consulta por canal oficial. La verificación final la realiza el "
-            "oficial de cumplimiento en la plataforma autorizada de su institución."
-        ),
+        "semantica_hash": SEMANTICA_HASH,
+        "no_es_sanciones": NO_ES_SANCIONES,
+        "disclaimer": SEMANTICA_HASH + " " + NO_ES_SANCIONES,
     }
 
 
 def generar_tabla_sarlaft(ficha: dict) -> list:
-    """Genera filas para la tabla PDF de la ficha SARLAFT.
-
-    Returns:
-        List of (label, valor) tuples para data_table().
-    """
+    """Filas (label, valor) para la tabla PDF de la ficha de contrapartes."""
     n_sujetos = ficha["total_sujetos"]
-    if n_sujetos == 1:
-        estado_sujetos = "1 sujeto identificado"
-    else:
-        estado_sujetos = "{} sujetos identificados".format(n_sujetos)
+    _decl = ficha.get("subjects_declared")
+    estado_sujetos = "{} sujeto(s) identificado(s)".format(
+        n_sujetos if _decl is None else _decl)
+    _scr = ficha.get("subjects_screened")
+    _noscr = ficha.get("subjects_not_screened")
+    _detalle_scr = ""
+    if _scr is not None:
+        _detalle_scr = " · {} screeningado(s) · {} no screeningado(s)".format(
+            _scr, 0 if _noscr is None else _noscr)
     filas = [
-        ("Estado de verificación SARLAFT",
-         f"Estructural (nombres + hash) · screening ONU/OFAC/UK en vivo (sección 09) · UIAF pendiente — {estado_sujetos}"),
+        ("Estado del screening de contrapartes",
+         "{} — {}{}".format(ficha.get("screening_label") or "NO EJECUTADO",
+                            estado_sujetos, _detalle_scr)),
+        ("Fuentes consultadas",
+         " · ".join(ficha.get("sources") or ()) or "Ninguna (screening no ejecutado)"),
         ("Hash de integridad de la ficha", ficha["hash_ficha"]),
         ("Timestamp de generación (UTC)", ficha["timestamp_utc"]),
     ]
     for s in ficha["sujetos"]:
+        _extra = " | Participación: {}".format(s["participacion"]) if s.get("participacion") else ""
+        _adv = (" | Advertencias: " + ", ".join(s["advertencias"])) if s.get("advertencias") else ""
         filas.append((
-            f"{s['rol']}: {s['nombre_declarado']}",
-            f"Hash: {s['hash_sha256_16']} | ID: {s['identificacion']} | Estado: {s['estado_verificacion']}"
+            "{}: {}".format(s["rol"], s["nombre_declarado"]),
+            "{} | Documento: {} | Hash: {} | {}{}{}".format(
+                s.get("tipo_persona_txt") or "No determinado", s["identificacion"],
+                s["hash_sha256_16"], s["estado_verificacion"], _extra, _adv)
         ))
-    filas.append((
-        "Plataformas de verificación",
-        " · ".join(ficha["plataformas_recomendadas"][:2]) + " (y otras)"
-    ))
+    filas.append(("Semántica de los hashes", ficha.get("semantica_hash") or SEMANTICA_HASH))
+    filas.append(("Alcance", ficha.get("no_es_sanciones") or NO_ES_SANCIONES))
     return filas

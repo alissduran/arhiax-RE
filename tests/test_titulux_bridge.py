@@ -2,7 +2,7 @@
 """
 Test del puente Titulux (arhiax-RE/api/titulux_bridge.py).
 
-Sin red: se siembra una caché de listas determinista para verificar que
+Sin red: se siembran SNAPSHOTS versionados (03S.1) para verificar que
   * el mapeo CTL -> Caso Titulux es correcto (folio, código, partes, anotaciones),
   * el screening ONU/OFAC con fuentes OPERATIVA da "sin coincidencia" y completa,
   * la degradación honesta (UIAF sin feed público) marca screening incompleto y
@@ -16,6 +16,7 @@ import sys
 import unittest
 from pathlib import Path
 
+os.environ["ARHIAX_SCREENING_OFFLINE"] = "1"   # 03S.1: la suite no descarga listas
 ROOT_DIR = Path(__file__).resolve().parent.parent
 API_DIR = ROOT_DIR / "api"
 sys.path.insert(0, str(ROOT_DIR))
@@ -42,18 +43,28 @@ def _nuevo_cache_dir(nombre):
 
 
 def _sembrar_cache(cache_dir, fuente, registros, estado="OPERATIVA"):
-    """Escribe la caché en el formato que lee ingest.listas._leer_cache."""
-    os.makedirs(cache_dir, exist_ok=True)
-    meta = {
-        "fuente": fuente, "nombre": fuente.upper(), "url": "", "formato": "xml",
-        "fecha_emision": "", "version": "test-v1", "hash": "test-hash-" + fuente,
-        "licencia": "public", "registros": len(registros), "estado": estado,
-        "autoridad": "", "metodo": "", "vigencia": "",
-    }
-    with open(os.path.join(cache_dir, fuente + "_meta.json"), "w", encoding="utf-8") as f:
-        json.dump(meta, f, ensure_ascii=False)
-    with open(os.path.join(cache_dir, fuente + "_registros.json"), "w", encoding="utf-8") as f:
-        json.dump(registros, f, ensure_ascii=False)
+    """Siembra un SNAPSHOT versionado (modelo 03S.1) para la fuente indicada.
+
+    `fuente` acepta la clave legada ('onu'/'ofac'/'uk') o el source_id.
+    `estado` != OPERATIVA fuerza una fuente no utilizable (sin snapshot válido).
+    """
+    from sanctions.contracts import SanctionsSnapshot
+    from sanctions.registry import current_source_id, get_source
+    from sanctions.snapshots import SnapshotStore, snapshot_id
+
+    sid = current_source_id(fuente) or fuente
+    d = get_source(sid)
+    store = SnapshotStore(cache_dir=cache_dir)
+    if estado != "OPERATIVA":
+        return   # no se siembra nada: la fuente queda NO DISPONIBLE (honesto)
+    import datetime
+    _ts = datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z")
+    sha = "test-hash-" + str(sid).lower()
+    store.guardar(SanctionsSnapshot(
+        snapshot_id=snapshot_id(sid, sha), source_id=sid, authority=d.authority,
+        retrieved_at=_ts, effective_date="2026-09-19", source_url=d.official_url,
+        sha256=sha, record_count=len(registros), parser_version=d.parser_version,
+        acquisition_status="OPERATIVA"), registros)
 
 
 def _registro(id, nombre, tipo_doc=None, num=None):
@@ -126,19 +137,23 @@ class TestEjecutarTituluxDeterminista(unittest.TestCase):
         # Hipoteca vigente -> bloqueo precautorio por gravamen (no por screening)
         self.assertEqual(res["conclusion"]["veredicto"], "BLOQUEO_PRECAUTORIO")
 
-    def test_uiaf_sin_feed_publico_marca_pendiente(self):
-        """UIAF es canal oficial: screening incompleto + PREANALISIS_INCOMPLETO."""
+    def test_uiaf_no_es_fuente_de_screening(self):
+        """03S.1 §10: UIAF/SIREL NO es fuente de screening.
+
+        Antes, pedirla marcaba el screening como incompleto ("lista UIAF
+        pendiente"). Ahora se ignora como fuente y NO ensucia el resultado.
+        """
         from titulux_bridge import ejecutar_titulux
-        tmp = _nuevo_cache_dir("uiaf_pendiente")
+        tmp = _nuevo_cache_dir("uiaf_fuera")
         _sembrar_cache(tmp, "onu", [_registro("o1", "JUAN PEREZ")])
         res = ejecutar_titulux(_ANALYSIS, _DB, _VAL,
                                fuentes_activas=("onu", "uiaf"),
                                cache_dir=tmp, timeout_listas=5)
         self.assertTrue(res["disponible"])
-        self.assertFalse(res["screening_completo"])
-        self.assertIn("uiaf", res["fuentes_pendientes"])
-        self.assertEqual(res["screening_agregado"], "pendiente")
-        self.assertEqual(res["conclusion"]["veredicto"], "PREANALISIS_INCOMPLETO")
+        self.assertNotIn("uiaf", res["fuentes_pendientes"])
+        self.assertNotIn("UIAF_SIREL",
+                         res["screening_summary"].get("sources") or [])
+        self.assertTrue(res["screening_completo"])
 
     def test_coincidencia_por_documento(self):
         """El documento del titular en la lista -> coincidencia -> bloqueo precautorio."""

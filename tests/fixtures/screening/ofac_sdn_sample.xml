@@ -1,0 +1,57 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- FIXTURE SANITIZADO 03S.1 — estructura OFICIAL del SDN de OFAC
+     (Sanctions List Service, export SDN.XML). Nombres ficticios: prueban el
+     PARSER, no son evidencia de screening. -->
+<sdnList xmlns="https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/XML">
+  <publshInformation>
+    <Publish_Date>09/18/2026</Publish_Date>
+    <Record_Count>2</Record_Count>
+  </publshInformation>
+  <sdnEntry>
+    <uid>70001</uid>
+    <lastName>KOVALENKO</lastName>
+    <firstName>ANDRII</firstName>
+    <sdnType>Individual</sdnType>
+    <programList>
+      <program>TESTPROG</program>
+    </programList>
+    <akaList>
+      <aka>
+        <uid>71001</uid>
+        <type>a.k.a.</type>
+        <lastName>KOVALENKO</lastName>
+        <firstName>ANDREY</firstName>
+      </aka>
+    </akaList>
+    <idList>
+      <id>
+        <uid>72001</uid>
+        <idType>Passport</idType>
+        <idNumber>UA112233</idNumber>
+        <idCountry>Ukraine</idCountry>
+      </id>
+    </idList>
+    <dateOfBirthList>
+      <dateOfBirthItem>
+        <uid>73001</uid>
+        <dateOfBirth>12 Mar 1971</dateOfBirth>
+        <mainEntry>true</mainEntry>
+      </dateOfBirthItem>
+    </dateOfBirthList>
+  </sdnEntry>
+  <sdnEntry>
+    <uid>70002</uid>
+    <lastName>MINERA DEL CARIBE S.A.</lastName>
+    <sdnType>Entity</sdnType>
+    <programList>
+      <program>TESTPROG</program>
+    </programList>
+    <idList>
+      <id>
+        <uid>72002</uid>
+        <idType>Tax ID No.</idType>
+        <idNumber>900123456</idNumber>
+      </id>
+    </idList>
+  </sdnEntry>
+</sdnList>

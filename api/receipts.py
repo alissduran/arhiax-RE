@@ -108,12 +108,55 @@ def build_execution_receipts(
                 for c in sorted(set((pois or {}).keys()) | set((poi_status or {}).keys()))
             },
         },
-        "sarlaft": {
-            "completo": (titulux or {}).get("screening_completo"),
-            "agregado": (titulux or {}).get("screening_agregado"),
-            "fuentes_pendientes": (titulux or {}).get("fuentes_pendientes") or [],
-        },
+        # 03S.1: el screening se reporta desde el ScreeningSummary único (misma
+        # verdad que los capítulos 05/09/16): estado canónico, sujetos, fuentes y
+        # frescura REAL de cada snapshot.
+        "sarlaft": _screening_receipt(titulux),
         "geocodificacion": {"lat": lat, "lon": lon},
+    }
+
+
+def _screening_receipt(titulux: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """Receipt de screening derivado del resumen único (03S.1)."""
+    titulux = titulux or {}
+    _sum = titulux.get("screening_summary") or {}
+    if not _sum:
+        return {
+            "status": "SCREENING_NOT_EXECUTED",
+            "etiqueta": "NO EJECUTADO",
+            "completo": bool(titulux.get("screening_completo")),
+            "agregado": titulux.get("screening_agregado"),
+            "fuentes_pendientes": list(titulux.get("fuentes_pendientes") or []),
+            "sujetos_declarados": None, "sujetos_screeningados": None,
+            "fuentes": [], "reason": "", "ejecutado": False,
+        }
+    _snaps = {s.get("source_id"): s for s in (_sum.get("snapshots") or [])}
+    return {
+        "status": _sum.get("status"),
+        "etiqueta": {
+            "SCREENING_COMPLETE": "COMPLETO",
+            "SCREENING_PARTIAL": "PARCIAL",
+            "SCREENING_REVIEW_REQUIRED": "REQUIERE REVISIÓN",
+            "SCREENING_NOT_EXECUTED": "NO EJECUTADO",
+        }.get(_sum.get("status"), "NO EJECUTADO"),
+        "completo": _sum.get("status") == "SCREENING_COMPLETE",
+        "agregado": titulux.get("screening_agregado"),
+        "fuentes_pendientes": list(_sum.get("sources_unavailable") or []),
+        "sujetos_declarados": _sum.get("subjects_declared"),
+        "sujetos_screeningados": _sum.get("subjects_screened"),
+        "sujetos_no_screeningados": _sum.get("subjects_not_screened"),
+        "revision_requerida": list(_sum.get("review_required_subjects") or []),
+        "coincidencias": list(_sum.get("matched_subjects") or []),
+        "reason": _sum.get("reason") or "",
+        "ejecutado": bool(_sum.get("executed")),
+        "algorithm_version": _sum.get("algorithm_version"),
+        "fuentes": [{
+            "source_id": sid, "sigla": sid,
+            "freshness": (_snaps.get(sid) or {}).get("freshness"),
+            "effective_date": (_snaps.get(sid) or {}).get("effective_date"),
+            "sha256": (_snaps.get(sid) or {}).get("sha256"),
+            "record_count": (_snaps.get(sid) or {}).get("record_count"),
+        } for sid in (_sum.get("sources") or [])],
     }
 
 
@@ -174,7 +217,21 @@ def receipt_rows(receipts: Optional[Dict[str, Any]]) -> List[Tuple[str, str]]:
         _poi_txt = "NO DISPONIBLE" + ((" · " + "; ".join(_poi_partes)) if _poi_partes else "")
     filas.append(("Equipamiento urbano (POI)", _poi_txt))
     sag = receipts.get("sarlaft") or {}
-    filas.append(("Screening SARLAFT",
-                  ("COMPLETO · " + (sag.get("agregado") or "")) if sag.get("completo")
-                  else ("INCOMPLETO · pendientes: " + ", ".join(sag.get("fuentes_pendientes") or ["?"]))))
+    if sag.get("ejecutado"):
+        _detalle_sag = [
+            "{} sujeto(s) screeningado(s) de {} declarado(s)".format(
+                sag.get("sujetos_screeningados"), sag.get("sujetos_declarados")),
+            "fuentes: " + ", ".join(
+                "{} {}".format(f.get("source_id"), f.get("freshness") or "")
+                for f in (sag.get("fuentes") or [])) or "—",
+        ]
+        if sag.get("fuentes_pendientes"):
+            _detalle_sag.append("no disponibles: "
+                                + ", ".join(sag.get("fuentes_pendientes") or []))
+        filas.append(("Screening de contrapartes",
+                      "{} · {}".format(sag.get("etiqueta") or "—",
+                                       " · ".join(x for x in _detalle_sag if x))))
+    else:
+        filas.append(("Screening de contrapartes",
+                      "NO EJECUTADO · " + (sag.get("reason") or "sin fuentes disponibles")))
     return filas

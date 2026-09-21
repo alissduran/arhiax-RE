@@ -520,12 +520,25 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
         return f"ESTADO {estado}"
 
     def _sarlaft_txt(default):
+        """03S.1: el capítulo 16 consume el MISMO ScreeningSummary que el 09.
+
+        Antes, en Barranquilla esta fila estaba fija en "NO EJECUTADA" mientras el
+        capítulo 09 podía reportar un screening ejecutado: dos estados
+        contradictorios en el mismo documento. Ahora hay una sola verdad.
+        """
         if not receipts:
             return default
-        if _sag.get("completo"):
-            return f"EJECUTADA EN VIVO -- screening {_sag.get('agregado') or 'completo'}"
-        return ("INCOMPLETA -- fuentes pendientes: "
-                + ", ".join(_sag.get("fuentes_pendientes") or ["?"]))
+        _status = _sag.get("status")
+        if _sag.get("ejecutado"):
+            _detalle = "screening {}".format(_sag.get("etiqueta") or "—")
+            _srcs = [f.get("source_id") for f in (_sag.get("fuentes") or [])]
+            if _srcs:
+                _detalle += " · fuentes: " + ", ".join(_srcs)
+            if _sag.get("fuentes_pendientes"):
+                _detalle += " · NO DISPONIBLES: " + ", ".join(_sag.get("fuentes_pendientes"))
+            return "EJECUTADO -- " + _detalle
+        return ("NO EJECUTADO -- " + (_sag.get("reason")
+                or "sin fuentes oficiales disponibles en esta generación"))
 
     def _snr_txt():
         """03D.2: la fila SNR refleja si el CTL está adjuntado (fuente única:
@@ -553,7 +566,7 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
             ("Riesgos/Amenazas Medellín", "EJECUTADA -- Capas de gestión del riesgo DAGRD consultadas en vivo"),
             ("Integracion WFS-IGAC", "PLANIFICADA -- En desarrollo para consulta en vivo (ver roadmap)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
-            ("Verificacion SARLAFT", _sarlaft_txt("EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial")),
+            ("Screening de contrapartes", _sarlaft_txt("NO EJECUTADO -- requiere fuentes oficiales de sanciones")),
             ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
         ]
     if es_bog:
@@ -564,7 +577,7 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
             ("Riesgos/Amenazas Bogotá", "EJECUTADA -- Capas IDIGER consultadas en vivo (mov. masa, sismos, geotecnia)"),
             ("Detalle predial (NUPRE/destino por predio)", "NO DISPONIBLE EN ABIERTO -- El catastro distrital no expone capa predial con NUPRE; el destino es uso predominante por manzana (referencial)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
-            ("Verificacion SARLAFT", _sarlaft_txt("EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial")),
+            ("Screening de contrapartes", _sarlaft_txt("NO EJECUTADO -- requiere fuentes oficiales de sanciones")),
             ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
         ]
     if es_pas:
@@ -589,7 +602,7 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
              _estado_capa("riesgos_urbano", "EJECUTADA EN VIVO -- Riesgo volcanico, inundacion, remocion en masa, subsidencia y ZAVA (geoportal de Pasto)")
              if receipts else "EJECUTADA EN VIVO -- Riesgo volcanico, inundacion, remocion en masa, subsidencia y ZAVA (geoportal de Pasto)"),
             ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
-            ("Verificacion SARLAFT", _sarlaft_txt("EJECUTADA EN VIVO (ONU/OFAC/UK) -- UIAF pendiente por canal oficial")),
+            ("Screening de contrapartes", _sarlaft_txt("NO EJECUTADO -- requiere fuentes oficiales de sanciones")),
             ("Estimacion referencial", "REFERENCIA GENERICA POR ESTRATO -- No usa metodología local; no sustituye avalúo RAA (Ley 1673/2013 · Resolución IGAC 941/2026)"),
         ]
     return [
@@ -604,7 +617,7 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
         ("Riesgos/Amenazas BAQ", "EJECUTADA -- Cruce espacial STRtree contra capas de amenaza y riesgo"),
         ("Integracion WFS-IGAC", "PLANIFICADA -- En desarrollo para consulta en vivo (ver roadmap)"),
         ("Sincronizacion Curaduria", "NO VALIDADA -- Requiere confrontación con licencia de construcción"),
-        ("Verificacion SARLAFT", "NO EJECUTADA -- Requiere cruce de listas restrictivas en plataforma externa"),
+        ("Screening de contrapartes", _sarlaft_txt("NO EJECUTADO -- requiere fuentes oficiales de sanciones")),
         ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013)"),
     ]
 
