@@ -51,55 +51,56 @@ def precondiciones_valoracion(clase_suelo=None, destino=None, tipologia=None,
 def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                   ciudad="barranquilla", clase_suelo=None, destino=None, tipologia=None,
                   unidad_ph_no_resuelta=False, market_context_blocked=False,
-                  valuation_authorized=None):
+                  valuation_authorized=False, market_context=None,
+                  allow_legacy_reference=False):
     """
     Retorna la valoracion tecnica de mercado consolidando M1 (comparacion de
     mercado), M2 (costo de reposicion) y M3 (capitalizacion de rentas).
 
-    Para Barranquilla usa el YAML de la Lonja (metodologia local). Para ciudades
-    SIN metodologia local verificada (p. ej. Pasto/Nariño) NO se aplica la Lonja
-    de Barranquilla (seria desinformacion): se usa una referencia generica por
-    estrato y se marca metodologia_local=False para que el dictamen lo declare.
+    03H.1A — FAIL-CLOSED por defecto: sin `valuation_authorized=True` (o sin el
+    flag EXPLÍCITO `allow_legacy_reference=True`) NO se calcula nada. Así el
+    default implícito no puede producir $305.5M ni $399.5M.
+
+    ÚNICA AUTORIDAD de la tasa de mercado: `market_context`
+    (`sector_metodologico.value_m2`). Esta función NO vuelve a resolver el sector
+    desde el YAML cuando recibe un MarketContext; solo lee cap_rate y factor de
+    costos de la metodología. Sin tasa válida en el contexto -> bloqueado.
 
     Regla de negocio (practica de la LONJA de Barranquilla, no de la Resolucion
     IGAC 941/2026): propiedad horizontal terminada -> metodo principal M1
     (comparacion de mercado, 100%); M3 (capitalizacion de rentas) solo en casos
     excepcionales con renta demostrable. La seleccion definitiva del metodo y la
     firma son del avaluador inscrito en el RAA.
-    metodo_principal: "m1" (default) | "m3" (excepcional, renta demostrable).
-
-    Precondiciones por tipología (bug L): si el predio NO admite comparación de
-    mercado (suelo de protección / no construible / rural), se devuelve
-    metodologia_aplica=False con consolidado=0 y motivo_no_aplica; el dictamen NO
-    estampa un valor de mercado sobre un predio que no lo tiene.
     """
     import yaml
     from pathlib import Path
-    
-    # Parámetros por defecto en caso de falla de carga
+
     cap_rate_neto = 0.0485
-    val_m2_mercado = 5200000
+    val_m2_mercado = None
     factor_costos = 1.2576
     es_pasto = "pasto" in (ciudad or "").lower()
-    # 03H: provenance de la tasa de mercado (no fallback silencioso sin marcar).
     market_rate_source = None
     market_rate_sector = None
     market_rate_match_type = None
 
-    # 03H.1: fail-closed. valuation_authorized=False bloquea explícitamente; None
-    # es el modo legacy (cálculo con fallback marcado, solo para adapters).
-    if valuation_authorized is False:
+    def _bloqueado(motivo):
         return {
             "consolidado": 0, "banda_baja": 0, "banda_alta": 0,
             "m1": 0, "m2": 0, "m3": 0,
             "metodo_principal": metodo_principal,
-            "m1_m2": 0, "m3_m2": 0,
-            "canon_mensual": 0,
+            "m1_m2": 0, "m3_m2": 0, "canon_mensual": 0,
             "cap_rate": cap_rate_neto,
             "metodologia_local": not es_pasto,
             "metodologia_aplica": False,
-            "motivo_no_aplica": "valoración no autorizada (identidad o contexto de mercado insuficiente)",
+            "motivo_no_aplica": motivo,
+            "value_m2": None, "market_rate_source": None,
+            "market_rate_sector": None, "market_rate_match_type": None,
         }
+
+    # ── 03H.1A: fail-closed. No hay permiso implícito. ──
+    if not valuation_authorized and not allow_legacy_reference:
+        return _bloqueado("valoración no autorizada (identidad o contexto de "
+                          "mercado insuficiente)")
 
     # ── Precondición por tipología (bug L), identidad (03D) y contexto (03H) ──
     _pre = precondiciones_valoracion(clase_suelo=clase_suelo, destino=destino,
@@ -107,92 +108,88 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                                      unidad_ph_no_resuelta=unidad_ph_no_resuelta,
                                      market_context_blocked=market_context_blocked)
     if not _pre["procede"]:
-        return {
-            "consolidado": 0,
-            "banda_baja": 0,
-            "banda_alta": 0,
-            "m1": 0, "m2": 0, "m3": 0,
-            "metodo_principal": metodo_principal,
-            "m1_m2": 0, "m3_m2": 0,
-            "canon_mensual": 0,
-            "cap_rate": cap_rate_neto,
-            "metodologia_local": not es_pasto,
-            "metodologia_aplica": False,
-            "motivo_no_aplica": _pre["motivo"],
-        }
+        return _bloqueado(_pre["motivo"])
 
-    if es_pasto:
-        # Sin metodologia local de Pasto verificada: referencia generica por
-        # estrato (NO se aplica la Lonja de Barranquilla). metodologia_local=False
-        # para que el dictamen lo declare como referencia generica nacional.
-        estrato_map = {3: 3800000, 4: 5200000, 5: 6500000, 6: 7800000}
-        val_m2_mercado = estrato_map.get(int(estrato), 5200000)
-    else:
-        # Resolver ruta de la metodologia de la Lonja de Barranquilla
+    # ── Metodología (solo cap_rate y factor de costos; NO la tasa) ──
+    _yml = None
+    if not es_pasto:
         base_dir = Path(__file__).resolve().parent
-        yaml_path = base_dir.parent / "motor_tma_lonja_baq_v1.0" / "motor_tma_lonja_baq_v1.0" / "lonja_layer" / "lonja_baq_metodologia.yaml"
+        yaml_path = (base_dir.parent / "motor_tma_lonja_baq_v1.0"
+                     / "motor_tma_lonja_baq_v1.0" / "lonja_layer"
+                     / "lonja_baq_metodologia.yaml")
         try:
             if yaml_path.exists():
-                with open(yaml_path, 'r', encoding='utf-8') as f:
-                    yml = yaml.safe_load(f)
-                
-                # 1. Obtener valor del suelo por sector o fallback
-                valores_suelo = yml.get("valor_suelo_por_sector", {})
-                # Normalizar nombre de barrio para búsqueda en las claves del YAML
-                barrio_key = barrio.replace(" ", "_").strip().title()
-                
-                # Buscar coincidencia exacta o parcial
-                sector_match = None
-                for k in valores_suelo.keys():
-                    if k.lower() == barrio_key.lower() or k.lower() in barrio.lower():
-                        sector_match = k
-                        break
-                        
-                if sector_match:
-                    # 03H.1: si el sector existe pero su tasa falta/inválida,
-                    # NO usar 5.2M default -> MARKET_RATE_INVALID (bloqueado).
-                    _v = valores_suelo[sector_match].get("valor_central_m2")
-                    market_rate_source = valores_suelo[sector_match].get("fuente")
-                    market_rate_sector = sector_match
-                    if _v is None or _v <= 0:
-                        val_m2_mercado = None
-                        market_rate_match_type = "MARKET_RATE_INVALID"
-                    else:
-                        val_m2_mercado = _v
-                        market_rate_match_type = "EXACT"
-                else:
-                    # Fallback por estrato — MARCADO explícitamente (03H): NO es
-                    # una metodología específica de sector; el gate lo bloquea.
-                    estrato_map = {3: 3800000, 4: 5200000, 5: 6500000, 6: 7800000}
-                    val_m2_mercado = estrato_map.get(int(estrato), 5200000)
-                    market_rate_source = "fallback genérico por estrato (no específico de sector)"
-                    market_rate_sector = None
-                    market_rate_match_type = "GENERIC_ESTRATO_FALLBACK"
-                    
-                # 2. Cap Rate (M3)
-                tasas_tip = yml.get("capitalizacion_rentas", {}).get("tasas_por_tipologia", {})
-                estrato_key = f"apto_NO_VIS_estrato_{estrato}"
-                if estrato_key in tasas_tip:
-                    cap_rate_neto = tasas_tip[estrato_key].get("tasa_central", 0.0485)
-                    
-                # 3. Factor de costos (M2)
-                factor_costos = yml.get("costos_construccion", {}).get("factor_actualizacion", 1.2576)
+                with open(yaml_path, "r", encoding="utf-8") as f:
+                    _yml = yaml.safe_load(f)
         except Exception as e:
-            print(f"[VALUATION][WARN] Fallo de integracion YAML, usando fallbacks: {e}")
+            print(f"[VALUATION][WARN] YAML Lonja no legible: {e}")
 
-    # 03H.1: tasa de mercado inválida (sector resuelto sin valor) -> bloquear.
-    if val_m2_mercado is None or val_m2_mercado <= 0:
-        return {
-            "consolidado": 0, "banda_baja": 0, "banda_alta": 0,
-            "m1": 0, "m2": 0, "m3": 0,
-            "metodo_principal": metodo_principal,
-            "m1_m2": 0, "m3_m2": 0,
-            "canon_mensual": 0,
-            "cap_rate": cap_rate_neto,
-            "metodologia_local": not es_pasto,
-            "metodologia_aplica": False,
-            "motivo_no_aplica": "tasa de mercado inválida (MARKET_RATE_INVALID)",
-        }
+    # ── 03H.1A: la tasa viene EXCLUSIVAMENTE del MarketContext ──
+    if market_context is not None:
+        _sector = market_context.get("sector_metodologico") or {}
+        val_m2_mercado = _sector.get("value_m2")
+        market_rate_source = (market_context.get("market_rate_source")
+                              or _sector.get("source"))
+        market_rate_sector = _sector.get("matched_sector")
+        market_rate_match_type = _sector.get("match_type")
+        # barrio/estrato VERIFICADOS (nunca defaults legacy)
+        _b = market_context.get("barrio") or {}
+        if _b.get("value"):
+            barrio = _b["value"]
+        _e = market_context.get("estrato") or {}
+        if _e.get("value") is not None:
+            estrato = _e["value"]
+        if not isinstance(val_m2_mercado, (int, float)) or val_m2_mercado <= 0:
+            return _bloqueado("tasa de mercado no resuelta por el MarketContext "
+                              "(MARKET_RATE_INVALID)")
+    elif allow_legacy_reference:
+        # Modo LEGACY explícito y exploratorio: resuelve del YAML con fallback
+        # MARCADO (nunca autoriza una valoración de alta confianza).
+        if es_pasto:
+            estrato_map = {3: 3800000, 4: 5200000, 5: 6500000, 6: 7800000}
+            val_m2_mercado = estrato_map.get(int(estrato), 5200000)
+            market_rate_match_type = "GENERIC_ESTRATO_FALLBACK"
+            market_rate_source = "referencia genérica por estrato (sin metodología local)"
+        elif _yml:
+            valores_suelo = _yml.get("valor_suelo_por_sector", {})
+            _barrio = str(barrio or "")
+            barrio_key = _barrio.replace(" ", "_").strip().title()
+            sector_match = None
+            for k in valores_suelo.keys():
+                if k.lower() == barrio_key.lower() or k.lower() in _barrio.lower():
+                    sector_match = k
+                    break
+            if sector_match:
+                _v = valores_suelo[sector_match].get("valor_central_m2")
+                market_rate_source = valores_suelo[sector_match].get("fuente")
+                market_rate_sector = sector_match
+                if _v is None or _v <= 0:
+                    val_m2_mercado = None
+                    market_rate_match_type = "MARKET_RATE_INVALID"
+                else:
+                    val_m2_mercado = _v
+                    market_rate_match_type = "EXACT"
+            else:
+                estrato_map = {3: 3800000, 4: 5200000, 5: 6500000, 6: 7800000}
+                val_m2_mercado = estrato_map.get(int(estrato), 5200000)
+                market_rate_source = ("fallback genérico por estrato "
+                                      "(no específico de sector)")
+                market_rate_match_type = "GENERIC_ESTRATO_FALLBACK"
+        if val_m2_mercado is None or val_m2_mercado <= 0:
+            return _bloqueado("tasa de mercado inválida (MARKET_RATE_INVALID)")
+    else:
+        # Autorización sin MarketContext: no hay tasa autorizada -> fail-closed.
+        return _bloqueado("autorización sin MarketContext (tasa de mercado no "
+                          "resuelta por la única autoridad)")
+
+    # Cap Rate (M3) y factor de costos (M2) — parámetros de metodología.
+    if _yml:
+        tasas_tip = _yml.get("capitalizacion_rentas", {}).get("tasas_por_tipologia", {})
+        estrato_key = f"apto_NO_VIS_estrato_{estrato}"
+        if estrato_key in tasas_tip:
+            cap_rate_neto = tasas_tip[estrato_key].get("tasa_central", 0.0485)
+        factor_costos = _yml.get("costos_construccion", {}).get(
+            "factor_actualizacion", 1.2576)
 
     # M1: Comparacion de Mercado (metodo principal para PH terminada, 100%)
     m1_base = int(area_construida_m2 * val_m2_mercado)

@@ -80,13 +80,15 @@ class TestPastoValuacion(unittest.TestCase):
 
     def test_valuation_pasto_sin_metodologia_local(self):
         from dictamen_data import get_valuation
-        v = get_valuation(58.75, "Centro", estrato=4, ciudad="pasto")
+        v = get_valuation(58.75, "Centro", estrato=4, ciudad="pasto",
+                          allow_legacy_reference=True)
         self.assertFalse(v.get("metodologia_local"))
         self.assertGreater(v.get("consolidado", 0), 0)
 
     def test_valuation_baq_usa_metodologia_local(self):
         from dictamen_data import get_valuation
-        v = get_valuation(58.75, "Miramar", estrato=4, ciudad="barranquilla")
+        v = get_valuation(58.75, "Miramar", estrato=4, ciudad="barranquilla",
+                          allow_legacy_reference=True)
         self.assertTrue(v.get("metodologia_local"))
 
     def test_valoracion_alert_pasto_no_menciona_lonja_baq(self):

@@ -760,6 +760,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _ubicacion = resolve_market_location(
             canonical_identity=canonical_identity, predio_real=predio_real,
             lat_geo=_lat_geo, lon_geo=_lon_geo,
+            # 03H.1A: las coordenadas del bloque de resolución provienen de la
+            # dirección del CTL/registral (no se reetiquetan como oficiales).
+            lat_geo_source="CTL_ADDRESS_GEOCODE",
             db_lat=(db_record.get('lat') or db_record.get('LAT')),
             db_lon=(db_record.get('lon') or db_record.get('LON')),
             db_direccion=db_record.get('direccion'),
@@ -768,9 +771,27 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         lat, lon = _ubicacion["lat"], _ubicacion["lon"]
     except Exception as _e_loc:
         _ubicacion = {"lat": None, "lon": None, "coordinate_source": "UNRESOLVED",
-                      "authoritative_address": None}
+                      "authoritative_address": None, "coordinate_source_verified": False}
         lat = lon = None
         print(f"[PDF][MARKET_LOCATION] no disponible: {_e_loc}")
+
+    # ── 03H.1A: contexto urbano OFICIAL por coordenadas AUTORIZADAS ────────────
+    # Consulta ESPACIAL de contexto (barrio/estrato/tratamiento) que NO modifica
+    # la identidad y funciona aunque predio_real sea None.
+    _STATUS_VERIFIED_OFFICIAL = "VERIFIED_OFFICIAL"
+    _STATUS_VERIFIED_REGISTRAL = "VERIFIED_REGISTRAL"
+    _STATUS_UNRESOLVED = "UNRESOLVED"
+    _STATUS_SOURCE_UNAVAILABLE = "SOURCE_UNAVAILABLE"
+    try:
+        from market_context import resolve_official_urban_context
+        _oficial_urbano = resolve_official_urban_context(
+            ciudad=ciudad, lat=_ubicacion.get("lat"), lon=_ubicacion.get("lon"),
+            coordinate_source=_ubicacion.get("coordinate_source"))
+    except Exception as _e_oc:
+        _oficial_urbano = {"barrio": None, "barrio_status": _STATUS_UNRESOLVED,
+                           "estrato": None, "estrato_status": _STATUS_UNRESOLVED,
+                           "context_status": _STATUS_SOURCE_UNAVAILABLE}
+        print(f"[PDF][OFFICIAL_CONTEXT] no disponible: {_e_oc}")
 
     # ── 03H: contexto de mercado (MarketContext) ───────────────────────────────
     # Identidad y contexto son dos problemas distintos. El contexto se construye
@@ -778,30 +799,41 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # sustituye por 4; sector sin match NO cae a fallback por estrato sin marcar.
     try:
         from market_context import (
-            build_market_context, market_context_authorized, resolve_market_sector,
-            STATUS_VERIFIED_OFFICIAL, STATUS_VERIFIED_REGISTRAL,
-            STATUS_UNRESOLVED, STATUS_SOURCE_UNAVAILABLE)
-        if _barrio_desde_catastro and barrio:
-            _barrio_status = STATUS_VERIFIED_OFFICIAL
-        elif predio_real is None and (analysis.get("codigo_catastral") or analysis.get("nupre")):
-            _barrio_status = STATUS_SOURCE_UNAVAILABLE
+            build_market_context, market_context_authorized, resolve_market_sector)
+        # barrio / estrato: prioridad contexto OFICIAL por coordenadas autorizadas.
+        if _oficial_urbano.get("barrio_status") == _STATUS_VERIFIED_OFFICIAL:
+            _mc_barrio = _oficial_urbano.get("barrio")
+            _mc_barrio_status = _STATUS_VERIFIED_OFFICIAL
+        elif _barrio_desde_catastro and barrio:
+            _mc_barrio, _mc_barrio_status = barrio, _STATUS_VERIFIED_OFFICIAL
         else:
-            _barrio_status = STATUS_UNRESOLVED
-        _estrato_status = (STATUS_VERIFIED_OFFICIAL
-                           if _predio_estrato_catastral is not None
-                           else STATUS_UNRESOLVED)
-        _tipologia_status = (STATUS_VERIFIED_REGISTRAL
+            _mc_barrio = None
+            _mc_barrio_status = (_oficial_urbano.get("barrio_status")
+                                 or _STATUS_UNRESOLVED)
+
+        if _oficial_urbano.get("estrato_status") == _STATUS_VERIFIED_OFFICIAL:
+            _mc_estrato = _oficial_urbano.get("estrato")
+            _mc_estrato_status = _STATUS_VERIFIED_OFFICIAL
+        elif _predio_estrato_catastral is not None:
+            _mc_estrato, _mc_estrato_status = (_predio_estrato_catastral,
+                                               _STATUS_VERIFIED_OFFICIAL)
+        else:
+            _mc_estrato = None
+            _mc_estrato_status = (_oficial_urbano.get("estrato_status")
+                                  or _STATUS_UNRESOLVED)
+
+        _tipologia_status = (_STATUS_VERIFIED_REGISTRAL
                              if "Propiedad Horizontal" in str(_tipologia_texto or "")
-                             else STATUS_UNRESOLVED)
-        _sector = resolve_market_sector(barrio)
+                             else _STATUS_UNRESOLVED)
+        _sector = resolve_market_sector(_mc_barrio)
         market_context = build_market_context(
             identity_verified=bool(canonical_identity.get("identity_verified")),
-            barrio=(barrio or None), barrio_status=_barrio_status,
-            estrato=(estrato if _estrato_status == STATUS_VERIFIED_OFFICIAL else None),
-            estrato_status=_estrato_status,
+            barrio=_mc_barrio, barrio_status=_mc_barrio_status,
+            estrato=_mc_estrato, estrato_status=_mc_estrato_status,
             tipologia=_tipologia_texto, tipologia_status=_tipologia_status,
             uso=_predio_destino,
-            uso_status=(STATUS_VERIFIED_OFFICIAL if _predio_destino else STATUS_UNRESOLVED),
+            uso_status=(_STATUS_VERIFIED_OFFICIAL if _predio_destino
+                        else _STATUS_UNRESOLVED),
             sector_resolution=_sector,
             market_rate_source=None,  # derivada del sector por el builder
             coordinates={"lat": _ubicacion.get("lat"), "lon": _ubicacion.get("lon")},
@@ -809,13 +841,26 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             geocoder_confidence=_ubicacion.get("geocoder_confidence"),
         )
         market_context["coordinate_source"] = _ubicacion.get("coordinate_source")
+        market_context["coordinate_source_verified"] = _ubicacion.get("coordinate_source_verified")
         market_context["authoritative_address"] = _ubicacion.get("authoritative_address")
         market_context["address_source"] = _ubicacion.get("address_source")
+        market_context["official_urban_context"] = _oficial_urbano
         _market_context_authorized = market_context_authorized(market_context)
     except Exception as _e_mc:
         market_context = {"ready": False, "blockers": [f"market_context error: {_e_mc}"]}
         _market_context_authorized = False
         print(f"[PDF][MARKET_CONTEXT] no disponible: {_e_mc}")
+
+    # 03H.1A: coherencia cross-chapter — si el contexto oficial resolvió barrio/
+    # estrato, se propagan a las variables de render (una sola fuente de verdad).
+    if (_mc_barrio_status == _STATUS_VERIFIED_OFFICIAL and _mc_barrio):
+        barrio = _mc_barrio
+        _barrio_desde_catastro = True
+    if _mc_estrato_status == _STATUS_VERIFIED_OFFICIAL and _mc_estrato is not None:
+        try:
+            estrato = int(str(_mc_estrato).replace("No_Aplica", "").split("_")[0])
+        except Exception:
+            pass
     # Actualizar el segundo gate canónico con el contexto COMPUTADO (03H).
     canonical_identity["market_context_ready"] = bool(market_context.get("ready"))
     canonical_identity["market_context"] = market_context
@@ -838,7 +883,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                              destino=_predio_destino, tipologia=_tipologia_texto,
                              unidad_ph_no_resuelta=_unidad_ph_no_resuelta,
                              market_context_blocked=_market_context_blocked,
-                             valuation_authorized=_valuation_authorized)
+                             valuation_authorized=_valuation_authorized,
+                             # 03H.1A: ÚNICA autoridad de la tasa de mercado.
+                             market_context=market_context)
     res_avaluo = val_data
     
     # Cargar hallazgos y recomendaciones dinamicas del analizador legal

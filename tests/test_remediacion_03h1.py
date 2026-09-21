@@ -32,29 +32,64 @@ def _golden_identity():
     }
 
 
-class TestResolveMarketLocation(unittest.TestCase):
-    """#1/#2/#3: ubicación de mercado (no identidad) con authoritative_address."""
+def _geocoder_mock(lat=10.9870, lon=-74.8115, registro=None):
+    def _g(direccion, ciudad=None):
+        if registro is not None:
+            registro.append(direccion)
+        return (lat, lon)
+    return _g
 
-    def test_oficial_adoption_address_es_authoritative(self):
+
+class TestResolveMarketLocation(unittest.TestCase):
+    """#1/#2/#3: ubicación de mercado (no identidad) con provenance REAL.
+
+    03H.1A: una coordenada preexistente NO se reetiqueta como oficial; si hay
+    dirección oficial se geocodifica ESA dirección.
+    """
+
+    def test_direccion_oficial_se_geocodifica_como_oficial(self):
+        registro = []
         loc = resolve_market_location(
             canonical_identity=_golden_identity(), predio_real=None,
-            lat_geo=10.9870, lon_geo=-74.8115,
+            lat_geo=10.1111, lon_geo=-74.2222,
             db_lat=None, db_lon=None, db_direccion="calle falsa 123",
             barrio="Miramar", es_bogota=False, es_medellin=False,
-            es_pasto=False, ciudad="barranquilla")
-        self.assertEqual(loc["authoritative_address"], "Transversal 43 100 50 TO 8 AP 430")
+            es_pasto=False, ciudad="barranquilla",
+            geocoder=_geocoder_mock(registro=registro))
+        self.assertEqual(loc["authoritative_address"],
+                         "Transversal 43 100 50 TO 8 AP 430")
         self.assertEqual(loc["address_source"], "OFFICIAL_ADOPTION_REGISTRY")
         self.assertEqual(loc["lat"], 10.9870)
-        self.assertEqual(loc["lon"], -74.8115)
-        self.assertEqual(loc["coordinate_source"], "OFFICIAL_ADDRESS_GEOCODE")
+        self.assertEqual(loc["coordinate_source"],
+                         "OFFICIAL_ADOPTION_ADDRESS_GEOCODE")
+        self.assertTrue(loc["coordinate_source_verified"])
+        # Se geocodificó la BASE de la dirección oficial (sin unidad PH).
+        self.assertTrue(registro and "TO 8" not in registro[0])
+
+    def test_no_escalada_de_procedencia(self):
+        """Sin geocoder, lat_geo preexistente conserva su origen real."""
+        loc = resolve_market_location(
+            canonical_identity=_golden_identity(), predio_real=None,
+            lat_geo=10.1111, lon_geo=-74.2222,
+            db_lat=None, db_lon=None, db_direccion=None,
+            barrio="Miramar", es_bogota=False, es_medellin=False,
+            es_pasto=False, ciudad="barranquilla",
+            geocoder=lambda d, ciudad=None: None)
+        # NO se renombra como oficial
+        self.assertNotEqual(loc["coordinate_source"],
+                            "OFFICIAL_ADOPTION_ADDRESS_GEOCODE")
+        self.assertEqual(loc["coordinate_source"], "CTL_ADDRESS_GEOCODE")
+        self.assertEqual(loc["lat"], 10.1111)
 
     def test_sin_predio_ni_geo_cae_a_centroide_no_verificado(self):
         loc = resolve_market_location(
             canonical_identity={}, predio_real=None,
             lat_geo=None, lon_geo=None, db_lat=None, db_lon=None,
             db_direccion=None, barrio="Centro", es_bogota=False,
-            es_medellin=False, es_pasto=False, ciudad="barranquilla")
+            es_medellin=False, es_pasto=False, ciudad="barranquilla",
+            geocoder=lambda d, ciudad=None: None)
         self.assertEqual(loc["coordinate_source"], "CITY_CENTROID")
+        self.assertFalse(loc["coordinate_source_verified"])
 
 
 class TestGoldenPipeline(unittest.TestCase):
@@ -113,21 +148,51 @@ class TestMalformedRate(unittest.TestCase):
 
 
 class TestCallerSafety(unittest.TestCase):
-    """#8/#14: get_valuation sin autorización explícita (False) -> bloqueado."""
+    """03H.1A: get_valuation es fail-closed por defecto; la autorización exige
+    un MarketContext válido (única autoridad de la tasa)."""
 
-    def test_get_valuation_sin_autorizacion_bloquea(self):
+    def _mc(self):
+        sector = resolve_market_sector("Miramar")
+        return build_market_context(
+            identity_verified=True,
+            barrio="Miramar", barrio_status=STATUS_VERIFIED_OFFICIAL,
+            estrato=4, estrato_status=STATUS_VERIFIED_OFFICIAL,
+            tipologia="Apartamento — Propiedad Horizontal",
+            tipologia_status=STATUS_VERIFIED_REGISTRAL,
+            sector_resolution=sector, market_rate_source=sector.get("source"))
+
+    def test_sin_autorizacion_bloquea(self):
         from dictamen_data import get_valuation
-        v = get_valuation(58.75, "Miramar", estrato=4, valuation_authorized=False)
+        v = get_valuation(58.75, "Miramar", estrato=4)
         self.assertIs(v["metodologia_aplica"], False)
         self.assertEqual(v["consolidado"], 0)
         self.assertIn("no autorizada", v["motivo_no_aplica"])
 
-    def test_get_valuation_autorizada_calcula(self):
+    def test_autorizada_sin_market_context_bloquea(self):
         from dictamen_data import get_valuation
         v = get_valuation(58.75, "Miramar", estrato=4, valuation_authorized=True)
+        self.assertIs(v["metodologia_aplica"], False)
+        self.assertIn("MarketContext", v["motivo_no_aplica"])
+
+    def test_autorizada_con_market_context_calcula(self):
+        from dictamen_data import get_valuation
+        mc = self._mc()
+        v = get_valuation(58.75, "Miramar", estrato=4,
+                          valuation_authorized=True, market_context=mc)
         self.assertIs(v["metodologia_aplica"], True)
         self.assertEqual(v["market_rate_match_type"], "EXACT")
         self.assertEqual(v["value_m2"], 6800000)
+
+    def test_market_context_sin_tasa_bloquea(self):
+        """MarketContext sin value_m2 válido -> bloqueado (no 5.2M, no YAML)."""
+        from dictamen_data import get_valuation
+        mc = self._mc()
+        mc["sector_metodologico"] = dict(mc["sector_metodologico"], value_m2=None)
+        v = get_valuation(58.75, "Miramar", estrato=4,
+                          valuation_authorized=True, market_context=mc)
+        self.assertIs(v["metodologia_aplica"], False)
+        self.assertEqual(v["consolidado"], 0)
+        self.assertIn("MARKET_RATE_INVALID", v["motivo_no_aplica"])
 
 
 if __name__ == "__main__":

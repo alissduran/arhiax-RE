@@ -87,11 +87,14 @@ class TestArhiaxReSuite(unittest.TestCase):
         self.assertIn("CANCELADA", anotaciones[1][4])  # Anotación 002 cancelada
 
     def test_valoracion_metodologia_lonja_baq_yaml(self):
-        val_miramar = get_valuation(60.0, "Miramar", estrato=4)
+        # 03H.1A: modo de REFERENCIA legacy explícito (exploratorio, no autorizado)
+        val_miramar = get_valuation(60.0, "Miramar", estrato=4,
+                                    allow_legacy_reference=True)
         self.assertGreater(val_miramar["consolidado"], 0)
         self.assertEqual(val_miramar["cap_rate"], 0.0485)
 
-        val_riomar = get_valuation(50.0, "Riomar", estrato=5)
+        val_riomar = get_valuation(50.0, "Riomar", estrato=5,
+                                   allow_legacy_reference=True)
         self.assertAlmostEqual(val_riomar["consolidado"], 260000000, delta=10000000)
 
     # ── Sprint 0 — Tests obligatorios (Titulux_Parche_Sprint0_Dictus.md) ────

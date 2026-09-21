@@ -137,7 +137,8 @@ class TestObservedFailure(unittest.TestCase):
         auth = can_value_property(cid)
         self.assertIs(auth["allowed"], False)
         v = get_valuation(58.75, "Miramar", estrato=4, ciudad="barranquilla",
-                          unidad_ph_no_resuelta=True)
+                          unidad_ph_no_resuelta=True,
+                          allow_legacy_reference=True)
         self.assertIs(v["metodologia_aplica"], False)
         self.assertEqual(v["consolidado"], 0)
         self.assertIn("PH", v["motivo_no_aplica"])

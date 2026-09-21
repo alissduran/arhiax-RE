@@ -156,9 +156,11 @@ class TestValorEstableConDireccionCatastralDelCtl(unittest.TestCase):
         """get_valuation con estrato 4 y área real da $291.460.000 (sin caer al
         valor de estrato 3 que produjo $212.990.000)."""
         from dictamen_data import get_valuation
-        v = get_valuation(56.05, "San Luis", estrato=4)
+        v = get_valuation(56.05, "San Luis", estrato=4,
+                          allow_legacy_reference=True)
         self.assertEqual(v["consolidado"], 291460000)
-        v3 = get_valuation(56.05, "San Luis", estrato=3)
+        v3 = get_valuation(56.05, "San Luis", estrato=3,
+                           allow_legacy_reference=True)
         self.assertEqual(v3["consolidado"], 212990000)
 
 

@@ -45,8 +45,10 @@ class TestGetValuationPrecondicion(unittest.TestCase):
 
     def test_no_procede_devuelve_consolidado_cero_y_flag(self):
         from dictamen_data import get_valuation
+        # 03H.1A: modo de referencia legacy explícito (exploratorio)
         v = get_valuation(80, "Centro", estrato=3, ciudad="pasto",
-                          clase_suelo="Suelo de proteccion")
+                          clase_suelo="Suelo de proteccion",
+                          allow_legacy_reference=True)
         self.assertIs(v["metodologia_aplica"], False)
         self.assertEqual(v["consolidado"], 0)
         self.assertTrue(v["motivo_no_aplica"])
@@ -54,7 +56,7 @@ class TestGetValuationPrecondicion(unittest.TestCase):
     def test_procede_devuelve_valor_y_flag_true(self):
         from dictamen_data import get_valuation
         v = get_valuation(76, "Centro", estrato=3, ciudad="pasto",
-                          clase_suelo="Urbano")
+                          clase_suelo="Urbano", allow_legacy_reference=True)
         self.assertIs(v["metodologia_aplica"], True)
         self.assertGreater(v["consolidado"], 0)
         self.assertIsNone(v["motivo_no_aplica"])
@@ -65,7 +67,8 @@ class TestGetValuationPrecondicion(unittest.TestCase):
         from dictamen_data import get_valuation
         v = get_valuation(76, "Centro", estrato=3, ciudad="pasto",
                           clase_suelo="Urbano",
-                          destino="Plan especial de manejo y proteccion (PEMP)")
+                          destino="Plan especial de manejo y proteccion (PEMP)",
+                          allow_legacy_reference=True)
         self.assertIs(v["metodologia_aplica"], True)
         self.assertGreater(v["consolidado"], 0)
 

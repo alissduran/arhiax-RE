@@ -105,13 +105,16 @@ class TestValuationBlock(unittest.TestCase):
     def test_305_5M_regression_bloqueado(self):
         """58.75 × 5.2M = 305.5M era el fallback silencioso; ahora queda bloqueado."""
         from dictamen_data import get_valuation
-        # Sin gate: el fallback por estrato produce 305.5M y se MARCA como fallback.
-        v_fallback = get_valuation(58.75, "Barrio Inexistente", estrato=4)
+        # Modo de REFERENCIA legacy explícito: el fallback por estrato produce
+        # 305.5M y se MARCA como fallback (nunca autorizado).
+        v_fallback = get_valuation(58.75, "Barrio Inexistente", estrato=4,
+                                   allow_legacy_reference=True)
         self.assertEqual(v_fallback["market_rate_match_type"], MATCH_GENERIC_ESTRATO_FALLBACK)
         self.assertAlmostEqual(v_fallback["consolidado"], 305500000, delta=20000)
         # Con el gate de contexto bloqueado: VALUATION_BLOCKED (consolidado 0).
         v_blocked = get_valuation(58.75, "Barrio Inexistente", estrato=4,
-                                  market_context_blocked=True)
+                                  market_context_blocked=True,
+                                  allow_legacy_reference=True)
         self.assertIs(v_blocked["metodologia_aplica"], False)
         self.assertEqual(v_blocked["consolidado"], 0)
         self.assertIn("mercado", v_blocked["motivo_no_aplica"])
@@ -119,7 +122,8 @@ class TestValuationBlock(unittest.TestCase):
     def test_sector_exact_miramar_no_es_fallback(self):
         """Con sector Miramar resuelto, la tasa es EXACT (6.8M) y no es fallback."""
         from dictamen_data import get_valuation
-        v = get_valuation(58.75, "Miramar", estrato=4)
+        v = get_valuation(58.75, "Miramar", estrato=4,
+                          allow_legacy_reference=True)
         self.assertEqual(v["market_rate_match_type"], "EXACT")
         self.assertEqual(v["market_rate_sector"], "Miramar")
         self.assertEqual(v["value_m2"], 6800000)

@@ -590,6 +590,7 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
             res["tipo_tratamiento"] = (feats[0].get("properties") or {}).get("tipo_tratamiento")
             res["altura_maxima"] = (feats[0].get("properties") or {}).get("altura_maxima")
 
+    res["campos_ambiguos"] = list(_ambiguos)
     if _ambiguos:
         res["context_status"] = "AMBIGUOUS_CONTEXT"
     res["disponible"] = bool(res["barrio"] or res["estrato"] or res["tratamiento"])

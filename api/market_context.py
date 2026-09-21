@@ -244,17 +244,42 @@ def market_context_blockers(mc: Dict[str, Any]) -> List[str]:
     return list((mc or {}).get("blockers") or [])
 
 
-# ── Categorías de fuente de coordenadas (03H.1) ───────────────────────────────
-# Solo las autorizadas pueden alimentar el gate de contexto.
+# ── Categorías de fuente de coordenadas (03H.1 / 03H.1A) ──────────────────────
+# ALLOWLIST explícita: SOLO estas fuentes pueden alimentar el contexto oficial.
 COORD_OFFICIAL_PREDIO = "OFFICIAL_PREDIO"
-COORD_OFFICIAL_ADDRESS_GEOCODE = "OFFICIAL_ADDRESS_GEOCODE"
+COORD_OFFICIAL_ADDRESS_GEOCODE = "OFFICIAL_ADOPTION_ADDRESS_GEOCODE"
+COORD_CTL_ADDRESS_GEOCODE = "CTL_ADDRESS_GEOCODE"
+# NO autorizadas (nunca abren el gate de contexto):
 COORD_FORM_ADDRESS_GEOCODE = "FORM_ADDRESS_GEOCODE"
 COORD_DB_COORDINATES = "DB_COORDINATES"
 COORD_BARRIO_DEMO = "BARRIO_DEMO"
 COORD_CITY_CENTROID = "CITY_CENTROID"
+COORD_UNRESOLVED = "UNRESOLVED"
 
-# Fuentes NO autorizadas para VERIFIED_OFFICIAL / VERIFIED_GEOGRAPHIC.
-_COORD_SOURCES_NO_VERIFIED = {COORD_BARRIO_DEMO, COORD_CITY_CENTROID, COORD_DB_COORDINATES}
+_COORD_SOURCES_VERIFIED = frozenset({
+    COORD_OFFICIAL_PREDIO,
+    COORD_OFFICIAL_ADDRESS_GEOCODE,
+    COORD_CTL_ADDRESS_GEOCODE,
+})
+
+
+def coordinate_source_verified(coordinate_source: Optional[str]) -> bool:
+    """True SOLO para fuentes de coordenadas en la allowlist.
+
+    03H.1A: `None` y `"UNRESOLVED"` NO son autorizadas (antes se colaban como
+    verificadas por estar fuera de la lista negra).
+    """
+    return coordinate_source in _COORD_SOURCES_VERIFIED
+
+
+def _geocodificador(geocoder=None):
+    if geocoder is not None:
+        return geocoder
+    try:
+        from geocoder import geocodificar_direccion
+        return geocodificar_direccion
+    except Exception:
+        return None
 
 
 def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
@@ -262,16 +287,19 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
                             lat_geo, lon_geo,
                             db_lat, db_lon, db_direccion: Optional[str],
                             barrio: str, es_bogota: bool, es_medellin: bool,
-                            es_pasto: bool, ciudad: str) -> Dict[str, Any]:
-    """03H.1: resuelve la ubicación de MERCADO (no identidad) con provenance.
+                            es_pasto: bool, ciudad: str,
+                            lat_geo_source: Optional[str] = None,
+                            geocoder=None) -> Dict[str, Any]:
+    """03H.1A: resuelve la ubicación de MERCADO (no identidad) con provenance REAL.
 
-    La geocodificación ubica el edificio/contexto; NO demuestra identidad predial.
-    Devuelve authoritative_address/address_source/lat/lon/geocoder_source/
-    geocoder_confidence/coordinate_source.
+    Regla de no escalada de procedencia: una coordenada preexistente NO se
+    reetiqueta como oficial. Si el registro oficial aporta una dirección, se
+    GEOCODIFICA ESA dirección para poder marcarla como
+    OFFICIAL_ADOPTION_ADDRESS_GEOCODE; si no se puede geocodificar, se conserva
+    el origen real de las coordenadas y el gate bloqueará si no alcanza.
     """
     authoritative_address = None
     address_source = None
-    # Dirección de mayor autoridad: registro oficial de adopción (03H.1).
     cid = canonical_identity or {}
     if cid.get("identity_source") == "OFFICIAL_ADOPTION_REGISTRY":
         reg = cid.get("adopcion_registro") or {}
@@ -280,73 +308,173 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
             address_source = "OFFICIAL_ADOPTION_REGISTRY"
 
     lat = lon = None
-    coordinate_source = None
+    source_address = None
+    coordinate_source = COORD_UNRESOLVED
     geocoder_source = None
     geocoder_confidence = None
+    _geo = _geocodificador(geocoder)
 
+    def _geocodificar(texto):
+        nonlocal geocoder_source
+        if not _geo or not texto:
+            return None, None
+        try:
+            from unidad_inmobiliaria import extraer_unidad
+            _u = extraer_unidad(texto)
+            base = _u.get("direccion_base") or texto
+        except Exception:
+            base = texto
+        if not base or base.lower() in ("pendiente", ""):
+            return None, None
+        try:
+            r = _geo(base, ciudad=ciudad)
+        except Exception:
+            return None, None
+        if isinstance(r, (tuple, list)) and len(r) == 2 and r[0] is not None \
+                and r[1] is not None:
+            geocoder_source = "NOMINATIM/OSM"
+            return r[0], r[1]
+        return None, None
+
+    # 1) coordenadas OFICIALES del predio resuelto (si las hay)
     if predio_real and predio_real.get("lat") is not None and predio_real.get("lon") is not None:
         lat, lon = predio_real["lat"], predio_real["lon"]
         coordinate_source = COORD_OFFICIAL_PREDIO
-    elif lat_geo is not None and lon_geo is not None:
+        source_address = predio_real.get("direccion_oficial") or None
+
+    # 2) dirección oficial de adopción -> geocodificar ESA dirección
+    if lat is None and authoritative_address:
+        _la, _lo = _geocodificar(authoritative_address)
+        if _la is not None:
+            lat, lon = _la, _lo
+            coordinate_source = COORD_OFFICIAL_ADDRESS_GEOCODE
+            source_address = authoritative_address
+
+    # 3) coordenadas ya geocodificadas (CTL) — conservan su origen REAL
+    if lat is None and lat_geo is not None and lon_geo is not None:
         lat, lon = lat_geo, lon_geo
-        coordinate_source = (COORD_OFFICIAL_ADDRESS_GEOCODE if authoritative_address
-                             else COORD_FORM_ADDRESS_GEOCODE)
-    elif db_lat or db_lon:
+        coordinate_source = lat_geo_source or COORD_CTL_ADDRESS_GEOCODE
+        source_address = db_direccion
+
+    # 4) coordenadas de la base de datos (NO autorizadas)
+    if lat is None and (db_lat or db_lon):
         lat, lon = db_lat, db_lon
         coordinate_source = COORD_DB_COORDINATES
+        source_address = db_direccion
 
-    if not lat or not lon:
-        # Geocodificar la dirección BASE (sin unidad PH si el geocoder no la reconoce).
-        _dir_geo = authoritative_address or db_direccion or ""
-        if _dir_geo:
-            try:
-                from unidad_inmobiliaria import extraer_unidad
-                _u = extraer_unidad(_dir_geo)
-                _base = _u.get("direccion_base") or _dir_geo
-            except Exception:
-                _base = _dir_geo
+    # 5) geocodificar la dirección del formulario
+    if lat is None and db_direccion:
+        _la, _lo = _geocodificar(db_direccion)
+        if _la is not None:
+            lat, lon = _la, _lo
+            coordinate_source = COORD_FORM_ADDRESS_GEOCODE
+            source_address = db_direccion
+
+    # 6) centroides/demo — NUNCA autorizados para el gate
+    if lat is None:
+        _bl = (barrio or "").lower().strip()
+        if _bl == "miramar":
+            lat, lon = (10.9870, -74.8115)
+            coordinate_source = COORD_BARRIO_DEMO
+        elif _bl in ("el recreo", "recreo"):
+            lat, lon = (10.9838, -74.7998)
+            coordinate_source = COORD_BARRIO_DEMO
+        elif es_bogota:
+            lat, lon = (4.7110, -74.0721)
+            coordinate_source = COORD_CITY_CENTROID
+        elif es_medellin:
+            lat, lon = (6.2442, -75.5812)
+            coordinate_source = COORD_CITY_CENTROID
+        elif es_pasto:
+            lat, lon = (1.2136, -77.2811)
+            coordinate_source = COORD_CITY_CENTROID
         else:
-            _base = ""
-        try:
-            from geocoder import geocodificar_direccion
-            if _base and _base.lower() not in ("pendiente", ""):
-                lat, lon = geocodificar_direccion(_base, ciudad=ciudad)
-                geocoder_source = "NOMINATIM/OSM"
-                coordinate_source = (COORD_OFFICIAL_ADDRESS_GEOCODE if authoritative_address
-                                     else COORD_FORM_ADDRESS_GEOCODE)
-            else:
-                raise ValueError("sin direccion valida")
-        except Exception:
-            _bl = (barrio or "").lower().strip()
-            if _bl == "miramar":
-                lat, lon = (10.9870, -74.8115)
-                coordinate_source = COORD_BARRIO_DEMO
-            elif _bl in ("el recreo", "recreo"):
-                lat, lon = (10.9838, -74.7998)
-                coordinate_source = COORD_BARRIO_DEMO
-            elif es_bogota:
-                lat, lon = (4.7110, -74.0721)
-                coordinate_source = COORD_CITY_CENTROID
-            elif es_medellin:
-                lat, lon = (6.2442, -75.5812)
-                coordinate_source = COORD_CITY_CENTROID
-            elif es_pasto:
-                lat, lon = (1.2136, -77.2811)
-                coordinate_source = COORD_CITY_CENTROID
-            else:
-                lat, lon = (10.9685, -74.7813)
-                coordinate_source = COORD_CITY_CENTROID
+            lat, lon = (10.9685, -74.7813)
+            coordinate_source = COORD_CITY_CENTROID
 
     return {
         "authoritative_address": authoritative_address,
         "address_source": address_source,
         "lat": lat, "lon": lon,
+        "source_address": source_address,
+        "coordinate_source": coordinate_source,
+        "coordinate_source_verified": coordinate_source_verified(coordinate_source),
         "geocoder_source": geocoder_source,
         "geocoder_confidence": geocoder_confidence,
-        "coordinate_source": coordinate_source,
     }
 
 
-def coordinate_source_verified(coordinate_source: Optional[str]) -> bool:
-    """True solo para fuentes de coordenadas autorizadas (no demo/centroide)."""
-    return coordinate_source not in _COORD_SOURCES_NO_VERIFIED
+# ── Contexto urbano OFICIAL por coordenadas autorizadas (03H.1A) ──────────────
+def resolve_official_urban_context(*, ciudad: str, lat, lon,
+                                   coordinate_source: Optional[str],
+                                   consultar_entorno=None) -> Dict[str, Any]:
+    """Consulta OFICIAL de barrio/estrato/tratamiento por coordenadas.
+
+    Es CONTEXTO ESPACIAL, no identidad: NO modifica identity_source y funciona
+    aunque `predio_real` sea None (la identidad puede venir del registro oficial
+    de adopción). Solo se consulta si `coordinate_source` está en la allowlist.
+    """
+    out: Dict[str, Any] = {
+        "barrio": None, "barrio_status": STATUS_UNRESOLVED,
+        "estrato": None, "estrato_status": STATUS_UNRESOLVED,
+        "tratamiento": None, "tratamiento_status": STATUS_UNRESOLVED,
+        "context_status": None, "campos_ambiguos": [], "source": None,
+    }
+
+    if not coordinate_source_verified(coordinate_source):
+        out["context_status"] = "COORDINATE_SOURCE_NOT_AUTHORIZED"
+        return out
+    if lat is None or lon is None:
+        out["context_status"] = "NO_COORDINATES"
+        return out
+
+    _fn = consultar_entorno
+    if _fn is None:
+        _c = (ciudad or "").lower()
+        try:
+            if "medellin" in _c or "medellín" in _c:
+                from catastro_predio_medellin import consultar_entorno_urbano as _fn
+            else:
+                from catastro_predio import consultar_entorno_urbano as _fn
+        except Exception:
+            _fn = None
+    if _fn is None:
+        out["context_status"] = STATUS_SOURCE_UNAVAILABLE
+        return out
+
+    try:
+        r = _fn(lat, lon) or {}
+    except Exception:
+        out["context_status"] = STATUS_SOURCE_UNAVAILABLE
+        return out
+
+    if not r.get("disponible"):
+        out["context_status"] = STATUS_SOURCE_UNAVAILABLE
+        return out
+
+    out["source"] = "official_urban_layer"
+    amb = set(r.get("campos_ambiguos") or [])
+    if r.get("context_status") == "AMBIGUOUS_CONTEXT" and not amb:
+        amb = {"barrio", "estrato", "tratamiento"}
+    out["campos_ambiguos"] = sorted(amb)
+
+    if r.get("barrio") and "barrio" not in amb:
+        out["barrio"] = r["barrio"]
+        out["barrio_status"] = STATUS_VERIFIED_OFFICIAL
+    elif "barrio" in amb:
+        out["barrio_status"] = STATUS_CONFLICT
+
+    if r.get("estrato") not in (None, "") and "estrato" not in amb:
+        out["estrato"] = r["estrato"]
+        out["estrato_status"] = STATUS_VERIFIED_OFFICIAL
+    elif "estrato" in amb:
+        out["estrato_status"] = STATUS_CONFLICT
+
+    if r.get("tratamiento") and "tratamiento" not in amb:
+        out["tratamiento"] = r["tratamiento"]
+        out["tratamiento_status"] = STATUS_VERIFIED_OFFICIAL
+    elif "tratamiento" in amb:
+        out["tratamiento_status"] = STATUS_CONFLICT
+
+    out["context_status"] = ("AMBIGUOUS_CONTEXT" if amb else "OK")
+    return out

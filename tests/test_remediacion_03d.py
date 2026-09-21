@@ -102,7 +102,8 @@ class TestValuationGate(unittest.TestCase):
     def test_unidad_ph_no_resuelta_no_emite(self):
         from dictamen_data import get_valuation
         v = get_valuation(58.75, "Miramar", estrato=4, ciudad="barranquilla",
-                          unidad_ph_no_resuelta=True)
+                          unidad_ph_no_resuelta=True,
+                          allow_legacy_reference=True)
         self.assertIs(v["metodologia_aplica"], False)
         self.assertEqual(v["consolidado"], 0)
         self.assertIn("unidad PH", v["motivo_no_aplica"])
@@ -110,7 +111,8 @@ class TestValuationGate(unittest.TestCase):
     def test_sin_unidad_ph_no_afecta(self):
         from dictamen_data import get_valuation
         v = get_valuation(58.75, "Miramar", estrato=4, ciudad="barranquilla",
-                          unidad_ph_no_resuelta=False)
+                          unidad_ph_no_resuelta=False,
+                          allow_legacy_reference=True)
         self.assertIs(v["metodologia_aplica"], True)
         self.assertGreater(v["consolidado"], 0)
 
