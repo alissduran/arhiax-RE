@@ -141,7 +141,9 @@ class TestParsersOficiales(unittest.TestCase):
         ent = next(r for r in regs if r.id == "uk-AFG0001")
         self.assertEqual(ent.nombre, "HAJI KHAIRULLAH HAJI SATTAR MONEY EXCHANGE")
         self.assertIn("Haji Alim Hawala", ent.alias)
-        self.assertEqual(ent.tipo_documento, "nit")   # IndividualEntityShip: Entity
+        # 03S.1A-4: el primer identificador real manda sobre el fallback de tipo.
+        self.assertEqual(ent.tipo_documento, "registro")
+        self.assertIn("BR-770011", [i["value"] for i in ent.identifiers])
         ind = next(r for r in regs if r.id == "uk-AFG0006")
         self.assertEqual(ind.nombre, "MOHAMMAD HASSAN AKHUND")
         self.assertEqual(ind.numero_documento, "AF1234567")

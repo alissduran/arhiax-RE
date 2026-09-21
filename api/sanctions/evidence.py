@@ -101,25 +101,42 @@ def evidence_payloads(records: Tuple[EvidenceRecord, ...]) -> Tuple[Dict[str, An
     return tuple(r.to_dict() for r in records)
 
 
+def verificar_cadena(eventos) -> bool:
+    """Verifica la cadena HMAC delegando en el mecanismo existente.
+
+    03S.1A-2: la verificación es explícita. Si el subsistema no está disponible
+    o la cadena no se puede verificar, devuelve False (y el motor lo declara como
+    `evidence_chain_status=FAILED`, nunca en silencio).
+    """
+    if not eventos:
+        return False
+    try:
+        from arhia_sag_screen.evidence.envelope import verificar_cadena as _v
+    except Exception:  # noqa: BLE001
+        return False
+    try:
+        return bool(_v(list(eventos)))
+    except Exception:  # noqa: BLE001
+        return False
+
+
 def encadenar_eventos(payloads: Tuple[Dict[str, Any], ...], agent_id: str
                       ) -> Tuple[Dict[str, Any], ...]:
     """Encadena la evidencia con el mecanismo HMAC ya existente (arhia_sag_screen).
 
-    Nunca lanza: si el subsistema de evidencia no está disponible, devuelve ()
-    (la consulta sigue siendo válida; solo no se encadena).
+    Devuelve () si el subsistema no está disponible: el llamador DEBE declararlo
+    como `FAILED` explícitamente (nunca interpretarlo como éxito silencioso).
     """
     try:
         from arhia_sag_screen.evidence.envelope import build_event
-    except Exception:  # noqa: BLE001
+    except Exception as e:  # noqa: BLE001
+        print(f"[SCREENING][EVIDENCE] cadena no disponible: {e}")
         return ()
     eventos = []
     prev = ""
     for p in payloads:
-        try:
-            ev = build_event(CONTROL_ID, EVENT_TYPE, agent_id, dict(p),
-                             previous_hash=prev)
-            prev = ev.get("chain_hash", "")
-            eventos.append(ev)
-        except Exception:  # noqa: BLE001
-            break
+        ev = build_event(CONTROL_ID, EVENT_TYPE, agent_id, dict(p),
+                         previous_hash=prev)
+        prev = ev.get("chain_hash", "")
+        eventos.append(ev)
     return tuple(eventos)

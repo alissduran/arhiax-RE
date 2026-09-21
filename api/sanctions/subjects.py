@@ -52,6 +52,10 @@ W_DOC_NON_STANDARD = "DOCUMENT_NON_STANDARD_FORMAT"
 W_NAME_PLACEHOLDER = "NAME_IS_PLACEHOLDER"
 W_NOT_FUSED = "MULTIPLE_NAME_VARIANTS_NOT_FUSED"
 
+# Longitud mínima de una variante declarada para consultarla por separado
+# (evita consultar siglas/muletillas que generarían ruido de homónimos).
+_MIN_VARIANTE = 4
+
 _PLACEHOLDERS = {
     "", "N/D", "ND", "N.A", "NA", "NONE", "NULL", "PENDIENTE",
     "PENDIENTE DE VERIFICACION", "PENDIENTE DE VERIFICACIÓN",
@@ -161,6 +165,24 @@ def person_type_from(name: str, tipo_documento: Optional[str]) -> Tuple[str, Tup
     if not tokens:
         return PERSON_UNKNOWN, (W_PERSON_TYPE_UNKNOWN, W_NAME_PLACEHOLDER)
     return PERSON_UNKNOWN, (W_PERSON_TYPE_UNKNOWN, W_DOC_MISSING)
+
+
+def variantes_declaradas(nombre: str) -> Tuple[str, ...]:
+    """Variantes de nombre DECLARADAS por la fuente ('A / B' → (A, B)).
+
+    03S.1A-5: separar las variantes NO es fusionar identidad jurídica. Cada
+    variante se consulta por separado y el resultado se agrega de forma
+    conservadora; la fusión jurídica exigiría evidencia (mismo NIT, continuidad
+    registral), que aquí no se asume.
+    """
+    partes = [p.strip(" .,;:-") for p in re.split(r"\s*/\s*", str(nombre or ""))]
+    _clave_canonica = match_key(nombre)
+    out = []
+    for p in partes:
+        if (len(p) >= _MIN_VARIANTE and p not in out
+                and match_key(p) != _clave_canonica):
+            out.append(p)
+    return tuple(out)
 
 
 def parse_person(raw: str) -> Dict[str, Any]:
@@ -302,6 +324,8 @@ def build_subject_envelopes(
             screened=screened,
             reason_for_screening=MOTIVO_POR_ROL.get(rol, "parte de la operación"),
             not_screened_reason=None if screened else "nombre no utilizable (N/D o marcador)",
+            declared_name_variants=variantes_declaradas(datos["canonical_name"]),
+            identifiers=(),
         ))
 
     return _consolidar(envelopes)
@@ -380,6 +404,9 @@ def _consolidar(envelopes: Sequence[SubjectEnvelope]) -> List[SubjectEnvelope]:
             reason_for_screening="; ".join(
                 dict.fromkeys(MOTIVO_POR_ROL.get(r, "") for r in roles)).strip("; "),
             not_screened_reason=(prev.not_screened_reason or env.not_screened_reason),
+            declared_name_variants=tuple(dict.fromkeys(
+                tuple(prev.declared_name_variants) + tuple(env.declared_name_variants))),
+            identifiers=prev.identifiers or env.identifiers,
         )
     # Orden determinista por rol y nombre (estable entre ejecuciones).
     _orden = {r: i for i, r in enumerate(ROLES_SCREENED)}

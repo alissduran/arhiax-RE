@@ -30,6 +30,18 @@
         <idNumber>UA112233</idNumber>
         <idCountry>Ukraine</idCountry>
       </id>
+      <id>
+        <uid>72003</uid>
+        <idType>National ID No.</idType>
+        <idNumber>DOC-2</idNumber>
+        <idCountry>Ukraine</idCountry>
+      </id>
+      <id>
+        <uid>72004</uid>
+        <idType>National ID No.</idType>
+        <idNumber>DOC-3</idNumber>
+        <idCountry>Ukraine</idCountry>
+      </id>
     </idList>
     <dateOfBirthList>
       <dateOfBirthItem>
@@ -51,6 +63,11 @@
         <uid>72002</uid>
         <idType>Tax ID No.</idType>
         <idNumber>900123456</idNumber>
+      </id>
+      <id>
+        <uid>72005</uid>
+        <idType>Business Registration Number</idType>
+        <idNumber>BR-770011</idNumber>
       </id>
     </idList>
   </sdnEntry>

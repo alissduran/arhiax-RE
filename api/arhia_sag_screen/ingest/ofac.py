@@ -35,18 +35,37 @@ def parse_ofac_sdn(xml_bytes, lista_version=""):
 def _to_registro(entry, lista_version):
     uid = _text(_find(entry, "uid"))
     nombre = _compose_name(entry)
+    ids = _identificadores(entry)
+    _prim = ids[0] if ids else None
     tipo_doc, num_doc = _doc(entry)
     return RegistroNormalizado(
         id=("ofac-" + uid) if uid else ("ofac-" + nombre),
         nombre=nombre,
         alias=_aliases(entry),
-        tipo_documento=tipo_doc,
-        numero_documento=num_doc,
+        tipo_documento=(_prim or {}).get("type") or tipo_doc,
+        numero_documento=(_prim or {}).get("value") or num_doc,
         fecha_nacimiento=_birth(entry),
         programas=_programs(entry),
         fuente="ofac",
         lista_version=lista_version,
+        identifiers=ids,
     )
+
+
+def _identificadores(entry):
+    """TODOS los <id> del registro (03S.1A-4).
+
+    Antes se conservaba solo el PRIMERO, perdiendo identificadores secundarios
+    que sí pueden confirmar (o descartar) una coincidencia.
+    """
+    out = []
+    for id_node in _iter(entry, "id"):
+        num = _text(_find(id_node, "idNumber"))
+        if not num:
+            continue
+        out.append({"type": _map_id_type(_text(_find(id_node, "idType"))),
+                    "value": num, "source_field": "idList/id/idNumber"})
+    return tuple(out)
 
 
 def _compose_name(entry):

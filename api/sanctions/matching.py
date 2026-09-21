@@ -24,8 +24,8 @@ from dataclasses import dataclass
 from typing import Any, Optional, Sequence, Tuple
 
 from .contracts import (
-    RESULT_EXACT, RESULT_NO_MATCH, RESULT_POTENTIAL, RESULT_REVIEW,
-    RESULT_STRONG,
+    RESULT_EXACT, RESULT_NO_MATCH, RESULT_NOT_SCREENED, RESULT_POTENTIAL,
+    RESULT_REVIEW, RESULT_SOURCE_UNAVAILABLE, RESULT_STRONG,
 )
 from .subjects import document_variants, match_key
 
@@ -56,10 +56,64 @@ def _g(rec: Any, key: str, default=None):
     return getattr(rec, key, default)
 
 
+_EQUIV_TIPOS = (
+    {"pasaporte", "passport"},
+    {"cc", "nuip", "ti", "rc", "cédula", "cedula", "national id", "national identifier"},
+    {"ce", "cedula de extranjeria", "cédula de extranjería"},
+    {"nit", "tax", "vat", "tax id", "ruc"},
+    {"registro", "business registration", "company number"},
+    {"licencia", "driving licence", "licencia de conduccion"},
+)
+
+
+def _tipos_compatibles(a: Optional[str], b: Optional[str]) -> bool:
+    """¿Son compatibles los tipos de documento del sujeto y de la lista?
+
+    Un tipo vacío es comodín (la fuente no lo declara). 'cc' y 'national id' son
+    equivalentes; pasaporte y cédula NO lo son.
+    """
+    ta = (a or "").strip().lower()
+    tb = (b or "").strip().lower()
+    if not ta or not tb or ta == tb:
+        return True
+    return any(ta in grupo and tb in grupo for grupo in _EQUIV_TIPOS)
+
+
+def _rec_identificadores(rec: Any) -> Tuple[Tuple[str, str, str], ...]:
+    """[(tipo, valor, origen)] con TODOS los identificadores del registro.
+
+    03S.1A-4: usa `identifiers` (todos los que publica la fuente) y, si el
+    productor es antiguo, cae al par legacy `tipo_documento`/`numero_documento`.
+    Nunca se descarta un identificador secundario.
+    """
+    out = []
+    for i in (_g(rec, "identifiers") or ()):
+        if isinstance(i, dict):
+            valor = str(i.get("value") or "").strip()
+            if valor:
+                out.append((str(i.get("type") or ""), valor,
+                            str(i.get("source_field") or "identifiers")))
+    _num_legacy = _g(rec, "numero_documento")
+    if _num_legacy:
+        out.append((str(_g(rec, "tipo_documento") or ""), str(_num_legacy), "legacy"))
+    vistos, unicos = set(), []
+    for t, v, o in out:
+        clave = (t.lower(), v.upper())
+        if clave in vistos:
+            continue
+        vistos.add(clave)
+        unicos.append((t, v, o))
+    return tuple(unicos)
+
+
 def _rec_doc_variants(rec: Any) -> Tuple[str, ...]:
-    tipo = _g(rec, "tipo_documento")
-    num = _g(rec, "numero_documento")
-    return document_variants(tipo, num)
+    """Todas las variantes normalizadas de TODOS los identificadores del registro."""
+    out = []
+    for tipo, valor, _ in _rec_identificadores(rec):
+        for v in document_variants(tipo, valor):
+            if v not in out:
+                out.append(v)
+    return tuple(out)
 
 
 def _rec_names(rec: Any) -> Tuple[Tuple[str, str], ...]:
@@ -74,9 +128,12 @@ def _rec_names(rec: Any) -> Tuple[Tuple[str, str], ...]:
     return tuple(out)
 
 
-def _mejor_nombre(env, registros) -> Optional[Tuple[Any, float, str, str]]:
-    """Mejor coincidencia de nombre (exacta o difusa) y cómo se obtuvo."""
-    objetivo = match_key(env.canonical_name)
+def _mejor_nombre(env, registros, nombre: Optional[str] = None) -> Optional[Tuple[Any, float, str, str]]:
+    """Mejor coincidencia de nombre (exacta o difusa) y cómo se obtuvo.
+
+    `nombre` permite consultar una variante declarada del sujeto.
+    """
+    objetivo = match_key(nombre if nombre is not None else env.canonical_name)
     objetivo_ts = " ".join(sorted(objetivo.split()))
     mejor = None
     for r in registros:
@@ -93,22 +150,22 @@ def _mejor_nombre(env, registros) -> Optional[Tuple[Any, float, str, str]]:
 
 
 def _conflicto_identificadores(env, rec) -> Tuple[bool, Tuple[str, ...]]:
-    """§19: ¿el registro trae un identificador INCOMPATIBLE con el sujeto?"""
+    """§19: ¿el registro trae un identificador INCOMPATIBLE con el sujeto?
+
+    03S.1A-4: se evalúan TODOS los identificadores del registro. El conflicto
+    solo se declara si NINGUNO es compatible con el del sujeto.
+    """
     motivos = []
     rec_variants = _rec_doc_variants(rec)
-    subj_variants = document_variants(env.document_type, env.document_normalized)
-    rec_tipo = (_g(rec, "tipo_documento") or "").strip().lower()
+    subj_variants = set(document_variants(env.document_type, env.document_normalized))
     if rec_variants and subj_variants:
-        if not set(rec_variants) & set(subj_variants):
-            motivos.append("DOCUMENT_MISMATCH")
-        elif rec_tipo and env.document_type and rec_tipo != env.document_type:
-            motivos.append("DOCUMENT_TYPE_MISMATCH")
-    elif rec_variants and not subj_variants:
-        # La lista aporta documento y el sujeto no: no es conflicto, es falta de
-        # corroboración (lo resuelve la jerarquía de nombres).
-        pass
-    elif subj_variants and not rec_variants:
-        pass
+        if not (set(rec_variants) & subj_variants):
+            # ¿Al menos uno es del mismo tipo (aunque el número difiera)?
+            if any(_tipos_compatibles(t, env.document_type)
+                   for t, _v, _o in _rec_identificadores(rec)):
+                motivos.append("DOCUMENT_MISMATCH")
+            else:
+                motivos.append("DOCUMENT_TYPE_MISMATCH")
     # Fecha de nacimiento: solo se compara si AMBOS la tienen.
     dob_rec = _g(rec, "fecha_nacimiento")
     dob_sub = getattr(env, "fecha_nacimiento", None)
@@ -126,43 +183,53 @@ def _core_numerico(doc: Optional[str]) -> Optional[str]:
     return m.group(1) if m else None
 
 
-def consultar(env, registros: Sequence[Any]) -> MatchResult:
-    """Aplica la jerarquía completa a UN sujeto contra UNA fuente."""
+def consultar(env, registros: Sequence[Any], nombre: Optional[str] = None) -> MatchResult:
+    """Aplica la jerarquía completa a UN sujeto contra UNA fuente.
+
+    `nombre` permite consultar una VARIANTE declarada del sujeto (§ 03S.1A-5)
+    sin reconstruir el envelope: los identificadores siguen siendo los del sujeto.
+    """
     registros = list(registros or ())
     if not registros:
         return MatchResult(RESULT_NO_MATCH, 0.0, "lista_vacia")
 
-    # ── 1. Identificador exacto ──────────────────────────────────────────────
+    # ── 1. Identificador exacto (evalúa TODOS los identificadores de la lista) ─
     subj_variants = document_variants(env.document_type, env.document_normalized)
     if subj_variants:
         for r in registros:
-            comunes = set(_rec_doc_variants(r)) & set(subj_variants)
-            if comunes:
-                rec_tipo = (_g(r, "tipo_documento") or "").strip().lower()
-                if not rec_tipo or not env.document_type or rec_tipo == env.document_type:
-                    return MatchResult(
-                        RESULT_EXACT, 1.0, "identificador_exacto",
-                        (str(_g(r, "id") or ""),),
-                        ("documento exacto", f"documento={sorted(comunes)[0]}"))
+            for tipo_rec, valor_rec, origen in _rec_identificadores(r):
+                _variantes = set(document_variants(tipo_rec, valor_rec))
+                comunes = _variantes & set(subj_variants)
+                if not comunes:
+                    continue
+                if not _tipos_compatibles(tipo_rec, env.document_type):
+                    # El número coincide pero el TIPO de documento es incompatible
+                    # (p. ej. cédula vs pasaporte): no confirma por sí solo.
+                    continue
+                return MatchResult(
+                    RESULT_EXACT, 1.0, "identificador_exacto",
+                    (str(_g(r, "id") or ""),),
+                    ("documento exacto",
+                     f"documento={valor_rec} (normalizado {sorted(comunes)[0]}, {origen})"))
         # 1b. Mismo NÚCLEO numérico con variante de formato (1045718995 vs
         #     1045718995X): NO es exacto silencioso — se confirma quedando en
         #     revisión, con el motivo declarado.
         _core = _core_numerico(env.document_normalized)
         if _core:
             for r in registros:
-                for v in _rec_doc_variants(r):
-                    if v != env.document_normalized and _core_numerico(v) == _core:
-                        rec_tipo = (_g(r, "tipo_documento") or "").strip().lower()
-                        if rec_tipo and env.document_type and rec_tipo != env.document_type:
-                            continue
-                        return MatchResult(
-                            RESULT_STRONG, 1.0, "documento_variante_de_formato",
-                            (str(_g(r, "id") or ""),),
-                            (f"documento coincidente con variante de formato "
-                             f"({env.document_normalized} vs {v})",))
+                for tipo_rec, valor_rec, origen in _rec_identificadores(r):
+                    if not _tipos_compatibles(tipo_rec, env.document_type):
+                        continue
+                    for v in document_variants(tipo_rec, valor_rec):
+                        if v != env.document_normalized and _core_numerico(v) == _core:
+                            return MatchResult(
+                                RESULT_STRONG, 1.0, "documento_variante_de_formato",
+                                (str(_g(r, "id") or ""),),
+                                (f"documento coincidente con variante de formato "
+                                 f"({env.document_normalized} vs {v}, {origen})",))
 
     # ── 2-5. Nombre (exacto o difuso) ────────────────────────────────────────
-    mejor = _mejor_nombre(env, registros)
+    mejor = _mejor_nombre(env, registros, nombre=nombre)
     if mejor is None:
         return MatchResult(RESULT_NO_MATCH, 0.0, "sin_nombre_comparable")
     r, score, campo, via = mejor

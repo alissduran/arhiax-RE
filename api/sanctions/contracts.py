@@ -99,6 +99,14 @@ def freshness_label(state: Optional[str]) -> str:
     return FRESHNESS_LABEL.get(state or "", "no consultado")
 
 
+# ── Estado de la cadena de evidencia (§ 03S.1A-2) ───────────────────────────
+CHAIN_SEALED = "SEALED"
+CHAIN_FAILED = "FAILED"
+CHAIN_NOT_REQUIRED_DEV = "NOT_REQUIRED_DEV"
+
+CHAIN_STATES = (CHAIN_SEALED, CHAIN_FAILED, CHAIN_NOT_REQUIRED_DEV)
+
+
 # ── Categoría de fuente (§10) ────────────────────────────────────────────────
 CAT_SANCTIONS = "SANCTIONS_LIST"
 CAT_REGULATORY_REPORTING = "REGULATORY_REPORTING"
@@ -162,6 +170,22 @@ class SubjectEnvelope:
     screened: bool = True
     reason_for_screening: str = ""
     not_screened_reason: Optional[str] = None
+    # § 03S.1A-5: variantes de nombre DECLARADAS por la fuente ("A / B"). No son
+    # una fusión jurídica: cada variante se consulta por separado y se agrega el
+    # resultado más conservador.
+    declared_name_variants: Tuple[str, ...] = ()
+    # Identificadores adicionales del sujeto (si la fuente aporta varios).
+    identifiers: Tuple[Dict[str, Any], ...] = ()
+
+    @property
+    def nombres_a_consultar(self) -> Tuple[str, ...]:
+        """Nombre canónico + variantes declaradas (sin duplicados, en orden)."""
+        out = []
+        for n in (self.canonical_name,) + tuple(self.declared_name_variants):
+            n = (n or "").strip()
+            if n and n not in out:
+                out.append(n)
+        return tuple(out)
 
     @property
     def masked_document(self) -> str:
@@ -181,6 +205,8 @@ class SubjectEnvelope:
             "screened": self.screened,
             "reason_for_screening": self.reason_for_screening,
             "not_screened_reason": self.not_screened_reason,
+            "declared_name_variants": list(self.declared_name_variants),
+            "identifiers": [dict(i) for i in self.identifiers],
         }
 
 
@@ -267,7 +293,13 @@ class EvidenceRecord:
 
 @dataclass(frozen=True)
 class ScreeningSummary:
-    """Resumen ÚNICO consumido por 05, 09, 16, 16.b y receipts (§25)."""
+    """Resumen ÚNICO consumido por 05, 09, 16, 16.b y receipts (§25).
+
+    03S.1A separa DECISIÓN de COBERTURA:
+      * `status` (decisión): COMPLETE / PARTIAL / NOT_EXECUTED / REVIEW_REQUIRED.
+      * `coverage_complete`: se deriva de los OUTCOMES (¿se consultó a todos los
+        sujetos contra todas las fuentes solicitadas?), no del status.
+    """
     status: str = SCREENING_NOT_EXECUTED
     executed: bool = False
     subjects_declared: int = 0
@@ -285,21 +317,69 @@ class ScreeningSummary:
     executed_at: str = ""
     algorithm_version: str = ""
     scope_note: str = ""
+    # Evidencia (§ 03S.1A-2): el conteo debe cuadrar con los outcomes.
+    evidence_records: Tuple[Dict[str, Any], ...] = ()
+    evidence_expected_count: int = 0
+    evidence_created_count: int = 0
+    evidence_chain_status: str = CHAIN_NOT_REQUIRED_DEV
     extra: Dict[str, Any] = field(default_factory=dict)
 
     # ── Consumidores (una sola verdad) ───────────────────────────────────────
+    @property
+    def decision_status(self) -> str:
+        """Estado de DECISIÓN (lo que el dictamen afirma sobre el caso)."""
+        return self.status
+
+    @property
+    def coverage_status(self) -> str:
+        """Estado de COBERTURA, independiente de la decisión."""
+        if not self.executed:
+            return "COVERAGE_NOT_EXECUTED"
+        if self.coverage_complete:
+            return "COVERAGE_COMPLETE"
+        return "COVERAGE_PARTIAL"
+
+    @property
+    def coverage_complete(self) -> bool:
+        """¿Se consultó a TODOS los sujetos screeningables contra TODAS las
+        fuentes solicitadas? Se deriva de los outcomes, no del status.
+
+        Antes se derivaba del status (`in (COMPLETE, REVIEW_REQUIRED)`), lo que
+        permitía declarar cobertura completa teniendo una fuente caída.
+        """
+        if not self.executed or not self.subjects or not self.sources:
+            return False
+        _screeningables = {s.subject_id for s in self.subjects if s.screened}
+        if not _screeningables:
+            return False
+        _esperados = {(sid, src) for sid in _screeningables for src in self.sources}
+        _cubiertos = {
+            (o.subject_id, o.source_id) for o in self.outcomes
+            if o.subject_id in _screeningables and o.source_id in self.sources
+            and o.result not in (RESULT_NOT_SCREENED, RESULT_SOURCE_UNAVAILABLE)
+        }
+        return _cubiertos == _esperados
+
     @property
     def completo(self) -> bool:
         return self.status == SCREENING_COMPLETE
 
     @property
     def cobertura_completa(self) -> bool:
-        """¿Se consultaron TODAS las fuentes para TODOS los sujetos?
+        """Alias histórico de `coverage_complete` (misma derivación)."""
+        return self.coverage_complete
 
-        Es distinto de `completo`: un screening con cobertura completa puede
-        exigir revisión humana (REVIEW_REQUIRED) sin que falte ninguna fuente.
-        """
-        return self.status in (SCREENING_COMPLETE, SCREENING_REVIEW_REQUIRED)
+    @property
+    def evidence_complete(self) -> bool:
+        """¿Hay evidencia por cada consulta esperada?"""
+        return (self.evidence_created_count == self.evidence_expected_count
+                and self.evidence_expected_count > 0)
+
+    @property
+    def evidence_reproducible(self) -> bool:
+        """¿Puede afirmarse que la evidencia está sellada y es reproducible?"""
+        return self.evidence_complete and self.evidence_chain_status in (
+            CHAIN_SEALED, CHAIN_NOT_REQUIRED_DEV)
 
     @property
     def hay_coincidencia(self) -> bool:
@@ -327,6 +407,9 @@ class ScreeningSummary:
     def to_dict(self) -> Dict[str, Any]:
         return {
             "status": self.status, "executed": self.executed,
+            "decision_status": self.decision_status,
+            "coverage_status": self.coverage_status,
+            "coverage_complete": self.coverage_complete,
             "subjects_declared": self.subjects_declared,
             "subjects_screened": self.subjects_screened,
             "subjects_not_screened": self.subjects_not_screened,
@@ -340,5 +423,12 @@ class ScreeningSummary:
             "matched_subjects": list(self.matched_subjects),
             "reason": self.reason, "executed_at": self.executed_at,
             "algorithm_version": self.algorithm_version,
-            "scope_note": self.scope_note, "extra": dict(self.extra),
+            "scope_note": self.scope_note,
+            "evidence_records": [dict(e) for e in self.evidence_records],
+            "evidence_expected_count": self.evidence_expected_count,
+            "evidence_created_count": self.evidence_created_count,
+            "evidence_chain_status": self.evidence_chain_status,
+            "evidence_complete": self.evidence_complete,
+            "evidence_reproducible": self.evidence_reproducible,
+            "extra": dict(self.extra),
         }

@@ -92,17 +92,21 @@ def adquirir_fuente(
                                ""), [])
     store = store or SnapshotStore()
 
-    # 1) Snapshot vigente (sin red): NO es "en vivo".
+    # 1) Snapshot del store (sin red): la frescura se CALCULA por edad, nunca se
+    #    hereda. Un snapshot que en su día se descargó queda como CACHED_FRESH:
+    #    "en vivo" jamás se recupera del store (§ 03S.1A-1).
     if not force_refresh:
         guardado = store.ultimo(source_id)
         if guardado is not None:
             snap, regs = guardado
             _fresh = evaluar_frescura(snap, ttl_segundos=ttl_segundos,
                                       permitir_stale=permitir_stale)
-            if _fresh != STALE_NOT_ALLOWED and snap.acquisition_status == SNAP_OPERATIVA:
-                return (_reemplazar(snap, freshness=_fresh), regs)
+            if _fresh == FRESH_CACHED and snap.acquisition_status == SNAP_OPERATIVA:
+                return (_reemplazar(snap, freshness=_fresh, error=None), regs)
+            # Vencido: el TTL manda refrescar. Si el refresco no es posible, el
+            # paso 3 sirve este mismo snapshot como STALE_*. 
 
-    # 2) Descarga real.
+    # 2) Descarga real — ÚNICA rama que puede producir LIVE_FRESH.
     url = url_override or src.official_url
     error = ""
     if permitir_descarga:

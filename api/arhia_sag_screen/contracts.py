@@ -41,6 +41,23 @@ class RegistroNormalizado:
     programas: Tuple[str, ...] = ()
     fuente: str = ""
     lista_version: str = ""
+    # 03S.1A-4: TODOS los identificadores que publica la fuente oficial.
+    # Cada uno: {"type", "value", "source_field"}. Los campos legacy
+    # (tipo_documento/numero_documento) se conservan por compatibilidad y
+    # apuntan al primer identificador.
+    identifiers: Tuple[dict, ...] = ()
+
+    def identificadores(self) -> Tuple[dict, ...]:
+        """Identificadores del registro, incluyendo el legacy si no está ya."""
+        out = [dict(i) for i in (self.identifiers or ())]
+        if self.numero_documento:
+            _legacy = {"type": self.tipo_documento or "", "value": self.numero_documento,
+                       "source_field": "legacy"}
+            _ya = any((i.get("value") or "").upper() == self.numero_documento.upper()
+                      for i in out)
+            if not _ya:
+                out.append(_legacy)
+        return tuple(out)
 
 
 @dataclass(frozen=True)

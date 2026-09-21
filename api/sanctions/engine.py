@@ -19,12 +19,12 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 from . import matching
 from .acquire import adquirir_fuente, es_cache, es_en_vivo, fuente_disponible
 from .contracts import (
-    RESULT_NOT_SCREENED, RESULT_SOURCE_UNAVAILABLE, RESULT_STATES_REVISION,
-    SCREENING_COMPLETE, SCREENING_NOT_EXECUTED, SCREENING_PARTIAL,
-    SCREENING_REVIEW_REQUIRED, SNAP_OPERATIVA, ScreeningSummary, SourceOutcome,
-    SubjectEnvelope,
+    CHAIN_FAILED, CHAIN_NOT_REQUIRED_DEV, CHAIN_SEALED, RESULT_NOT_SCREENED,
+    RESULT_SOURCE_UNAVAILABLE, RESULT_STATES_REVISION, SCREENING_COMPLETE,
+    SCREENING_NOT_EXECUTED, SCREENING_PARTIAL, SCREENING_REVIEW_REQUIRED,
+    SNAP_OPERATIVA, ScreeningSummary, SourceOutcome, SubjectEnvelope,
 )
-from .evidence import build_evidence, encadenar_eventos
+from .evidence import build_evidence, encadenar_eventos, verificar_cadena
 from .registry import (
     CORE_SOURCE_IDS, cobertura_declarada, get_source, screening_sources,
 )
@@ -124,46 +124,99 @@ def ejecutar_screening(
             elif out.result in RESULT_STATES_REVISION:
                 revisión.append(env.subject_id)
 
-    # 5) Estado global (§25/§35).
-    status, reason = _estado(envelopes, defs, snapshots, outcomes)
+    # 5) Cobertura y decisión: DOS cosas distintas (§ 03S.1A-3).
+    #    La cobertura se mide contra TODAS las fuentes SOLICITADAS (no solo las
+    #    disponibles): una fuente caída deja la cobertura INCOMPLETA aunque el
+    #    resto haya respondido.
+    _fuentes_disponibles = tuple(sorted(s for s, sn in snapshots.items()
+                                       if fuente_disponible(sn)))
+    _fuentes_no_disponibles = tuple(sorted(set(snapshots) - set(_fuentes_disponibles)))
+    _solicitadas = tuple(d.source_id for d in defs)
+    _screeningables = {e.subject_id for e in envelopes if e.screened}
+    _esperados = {(sid, src) for sid in _screeningables for src in _solicitadas}
+    _cubiertos = {(o.subject_id, o.source_id) for o in outcomes
+                  if o.subject_id in _screeningables
+                  and o.source_id in _fuentes_disponibles
+                  and o.result not in (RESULT_NOT_SCREENED, RESULT_SOURCE_UNAVAILABLE)}
+    _cobertura_completa = bool(_esperados) and _cubiertos == _esperados
 
-    # 6) Evidencia encadenada (mecanismo existente), best-effort.
-    eventos: Tuple[Dict[str, Any], ...] = ()
+    # 6) Evidencia: SIEMPRE un registro por outcome sujeto×fuente (§ 03S.1A-2).
+    _evidencias = []
+    _evidence_error = None
+    try:
+        for env in envelopes:
+            for out in [o for o in outcomes if o.subject_id == env.subject_id]:
+                _evidencias.append(build_evidence(env, out))
+    except Exception as e:  # noqa: BLE001
+        _evidence_error = f"{type(e).__name__}: {str(e)[:160]}"
+
+    # 7) Cadena HMAC: se intenta y se DECLARA su estado (nunca en silencio).
+    _chain_status = CHAIN_NOT_REQUIRED_DEV
+    _chain_error = None
     if encadenar_evidencia:
         try:
-            evidencias = []
-            for env in envelopes:
-                for out in [o for o in outcomes if o.subject_id == env.subject_id]:
-                    evidencias.append(build_evidence(env, out))
-            eventos = encadenar_eventos(tuple(e.to_dict() for e in evidencias), agent_id)
-        except Exception:  # noqa: BLE001
-            eventos = ()
+            if _evidence_error:
+                raise RuntimeError(_evidence_error)
+            _eventos = encadenar_eventos(tuple(e.to_dict() for e in _evidencias), agent_id)
+            if _eventos and verificar_cadena(_eventos):
+                _chain_status = CHAIN_SEALED
+            else:
+                _chain_status = CHAIN_FAILED
+                _chain_error = "la cadena no devolvió eventos verificables"
+        except Exception as e:  # noqa: BLE001
+            _chain_status = CHAIN_FAILED
+            _chain_error = f"{type(e).__name__}: {str(e)[:160]}"
 
-    disponibles = tuple(sorted(s for s, sn in snapshots.items() if fuente_disponible(sn)))
-    no_disponibles = tuple(sorted(set(snapshots) - set(disponibles)))
+    status, reason = _estado(envelopes, defs, snapshots, outcomes,
+                             cobertura_completa=_cobertura_completa,
+                             chain_status=_chain_status, chain_error=_chain_error)
+
+    # Fail-closed de la capa de evidencia en producción: sin cadena sellada NO se
+    # puede declarar el screening completo ni "evidencia sellada".
+    if _chain_status == CHAIN_FAILED and status == SCREENING_COMPLETE and _es_produccion():
+        status = SCREENING_PARTIAL
+        reason = (reason + " La evidencia no pudo sellarse (cadena HMAC "
+                  f"FAILED): el screening no se declara completo.").strip()
+
     return ScreeningSummary(
-        status=status, executed=bool(disponibles),
+        status=status, executed=bool(_fuentes_disponibles),
         subjects_declared=len(envelopes),
         subjects_screened=sum(1 for e in envelopes if e.screened),
         subjects_not_screened=sum(1 for e in envelopes if not e.screened),
         subjects=tuple(envelopes), outcomes=tuple(outcomes),
         sources=tuple(d.source_id for d in defs),
-        sources_available=disponibles, sources_unavailable=no_disponibles,
+        sources_available=_fuentes_disponibles,
+        sources_unavailable=_fuentes_no_disponibles,
         snapshots=tuple(snapshots[s] for s in sorted(snapshots)),
         review_required_subjects=tuple(sorted(set(revisión))),
         matched_subjects=tuple(sorted(set(coincidentes))),
         reason=reason, executed_at=ejecutado_en, algorithm_version=ALGORITHM_VERSION,
         scope_note=SCOPE_NOTE,
+        evidence_records=tuple(e.to_dict() for e in _evidencias),
+        evidence_expected_count=len(outcomes),
+        evidence_created_count=len(_evidencias),
+        evidence_chain_status=_chain_status,
         extra={
             "cobertura": cobertura_declarada([d.source_id for d in defs]),
-            "cobertura_completa": (status in (SCREENING_COMPLETE,
-                                              SCREENING_REVIEW_REQUIRED)),
+            "cobertura_completa": _cobertura_completa,
+            "coverage_status": ("COVERAGE_COMPLETE" if _cobertura_completa
+                                else "COVERAGE_PARTIAL"),
+            "gate_pares_sin_consultar": sorted(
+                f"{sid}|{src}" for sid, src in (_esperados - _cubiertos)),
+            "evidence_error": _evidence_error,
+            "evidence_chain_error": _chain_error,
             "en_vivo": [s for s in sorted(snapshots)
                         if es_en_vivo(snapshots[s])],
             "desde_snapshot": [s for s in sorted(snapshots) if es_cache(snapshots[s])],
-            "eventos_evidencia": list(eventos),
         },
     )
+
+
+def _es_produccion() -> bool:
+    """¿Corre en producción? (fail-closed de la capa de evidencia)."""
+    import os
+    return bool(os.environ.get("VERCEL")) or \
+        (os.environ.get("ARHIAX_ENV") or "").strip().lower() in ("prod", "production")
 
 
 def _consultar(env: SubjectEnvelope, source_id: str, snap, regs) -> SourceOutcome:
@@ -185,20 +238,58 @@ def _consultar(env: SubjectEnvelope, source_id: str, snap, regs) -> SourceOutcom
             snapshot_sha256=getattr(snap, "sha256", ""),
             snapshot_effective_date=getattr(snap, "effective_date", "") or "",
             freshness=getattr(snap, "freshness", ""))
-    r = matching.consultar(env, regs)
+    # 03S.1A-5: se consulta el nombre canónico Y cada variante DECLARADA por
+    # separado; se agrega el resultado MÁS CONSERVADOR (nunca se fusiona la
+    # identidad jurídica por similitud de nombre).
+    _nombres = env.nombres_a_consultar or (env.canonical_name,)
+    _peor = None
+    _motivos: List[str] = []
+    _errores: List[str] = []
+    for _n in _nombres:
+        try:
+            _r = matching.consultar(env, regs, nombre=_n)
+        except Exception as e:  # noqa: BLE001
+            _errores.append(f"error al consultar la variante {_n!r}: {type(e).__name__}")
+            continue
+        _etiqueta = tuple(_r.reasons)
+        if len(_nombres) > 1 and _r.result not in (matching.RESULT_NO_MATCH,):
+            _etiqueta = tuple(f"variante declarada {_n!r}: {x}" for x in _r.reasons) \
+                or (f"variante declarada {_n!r} sin motivos",)
+        if _peor is None:
+            _peor, _motivos = _r, list(_etiqueta)
+            continue
+        # Resultado MÁS CONSERVADOR (el más severo) entre las variantes.
+        if _r.result != _peor.result and \
+                matching.peor_resultado(_r.result, _peor.result) == _r.result:
+            _peor, _motivos = _r, list(_etiqueta)
+        else:
+            _motivos.extend(x for x in _etiqueta if x not in _motivos)
+    _motivos.extend(_errores)
+    if _peor is None:
+        return SourceOutcome(
+            subject_id=env.subject_id, source_id=source_id,
+            result=RESULT_REVIEW, note="; ".join(_motivos) or "error en la consulta",
+            snapshot_id=snap.snapshot_id, snapshot_sha256=snap.sha256,
+            snapshot_effective_date=snap.effective_date or "",
+            freshness=snap.freshness, review_status="REQUIERE_REVISION")
     return SourceOutcome(
-        subject_id=env.subject_id, source_id=source_id, result=r.result,
-        score=r.score, matched_record_ids=r.matched_record_ids,
-        matching_reasons=r.reasons, snapshot_id=snap.snapshot_id,
+        subject_id=env.subject_id, source_id=source_id, result=_peor.result,
+        score=_peor.score, matched_record_ids=_peor.matched_record_ids,
+        matching_reasons=tuple(_motivos), snapshot_id=snap.snapshot_id,
         snapshot_sha256=snap.sha256,
         snapshot_effective_date=snap.effective_date or "",
         freshness=snap.freshness,
-        review_status="REQUIERE_REVISION" if r.requiere_revision else "NO_REQUIERE",
-        note="; ".join(r.reasons) if r.reasons else "")
+        review_status="REQUIERE_REVISION" if _peor.requiere_revision else "NO_REQUIERE",
+        note="; ".join(_motivos) if _motivos else "")
 
 
-def _estado(envelopes, defs, snapshots, outcomes) -> Tuple[str, str]:
-    """Estado global determinista + motivo imprimible."""
+def _estado(envelopes, defs, snapshots, outcomes, *, cobertura_completa: bool = True,
+            chain_status: str = "", chain_error: Optional[str] = None) -> Tuple[str, str]:
+    """Estado de DECISIÓN + motivo imprimible que declara AMBAS dimensiones.
+
+    03S.1A-3: el motivo debe informar la decisión Y la cobertura (qué fuente
+    faltó), nunca solo una de las dos.
+    """
     if not defs:
         return SCREENING_NOT_EXECUTED, "no hay fuentes de screening configuradas"
     screeningados = [e for e in envelopes if e.screened]
@@ -207,35 +298,48 @@ def _estado(envelopes, defs, snapshots, outcomes) -> Tuple[str, str]:
                 "no se identificaron sujetos screeningables en el caso")
     disponibles = [s for s in snapshots if fuente_disponible(snapshots[s])]
     if not disponibles:
+        _faltan = ", ".join(sigla(s) for s in sorted(snapshots))
         return (SCREENING_NOT_EXECUTED,
-                "ninguna fuente oficial de screening estuvo disponible en esta ejecución")
+                "ninguna fuente oficial de screening estuvo disponible en esta "
+                "ejecución (no consultadas: " + (_faltan or "todas") + ")")
 
     _revision = [o for o in outcomes if o.result in RESULT_STATES_REVISION]
     _no_disp = sorted({o.source_id for o in outcomes
                        if o.result == RESULT_SOURCE_UNAVAILABLE})
     _no_scr = [o for o in outcomes if o.result == RESULT_NOT_SCREENED]
 
-    partes: List[str] = []
+    # DECISIÓN
     if _revision:
         status = SCREENING_REVIEW_REQUIRED
-        partes.append("hay candidatos que exigen revisión humana en "
-                      + ", ".join(sorted({sigla(o.source_id) for o in _revision})))
-    elif _no_disp or _no_scr:
+        _donde = ", ".join(sorted({sigla(o.source_id) for o in _revision}))
+        _decision = (f"Existe candidato que requiere revisión humana ({_donde}); "
+                     "una coincidencia por nombre no confirma una designación.")
+    elif _no_disp or _no_scr or not cobertura_completa:
         status = SCREENING_PARTIAL
+        _decision = ""
     else:
         status = SCREENING_COMPLETE
+        _decision = ""
+
+    # COBERTURA (se declara SIEMPRE, junto a la decisión)
+    if cobertura_completa:
+        _cobertura = ("Cobertura completa: " + cobertura_declarada(disponibles) + ".")
+    else:
+        _faltan_txt = ", ".join(sigla(s) for s in _no_disp) or "sin identificar"
+        _cobertura = (f"Cobertura PARCIAL: {_faltan_txt} no estuvo disponible."
+                      if _no_disp else
+                      "Cobertura PARCIAL: hay sujetos o fuentes sin consulta.")
+        if _no_scr:
+            _cobertura += f" {len(_no_scr)} consulta(s) de sujeto no screeningado(s)."
 
     if not _revision:
-        if _no_disp:
-            partes.append("Sin coincidencias en las fuentes efectivamente consultadas. "
-                          + ", ".join(sigla(s) for s in _no_disp) + " no estuvo disponible.")
-        else:
-            partes.append("Sin coincidencias en las fuentes efectivamente consultadas ("
-                          + cobertura_declarada(disponibles) + ").")
-    if _no_scr:
-        partes.append("{} sujeto(s) no screeningado(s) por nombre no utilizable.".format(
-            len(_no_scr)))
-    return status, " ".join(partes)
+        _decision = ("Sin coincidencias en las fuentes efectivamente consultadas"
+                     + ("" if cobertura_completa else " (no en las no disponibles)") + ".")
+
+    if chain_status == CHAIN_FAILED:
+        _cobertura += (" La evidencia no pudo sellarse (cadena HMAC FAILED"
+                       + (f": {chain_error}" if chain_error else "") + ").")
+    return status, (_decision + " " + _cobertura).strip()
 
 
 # ── Serialización / rehidratación (el dictamen transporta dicts) ─────────────
@@ -265,7 +369,9 @@ def summary_desde_dict(d: Optional[Dict[str, Any]]) -> Optional[ScreeningSummary
                 identity_warnings=tuple(x.get("identity_warnings") or ()),
                 screened=bool(x.get("screened", True)),
                 reason_for_screening=x.get("reason_for_screening", ""),
-                not_screened_reason=x.get("not_screened_reason"))
+                not_screened_reason=x.get("not_screened_reason"),
+                declared_name_variants=tuple(x.get("declared_name_variants") or ()),
+                identifiers=tuple(x.get("identifiers") or ()))
 
         def _out(x):
             return SourceOutcome(
@@ -309,6 +415,11 @@ def summary_desde_dict(d: Optional[Dict[str, Any]]) -> Optional[ScreeningSummary
             matched_subjects=tuple(d.get("matched_subjects") or ()),
             reason=d.get("reason", ""), executed_at=d.get("executed_at", ""),
             algorithm_version=d.get("algorithm_version", ""),
-            scope_note=d.get("scope_note", ""), extra=dict(d.get("extra") or {}))
+            scope_note=d.get("scope_note", ""),
+            evidence_records=tuple(d.get("evidence_records") or ()),
+            evidence_expected_count=int(d.get("evidence_expected_count") or 0),
+            evidence_created_count=int(d.get("evidence_created_count") or 0),
+            evidence_chain_status=d.get("evidence_chain_status", CHAIN_NOT_REQUIRED_DEV),
+            extra=dict(d.get("extra") or {}))
     except Exception:  # noqa: BLE001
         return None

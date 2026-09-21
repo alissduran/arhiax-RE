@@ -255,15 +255,25 @@ def _snap_desde_dict(d: Dict[str, Any]) -> SanctionsSnapshot:
 
 def evaluar_frescura(snap: Optional[SanctionsSnapshot], *, ahora: Optional[float] = None,
                      ttl_segundos: int = TTL_DEFAULT, permitir_stale: bool = True) -> str:
-    """Frescura de un snapshot (§15). El TTL controla el refresco, no la evidencia."""
+    """Frescura de un snapshot (§15). El TTL controla el refresco, no la evidencia.
+
+    03S.1A — LA FRESCURA ES LOCAL A LA EJECUCIÓN. Esta función NUNCA devuelve
+    `LIVE_FRESH`: ese estado solo puede originarlo la rama que acaba de ejecutar
+    `fetch_bytes()` con éxito en ESTA ejecución. Un snapshot guardado con
+    `freshness=LIVE_FRESH` (porque en su momento se descargó) NO puede reclamar
+    "en vivo" al releerlo: aquí siempre se calcula la EDAD real.
+
+    (Bug corregido: existía el atajo `if snap.freshness == LIVE_FRESH: return
+    LIVE_FRESH`, que propagaba "en vivo" a ejecuciones posteriores.)
+    """
     if snap is None or not snap.sha256:
         return NO_SNAPSHOT
-    if snap.freshness == FRESH_LIVE:
-        return FRESH_LIVE
     try:
         from datetime import datetime
         ts = datetime.fromisoformat(str(snap.retrieved_at).replace("Z", "+00:00")).timestamp()
     except Exception:  # noqa: BLE001
+        # Sin fecha de obtención fiable no se puede afirmar frescura: se trata
+        # como vencido y se aplica la política.
         return STALE_ALLOWED if permitir_stale else STALE_NOT_ALLOWED
     edad = (ahora if ahora is not None else time.time()) - ts
     if edad <= ttl_segundos:

@@ -3082,6 +3082,33 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "<b>Un cotejo solo por nombre difuso nunca confirma una coincidencia.</b>"))
         story.append(Spacer(1, 4))
 
+        # 09.3 Evidencia (§ 03S.1A-2): conteo y estado de la cadena, siempre.
+        story.append(sub("09.3 Evidencia de las consultas"))
+        _chain = _summary.evidence_chain_status
+        _chain_txt = {
+            "SEALED": "cadena HMAC sellada (verificada)",
+            "FAILED": "CADENA FALLIDA — la evidencia NO pudo sellarse",
+            "NOT_REQUIRED_DEV": "sellado no exigido en este entorno (desarrollo/pruebas)",
+        }.get(_chain, str(_chain or "no declarado"))
+        story.append(dt([
+            ("Consultas de sujeto × fuente esperadas", str(_summary.evidence_expected_count)),
+            ("Envelopes de evidencia creados", str(_summary.evidence_created_count)),
+            ("Estado de la cadena de evidencia", _chain_txt),
+        ]))
+        if _chain == "FAILED":
+            story.append(alert_orange(
+                "<b>EVIDENCIA NO SELLADA:</b> los envelopes de evidencia existen, pero la "
+                "cadena de integridad no pudo verificarse ("
+                + str((_summary.extra or {}).get("evidence_chain_error") or "error no detallado")
+                + "). El dictamen NO afirma evidencia sellada ni reproducible; en producción "
+                "el screening no se declara completo en este estado."))
+        elif not _summary.evidence_complete:
+            story.append(alert_orange(
+                "<b>EVIDENCIA INCOMPLETA:</b> se esperaban "
+                f"{_summary.evidence_expected_count} envelope(s) y se crearon "
+                f"{_summary.evidence_created_count}. No se afirma trazabilidad completa."))
+        story.append(Spacer(1, 4))
+
         if _summary.matched_subjects:
             story.append(alert_red(
                 "<b>COINCIDENCIA EN LISTAS DE SANCIONES.</b> Procede revisión humana y "

@@ -1,4 +1,4 @@
-﻿"""Parser de la ONU Consolidated List (XML)."""
+"""Parser de la ONU Consolidated List (XML)."""
 import xml.etree.ElementTree as ET
 
 from ..contracts import RegistroNormalizado
@@ -19,17 +19,59 @@ def parse_onu_xml(xml_bytes, lista_version=""):
 def _to_registro(item, lista_version):
     nombre = _compose_name(item)
     dataid = _text(item.find("DATAID"))
+    ids = _identificadores(item)
+    _prim = ids[0] if ids else None
     return RegistroNormalizado(
         id=("onu-" + dataid) if dataid else ("onu-" + nombre),
         nombre=nombre,
         alias=_aliases(item),
-        tipo_documento=None,
-        numero_documento=_doc_number(item),
+        tipo_documento=(_prim or {}).get("type") or None,
+        numero_documento=(_prim or {}).get("value") or _doc_number(item),
         fecha_nacimiento=_birth_date(item),
         programas=_programs(item),
         fuente="onu",
         lista_version=lista_version,
+        identifiers=ids,
     )
+
+
+def _identificadores(item):
+    """TODOS los documentos estructurados que publica la lista (03S.1A-4).
+
+    ONU publica INDIVIDUAL_DOCUMENT / ENTITY_DOCUMENT con
+    TYPE_OF_DOCUMENT + NUMBER (+ ISSUING_COUNTRY, DATE_OF_ISSUE, NOTE).
+    """
+    out = []
+    for nodo in item.iter():
+        if _local_name(nodo.tag) not in ("INDIVIDUAL_DOCUMENT", "ENTITY_DOCUMENT"):
+            continue
+        tipo = ""
+        valor = ""
+        for hijo in nodo:
+            k = _local_name(hijo.tag)
+            if k == "TYPE_OF_DOCUMENT":
+                tipo = (hijo.text or "").strip()
+            elif k in ("NUMBER", "DOCUMENT_NUMBER"):
+                valor = (hijo.text or "").strip()
+        if valor:
+            out.append({"type": _tipo_doc(tipo), "value": valor,
+                        "source_field": "INDIVIDUAL_DOCUMENT"})
+    return tuple(out)
+
+
+def _tipo_doc(tipo):
+    t = (tipo or "").strip().lower()
+    if "passport" in t or "pasaporte" in t:
+        return "pasaporte"
+    if "national" in t or "cedula" in t or "cédula" in t or "identity" in t:
+        return "cc"
+    if "tax" in t or "nit" in t:
+        return "nit"
+    return t
+
+
+def _local_name(tag):
+    return str(tag).split("}")[-1]
 
 
 def _compose_name(item):

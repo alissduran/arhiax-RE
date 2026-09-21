@@ -14,7 +14,34 @@ from __future__ import annotations
 import xml.etree.ElementTree as ET
 from typing import Any, List, Tuple
 
-PARSER_VERSION = "sanctions-parsers/1.0"
+PARSER_VERSION = "sanctions-parsers/1.1"
+
+# Tipos de documento normalizados (mapa de la fuente → vocabulario interno).
+_TIPO_DOC = (
+    (("passport", "pasaporte"), "pasaporte"),
+    (("national id", "national identifier", "nationalid", "cedula", "cédula",
+      "identity card", "national identification"), "cc"),
+    (("tax", "vat", "ruc", "tax id", "nit"), "nit"),
+    (("registration", "business registration", "company number", "reg no"), "registro"),
+    (("imo",), "imo"),
+    (("driving", "licencia de conduccion", "licence"), "licencia"),
+    (("other", "otro"), "otro"),
+)
+
+
+def _normalizar_tipo_doc(tipo: str) -> str:
+    t = str(tipo or "").strip().lower()
+    if not t:
+        return ""
+    for claves, canon in _TIPO_DOC:
+        if any(k in t for k in claves):
+            return canon
+    return t
+
+
+def _ident(type_: str, value: str, source_field: str) -> dict:
+    return {"type": _normalizar_tipo_doc(type_), "value": (value or "").strip(),
+            "source_field": source_field}
 
 
 class FuenteEstructuraNoReconocida(Exception):
@@ -71,7 +98,13 @@ def parse_uk_sanctions_list(xml_bytes: bytes, lista_version: str = "") -> List[A
       Designation/UniqueID, Names/Name/(Name1..Name6, NameType),
       IndividualEntityShip (Individual|Entity|Ship), RegimeName,
       DesignationSource, IndividualDetails/Individual/DOBs/DOB,
-      .../Passports/Passport/PassportNumber
+      PassportDetails/Passport/PassportNumber,
+      NationalIdentifierDetails/NationalIdentifier/NationalIdentifierNumber,
+      EntityDetails/.../BusinessRegistrationNumbers/BusinessRegistrationNumber,
+      ShipDetails/IMONumbers/IMONumber
+
+    03S.1A-4: se conservan TODOS los identificadores soportados por el esquema,
+    no solo el primer PassportNumber.
     """
     from arhia_sag_screen.contracts import RegistroNormalizado
 
@@ -88,7 +121,8 @@ def parse_uk_sanctions_list(xml_bytes: bytes, lista_version: str = "") -> List[A
             continue
         principal, alias = nombres[0], nombres[1:]
         tipo = _text(_find_local(des, "IndividualEntityShip")).lower()
-        pasaporte = _pasaporte_uk(des)
+        ids = _identificadores_uk(des)
+        _prim = ids[0] if ids else None
         programas = tuple(p for p in (
             _text(_find_local(des, "RegimeName")),
             _text(_find_local(des, "DesignationSource")),
@@ -98,18 +132,39 @@ def parse_uk_sanctions_list(xml_bytes: bytes, lista_version: str = "") -> List[A
             id=("uk-" + uid) if uid else ("uk-" + principal),
             nombre=principal,
             alias=tuple(alias),
-            tipo_documento=("pasaporte" if pasaporte else
-                            ("nit" if tipo in ("entity", "ship") else None)),
-            numero_documento=pasaporte,
+            tipo_documento=((_prim or {}).get("type")
+                            or ("nit" if tipo in ("entity", "ship") else None)),
+            numero_documento=(_prim or {}).get("value"),
             fecha_nacimiento=_dob_uk(des),
             programas=programas,
             fuente="uk",
             lista_version=lista_version or fecha,
+            identifiers=ids,
         ))
     if not out:
         raise FuenteEstructuraNoReconocida(
             "UK_SANCTIONS_LIST: el XML no arrojó designaciones")
     return out
+
+
+def _identificadores_uk(des) -> Tuple[dict, ...]:
+    """Todos los identificadores de la designación (pasaportes, NIF nacionales,
+    registros mercantiles, números IMO)."""
+    out: List[dict] = []
+    _mapa = (
+        ("PassportNumber", "Passport", "PassportDetails/Passport/PassportNumber"),
+        ("NationalIdentifierNumber", "National ID",
+         "NationalIdentifierDetails/NationalIdentifier/NationalIdentifierNumber"),
+        ("BusinessRegistrationNumber", "Business Registration",
+         "EntityDetails/BusinessRegistrationNumbers/BusinessRegistrationNumber"),
+        ("IMONumber", "IMO", "ShipDetails/IMONumbers/IMONumber"),
+    )
+    for tag, tipo, campo in _mapa:
+        for nodo in _iter_local(des, tag):
+            valor = _text(nodo)
+            if valor:
+                out.append(_ident(tipo, valor, campo))
+    return tuple(out)
 
 
 def _nombres_uk(des) -> List[str]:
@@ -136,14 +191,6 @@ def _nombres_uk(des) -> List[str]:
 def _dob_uk(des):
     for dob in _iter_local(des, "DOB"):
         t = _text(dob)
-        if t:
-            return t
-    return None
-
-
-def _pasaporte_uk(des):
-    for p in _iter_local(des, "PassportNumber"):
-        t = _text(p)
         if t:
             return t
     return None

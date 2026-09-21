@@ -150,6 +150,17 @@ def _screening_receipt(titulux: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         "reason": _sum.get("reason") or "",
         "ejecutado": bool(_sum.get("executed")),
         "algorithm_version": _sum.get("algorithm_version"),
+        # § 03S.1A-2/3: decisión y cobertura son dimensiones distintas, y la
+        # evidencia no puede desaparecer en silencio.
+        "decision_status": _sum.get("decision_status") or _sum.get("status"),
+        "coverage_status": (_sum.get("coverage_status")
+                            or ("COVERAGE_COMPLETE" if _sum.get("coverage_complete")
+                                else "COVERAGE_PARTIAL")),
+        "coverage_complete": bool(_sum.get("coverage_complete")),
+        "evidence_expected": _sum.get("evidence_expected_count"),
+        "evidence_created": _sum.get("evidence_created_count"),
+        "evidence_chain_status": _sum.get("evidence_chain_status"),
+        "evidence_reproducible": bool(_sum.get("evidence_reproducible")),
         "fuentes": [{
             "source_id": sid, "sigla": sid,
             "freshness": (_snaps.get(sid) or {}).get("freshness"),
@@ -221,9 +232,10 @@ def receipt_rows(receipts: Optional[Dict[str, Any]]) -> List[Tuple[str, str]]:
         _detalle_sag = [
             "{} sujeto(s) screeningado(s) de {} declarado(s)".format(
                 sag.get("sujetos_screeningados"), sag.get("sujetos_declarados")),
-            "fuentes: " + ", ".join(
-                "{} {}".format(f.get("source_id"), f.get("freshness") or "")
-                for f in (sag.get("fuentes") or [])) or "—",
+            "cobertura: " + str(sag.get("coverage_status") or "—"),
+            "evidencia: {}/{} envelopes · cadena {}".format(
+                sag.get("evidence_created"), sag.get("evidence_expected"),
+                sag.get("evidence_chain_status") or "—"),
         ]
         if sag.get("fuentes_pendientes"):
             _detalle_sag.append("no disponibles: "

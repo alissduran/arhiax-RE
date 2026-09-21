@@ -531,11 +531,20 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
         _status = _sag.get("status")
         if _sag.get("ejecutado"):
             _detalle = "screening {}".format(_sag.get("etiqueta") or "—")
+            # § 03S.1A-3: la cobertura se declara SIEMPRE, separada de la decisión.
+            _cobertura = (_sag.get("coverage_status")
+                          or ("COVERAGE_COMPLETE" if _sag.get("coverage_complete")
+                              else "COVERAGE_PARTIAL"))
+            _detalle += " · " + _cobertura.replace("COVERAGE_", "cobertura ").lower()
             _srcs = [f.get("source_id") for f in (_sag.get("fuentes") or [])]
             if _srcs:
                 _detalle += " · fuentes: " + ", ".join(_srcs)
             if _sag.get("fuentes_pendientes"):
                 _detalle += " · NO DISPONIBLES: " + ", ".join(_sag.get("fuentes_pendientes"))
+            if _sag.get("evidence_expected") is not None:
+                _detalle += " · evidencia {}/{} · cadena {}".format(
+                    _sag.get("evidence_created"), _sag.get("evidence_expected"),
+                    _sag.get("evidence_chain_status") or "—")
             return "EJECUTADO -- " + _detalle
         return ("NO EJECUTADO -- " + (_sag.get("reason")
                 or "sin fuentes oficiales disponibles en esta generación"))

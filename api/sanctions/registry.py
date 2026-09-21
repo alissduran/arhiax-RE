@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from typing import Dict, Optional, Tuple
 
 from .contracts import (
-    ACQ_FILE, ACQ_LIVE, ACQ_OUT_OF_SCOPE, CAT_ENFORCEMENT,
+    ACQ_FILE, ACQ_LIVE, ACQ_OUT_OF_SCOPE, CAT_ENFORCEMENT, CAT_PEP,
     CAT_REGULATORY_REPORTING, CAT_SANCTIONS,
 )
 
@@ -152,12 +152,12 @@ PEP_COLOMBIA = SourceDefinition(
     source_id="PEP_COLOMBIA",
     authority="Registros oficiales de servidores públicos (CO)",
     dataset_name="Personas Expuestas Políticamente (PEP)",
-    category=CAT_REGULATORY_REPORTING,
+    category=CAT_PEP,
     official_url="",
     current_or_historical="CURRENT", formato="", parser="none", parser_version="",
     acquisition_policy=ACQ_OUT_OF_SCOPE,
     refresh_policy="n/a",
-    cobertura="PEP avanzado queda fuera de 03S.1 (se declara, no se simula).",
+    cobertura="PEP avanzado queda fuera de 03S.1/03S.1A (se declara, no se simula).",
 )
 
 _REGISTRY: Dict[str, SourceDefinition] = {
