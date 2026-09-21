@@ -1,0 +1,26 @@
+{
+  "source_name": "Anexo 1 - Adopción Catastral Barranquilla",
+  "source_url": "https://www.barranquilla.gov.co/transparencia/normatividad (Resolución GGCD 003 del 07/03/2025)",
+  "resolution_number": "GGCD 003",
+  "resolution_date": "2025-03-07",
+  "version": "1",
+  "downloaded_at": "2025-03-07T00:00:00Z",
+  "registros": [
+    {
+      "numero_predial": "080010103000010040001908040002",
+      "codigo_homologado": "AFT0005BOHA",
+      "fmi": "646406",
+      "codigo_registral": "040",
+      "direccion": "Transversal 43 100 50 TO 8 AP 430",
+      "area_terreno": null
+    },
+    {
+      "numero_predial": "080010103000010040001908040003",
+      "codigo_homologado": "AFT0005BORE",
+      "fmi": "646407",
+      "codigo_registral": "040",
+      "direccion": "Transversal 43 100 50 TO 8 AP 431",
+      "area_terreno": null
+    }
+  ]
+}

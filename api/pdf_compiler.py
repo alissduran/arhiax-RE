@@ -713,6 +713,37 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         administrative_context = {"ciudad": ciudad, "comuna": None,
                                   "barrio": barrio, "estrato": estrato}
         print(f"[PDF][CANONICAL] no disponible: {_e_canon}")
+
+    # ── 03G.1: ruta AUTORITATIVA estática de identidad (fallback del ArcGIS) ──
+    # Si el MapServer quedó SOURCE_UNAVAILABLE (predio_real None) y el CTL trae
+    # identificadores exactos, se consulta el Anexo 1 de adopción catastral de
+    # Barranquilla (Resolución GGCD 003 del 07/03/2025). NO es fallback espacial:
+    # es match EXACTO determinista. Solo aplica a Barranquilla.
+    if (predio_real is None
+            and not es_medellin and not es_bogota and not es_pasto
+            and (analysis.get("codigo_catastral") or analysis.get("nupre"))):
+        try:
+            from barranquilla_adopcion import resolver_identidad_oficial
+            _oficial = resolver_identidad_oficial(
+                folio=folio,
+                numero_predial=analysis.get("codigo_catastral"),
+                codigo_homologado=analysis.get("nupre"))
+            if _oficial.get("estado") in ("MATCH_EXACT", "IDENTITY_CONFLICT"):
+                canonical_identity["estado"] = _oficial["estado"]
+                canonical_identity["resolution_method"] = _oficial["resolution_method"]
+                canonical_identity["resolution_confidence"] = _oficial["resolution_confidence"]
+                canonical_identity["identity_verified"] = _oficial["identity_verified"]
+                # 03G.1: identidad verificada NO basta; el registro estático no
+                # aporta barrio/estrato/tipología -> segundo gate MARKET_CONTEXT_READY.
+                canonical_identity["market_context_ready"] = _oficial["market_context_ready"]
+                canonical_identity["identity_source"] = _oficial["identity_source"]
+                canonical_identity["adopcion_registro"] = _oficial.get("registro")
+                canonical_identity["adopcion_provenance"] = _oficial.get("provenance")
+                print(f"[PDF][ADOPCION] identidad oficial: estado={_oficial['estado']} "
+                      f"confidence={_oficial['resolution_confidence']}")
+        except Exception as _e_adop:
+            print(f"[PDF][ADOPCION] no disponible: {_e_adop}")
+
     # Metodo principal de valoracion (practica de la Lonja de Barranquilla, no
     # de la Res. IGAC 941): "m1" = comparacion de mercado (100% para PH terminada);
     # "m3" = capitalizacion de rentas (caso excepcional con renta demostrable).

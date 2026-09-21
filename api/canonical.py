@@ -368,9 +368,12 @@ def _detectar_ph(*, analysis: Dict[str, Any],
 
 def can_value_property(canonical_identity: Optional[Dict[str, Any]],
                        property_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    """Autorización ÚNICA de valoración (03D.2).
+    """Autorización ÚNICA de valoración (03D.2 / 03G.1).
 
     Devuelve {"allowed": bool, "reason": str|None, "identity_level": str}.
+      * 03G.1 (segundo gate): si market_context_ready es EXPLÍCITAMENTE False,
+        se bloquea aunque la identidad esté verificada (barrio/estrato/tipología
+        no resueltos). Solo el valor literal False bloquea (backward-compatible).
       * No PH (o sin evidencia de PH): procede (allowed=True); las precondiciones
         de tipología (suelo de protección / no construible / rural) son aparte.
       * PH: solo procede con identidad VERIFIED_UNIT_IDENTITY. NO_RECORD,
@@ -378,9 +381,13 @@ def can_value_property(canonical_identity: Optional[Dict[str, Any]],
         SPATIAL_CONTEXT_ONLY, IDENTITY_CONFLICT, UNKNOWN o None -> bloqueado.
     """
     cid = canonical_identity or {}
-    es_ph = _es_unidad_ph(cid, property_context)
     conf = cid.get("resolution_confidence")
     nivel = conf or "UNKNOWN"
+    if cid.get("market_context_ready") is False:
+        return {"allowed": False,
+                "reason": "Contexto de mercado insuficiente (barrio/estrato/tipología no resueltos).",
+                "identity_level": nivel}
+    es_ph = _es_unidad_ph(cid, property_context)
     if not es_ph:
         return {"allowed": True, "reason": None, "identity_level": nivel}
     if conf == RESOLUTION_VERIFIED_UNIT:
