@@ -751,6 +751,27 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     _metodo_principal = (db_record.get("metodo_avaluo") or "m1").strip().lower()
     if _metodo_principal not in ("m1", "m3"):
         _metodo_principal = "m1"
+
+    # ── 03H.1: resolución de UBICACIÓN de mercado (antes de construir el contexto) ──
+    # (BLOCKER corregido: lat/lon se resolvían DESPUÉS del MarketContext y producían
+    #  UnboundLocalError oculto por el except). La geocodificación es contexto, no identidad.
+    try:
+        from market_context import resolve_market_location
+        _ubicacion = resolve_market_location(
+            canonical_identity=canonical_identity, predio_real=predio_real,
+            lat_geo=_lat_geo, lon_geo=_lon_geo,
+            db_lat=(db_record.get('lat') or db_record.get('LAT')),
+            db_lon=(db_record.get('lon') or db_record.get('LON')),
+            db_direccion=db_record.get('direccion'),
+            barrio=barrio, es_bogota=es_bogota, es_medellin=es_medellin,
+            es_pasto=es_pasto, ciudad=ciudad)
+        lat, lon = _ubicacion["lat"], _ubicacion["lon"]
+    except Exception as _e_loc:
+        _ubicacion = {"lat": None, "lon": None, "coordinate_source": "UNRESOLVED",
+                      "authoritative_address": None}
+        lat = lon = None
+        print(f"[PDF][MARKET_LOCATION] no disponible: {_e_loc}")
+
     # ── 03H: contexto de mercado (MarketContext) ───────────────────────────────
     # Identidad y contexto son dos problemas distintos. El contexto se construye
     # desde fuentes resueltas SIN fallback silencioso: estrato faltante NO se
@@ -783,9 +804,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             uso_status=(STATUS_VERIFIED_OFFICIAL if _predio_destino else STATUS_UNRESOLVED),
             sector_resolution=_sector,
             market_rate_source=None,  # derivada del sector por el builder
-            coordinates={"lat": lat, "lon": lon},
-            geocoder_source=None, geocoder_confidence=None,
+            coordinates={"lat": _ubicacion.get("lat"), "lon": _ubicacion.get("lon")},
+            geocoder_source=_ubicacion.get("geocoder_source"),
+            geocoder_confidence=_ubicacion.get("geocoder_confidence"),
         )
+        market_context["coordinate_source"] = _ubicacion.get("coordinate_source")
+        market_context["authoritative_address"] = _ubicacion.get("authoritative_address")
+        market_context["address_source"] = _ubicacion.get("address_source")
         _market_context_authorized = market_context_authorized(market_context)
     except Exception as _e_mc:
         market_context = {"ready": False, "blockers": [f"market_context error: {_e_mc}"]}
@@ -812,7 +837,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                              ciudad=ciudad, clase_suelo=_ent2.get("clase_suelo"),
                              destino=_predio_destino, tipologia=_tipologia_texto,
                              unidad_ph_no_resuelta=_unidad_ph_no_resuelta,
-                             market_context_blocked=_market_context_blocked)
+                             market_context_blocked=_market_context_blocked,
+                             valuation_authorized=_valuation_authorized)
     res_avaluo = val_data
     
     # Cargar hallazgos y recomendaciones dinamicas del analizador legal
@@ -884,47 +910,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     poi_map_png = str(assets_dir / 'poi_map.png')
     poi_map_html = str(assets_dir / 'poi_map.html')
     
-    BARRIO_COORDS = {'miramar': (10.9870, -74.8115), 'el recreo': (10.9838, -74.7998), 'recreo': (10.9838, -74.7998)}
-
-    # Prioridad 1 (exactitud): coordenadas del predio REAL resueltas por código
-    # catastral/NUPRE del CTL (capa 105 Dirección oficial). Si el CTL trae código,
-    # estas coordenadas son la verdad, no el barrio de demostración.
-    lat = lon = None
-    if predio_real and predio_real.get("lat") is not None and predio_real.get("lon") is not None:
-        lat = predio_real["lat"]
-        lon = predio_real["lon"]
-        print(f"[PDF][CATASTRO-PREDIO] coords reales del predio: ({lat:.5f}, {lon:.5f})")
-
-    # Prioridad 2: coordenadas ya geocodificadas (bloque de enriquecimiento) o BD
-    if lat is None or lon is None:
-        if _lat_geo is not None and _lon_geo is not None:
-            lat, lon = _lat_geo, _lon_geo
-        else:
-            lat = db_record.get('lat') or db_record.get('LAT')
-            lon = db_record.get('lon') or db_record.get('LON')
-
-    if not lat or not lon:
-        # Prioridad 3: geocodificar la direccion real del predio (con la ciudad)
-        try:
-            from geocoder import geocodificar_direccion
-            direccion_raw = db_record.get('direccion', '') or ''
-            if direccion_raw and direccion_raw.lower() not in ('pendiente', ''):
-                lat, lon = geocodificar_direccion(direccion_raw, ciudad=ciudad)
-            else:
-                raise ValueError("sin direccion valida")
-        except Exception:
-            # Prioridad 4: fallback (centroide de la ciudad o barrio demo legado)
-            if barrio.lower().strip() in BARRIO_COORDS:
-                coords = BARRIO_COORDS[barrio.lower().strip()]
-            elif es_bogota:
-                coords = (4.7110, -74.0721)
-            elif es_medellin:
-                coords = (6.2442, -75.5812)
-            elif es_pasto:
-                coords = (1.2136, -77.2811)
-            else:
-                coords = (10.9685, -74.7813)
-            lat, lon = coords
+    # (03H.1) lat/lon ya fueron resueltos por resolve_market_location() antes de
+    # construir el MarketContext (con coordinate_source/authoritative_address).
+    # No se re-resuelven aquí.
 
     # ── Sombras automáticas 9:00 AM / 3:00 PM (si el caso no trae las de ArcGIS Pro) ──
     # Simulación geométrica: posición solar (solar_engine) + huella/altura del

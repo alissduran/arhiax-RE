@@ -50,7 +50,8 @@ def precondiciones_valoracion(clase_suelo=None, destino=None, tipologia=None,
 
 def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                   ciudad="barranquilla", clase_suelo=None, destino=None, tipologia=None,
-                  unidad_ph_no_resuelta=False, market_context_blocked=False):
+                  unidad_ph_no_resuelta=False, market_context_blocked=False,
+                  valuation_authorized=None):
     """
     Retorna la valoracion tecnica de mercado consolidando M1 (comparacion de
     mercado), M2 (costo de reposicion) y M3 (capitalizacion de rentas).
@@ -84,6 +85,21 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
     market_rate_source = None
     market_rate_sector = None
     market_rate_match_type = None
+
+    # 03H.1: fail-closed. valuation_authorized=False bloquea explícitamente; None
+    # es el modo legacy (cálculo con fallback marcado, solo para adapters).
+    if valuation_authorized is False:
+        return {
+            "consolidado": 0, "banda_baja": 0, "banda_alta": 0,
+            "m1": 0, "m2": 0, "m3": 0,
+            "metodo_principal": metodo_principal,
+            "m1_m2": 0, "m3_m2": 0,
+            "canon_mensual": 0,
+            "cap_rate": cap_rate_neto,
+            "metodologia_local": not es_pasto,
+            "metodologia_aplica": False,
+            "motivo_no_aplica": "valoración no autorizada (identidad o contexto de mercado insuficiente)",
+        }
 
     # ── Precondición por tipología (bug L), identidad (03D) y contexto (03H) ──
     _pre = precondiciones_valoracion(clase_suelo=clase_suelo, destino=destino,
@@ -133,10 +149,17 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                         break
                         
                 if sector_match:
-                    val_m2_mercado = valores_suelo[sector_match].get("valor_central_m2", 5200000)
+                    # 03H.1: si el sector existe pero su tasa falta/inválida,
+                    # NO usar 5.2M default -> MARKET_RATE_INVALID (bloqueado).
+                    _v = valores_suelo[sector_match].get("valor_central_m2")
                     market_rate_source = valores_suelo[sector_match].get("fuente")
                     market_rate_sector = sector_match
-                    market_rate_match_type = "EXACT"
+                    if _v is None or _v <= 0:
+                        val_m2_mercado = None
+                        market_rate_match_type = "MARKET_RATE_INVALID"
+                    else:
+                        val_m2_mercado = _v
+                        market_rate_match_type = "EXACT"
                 else:
                     # Fallback por estrato — MARCADO explícitamente (03H): NO es
                     # una metodología específica de sector; el gate lo bloquea.
@@ -156,6 +179,20 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                 factor_costos = yml.get("costos_construccion", {}).get("factor_actualizacion", 1.2576)
         except Exception as e:
             print(f"[VALUATION][WARN] Fallo de integracion YAML, usando fallbacks: {e}")
+
+    # 03H.1: tasa de mercado inválida (sector resuelto sin valor) -> bloquear.
+    if val_m2_mercado is None or val_m2_mercado <= 0:
+        return {
+            "consolidado": 0, "banda_baja": 0, "banda_alta": 0,
+            "m1": 0, "m2": 0, "m3": 0,
+            "metodo_principal": metodo_principal,
+            "m1_m2": 0, "m3_m2": 0,
+            "canon_mensual": 0,
+            "cap_rate": cap_rate_neto,
+            "metodologia_local": not es_pasto,
+            "metodologia_aplica": False,
+            "motivo_no_aplica": "tasa de mercado inválida (MARKET_RATE_INVALID)",
+        }
 
     # M1: Comparacion de Mercado (metodo principal para PH terminada, 100%)
     m1_base = int(area_construida_m2 * val_m2_mercado)
