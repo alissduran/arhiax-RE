@@ -17,18 +17,24 @@ C_NEGRO_MONO = colors.HexColor("#0A1424")
 
 
 def precondiciones_valoracion(clase_suelo=None, destino=None, tipologia=None,
-                              unidad_ph_no_resuelta=False):
-    """Precondiciones de valoración por tipología (bug L) e identidad (03D).
+                              unidad_ph_no_resuelta=False,
+                              market_context_blocked=False):
+    """Precondiciones de valoración por tipología (bug L), identidad (03D) y
+    contexto de mercado (03H).
 
     La comparación de mercado (M1) y la capitalización de rentas (M3) NO proceden
     sobre ciertos predios: suelo de protección, no construible o rural. Tampoco
     procede emitir una estimación de mercado de una UNIDAD PH cuya identidad no
-    está suficientemente resuelta (remediación forense 040-646406). Devuelve
-    procede=False + motivo.
+    está suficientemente resuelta (03D) NI con contexto de mercado insuficiente
+    (03H: barrio/estrato/tipología/tasa no resueltos). Devuelve procede=False +
+    motivo.
     """
     if unidad_ph_no_resuelta:
         return {"procede": False,
                 "motivo": "identidad predial de la unidad PH insuficientemente resuelta"}
+    if market_context_blocked:
+        return {"procede": False,
+                "motivo": "contexto de mercado insuficiente (barrio/estrato/tipología/tasa de mercado no resueltos)"}
     cs = (clase_suelo or "").strip().lower()
     dst = (destino or "").strip().lower()
     tip = (tipologia or "").strip().lower()
@@ -44,7 +50,7 @@ def precondiciones_valoracion(clase_suelo=None, destino=None, tipologia=None,
 
 def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                   ciudad="barranquilla", clase_suelo=None, destino=None, tipologia=None,
-                  unidad_ph_no_resuelta=False):
+                  unidad_ph_no_resuelta=False, market_context_blocked=False):
     """
     Retorna la valoracion tecnica de mercado consolidando M1 (comparacion de
     mercado), M2 (costo de reposicion) y M3 (capitalizacion de rentas).
@@ -74,11 +80,16 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
     val_m2_mercado = 5200000
     factor_costos = 1.2576
     es_pasto = "pasto" in (ciudad or "").lower()
+    # 03H: provenance de la tasa de mercado (no fallback silencioso sin marcar).
+    market_rate_source = None
+    market_rate_sector = None
+    market_rate_match_type = None
 
-    # ── Precondición por tipología (bug L) e identidad de unidad PH (03D) ──
+    # ── Precondición por tipología (bug L), identidad (03D) y contexto (03H) ──
     _pre = precondiciones_valoracion(clase_suelo=clase_suelo, destino=destino,
                                      tipologia=tipologia,
-                                     unidad_ph_no_resuelta=unidad_ph_no_resuelta)
+                                     unidad_ph_no_resuelta=unidad_ph_no_resuelta,
+                                     market_context_blocked=market_context_blocked)
     if not _pre["procede"]:
         return {
             "consolidado": 0,
@@ -123,10 +134,17 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                         
                 if sector_match:
                     val_m2_mercado = valores_suelo[sector_match].get("valor_central_m2", 5200000)
+                    market_rate_source = valores_suelo[sector_match].get("fuente")
+                    market_rate_sector = sector_match
+                    market_rate_match_type = "EXACT"
                 else:
-                    # Fallback por estrato
+                    # Fallback por estrato — MARCADO explícitamente (03H): NO es
+                    # una metodología específica de sector; el gate lo bloquea.
                     estrato_map = {3: 3800000, 4: 5200000, 5: 6500000, 6: 7800000}
                     val_m2_mercado = estrato_map.get(int(estrato), 5200000)
+                    market_rate_source = "fallback genérico por estrato (no específico de sector)"
+                    market_rate_sector = None
+                    market_rate_match_type = "GENERIC_ESTRATO_FALLBACK"
                     
                 # 2. Cap Rate (M3)
                 tasas_tip = yml.get("capitalizacion_rentas", {}).get("tasas_por_tipologia", {})
@@ -180,6 +198,11 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
         "metodologia_local": not es_pasto,
         "metodologia_aplica": True,
         "motivo_no_aplica": None,
+        # 03H: provenance de la tasa de mercado (no emitir $/m² sin fuente).
+        "value_m2": val_m2_mercado,
+        "market_rate_source": market_rate_source,
+        "market_rate_sector": market_rate_sector,
+        "market_rate_match_type": market_rate_match_type,
     }
 
 

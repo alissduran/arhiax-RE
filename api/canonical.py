@@ -409,6 +409,20 @@ def unidad_ph_no_resuelta(canonical_identity: Optional[Dict[str, Any]]) -> bool:
     return not can_value_property(canonical_identity)["allowed"]
 
 
+def identity_authorized(canonical_identity: Optional[Dict[str, Any]],
+                        property_context: Optional[Dict[str, Any]] = None) -> bool:
+    """Autorización de IDENTIDAD (03H), separada del contexto de mercado.
+
+    `valuation_authorized = identity_authorized AND market_context_authorized`.
+    No PH (o sin evidencia) => identidad no bloquea (True). PH => solo
+    VERIFIED_UNIT_IDENTITY autoriza.
+    """
+    cid = canonical_identity or {}
+    if not _es_unidad_ph(cid, property_context):
+        return True
+    return cid.get("resolution_confidence") == RESOLUTION_VERIFIED_UNIT
+
+
 def build_canonical_property_identity(
     *,
     analysis: Dict[str, Any],

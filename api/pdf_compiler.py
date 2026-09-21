@@ -37,7 +37,7 @@ from map_generator import generate_maps
 from address_normalizer import normalize_address_colombia
 
 from dictamen_data import get_valuation, get_hallazgos, get_recs, get_identificacion_dt, get_localizacion_dt, get_cobertura_alert, get_analisis_registral_text, get_catastral_dt, get_pot_summary_dt, get_valoracion_alert, get_alcance_dt, get_geospatial_evaluation
-from canonical import can_value_property
+from canonical import can_value_property, identity_authorized
 from carga_economica import estimar_carga_hipotecaria, generar_tabla_carga
 from ruta_verificacion import generar_ruta, generar_tabla_ruta
 from score_engine import calcular_score_actuarial, generar_narrativa_score, color_score
@@ -751,22 +751,68 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     _metodo_principal = (db_record.get("metodo_avaluo") or "m1").strip().lower()
     if _metodo_principal not in ("m1", "m3"):
         _metodo_principal = "m1"
-    # Precondiciones de valoración por tipología (bug L): un predio de suelo de
-    # protección / no construible / rural NO se valora por comparación de mercado.
-    # Remediation 03D: si hay evidencia de UNIDAD PH (torre/apartamento/unidad) pero
-    # la resolución catastral NO la resolvió en EXACTA, NO se emite estimación de
-    # mercado de precisión aparente.
-    # Remediation 03D.2: la autorización de valoración es UNA sola decisión
-    # (can_value_property) basada en detección de PH + confianza de identidad
-    # canónica. Solo VERIFIED_UNIT_IDENTITY autoriza valorar una unidad PH;
-    # NO_RECORD / PARTIAL / AMBIGUOUS / CONTEXT_ONLY / CONFLICT / None bloquean
-    # (fail-closed). Invariante: UNRESOLVED + PH + VALUATION EMITTED = INVALID.
-    _valuation_authorization = can_value_property(canonical_identity)
-    _unidad_ph_no_resuelta = not _valuation_authorization["allowed"]
+    # ── 03H: contexto de mercado (MarketContext) ───────────────────────────────
+    # Identidad y contexto son dos problemas distintos. El contexto se construye
+    # desde fuentes resueltas SIN fallback silencioso: estrato faltante NO se
+    # sustituye por 4; sector sin match NO cae a fallback por estrato sin marcar.
+    try:
+        from market_context import (
+            build_market_context, market_context_authorized, resolve_market_sector,
+            STATUS_VERIFIED_OFFICIAL, STATUS_VERIFIED_REGISTRAL,
+            STATUS_UNRESOLVED, STATUS_SOURCE_UNAVAILABLE)
+        if _barrio_desde_catastro and barrio:
+            _barrio_status = STATUS_VERIFIED_OFFICIAL
+        elif predio_real is None and (analysis.get("codigo_catastral") or analysis.get("nupre")):
+            _barrio_status = STATUS_SOURCE_UNAVAILABLE
+        else:
+            _barrio_status = STATUS_UNRESOLVED
+        _estrato_status = (STATUS_VERIFIED_OFFICIAL
+                           if _predio_estrato_catastral is not None
+                           else STATUS_UNRESOLVED)
+        _tipologia_status = (STATUS_VERIFIED_REGISTRAL
+                             if "Propiedad Horizontal" in str(_tipologia_texto or "")
+                             else STATUS_UNRESOLVED)
+        _sector = resolve_market_sector(barrio)
+        market_context = build_market_context(
+            identity_verified=bool(canonical_identity.get("identity_verified")),
+            barrio=(barrio or None), barrio_status=_barrio_status,
+            estrato=(estrato if _estrato_status == STATUS_VERIFIED_OFFICIAL else None),
+            estrato_status=_estrato_status,
+            tipologia=_tipologia_texto, tipologia_status=_tipologia_status,
+            uso=_predio_destino,
+            uso_status=(STATUS_VERIFIED_OFFICIAL if _predio_destino else STATUS_UNRESOLVED),
+            sector_resolution=_sector,
+            market_rate_source=None,  # derivada del sector por el builder
+            coordinates={"lat": lat, "lon": lon},
+            geocoder_source=None, geocoder_confidence=None,
+        )
+        _market_context_authorized = market_context_authorized(market_context)
+    except Exception as _e_mc:
+        market_context = {"ready": False, "blockers": [f"market_context error: {_e_mc}"]}
+        _market_context_authorized = False
+        print(f"[PDF][MARKET_CONTEXT] no disponible: {_e_mc}")
+    # Actualizar el segundo gate canónico con el contexto COMPUTADO (03H).
+    canonical_identity["market_context_ready"] = bool(market_context.get("ready"))
+    canonical_identity["market_context"] = market_context
+
+    # ── 03H: valuation_authorized = identity_authorized AND market_context_authorized ──
+    # Dos gates separados. Invariante: UNRESOLVED + PH + VALUATION EMITTED = INVALID;
+    # y también: identity_verified + barrio/estrato/tasa no resueltos -> BLOCKED.
+    _identity_authorized = identity_authorized(canonical_identity)
+    _valuation_authorized = _identity_authorized and _market_context_authorized
+    _unidad_ph_no_resuelta = not _identity_authorized
+    _market_context_blocked = not _market_context_authorized
+    _valuation_authorization = {
+        "allowed": _valuation_authorized,
+        "identity_authorized": _identity_authorized,
+        "market_context_authorized": _market_context_authorized,
+        "identity_level": canonical_identity.get("resolution_confidence") or "UNKNOWN",
+    }
     val_data = get_valuation(area, barrio, estrato, metodo_principal=_metodo_principal,
                              ciudad=ciudad, clase_suelo=_ent2.get("clase_suelo"),
                              destino=_predio_destino, tipologia=_tipologia_texto,
-                             unidad_ph_no_resuelta=_unidad_ph_no_resuelta)
+                             unidad_ph_no_resuelta=_unidad_ph_no_resuelta,
+                             market_context_blocked=_market_context_blocked)
     res_avaluo = val_data
     
     # Cargar hallazgos y recomendaciones dinamicas del analizador legal
@@ -2201,6 +2247,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "de mercado sobre el inmueble. La valoracion definitiva, si procede, la debe "
             "determinar un avaluador inscrito en el RAA.".format(
                 res_avaluo.get('motivo_no_aplica') or "")))
+        # 03H: si el bloqueo es por contexto de mercado (no por identidad),
+        # mostrar específicamente qué falta (mejor que "identidad insuficiente").
+        if _market_context_blocked and canonical_identity.get("identity_verified"):
+            _pendientes = (market_context or {}).get("blockers") or []
+            story.append(alert_orange(
+                "<b>Identidad predial:</b> VERIFICADA. "
+                "<b>Contexto de mercado:</b> INCOMPLETO. "
+                "Pendientes: " + "; ".join(_pendientes) + "."))
         story.append(Spacer(1, 6))
     elif not (area > 0 and (res_avaluo.get('consolidado') or 0) > 0):
         # Sin metraje: la estimación de mercado no es calculable -> aviso claro,
