@@ -178,7 +178,11 @@ class TestNegativos(unittest.TestCase):
 
 
 class TestAutoridadUrbanaUnica(unittest.TestCase):
-    """#4: el render 6.2/6.3 y el MarketContext consumen la MISMA verdad."""
+    """#4: el render 6.2/6.3 y el MarketContext consumen la MISMA verdad.
+
+    03H.2A (#C): la precedencia es DETERMINISTA — VERIFIED_OFFICIAL manda y los
+    desacuerdos quedan registrados como conflicto (nunca `setdefault`).
+    """
 
     def _oficial(self, **over):
         out = resolve_official_urban_context(
@@ -190,36 +194,55 @@ class TestAutoridadUrbanaUnica(unittest.TestCase):
 
     def test_capa500_vacia_se_llena_con_contexto_oficial(self):
         from pdf_compiler import _merge_contexto_urbano_oficial
-        ent, trat = _merge_contexto_urbano_oficial({}, self._oficial(), None)
+        ent, trat, prov = _merge_contexto_urbano_oficial({}, self._oficial(), None)
         self.assertEqual(ent["tratamiento"], "Consolidación")
         self.assertEqual(ent["altura_maxima"], "11")
         self.assertEqual(ent["estrato"], "4")
         # La autoridad POT del render ya NO queda vacía: no cae al texto genérico.
         self.assertEqual(trat, "Consolidación")
+        self.assertEqual(prov["conflictos"], [])
+        self.assertEqual(prov["authority"], "OfficialUrbanContext")
 
-    def test_no_pisa_lo_que_ya_traia_la_capa500(self):
+    def test_oficial_gana_sobre_legacy_distinto_y_lo_registra(self):
+        """#C: legacy altura 5 vs oficial VERIFIED_OFFICIAL 11 -> NUNCA queda 5."""
         from pdf_compiler import _merge_contexto_urbano_oficial
-        ent, trat = _merge_contexto_urbano_oficial(
-            {"tratamiento": "Renovación Urbana", "barrio": "Barrio L500"},
-            self._oficial(), "Renovación Urbana")
-        self.assertEqual(ent["tratamiento"], "Renovación Urbana")
-        self.assertEqual(ent["barrio"], "Barrio L500")
-        self.assertEqual(trat, "Renovación Urbana")
+        ent, trat, prov = _merge_contexto_urbano_oficial(
+            {"tratamiento": "Consolidación", "altura_maxima": "5"},
+            self._oficial(), "Consolidación")
+        self.assertEqual(ent["altura_maxima"], "11")
+        self.assertEqual(ent["tratamiento"], "Consolidación")
+        self.assertEqual(trat, "Consolidación")
+        _conf = {c["campo"]: c for c in prov["conflictos"]}
+        self.assertIn("altura_maxima", _conf)
+        self.assertEqual(_conf["altura_maxima"]["valor_previo"], "5")
+        self.assertEqual(_conf["altura_maxima"]["valor_oficial"], "11")
+        # El valor idéntico no genera conflicto espurio.
+        self.assertNotIn("tratamiento", _conf)
+
+    def test_valor_identico_no_genera_conflicto(self):
+        from pdf_compiler import _merge_contexto_urbano_oficial
+        ent, _trat, prov = _merge_contexto_urbano_oficial(
+            {"tratamiento": "Consolidación"}, self._oficial(), "Consolidación")
+        self.assertEqual(prov["conflictos"], [])
+        self.assertEqual(prov["aplicados"]["tratamiento"], "coincide")
 
     def test_ambiguo_no_se_afirma_en_el_render(self):
         from pdf_compiler import _merge_contexto_urbano_oficial
         oficial = self._oficial(
             tratamiento=None, tratamiento_status=STATUS_CONFLICT,
+            tipo_tratamiento=None, tipo_tratamiento_status=STATUS_CONFLICT,
             altura_maxima=None, altura_status=STATUS_CONFLICT,
             context_status="AMBIGUOUS_CONTEXT")
-        ent, trat = _merge_contexto_urbano_oficial({}, oficial, None)
+        ent, trat, prov = _merge_contexto_urbano_oficial({}, oficial, None)
         self.assertIsNone(ent.get("tratamiento"))
         self.assertIsNone(ent.get("altura_maxima"))
         self.assertIsNone(trat)
+        _noap = {x["campo"] for x in prov["no_aplicados"]}
+        self.assertIn("altura_maxima", _noap)
 
     def test_sin_contexto_oficial_no_toca_el_entorno(self):
         from pdf_compiler import _merge_contexto_urbano_oficial
-        ent, trat = _merge_contexto_urbano_oficial(
+        ent, trat, _prov = _merge_contexto_urbano_oficial(
             {"clase_suelo": "Urbano"},
             {"context_status": STATUS_SOURCE_UNAVAILABLE}, None)
         self.assertEqual(ent, {"clase_suelo": "Urbano"})

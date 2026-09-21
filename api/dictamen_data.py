@@ -608,10 +608,42 @@ def get_alcance_dt(barrio, ciudad="barranquilla", receipts=None):
         ("Estimacion referencial", "NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley 1673/2013)"),
     ]
 
+def _destino_source_txt(destino_economico, gc_sigla, es_bog, es_pas, source=None):
+    """03H.2A (#G): el origen del destino económico debe ser el REAL.
+
+    Antes se afirmaba "(Capa Predio GC-BAQ, en vivo)" para cualquier destino, sin
+    importar si el valor venía del servicio temático de destinos económicos, de un
+    fallback espacial o de una inferencia del CTL. Eso atribuía a la capa Predio
+    un dato que no salió de ahí.
+
+    `source` (contrato del motor):
+      capa_predio | thematic_exact | thematic_spatial | ctl_inferred | pot_context
+      None -> origen no declarado: se etiqueta de forma NEUTRA.
+    """
+    if es_bog:
+        return f"{destino_economico} (uso predominante por manzana, en vivo)"
+    if es_pas:
+        return f"{destino_economico} (area de actividad del POT Pasto, en vivo)"
+    if source == "capa_predio":
+        return f"{destino_economico} (Capa Predio {gc_sigla}, en vivo)"
+    if source == "thematic_exact":
+        return (f"{destino_economico} (Servicio Destinos Economicos -- "
+                f"identificador exacto)")
+    if source == "thematic_spatial":
+        return (f"{destino_economico} (Servicio Destinos Economicos -- "
+                f"contexto espacial)")
+    if source == "ctl_inferred":
+        return f"{destino_economico} (inferido del CTL adjunto)"
+    if source == "pot_context":
+        return f"{destino_economico} (norma POT del poligono, en vivo)"
+    # Origen no declarado por el motor: no se atribuye a una capa concreta.
+    return f"{destino_economico} (fuente catastral en vivo)"
+
+
 def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
                      codigo_catastral=None, condicion=None, area_catastral=None,
                      tipo_construccion=None, pisos=None, estrato=None,
-                     ciudad="barranquilla"):
+                     ciudad="barranquilla", destino_source=None):
     barrio_clean = barrio.strip().title() if barrio else "Pendiente de verificacion"
     es_med = "medellin" in (ciudad or "").lower()
     es_bog = "bogota" in (ciudad or "").lower()
@@ -631,12 +663,8 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
     # Sprint 2 (exactitud): el destino económico y el NUPRE salen del catastro en
     # vivo cuando el CTL trae código/NUPRE; nunca se asume HABITACIONAL por defecto.
     if destino_economico:
-        if es_bog:
-            destino_txt = f"{destino_economico} (uso predominante por manzana, en vivo)"
-        elif es_pas:
-            destino_txt = f"{destino_economico} (area de actividad del POT Pasto, en vivo)"
-        else:
-            destino_txt = f"{destino_economico} (Capa Predio {gc_sigla}, en vivo)"
+        destino_txt = _destino_source_txt(destino_economico, gc_sigla, es_bog,
+                                          es_pas, destino_source)
     elif es_pas:
         # El geoportal de Pasto SI publica el uso del predio: si no llegó, se
         # declara PENDIENTE (sin el texto 'NO REGISTRA', retirado del informe).

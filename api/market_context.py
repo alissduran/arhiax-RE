@@ -419,7 +419,7 @@ def resolve_official_urban_context(*, ciudad: str, lat, lon,
         "localidad": None,
         "estrato": None, "estrato_status": STATUS_UNRESOLVED,
         "tratamiento": None, "tratamiento_status": STATUS_UNRESOLVED,
-        "tipo_tratamiento": None,
+        "tipo_tratamiento": None, "tipo_tratamiento_status": STATUS_UNRESOLVED,
         "altura_maxima": None, "altura_status": STATUS_UNRESOLVED,
         "pieza_urbana": None,
         "codigo_manzana": None,
@@ -459,9 +459,14 @@ def resolve_official_urban_context(*, ciudad: str, lat, lon,
         return out
 
     out["source"] = "official_urban_layer"
+    # 03H.2A (#A): ambigüedad POR CAMPO. La fuente declara exactamente qué
+    # atributos no pudo consolidar; un campo ambiguo NO se afirma y su status
+    # queda CONFLICT (nunca VERIFIED_OFFICIAL). El fallback global solo aplica a
+    # productores antiguos que no informan `campos_ambiguos`.
     amb = set(r.get("campos_ambiguos") or [])
     if r.get("context_status") == "AMBIGUOUS_CONTEXT" and not amb:
-        amb = {"barrio", "estrato", "tratamiento"}
+        amb = {"barrio", "estrato", "tratamiento", "tipo_tratamiento",
+               "altura_maxima"}
     out["campos_ambiguos"] = sorted(amb)
 
     # 03H.2: conservar TODOS los atributos devueltos (no descartar riqueza).
@@ -486,13 +491,25 @@ def resolve_official_urban_context(*, ciudad: str, lat, lon,
         out["tratamiento_status"] = STATUS_VERIFIED_OFFICIAL
     elif "tratamiento" in amb:
         out["tratamiento_status"] = STATUS_CONFLICT
-    out["tipo_tratamiento"] = r.get("tipo_tratamiento")
+
+    # 03H.2A (#A): tipo_tratamiento tiene su PROPIA ambigüedad. Aunque el tipo se
+    # haya consolidado, si el TRATAMIENTO no se pudo consolidar el polígono del
+    # predio no está determinado y el tipo no es atribuible: no se afirma.
+    if (r.get("tipo_tratamiento")
+            and "tipo_tratamiento" not in amb and "tratamiento" not in amb):
+        out["tipo_tratamiento"] = r["tipo_tratamiento"]
+        out["tipo_tratamiento_status"] = STATUS_VERIFIED_OFFICIAL
+    elif "tipo_tratamiento" in amb or "tratamiento" in amb:
+        out["tipo_tratamiento_status"] = STATUS_CONFLICT
 
     # Altura normativa (misma capa que tratamiento: se propaga, no se hardcodea).
-    if r.get("altura_maxima") not in (None, "") and "tratamiento" not in amb:
+    # 03H.2A: VERIFIED_OFFICIAL solo si la altura se consolidó SIN conflicto
+    # (una altura elegida de features[0] NO puede afirmarse como oficial).
+    if (r.get("altura_maxima") not in (None, "")
+            and "altura_maxima" not in amb and "tratamiento" not in amb):
         out["altura_maxima"] = r["altura_maxima"]
         out["altura_status"] = STATUS_VERIFIED_OFFICIAL
-    elif "tratamiento" in amb:
+    elif "altura_maxima" in amb or "tratamiento" in amb:
         out["altura_status"] = STATUS_CONFLICT
 
     out["context_status"] = ("AMBIGUOUS_CONTEXT" if amb else "OK")

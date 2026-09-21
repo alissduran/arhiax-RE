@@ -463,6 +463,33 @@ def consultar_construccion(lat: float, lon: float) -> dict[str, Any]:
 
 # ── 4. Condición jurídica y destino económico vigente (servicios por año) ────
 
+# 03H.2A (#D): procedencia POR CAMPO. Se conservan los campos planos por
+# compatibilidad, pero la autoridad es el metadato por atributo.
+STATUS_VERIFIED_CATASTRAL = "VERIFIED_CATASTRAL"
+STATUS_UNRESOLVED = "UNRESOLVED"
+STATUS_SOURCE_UNAVAILABLE = "SOURCE_UNAVAILABLE"
+
+
+def _campo_cd(value=None, status=None, resolution_method=None, source=None) -> dict:
+    """Metadatos de procedencia de un atributo temático (03H.2A #D)."""
+    return {"value": value, "status": status,
+            "resolution_method": resolution_method, "source": source}
+
+
+def _es_codigo_catastral_valido(valor) -> bool:
+    """¿El valor puede enviarse como `terreno=<identificador>` a los servicios?
+
+    03H.2A (#E): el NUPRE es ALFANUMÉRICO (AFT0005BOHA) y NO es el número predial
+    nacional. Consultar `terreno='AFT0005BOHA'` como si fuera código produce
+    siempre cero coincidencias y, peor, aparenta una consulta exacta que nunca
+    ocurrió. Solo se acepta un identificador numérico de 15 a 30 dígitos.
+    """
+    if valor is None:
+        return False
+    v = str(valor).strip()
+    return bool(re.fullmatch(r"\d{15,30}", v))
+
+
 def consultar_condicion_destino(codigo_catastral: str = None, lat: float = None, lon: float = None) -> dict[str, Any]:
     """Consulta los servicios temáticos (condición 2025, destino 2026) por terreno.
 
@@ -472,25 +499,55 @@ def consultar_condicion_destino(codigo_catastral: str = None, lat: float = None,
     y en ese caso se marca resolution_method='spatial' (no debe parecer un dato
     exacto del predio). Clasificación features[0]: VALUATION_CRITICAL (destino y
     condición jurídica alimentan tipología y precondiciones de valoración).
+
+    03H.2A (#D): cada atributo lleva su PROPIA procedencia (`condicion` y
+    `destino` con value/status/resolution_method/source). Es legítimo —y ahora
+    visible— que la condición venga de un identificador exacto y el destino de
+    una consulta espacial: antes ambos quedaban bajo un único
+    `resolution_method` global y eso los presentaba como igualmente exactos.
+    03H.2A (#E): si el identificador no es numérico (p. ej. un NUPRE AFT...) NO
+    se consulta `terreno='AFT...'`: se degrada a contexto espacial o UNRESOLVED.
     """
     cache_key = f"cond|{codigo_catastral}|{round(lat or 0, 5)}|{round(lon or 0, 5)}"
     cached = _cache_get(cache_key)
     if cached is not None:
         return cached
     res = {"disponible": False, "condicion_juridica": None, "destino_vigente": None,
-           "error": None, "resolution_method": None}
+           "error": None, "resolution_method": None,
+           "condicion": _campo_cd(), "destino": _campo_cd(),
+           "identificador_exacto_usado": None, "identificador_rechazado": None}
 
     _cond_srv = "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer"
     _dest_srv = "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer"
+    _src_cond = "catastro/condicion (capa anual)"
+    _src_dest = "catastro/destinoseconomicos (capa anual)"
+    _cond_resp = False   # ¿el servicio respondió? (distingue UNRESOLVED de SOURCE_UNAVAILABLE)
+    _dest_resp = False
 
     # 1º — lookup EXACTO por identificador catastral (terreno = código).
-    if codigo_catastral:
-        r_cond = _query_capa(_cond_srv, 5, f"terreno='{codigo_catastral}'", "terreno,condicion,anio")
+    _id_exacto = str(codigo_catastral).strip() if codigo_catastral else None
+    if _id_exacto and not _es_codigo_catastral_valido(_id_exacto):
+        # NUPRE u otro identificador no predial: NO se consulta como terreno.
+        res["identificador_rechazado"] = _id_exacto
+        print(f"[CATASTRO][CONDICION-DESTINO] identificador no predial rechazado "
+              f"para terreno=: {_id_exacto!r} (solo se aceptan 15-30 dígitos)")
+        _id_exacto = None
+    if _id_exacto:
+        res["identificador_exacto_usado"] = _id_exacto
+        r_cond = _query_capa(_cond_srv, 5, f"terreno='{_id_exacto}'", "terreno,condicion,anio")
+        _cond_resp = bool(r_cond.get("disponible"))
         if r_cond.get("features"):
             res["condicion_juridica"] = r_cond["features"][0].get("properties", {}).get("condicion")
-        r_dest = _query_capa(_dest_srv, 5, f"terreno='{codigo_catastral}'", "terreno,destino,anio")
+            res["condicion"] = _campo_cd(res["condicion_juridica"],
+                                         STATUS_VERIFIED_CATASTRAL,
+                                         "exact_identifier", _src_cond)
+        r_dest = _query_capa(_dest_srv, 5, f"terreno='{_id_exacto}'", "terreno,destino,anio")
+        _dest_resp = bool(r_dest.get("disponible"))
         if r_dest.get("features"):
             res["destino_vigente"] = r_dest["features"][0].get("properties", {}).get("destino")
+            res["destino"] = _campo_cd(res["destino_vigente"],
+                                       STATUS_VERIFIED_CATASTRAL,
+                                       "exact_identifier", _src_dest)
         if res["condicion_juridica"] is not None or res["destino_vigente"] is not None:
             res["resolution_method"] = "exact_identifier"
 
@@ -499,15 +556,32 @@ def consultar_condicion_destino(codigo_catastral: str = None, lat: float = None,
             (res["condicion_juridica"] is None or res["destino_vigente"] is None):
         if res["condicion_juridica"] is None:
             r_cond = _query_punto(_cond_srv, 5, lon, lat, "terreno,condicion,anio")
+            _cond_resp = _cond_resp or bool(r_cond.get("disponible"))
             if r_cond.get("features"):
                 res["condicion_juridica"] = r_cond["features"][0].get("properties", {}).get("condicion")
+                res["condicion"] = _campo_cd(res["condicion_juridica"],
+                                             STATUS_VERIFIED_CATASTRAL,
+                                             "spatial", _src_cond)
         if res["destino_vigente"] is None:
             r_dest = _query_punto(_dest_srv, 5, lon, lat, "terreno,destino,anio")
+            _dest_resp = _dest_resp or bool(r_dest.get("disponible"))
             if r_dest.get("features"):
                 res["destino_vigente"] = r_dest["features"][0].get("properties", {}).get("destino")
+                res["destino"] = _campo_cd(res["destino_vigente"],
+                                           STATUS_VERIFIED_CATASTRAL,
+                                           "spatial", _src_dest)
         if res["resolution_method"] is None and \
                 (res["condicion_juridica"] is not None or res["destino_vigente"] is not None):
             res["resolution_method"] = "spatial"
+
+    # 03H.2A (#D): estado por campo. Sin valor: UNRESOLVED si el servicio
+    # respondió, SOURCE_UNAVAILABLE si no respondió (nunca se confunden).
+    for _k, _resp, _src in (("condicion", _cond_resp, _src_cond),
+                            ("destino", _dest_resp, _src_dest)):
+        if res[_k]["value"] is None:
+            res[_k] = _campo_cd(None,
+                                STATUS_UNRESOLVED if _resp else STATUS_SOURCE_UNAVAILABLE,
+                                None, _src)
 
     res["disponible"] = bool(res["condicion_juridica"] is not None or res["destino_vigente"] is not None)
     if not res["disponible"]:
@@ -550,13 +624,18 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
     PERO si una capa devuelve features incompatibles NO se elige silenciosamente
     la primera: se consolida solo cuando coinciden, y si discrepan se marca
     AMBIGUOUS_CONTEXT (el valor relevante queda None, no se afirma).
+
+    03H.2A: la consolidación es POR CAMPO (tratamiento, tipo_tratamiento y
+    altura_maxima se consolidan cada uno de forma independiente). Nunca se toma
+    ninguno de features[0].
     """
     cache_key = f"entorno|{round(lat, 5)}|{round(lon, 5)}"
     cached = _cache_get(cache_key)
     if cached is not None:
         return cached
     res = {"disponible": False, "error": None, "barrio": None, "localidad": None,
-           "estrato": None, "tratamiento": None, "pieza_urbana": None,
+           "estrato": None, "tratamiento": None, "tipo_tratamiento": None,
+           "altura_maxima": None, "pieza_urbana": None, "codigo_manzana": None,
            "context_status": None}
     _ambiguos = []
 
@@ -593,13 +672,24 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
         "tratamiento,tipo_tratamiento,altura_maxima")
     if r_trat.get("features"):
         feats = r_trat["features"]
-        tratamiento, status = _consolidar_valor(feats, "tratamiento")
-        res["tratamiento"] = tratamiento
-        if status:
+        # 03H.2A (#A): consolidación INDEPENDIENTE por atributo. Tomar
+        # tipo_tratamiento/altura_maxima de features[0] elegía en silencio la
+        # altura de la PRIMERA feature (p. ej. 11) aunque otra dijera 15: eso es
+        # afirmar un dato no consolidado. Cada campo se consolida con la misma
+        # lógica determinista y, si discrepa, queda None + ambiguo.
+        tratamiento, status_trat = _consolidar_valor(feats, "tratamiento")
+        if status_trat:
             _ambiguos.append("tratamiento")
         else:
-            res["tipo_tratamiento"] = (feats[0].get("properties") or {}).get("tipo_tratamiento")
-            res["altura_maxima"] = (feats[0].get("properties") or {}).get("altura_maxima")
+            res["tratamiento"] = tratamiento
+        for _campo in ("tipo_tratamiento", "altura_maxima"):
+            valor, status = _consolidar_valor(feats, _campo)
+            # Si el propio tratamiento es ambiguo, tipo/altura NO son atribuibles
+            # al polígono del predio: tampoco se afirman.
+            if status_trat or status:
+                _ambiguos.append(_campo)
+            else:
+                res[_campo] = valor
 
     res["campos_ambiguos"] = list(_ambiguos)
     if _ambiguos:
@@ -646,9 +736,14 @@ def enriquecer_desde_ctl(codigo_catastral: str = None, nupre: str = None,
 
     # Construcción + condición/destino + entorno, solo si hay coordenadas
     if lat is not None and lon is not None:
-        const = consultar_construccion(lat, lon)
-        if const.get("disponible"):
-            res["construccion"] = const
+        # 03H.2A (#B): se guarda SIEMPRE el resultado, aunque disponible=False.
+        # Antes solo se conservaba cuando había construcción y se perdía
+        # `construction_status`: SOURCE_UNAVAILABLE ("la capa no respondió")
+        # colapsaba a NO_MATCH ("no hay edificación") aguas abajo, y el dictamen
+        # terminaba sugiriendo un lote sin edificación. Se preservan
+        # construction_status, source_disponible, source_error y
+        # resolution_method.
+        res["construccion"] = consultar_construccion(lat, lon)
         res["condicion"] = consultar_condicion_destino(codigo_catastral, lat, lon)
         res["entorno"] = consultar_entorno_urbano(lat, lon)
     else:

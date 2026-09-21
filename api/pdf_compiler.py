@@ -266,8 +266,46 @@ def _direccion_para_geocodificar(analysis, db_record):
     return (db_record.get("direccion") or "").strip()
 
 
-# ── 03H.2: AUTORIDAD URBANA ÚNICA del render (6.2/6.3) ────────────────────────
+# ── 03H.2A (#G): procedencia del destino económico / condición jurídica ───────
+# El render 6.1 debe diferenciar de dónde salió el dato; antes afirmaba siempre
+# "Capa Predio <sigla>, en vivo" aunque el valor viniera del servicio temático.
+_CD_SOURCE_CAPA = "capa_predio"
+_CD_SOURCE_THEM_EXACT = "thematic_exact"
+_CD_SOURCE_THEM_SPATIAL = "thematic_spatial"
+_CD_SOURCE_CTL = "ctl_inferred"
+_CD_SOURCE_POT = "pot_context"
+
+
+def _cd_source_label(meta, fallback=None):
+    """Etiqueta de procedencia a partir del metadato POR CAMPO del servicio.
+
+    Solo se acepta meta VERIFIED_CATASTRAL con valor (un campo UNRESOLVED o
+    SOURCE_UNAVAILABLE no puede etiquetarse como dato verificado).
+    """
+    if not isinstance(meta, dict):
+        return fallback
+    if meta.get("status") != "VERIFIED_CATASTRAL" or not meta.get("value"):
+        return fallback
+    _m = meta.get("resolution_method")
+    if _m == "exact_identifier":
+        return _CD_SOURCE_THEM_EXACT
+    if _m == "spatial":
+        return _CD_SOURCE_THEM_SPATIAL
+    return fallback
+
+
+# ── 03H.2A: AUTORIDAD URBANA ÚNICA del render (6.2/6.3) ───────────────────────
 _STATUS_VERIFIED_OFFICIAL = "VERIFIED_OFFICIAL"
+_CAMPOS_URBANOS_OFICIALES = (
+    ("barrio", "barrio_status"),
+    ("estrato", "estrato_status"),
+    ("tratamiento", "tratamiento_status"),
+    ("tipo_tratamiento", "tipo_tratamiento_status"),
+    ("altura_maxima", "altura_status"),
+    ("localidad", None),
+    ("pieza_urbana", None),
+    ("codigo_manzana", None),
+)
 
 
 def _merge_contexto_urbano_oficial(entorno, oficial, predio_tratamiento=None):
@@ -278,39 +316,77 @@ def _merge_contexto_urbano_oficial(entorno, oficial, predio_tratamiento=None):
     capa 500 no resolvía, el dictamen mostraba N/D/sin norma aunque el contexto
     oficial sí tuviera el dato.
 
-    Regla de honestidad: SOLO se propaga lo que la capa oficial marcó como
-    VERIFIED_OFFICIAL. Los campos en `campos_ambiguos` / STATUS_CONFLICT NO se
-    afirman (no se convierten en dato del dictamen).
+    03H.2A (#C) — precedencia DETERMINISTA, sin `setdefault`:
+      1. `OfficialUrbanContext` marcado `VERIFIED_OFFICIAL` es la AUTORIDAD del
+         render para los campos POT/urbanos. Un valor legacy previo NO puede
+         ganarle por el simple hecho de estar ahí (con `setdefault`, una altura
+         legacy 5 sobrevivía frente a una altura oficial verificada 11).
+      2. Valor previo idéntico -> se conserva y se registra "coincide".
+      3. Valor previo distinto -> gana VERIFIED_OFFICIAL y el desacuerdo queda
+         registrado como CONFLICTO auditable (campo, legacy, oficial, decisión).
+      4. Campo marcado CONFLICT/ambiguo por la fuente oficial NO se afirma: no
+         reemplaza nada y queda registrado como no aplicado.
+
+    Devuelve `(entorno, predio_tratamiento, provenance)`; `provenance` es
+    serializable y deja la decisión auditable en el dictamen/evidencia.
     """
     _ent = dict(entorno or {}) if isinstance(entorno, dict) else {}
+    prov = {"authority": "OfficialUrbanContext", "aplicados": {},
+            "conflictos": [], "no_aplicados": [], "context_status": None}
     if not isinstance(oficial, dict):
-        return _ent, predio_tratamiento
+        return _ent, predio_tratamiento, prov
+    prov["context_status"] = oficial.get("context_status")
     if oficial.get("context_status") not in ("OK", "AMBIGUOUS_CONTEXT"):
-        return _ent, predio_tratamiento
+        return _ent, predio_tratamiento, prov
 
-    if (oficial.get("barrio")
-            and oficial.get("barrio_status") == _STATUS_VERIFIED_OFFICIAL):
-        _ent.setdefault("barrio", oficial.get("barrio"))
-    if (oficial.get("estrato") not in (None, "")
-            and oficial.get("estrato_status") == _STATUS_VERIFIED_OFFICIAL):
-        _ent.setdefault("estrato", oficial.get("estrato"))
-    if (oficial.get("tratamiento")
-            and oficial.get("tratamiento_status") == _STATUS_VERIFIED_OFFICIAL):
-        # _predio_tratamiento es la autoridad del bloque POT del render: si la
-        # capa 500 no lo trajo, se toma del contexto OFICIAL verificado (misma
-        # capa normativa) en vez del texto genérico de respaldo.
-        if not predio_tratamiento:
-            predio_tratamiento = oficial.get("tratamiento")
-        _ent.setdefault("tratamiento", oficial.get("tratamiento"))
-        if oficial.get("tipo_tratamiento"):
-            _ent.setdefault("tipo_tratamiento", oficial.get("tipo_tratamiento"))
-        if oficial.get("altura_maxima") not in (None, ""):
-            _ent.setdefault("altura_maxima", oficial.get("altura_maxima"))
-    for _k in ("localidad", "pieza_urbana", "codigo_manzana"):
-        _v = oficial.get(_k)
-        if _v not in (None, ""):
-            _ent.setdefault(_k, _v)
-    return _ent, predio_tratamiento
+    for campo, status_key in _CAMPOS_URBANOS_OFICIALES:
+        nuevo = oficial.get(campo)
+        anterior = _ent.get(campo)
+        _verificado = (oficial.get(status_key) == _STATUS_VERIFIED_OFFICIAL
+                       if status_key else True)
+        if not _verificado:
+            # La fuente oficial NO consolidó este campo: no se afirma y tampoco se
+            # descarta en silencio lo que ya traía el entorno (queda auditado).
+            _ambiguo = False
+            if status_key:
+                _ambiguo = (oficial.get(status_key) == "CONFLICT"
+                            or campo in (oficial.get("campos_ambiguos") or []))
+            if _ambiguo or nuevo not in (None, "") or anterior not in (None, ""):
+                prov["no_aplicados"].append({
+                    "campo": campo, "status": oficial.get(status_key),
+                    "motivo": f"status={oficial.get(status_key)}",
+                    "valor_oficial": nuevo,
+                    "valor_previo_conservado": anterior})
+            continue
+        if nuevo in (None, ""):
+            continue
+        if anterior in (None, ""):
+            _ent[campo] = nuevo
+            prov["aplicados"][campo] = "official_urban_context"
+        elif str(anterior).strip() == str(nuevo).strip():
+            prov["aplicados"][campo] = "coincide"
+        else:
+            # 03H.2A (#C): gana VERIFIED_OFFICIAL, pero NO en silencio.
+            _ent[campo] = nuevo
+            prov["aplicados"][campo] = "official_urban_context (reemplaza valor previo)"
+            prov["conflictos"].append({"campo": campo, "valor_previo": anterior,
+                                       "valor_oficial": nuevo,
+                                       "decision": "official_urban_context"})
+            print(f"[PDF][URBAN-AUTHORITY] conflicto {campo}: "
+                  f"previo={anterior!r} -> oficial={nuevo!r} (gana oficial)")
+
+    # `_predio_tratamiento` es la autoridad del bloque POT del render: el valor
+    # del contexto oficial verificado reemplaza también al legacy.
+    _trat_of = oficial.get("tratamiento")
+    if (_trat_of and oficial.get("tratamiento_status") == _STATUS_VERIFIED_OFFICIAL
+            and str(predio_tratamiento or "").strip() != str(_trat_of).strip()):
+        if predio_tratamiento not in (None, ""):
+            prov["conflictos"].append({"campo": "tratamiento (render POT)",
+                                       "valor_previo": predio_tratamiento,
+                                       "valor_oficial": _trat_of,
+                                       "decision": "official_urban_context"})
+        predio_tratamiento = _trat_of
+    return _ent, predio_tratamiento, prov
 
 
 # ── 03H.2: BUILDING_SPATIAL_CONTEXT por coordenadas AUTORIZADAS ───────────────
@@ -662,6 +738,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     _predio_area_catastral = None
     _ent2 = {}
     _predio_tratamiento = None
+    # 03H.2A (#G): procedencia REAL del destino económico para el render de 6.1.
+    # Sin esto la tabla afirmaba "Capa Predio GC-BAQ, en vivo" incluso cuando el
+    # valor venía del servicio temático de destinos económicos o de un fallback
+    # espacial. Se etiqueta solo lo que realmente se ejecutó.
+    _destino_source = None
+    _condicion_source = None
     # 03H.2: estado de la capa de construcción (NO confundir NO_MATCH con
     # SOURCE_UNAVAILABLE -> evita el falso "posible lote sin edificación").
     _construction_status = "NOT_EVALUATED"
@@ -681,14 +763,38 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _predio_comuna = _ent2.get("localidad")
         else:
             _predio_destino = _p.get("destino_economico")
+            if _predio_destino:
+                _destino_source = _CD_SOURCE_CAPA
             # Pasto: el geoportal no expone 'destino economico catastral' como tal,
             # pero SI el area de actividad del POT (que es el uso normativo del
             # predio). Se usa para no mostrar "PENDIENTE" teniendo el dato.
             if not _predio_destino and es_pasto:
                 _predio_destino = _ent2.get("area_actividad") or _ent2.get("uso_economico")
+                if _predio_destino:
+                    _destino_source = _CD_SOURCE_POT
             # Medellín no expone condición jurídica en las capas abiertas (queda
             # PENDIENTE); Barranquilla la trae del servicio temático 'condicion'.
-            _predio_condicion = (predio_real.get("condicion") or {}).get("condicion_juridica")
+            _cond_them = predio_real.get("condicion") or {}
+            _predio_condicion = _cond_them.get("condicion_juridica")
+            if _predio_condicion:
+                _condicion_source = _cd_source_label(_cond_them.get("condicion"),
+                                                     _CD_SOURCE_THEM_SPATIAL)
+            # ── 03H.2A (#F): destino temático aunque predio_real exista ────────
+            # La capa 500 puede resolver el predio y NO traer destino económico.
+            # El servicio temático (destinoseconomicos) ya se consultó: usarlo con
+            # SU procedencia en vez de dejar el dato en PENDIENTE por depender de
+            # una sola capa.
+            if not _predio_destino:
+                _destino_tem = _cond_them.get("destino_vigente")
+                if _destino_tem:
+                    _predio_destino = _destino_tem
+                    _destino_source = _cd_source_label(_cond_them.get("destino"))
+                    if _destino_source is None:
+                        # productor legacy sin metadatos por campo
+                        _destino_source = (_CD_SOURCE_THEM_EXACT
+                                           if _cond_them.get("resolution_method")
+                                           == "exact_identifier"
+                                           else _CD_SOURCE_THEM_SPATIAL)
             # NUPRE/código SOLO se afirman si vinieron del CTL o de la resolución
             # exacta por código. La resolución por punto (sin CTL) cae en el predio
             # más cercano y podría ser un vecino: no se afirma su NUPRE como propio.
@@ -710,11 +816,22 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _const_bog = predio_real.get("construccion") or {}
             _predio_tipo_construccion = _const_bog.get("tipo_construccion")
             _predio_pisos = _const_bog.get("total_pisos")
-        # 03H.2: estado explícito de la capa de construcción.
+        # 03H.2 / 03H.2A (#B): el estado del PRODUCTOR manda literalmente. Solo se
+        # infiere un status legacy si el productor antiguo no lo incluye, y
+        # JAMÁS se convierte SOURCE_UNAVAILABLE en NO_MATCH (que afirmaría "no hay
+        # edificación" cuando en realidad la capa no respondió).
         _constr_st = predio_real.get("construccion") or predio_real.get("lote") or {}
-        _construction_status = _constr_st.get("construction_status") or (
-            "AVAILABLE" if (_predio_pisos or _predio_tipo_construccion)
-            else "NO_MATCH")
+        _construction_status = _constr_st.get("construction_status")
+        if not _construction_status:
+            if _constr_st.get("disponible") or _predio_pisos or _predio_tipo_construccion:
+                _construction_status = "AVAILABLE"
+            elif (_constr_st.get("source_disponible") is False
+                  or _constr_st.get("error")):
+                _construction_status = "SOURCE_UNAVAILABLE"
+            else:
+                # Sin objeto de construcción o productor legacy sin estado: la
+                # capa NO se evaluó (no es NO_MATCH).
+                _construction_status = "NOT_EVALUATED"
     else:
         _predio_tratamiento = None
         _predio_codigo_barrio = None
@@ -723,8 +840,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         # Aunque el predio no se haya resuelto en la capa 500, el servicio
         # temático puede responder por identificador EXACTO (o por punto).
         # No perder el dato catastral por depender de una sola capa.
-        _cod_cd = (analysis.get("codigo_catastral") or analysis.get("nupre"))
-        if _cod_cd and not es_bogota and not es_pasto and not es_medellin:
+        # 03H.2A (#E): SOLO el código catastral va como `terreno=`. El NUPRE es
+        # alfanumérico (AFT0005BOHA) y NO es el número predial nacional:
+        # reutilizarlo producía una consulta que nunca podía coincidir y
+        # aparentaba un lookup exacto. Sin código, se resuelve por contexto
+        # espacial (si la coordenada está autorizada) o queda UNRESOLVED.
+        _cod_cd = str(analysis.get("codigo_catastral") or "").strip() or None
+        if (_cod_cd or (_lat_geo is not None and _lon_geo is not None)) \
+                and not es_bogota and not es_pasto and not es_medellin:
             try:
                 from catastro_predio import consultar_condicion_destino
                 _res_cd = consultar_condicion_destino(
@@ -732,12 +855,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                     lat=_lat_geo, lon=_lon_geo)
                 if _res_cd.get("condicion_juridica"):
                     _predio_condicion = _res_cd["condicion_juridica"]
+                    _condicion_source = _cd_source_label(_res_cd.get("condicion"))
                 if _res_cd.get("destino_vigente"):
                     _predio_destino = _res_cd["destino_vigente"]
+                    _destino_source = _cd_source_label(_res_cd.get("destino"))
                 _cond_dest_method = _res_cd.get("resolution_method")
                 print(f"[PDF][CONDICION-DESTINO] sin capa 500: "
-                      f"metodo={_cond_dest_method} destino={_predio_destino!r} "
-                      f"condicion={_predio_condicion!r}")
+                      f"id={_cod_cd!r} metodo={_cond_dest_method} "
+                      f"destino={_predio_destino!r} ({_destino_source}) "
+                      f"condicion={_predio_condicion!r} ({_condicion_source})")
             except Exception as _e_cd:
                 print(f"[PDF][CONDICION-DESTINO] no disponible: {_e_cd}")
 
@@ -756,6 +882,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                 # dato del catastro algo que se infirio del CTL. Los geoportales
                 # (Bogota, Medellin y Pasto) no publican condicion juridica.
                 _predio_condicion = f"{_cond_ctl} (inferido del CTL adjunto)"
+                _condicion_source = _CD_SOURCE_CTL
         except Exception as _e_cond:
             print(f"[PDF][CONDICION] inferencia desde CTL no disponible: {_e_cond}")
 
@@ -780,7 +907,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         # apartamento) se refleja en la tipología, aunque el catastro no haya
         # resuelto el predio; sin evidencia queda PENDIENTE (nunca se asume PH).
         if "Propiedad Horizontal" in str(_predio_condicion or ""):
-            _tipologia_texto = "Apartamento -- Propiedad Horizontal (inferido del CTL)"
+            # 03H.2A (#G): distinguir el ORIGEN. Si la condición vino del servicio
+            # catastral temático NO se etiqueta como "inferido del CTL".
+            if _condicion_source in (_CD_SOURCE_THEM_EXACT, _CD_SOURCE_THEM_SPATIAL):
+                _tipologia_texto = ("Apartamento -- Propiedad Horizontal "
+                                    "(condición catastral)")
+            else:
+                _tipologia_texto = "Apartamento -- Propiedad Horizontal (inferido del CTL)"
         elif is_miramar and not path_certificado:
             _tipologia_texto = "Apartamento -- Propiedad Horizontal (NO VIS)"
         else:
@@ -882,6 +1015,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # la identidad y funciona aunque predio_real sea None.
     _STATUS_VERIFIED_OFFICIAL = "VERIFIED_OFFICIAL"
     _STATUS_VERIFIED_REGISTRAL = "VERIFIED_REGISTRAL"
+    _STATUS_VERIFIED_CATASTRAL = "VERIFIED_CATASTRAL"
     _STATUS_UNRESOLVED = "UNRESOLVED"
     _STATUS_SOURCE_UNAVAILABLE = "SOURCE_UNAVAILABLE"
     try:
@@ -912,12 +1046,46 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _predio_pisos = _predio_pisos or _const_ctx.get("total_pisos")
         print(f"[PDF][BUILDING_CONTEXT] status={_construction_status}")
 
-    # ── 03H.2: AUTORIDAD URBANA ÚNICA para el render (6.2/6.3) ─────────────────
+    # ── 03H.2A (#F/#G): destino/condición por CONTEXTO ESPACIAL autorizado ─────
+    # Si el dato temático sigue faltando y la coordenada está autorizada, se
+    # consulta la intersección de punto y se etiqueta como CONTEXTO ESPACIAL
+    # (jamás como identificador exacto). No abre ningún gate: solo recupera el
+    # dato con su provenance real.
+    if (not es_bogota and not es_pasto and not es_medellin
+            and (not _predio_destino or not _predio_condicion)
+            and _ubicacion.get("coordinate_source_verified")
+            and lat is not None and lon is not None):
+        try:
+            from catastro_predio import consultar_condicion_destino
+            _res_cd2 = consultar_condicion_destino(codigo_catastral=None,
+                                                   lat=lat, lon=lon)
+            if not _predio_destino and _res_cd2.get("destino_vigente"):
+                _predio_destino = _res_cd2["destino_vigente"]
+                _destino_source = _cd_source_label(_res_cd2.get("destino"))
+            if not _predio_condicion and _res_cd2.get("condicion_juridica"):
+                _predio_condicion = _res_cd2["condicion_juridica"]
+                _condicion_source = _cd_source_label(_res_cd2.get("condicion"))
+            print(f"[PDF][CONDICION-DESTINO] contexto espacial: "
+                  f"destino={_predio_destino!r} ({_destino_source}) "
+                  f"condicion={_predio_condicion!r} ({_condicion_source})")
+        except Exception as _e_cd2:
+            print(f"[PDF][CONDICION-DESTINO] contexto espacial no disponible: {_e_cd2}")
+
+    # ── 03H.2A: AUTORIDAD URBANA ÚNICA para el render (6.2/6.3) ────────────────
     # Evita "dos verdades": 6.3 leía _ent2 mientras el MarketContext leía el
-    # contexto OFICIAL. Solo se propaga lo VERIFICADO por la capa oficial: los
-    # campos ambiguos (campos_ambiguos / CONFLICT) NO se afirman como datos.
-    _ent2, _predio_tratamiento = _merge_contexto_urbano_oficial(
-        _ent2, _oficial_urbano, _predio_tratamiento)
+    # contexto OFICIAL. Precedencia determinista: VERIFIED_OFFICIAL manda y los
+    # desacuerdos con valores legacy quedan registrados como conflicto.
+    _urban_provenance = {"authority": "OfficialUrbanContext", "aplicados": {},
+                         "conflictos": [], "no_aplicados": [],
+                         "context_status": None}
+    try:
+        _ent2, _predio_tratamiento, _urban_provenance = (
+            _merge_contexto_urbano_oficial(_ent2, _oficial_urbano,
+                                           _predio_tratamiento))
+    except Exception as _e_ua:
+        # La precedencia urbana nunca puede tumbar el dictamen: si falla, se
+        # conserva el entorno tal como venía y se declara el error.
+        print(f"[PDF][URBAN-AUTHORITY] no disponible: {_e_ua}")
 
     # ── 03H: contexto de mercado (MarketContext) ───────────────────────────────
     # Identidad y contexto son dos problemas distintos. El contexto se construye
@@ -948,9 +1116,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _mc_estrato_status = (_oficial_urbano.get("estrato_status")
                                   or _STATUS_UNRESOLVED)
 
-        _tipologia_status = (_STATUS_VERIFIED_REGISTRAL
-                             if "Propiedad Horizontal" in str(_tipologia_texto or "")
-                             else _STATUS_UNRESOLVED)
+        _tipologia_status = (
+            _STATUS_VERIFIED_CATASTRAL
+            if (_condicion_source in (_CD_SOURCE_THEM_EXACT, _CD_SOURCE_THEM_SPATIAL)
+                and "Propiedad Horizontal" in str(_tipologia_texto or ""))
+            else (_STATUS_VERIFIED_REGISTRAL
+                  if "Propiedad Horizontal" in str(_tipologia_texto or "")
+                  else _STATUS_UNRESOLVED))
         _sector = resolve_market_sector(_mc_barrio)
         market_context = build_market_context(
             identity_verified=bool(canonical_identity.get("identity_verified")),
@@ -971,6 +1143,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         market_context["authoritative_address"] = _ubicacion.get("authoritative_address")
         market_context["address_source"] = _ubicacion.get("address_source")
         market_context["official_urban_context"] = _oficial_urbano
+        # 03H.2A (#C): la decisión de precedencia del render queda AUDITABLE
+        # (qué se aplicó, qué se descartó por ambiguo y qué conflictos hubo).
+        market_context["urban_render_provenance"] = _urban_provenance
+        print(f"[PDF][URBAN-AUTHORITY] aplicados={len(_urban_provenance['aplicados'])} "
+              f"conflictos={len(_urban_provenance['conflictos'])} "
+              f"no_aplicados={len(_urban_provenance['no_aplicados'])}")
         _market_context_authorized = market_context_authorized(market_context)
     except Exception as _e_mc:
         market_context = {"ready": False, "blockers": [f"market_context error: {_e_mc}"]}
@@ -1683,7 +1861,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Comuna/Localidad desde el MODELO CANÓNICO (misma fuente que Titulux y GIS):
     # antes Pasto leía _ent2['localidad'] (campo que su geoportal no expone) y
     # mostraba "N/D" teniendo la "Comuna 1" resuelta en el entorno (bug B).
-    _localidad_txt = administrative_context.get("comuna") or _ent2.get("comuna")
+    # 03H.2A: última fuente = `localidad` del contexto urbano OFICIAL (capa
+    # unidadesadministrativas). Antes solo Bogotá la leía y Barranquilla mostraba
+    # "N/D" teniendo la localidad resuelta por el contexto oficial (otra "dos
+    # verdades": el MarketContext la conocía, el render no la mostraba).
+    _localidad_txt = (administrative_context.get("comuna") or _ent2.get("comuna")
+                      or _ent2.get("localidad"))
     if es_bogota:
         _localidad_txt = _ent2.get("localidad") or _localidad_txt
     _filas_localizacion = [
@@ -2120,6 +2303,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         pisos=_predio_pisos,
         estrato=_estrato_61,
         ciudad=ciudad,
+        # 03H.2A (#G): origen REAL del destino económico (no se atribuye a la capa
+        # Predio un valor que vino del servicio temático o de contexto espacial).
+        destino_source=_destino_source,
     )))
     story.append(Spacer(1, 4))
 
