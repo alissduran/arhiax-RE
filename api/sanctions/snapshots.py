@@ -250,7 +250,8 @@ def _snap_desde_dict(d: Dict[str, Any]) -> SanctionsSnapshot:
         record_count=int(d.get("record_count") or 0),
         parser_version=d.get("parser_version", "") or "",
         acquisition_status=d.get("acquisition_status", SNAP_OPERATIVA),
-        freshness=d.get("freshness", NO_SNAPSHOT), error=d.get("error"))
+        freshness=d.get("freshness", NO_SNAPSHOT), error=d.get("error"),
+        refresh_error=d.get("refresh_error"))
 
 
 def evaluar_frescura(snap: Optional[SanctionsSnapshot], *, ahora: Optional[float] = None,

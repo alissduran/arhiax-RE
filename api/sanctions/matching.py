@@ -106,16 +106,6 @@ def _rec_identificadores(rec: Any) -> Tuple[Tuple[str, str, str], ...]:
     return tuple(unicos)
 
 
-def _rec_doc_variants(rec: Any) -> Tuple[str, ...]:
-    """Todas las variantes normalizadas de TODOS los identificadores del registro."""
-    out = []
-    for tipo, valor, _ in _rec_identificadores(rec):
-        for v in document_variants(tipo, valor):
-            if v not in out:
-                out.append(v)
-    return tuple(out)
-
-
 def _rec_names(rec: Any) -> Tuple[Tuple[str, str], ...]:
     """[(campo, nombre)] del registro: nombre principal + alias."""
     out = []
@@ -149,23 +139,71 @@ def _mejor_nombre(env, registros, nombre: Optional[str] = None) -> Optional[Tupl
     return mejor
 
 
+def _ids_compatibles_exactos(env, rec) -> Tuple[Tuple[str, str, str], ...]:
+    """Identificadores del registro que coinciden en VALOR **y** en TIPO.
+
+    03S.1A-1/2: la unidad de comparación es (tipo-compatible, valor normalizado).
+    Un mismo número con tipo incompatible (cédula 12345678 vs pasaporte
+    12345678) NO es un identificador compatible: es un conflicto de tipo.
+    """
+    subj_variants = set(document_variants(env.document_type, env.document_normalized))
+    if not subj_variants:
+        return ()
+    out = []
+    for tipo_rec, valor_rec, origen in _rec_identificadores(rec):
+        if not (set(document_variants(tipo_rec, valor_rec)) & subj_variants):
+            continue
+        if not _tipos_compatibles(tipo_rec, env.document_type):
+            continue
+        out.append((tipo_rec, valor_rec, origen))
+    return tuple(out)
+
+
+def _ids_mismo_valor_tipo_incompatible(env, rec) -> Tuple[Tuple[str, str, str], ...]:
+    """Identificadores del registro con el MISMO valor pero TIPO incompatible."""
+    subj_variants = set(document_variants(env.document_type, env.document_normalized))
+    if not subj_variants:
+        return ()
+    out = []
+    for tipo_rec, valor_rec, origen in _rec_identificadores(rec):
+        if not (set(document_variants(tipo_rec, valor_rec)) & subj_variants):
+            continue
+        if _tipos_compatibles(tipo_rec, env.document_type):
+            continue
+        out.append((tipo_rec, valor_rec, origen))
+    return tuple(out)
+
+
 def _conflicto_identificadores(env, rec) -> Tuple[bool, Tuple[str, ...]]:
     """§19: ¿el registro trae un identificador INCOMPATIBLE con el sujeto?
 
-    03S.1A-4: se evalúan TODOS los identificadores del registro. El conflicto
-    solo se declara si NINGUNO es compatible con el del sujeto.
+    03S.1A-1/2: se compara por (tipo-compatible, valor normalizado), no por mera
+    intersección de números:
+
+      * si hay AL MENOS UN identificador compatible exacto -> NO hay conflicto
+        (un ID incompatible adicional no invalida uno compatible);
+      * si el ÚNICO valor coincidente pertenece a un tipo incompatible ->
+        conflicto `IDENTIFIER_TYPE_MISMATCH`;
+      * si el registro trae identificadores y ninguno coincide en valor: mismo
+        tipo -> `DOCUMENT_MISMATCH`, tipos distintos -> `IDENTIFIER_TYPE_MISMATCH`.
     """
     motivos = []
-    rec_variants = _rec_doc_variants(rec)
-    subj_variants = set(document_variants(env.document_type, env.document_normalized))
-    if rec_variants and subj_variants:
-        if not (set(rec_variants) & subj_variants):
-            # ¿Al menos uno es del mismo tipo (aunque el número difiera)?
-            if any(_tipos_compatibles(t, env.document_type)
-                   for t, _v, _o in _rec_identificadores(rec)):
-                motivos.append("DOCUMENT_MISMATCH")
-            else:
-                motivos.append("DOCUMENT_TYPE_MISMATCH")
+    if _ids_compatibles_exactos(env, rec):
+        pass  # identificador compatible exacto: sin conflicto por otros IDs
+    else:
+        _incompatibles = _ids_mismo_valor_tipo_incompatible(env, rec)
+        if _incompatibles:
+            _t = ", ".join(sorted({t or "sin tipo" for t, _v, _o in _incompatibles}))
+            motivos.append(f"IDENTIFIER_TYPE_MISMATCH ({_t})")
+        else:
+            _todos = _rec_identificadores(rec)
+            subj_variants = set(document_variants(env.document_type,
+                                                  env.document_normalized))
+            if _todos and subj_variants:
+                if any(_tipos_compatibles(t, env.document_type) for t, _v, _o in _todos):
+                    motivos.append("DOCUMENT_MISMATCH")
+                else:
+                    motivos.append("IDENTIFIER_TYPE_MISMATCH")
     # Fecha de nacimiento: solo se compara si AMBOS la tienen.
     dob_rec = _g(rec, "fecha_nacimiento")
     dob_sub = getattr(env, "fecha_nacimiento", None)
@@ -264,12 +302,13 @@ def consultar(env, registros: Sequence[Any], nombre: Optional[str] = None) -> Ma
 
 
 def _atributo_corroborante(env, rec, campo_coincidente) -> Optional[str]:
-    """Segundo atributo independiente del MISMO registro que corrobora (§17)."""
-    # (a) documento presente en la lista que coincide en al menos la parte común
-    rec_variants = set(_rec_doc_variants(rec))
-    subj_variants = set(document_variants(env.document_type, env.document_normalized))
-    if rec_variants and subj_variants and (rec_variants & subj_variants):
-        return "documento coincidente"
+    """Segundo atributo independiente del MISMO registro que corrobora (§17).
+
+    03S.1A-3: el documento solo corrobora si coincide el VALOR **y** el TIPO es
+    compatible. `CC 123` frente a `PASSPORT 123` NO es corroboración.
+    """
+    if _ids_compatibles_exactos(env, rec):
+        return "documento coincidente (tipo compatible)"
     # (b) otro nombre/alias del registro que coincide exactamente
     objetivo = match_key(env.canonical_name)
     for c, cand in _rec_names(rec):

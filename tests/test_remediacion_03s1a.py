@@ -259,8 +259,10 @@ class TestEvidenciaNoDesaparece(unittest.TestCase):
         with mock.patch("sanctions.engine.encadenar_eventos", return_value=()):
             s = _ejecutar(cache_dir=str(TMP / "ev_fail"))
         self.assertEqual(s.evidence_chain_status, "FAILED")
-        self.assertFalse(s.evidence_reproducible)
-        # Los envelopes SIGUEN existiendo (no desaparecen).
+        self.assertFalse(s.evidence_sealed)
+        # Los envelopes SIGUEN existiendo (no desaparecen) y son reproducibles
+        # por sus hashes, pero NO están sellados.
+        self.assertTrue(s.evidence_reproducible)
         self.assertEqual(s.evidence_created_count, 9)
         self.assertEqual(len(s.evidence_records), 9)
         # El motivo lo declara y no hay afirmación de "sin coincidencias" pelada.
@@ -280,7 +282,7 @@ class TestEvidenciaNoDesaparece(unittest.TestCase):
         self.assertEqual(s.evidence_chain_status, "FAILED")
         self.assertNotEqual(s.status, "SCREENING_COMPLETE")
         self.assertIn("no se declara completo", s.reason)
-        self.assertFalse(s.evidence_reproducible)
+        self.assertFalse(s.evidence_sealed)
 
     def test_produccion_con_clave_sella_la_cadena(self):
         _sembrar(TMP / "ev_prod_ok")
@@ -289,6 +291,7 @@ class TestEvidenciaNoDesaparece(unittest.TestCase):
                 "ARHIAX_EVIDENCE_HMAC_KEY": "clave-de-prueba-para-el-test"}, clear=False):
             s = _ejecutar(cache_dir=str(TMP / "ev_prod_ok"))
         self.assertEqual(s.evidence_chain_status, "SEALED")
+        self.assertTrue(s.evidence_sealed)
         self.assertTrue(s.evidence_reproducible)
         self.assertEqual(s.status, "SCREENING_COMPLETE")
 
@@ -534,7 +537,9 @@ class TestDictamenEvidencia(unittest.TestCase):
     def test_declara_conteo_y_cadena_de_evidencia(self):
         self.assertIn("09.3 evidencia de las consultas", self.txt)
         self.assertIn("envelopes de evidencia creados", self.txt)
-        self.assertIn("cadena hmac sellada", self.txt)
+        self.assertIn("evidencia sellada", self.txt)
+        self.assertIn("sellada", self.txt)
+        self.assertIn("reproducible con lo registrado", self.txt)
 
     def test_declara_cobertura(self):
         self.assertIn("cobertura completa", self.txt)

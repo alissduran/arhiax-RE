@@ -138,6 +138,9 @@ class SanctionsSnapshot:
     acquisition_status: str = SNAP_OPERATIVA
     freshness: str = NO_SNAPSHOT
     error: Optional[str] = None
+    # 03S.1B-6: el refresco FALLIDO se declara aparte. La frescura describe la
+    # EDAD del snapshot, no el éxito/fracaso del intento deactualizarlo.
+    refresh_error: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -148,6 +151,7 @@ class SanctionsSnapshot:
             "parser_version": self.parser_version,
             "acquisition_status": self.acquisition_status,
             "freshness": self.freshness, "error": self.error,
+            "refresh_error": self.refresh_error,
         }
 
 
@@ -317,11 +321,12 @@ class ScreeningSummary:
     executed_at: str = ""
     algorithm_version: str = ""
     scope_note: str = ""
-    # Evidencia (§ 03S.1A-2): el conteo debe cuadrar con los outcomes.
+    # Evidencia (§ 03S.1A-2 / 03S.1B-7/8): el conteo debe cuadrar con los outcomes.
     evidence_records: Tuple[Dict[str, Any], ...] = ()
     evidence_expected_count: int = 0
     evidence_created_count: int = 0
     evidence_chain_status: str = CHAIN_NOT_REQUIRED_DEV
+    evidence_errors: Tuple[Dict[str, Any], ...] = ()
     extra: Dict[str, Any] = field(default_factory=dict)
 
     # ── Consumidores (una sola verdad) ───────────────────────────────────────
@@ -371,15 +376,34 @@ class ScreeningSummary:
 
     @property
     def evidence_complete(self) -> bool:
-        """¿Hay evidencia por cada consulta esperada?"""
-        return (self.evidence_created_count == self.evidence_expected_count
-                and self.evidence_expected_count > 0)
+        """¿Hay un envelope por CADA consulta esperada? (conteo, sin más)."""
+        return (self.evidence_expected_count > 0
+                and self.evidence_created_count == self.evidence_expected_count)
+
+    @property
+    def evidence_sealed(self) -> bool:
+        """¿La cadena HMAC quedó SELLADA en esta ejecución?
+
+        03S.1B-7: `NOT_REQUIRED_DEV` NUNCA cuenta como sellado.
+        """
+        return self.evidence_chain_status == CHAIN_SEALED
 
     @property
     def evidence_reproducible(self) -> bool:
-        """¿Puede afirmarse que la evidencia está sellada y es reproducible?"""
-        return self.evidence_complete and self.evidence_chain_status in (
-            CHAIN_SEALED, CHAIN_NOT_REQUIRED_DEV)
+        """¿La consulta puede reproducirse con lo registrado?
+
+        03S.1B-7: exige los envelopes COMPLETOS y los hashes presentes
+        (snapshot + query + evidence). NO exige que la cadena esté sellada: en
+        desarrollo (`NOT_REQUIRED_DEV`) la evidencia es reproducible pero NO está
+        sellada, y así se declara.
+        """
+        if not self.evidence_complete:
+            return False
+        for e in self.evidence_records:
+            if not (e.get("query_hash") and e.get("evidence_hash")
+                    and e.get("snapshot_sha256") and e.get("subject_hash")):
+                return False
+        return True
 
     @property
     def hay_coincidencia(self) -> bool:
@@ -428,7 +452,9 @@ class ScreeningSummary:
             "evidence_expected_count": self.evidence_expected_count,
             "evidence_created_count": self.evidence_created_count,
             "evidence_chain_status": self.evidence_chain_status,
+            "evidence_errors": [dict(e) for e in self.evidence_errors],
             "evidence_complete": self.evidence_complete,
+            "evidence_sealed": self.evidence_sealed,
             "evidence_reproducible": self.evidence_reproducible,
             "extra": dict(self.extra),
         }

@@ -102,7 +102,8 @@ def adquirir_fuente(
             _fresh = evaluar_frescura(snap, ttl_segundos=ttl_segundos,
                                       permitir_stale=permitir_stale)
             if _fresh == FRESH_CACHED and snap.acquisition_status == SNAP_OPERATIVA:
-                return (_reemplazar(snap, freshness=_fresh, error=None), regs)
+                return (_reemplazar(snap, freshness=_fresh, error=None,
+                                    refresh_error=None), regs)
             # Vencido: el TTL manda refrescar. Si el refresco no es posible, el
             # paso 3 sirve este mismo snapshot como STALE_*. 
 
@@ -128,13 +129,22 @@ def adquirir_fuente(
     else:
         error = "descarga deshabilitada en esta ejecución (modo offline)"
 
-    # 3) Snapshot vencido (la evidencia no se destruye; se declara su frescura).
+    # 3) Fallback al snapshot del store. 03S.1B-6: la frescura describe la EDAD
+    #    del snapshot, NO el resultado del refresco: se vuelve a evaluar la
+    #    frescura real y se aplica la política. Un refresco fallido sobre una
+    #    caché VIGENTE sigue siendo CACHED_FRESH (y el fallo se declara aparte en
+    #    `refresh_error`).
     guardado = store.ultimo(source_id)
     if guardado is not None:
         snap, regs = guardado
-        fresh = STALE_ALLOWED if permitir_stale else STALE_NOT_ALLOWED
-        snap = _reemplazar(snap, freshness=fresh, error=error)
-        return snap, (regs if permitir_stale else [])
+        fresh = evaluar_frescura(snap, ttl_segundos=ttl_segundos,
+                                 permitir_stale=permitir_stale)
+        _usable = (fresh != STALE_NOT_ALLOWED
+                   and snap.acquisition_status == SNAP_OPERATIVA)
+        snap = _reemplazar(snap, freshness=fresh, error=None,
+                           # Solo se declara lo que REALMENTE se intentó y falló.
+                           refresh_error=((error or None) if permitir_descarga else None))
+        return snap, (regs if _usable else [])
 
     # 4) Sin dato alguno: se declara la no disponibilidad (nunca lista vacía).
     return (error_snapshot(source_id, src.authority, url, error,

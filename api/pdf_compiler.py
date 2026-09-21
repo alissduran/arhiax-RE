@@ -3075,6 +3075,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         ]))
         story.append(_t_prov)
         story.append(Spacer(1, 4))
+        # 03S.1B-6: un refresco fallido se declara (la frescura describe la EDAD).
+        _refrescos = (_summary.extra or {}).get("refresh_errors") or {}
+        if _refrescos:
+            story.append(alert_orange(
+                "<b>Refresco de fuentes no completado:</b> "
+                + "; ".join(f"{sigla(s)}: {e}" for s, e in _refrescos.items())
+                + ". Se usó el snapshot oficial versionado indicado arriba (su frescura "
+                  "corresponde a la fecha de obtención, no al intento de actualización)."))
         story.append(body(
             "<b>Algoritmo de cotejo:</b> " + (_summary.algorithm_version or "—")
             + " · <b>Umbrales:</b> nombre exacto + atributo corroborante = coincidencia; "
@@ -3082,26 +3090,39 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "<b>Un cotejo solo por nombre difuso nunca confirma una coincidencia.</b>"))
         story.append(Spacer(1, 4))
 
-        # 09.3 Evidencia (§ 03S.1A-2): conteo y estado de la cadena, siempre.
+        # 09.3 Evidencia (§ 03S.1A-2 / 03S.1B-7): conteo, sellado y reproducibilidad.
         story.append(sub("09.3 Evidencia de las consultas"))
         _chain = _summary.evidence_chain_status
         _chain_txt = {
-            "SEALED": "cadena HMAC sellada (verificada)",
-            "FAILED": "CADENA FALLIDA — la evidencia NO pudo sellarse",
-            "NOT_REQUIRED_DEV": "sellado no exigido en este entorno (desarrollo/pruebas)",
-        }.get(_chain, str(_chain or "no declarado"))
+            "SEALED": "SELLADA — cadena HMAC verificada",
+            "FAILED": "NO SELLADA — la cadena HMAC falló",
+            "NOT_REQUIRED_DEV": "NO SELLADA — el sellado no se exige en este entorno "
+                                "(desarrollo/pruebas)",
+        }.get(_chain, f"NO SELLADA — estado '{_chain or 'no declarado'}'")
         story.append(dt([
             ("Consultas de sujeto × fuente esperadas", str(_summary.evidence_expected_count)),
             ("Envelopes de evidencia creados", str(_summary.evidence_created_count)),
+            ("Evidencia sellada", "SÍ" if _summary.evidence_sealed else "NO"),
+            ("Reproducible con lo registrado",
+             "SÍ" if _summary.evidence_reproducible else "NO"),
             ("Estado de la cadena de evidencia", _chain_txt),
         ]))
-        if _chain == "FAILED":
+        if _summary.evidence_errors:
+            _errs = "; ".join(
+                f"{e.get('subject_id')}×{e.get('source_id')}: {e.get('error')}"
+                for e in _summary.evidence_errors[:3])
+            story.append(alert_orange(
+                "<b>EVIDENCIA INCOMPLETA:</b> "
+                f"{len(_summary.evidence_errors)} envelope(s) no se pudieron crear "
+                f"({_errs}). Los envelopes restantes SÍ se generaron y se conservan; "
+                "la cadena no se declara sellada."))
+        elif _chain == "FAILED":
             story.append(alert_orange(
                 "<b>EVIDENCIA NO SELLADA:</b> los envelopes de evidencia existen, pero la "
                 "cadena de integridad no pudo verificarse ("
                 + str((_summary.extra or {}).get("evidence_chain_error") or "error no detallado")
-                + "). El dictamen NO afirma evidencia sellada ni reproducible; en producción "
-                "el screening no se declara completo en este estado."))
+                + "). El dictamen NO afirma evidencia sellada; en producción el screening "
+                "no se declara completo en este estado."))
         elif not _summary.evidence_complete:
             story.append(alert_orange(
                 "<b>EVIDENCIA INCOMPLETA:</b> se esperaban "

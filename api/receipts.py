@@ -160,6 +160,10 @@ def _screening_receipt(titulux: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         "evidence_expected": _sum.get("evidence_expected_count"),
         "evidence_created": _sum.get("evidence_created_count"),
         "evidence_chain_status": _sum.get("evidence_chain_status"),
+        "evidence_errors": list(_sum.get("evidence_errors") or []),
+        "evidence_sealed": bool(_sum.get("evidence_sealed")
+                                if _sum.get("evidence_sealed") is not None
+                                else _sum.get("evidence_chain_status") == "SEALED"),
         "evidence_reproducible": bool(_sum.get("evidence_reproducible")),
         "fuentes": [{
             "source_id": sid, "sigla": sid,

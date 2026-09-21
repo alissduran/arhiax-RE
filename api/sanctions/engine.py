@@ -140,23 +140,31 @@ def ejecutar_screening(
                   and o.result not in (RESULT_NOT_SCREENED, RESULT_SOURCE_UNAVAILABLE)}
     _cobertura_completa = bool(_esperados) and _cubiertos == _esperados
 
-    # 6) Evidencia: SIEMPRE un registro por outcome sujeto×fuente (§ 03S.1A-2).
+    # 6) Evidencia: SIEMPRE un registro por outcome sujeto×fuente (§ 03S.1A-2),
+    #    con aislamiento POR OUTCOME (§ 03S.1B-8): el fallo de uno NO impide
+    #    crear los demás; el fallo se registra en `evidence_errors`.
     _evidencias = []
-    _evidence_error = None
-    try:
-        for env in envelopes:
-            for out in [o for o in outcomes if o.subject_id == env.subject_id]:
+    _evidence_errors = []
+    for env in envelopes:
+        for out in [o for o in outcomes if o.subject_id == env.subject_id]:
+            try:
                 _evidencias.append(build_evidence(env, out))
-    except Exception as e:  # noqa: BLE001
-        _evidence_error = f"{type(e).__name__}: {str(e)[:160]}"
+            except Exception as e:  # noqa: BLE001
+                _evidence_errors.append({
+                    "subject_id": env.subject_id, "source_id": out.source_id,
+                    "error": f"{type(e).__name__}: {str(e)[:160]}"})
+    _evidence_error = (_evidence_errors[0]["error"] if _evidence_errors else None)
 
     # 7) Cadena HMAC: se intenta y se DECLARA su estado (nunca en silencio).
+    #    Si faltan envelopes, la cadena NO puede declararse sellada.
     _chain_status = CHAIN_NOT_REQUIRED_DEV
     _chain_error = None
     if encadenar_evidencia:
         try:
-            if _evidence_error:
-                raise RuntimeError(_evidence_error)
+            if _evidence_errors:
+                raise RuntimeError(
+                    f"{len(_evidence_errors)} envelope(s) de evidencia no se "
+                    f"pudieron crear: {_evidence_error}")
             _eventos = encadenar_eventos(tuple(e.to_dict() for e in _evidencias), agent_id)
             if _eventos and verificar_cadena(_eventos):
                 _chain_status = CHAIN_SEALED
@@ -196,6 +204,7 @@ def ejecutar_screening(
         evidence_expected_count=len(outcomes),
         evidence_created_count=len(_evidencias),
         evidence_chain_status=_chain_status,
+        evidence_errors=tuple(_evidence_errors),
         extra={
             "cobertura": cobertura_declarada([d.source_id for d in defs]),
             "cobertura_completa": _cobertura_completa,
@@ -205,6 +214,8 @@ def ejecutar_screening(
                 f"{sid}|{src}" for sid, src in (_esperados - _cubiertos)),
             "evidence_error": _evidence_error,
             "evidence_chain_error": _chain_error,
+            "refresh_errors": {s: snapshots[s].refresh_error for s in sorted(snapshots)
+                               if getattr(snapshots[s], "refresh_error", None)},
             "en_vivo": [s for s in sorted(snapshots)
                         if es_en_vivo(snapshots[s])],
             "desde_snapshot": [s for s in sorted(snapshots) if es_cache(snapshots[s])],
@@ -397,7 +408,8 @@ def summary_desde_dict(d: Optional[Dict[str, Any]]) -> Optional[ScreeningSummary
                 record_count=int(x.get("record_count") or 0),
                 parser_version=x.get("parser_version", "") or "",
                 acquisition_status=x.get("acquisition_status", SNAP_OPERATIVA),
-                freshness=x.get("freshness", ""), error=x.get("error"))
+                freshness=x.get("freshness", ""), error=x.get("error"),
+                refresh_error=x.get("refresh_error"))
 
         return ScreeningSummary(
             status=d.get("status", SCREENING_NOT_EXECUTED),
@@ -420,6 +432,7 @@ def summary_desde_dict(d: Optional[Dict[str, Any]]) -> Optional[ScreeningSummary
             evidence_expected_count=int(d.get("evidence_expected_count") or 0),
             evidence_created_count=int(d.get("evidence_created_count") or 0),
             evidence_chain_status=d.get("evidence_chain_status", CHAIN_NOT_REQUIRED_DEV),
+            evidence_errors=tuple(d.get("evidence_errors") or ()),
             extra=dict(d.get("extra") or {}))
     except Exception:  # noqa: BLE001
         return None
