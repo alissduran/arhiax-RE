@@ -111,7 +111,23 @@ def altura_permitida(ciudad, ent2):
     return None, "texto", am
 
 
-def filas_edificabilidad(ciudad, ent2, pisos_construidos):
+def _texto_pisos_construidos(pisos_construidos, construction_status=None):
+    """03H.2: distinguir 'sin construcción' (NO_MATCH) de 'fuente no disponible'."""
+    pisos_ok = _parse_pisos(pisos_construidos)
+    if pisos_ok:
+        return "{} piso(s)".format(pisos_ok)
+    if construction_status == "SOURCE_UNAVAILABLE":
+        return ("PENDIENTE — fuente de construcción no disponible en esta "
+                "ejecución.")
+    if construction_status == "NOT_EVALUATED":
+        return "PENDIENTE DE VERIFICACIÓN (capa de construcción no consultada)"
+    if construction_status == "NO_MATCH":
+        return ("N/D — capa de construcción consultada sin edificación "
+                "registrada en el punto")
+    return "PENDIENTE DE VERIFICACIÓN"
+
+
+def filas_edificabilidad(ciudad, ent2, pisos_construidos, construction_status=None):
     """Filas (label, valor) para la tabla 'Edificabilidad y Altura Máxima'."""
     e = ent2 or {}
     ciudad = (ciudad or "barranquilla").lower().strip()
@@ -156,26 +172,36 @@ def filas_edificabilidad(ciudad, ent2, pisos_construidos):
 
     # Pisos construidos (catastro) — común a todas las ciudades
     filas.append(("Pisos construidos (catastro)",
-                  "{} piso(s)".format(pisos_ok) if pisos_ok else
-                  "N/D -- sin pisos registrados en catastro (posible lote sin edificacion)"))
+                  _texto_pisos_construidos(pisos_construidos, construction_status)))
 
     # Confrontación construido vs. permitido
-    estado, texto = _confrontacion(ciudad, e, pisos_construidos)
+    estado, texto = _confrontacion(ciudad, e, pisos_construidos, construction_status)
     filas.append(("Confrontación (construido vs. norma)", texto))
     return filas
 
 
-def _confrontacion(ciudad, ent2, pisos_construidos):
+def _confrontacion(ciudad, ent2, pisos_construidos, construction_status=None):
     """Compara pisos construidos con la altura permitida.
 
     Devuelve (estado, texto): estado en
-    'exceso' | 'dentro' | 'pendiente' | 'sin_construccion' | 'sin_norma'."""
+    'exceso' | 'dentro' | 'pendiente' | 'pendiente_fuente' | 'sin_construccion'
+    | 'sin_norma'."""
     permitido, tipo, _ = altura_permitida(ciudad, ent2)
     construidos = _parse_pisos(pisos_construidos)
     if construidos is None:
+        if construction_status == "SOURCE_UNAVAILABLE":
+            return "pendiente_fuente", (
+                "No se compara: la fuente de construcción (capa catastral) no "
+                "estuvo disponible en esta ejecución.")
+        if construction_status in ("NOT_EVALUATED", None):
+            return "pendiente", (
+                "No se compara: la capa de construcción no se consultó en esta "
+                "ejecución.")
+        # NO_MATCH: la capa respondió y no hay edificación registrada.
         return "sin_construccion", (
-            "PENDIENTE: catastro sin pisos registrados (aplica la norma para "
-            "desarrollo nuevo según la altura permitida)")
+            "PENDIENTE: la capa de construcción respondió sin edificación "
+            "registrada en el punto (aplica la norma para desarrollo nuevo según "
+            "la altura permitida)")
     if permitido is None:
         if tipo == "ficha_upz":
             return "pendiente", (

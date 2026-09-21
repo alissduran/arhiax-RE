@@ -589,6 +589,9 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     _predio_area_catastral = None
     _ent2 = {}
     _predio_tratamiento = None
+    # 03H.2: estado de la capa de construcción (NO confundir NO_MATCH con
+    # SOURCE_UNAVAILABLE -> evita el falso "posible lote sin edificación").
+    _construction_status = "NOT_EVALUATED"
     if predio_real:
         _p = predio_real.get("predio") or {}
         _ent2 = predio_real.get("entorno") or {}
@@ -634,10 +637,36 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _const_bog = predio_real.get("construccion") or {}
             _predio_tipo_construccion = _const_bog.get("tipo_construccion")
             _predio_pisos = _const_bog.get("total_pisos")
+        # 03H.2: estado explícito de la capa de construcción.
+        _constr_st = predio_real.get("construccion") or predio_real.get("lote") or {}
+        _construction_status = _constr_st.get("construction_status") or (
+            "AVAILABLE" if (_predio_pisos or _predio_tipo_construccion)
+            else "NO_MATCH")
     else:
         _predio_tratamiento = None
         _predio_codigo_barrio = None
         _predio_comuna = None
+        # ── 03H.2: destino/condición DESACOPLADOS de la capa 500 ──────────────
+        # Aunque el predio no se haya resuelto en la capa 500, el servicio
+        # temático puede responder por identificador EXACTO (o por punto).
+        # No perder el dato catastral por depender de una sola capa.
+        _cod_cd = (analysis.get("codigo_catastral") or analysis.get("nupre"))
+        if _cod_cd and not es_bogota and not es_pasto and not es_medellin:
+            try:
+                from catastro_predio import consultar_condicion_destino
+                _res_cd = consultar_condicion_destino(
+                    codigo_catastral=_cod_cd,
+                    lat=_lat_geo, lon=_lon_geo)
+                if _res_cd.get("condicion_juridica"):
+                    _predio_condicion = _res_cd["condicion_juridica"]
+                if _res_cd.get("destino_vigente"):
+                    _predio_destino = _res_cd["destino_vigente"]
+                _cond_dest_method = _res_cd.get("resolution_method")
+                print(f"[PDF][CONDICION-DESTINO] sin capa 500: "
+                      f"metodo={_cond_dest_method} destino={_predio_destino!r} "
+                      f"condicion={_predio_condicion!r}")
+            except Exception as _e_cd:
+                print(f"[PDF][CONDICION-DESTINO] no disponible: {_e_cd}")
 
     # Condición jurídica (PH / No PH): el catastro solo la publica en
     # Barranquilla; para Medellín/Bogotá (y BAQ sin servicio) se infiere del
@@ -1563,7 +1592,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     _filas_localizacion = [
         ("Coordenadas WGS84", f"Lat: {lat:.5f} N | Lon: {lon:.5f} W"),
         ("Sector urbano", f"{_NOMBRE_CIUDAD} / {barrio}" if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else f"{_NOMBRE_CIUDAD} (sector por verificar)"),
-        ("Barrio catastral", barrio if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else "PENDIENTE DE VERIFICACION"),
+        ("Barrio / sector oficial", barrio if barrio and barrio != "PENDIENTE DE VERIFICACION CATASTRAL" else "PENDIENTE DE VERIFICACION"),
         ("Comuna/Localidad", _localidad_txt if _localidad_txt else "N/D"),
     ]
     if es_bogota and _ent2.get("upz"):
@@ -1979,6 +2008,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "<b>[FUENTE: CAPAS POT BARRANQUILLA - MODULO ARHIAX RE]</b>"))
     story.append(Spacer(1, 4))
     story.append(sub("6.1 Datos Catastrales"))
+    # 03H.2: 6.1 consume el estrato VERIFICADO del contexto (oficial o
+    # catastro vivo), no un default legacy.
+    _estrato_61 = (_mc_estrato if _mc_estrato_status == _STATUS_VERIFIED_OFFICIAL
+                   else _predio_estrato_catastral)
     story.append(dt(get_catastral_dt(
         barrio, area,
         destino_economico=_predio_destino,
@@ -1988,7 +2021,7 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         area_catastral=_predio_area_catastral,
         tipo_construccion=_predio_tipo_construccion,
         pisos=_predio_pisos,
-        estrato=_predio_estrato_catastral,
+        estrato=_estrato_61,
         ciudad=ciudad,
     )))
     story.append(Spacer(1, 4))
@@ -2198,14 +2231,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                                     fuente_norma_texto, link_oficial,
                                     _confrontacion, confrontacion_con_licencia)
         story.append(sub("6.3 Edificabilidad y Altura Maxima (Norma Urbanistica)"))
-        _filas_edi = filas_edificabilidad(ciudad, _ent2, _predio_pisos)
+        _filas_edi = filas_edificabilidad(ciudad, _ent2, _predio_pisos,
+                                          construction_status=_construction_status)
         story.append(dt(_filas_edi))
         story.append(Spacer(1, 3))
         # Confrontación: con licencia identificada se prioriza lo licenciado
         _est_edi, _txt_edi = confrontacion_con_licencia(ciudad, _ent2, _predio_pisos, licencia)
         _usa_lic = _est_edi != "sin_licencia"
         if _est_edi in ("sin_licencia", "licencia_sin_pisos"):
-            _est_edi, _txt_edi = _confrontacion(ciudad, _ent2, _predio_pisos)
+            _est_edi, _txt_edi = _confrontacion(ciudad, _ent2, _predio_pisos,
+                                                _construction_status)
         if _est_edi in ("exceso", "exceso_licencia"):
             story.append(alert_red(
                 f"<b>{_txt_edi.rstrip('.')}.</b> Requiere verificacion de la "

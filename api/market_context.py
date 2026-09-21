@@ -416,9 +416,15 @@ def resolve_official_urban_context(*, ciudad: str, lat, lon,
     """
     out: Dict[str, Any] = {
         "barrio": None, "barrio_status": STATUS_UNRESOLVED,
+        "localidad": None,
         "estrato": None, "estrato_status": STATUS_UNRESOLVED,
         "tratamiento": None, "tratamiento_status": STATUS_UNRESOLVED,
-        "context_status": None, "campos_ambiguos": [], "source": None,
+        "tipo_tratamiento": None,
+        "altura_maxima": None, "altura_status": STATUS_UNRESOLVED,
+        "pieza_urbana": None,
+        "codigo_manzana": None,
+        "context_status": None, "campos_ambiguos": [],
+        "source": None, "coordinate_source": coordinate_source,
     }
 
     if not coordinate_source_verified(coordinate_source):
@@ -458,11 +464,16 @@ def resolve_official_urban_context(*, ciudad: str, lat, lon,
         amb = {"barrio", "estrato", "tratamiento"}
     out["campos_ambiguos"] = sorted(amb)
 
+    # 03H.2: conservar TODOS los atributos devueltos (no descartar riqueza).
     if r.get("barrio") and "barrio" not in amb:
         out["barrio"] = r["barrio"]
         out["barrio_status"] = STATUS_VERIFIED_OFFICIAL
     elif "barrio" in amb:
         out["barrio_status"] = STATUS_CONFLICT
+
+    out["localidad"] = r.get("localidad")
+    out["pieza_urbana"] = r.get("pieza_urbana")
+    out["codigo_manzana"] = r.get("codigo_manzana")
 
     if r.get("estrato") not in (None, "") and "estrato" not in amb:
         out["estrato"] = r["estrato"]
@@ -475,6 +486,14 @@ def resolve_official_urban_context(*, ciudad: str, lat, lon,
         out["tratamiento_status"] = STATUS_VERIFIED_OFFICIAL
     elif "tratamiento" in amb:
         out["tratamiento_status"] = STATUS_CONFLICT
+    out["tipo_tratamiento"] = r.get("tipo_tratamiento")
+
+    # Altura normativa (misma capa que tratamiento: se propaga, no se hardcodea).
+    if r.get("altura_maxima") not in (None, "") and "tratamiento" not in amb:
+        out["altura_maxima"] = r["altura_maxima"]
+        out["altura_status"] = STATUS_VERIFIED_OFFICIAL
+    elif "tratamiento" in amb:
+        out["altura_status"] = STATUS_CONFLICT
 
     out["context_status"] = ("AMBIGUOUS_CONTEXT" if amb else "OK")
     return out

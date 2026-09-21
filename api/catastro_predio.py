@@ -431,10 +431,15 @@ def consultar_construccion(lat: float, lon: float) -> dict[str, Any]:
         return cached
     res = {"disponible": False, "error": "sin construcción", "tipo_construccion": None,
            "total_pisos": None, "altura_total_construccion": None, "area_construida": None,
-           "resolution_method": "spatial"}
+           "resolution_method": "spatial",
+           # 03H.2: NO confundir "no hay construcción" con "la fuente no respondió".
+           "construction_status": "NOT_EVALUATED", "source_disponible": False,
+           "source_error": None}
     r = _query_punto(BASE_CATASTRO, CAPA_CONSTRUCCION, lon, lat,
                      "tipo_construccion,total_pisos,total_sotanos,total_mezanines,total_semisotanos,"
                      "altura_total_construccion,st_area(shape),local_id,estado_construccion")
+    res["source_disponible"] = bool(r.get("disponible"))
+    res["source_error"] = r.get("error")
     if r.get("features"):
         p = r["features"][0].get("properties", {})
         res.update({
@@ -445,7 +450,13 @@ def consultar_construccion(lat: float, lon: float) -> dict[str, Any]:
             "altura_total_construccion": p.get("altura_total_construccion"),
             "area_construida": p.get("st_area(shape)"),
             "estado_construccion": p.get("estado_construccion"),
+            "construction_status": "AVAILABLE",
         })
+    else:
+        # La capa respondió (HTTP 200) sin construcción -> NO_MATCH real; si no
+        # respondió -> SOURCE_UNAVAILABLE (NO es "posible lote sin edificación").
+        res["construction_status"] = ("NO_MATCH" if res["source_disponible"]
+                                      else "SOURCE_UNAVAILABLE")
     _cache_set(cache_key, res)
     return res
 

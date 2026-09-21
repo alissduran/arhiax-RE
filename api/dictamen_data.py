@@ -395,7 +395,7 @@ def get_localizacion_dt(barrio, lat, lon):
     return [
         ("Coordenadas WGS84", f"Lat: {lat:.5f} N | Lon: {lon:.5f} W"),
         ("Sector urbano", f"Perímetro Urbano Barranquilla / {barrio_clean}"),
-        ("Barrio catastral", barrio_clean),
+        ("Barrio / sector oficial", barrio_clean),
         ("Infraestructura vial", "Malla vial urbana y corredores de conectividad inmediata"),
         ("Equipamientos cercanos", "Equipamientos institucionales, comerciales y asistenciales en radio 2.0 km"),
     ]
@@ -652,27 +652,32 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
         constr_txt = "PENDIENTE DE VERIFICACION"
     else:
         constr_txt = "Pendiente de verificacion"
-    # Estrato: la AUSENCIA del dato NO implica uso no residencial. Antes, sin
-    # estrato se imprimia "No aplica (uso no residencial)" aunque el predio fuera
-    # residencial (contradiciendo al area de actividad). Ahora solo se afirma "no
-    # aplica" cuando el destino declarado es efectivamente no residencial.
+    # 03H.2 — Estrato: la AUSENCIA del dato NO implica uso no residencial.
+    #   estrato=None + destino=None            -> PENDIENTE DE VERIFICACIÓN
+    #   destino=Habitacional + estrato=None    -> PENDIENTE (uso residencial
+    #                                             confirmado; estrato no resuelto)
+    #   destino exclusivamente no residencial   -> "No aplica (uso no residencial
+    #                                             declarado)"
+    # Nunca se afirma "no aplica" sin evidencia explícita de un destino no
+    # residencial declarado.
     if estrato not in (None, "", "No_Aplica"):
         estrato_txt = estrato
     else:
         _dest_up = str(destino_economico or "").upper()
-        # OJO: un uso MIXTO ("residencial, comercial y de servicios") SIGUE siendo
-        # residencial para efectos de estrato. Antes bastaba encontrar "COMERCIAL"
-        # para declararlo no residencial, lo que contradecia al propio destino.
-        _es_resid = "RESIDENCIAL" in _dest_up or "VIVIENDA" in _dest_up
+        # Un uso MIXTO ("residencial, comercial y de servicios") SIGUE siendo
+        # residencial para efectos de estrato.
+        _es_resid = any(k in _dest_up for k in ("RESIDENCIAL", "VIVIENDA",
+                                                "HABITACIONAL"))
         _no_resid = (not _es_resid) and any(
             k in _dest_up for k in ("INDUSTRIAL", "BODEGA", "COMERCIAL", "OFICINA",
                                     "LOTE", "GARAJE"))
         if _no_resid:
             estrato_txt = "No aplica (uso no residencial declarado)"
-        elif es_pas:
-            estrato_txt = "PENDIENTE DE VERIFICACION"
+        elif _es_resid:
+            estrato_txt = ("PENDIENTE — uso residencial confirmado; estrato no "
+                           "resuelto")
         else:
-            estrato_txt = "No aplica (uso no residencial)"
+            estrato_txt = "PENDIENTE DE VERIFICACIÓN"
     # Regresión (CTL real 040-646406): 'Área Registrada' es el área PRIVADA del
     # inmueble que declara el CTL (apartamento 430: 58.75 m2). El área de TERRENO
     # catastral (22.05 m2 del lote) NO es el área del apartamento: mostrarla como
@@ -680,7 +685,9 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
     area_reg_txt = f"{area:.2f} m2" if area else "Pendiente de verificación (requiere el área del CTL)"
     return [
         ("Area Registrada", area_reg_txt),
-        ("Barrio catastral", barrio_clean),
+        # 03H.2: el barrio proviene de la capa oficial POT/unidades
+        # administrativas; "Barrio / sector oficial" es la etiqueta honesta.
+        ("Barrio / sector oficial", barrio_clean),
         ("NUPRE", nupre if nupre else f"Pendiente de consulta {gc_sigla}"),
         ("Codigo catastral", codigo_catastral if codigo_catastral else f"Pendiente de consulta {gc_sigla}"),
         ("Destino economico catastral", destino_txt),
