@@ -7,6 +7,21 @@ Standard»), adoptado con un desvío explícito: **radio 0px** (el prototipo Sti
 Principio rector: **funcionalismo racional** — libro de registro notarial, folio SNR
 y docket de avalúo. Densidad alta, jerarquía tipográfica estricta, cero decoración.
 
+## 0. Marca del cliente (Igama)
+
+La interfaz es de **Igama Financiera e Inmobiliaria** y el motor es **ARHIAX RE**. La
+cabecera muestra el logo del cliente y el nombre del producto, en ese orden.
+
+- Activo oficial: public/assets/igama-logo.png (copia de trabajo en
+  ui/prototipo/assets/igama-logo.png), 192x162 px RGBA,
+  sha256 1ef7ded741f84f565be387dc37bef2013feb7a6d69ff2f492fbc6012f6587a6b.
+- Reglas: el logo **no** se recolorea, no se le aplican filtros ni sombras, no se
+  estira (altura fija, ancho automático) y va sobre superficie blanca o alabastro.
+  Alturas usadas: 56px (tarjeta de acceso), 42px (cabecera del portal), 34px
+  (consola de la interfaz nueva).
+- El rojo del logo es un acento de MARCA, no un color semántico: los cuatro estados
+  legales siguen usando exclusivamente los pares definidos en la sección 1.
+
 ## 1. Tokens
 
 Fuente única: `ui/prototipo/tokens.css`. Ninguna vista define colores literales.
