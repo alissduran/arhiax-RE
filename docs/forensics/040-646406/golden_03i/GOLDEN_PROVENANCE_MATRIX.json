@@ -1,0 +1,386 @@
+{
+ "case": "040-646406",
+ "generated_from": [
+  "GOLDEN_INTERNAL_STATE.json",
+  "GOLDEN_PDF_TEXT.txt"
+ ],
+ "facts": [
+  {
+   "fact": "folio",
+   "value": "040-646406",
+   "source": "CTL (legal_analyzer) + modelo canónico",
+   "status": "VERIFIED_REGISTRAL",
+   "method": "extracción del CTL",
+   "version": "legal_analyzer",
+   "chapters": [
+    "01",
+    "05",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "codigo_catastral",
+   "value": "080010103000010040001908040002",
+   "source": "CTL (CODIGO CATASTRAL)",
+   "status": "VERIFIED_REGISTRAL",
+   "method": "identificador exacto del CTL",
+   "version": "canonical/03D.1",
+   "chapters": [
+    "01",
+    "06.1",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "nupre",
+   "value": "AFT0005BOHA",
+   "source": "CTL (NUPRE)",
+   "status": "VERIFIED_REGISTRAL",
+   "method": "identificador exacto del CTL",
+   "version": "canonical/03D.1",
+   "chapters": [
+    "01",
+    "06.1",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "identidad_autorizada",
+   "value": true,
+   "source": "Registro oficial de adopción catastral (Anexo 1, Res. GGCD 003)",
+   "status": "VERIFIED_UNIT_IDENTITY",
+   "method": "official_adoption_registry",
+   "version": "03G.1",
+   "chapters": [
+    "01",
+    "05",
+    "06",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "direccion",
+   "value": "TV 43 # 100 - 50 TO 8 AP 430 (impresa en 01)",
+   "source": "record del caso (registro oficial de adopción) — el CTL disponible no trae bloque DIRECCION",
+   "status": "VERIFIED_OFFICIAL (registro)",
+   "method": "address_normalizer + impresión",
+   "version": "03D/03H.2",
+   "chapters": [
+    "01",
+    "02"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "direccion_canonica_interna",
+   "value": "Pendiente de verificacion",
+   "source": "modelo canónico (NO toma la dirección del registro de adopción)",
+   "status": "PENDIENTE",
+   "method": "—",
+   "version": "canonical",
+   "chapters": [
+    "(interno)"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "unidad_torre_apartamento",
+   "value": "torre=None ap=None unidad=None",
+   "source": "modelo canónico (extracción de unidad del CTL)",
+   "status": "NO EXTRAÍDA",
+   "method": "—",
+   "version": "03D.2 unidad PH",
+   "chapters": [
+    "(interno)",
+    "09 (rol)"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "area_registrada",
+   "value": 58.75,
+   "source": "CTL real vía index.extraer_datos_de_pdf",
+   "status": "VERIFIED_REGISTRAL",
+   "method": "regex AREA PRIVADA metros+centímetros",
+   "version": "index",
+   "chapters": [
+    "01",
+    "06.1",
+    "07",
+    "05(Titulux)"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "barrio",
+   "value": "Miramar",
+   "source": "official POT / Alcaldía",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "capa POT unidadesadministrativas (punto geocodificado)",
+   "version": "03H.1A",
+   "chapters": [
+    "01",
+    "02",
+    "06.1",
+    "06.2",
+    "07",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "localidad",
+   "value": "02",
+   "source": "capa unidadesadministrativas (campo localidad)",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "consolidación",
+   "version": "03H.2",
+   "chapters": [
+    "02",
+    "06.2"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "estrato",
+   "value": null,
+   "source": null,
+   "status": "UNRESOLVED",
+   "method": "capa estratificación (0 features en el punto)",
+   "version": "03H.1A",
+   "chapters": [
+    "06.1",
+    "07"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "destino_economico",
+   "value": "PENDIENTE",
+   "source": "capa 500 / servicio destinoseconomicos",
+   "status": "SOURCE_UNAVAILABLE / UNRESOLVED",
+   "method": "identificador exacto + contexto espacial",
+   "version": "03H.2A",
+   "chapters": [
+    "06.1",
+    "07(uso)"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "condicion_juridica",
+   "value": null,
+   "source": "CTL (inferencia registral)",
+   "status": "VERIFIED_REGISTRAL",
+   "method": "legal_analyzer.inferir_condicion_juridica",
+   "version": "03H.2A",
+   "chapters": [
+    "01",
+    "06.1"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "tratamiento_urbanistico",
+   "value": "Desarrollo",
+   "source": "official_urban_layer",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "capa planeación (punto geocodificado)",
+   "version": "03H.1A",
+   "chapters": [
+    "06.2 (tabla y resumen)",
+    "06.3"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "altura_normativa",
+   "value": "8",
+   "source": "official_urban_layer",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "capa planeación",
+   "version": "03H.1A",
+   "chapters": [
+    "06.2",
+    "06.3"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "pisos_construidos",
+   "value": "PENDIENTE (fuente de construcción no disponible)",
+   "source": "capa 310 construcción",
+   "status": "SOURCE_UNAVAILABLE",
+   "method": "consulta espacial",
+   "version": "03H.2",
+   "chapters": [
+    "06.3"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "sector_metodologico",
+   "value": "Miramar",
+   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+   "status": "EXACT",
+   "method": "resolución de sector por barrio",
+   "version": "03H",
+   "chapters": [
+    "07",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "value_m2",
+   "value": 6800000,
+   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+   "status": "EXACT",
+   "method": "sector → tasa (ÚNICA autoridad: MarketContext)",
+   "version": "03H.1A",
+   "chapters": [
+    "07"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "valuation_authorized",
+   "value": false,
+   "source": "identity_authorized AND market_context_authorized",
+   "status": "BLOCKED",
+   "method": "doble gate",
+   "version": "03H.1",
+   "chapters": [
+    "07",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "screening",
+   "value": "SCREENING_COMPLETE",
+   "source": "ScreeningSummary",
+   "status": "COVERAGE_COMPLETE",
+   "method": "sanctions-matcher/1.1.0",
+   "version": "matcher sanctions-matcher/1.1.0",
+   "chapters": [
+    "05",
+    "09",
+    "16",
+    "16.b"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "evidencia_cadena",
+   "value": "SEALED",
+   "source": "evidencia HMAC (arhia_sag_screen)",
+   "status": "9/9",
+   "method": "c73a3fee8fccce64",
+   "version": "03S.1C",
+   "chapters": [
+    "09.3",
+    "16.b"
+   ],
+   "evidence_id": "09fff1d974a4c01eb6cd198c"
+  },
+  {
+   "fact": "poi",
+   "value": "4 categorías AVAILABLE (3 ítems c/u)",
+   "source": "OpenStreetMap / Overpass (motor real)",
+   "status": "AVAILABLE",
+   "method": "consulta en radio 2 km",
+   "version": "03F",
+   "chapters": [
+    "03",
+    "16.b"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "riesgo_volcanico_sgc",
+   "value": "consultado · BAJO",
+   "source": "SGC (mapa oficial)",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "consulta al servicio SGC",
+   "version": "03H",
+   "chapters": [
+    "08.2",
+    "16.b"
+   ],
+   "evidence_id": ""
+  }
+ ],
+ "cross_checks": [
+  {
+   "check": "area registral vs TIT_B01",
+   "defecto": true,
+   "resultado": "FAIL",
+   "nota": "el capítulo 05 (TIT_B01) afirma 'no hay área registral ni catastral' mientras 6.1 declara 58.75 m² (área registral presente)"
+  },
+  {
+   "check": "tratamiento 6.2 (tabla) vs 6.2 (resumen) vs 6.3",
+   "defecto": true,
+   "resultado": "FAIL",
+   "nota": "la tabla de 6.2 y 6.3 muestran el polígono REAL (Desarrollo/Bajo/8) mientras el resumen POT de 6.2 imprime una cadena fija 'CONSOLIDACION / DESARROLLO (Según polígono POT)'"
+  },
+  {
+   "check": "estrato ausente etiquetado como uso no residencial",
+   "defecto": false,
+   "resultado": "PASS",
+   "nota": "el estrato no resuelto se declara PENDIENTE DE VERIFICACIÓN (no se afirma uso no residencial)"
+  },
+  {
+   "check": "pisos construidos: 'posible lote'/'sin edificación' indebido",
+   "defecto": false,
+   "resultado": "PASS",
+   "nota": "la fuente de construcción no disponible se declara PENDIENTE, no 'sin edificación'"
+  },
+  {
+   "check": "folio/NUPRE/código ausentes del PDF",
+   "defecto": false,
+   "resultado": "PASS",
+   "nota": "folio, NUPRE y código catastral presentes y coherentes en 01/06.1/16"
+  },
+  {
+   "check": "screening 05/09/16 con estados distintos",
+   "defecto": false,
+   "resultado": "PASS",
+   "nota": "05 (SAG_B01), 09 (estado) y 16.b coinciden en el mismo ScreeningSummary"
+  },
+  {
+   "check": "UIAF como columna/lista de screening",
+   "defecto": false,
+   "resultado": "PASS",
+   "nota": "09 usa ONU · OFAC SDN · UKSL; UIAF solo se explica como canal de reporte"
+  },
+  {
+   "check": "titular natural descrito como persona jurídica",
+   "defecto": false,
+   "resultado": "PASS",
+   "nota": "el titular natural no se describe como persona jurídica"
+  },
+  {
+   "check": "amenaza baja con severidad ALTA",
+   "defecto": true,
+   "resultado": "FAIL",
+   "nota": "DEFECTO: amenaza 'baja' con severidad ALTA (narrativa genérica, sin causa específica del caso) — §15"
+  },
+  {
+   "check": "cifra $0 como sustituto de 'desconocido'",
+   "defecto": false,
+   "resultado": "PASS",
+   "nota": "la carga no estimable no se imprime como cero"
+  },
+  {
+   "check": "tarifa de avalúo arbitraria impresa",
+   "defecto": false,
+   "resultado": "PASS",
+   "nota": "no se imprime tarifa: el costo del avalúo profesional sigue NEEDS_PRODUCT_SOURCE"
+  }
+ ]
+}
