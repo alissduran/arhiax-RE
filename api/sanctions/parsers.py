@@ -14,7 +14,24 @@ from __future__ import annotations
 import xml.etree.ElementTree as ET
 from typing import Any, List, Tuple
 
-PARSER_VERSION = "sanctions-parsers/1.1"
+PARSER_VERSION = "sanctions-parsers/1.1.0"
+
+# 03S.1C-2: versión REAL por parser. Los tres parsers cambiaron en 03S.1A al
+# conservar TODOS los identificadores oficiales, así que la versión declarada en
+# el SourceRegistry y en cada SanctionsSnapshot debe ser la de la implementación
+# que generó los registros normalizados (1.1.0), no la anterior.
+PARSER_VERSIONS = {
+    "onu_xml": "onu_xml/1.1.0",
+    "ofac_sdn_xml": "ofac_sdn_xml/1.1.0",
+    "uk_sanctions_list_xml": "uk_sanctions_list_xml/1.1.0",
+    # Parser del ConList.xml legado (solo históricos): sin cambios.
+    "uk_ofsi_legacy_xml": "uk_ofsi_legacy_xml/1.0.0",
+}
+
+
+def parser_version(parser_id: str) -> str:
+    """Versión REAL del parser indicado ('' si no está implementado)."""
+    return PARSER_VERSIONS.get(parser_id, "")
 
 # Tipos de documento normalizados (mapa de la fuente → vocabulario interno).
 _TIPO_DOC = (

@@ -3057,7 +3057,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             if _snap is None:
                 continue
             _filas_prov.append([
-                Paragraph(f"<b>{sigla(_sid)}</b><br/>{_sid}", s["body"]),
+                Paragraph(f"<b>{sigla(_sid)}</b><br/>{_sid}<br/>parser "
+                          f"{_snap.parser_version or '—'}", s["body"]),
                 Paragraph(_snap.authority or "—", s["body"]),
                 Paragraph(freshness_label(_snap.freshness), s["body"]),
                 Paragraph(_snap.effective_date or "no declarada por la fuente", s["body"]),
@@ -3106,6 +3107,11 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             ("Reproducible con lo registrado",
              "SÍ" if _summary.evidence_reproducible else "NO"),
             ("Estado de la cadena de evidencia", _chain_txt),
+            # 03S.1C: identidad de ejecución de la evidencia (versiones).
+            ("Versión del matcher", _summary.algorithm_version or "—"),
+            ("Versión del parser por fuente",
+             " · ".join(f"{sigla(s.source_id)} {s.parser_version or '—'}"
+                        for s in _summary.snapshots) or "—"),
         ]))
         if _summary.evidence_errors:
             _errs = "; ".join(

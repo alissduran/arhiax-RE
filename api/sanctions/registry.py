@@ -17,6 +17,7 @@ from .contracts import (
     ACQ_FILE, ACQ_LIVE, ACQ_OUT_OF_SCOPE, CAT_ENFORCEMENT, CAT_PEP,
     CAT_REGULATORY_REPORTING, CAT_SANCTIONS,
 )
+from .parsers import parser_version as _parser_version
 
 
 @dataclass(frozen=True)
@@ -51,7 +52,7 @@ UN_CONSOLIDATED = SourceDefinition(
     category=CAT_SANCTIONS,
     official_url="https://scsanctions.un.org/resources/xml/en/consolidated.xml",
     current_or_historical="CURRENT", formato="xml", parser="onu_xml",
-    parser_version="onu_xml/1.0",
+    parser_version=_parser_version("onu_xml"),
     acquisition_policy=ACQ_LIVE,
     refresh_policy="diaria (el feed oficial se actualiza sin aviso; se versiona por SHA-256)",
     cobertura=("Personas y entidades designadas por el Consejo de Seguridad (todas las "
@@ -65,7 +66,7 @@ OFAC_SDN = SourceDefinition(
     category=CAT_SANCTIONS,
     official_url="https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.XML",
     current_or_historical="CURRENT", formato="xml", parser="ofac_sdn_xml",
-    parser_version="ofac_sdn_xml/1.0",
+    parser_version=_parser_version("ofac_sdn_xml"),
     acquisition_policy=ACQ_LIVE,
     refresh_policy="diaria (publicación OFAC); versionado por SHA-256",
     cobertura=("Lista SDN: sancionados y bloqueados por OFAC. NO incluye las listas "
@@ -93,7 +94,7 @@ UK_SANCTIONS_LIST = SourceDefinition(
     category=CAT_SANCTIONS,
     official_url="https://sanctionslist.fcdo.gov.uk/docs/UK-Sanctions-List.xml",
     current_or_historical="CURRENT", formato="xml", parser="uk_sanctions_list_xml",
-    parser_version="uk_sanctions_list_xml/1.0",
+    parser_version=_parser_version("uk_sanctions_list_xml"),
     acquisition_policy=ACQ_LIVE,
     refresh_policy=("diaria; el listado se republica con nuevo URL de medio en gov.uk, "
                     "por lo que la URL viva del FCDO es la estable"),
@@ -110,7 +111,7 @@ UK_OFSI_CONLIST_HISTORICAL = SourceDefinition(
     category=CAT_SANCTIONS,
     official_url="https://ofsistorage.blob.core.windows.net/publishlive/2022format/ConList.xml",
     current_or_historical="HISTORICAL", formato="xml", parser="uk_ofsi_legacy_xml",
-    parser_version="uk_ofsi_legacy_xml/1.0",
+    parser_version=_parser_version("uk_ofsi_legacy_xml"),
     acquisition_policy=ACQ_FILE,
     refresh_policy="no se refresca: congelada (sustituida por UK_SANCTIONS_LIST)",
     cobertura="Solo para reproducir dictámenes históricos. PROHIBIDA como fuente vigente.",

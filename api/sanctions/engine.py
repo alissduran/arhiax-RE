@@ -238,6 +238,7 @@ def _consultar(env: SubjectEnvelope, source_id: str, snap, regs) -> SourceOutcom
             snapshot_id=getattr(snap, "snapshot_id", ""),
             snapshot_sha256=getattr(snap, "sha256", ""),
             snapshot_effective_date=getattr(snap, "effective_date", "") or "",
+            parser_version=getattr(snap, "parser_version", "") or "",
             freshness=getattr(snap, "freshness", ""))
     if not fuente_disponible(snap):
         return SourceOutcome(
@@ -248,6 +249,7 @@ def _consultar(env: SubjectEnvelope, source_id: str, snap, regs) -> SourceOutcom
             snapshot_id=getattr(snap, "snapshot_id", ""),
             snapshot_sha256=getattr(snap, "sha256", ""),
             snapshot_effective_date=getattr(snap, "effective_date", "") or "",
+            parser_version=getattr(snap, "parser_version", "") or "",
             freshness=getattr(snap, "freshness", ""))
     # 03S.1A-5: se consulta el nombre canónico Y cada variante DECLARADA por
     # separado; se agrega el resultado MÁS CONSERVADOR (nunca se fusiona la
@@ -282,6 +284,7 @@ def _consultar(env: SubjectEnvelope, source_id: str, snap, regs) -> SourceOutcom
             result=RESULT_REVIEW, note="; ".join(_motivos) or "error en la consulta",
             snapshot_id=snap.snapshot_id, snapshot_sha256=snap.sha256,
             snapshot_effective_date=snap.effective_date or "",
+            parser_version=snap.parser_version or "",
             freshness=snap.freshness, review_status="REQUIERE_REVISION")
     return SourceOutcome(
         subject_id=env.subject_id, source_id=source_id, result=_peor.result,
@@ -289,6 +292,7 @@ def _consultar(env: SubjectEnvelope, source_id: str, snap, regs) -> SourceOutcom
         matching_reasons=tuple(_motivos), snapshot_id=snap.snapshot_id,
         snapshot_sha256=snap.sha256,
         snapshot_effective_date=snap.effective_date or "",
+        parser_version=snap.parser_version or "",
         freshness=snap.freshness,
         review_status="REQUIERE_REVISION" if _peor.requiere_revision else "NO_REQUIERE",
         note="; ".join(_motivos) if _motivos else "")
@@ -394,6 +398,7 @@ def summary_desde_dict(d: Optional[Dict[str, Any]]) -> Optional[ScreeningSummary
                 snapshot_id=x.get("snapshot_id", ""),
                 snapshot_sha256=x.get("snapshot_sha256", ""),
                 snapshot_effective_date=x.get("snapshot_effective_date", "") or "",
+                parser_version=x.get("parser_version", "") or "",
                 freshness=x.get("freshness", ""),
                 review_status=x.get("review_status", "NO_REQUIERE"),
                 note=x.get("note", ""))

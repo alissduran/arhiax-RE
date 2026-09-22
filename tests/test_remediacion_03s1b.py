@@ -290,17 +290,27 @@ class TestEvidenciaSemanticaYAislamiento(unittest.TestCase):
             self.assertTrue(e["query_hash"] and e["evidence_hash"]
                             and e["snapshot_sha256"] and e["subject_hash"])
 
-    def test_reproducible_exige_los_tres_hashes(self):
+    def test_reproducible_exige_identidad_de_ejecucion(self):
+        """03S.1C-7: los hashes presentes deben incluir la identidad de ejecución
+        (screening_input + parser + matcher), no solo los cuatro antiguos."""
         from sanctions.contracts import ScreeningSummary
         base = dict(evidence_created_count=1, evidence_expected_count=1,
                     evidence_chain_status="NOT_REQUIRED_DEV")
-        ok = ScreeningSummary(evidence_records=(
-            {"query_hash": "q", "evidence_hash": "e", "snapshot_sha256": "s",
-             "subject_hash": "h"},), **base)
+        _solo_cuatro = {"query_hash": "q", "evidence_hash": "e",
+                        "snapshot_sha256": "s", "subject_hash": "h"}
+        # Los cuatro hashes antiguos YA NO bastan.
+        self.assertFalse(ScreeningSummary(evidence_records=(dict(_solo_cuatro),),
+                                          **base).evidence_reproducible)
+        # Con la identidad de ejecución completa sí es reproducible.
+        ok = ScreeningSummary(evidence_records=({
+            **_solo_cuatro, "screening_input_hash": "i", "parser_version": "p",
+            "matcher_version": "m"},), **base)
         self.assertTrue(ok.evidence_reproducible)
-        malo = ScreeningSummary(evidence_records=(
-            {"query_hash": "q", "evidence_hash": "", "snapshot_sha256": "s",
-             "subject_hash": "h"},), **base)
+        # Y si falta el hash del envelope, no.
+        malo = ScreeningSummary(evidence_records=({
+            "query_hash": "q", "evidence_hash": "", "snapshot_sha256": "s",
+            "subject_hash": "h", "screening_input_hash": "i",
+            "parser_version": "p", "matcher_version": "m"},), **base)
         self.assertFalse(malo.evidence_reproducible)
 
 

@@ -29,7 +29,12 @@ from .contracts import (
 )
 from .subjects import document_variants, match_key
 
-ALGORITHM_VERSION = "sanctions-matcher/1.0"
+ALGORITHM_VERSION = "sanctions-matcher/1.1.0"
+# 03S.1C-1: la versión declara la IMPLEMENTACIÓN REAL. El matching cambió
+# materialmente en 03S.1A (multi-identificador, variantes declaradas) y en
+# 03S.1B (mismo valor != identificador compatible), así que la evidencia
+# histórica emitida como `sanctions-matcher/1.0` se conserva intacta y toda
+# evidencia NUEVA registra 1.1.0.
 
 UMBRAL_ALERTA = 0.90      # nombre muy parecido
 UMBRAL_REVISION = 0.80    # nombre parecido -> revisión manual

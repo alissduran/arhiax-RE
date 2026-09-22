@@ -165,12 +165,17 @@ def _screening_receipt(titulux: Optional[Dict[str, Any]]) -> Dict[str, Any]:
                                 if _sum.get("evidence_sealed") is not None
                                 else _sum.get("evidence_chain_status") == "SEALED"),
         "evidence_reproducible": bool(_sum.get("evidence_reproducible")),
+        # 03S.1C: identidad de ejecución (versiones que produjeron el resultado).
+        "matcher_version": _sum.get("algorithm_version"),
+        "parser_versions": {s.get("source_id"): s.get("parser_version")
+                            for s in (_sum.get("snapshots") or [])},
         "fuentes": [{
             "source_id": sid, "sigla": sid,
             "freshness": (_snaps.get(sid) or {}).get("freshness"),
             "effective_date": (_snaps.get(sid) or {}).get("effective_date"),
             "sha256": (_snaps.get(sid) or {}).get("sha256"),
             "record_count": (_snaps.get(sid) or {}).get("record_count"),
+            "parser_version": (_snaps.get(sid) or {}).get("parser_version"),
         } for sid in (_sum.get("sources") or [])],
     }
 

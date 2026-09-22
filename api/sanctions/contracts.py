@@ -236,6 +236,9 @@ class SourceOutcome:
     snapshot_id: str = ""
     snapshot_sha256: str = ""
     snapshot_effective_date: str = ""
+    # 03S.1C-12: versión del PARSER que generó los registros normalizados, tomada
+    # del SNAPSHOT (no del registry): es la que realmente produjo el resultado.
+    parser_version: str = ""
     freshness: str = NO_SNAPSHOT
     review_status: str = "NO_REQUIERE"
     note: str = ""
@@ -249,6 +252,7 @@ class SourceOutcome:
             "snapshot_id": self.snapshot_id,
             "snapshot_sha256": self.snapshot_sha256,
             "snapshot_effective_date": self.snapshot_effective_date,
+            "parser_version": self.parser_version,
             "freshness": self.freshness, "review_status": self.review_status,
             "note": self.note,
         }
@@ -275,6 +279,12 @@ class EvidenceRecord:
     review_status: str
     subject_hash: str = ""
     evidence_hash: str = ""
+    # 03S.1C: identidad de EJECUCIÓN (versiones) + inputs efectivos + hash de
+    # contenido sin sello de tiempo.
+    matcher_version: str = ""
+    parser_version: str = ""
+    screening_input_hash: str = ""
+    evidence_content_hash: str = ""
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -292,6 +302,10 @@ class EvidenceRecord:
             "review_status": self.review_status,
             "subject_hash": self.subject_hash,
             "evidence_hash": self.evidence_hash,
+            "matcher_version": self.matcher_version,
+            "parser_version": self.parser_version,
+            "screening_input_hash": self.screening_input_hash,
+            "evidence_content_hash": self.evidence_content_hash,
         }
 
 
@@ -392,16 +406,20 @@ class ScreeningSummary:
     def evidence_reproducible(self) -> bool:
         """¿La consulta puede reproducirse con lo registrado?
 
-        03S.1B-7: exige los envelopes COMPLETOS y los hashes presentes
-        (snapshot + query + evidence). NO exige que la cadena esté sellada: en
-        desarrollo (`NOT_REQUIRED_DEV`) la evidencia es reproducible pero NO está
-        sellada, y así se declara.
+        03S.1C-7: exige los envelopes COMPLETOS y, por cada uno, la identidad de
+        ejecución completa: `subject_hash`, `screening_input_hash`,
+        `snapshot_sha256`, `parser_version`, `matcher_version`, `query_hash` y
+        `evidence_hash`. La presencia de los cuatro hashes antiguos ya no basta.
+        No exige que la cadena esté sellada: en desarrollo (`NOT_REQUIRED_DEV`) la
+        evidencia es reproducible pero NO está sellada, y así se declara.
         """
         if not self.evidence_complete:
             return False
+        _requeridos = ("subject_hash", "screening_input_hash", "snapshot_sha256",
+                       "parser_version", "matcher_version", "query_hash",
+                       "evidence_hash")
         for e in self.evidence_records:
-            if not (e.get("query_hash") and e.get("evidence_hash")
-                    and e.get("snapshot_sha256") and e.get("subject_hash")):
+            if not all(e.get(k) for k in _requeridos):
                 return False
         return True
 
