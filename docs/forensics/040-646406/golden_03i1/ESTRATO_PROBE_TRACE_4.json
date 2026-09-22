@@ -1,0 +1,547 @@
+[
+ {
+  "via": "manzanas en buffer 150 m (4326)",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "outSR": "4326",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "distance": 150,
+   "units": "esriSRUnit_Meter",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 15,
+  "attrs": [
+   {
+    "objectid": 696,
+    "codigo_manzana": "08001010300001006",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 217.7710667999522,
+    "st_area(shape)": 1797.44647656
+   },
+   {
+    "objectid": 697,
+    "codigo_manzana": "08001010300001007",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 217.77097463660195,
+    "st_area(shape)": 1797.44134544
+   },
+   {
+    "objectid": 698,
+    "codigo_manzana": "08001010300001008",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 227.70769687892954,
+    "st_area(shape)": 2001.013260715
+   },
+   {
+    "objectid": 695,
+    "codigo_manzana": "08001010300001004",
+    "estratificacion": "4",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 419.2669285433654,
+    "st_area(shape)": 10823.9481974
+   },
+   {
+    "objectid": 726,
+    "codigo_manzana": "08001010300001022",
+    "estratificacion": "No aplica",
+    "nombre_barrio": null,
+    "identificador": "164",
+    "localidad": "02",
+    "st_length(shape)": 2037.147232038822,
+    "st_area(shape)": 144826.42812908
+   },
+   {
+    "objectid": 812,
+    "codigo_manzana": "08001010300000934",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 312.0009903514884,
+    "st_area(shape)": 3733.028127865
+   }
+  ]
+ },
+ {
+  "via": "manzana del predial 08001010300001004 (4326)",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='08001010300001004'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "outSR": "4326",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 1,
+  "attrs": [
+   {
+    "objectid": 695,
+    "codigo_manzana": "08001010300001004",
+    "estratificacion": "4",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 419.2669285433654,
+    "st_area(shape)": 10823.9481974
+   }
+  ]
+ },
+ {
+  "via": "ordenamiento/direcciones metadata",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/direcciones/MapServer",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "keys": [
+   "currentVersion",
+   "cimVersion",
+   "serviceDescription",
+   "mapName",
+   "description",
+   "copyrightText",
+   "supportsDynamicLayers",
+   "layers",
+   "tables",
+   "spatialReference",
+   "singleFusedMapCache",
+   "tileInfo",
+   "storageInfo",
+   "initialExtent",
+   "fullExtent"
+  ]
+ },
+ {
+  "via": "direcciones capa 1 fields",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/direcciones/MapServer/1",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "keys": [
+   "currentVersion",
+   "cimVersion",
+   "id",
+   "name",
+   "type",
+   "description",
+   "geometryType",
+   "sourceSpatialReference",
+   "spatialReference",
+   "copyrightText",
+   "parentLayer",
+   "subLayers",
+   "minScale",
+   "maxScale",
+   "referenceScale"
+  ]
+ },
+ {
+  "via": "direcciones capa 1 where=1=1",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/direcciones/MapServer/1/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "outSR": "4326",
+   "resultRecordCount": 5,
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 5,
+  "attrs": [
+   {
+    "objectid": 1,
+    "codigopostal": "05",
+    "secuencia": "199",
+    "codigomanzana": "080005199",
+    "localidad": "04",
+    "barrio": "Simón Bolívar",
+    "st_area(shape)": 9257.01824494,
+    "st_length(shape)": 467.0883002141753
+   },
+   {
+    "objectid": 2,
+    "codigopostal": "05",
+    "secuencia": "294",
+    "codigomanzana": "080005294",
+    "localidad": "04",
+    "barrio": "Simón Bolívar",
+    "st_area(shape)": 8787.59592356,
+    "st_length(shape)": 435.7266175964098
+   },
+   {
+    "objectid": 3,
+    "codigopostal": "05",
+    "secuencia": "292",
+    "codigomanzana": "080005292",
+    "localidad": "04",
+    "barrio": "Simón Bolívar",
+    "st_area(shape)": 7413.1917995,
+    "st_length(shape)": 395.26611837523217
+   },
+   {
+    "objectid": 4,
+    "codigopostal": "05",
+    "secuencia": "418",
+    "codigomanzana": "080005418",
+    "localidad": "04",
+    "barrio": "Primero de mayo",
+    "st_area(shape)": 7901.630037865,
+    "st_length(shape)": 382.1823357702768
+   },
+   {
+    "objectid": 5,
+    "codigopostal": "05",
+    "secuencia": "454",
+    "codigomanzana": "080005454",
+    "localidad": "04",
+    "barrio": null,
+    "st_area(shape)": 1214.57132039,
+    "st_length(shape)": 142.06535625784804
+   }
+  ]
+ },
+ {
+  "via": "datosabiertos metadata",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "keys": [
+   "currentVersion",
+   "cimVersion",
+   "serviceDescription",
+   "mapName",
+   "description",
+   "copyrightText",
+   "supportsDynamicLayers",
+   "layers",
+   "tables",
+   "spatialReference",
+   "singleFusedMapCache",
+   "tileInfo",
+   "storageInfo",
+   "initialExtent",
+   "fullExtent"
+  ]
+ },
+ {
+  "via": "datosabiertos Manzana punto+60m",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/320/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "outSR": "4326",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "distance": 60,
+   "units": "esriSRUnit_Meter",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 6,
+  "attrs": [
+   {
+    "objectid": 696,
+    "codigo": "08001010300001006",
+    "nombre": "0",
+    "st_area(shape)": 1797.44647656,
+    "st_length(shape)": 217.7710667999522,
+    "globalid": "{90E51B4B-4467-43BD-9085-7C9176FFBC48}"
+   },
+   {
+    "objectid": 697,
+    "codigo": "08001010300001007",
+    "nombre": "0",
+    "st_area(shape)": 1797.44134544,
+    "st_length(shape)": 217.77097463660195,
+    "globalid": "{4AA05020-485C-4784-8B5E-30E0A4088F42}"
+   },
+   {
+    "objectid": 695,
+    "codigo": "08001010300001004",
+    "nombre": "0",
+    "st_area(shape)": 10823.9481974,
+    "st_length(shape)": 419.2669285433654,
+    "globalid": "{0AC51FB8-675A-4EEC-848C-648478C1A73A}"
+   },
+   {
+    "objectid": 899,
+    "codigo": "08001010300001005",
+    "nombre": "0",
+    "st_area(shape)": 4951.45120694,
+    "st_length(shape)": 281.47089638360904,
+    "globalid": "{ADF2390B-6CD9-4667-919D-245F64EA1B21}"
+   },
+   {
+    "objectid": 900,
+    "codigo": "08001010300001023",
+    "nombre": "0",
+    "st_area(shape)": 6931.32238424,
+    "st_length(shape)": 332.6099063865054,
+    "globalid": "{F52B6333-6DC4-492B-9169-931F86DCF046}"
+   },
+   {
+    "objectid": 1078,
+    "codigo": "08001010300001003",
+    "nombre": "0",
+    "st_area(shape)": 13763.30994433,
+    "st_length(shape)": 492.6237226395035,
+    "globalid": "{16F78168-D1D6-414D-9249-8924A60BC361}"
+   }
+  ]
+ },
+ {
+  "via": "datosabiertos Dirección punto+60m",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/105/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "outSR": "4326",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "distance": 60,
+   "units": "esriSRUnit_Meter",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 5,
+  "attrs": [
+   {
+    "objectid": 218207,
+    "valor_via_principal": "43",
+    "letra_via_principal": null,
+    "letra_via_generadora": "C",
+    "numero_predio": "35",
+    "tipo_direccion": "Estructurada",
+    "es_direccion_principal": 1,
+    "complemento": "ZV LT 1",
+    "nombre_predio": "Transversal 43 101 C 35 ZV LT 1",
+    "sector_predio": null,
+    "valor_via_generadora": "101",
+    "sector_ciudad": null,
+    "codigo_postal": "080010103000010050001000000000",
+    "clase_via_principal": "Transversal",
+    "cr_predio_guid": "{8FEAC61B-D844-4277-BABC-7FAA224CDC94}",
+    "cr_construccion_guid": null,
+    "cr_terreno_guid": "{CB40EEA6-A1A9-41EF-9C09-037F6E4A37E6}",
+    "cr_unidadconstruccion_guid": null,
+    "estado_direccion": 1
+   },
+   {
+    "objectid": 342294,
+    "valor_via_principal": "43",
+    "letra_via_principal": null,
+    "letra_via_generadora": null,
+    "numero_predio": "44",
+    "tipo_direccion": "Estructurada",
+    "es_direccion_principal": 1,
+    "complemento": "LT 2",
+    "nombre_predio": "Transversal 43 100 44 LT 2",
+    "sector_predio": null,
+    "valor_via_generadora": "100",
+    "sector_ciudad": null,
+    "codigo_postal": "080010103000010060001000000000",
+    "clase_via_principal": "Transversal",
+    "cr_predio_guid": "{2DA40F75-9B30-46AE-A04C-4F939738F0DD}",
+    "cr_construccion_guid": null,
+    "cr_terreno_guid": "{141508A1-5104-46CA-9CA6-DC5DEE946D7F}",
+    "cr_unidadconstruccion_guid": null,
+    "estado_direccion": 1
+   },
+   {
+    "objectid": 428270,
+    "valor_via_principal": "43",
+    "letra_via_principal": null,
+    "letra_via_generadora": null,
+    "numero_predio": "50",
+    "tipo_direccion": "Estructurada",
+    "es_direccion_principal": 1,
+    "complemento": null,
+    "nombre_predio": "Transversal 43 100 50",
+    "sector_predio": null,
+    "valor_via_generadora": "100",
+    "sector_ciudad": null,
+    "codigo_postal": "080010103000010040001900000000",
+    "clase_via_principal": "Transversal",
+    "cr_predio_guid": "{3C6ECB63-1E8B-402B-9338-C710DBDD1C19}",
+    "cr_construccion_guid": null,
+    "cr_terreno_guid": "{69AAD6F2-F9B6-4E61-94FC-FE30E27E8311}",
+    "cr_unidadconstruccion_guid": null,
+    "estado_direccion": 1
+   },
+   {
+    "objectid": 361826,
+    "valor_via_principal": "43",
+    "letra_via_principal": null,
+    "letra_via_generadora": null,
+    "numero_predio": "44",
+    "tipo_direccion": "Estructurada",
+    "es_direccion_principal": 1,
+    "complemento": "LT 3",
+    "nombre_predio": "Transversal 43 100 44 LT 3",
+    "sector_predio": null,
+    "valor_via_generadora": "100",
+    "sector_ciudad": null,
+    "codigo_postal": "080010103000010070001000000000",
+    "clase_via_principal": "Transversal",
+    "cr_predio_guid": "{D8E8AA3A-6B99-412C-BFEB-3866E4B9191A}",
+    "cr_construccion_guid": null,
+    "cr_terreno_guid": "{164AAE76-FE16-4A30-9167-CBBA1F29BEEE}",
+    "cr_unidadconstruccion_guid": null,
+    "estado_direccion": 1
+   },
+   {
+    "objectid": 62734,
+    "valor_via_principal": "0",
+    "letra_via_principal": null,
+    "letra_via_generadora": null,
+    "numero_predio": "0",
+    "tipo_direccion": "No_Estructurada",
+    "es_direccion_principal": 1,
+    "complemento": null,
+    "nombre_predio": "LOTE EL VOLADOR D 2",
+    "sector_predio": null,
+    "valor_via_generadora": "0",
+    "sector_ciudad": null,
+    "codigo_postal": "080010103000010230001000000000",
+    "clase_via_principal": "Calle",
+    "cr_predio_guid": "{5094772A-F386-46A0-A751-D935A6E52BBB}",
+    "cr_construccion_guid": null,
+    "cr_terreno_guid": "{07008BAB-DEE1-42FB-A594-C6CEE5E991D7}",
+    "cr_unidadconstruccion_guid": null,
+    "estado_direccion": 1
+   }
+  ]
+ },
+ {
+  "via": "datosabiertos Nomenclatura punto+60m",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/100/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "outSR": "4326",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "distance": 60,
+   "units": "esriSRUnit_Meter",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "error": "{'code': 400, 'message': 'Invalid or missing input parameters.', 'details': []}"
+ },
+ {
+  "via": "datosabiertos Terreno punto+60m",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/315/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "outSR": "4326",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "distance": 60,
+   "units": "esriSRUnit_Meter",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 6,
+  "attrs": [
+   {
+    "objectid": 15921,
+    "name": "080010103000010030001900000000",
+    "relacion_superficie": "En_Rasante",
+    "estado_terreno": 1,
+    "st_area(shape)": 13763.30994433,
+    "st_length(shape)": 492.6237226395035,
+    "globalid": "{DCC1915B-4205-4FBA-BC08-4A545DA2B823}"
+   },
+   {
+    "objectid": 124380,
+    "name": "080010103000010040001900000000",
+    "relacion_superficie": "En_Rasante",
+    "estado_terreno": 1,
+    "st_area(shape)": 10823.94868445,
+    "st_length(shape)": 419.26692854688366,
+    "globalid": "{69AAD6F2-F9B6-4E61-94FC-FE30E27E8311}"
+   },
+   {
+    "objectid": 15923,
+    "name": "080010103000010070001000000000",
+    "relacion_superficie": "En_Rasante",
+    "estado_terreno": 1,
+    "st_area(shape)": 1797.44134544,
+    "st_length(shape)": 217.77097463660195,
+    "globalid": "{164AAE76-FE16-4A30-9167-CBBA1F29BEEE}"
+   },
+   {
+    "objectid": 23155,
+    "name": "080010103000010050001000000000",
+    "relacion_superficie": "En_Rasante",
+    "estado_terreno": 1,
+    "st_area(shape)": 4951.4485739,
+    "st_length(shape)": 281.4708963837632,
+    "globalid": "{CB40EEA6-A1A9-41EF-9C09-037F6E4A37E6}"
+   },
+   {
+    "objectid": 23156,
+    "name": "080010103000010230001000000000",
+    "relacion_superficie": "En_Rasante",
+    "estado_terreno": 1,
+    "st_area(shape)": 6931.32222925,
+    "st_length(shape)": 332.60990638654744,
+    "globalid": "{07008BAB-DEE1-42FB-A594-C6CEE5E991D7}"
+   },
+   {
+    "objectid": 15922,
+    "name": "080010103000010060001000000000",
+    "relacion_superficie": "En_Rasante",
+    "estado_terreno": 1,
+    "st_area(shape)": 1797.44647656,
+    "st_length(shape)": 217.7710667999522,
+    "globalid": "{141508A1-5104-46CA-9CA6-DC5DEE946D7F}"
+   }
+  ]
+ }
+]

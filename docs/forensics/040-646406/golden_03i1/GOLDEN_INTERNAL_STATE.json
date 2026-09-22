@@ -1,0 +1,1152 @@
+{
+ "versionado": {
+  "GIT_COMMIT_SHA": "7a49762ffa97222ad1b5d30d92572b1d8ad1c9ef",
+  "ARHIAX_RE_VERSION": "1.4.0",
+  "DICTUS_ENGINE_VERSION": "1.4.0",
+  "GIS_ADAPTER_VERSION": "1.2.0",
+  "TITULUX_VERSION": "1.1.0",
+  "RULESET_VERSION": "1.3.0",
+  "version_line": "ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
+  "arbol_de_trabajo": {
+   "dirty": true,
+   "files": [
+    "M api/arhia_title/rules.py",
+    "M api/catastro_predio.py",
+    "M api/dictamen_data.py",
+    "M api/edificabilidad.py",
+    "M api/legal_analyzer.py",
+    "M api/market_context.py",
+    "M api/pdf_compiler.py",
+    "M api/receipts.py",
+    "M api/riesgo_volcanico.py",
+    "M api/score_engine.py",
+    "M api/unidad_inmobiliaria.py",
+    "M tests/test_coherencia_bogota.py",
+    "M tests/test_edificabilidad.py",
+    "M tests/test_remediacion_03h2.py",
+    "M tests/test_remediacion_03h2a.py",
+    "M tests/test_riesgo_volcanico.py",
+    "?? api/risk_severity.py",
+    "?? debug_pasto_240_211101_out.txt",
+    "?? debug_poi_ab_out.txt",
+    "?? debug_poi_photon_out.txt",
+    "?? docs/forensics/040-646406/REMEDIATION_03I1.md",
+    "?? docs/forensics/040-646406/golden_03i1/",
+    "?? presentacion/",
+    "?? scripts/debug_pasto_240_211101.py",
+    "?? scripts/debug_poi_ab.py",
+    "?? scripts/debug_poi_photon.py",
+    "?? scripts/estrato_probe_03i1.py",
+    "?? scripts/estrato_probe_03i1_r2.py",
+    "?? scripts/estrato_probe_03i1_r3.py",
+    "?? scripts/estrato_probe_03i1_r4.py",
+    "?? scripts/golden_coherence_03i1.py",
+    "?? scripts/golden_matrices_03i1.py",
+    "?? scripts/golden_page_review_03i1.py",
+    "?? scripts/golden_run_03i1.py",
+    "?? tests/_fakes_03i1.py",
+    "?? tests/test_remediacion_03i1.py"
+   ],
+   "diff_sha256": "daa24a9fb4c82cd6b0e435ca32299a09aec78413301cbe5f1d0b6c805a51ffe3",
+   "n_files": 36
+  }
+ },
+ "input": {
+  "ctl_path": "C:\\Users\\aliss\\Downloads\\certificado64640614546464261189306228pdf.pdf",
+  "ctl_sha256": "4493da88f4231a6b9a0e966cefe4b14030d53a0e00f86ba3efc1d0f61e6ddf87",
+  "ctl_size": 124345,
+  "input_type": "ORIGINAL_BINARY",
+  "copia_evidencia": "C:\\Users\\aliss\\.gemini\\antigravity-ide\\scratch\\20260825_DeepSeek_Harness_Web\\arhiax-RE\\docs\\forensics\\040-646406\\golden_03i1\\inputs\\CTL_040-646406_ORIGINAL.pdf",
+  "area_extraida_por_producto": 58.75
+ },
+ "identity": {
+  "folio": "040-646406",
+  "nupre": "AFT0005BOHA",
+  "codigo_catastral": "080010103000010040001908040002",
+  "direccion_raw": "Transversal 43 100 50 TO 8 AP 430",
+  "direccion_base": "Transversal 43 100 50",
+  "direccion_normalizada": "TRANSVERSAL 43 100 50",
+  "direccion_source": "OFFICIAL_ADOPTION_REGISTRY",
+  "direccion_previa": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3",
+  "torre": "8",
+  "apartamento": "430",
+  "unidad": "TO 8 AP 430",
+  "estado": "MATCH_EXACT",
+  "resolution_status": null,
+  "resolution_method": "official_adoption_registry",
+  "resolution_confidence": "VERIFIED_UNIT_IDENTITY",
+  "identity_verified": true,
+  "identity_source": "OFFICIAL_ADOPTION_REGISTRY",
+  "market_context_ready": true,
+  "adopcion_registro": {
+   "numero_predial": "080010103000010040001908040002",
+   "codigo_homologado": "AFT0005BOHA",
+   "fmi": "646406",
+   "codigo_registral": "040",
+   "direccion": "Transversal 43 100 50 TO 8 AP 430",
+   "area_terreno": null
+  },
+  "identificadores": {
+   "nupre": {
+    "value": "AFT0005BOHA",
+    "source": "CTL (NUPRE)",
+    "match_status": "RESUELTO"
+   },
+   "codigo_catastral": {
+    "value": "080010103000010040001908040002",
+    "source": "CTL (CODIGO CATASTRAL)",
+    "match_status": "RESUELTO"
+   }
+  }
+ },
+ "coordinates": {
+  "lat": 11.006116,
+  "lon": -74.837532,
+  "source": "OFFICIAL_ADOPTION_ADDRESS_GEOCODE",
+  "verified": true,
+  "authoritative_address": "Transversal 43 100 50 TO 8 AP 430",
+  "address_source": "OFFICIAL_ADOPTION_REGISTRY"
+ },
+ "urban": {
+  "barrio": "Miramar",
+  "barrio_status": "VERIFIED_OFFICIAL",
+  "localidad": "02",
+  "estrato": "4",
+  "estrato_status": "VERIFIED_OFFICIAL",
+  "estrato_origen": null,
+  "estrato_trace": null,
+  "tratamiento": "Consolidacion",
+  "tratamiento_status": "VERIFIED_OFFICIAL",
+  "tipo_tratamiento": "Nivel 2",
+  "altura_maxima": "11",
+  "altura_status": "VERIFIED_OFFICIAL",
+  "pieza_urbana": 6,
+  "codigo_manzana": "08001010300001004",
+  "source": "official_urban_layer",
+  "context_status": "OK",
+  "campos_ambiguos": [],
+  "predio_entorno": {},
+  "predio_destino_catastral": null,
+  "predio_condicion": null,
+  "predio_construccion": {}
+ },
+ "urban_source_summary": {
+  "source_mode": "MIXED",
+  "campos": {
+   "barrio": {
+    "value": "Miramar",
+    "status": "VERIFIED_OFFICIAL",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "localidad": {
+    "value": "02",
+    "status": "OK",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "pieza_urbana": {
+    "value": 6,
+    "status": "OK",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "estrato": {
+    "value": "4",
+    "status": "VERIFIED_OFFICIAL",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "tratamiento": {
+    "value": "Consolidacion",
+    "status": "VERIFIED_OFFICIAL",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "tipo_tratamiento": {
+    "value": "Nivel 2",
+    "status": "VERIFIED_OFFICIAL",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "altura_maxima": {
+    "value": "11",
+    "status": null,
+    "fuente": null,
+    "modo": "PACKAGED_REFERENCE"
+   },
+   "amenaza_remocion_masa": {
+    "value": null,
+    "status": null,
+    "fuente": "Geometrias oficiales del POT empaquetadas en la aplicacion (cruce local STRtree, sin consulta en vivo)",
+    "modo": "PACKAGED_REFERENCE"
+   },
+   "areas_en_riesgo": {
+    "value": null,
+    "status": null,
+    "fuente": "Geometrias oficiales del POT empaquetadas en la aplicacion (cruce local STRtree, sin consulta en vivo)",
+    "modo": "PACKAGED_REFERENCE"
+   },
+   "inundacion": {
+    "value": null,
+    "status": null,
+    "fuente": "Geometrias oficiales del POT empaquetadas en la aplicacion (cruce local STRtree, sin consulta en vivo)",
+    "modo": "PACKAGED_REFERENCE"
+   },
+   "riesgo_no_mitigable": {
+    "value": null,
+    "status": null,
+    "fuente": "Geometrias oficiales del POT empaquetadas en la aplicacion (cruce local STRtree, sin consulta en vivo)",
+    "modo": "PACKAGED_REFERENCE"
+   },
+   "arroyos": {
+    "value": null,
+    "status": null,
+    "fuente": "Geometrias oficiales del POT empaquetadas en la aplicacion (cruce local STRtree, sin consulta en vivo)",
+    "modo": "PACKAGED_REFERENCE"
+   }
+  },
+  "fuente_oficial": "official_urban_layer",
+  "context_status": "OK",
+  "declaracion": "Procedencia MIXTA: EN VIVO (barrio, localidad, pieza_urbana, estrato, tratamiento, tipo_tratamiento) · EMPAQUETADO (altura_maxima, amenaza_remocion_masa, areas_en_riesgo, inundacion, riesgo_no_mitigable, arroyos)"
+ },
+ "market": {
+  "ready": true,
+  "blockers": [],
+  "sector": "Miramar",
+  "match_type": "EXACT",
+  "value_m2": 6800000,
+  "rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+  "rate_date": "Q3-2026",
+  "methodology_version": "0.1-codiseno",
+  "market_methodology_id": "lonja_baq_metodologia",
+  "market_methodology_version": "0.1-codiseno",
+  "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+  "market_methodology_file": "lonja_baq_metodologia.yaml",
+  "estrato": {
+   "value": "4",
+   "status": "VERIFIED_OFFICIAL",
+   "source": "estratificación oficial"
+  },
+  "barrio": {
+   "value": "Miramar",
+   "status": "VERIFIED_OFFICIAL",
+   "source": "official POT / Alcaldía"
+  },
+  "tipologia": {
+   "value": "Apartamento -- Propiedad Horizontal (inferido del CTL)",
+   "status": "VERIFIED_REGISTRAL",
+   "source": "CTL + registro oficial"
+  },
+  "uso": {
+   "value": null,
+   "status": "UNRESOLVED",
+   "source": null
+  },
+  "urban_render_provenance": {
+   "authority": "OfficialUrbanContext",
+   "aplicados": {
+    "barrio": "official_urban_context",
+    "estrato": "official_urban_context",
+    "tratamiento": "official_urban_context",
+    "tipo_tratamiento": "official_urban_context",
+    "altura_maxima": "official_urban_context",
+    "localidad": "official_urban_context",
+    "pieza_urbana": "official_urban_context",
+    "codigo_manzana": "official_urban_context"
+   },
+   "conflictos": [],
+   "no_aplicados": [],
+   "context_status": "OK"
+  }
+ },
+ "poi": {
+  "sources_attempted": [
+   "OSM_OVERPASS",
+   "PHOTON_OSM"
+  ],
+  "sources_succeeded": [
+   "PHOTON_OSM"
+  ],
+  "categorias": {
+   "Comercio": {
+    "status": "NO_MATCH",
+    "item_count": 0,
+    "items": [],
+    "fuentes_de_items": []
+   },
+   "Educacion": {
+    "status": "AVAILABLE",
+    "item_count": 2,
+    "items": [
+     {
+      "name": "American School",
+      "type": "Educacion (Colegio)",
+      "distance": 1397.4,
+      "source": "PHOTON_OSM"
+     },
+     {
+      "name": "Colegio Real / Royal School",
+      "type": "Educacion (Colegio)",
+      "distance": 1751.2,
+      "source": "PHOTON_OSM"
+     }
+    ],
+    "fuentes_de_items": [
+     "PHOTON_OSM"
+    ]
+   },
+   "Recreacion": {
+    "status": "NO_MATCH",
+    "item_count": 0,
+    "items": [],
+    "fuentes_de_items": []
+   },
+   "Salud": {
+    "status": "AVAILABLE",
+    "item_count": 3,
+    "items": [
+     {
+      "name": "Clínica de Fracturas",
+      "type": "Salud (Clinica)",
+      "distance": 1882.4,
+      "source": "PHOTON_OSM"
+     },
+     {
+      "name": "Clínica Oftalmológica del Caribe",
+      "type": "Salud (Clinica)",
+      "distance": 1923.8,
+      "source": "PHOTON_OSM"
+     },
+     {
+      "name": "Clínica Mediesp",
+      "type": "Salud (Clinica)",
+      "distance": 1958.6,
+      "source": "PHOTON_OSM"
+     }
+    ],
+    "fuentes_de_items": [
+     "PHOTON_OSM"
+    ]
+   }
+  }
+ },
+ "catastral_dt_render": {
+  "args": [
+   "Miramar",
+   "58.75"
+  ],
+  "kwargs": {
+   "destino_economico": null,
+   "nupre": "AFT0005BOHA",
+   "codigo_catastral": "080010103000010040001908040002",
+   "condicion": "Propiedad Horizontal (inferido del CTL adjunto)",
+   "area_catastral": null,
+   "tipo_construccion": null,
+   "pisos": null,
+   "estrato": "4",
+   "ciudad": "barranquilla",
+   "destino_source": null
+  },
+  "filas": [
+   [
+    "Area Registrada",
+    "58.75 m2"
+   ],
+   [
+    "Barrio / sector oficial",
+    "Miramar"
+   ],
+   [
+    "NUPRE",
+    "AFT0005BOHA"
+   ],
+   [
+    "Codigo catastral",
+    "080010103000010040001908040002"
+   ],
+   [
+    "Destino economico catastral",
+    "PENDIENTE DE VERIFICACION (Requiere consulta catastral del predio)"
+   ],
+   [
+    "Condicion juridica",
+    "Propiedad Horizontal (inferido del CTL adjunto)"
+   ],
+   [
+    "Tipo de construccion",
+    "Pendiente de verificacion"
+   ],
+   [
+    "Estrato",
+    "4"
+   ]
+  ]
+ },
+ "volcan": {
+  "estado": "NO_COVERAGE",
+  "nivel": "NO EVALUADO",
+  "disponible": true,
+  "cobertura_confirmada": false,
+  "zonas": []
+ },
+ "screening": {
+  "status": "SCREENING_COMPLETE",
+  "coverage_status": "COVERAGE_COMPLETE",
+  "executed": true,
+  "subjects_declared": 3,
+  "subjects_screened": 3,
+  "evidence_expected": 9,
+  "evidence_created": 9,
+  "evidence_chain_status": "SEALED",
+  "evidence_sealed": true,
+  "evidence_reproducible": true,
+  "matcher_version": "sanctions-matcher/1.1.0",
+  "reason": "Sin coincidencias en las fuentes efectivamente consultadas. Cobertura completa: ONU (lista consolidada del Consejo de Seguridad); OFAC — SDN (solo SDN); UK Sanctions List (FCDO/OFSI).",
+  "subjects": [
+   {
+    "subject_id": "titular_actual-1045718995",
+    "raw_name": "DURAN BACCA ALISSON CC# 1045718995",
+    "canonical_name": "DURAN BACCA ALISSON",
+    "person_type": "NATURAL_PERSON",
+    "document_type": "cc",
+    "document_number": "1045718995X",
+    "document_normalized": "1045718995X",
+    "roles": [
+     "TITULAR_ACTUAL"
+    ],
+    "participation": "50%",
+    "source": "MODELO_CANONICO",
+    "source_reference": "modelo canónico (CTL)",
+    "identity_confidence": "VERIFIED_REGISTRAL",
+    "identity_warnings": [
+     "DOCUMENT_NON_STANDARD_FORMAT"
+    ],
+    "screened": true,
+    "reason_for_screening": "titular actual del inmueble (parte de la operación)",
+    "not_screened_reason": null,
+    "declared_name_variants": [],
+    "identifiers": []
+   },
+   {
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "raw_name": "BANCO DE BOGOTA S.A.NIT# 8600029644",
+    "canonical_name": "BANCO DE BOGOTA S.A.",
+    "person_type": "LEGAL_ENTITY",
+    "document_type": "nit",
+    "document_number": "8600029644",
+    "document_normalized": "8600029644",
+    "roles": [
+     "ACREEDOR_HIPOTECARIO"
+    ],
+    "participation": null,
+    "source": "CTL",
+    "source_reference": "CTL — anotación con hipoteca vigente 001",
+    "identity_confidence": "VERIFIED_REGISTRAL",
+    "identity_warnings": [],
+    "screened": true,
+    "reason_for_screening": "acreedor hipotecario inscrito (contraparte financiera)",
+    "not_screened_reason": null,
+    "declared_name_variants": [],
+    "identifiers": []
+   },
+   {
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "raw_name": "URBANIZADORA MARVAL S.A.S.",
+    "canonical_name": "URBANIZADORA MARVAL S.A.S.",
+    "person_type": "LEGAL_ENTITY",
+    "document_type": null,
+    "document_number": null,
+    "document_normalized": null,
+    "roles": [
+     "CONSTRUCTOR_ENAJENANTE"
+    ],
+    "participation": null,
+    "source": "CTL",
+    "source_reference": "CTL — descripción del inmueble / enajenante original",
+    "identity_confidence": "VERIFIED_REGISTRAL",
+    "identity_warnings": [
+     "DOCUMENT_MISSING",
+     "PERSON_TYPE_INFERRED_FROM_LEGAL_FORM"
+    ],
+    "screened": true,
+    "reason_for_screening": "constructor/enajenante original (material a la operación)",
+    "not_screened_reason": null,
+    "declared_name_variants": [],
+    "identifiers": []
+   }
+  ],
+  "outcomes": [
+   {
+    "subject_id": "titular_actual-1045718995",
+    "source_id": "UN_CONSOLIDATED",
+    "result": "NO_MATCH",
+    "score": 0.5641025641025641,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.564 (bajo umbral)"
+    ],
+    "snapshot_id": "UN_CONSOLIDATED:39e07e4793a740a0",
+    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
+    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
+    "parser_version": "onu_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.564 (bajo umbral)"
+   },
+   {
+    "subject_id": "titular_actual-1045718995",
+    "source_id": "OFAC_SDN",
+    "result": "NO_MATCH",
+    "score": 0.5806451612903226,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.581 (bajo umbral)"
+    ],
+    "snapshot_id": "OFAC_SDN:30c2a70887d694f7",
+    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
+    "snapshot_effective_date": "09/18/2026",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.581 (bajo umbral)"
+   },
+   {
+    "subject_id": "titular_actual-1045718995",
+    "source_id": "UK_SANCTIONS_LIST",
+    "result": "NO_MATCH",
+    "score": 0.5882352941176471,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.588 (bajo umbral)"
+    ],
+    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.588 (bajo umbral)"
+   },
+   {
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "source_id": "UN_CONSOLIDATED",
+    "result": "NO_MATCH",
+    "score": 0.5,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.500 (bajo umbral)"
+    ],
+    "snapshot_id": "UN_CONSOLIDATED:39e07e4793a740a0",
+    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
+    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
+    "parser_version": "onu_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.500 (bajo umbral)"
+   },
+   {
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "source_id": "OFAC_SDN",
+    "result": "NO_MATCH",
+    "score": 0.6829268292682927,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.683 (bajo umbral)"
+    ],
+    "snapshot_id": "OFAC_SDN:30c2a70887d694f7",
+    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
+    "snapshot_effective_date": "09/18/2026",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.683 (bajo umbral)"
+   },
+   {
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "source_id": "UK_SANCTIONS_LIST",
+    "result": "NO_MATCH",
+    "score": 0.5641025641025641,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.564 (bajo umbral)"
+    ],
+    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.564 (bajo umbral)"
+   },
+   {
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "source_id": "UN_CONSOLIDATED",
+    "result": "NO_MATCH",
+    "score": 0.5263157894736842,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.526 (bajo umbral)"
+    ],
+    "snapshot_id": "UN_CONSOLIDATED:39e07e4793a740a0",
+    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
+    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
+    "parser_version": "onu_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.526 (bajo umbral)"
+   },
+   {
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "source_id": "OFAC_SDN",
+    "result": "NO_MATCH",
+    "score": 0.6666666666666666,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.667 (bajo umbral)"
+    ],
+    "snapshot_id": "OFAC_SDN:30c2a70887d694f7",
+    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
+    "snapshot_effective_date": "09/18/2026",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.667 (bajo umbral)"
+   },
+   {
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "source_id": "UK_SANCTIONS_LIST",
+    "result": "NO_MATCH",
+    "score": 0.6046511627906976,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.605 (bajo umbral)"
+    ],
+    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.605 (bajo umbral)"
+   }
+  ],
+  "snapshots": [
+   {
+    "snapshot_id": "OFAC_SDN:30c2a70887d694f7",
+    "source_id": "OFAC_SDN",
+    "authority": "US Department of the Treasury — OFAC (Sanctions List Service)",
+    "retrieved_at": "2026-09-22T14:32:32.508148Z",
+    "effective_date": "09/18/2026",
+    "source_url": "https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.XML",
+    "sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
+    "record_count": 19393,
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "acquisition_status": "OPERATIVA",
+    "freshness": "CACHED_FRESH",
+    "error": null,
+    "refresh_error": null
+   },
+   {
+    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
+    "source_id": "UK_SANCTIONS_LIST",
+    "authority": "UK FCDO / OFSI (UK Sanctions List)",
+    "retrieved_at": "2026-09-22T14:32:47.127887Z",
+    "effective_date": "21/09/2026",
+    "source_url": "https://sanctionslist.fcdo.gov.uk/docs/UK-Sanctions-List.xml",
+    "sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "record_count": 6339,
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "acquisition_status": "OPERATIVA",
+    "freshness": "CACHED_FRESH",
+    "error": null,
+    "refresh_error": null
+   },
+   {
+    "snapshot_id": "UN_CONSOLIDATED:39e07e4793a740a0",
+    "source_id": "UN_CONSOLIDATED",
+    "authority": "United Nations Security Council",
+    "retrieved_at": "2026-09-22T14:32:09.246478Z",
+    "effective_date": "2026-09-21T23:00:06.615Z",
+    "source_url": "https://scsanctions.un.org/resources/xml/en/consolidated.xml",
+    "sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
+    "record_count": 1011,
+    "parser_version": "onu_xml/1.1.0",
+    "acquisition_status": "OPERATIVA",
+    "freshness": "CACHED_FRESH",
+    "error": null,
+    "refresh_error": null
+   }
+  ],
+  "freshness": {
+   "OFAC_SDN": "CACHED_FRESH",
+   "UK_SANCTIONS_LIST": "CACHED_FRESH",
+   "UN_CONSOLIDATED": "CACHED_FRESH"
+  },
+  "review_required": [],
+  "matched": [],
+  "evidence_records": [
+   {
+    "evidence_id": "85d9228d0def82bdcd9d05b6",
+    "subject_id": "titular_actual-1045718995",
+    "canonical_name": "DURAN BACCA ALISSON",
+    "document_type": "cc",
+    "document_number_masked": "1045******X",
+    "source_id": "UN_CONSOLIDATED",
+    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
+    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
+    "query_hash": "c73a3fee8fccce6485725ade47b6a215ed86e8ca5d4777ce41069d27a97871c2",
+    "screened_at": "2026-09-22T17:58:33.248741Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5641,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.564 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
+    "evidence_hash": "85d9228d0def82bdcd9d05b698e64e56a60d82df88388a389d316003cec5811e",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "onu_xml/1.1.0",
+    "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
+    "evidence_content_hash": "d9cdf3805b5a68974069d40ac5fd2fc89a3c7b3b7b9c2db02e8bb3da68bb0eae"
+   },
+   {
+    "evidence_id": "f8e9dd09aa777ef006585c06",
+    "subject_id": "titular_actual-1045718995",
+    "canonical_name": "DURAN BACCA ALISSON",
+    "document_type": "cc",
+    "document_number_masked": "1045******X",
+    "source_id": "OFAC_SDN",
+    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
+    "snapshot_effective_date": "09/18/2026",
+    "query_hash": "22b234f596462e311d535cc2f542a1e7b2974a868eab4731e82a87298ce51ce3",
+    "screened_at": "2026-09-22T17:58:33.249447Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5806,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.581 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
+    "evidence_hash": "f8e9dd09aa777ef006585c061176816ddf17b502f3f81ae58a14d3552c1ca15a",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
+    "evidence_content_hash": "3722ab4775e7d88399e912b5bab15f236589b7cc45a868fc2d7aae9b4fa7126f"
+   },
+   {
+    "evidence_id": "4882965f542e7fcadabfa2b1",
+    "subject_id": "titular_actual-1045718995",
+    "canonical_name": "DURAN BACCA ALISSON",
+    "document_type": "cc",
+    "document_number_masked": "1045******X",
+    "source_id": "UK_SANCTIONS_LIST",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "query_hash": "87ff6c8f353af3b24752160f12c611285117272ae8776e64aec95673fbf4be39",
+    "screened_at": "2026-09-22T17:58:33.250140Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5882,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.588 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
+    "evidence_hash": "4882965f542e7fcadabfa2b1c99725fe9cd53ebf596600c3f2b24dd3e34d4bbf",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
+    "evidence_content_hash": "2bfcf126ead8b0d88239f769a5d6e65490061cd8a4605331fb704a71e867dd45"
+   },
+   {
+    "evidence_id": "1e59e582913c664d822146b9",
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "canonical_name": "BANCO DE BOGOTA S.A.",
+    "document_type": "nit",
+    "document_number_masked": "8600*****4",
+    "source_id": "UN_CONSOLIDATED",
+    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
+    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
+    "query_hash": "e22b4aa87e92998e313b1c04225538417ed2fb8380bf76b952dee59f974fdde8",
+    "screened_at": "2026-09-22T17:58:33.250678Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.500 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
+    "evidence_hash": "1e59e582913c664d822146b952c6a0a5ca87f260b98005268bacaa5c6d30e4c6",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "onu_xml/1.1.0",
+    "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
+    "evidence_content_hash": "8c00ea92e4b0c8da52f3c155bb7c19496ad7cdcccbef7981d24031d00021c9be"
+   },
+   {
+    "evidence_id": "1f14e43459c384b5b661b5ea",
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "canonical_name": "BANCO DE BOGOTA S.A.",
+    "document_type": "nit",
+    "document_number_masked": "8600*****4",
+    "source_id": "OFAC_SDN",
+    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
+    "snapshot_effective_date": "09/18/2026",
+    "query_hash": "862fd1ba59dc236e34f373e49a4e58338c26f178f804e5bdfd3086c476e2bd21",
+    "screened_at": "2026-09-22T17:58:33.251197Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.6829,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.683 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
+    "evidence_hash": "1f14e43459c384b5b661b5eac44c0a49a1077d3686aeb23d94f1a68deb959f2a",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
+    "evidence_content_hash": "05718e6bba546767aa1dabe2d3c9af96d50129709f6efdb6a1614b5b7556597e"
+   },
+   {
+    "evidence_id": "46d7c5ab68a960166f6384a5",
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "canonical_name": "BANCO DE BOGOTA S.A.",
+    "document_type": "nit",
+    "document_number_masked": "8600*****4",
+    "source_id": "UK_SANCTIONS_LIST",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "query_hash": "7a092e6b93ec384851dad82c123c0e9ac79573c1acc3bce396025b57366da817",
+    "screened_at": "2026-09-22T17:58:33.251859Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5641,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.564 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
+    "evidence_hash": "46d7c5ab68a960166f6384a59332e6e26c9d9a1056bd8a5fad363b038f7c5425",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
+    "evidence_content_hash": "31be91334a6cf8eaa7338dccb2332989bb3748088bd671cdc31465d0b3a642b1"
+   },
+   {
+    "evidence_id": "b19452fa5cd687a4d3433177",
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "canonical_name": "URBANIZADORA MARVAL S.A.S.",
+    "document_type": null,
+    "document_number_masked": "N/D",
+    "source_id": "UN_CONSOLIDATED",
+    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
+    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
+    "query_hash": "9f41dc7d0eecaaf44b21569b6236e46ffeffdcabf6572111d3508ed048abefd0",
+    "screened_at": "2026-09-22T17:58:33.252409Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5263,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.526 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
+    "evidence_hash": "b19452fa5cd687a4d343317705efaed0140acd10bc3db3c087f3682d7a4cab10",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "onu_xml/1.1.0",
+    "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
+    "evidence_content_hash": "193f5aeb825bae65c9af4fdbee0fcb12572a9888924ad079a336447468c470e6"
+   },
+   {
+    "evidence_id": "de3eaf51bbb65f0736c4aa13",
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "canonical_name": "URBANIZADORA MARVAL S.A.S.",
+    "document_type": null,
+    "document_number_masked": "N/D",
+    "source_id": "OFAC_SDN",
+    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
+    "snapshot_effective_date": "09/18/2026",
+    "query_hash": "a7fc1e286904cfa9e2c36214a03a1fcdf3992b999a49e46222108c49167bbc4e",
+    "screened_at": "2026-09-22T17:58:33.253091Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.6667,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.667 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
+    "evidence_hash": "de3eaf51bbb65f0736c4aa138bc795f0e6d0639eed64803a35c5a6fbe016d55a",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
+    "evidence_content_hash": "81b76168c61531045a8f696296f792f8aad74570cb6cb83fcd3c46281b83a57a"
+   },
+   {
+    "evidence_id": "046eb61a899d61522a2891f5",
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "canonical_name": "URBANIZADORA MARVAL S.A.S.",
+    "document_type": null,
+    "document_number_masked": "N/D",
+    "source_id": "UK_SANCTIONS_LIST",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "query_hash": "18404c2adcf3685bb7f2ac7592009cb72864d451809fdd139b17890374a1e90f",
+    "screened_at": "2026-09-22T17:58:33.253623Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.6047,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.605 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
+    "evidence_hash": "046eb61a899d61522a2891f5a592e520367c2126580fc64ee7839fd997939a5b",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
+    "evidence_content_hash": "99d05cc09a17fefa955b90225336a07edf94614ea9788c524378e78b9dc5ada9"
+   }
+  ]
+ },
+ "valuation": {
+  "authorization": {
+   "allowed": true,
+   "identity_authorized": true,
+   "market_context_authorized": true,
+   "identity_level": "VERIFIED_UNIT_IDENTITY"
+  },
+  "metodologia_aplica": true,
+  "motivo_no_aplica": null,
+  "value_m2": 6800000,
+  "source_m2": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+  "sector": "Miramar",
+  "match_type": "EXACT",
+  "consolidado": 399500000,
+  "m1": 407490000,
+  "m2": 295690000,
+  "m3": 446700000,
+  "banda_baja": 373532500,
+  "banda_alta": 435455000,
+  "canon_mensual": 2149310,
+  "cap_rate": 0.0485
+ },
+ "receipts": {
+  "generated_at": "2026-09-22T17:58:36.040431+00:00",
+  "ciudad": "barranquilla",
+  "versionado": {
+   "ARHIAX_RE_VERSION": "1.4.0",
+   "DICTUS_ENGINE_VERSION": "1.4.0",
+   "GIS_ADAPTER_VERSION": "1.2.0",
+   "TITULUX_VERSION": "1.1.0",
+   "RULESET_VERSION": "1.3.0",
+   "GIT_COMMIT_SHA": "7a49762ffa97222ad1b5d30d92572b1d8ad1c9ef"
+  },
+  "ctl_adjuntado": true,
+  "catastro": {
+   "consultado": true,
+   "exacto": true,
+   "espacial": false
+  },
+  "identidad": {
+   "estado": "MATCH_EXACT",
+   "nupre": "AFT0005BOHA",
+   "codigo_catastral": "080010103000010040001908040002",
+   "folio_snr": "040-646406"
+  },
+  "gis": {
+   "estado_fuente": null,
+   "capas": {}
+  },
+  "riesgo_volcanico": {
+   "disponible": true,
+   "nivel": "NO EVALUADO",
+   "estado": "NO_COVERAGE",
+   "cobertura_confirmada": false
+  },
+  "mercado": {
+   "ready": true,
+   "metodologia_id": "lonja_baq_metodologia",
+   "metodologia_version": "0.1-codiseno",
+   "metodologia_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+   "sector": "Miramar",
+   "match_type": "EXACT",
+   "blockers": []
+  },
+  "contexto_urbano": {
+   "estrato": "4",
+   "estrato_status": "VERIFIED_OFFICIAL",
+   "estrato_origen": null,
+   "urban_source_mode": "MIXED"
+  },
+  "geo_evaluado": false,
+  "poi": {
+   "disponible": true,
+   "categorias": {
+    "Comercio": {
+     "status": "NO_MATCH",
+     "count": 0
+    },
+    "Educacion": {
+     "status": "AVAILABLE",
+     "count": 2
+    },
+    "Recreacion": {
+     "status": "NO_MATCH",
+     "count": 0
+    },
+    "Salud": {
+     "status": "AVAILABLE",
+     "count": 3
+    }
+   }
+  },
+  "sarlaft": {
+   "status": "SCREENING_COMPLETE",
+   "etiqueta": "COMPLETO",
+   "completo": true,
+   "agregado": "sinCoincidencia",
+   "fuentes_pendientes": [],
+   "sujetos_declarados": 3,
+   "sujetos_screeningados": 3,
+   "sujetos_no_screeningados": 0,
+   "revision_requerida": [],
+   "coincidencias": [],
+   "reason": "Sin coincidencias en las fuentes efectivamente consultadas. Cobertura completa: ONU (lista consolidada del Consejo de Seguridad); OFAC — SDN (solo SDN); UK Sanctions List (FCDO/OFSI).",
+   "ejecutado": true,
+   "algorithm_version": "sanctions-matcher/1.1.0",
+   "decision_status": "SCREENING_COMPLETE",
+   "coverage_status": "COVERAGE_COMPLETE",
+   "coverage_complete": true,
+   "evidence_expected": 9,
+   "evidence_created": 9,
+   "evidence_chain_status": "SEALED",
+   "evidence_errors": [],
+   "evidence_sealed": true,
+   "evidence_reproducible": true,
+   "matcher_version": "sanctions-matcher/1.1.0",
+   "parser_versions": {
+    "OFAC_SDN": "ofac_sdn_xml/1.1.0",
+    "UK_SANCTIONS_LIST": "uk_sanctions_list_xml/1.1.0",
+    "UN_CONSOLIDATED": "onu_xml/1.1.0"
+   },
+   "fuentes": [
+    {
+     "source_id": "UN_CONSOLIDATED",
+     "sigla": "UN_CONSOLIDATED",
+     "freshness": "CACHED_FRESH",
+     "effective_date": "2026-09-21T23:00:06.615Z",
+     "sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
+     "record_count": 1011,
+     "parser_version": "onu_xml/1.1.0"
+    },
+    {
+     "source_id": "OFAC_SDN",
+     "sigla": "OFAC_SDN",
+     "freshness": "CACHED_FRESH",
+     "effective_date": "09/18/2026",
+     "sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
+     "record_count": 19393,
+     "parser_version": "ofac_sdn_xml/1.1.0"
+    },
+    {
+     "source_id": "UK_SANCTIONS_LIST",
+     "sigla": "UK_SANCTIONS_LIST",
+     "freshness": "CACHED_FRESH",
+     "effective_date": "21/09/2026",
+     "sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+     "record_count": 6339,
+     "parser_version": "uk_sanctions_list_xml/1.1.0"
+    }
+   ]
+  },
+  "geocodificacion": {
+   "lat": 11.006116,
+   "lon": -74.837532
+  }
+ },
+ "gate": {
+  "ok": true,
+  "bloqueantes": [],
+  "advertencias": [],
+  "resultados": [
+   {
+    "codigo": "I-SCORE-NOEVAL",
+    "nivel": "bloqueante",
+    "descripcion": "NO EVALUADO implica score hidrológico nulo",
+    "cumple": true,
+    "detalle": "score hidrologico coherente con el estado de evaluacion"
+   },
+   {
+    "codigo": "I-IDENTITY-CONFLICT",
+    "nivel": "bloqueante",
+    "descripcion": "IDENTITY_CONFLICT no afirma datos prediales",
+    "cumple": true,
+    "detalle": "sin conflicto de identidad sin resolver al afirmar datos prediales"
+   },
+   {
+    "codigo": "I-NORECORD-NOEVAL",
+    "nivel": "bloqueante",
+    "descripcion": "sin predio resuelto no se marca EVALUADO en vivo",
+    "cumple": true,
+    "detalle": "coherencia entre identidad resuelta y estado de evaluacion geoespacial"
+   },
+   {
+    "codigo": "I-NUPRE",
+    "nivel": "bloqueante",
+    "descripcion": "NUPRE canónico y del predio resuelto coinciden",
+    "cumple": true,
+    "detalle": "NUPRE y codigo catastral canonicos coinciden con el predio resuelto"
+   },
+   {
+    "codigo": "I-MATRICULA",
+    "nivel": "advertencia",
+    "descripcion": "matrícula municipal y folio SNR son coherentes",
+    "cumple": true,
+    "detalle": "matricula municipal y folio SNR coinciden o no hay ambas para comparar"
+   },
+   {
+    "codigo": "I-COMUNA",
+    "nivel": "advertencia",
+    "descripcion": "comuna mostrada sale del contexto canónico",
+    "cumple": true,
+    "detalle": "comuna mostrada coherente con el contexto canonico"
+   },
+   {
+    "codigo": "I-TITULAR",
+    "nivel": "advertencia",
+    "descripcion": "tipo de persona coherente con el documento",
+    "cumple": true,
+    "detalle": "tipo de persona coherente con el documento"
+   },
+   {
+    "codigo": "I-REGISTRY",
+    "nivel": "bloqueante",
+    "descripcion": "finding registry único coherente (sin contradicciones entre capas)",
+    "cumple": true,
+    "detalle": "finding registry coherente (sin contradicciones)"
+   },
+   {
+    "codigo": "I-VALUATION",
+    "nivel": "bloqueante",
+    "descripcion": "valoración emitida solo si la autorización de identidad lo permite (03D.2)",
+    "cumple": true,
+    "detalle": "valoración coherente con la autorización de identidad (03D.2)"
+   }
+  ],
+  "total": 9
+ }
+}

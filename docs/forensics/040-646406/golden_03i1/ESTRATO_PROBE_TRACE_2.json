@@ -1,0 +1,547 @@
+[
+ {
+  "via": "ordenamiento (root)",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "keys": [
+   "currentVersion",
+   "folders",
+   "services"
+  ]
+ },
+ {
+  "via": "estratificacion MapServer",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "keys": [
+   "currentVersion",
+   "cimVersion",
+   "serviceDescription",
+   "mapName",
+   "description",
+   "copyrightText",
+   "supportsDynamicLayers",
+   "layers",
+   "tables",
+   "spatialReference",
+   "singleFusedMapCache",
+   "initialExtent",
+   "fullExtent",
+   "datesInUnknownTimezone",
+   "minScale",
+   "maxScale",
+   "units",
+   "supportedImageFormatTypes",
+   "documentInfo",
+   "supportsQueryDomains"
+  ]
+ },
+ {
+  "via": "catastro (root)",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "keys": [
+   "currentVersion",
+   "folders",
+   "services"
+  ]
+ },
+ {
+  "via": "manzanas prefijo 08001010300001",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana LIKE '08001010300001%'",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 81,
+  "attrs": [
+   {
+    "objectid": 696,
+    "codigo_manzana": "08001010300001006",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 217.7710667999522,
+    "st_area(shape)": 1797.44647656
+   },
+   {
+    "objectid": 705,
+    "codigo_manzana": "08001010300001015",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 146.47358182125134,
+    "st_area(shape)": 1091.907197035
+   },
+   {
+    "objectid": 697,
+    "codigo_manzana": "08001010300001007",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 217.77097463660195,
+    "st_area(shape)": 1797.44134544
+   },
+   {
+    "objectid": 698,
+    "codigo_manzana": "08001010300001008",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 227.70769687892954,
+    "st_area(shape)": 2001.013260715
+   },
+   {
+    "objectid": 699,
+    "codigo_manzana": "08001010300001009",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 184.5912353682459,
+    "st_area(shape)": 1549.75829022
+   },
+   {
+    "objectid": 700,
+    "codigo_manzana": "08001010300001010",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 196.7373675375984,
+    "st_area(shape)": 1689.213610545
+   },
+   {
+    "objectid": 701,
+    "codigo_manzana": "08001010300001011",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 140.64537719277172,
+    "st_area(shape)": 1029.21891155
+   },
+   {
+    "objectid": 702,
+    "codigo_manzana": "08001010300001012",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 139.825603768861,
+    "st_area(shape)": 1022.340352965
+   },
+   {
+    "objectid": 703,
+    "codigo_manzana": "08001010300001013",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 138.77601154759037,
+    "st_area(shape)": 1011.02279429
+   },
+   {
+    "objectid": 704,
+    "codigo_manzana": "08001010300001014",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 140.7251760526368,
+    "st_area(shape)": 1025.69821599
+   },
+   {
+    "objectid": 706,
+    "codigo_manzana": "08001010300001016",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 162.74825465247721,
+    "st_area(shape)": 1228.5315951
+   },
+   {
+    "objectid": 695,
+    "codigo_manzana": "08001010300001004",
+    "estratificacion": "4",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 419.2669285433654,
+    "st_area(shape)": 10823.9481974
+   }
+  ]
+ },
+ {
+  "via": "manzanas prefijo 0800101030000100",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana LIKE '0800101030000100%'",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 10,
+  "attrs": [
+   {
+    "objectid": 696,
+    "codigo_manzana": "08001010300001006",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 217.7710667999522,
+    "st_area(shape)": 1797.44647656
+   },
+   {
+    "objectid": 697,
+    "codigo_manzana": "08001010300001007",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 217.77097463660195,
+    "st_area(shape)": 1797.44134544
+   },
+   {
+    "objectid": 698,
+    "codigo_manzana": "08001010300001008",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 227.70769687892954,
+    "st_area(shape)": 2001.013260715
+   },
+   {
+    "objectid": 699,
+    "codigo_manzana": "08001010300001009",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 184.5912353682459,
+    "st_area(shape)": 1549.75829022
+   },
+   {
+    "objectid": 695,
+    "codigo_manzana": "08001010300001004",
+    "estratificacion": "4",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 419.2669285433654,
+    "st_area(shape)": 10823.9481974
+   },
+   {
+    "objectid": 899,
+    "codigo_manzana": "08001010300001005",
+    "estratificacion": "No aplica",
+    "nombre_barrio": null,
+    "identificador": "164",
+    "localidad": "02",
+    "st_length(shape)": 281.47089638360904,
+    "st_area(shape)": 4951.45120694
+   },
+   {
+    "objectid": 1075,
+    "codigo_manzana": "08001010300001000",
+    "estratificacion": "4",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 408.89993433936,
+    "st_area(shape)": 10189.04991881
+   },
+   {
+    "objectid": 1076,
+    "codigo_manzana": "08001010300001001",
+    "estratificacion": "4",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 467.7138625379716,
+    "st_area(shape)": 11129.45211851
+   },
+   {
+    "objectid": 1077,
+    "codigo_manzana": "08001010300001002",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 362.9348421418244,
+    "st_area(shape)": 8036.038682915
+   },
+   {
+    "objectid": 1078,
+    "codigo_manzana": "08001010300001003",
+    "estratificacion": "4",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 492.6237226395035,
+    "st_area(shape)": 13763.30994433
+   }
+  ]
+ },
+ {
+  "via": "codigo_manzana=08001010300001004",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='08001010300001004'",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 1,
+  "attrs": [
+   {
+    "objectid": 695,
+    "codigo_manzana": "08001010300001004",
+    "estratificacion": "4",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 419.2669285433654,
+    "st_area(shape)": 10823.9481974
+   }
+  ]
+ },
+ {
+  "via": "codigo_manzana=08001010300001006",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='08001010300001006'",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 1,
+  "attrs": [
+   {
+    "objectid": 696,
+    "codigo_manzana": "08001010300001006",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 217.7710667999522,
+    "st_area(shape)": 1797.44647656
+   }
+  ]
+ },
+ {
+  "via": "codigo_manzana=0800101030000104",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='0800101030000104'",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": []
+ },
+ {
+  "via": "codigo_manzana=0800101030000100004",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='0800101030000100004'",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": []
+ },
+ {
+  "via": "codigo_manzana=0800101030000100400",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='0800101030000100400'",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": []
+ },
+ {
+  "via": "Miramar manzanas",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "UPPER(nombre_barrio)='MIRAMAR'",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 82,
+  "attrs": [
+   {
+    "objectid": 696,
+    "codigo_manzana": "08001010300001006",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 217.7710667999522,
+    "st_area(shape)": 1797.44647656
+   },
+   {
+    "objectid": 705,
+    "codigo_manzana": "08001010300001015",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 146.47358182125134,
+    "st_area(shape)": 1091.907197035
+   },
+   {
+    "objectid": 697,
+    "codigo_manzana": "08001010300001007",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 217.77097463660195,
+    "st_area(shape)": 1797.44134544
+   },
+   {
+    "objectid": 698,
+    "codigo_manzana": "08001010300001008",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 227.70769687892954,
+    "st_area(shape)": 2001.013260715
+   },
+   {
+    "objectid": 699,
+    "codigo_manzana": "08001010300001009",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 184.5912353682459,
+    "st_area(shape)": 1549.75829022
+   },
+   {
+    "objectid": 700,
+    "codigo_manzana": "08001010300001010",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 196.7373675375984,
+    "st_area(shape)": 1689.213610545
+   },
+   {
+    "objectid": 701,
+    "codigo_manzana": "08001010300001011",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 140.64537719277172,
+    "st_area(shape)": 1029.21891155
+   },
+   {
+    "objectid": 702,
+    "codigo_manzana": "08001010300001012",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 139.825603768861,
+    "st_area(shape)": 1022.340352965
+   },
+   {
+    "objectid": 703,
+    "codigo_manzana": "08001010300001013",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 138.77601154759037,
+    "st_area(shape)": 1011.02279429
+   },
+   {
+    "objectid": 704,
+    "codigo_manzana": "08001010300001014",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 140.7251760526368,
+    "st_area(shape)": 1025.69821599
+   },
+   {
+    "objectid": 706,
+    "codigo_manzana": "08001010300001016",
+    "estratificacion": "No aplica",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 162.74825465247721,
+    "st_area(shape)": 1228.5315951
+   },
+   {
+    "objectid": 695,
+    "codigo_manzana": "08001010300001004",
+    "estratificacion": "4",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 419.2669285433654,
+    "st_area(shape)": 10823.9481974
+   }
+  ]
+ },
+ {
+  "via": "datos.gov.co busqueda 'estratificacion Barranquilla'",
+  "url": "https://www.datos.gov.co/api/views.json",
+  "params": {
+   "q": "estratificacion Barranquilla",
+   "limit": 5
+  },
+  "error": "ReadTimeout: HTTPSConnectionPool(host='www.datos.gov.co', port=443): Read timed out. (read timeout=15.0)"
+ }
+]

@@ -112,7 +112,17 @@ def altura_permitida(ciudad, ent2):
 
 
 def _texto_pisos_construidos(pisos_construidos, construction_status=None):
-    """03H.2: distinguir 'sin construcción' (NO_MATCH) de 'fuente no disponible'."""
+    """03H.2: distinguir 'sin construcción' (NO_MATCH) de 'fuente no disponible'.
+
+    03I.1 · F12 (hallazgo real de la corrida Golden con el CTL original): con el
+    punto geocodificado de la dirección oficial la capa 310 respondió sin features
+    y el dictamen imprimía "capa de construcción consultada sin edificación
+    registrada en el punto" — para un inmueble que el MISMO dictamen identifica
+    como apartamento en propiedad horizontal (unidad 430, matrícula 040-646406).
+    Una respuesta sin features NO prueba que no exista edificación: el punto puede
+    caer en la vía (el geocodificador devuelve el eje de la dirección). Se declara
+    la ausencia de REGISTRO en la capa, sin afirmar ausencia de construcción.
+    """
     pisos_ok = _parse_pisos(pisos_construidos)
     if pisos_ok:
         return "{} piso(s)".format(pisos_ok)
@@ -122,8 +132,8 @@ def _texto_pisos_construidos(pisos_construidos, construction_status=None):
     if construction_status == "NOT_EVALUATED":
         return "PENDIENTE DE VERIFICACIÓN (capa de construcción no consultada)"
     if construction_status == "NO_MATCH":
-        return ("N/D — capa de construcción consultada sin edificación "
-                "registrada en el punto")
+        return ("N/D — la capa de construcción no devolvió registro en el punto "
+                "consultado (no se afirma ausencia de edificación)")
     return "PENDIENTE DE VERIFICACIÓN"
 
 
@@ -184,8 +194,13 @@ def _confrontacion(ciudad, ent2, pisos_construidos, construction_status=None):
     """Compara pisos construidos con la altura permitida.
 
     Devuelve (estado, texto): estado en
-    'exceso' | 'dentro' | 'pendiente' | 'pendiente_fuente' | 'sin_construccion'
-    | 'sin_norma'."""
+    'exceso' | 'dentro' | 'pendiente' | 'pendiente_fuente'
+    | 'sin_registro_construccion' | 'sin_norma'.
+
+    03I.1 · F12: la ausencia de registro en la capa de construcción NO es "no hay
+    edificación" ni habilita aplicar la norma "para desarrollo nuevo": el punto
+    geocodificado puede corresponder a la vía.
+    """
     permitido, tipo, _ = altura_permitida(ciudad, ent2)
     construidos = _parse_pisos(pisos_construidos)
     if construidos is None:
@@ -197,11 +212,15 @@ def _confrontacion(ciudad, ent2, pisos_construidos, construction_status=None):
             return "pendiente", (
                 "No se compara: la capa de construcción no se consultó en esta "
                 "ejecución.")
-        # NO_MATCH: la capa respondió y no hay edificación registrada.
-        return "sin_construccion", (
-            "PENDIENTE: la capa de construcción respondió sin edificación "
-            "registrada en el punto (aplica la norma para desarrollo nuevo según "
-            "la altura permitida)")
+        # NO_MATCH: la capa respondió SIN REGISTRO en el punto consultado. No se
+        # afirma ausencia de edificación (el punto puede caer en la vía) ni se
+        # aplica la norma de desarrollo nuevo.
+        return "sin_registro_construccion", (
+            "No se compara: la capa de construcción no devolvió registro en el "
+            "punto geocodificado (el punto puede corresponder a la vía o el "
+            "registro estar asociado a la unidad predial). No se afirma ausencia "
+            "de edificación ni lote disponible; verificar la construcción por "
+            "código catastral / unidad predial.")
     if permitido is None:
         if tipo == "ficha_upz":
             return "pendiente", (

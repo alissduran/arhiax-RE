@@ -66,6 +66,38 @@ def lonja_metadata(yml: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         "vigencia_desde": decl.get("vigencia_desde"),
         "vigencia_hasta": decl.get("vigencia_hasta"),
         "version": cons.get("version") or "0.1",
+        "autor": cons.get("autor"),
+    }
+
+
+# ── Identidad metodológica del mercado (03I.1 · F) ────────────────────────────
+# Una tasa autorizable NO puede viajar con `methodology_version = null`: el
+# dictamen debe poder citar QUÉ artefacto metodológico la produjo y con qué
+# versión. La versión NO se inventa retrospectivamente: se deriva del artefacto
+# real (`regla_consolidacion.version` del YAML de la Lonja) y se sella con el
+# sha256 del archivo leído.
+METHODOLOGY_ID = "lonja_baq_metodologia"
+
+
+def market_methodology(yml_path: Optional[Path] = None) -> Dict[str, Any]:
+    """Identidad + versión REAL del artefacto metodológico de mercado."""
+    import hashlib
+    p = Path(yml_path) if yml_path else _YAML_PATH
+    try:
+        sha = hashlib.sha256(p.read_bytes()).hexdigest()
+    except Exception:
+        sha = None
+    meta = lonja_metadata(_load_lonja(p) if p.exists() else None)
+    return {
+        "id": METHODOLOGY_ID,
+        "version": meta.get("version"),
+        "entity": meta.get("entidad"),
+        "autor": meta.get("autor"),
+        "vigencia_desde": meta.get("vigencia_desde"),
+        "vigencia_hasta": meta.get("vigencia_hasta"),
+        "file": p.name,
+        "sha256": sha,
+        "ruta": str(p),
     }
 
 
@@ -78,6 +110,7 @@ def resolve_market_sector(barrio: Optional[str],
     """
     y = _load_lonja(yml_path)
     meta = lonja_metadata(y)
+    _met = market_methodology(yml_path)
     sectores = y.get("valor_suelo_por_sector") or {}
     barrio_clean = str(barrio or "").strip()
 
@@ -86,6 +119,10 @@ def resolve_market_sector(barrio: Optional[str],
         "matched_sector": None,
         "match_type": MATCH_NO_MATCH,
         "methodology_version": meta.get("version"),
+        "market_methodology_id": _met.get("id"),
+        "market_methodology_version": _met.get("version"),
+        "market_methodology_sha256": _met.get("sha256"),
+        "market_methodology_file": _met.get("file"),
         "methodology_entity": meta.get("entidad"),
         "vigencia_desde": meta.get("vigencia_desde"),
         "value_m2": None,
@@ -94,9 +131,12 @@ def resolve_market_sector(barrio: Optional[str],
         "rango_min_m2": None,
         "rango_max_m2": None,
         "provenance": {
-            "methodology_file": _YAML_PATH.name,
+            "methodology_file": _met.get("file") or _YAML_PATH.name,
             "methodology_version": meta.get("version"),
+            "methodology_id": _met.get("id"),
+            "methodology_sha256": _met.get("sha256"),
             "methodology_entity": meta.get("entidad"),
+            "artifact_autor": _met.get("autor"),
         },
     }
 
@@ -175,12 +215,21 @@ def build_market_context(*, identity_verified: bool,
         "uso": _field(uso, uso_status, None),
         "sector_metodologico": sector,
         "market_rate_source": _rate_source,
+        # 03I.1 · F: la metodología que produjo la tasa viaja hasta el manifest y el
+        # receipt (antes quedaba en None y una tasa autorizable salía sin versión).
+        "market_methodology_id": sector.get("market_methodology_id"),
+        "market_methodology_version": sector.get("market_methodology_version"),
+        "market_methodology_sha256": sector.get("market_methodology_sha256"),
+        "market_methodology_file": sector.get("market_methodology_file"),
         "coordinates": coordinates or {},
         "geocoder_source": geocoder_source,
         "geocoder_confidence": geocoder_confidence,
         "provenance": {
             "market_rate_source": _rate_source,
             "methodology_version": sector.get("methodology_version"),
+            "market_methodology_id": sector.get("market_methodology_id"),
+            "market_methodology_version": sector.get("market_methodology_version"),
+            "market_methodology_sha256": sector.get("market_methodology_sha256"),
             "methodology_entity": sector.get("methodology_entity"),
         },
         "ready": False,
@@ -216,6 +265,13 @@ def _evaluate_ready(mc: Dict[str, Any]) -> Tuple[bool, List[str]]:
 
     if mc.get("market_rate_source") is None:
         blockers.append("market_rate_source ausente (sin tasa de mercado autorizada)")
+
+    # 03I.1 · F: una tasa autorizable no puede viajar sin identidad metodológica
+    # (id + versión del artefacto real). Sin versión no hay trazabilidad.
+    if match_type in (MATCH_EXACT, MATCH_NORMALIZED_EXACT, MATCH_ALIAS):
+        if not mc.get("market_methodology_id") or not mc.get("market_methodology_version"):
+            blockers.append("metodología de mercado sin id/versión trazable "
+                            "(market_methodology_version ausente)")
 
     # 03H.1: la tasa debe existir y ser > 0.
     _v = sector.get("value_m2")
@@ -404,20 +460,112 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
     }
 
 
+# ── UrbanSourceSummary (03I.1 · F2) ───────────────────────────────────────────
+# Declara, POR CAMPO, qué fuente produjo el valor urbano que muestra el dictamen.
+# El caso Golden llegó a mostrar en 6.2 el texto fijo "CONSOLIDACION / DESARROLLO"
+# y una fila "Fuente de capas: GeoJSON empaquetados (sin consulta en vivo)"
+# mientras la tabla del mismo capítulo mostraba el tratamiento REAL de la capa
+# oficial en vivo (Desarrollo / Bajo / altura 8). Dos verdades = un defecto.
+USM_LIVE = "LIVE_OFFICIAL"
+USM_PACKAGED = "PACKAGED_REFERENCE"
+USM_MIXED = "MIXED"
+USM_UNAVAILABLE = "SOURCE_UNAVAILABLE"
+
+# Campos urbanos que pueden venir del contexto oficial en vivo.
+_CAMPOS_OFICIALES = ("barrio", "localidad", "pieza_urbana", "estrato", "tratamiento",
+                     "tipo_tratamiento", "altura_maxima")
+
+
+def build_urban_source_summary(*, official_urban_context: Optional[Dict[str, Any]] = None,
+                               campos_empaquetados: Optional[List[str]] = None,
+                               etiqueta_empaquetados: str = ("Geometrias del POT "
+                                                             "empaquetadas en la aplicacion")) -> Dict[str, Any]:
+    """Resumen auditable de procedencia urbana (por campo + modo global).
+
+    Args:
+        official_urban_context: salida de `resolve_official_urban_context`.
+        campos_empaquetados: hechos que provienen de geometrías EMPAQUETADAS
+            (p. ej. las capas de riesgo del POT consultadas por STRtree local).
+
+    Returns:
+        {"source_mode", "campos": {campo: {value, fuente, modo}}, "fuente_oficial",
+         "declaracion"}
+    """
+    ouc = official_urban_context or {}
+    campos: Dict[str, Dict[str, Any]] = {}
+    for campo in _CAMPOS_OFICIALES:
+        valor = ouc.get(campo)
+        status = ouc.get(f"{campo}_status") if campo != "localidad" and campo != "pieza_urbana" else ouc.get("context_status")
+        if valor in (None, ""):
+            continue
+        vivo = (campo in ("localidad", "pieza_urbana")) or status == STATUS_VERIFIED_OFFICIAL
+        campos[campo] = {
+            "value": valor,
+            "status": status,
+            "fuente": (ouc.get("source") or "official_urban_layer") if vivo else None,
+            "modo": USM_LIVE if vivo else USM_PACKAGED,
+        }
+    for campo in (campos_empaquetados or []):
+        campos.setdefault(campo, {"value": None, "status": None,
+                                  "fuente": etiqueta_empaquetados, "modo": USM_PACKAGED})
+
+    _modos = {c["modo"] for c in campos.values()}
+    if not _modos:
+        modo = USM_UNAVAILABLE
+    elif _modos == {USM_LIVE}:
+        modo = USM_LIVE
+    elif _modos == {USM_PACKAGED}:
+        modo = USM_PACKAGED
+    else:
+        modo = USM_MIXED
+
+    if modo == USM_LIVE:
+        declaracion = ("Todos los valores urbanos mostrados provienen de la capa oficial "
+                       "consultada EN VIVO.")
+    elif modo == USM_PACKAGED:
+        declaracion = ("Los valores urbanos mostrados provienen de geometrias "
+                       "empaquetadas en la aplicacion (sin consulta en vivo).")
+    elif modo == USM_MIXED:
+        _vivos = ", ".join(k for k, v in campos.items() if v["modo"] == USM_LIVE)
+        _emp = ", ".join(k for k, v in campos.items() if v["modo"] == USM_PACKAGED)
+        declaracion = ("Procedencia MIXTA: " + (f"EN VIVO ({_vivos})" if _vivos else "EN VIVO (—)")
+                       + " · " + (f"EMPAQUETADO ({_emp})" if _emp else "EMPAQUETADO (—)"))
+    else:
+        declaracion = "Sin valores urbanos resueltos en esta ejecución."
+    return {
+        "source_mode": modo,
+        "campos": campos,
+        "fuente_oficial": ouc.get("source"),
+        "context_status": ouc.get("context_status"),
+        "declaracion": declaracion,
+    }
+
+
+def urban_source_mode(summary: Optional[Dict[str, Any]]) -> str:
+    return (summary or {}).get("source_mode") or USM_UNAVAILABLE
+
+
 # ── Contexto urbano OFICIAL por coordenadas autorizadas (03H.1A) ──────────────
 def resolve_official_urban_context(*, ciudad: str, lat, lon,
                                    coordinate_source: Optional[str],
-                                   consultar_entorno=None) -> Dict[str, Any]:
+                                   consultar_entorno=None,
+                                   numero_predial: Optional[str] = None) -> Dict[str, Any]:
     """Consulta OFICIAL de barrio/estrato/tratamiento por coordenadas.
 
     Es CONTEXTO ESPACIAL, no identidad: NO modifica identity_source y funciona
     aunque `predio_real` sea None (la identidad puede venir del registro oficial
     de adopción). Solo se consulta si `coordinate_source` está en la allowlist.
+
+    03I.1 · F4: `numero_predial` habilita la resolución del estrato por MANZANA
+    cuando la consulta espacial por punto no intersecta ningún polígono de
+    manzana (caso Golden 040-646406). La atribución sigue siendo OFICIAL: la
+    manzana sale del propio número predial y se consulta por atributo.
     """
     out: Dict[str, Any] = {
         "barrio": None, "barrio_status": STATUS_UNRESOLVED,
         "localidad": None,
         "estrato": None, "estrato_status": STATUS_UNRESOLVED,
+        "estrato_origen": None, "estrato_trace": None,
         "tratamiento": None, "tratamiento_status": STATUS_UNRESOLVED,
         "tipo_tratamiento": None, "tipo_tratamiento_status": STATUS_UNRESOLVED,
         "altura_maxima": None, "altura_status": STATUS_UNRESOLVED,
@@ -449,7 +597,17 @@ def resolve_official_urban_context(*, ciudad: str, lat, lon,
         return out
 
     try:
-        r = _fn(lat, lon) or {}
+        if numero_predial:
+            r = _fn(lat, lon, numero_predial=numero_predial) or {}
+        else:
+            r = _fn(lat, lon) or {}
+    except TypeError:
+        # Productores antiguos/alternativos que no aceptan el número predial.
+        try:
+            r = _fn(lat, lon) or {}
+        except Exception:
+            out["context_status"] = STATUS_SOURCE_UNAVAILABLE
+            return out
     except Exception:
         out["context_status"] = STATUS_SOURCE_UNAVAILABLE
         return out
@@ -479,6 +637,9 @@ def resolve_official_urban_context(*, ciudad: str, lat, lon,
     out["localidad"] = r.get("localidad")
     out["pieza_urbana"] = r.get("pieza_urbana")
     out["codigo_manzana"] = r.get("codigo_manzana")
+    # 03I.1 · F4: procedencia del estrato (espacial vs manzana del predial).
+    out["estrato_origen"] = r.get("estrato_origen")
+    out["estrato_trace"] = r.get("estrato_trace")
 
     if r.get("estrato") not in (None, "") and "estrato" not in amb:
         out["estrato"] = r["estrato"]

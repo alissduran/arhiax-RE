@@ -104,12 +104,20 @@ class TestNoPosibleLote(unittest.TestCase):
         self.assertIn("no disponible", txt)
         self.assertIn("fuente de construcción", d["Confrontación (construido vs. norma)"])
 
-    def test_no_match_si_dice_sin_edificacion(self):
+    def test_no_match_no_afirma_ausencia_de_edificacion(self):
+        """03I.1 · F12: la capa respondió SIN REGISTRO en el punto != no hay edificio.
+
+        El Golden real (CTL original, punto geocodificado de la dirección oficial)
+        produjo 'capa de construcción consultada sin edificación registrada en el
+        punto' para un apartamento en PH que el mismo dictamen identifica: el punto
+        del geocodificador puede caer en la vía. Se declara el estado real.
+        """
         from edificabilidad import filas_edificabilidad
         d = dict(filas_edificabilidad("barranquilla", _URBANO_GOLDEN, None,
                                       construction_status="NO_MATCH"))
-        self.assertIn("sin edificación registrada",
-                      d["Pisos construidos (catastro)"])
+        _t = d["Pisos construidos (catastro)"]
+        self.assertIn("no devolvió registro", _t)
+        self.assertNotIn("sin edificación registrada", _t)
 
 
 class TestEstratoSemantico(unittest.TestCase):

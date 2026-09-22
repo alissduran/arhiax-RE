@@ -60,6 +60,10 @@ def build_execution_receipts(
 ) -> Dict[str, Any]:
     """Compila los receipts REALES de esta ejecución (sin red, ya resueltos)."""
     capas = (predio_real or {}).get("capas") or {}
+    # 03I.1: el MarketContext viaja dentro de la identidad canónica (autoridad única
+    # del render); el recibo lee de ahí y no reconstruye valores.
+    _mc = (canonical_identity or {}).get("market_context")
+    _mc = _mc if isinstance(_mc, dict) else {}
     fuente_gis = ((predio_real or {}).get("fuente") or {}).get("estado")
     # 03D.2A: 'exacto' deriva de la SEMÁNTICA NORMALIZADA de resolución de la
     # identidad canónica, NO de predio_real.disponible (que puede ser PARTIAL /
@@ -94,6 +98,28 @@ def build_execution_receipts(
         "riesgo_volcanico": {
             "disponible": bool((volcan or {}).get("disponible")),
             "nivel": (volcan or {}).get("nivel"),
+            # 03I.1 · F8: el ESTADO es la única verdad del capítulo 8.2 (el nivel
+            # "NO EVALUADO" ya no se imprime como "amenaza baja").
+            "estado": (volcan or {}).get("estado"),
+            "cobertura_confirmada": (volcan or {}).get("cobertura_confirmada"),
+        },
+        # 03I.1 · F: la metodología que produjo la tasa de mercado (id + versión
+        # del artefacto real + sha256) viaja al recibo, igual que en el manifest.
+        "mercado": {
+            "ready": _mc.get("ready"),
+            "metodologia_id": _mc.get("market_methodology_id"),
+            "metodologia_version": _mc.get("market_methodology_version"),
+            "metodologia_sha256": _mc.get("market_methodology_sha256"),
+            "sector": (_mc.get("sector_metodologico") or {}).get("matched_sector"),
+            "match_type": (_mc.get("sector_metodologico") or {}).get("match_type"),
+            "blockers": list(_mc.get("blockers") or []),
+        },
+        # 03I.1 · F4: procedencia del estrato (espacial vs manzana del predial).
+        "contexto_urbano": {
+            "estrato": (_mc.get("estrato") or {}).get("value"),
+            "estrato_status": (_mc.get("estrato") or {}).get("status"),
+            "estrato_origen": (_mc.get("official_urban_context") or {}).get("estrato_origen"),
+            "urban_source_mode": (_mc.get("urban_source_summary") or {}).get("source_mode"),
         },
         "geo_evaluado": bool((geo_eval or {}).get("evaluado")),
         # 03F.1: receipt por categoría (status + count). El status respeta la

@@ -267,15 +267,23 @@ class TestCoherenciaMedellin(unittest.TestCase):
         self.assertNotIn("Barranquilla", ruta[0]["fuente"])
 
     def test_planes_parciales_med_bog_no_afirmados(self):
-        """'Planes Parciales: SIN AFECTACION' era una afirmación sin consulta
-        en MED/BOG -> ahora 'NO EVALUADO' (la fila BAQ sí se mantiene)."""
+        """'Planes Parciales: SIN AFECTACION' era una afirmación sin consulta.
+
+        03I.1: la fila de Barranquilla también afirmaba 'SIN AFECTACION DIRECTA
+        REGISTRADA' para Planes Parciales y Planes de Reordenamiento SIN haber
+        consultado esas capas (el paquete de cruce son inundación, remoción,
+        riesgo no mitigable y arroyos). Se alinea con MED/BOG: si no se consultó,
+        no se afirma.
+        """
         from dictamen_data import get_pot_summary_dt
         filas_med = dict(get_pot_summary_dt("x", ciudad="medellin"))
         filas_bog = dict(get_pot_summary_dt("x", ciudad="bogota"))
         self.assertIn("NO EVALUADO", filas_med["Planes Parciales"])
         self.assertIn("NO EVALUADO", filas_bog["Planes Parciales"])
         filas_baq = dict(get_pot_summary_dt("x", ciudad="barranquilla"))
-        self.assertIn("SIN AFECTACION", filas_baq["Planes Parciales"].upper())
+        self.assertIn("NO EVALUADO", filas_baq["Planes Parciales"])
+        self.assertIn("NO EVALUADO", filas_baq["Planes de Reordenamiento"])
+        self.assertNotIn("SIN AFECTACION", filas_baq["Planes Parciales"].upper())
 
     def test_cobertura_alert_con_la_ciudad_correcta(self):
         """Regresión (reporte del usuario): en un caso de Bogotá la evaluación

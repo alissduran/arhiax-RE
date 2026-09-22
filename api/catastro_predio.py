@@ -612,7 +612,134 @@ def _consolidar_valor(features: list, key: str) -> tuple:
     return None, "AMBIGUOUS_CONTEXT"
 
 
-def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
+def _solo_digitos(txt) -> str:
+    return re.sub(r"\D", "", str(txt or ""))
+
+
+def resolver_manzana_y_estrato(numero_predial: str,
+                               barrio_esperado: Optional[str] = None,
+                               localidad_esperada: Optional[str] = None) -> dict[str, Any]:
+    """Estrato OFICIAL del predio por su MANZANA (03I.1 · F4).
+
+    Problema que cierra: la consulta espacial por PUNTO contra la capa oficial de
+    estratificación devolvía 0 features en el caso Golden (el punto geocodificado
+    no cae dentro de ningún polígono de manzana), de modo que el estrato quedaba
+    UNRESOLVED y bloqueaba la valoración. La vía correcta NO es inferir ni usar un
+    default: es resolver la MANZANA del predio por su IDENTIFICADOR.
+
+    Método (determinista, sin inferencia):
+      1. El `codigo_manzana` oficial es un PREFIJO del número predial. No se fija
+         la longitud a mano: se prueban las longitudes 14..22 y se exige que
+         EXACTAMENTE UNA coincida con UNA sola manzana (unicidad).
+      2. Se consulta la capa de estratificación por ATRIBUTO (`codigo_manzana='...'`),
+         sin ambigüedad espacial.
+      3. Se corrobora: (a) el barrio/localidad de la manzana contra el contexto
+         oficial ya resuelto, (b) la existencia de la manzana en la capa catastral
+         de manzanas del mismo servicio.
+      4. Un valor no numérico ("No aplica") NO es un estrato: no se afirma.
+
+    Returns:
+        {"estado": "VERIFIED_OFFICIAL"|"UNRESOLVED"|"AMBIGUOUS"|"CONFLICT"|
+                   "SOURCE_UNAVAILABLE",
+         "estrato", "codigo_manzana", "barrio_oficial", "localidad",
+         "motivo", "trace": {...}}
+    """
+    out: dict[str, Any] = {
+        "estado": "UNRESOLVED", "estrato": None, "codigo_manzana": None,
+        "barrio_oficial": None, "localidad": None, "identificador_barrio": None,
+        "longitud_prefijo": None, "motivo": None,
+        "trace": {"url": f"{BASE_ORDENAMIENTO}/estratificacion/MapServer/1/query",
+                  "consultas": []},
+    }
+    pred = _solo_digitos(numero_predial)
+    if len(pred) < 15:
+        out["motivo"] = "NUMERO_PREDIAL_INSUFICIENTE"
+        return out
+
+    candidatos = [pred[:L] for L in range(14, min(len(pred), 22) + 1)]
+    where = "codigo_manzana IN (" + ",".join(f"'{c}'" for c in candidatos) + ")"
+    r = _query_capa(f"{BASE_ORDENAMIENTO}/estratificacion/MapServer", 1, where,
+                    out_fields="*", max_features=10)
+    feats = r.get("features") or []
+    out["trace"]["consultas"].append({
+        "via": "estratificacion por prefijo del numero predial",
+        "where": where, "n_features": len(feats),
+        "disponible": r.get("disponible"), "error": r.get("error"),
+    })
+    if not r.get("disponible"):
+        out["estado"] = "SOURCE_UNAVAILABLE"
+        out["motivo"] = "SERVICIO_SIN_RESPUESTA"
+        return out
+
+    if not feats:
+        out["motivo"] = "MANZANA_NO_ENCONTRADA_POR_PREFIJO"
+        return out
+    if len(feats) > 1:
+        out["estado"] = "AMBIGUOUS"
+        out["motivo"] = "PREFIJO_AMBIGUO_MULTIPLES_MANZANAS"
+        out["trace"]["candidatas"] = [f.get("properties") for f in feats[:5]]
+        return out
+
+    at = feats[0].get("properties") or {}
+    codigo = str(at.get("codigo_manzana") or "")
+    out["codigo_manzana"] = codigo or None
+    out["longitud_prefijo"] = len(codigo) or None
+    out["barrio_oficial"] = at.get("nombre_barrio")
+    out["localidad"] = at.get("localidad")
+    out["identificador_barrio"] = at.get("identificador")
+    _valor = at.get("estratificacion")
+
+    # Corroboración (b): la manzana existe en la capa catastral de manzanas.
+    _corr = (_query_capa(f"{BASE_CATASTRO}", CAPA_MANZANA, f"codigo='{codigo}'",
+                         out_fields="*", max_features=3) if codigo else None)
+    out["trace"]["corroboracion_manzana_catastral"] = {
+        "where": f"codigo='{codigo}'",
+        "n_features": len((_corr or {}).get("features") or []),
+        "disponible": (_corr or {}).get("disponible"),
+    }
+    if _corr is not None and _corr.get("disponible") and not (_corr.get("features") or []):
+        out["estado"] = "CONFLICT"
+        out["motivo"] = "MANZANA_NO_EXISTE_EN_CAPA_CATASTRAL"
+        return out
+
+    # Corroboración (a): barrio/localidad de la manzana vs contexto oficial.
+    if barrio_esperado and out["barrio_oficial"]:
+        if _sin_acentos(out["barrio_oficial"]) != _sin_acentos(barrio_esperado):
+            out["estado"] = "CONFLICT"
+            out["motivo"] = (f"BARRIO_DISCREPANTE (manzana={out['barrio_oficial']!r} "
+                             f"vs contexto={barrio_esperado!r})")
+            return out
+    if localidad_esperada and out["localidad"]:
+        if _solo_digitos(out["localidad"]) and _solo_digitos(localidad_esperada):
+            if _solo_digitos(out["localidad"]) != _solo_digitos(localidad_esperada):
+                out["estado"] = "CONFLICT"
+                out["motivo"] = "LOCALIDAD_DISCREPANTE"
+                return out
+
+    # Un valor no numérico NO es un estrato (p. ej. "No aplica" en manzanas sin
+    # estratificación residencial): no se afirma como estrato del predio.
+    _txt = str(_valor or "").strip()
+    if not re.fullmatch(r"[1-6]", _txt):
+        out["motivo"] = (f"ESTRATO_NO_APLICA_EN_MANZANA ({_txt!r})" if _txt
+                         else "MANZANA_SIN_VALOR_DE_ESTRATO")
+        return out
+
+    out["estrato"] = _txt
+    out["estado"] = "VERIFIED_OFFICIAL"
+    out["motivo"] = None
+    return out
+
+
+def _sin_acentos(txt) -> str:
+    import unicodedata
+    nfd = unicodedata.normalize("NFD", str(txt or ""))
+    return " ".join("".join(c for c in nfd if unicodedata.category(c) != "Mn").upper().split())
+
+
+def consultar_entorno_urbano(lat: float, lon: float,
+                             numero_predial: Optional[str] = None,
+                             barrio_esperado: Optional[str] = None,
+                             localidad_esperada: Optional[str] = None) -> dict[str, Any]:
     """Consulta barrio, localidad, estrato y tratamiento urbanístico por punto.
 
     Capas POT oficiales de la Alcaldía (unidadesadministrativas → Barrios,
@@ -629,14 +756,15 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
     altura_maxima se consolidan cada uno de forma independiente). Nunca se toma
     ninguno de features[0].
     """
-    cache_key = f"entorno|{round(lat, 5)}|{round(lon, 5)}"
+    cache_key = (f"entorno|{round(lat, 5)}|{round(lon, 5)}"
+                 f"|{_solo_digitos(numero_predial) or '-'}|{barrio_esperado or '-'}")
     cached = _cache_get(cache_key)
     if cached is not None:
         return cached
     res = {"disponible": False, "error": None, "barrio": None, "localidad": None,
            "estrato": None, "tratamiento": None, "tipo_tratamiento": None,
            "altura_maxima": None, "pieza_urbana": None, "codigo_manzana": None,
-           "context_status": None}
+           "context_status": None, "estrato_origen": None, "estrato_trace": None}
     _ambiguos = []
 
     r_barrios = _query_punto(
@@ -690,6 +818,29 @@ def consultar_entorno_urbano(lat: float, lon: float) -> dict[str, Any]:
                 _ambiguos.append(_campo)
             else:
                 res[_campo] = valor
+
+    # 03I.1 · F4: si la consulta ESPACIAL no resolvió el estrato (el punto puede
+    # caer fuera de los polígonos de manzana, como en el caso Golden), se resuelve
+    # por IDENTIFICADOR: la manzana del predio sale de su número predial y se
+    # consulta por atributo. Sin inferencia, sin default y sin copiar históricos.
+    if res["estrato"] is None and numero_predial:
+        _mz = resolver_manzana_y_estrato(
+            numero_predial,
+            barrio_esperado=(barrio_esperado or res.get("barrio")),
+            localidad_esperada=localidad_esperada)
+        res["estrato_trace"] = {"manzana": _mz.get("trace"),
+                                "estado": _mz.get("estado"),
+                                "motivo": _mz.get("motivo")}
+        if _mz.get("estado") == "VERIFIED_OFFICIAL":
+            res["estrato"] = _mz["estrato"]
+            res["estrato_origen"] = "MANZANA_OFICIAL_DEL_NUMERO_PREDIAL"
+            res["codigo_manzana"] = _mz.get("codigo_manzana")
+            if not res["barrio"] and _mz.get("barrio_oficial"):
+                res["barrio"] = _mz["barrio_oficial"]
+            if not res["localidad"] and _mz.get("localidad"):
+                res["localidad"] = _mz["localidad"]
+        elif _mz.get("estado") == "CONFLICT":
+            _ambiguos.append("estrato")
 
     res["campos_ambiguos"] = list(_ambiguos)
     if _ambiguos:

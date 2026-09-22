@@ -1,0 +1,299 @@
+[
+ {
+  "via": "ordenamiento/estratificacion (root)",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "sample": {
+   "currentVersion": 11.5,
+   "cimVersion": "3.5.0",
+   "serviceDescription": "<div style='text-align:Left;font-size:12pt'><p><span>Muestra la variable estrato socioeconómico en Barranquilla espacializada a nivel de manzanas, relaciona también información de barrio y localidad. Permite comprender cómo se distribuyen los distintos niveles de condiciones de vida en la ciudad. A través de esta información, se pueden orientar políticas públicas, definir tarifas diferenciadas para servicios y promover una planeación urbana más equitativa.</span></p></div>",
+   "mapName": "Estratificación",
+   "description": "Muestra la variable estrato socioeconómico en Barranquilla espacializada a nivel de manzanas, relaciona también información de barrio y localidad. Permite comprender cómo se distribuyen los distintos niveles de condiciones de vida en la ciudad. A través de esta información, se pueden orientar políticas públicas, definir tarifas diferenciadas para servicios y promover una planeación urbana más equitativa.",
+   "copyrightText": "",
+   "supportsDynamicLayers": true,
+   "layers": [
+    {
+     "id": 1,
+     "name": "Estratificación por manzanas",
+     "parentLayerId": -1,
+     "defaultVisibility": true,
+     "subLayerIds": null,
+     "minScale": 0,
+     "maxScale": 0,
+     "type": "Feature Layer",
+     "geometryType": "esriGeometryPolygon",
+     "supportsDynamicLegends": true
+    }
+   ],
+   "tables": [],
+   "spatialReference": {
+    "wkid": 9377,
+    "latestWkid": 9377,
+    "xyTolerance": 0.001,
+    "zTolerance": 0.001,
+    "mTolerance": 0.001,
+    "falseX": -618700,
+    "falseY": -8436100,
+    "xyUnits": 10000,
+    "falseZ": -100000,
+    "zUnits": 10000,
+    "falseM": -100000,
+    "mUnits": 10000
+   },
+   "singleFusedMapCache": false,
+   "initialExtent": {
+    "xmin": 4789681.946335624,
+    "ymin": 2764445.313795707,
+    "xmax": 4811558.278570126,
+    "ymax": 2780302.5413357066,
+    "spatialReference": {
+     "wkid": 9377,
+     "latestWkid": 9377,
+     "xyTolerance": 0.001,
+     "zTolerance": 0.001,
+     "mTolerance": 0.001,
+     "falseX": -618700,
+     "falseY": -8436100,
+     "xyUnits": 10000,
+     "falseZ": -100000,
+     "zUnits": 10000,
+     "falseM": -100000,
+     "mUnits": 10000
+    }
+   }
+  }
+ },
+ {
+  "via": "estratificacion capa 1 (metadata)",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "sample": {
+   "currentVersion": 11.5,
+   "cimVersion": "3.5.0",
+   "id": 1,
+   "name": "Estratificación por manzanas",
+   "type": "Feature Layer",
+   "description": "Representa las unidades geográficas del Distrito de Barranquilla a nivel de manzana, vinculadas con la clasificación de estrato socioeconómico establecida por la Secretaría de Planeación. Este mapa permite visualizar la distribución espacial de los distintos estratos, facilitando el análisis urbano y la toma de decisiones en materia de desarrollo social y ordenamiento del territorio.",
+   "geometryType": "esriGeometryPolygon",
+   "sourceSpatialReference": {
+    "wkid": 9377,
+    "latestWkid": 9377,
+    "xyTolerance": 0.001,
+    "zTolerance": 0.001,
+    "mTolerance": 0.001,
+    "falseX": -618700,
+    "falseY": -8436100,
+    "xyUnits": 10000,
+    "falseZ": -100000,
+    "zUnits": 10000,
+    "falseM": -100000,
+    "mUnits": 10000
+   },
+   "spatialReference": {
+    "wkid": 9377,
+    "latestWkid": 9377,
+    "xyTolerance": 0.001,
+    "zTolerance": 0.001,
+    "mTolerance": 0.001,
+    "falseX": -618700,
+    "falseY": -8436100,
+    "xyUnits": 10000,
+    "falseZ": -100000,
+    "zUnits": 10000,
+    "falseM": -100000,
+    "mUnits": 10000
+   },
+   "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Planeación.",
+   "parentLayer": null,
+   "subLayers": []
+  }
+ },
+ {
+  "via": "estratificacion punto exacto",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "campos": [],
+  "sample": null
+ },
+ {
+  "via": "estratificacion punto + buffer 25 m",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json",
+   "distance": 25,
+   "units": "esriSRUnit_Meter"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 4,
+  "campos": [
+   "codigo_manzana",
+   "estratificacion",
+   "identificador",
+   "localidad",
+   "nombre_barrio",
+   "objectid",
+   "st_area(shape)",
+   "st_length(shape)"
+  ],
+  "sample": {
+   "objectid": 696,
+   "codigo_manzana": "08001010300001006",
+   "estratificacion": "No aplica",
+   "nombre_barrio": "Miramar",
+   "identificador": "119",
+   "localidad": "02",
+   "st_length(shape)": 217.7710667999522,
+   "st_area(shape)": 1797.44647656
+  }
+ },
+ {
+  "via": "estratificacion punto + buffer 100 m",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json",
+   "distance": 100,
+   "units": "esriSRUnit_Meter"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 8,
+  "campos": [
+   "codigo_manzana",
+   "estratificacion",
+   "identificador",
+   "localidad",
+   "nombre_barrio",
+   "objectid",
+   "st_area(shape)",
+   "st_length(shape)"
+  ],
+  "sample": {
+   "objectid": 696,
+   "codigo_manzana": "08001010300001006",
+   "estratificacion": "No aplica",
+   "nombre_barrio": "Miramar",
+   "identificador": "119",
+   "localidad": "02",
+   "st_length(shape)": 217.7710667999522,
+   "st_area(shape)": 1797.44647656
+  }
+ },
+ {
+  "via": "estratificacion barrio MIRAMAR",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "UPPER(nombre_barrio) LIKE '%MIRAMAR%'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 82,
+  "campos": [
+   "codigo_manzana",
+   "estratificacion",
+   "identificador",
+   "localidad",
+   "nombre_barrio",
+   "objectid",
+   "st_area(shape)",
+   "st_length(shape)"
+  ],
+  "sample": {
+   "objectid": 696,
+   "codigo_manzana": "08001010300001006",
+   "estratificacion": "No aplica",
+   "nombre_barrio": "Miramar",
+   "identificador": "119",
+   "localidad": "02",
+   "st_length(shape)": 217.7710667999522,
+   "st_area(shape)": 1797.44647656
+  }
+ },
+ {
+  "via": "capata 320 Manzana punto",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/320/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "campos": [],
+  "sample": null
+ },
+ {
+  "via": "capa 500 Predio por numero_predial/NUPRE",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/500/query",
+  "params": {
+   "where": "numero_predial='080010103000010040001908040002' OR codigo_homologado='AFT0005BOHA' OR nupre='AFT0005BOHA'",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "f": "json"
+  },
+  "http": 200,
+  "error": "{'code': 404, 'message': 'Layer not found', 'details': []}"
+ },
+ {
+  "via": "capa 105 Direccion punto",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/105/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "campos": [],
+  "sample": null
+ }
+]

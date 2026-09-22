@@ -305,10 +305,20 @@ class TestConstruccionNoSePierde(_Base):
         self.assertEqual(_confrontacion("barranquilla", ent, None,
                                         "SOURCE_UNAVAILABLE")[0],
                          "pendiente_fuente")
-        # Y NO_MATCH sí lo dice (no se confunden entre sí).
+        # Y NO_MATCH se distingue de SOURCE_UNAVAILABLE, pero SIN afirmar ausencia
+        # de edificación (03I.1 · F12: la corrida Golden con el CTL original mostró
+        # que un punto geocodificado puede caer en la vía; el dictamen llegaba a
+        # decir "sin edificación registrada" de un apartamento en PH que él mismo
+        # identificaba).
         d_nm = dict(filas_edificabilidad("barranquilla", ent, None, "NO_MATCH"))
-        self.assertIn("sin edificación registrada",
-                      d_nm["Pisos construidos (catastro)"])
+        _txt_nm = d_nm["Pisos construidos (catastro)"]
+        self.assertIn("no devolvió registro", _txt_nm)
+        self.assertNotIn("sin edificación registrada", _txt_nm)
+        self.assertEqual(_confrontacion("barranquilla", ent, None, "NO_MATCH")[0],
+                         "sin_registro_construccion")
+        _txt_conf = _confrontacion("barranquilla", ent, None, "NO_MATCH")[1]
+        self.assertNotIn("desarrollo nuevo", _txt_conf)
+        self.assertIn("no se afirma ausencia de edificación", _txt_conf.lower())
 
 
 # ── C. Precedencia determinista de la autoridad urbana ───────────────────────

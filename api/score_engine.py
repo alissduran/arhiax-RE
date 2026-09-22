@@ -133,29 +133,35 @@ def calcular_score_actuarial(
         _resumen_geo = (geo_eval.get("resumen_ejecutivo") or "").lower()
         _evaluado = not ("no evaluado" in _resumen_geo or "pendiente" in _resumen_geo)
 
-    if am.get("intersecta"):
-        nivel_am = str(am.get("nivel", "")).upper()
-        if "ALTA" in nivel_am or "ALTO" in nivel_am:
-            score_hidrologico -= 15
-            detalle_hidro.append(f"-15 pts: Amenaza remoción en masa ALTA")
-        elif "MEDIA" in nivel_am or "MEDIO" in nivel_am:
-            score_hidrologico -= 8
-            detalle_hidro.append(f"-8 pts: Amenaza remoción en masa MEDIA")
-        else:
-            score_hidrologico -= 5
-            detalle_hidro.append(f"-5 pts: Amenaza remoción en masa BAJA")
+    if am.get("intersecta") or ri.get("intersecta"):
+        # 03I.1 · F3: los pesos por nivel viven en el contrato ÚNICO de severidad
+        # (`risk_severity`), el mismo que consumen Titulux, los hallazgos y el
+        # resumen. Antes esta tabla estaba duplicada aquí y podía divergir.
+        from risk_severity import decidir as _decidir_sev
 
-    if ri.get("intersecta"):
-        nivel_ri = str(ri.get("nivel", "")).upper()
-        if "ALTA" in nivel_ri or "ALTO" in nivel_ri:
-            score_hidrologico -= 15
-            detalle_hidro.append(f"-15 pts: Área en riesgo ALTA")
-        elif "MEDIA" in nivel_ri or "MEDIO" in nivel_ri:
-            score_hidrologico -= 8
-            detalle_hidro.append(f"-8 pts: Área en riesgo MEDIA")
-        else:
-            score_hidrologico -= 5
-            detalle_hidro.append(f"-5 pts: Área en riesgo BAJA")
+        def _peso(capa, etiqueta):
+            """Peso del score para una capa que SÍ intersecta (None si no tabulada)."""
+            dec = _decidir_sev(capa.get("nivel"), intersecta=True, evaluado=True)
+            peso = dec.get("peso_hidrologico")
+            if peso:
+                detalle_hidro.append(
+                    f"-{peso} pts: {etiqueta} {str(capa.get('nivel') or dec['nivel']).upper()}"
+                    f" (severidad {dec['severidad']} · {dec['regla']} v{dec['regla_version']})")
+                return peso
+            detalle_hidro.append(
+                f"{etiqueta}: nivel declarado no tabulado ({capa.get('nivel')!r}) — "
+                "no se asigna penalización sin nivel oficial reconocido")
+            return None
+
+        _p_am = _peso(am, "Amenaza remoción en masa") if am.get("intersecta") else 0
+        _p_ri = _peso(ri, "Área en riesgo") if ri.get("intersecta") else 0
+        # Una capa que intersecta SIN nivel tabulado no se penaliza con el peso de
+        # "BAJA" (eso era afirmar un nivel no declarado): la componente se declara
+        # no calificable.
+        _no_calificable_hidro = (_p_am is None) or (_p_ri is None)
+        score_hidrologico -= (_p_am or 0) + (_p_ri or 0)
+    else:
+        _no_calificable_hidro = False
 
     if not am.get("intersecta") and not ri.get("intersecta"):
         if _evaluado:
@@ -163,7 +169,7 @@ def calcular_score_actuarial(
         else:
             detalle_hidro.append("Amenaza/riesgo NO EVALUADO (sin fuente en vivo) — componente no calificable")
 
-    if not _evaluado:
+    if not _evaluado or _no_calificable_hidro:
         score_hidrologico = None
     else:
         score_hidrologico = max(0, min(100, score_hidrologico))

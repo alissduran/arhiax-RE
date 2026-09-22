@@ -115,11 +115,13 @@ class TestConfrontacionYHallazgo(unittest.TestCase):
         self.assertIsNone(hallazgo_exceso_altura("medellin", ent, 18))
 
     def test_sin_pisos_construidos_pendiente_sin_exceso(self):
-        """03H.2: solo se afirma 'sin construcción' si la capa RESPONDIÓ sin
-        edificación (NO_MATCH); si no se evaluó, queda PENDIENTE."""
+        """03H.2 + 03I.1 · F12: NO_MATCH = la capa respondió SIN REGISTRO en el
+        punto (no 'no hay edificación': el punto geocodificado puede caer en la
+        vía). Se distingue de SOURCE_UNAVAILABLE y de NOT_EVALUATED."""
         ent = {"tratamiento": "Consolidacion", "altura_maxima": "11"}
-        estado, _ = _confrontacion("barranquilla", ent, None, "NO_MATCH")
-        self.assertEqual(estado, "sin_construccion")
+        estado, texto = _confrontacion("barranquilla", ent, None, "NO_MATCH")
+        self.assertEqual(estado, "sin_registro_construccion")
+        self.assertIn("no se afirma ausencia de edificación", texto.lower())
         estado_na, _ = _confrontacion("barranquilla", ent, None, "SOURCE_UNAVAILABLE")
         self.assertEqual(estado_na, "pendiente_fuente")
         estado_ne, _ = _confrontacion("barranquilla", ent, None)

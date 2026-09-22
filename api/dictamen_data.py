@@ -748,10 +748,19 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
 
 def get_pot_summary_dt(barrio, ciudad="barranquilla", clase_suelo=None,
                        uso_economico=None, upz=None, tratamiento=None,
-                       tipo_tratamiento=None):
+                       tipo_tratamiento=None, altura_maxima=None,
+                       fuente_modo=None, fuente_detalle=None):
     """Resumen POT por ciudad. Cuando la consulta en vivo trajo el valor real
-    (clase_suelo, uso, UPZ, tratamiento) se muestra; si no, PENDIENTE (nunca se
-    afirma un valor genérico como si fuera del predio)."""
+    (clase_suelo, uso, UPZ, tratamiento, altura) se muestra; si no, PENDIENTE
+    (nunca se afirma un valor genérico como si fuera del predio).
+
+    03I.1 · F2: el caso Golden mostraba en 6.2 la cadena FIJA
+    "CONSOLIDACION / DESARROLLO (Según polígono POT)" mientras la tabla del mismo
+    capítulo mostraba el tratamiento REAL de la capa oficial en vivo
+    ("Desarrollo (Bajo)", altura 8). Dos verdades en el mismo capítulo. Ahora 6.2
+    y 6.3 consumen el MISMO objeto (`fuente_modo` declara la procedencia por campo
+    vía UrbanSourceSummary).
+    """
     es_med = "medellin" in (ciudad or "").lower()
     es_bog = "bogota" in (ciudad or "").lower()
     es_pas = "pasto" in (ciudad or "").lower()
@@ -759,6 +768,12 @@ def get_pot_summary_dt(barrio, ciudad="barranquilla", clase_suelo=None,
     def _v(valor, pendiente):
         valor = (valor or "").strip()
         return valor if valor and valor.upper() not in ("N/A", "N/D", "NONE") else pendiente
+
+    def _fuente_txt(defecto):
+        """Texto de procedencia declarado por el render (nunca un literal fijo)."""
+        if fuente_detalle:
+            return fuente_detalle
+        return defecto
 
     if es_med:
         suelo = _v(clase_suelo, "PENDIENTE (consulta en vivo no disponible)")
@@ -809,14 +824,37 @@ def get_pot_summary_dt(barrio, ciudad="barranquilla", clase_suelo=None,
             ("Fuente de capas",
              "Geoportal Municipal de Pasto -- Planeacion (consultas en vivo)"),
         ]
+    # ── Barranquilla: se muestra lo que la fuente OFICIAL resolvió (o PENDIENTE) ──
+    # 03I.1 · F2: aquí NO se afirma un tratamiento/altura por defecto. Antes decía
+    # "CONSOLIDACION / DESARROLLO (Según polígono POT)" y "Altura: sujeta a ficha
+    # normativa" aunque la capa oficial viva hubiera resuelto otro polígono; el
+    # dictamen debía mostrar DOS tratamientos distintos en 6.2 y 6.3.
+    _suelo_baq = _v(clase_suelo, "")
+    _trat_baq = _v(tratamiento, "")
+    _tipo_baq = _v(tipo_tratamiento, "")
+    _alt_baq = _v(altura_maxima, "")
+    _trat_txt = ("PENDIENTE (capa oficial de tratamientos sin resolver para el predio)")
+    if _trat_baq:
+        _trat_txt = _trat_baq
+        if _tipo_baq:
+            _trat_txt += f" ({_tipo_baq})"
+        _trat_txt += " -- polígono POT consultado en vivo"
+    _alt_txt = (f"Hasta {_alt_baq} pisos (capa oficial de tratamientos)"
+                if _alt_baq else
+                "PENDIENTE (la capa oficial no declara altura máxima para el polígono)")
     return [
-        ("Clasificacion del suelo", "SUELO URBANO (POT Barranquilla - Confirmado)"),
-        ("Norma uso de suelo", "ACTIVIDAD URBANA RESIDENCIAL / COMERCIAL"),
-        ("Tratamiento urbanistico", "CONSOLIDACION / DESARROLLO (Según polígono POT)"),
-        ("Altura maxima segun tratamiento", "Sujeta a ficha normativa del polígono específico"),
-        ("Planes Parciales", "SIN AFECTACION DIRECTA REGISTRADA"),
-        ("Planes de Reordenamiento", "SIN AFECTACION DIRECTA REGISTRADA"),
-        ("Fuente de capas", "GeoJSON POT Barranquilla empaquetados en la aplicacion (sin consulta en vivo)"),
+        ("Clasificacion del suelo",
+         f"{_suelo_baq} (POT Barranquilla, en vivo)" if _suelo_baq
+         else "PENDIENTE (consulta en vivo no disponible)"),
+        ("Norma uso de suelo",
+         f"{_v(uso_economico, '')} (consulta en vivo)" if _v(uso_economico, "")
+         else "PENDIENTE (consulta en vivo no disponible)"),
+        ("Tratamiento urbanistico", _trat_txt),
+        ("Altura maxima segun tratamiento", _alt_txt),
+        ("Planes Parciales", "NO EVALUADO en capas abiertas (verificar en Planeación)"),
+        ("Planes de Reordenamiento", "NO EVALUADO en capas abiertas (verificar en Planeación)"),
+        ("Fuente de capas", _fuente_txt(
+            "Ordenamiento territorial de Barranquilla (consultas en vivo)")),
     ]
 
 

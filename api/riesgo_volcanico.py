@@ -45,6 +45,22 @@ TIMEOUT = 12.0
 TTL_CACHE = 3600          # 1 hora
 _UA = {"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
 
+# ── 03I.1 · F8: ESTADO ÚNICO del resultado volcánico ──────────────────────────
+# El dictamen llegó a imprimir a la vez "SIN ZONA DE AMENAZA VOLCANICA
+# CARTOGRAFIADA" y "H-VOL | Amenaza volcanica BAJA" para el MISMO hecho, porque
+# `nivel` se fijaba en "BAJO" cuando el servicio respondía sin intersección (eso
+# NO es una amenaza baja: es ausencia de intersección). Ahora un único
+# `VolcanicRiskResult` con `estado` explícito alimenta la tabla 8.2, el hallazgo y
+# los receipts, y el texto se redacta desde ese estado (nunca desde `nivel` solo).
+VOL_HAZARD = "HAZARD_MAPPED"          # intersección con amenaza Alta/Media
+VOL_LOW = "LOW_HAZARD"                # intersección con amenaza Baja declarada
+VOL_NO_INTERSECTION = "NO_INTERSECTION"   # el servicio respondió; el punto no cae
+VOL_NO_COVERAGE = "NO_COVERAGE"       # el punto queda fuera del área cartografiada
+VOL_SOURCE_UNAVAILABLE = "SOURCE_UNAVAILABLE"   # el servicio no respondió
+
+RADIO_COBERTURA_M = 50000   # 50 km: si no hay NINGUNA zona cartografiada en este
+# radio, el punto está fuera del área de estudio del mapa (no es "sin amenaza").
+
 _CACHE: Dict[tuple, tuple] = {}
 
 # Orden de severidad del grado de amenaza del SGC
@@ -120,6 +136,43 @@ def _consultar_capa(capa_id: int, lat: float, lon: float):
     }, None
 
 
+def _cobertura_cercana(lat: float, lon: float) -> Optional[bool]:
+    """¿Existe alguna zona cartografiada del SGC en un radio amplio del punto?
+
+    Distingue NO_INTERSECTION (el punto está dentro del área de estudio del mapa y
+    NO cae en zona de amenaza) de NO_COVERAGE (el punto está fuera del área
+    cartografiada). Devuelve None si no se pudo determinar (ningún sondeo válido).
+    """
+    hubo_sondeo_valido = False
+    for capa_id, _etiqueta in CAPAS:
+        params = {
+            "where": "1=1",
+            "outFields": "objectid",
+            "returnCountOnly": "true",
+            "geometry": '{"x": %s, "y": %s, "spatialReference": {"wkid": 4326}}' % (lon, lat),
+            "geometryType": "esriGeometryPoint",
+            "inSR": "4326",
+            "distance": RADIO_COBERTURA_M,
+            "units": "esriSRUnit_Meter",
+            "spatialRel": "esriSpatialRelIntersects",
+            "f": "json",
+        }
+        try:
+            r = requests.get(f"{BASE}/{capa_id}/query", params=params,
+                             headers=_UA, timeout=TIMEOUT)
+            if r.status_code != 200:
+                continue
+            data = r.json() or {}
+            if isinstance(data, dict) and data.get("error"):
+                continue
+            hubo_sondeo_valido = True
+            if int(data.get("count") or 0) > 0:
+                return True
+        except Exception:  # noqa: BLE001
+            continue
+    return False if hubo_sondeo_valido else None
+
+
 def verificar_riesgo_volcanico(lat: float, lon: float) -> Dict[str, Any]:
     """Zona de amenaza volcánica oficial (SGC) del punto indicado.
 
@@ -145,6 +198,9 @@ def verificar_riesgo_volcanico(lat: float, lon: float) -> Dict[str, Any]:
         "zonas": [],
         "peor_grado": None,
         "nivel": "NO EVALUADO",
+        # 03I.1 · F8: estado ÚNICO que gobierna todo el texto del capítulo 8.2.
+        "estado": VOL_SOURCE_UNAVAILABLE,
+        "cobertura_confirmada": None,
         "fuente": {
             "nombre": "Servicio Geológico Colombiano (SGC) — Mapa de amenaza volcánica",
             "url": BASE,
@@ -169,42 +225,126 @@ def verificar_riesgo_volcanico(lat: float, lon: float) -> Dict[str, Any]:
             zona["etiqueta"] = etiqueta
             res["zonas"].append(zona)
 
-    if hubo_respuesta:
-        res["disponible"] = True
-        res["fuente"]["estado"] = ("CONSULTADA EN VIVO (SGC)"
-                                   if res["zonas"] else
-                                   "CONSULTADA — el predio no cae en zona de amenaza volcánica cartografiada")
-        if res["zonas"]:
-            peor = max(res["zonas"], key=lambda z: _severidad(z.get("grado")))
-            res["peor_grado"] = peor.get("grado")
-            res["nivel"] = _NIVEL_ARHIAX.get(_severidad(peor.get("grado")), "NO EVALUADO")
-        else:
-            res["nivel"] = "BAJO"
-    else:
+    if not hubo_respuesta:
         res["error"] = res["error"] or "el servicio del SGC no respondió"
+        return res
+
+    res["disponible"] = True
+    if res["zonas"]:
+        peor = max(res["zonas"], key=lambda z: _severidad(z.get("grado")))
+        res["peor_grado"] = peor.get("grado")
+        _sev = _severidad(peor.get("grado"))
+        res["nivel"] = _NIVEL_ARHIAX.get(_sev, "NO EVALUADO")
+        res["estado"] = VOL_LOW if _sev <= 1 else VOL_HAZARD
+        res["fuente"]["estado"] = "CONSULTADA EN VIVO (SGC)"
+    else:
+        # El servicio respondió y el punto NO cae en ninguna zona cartografiada.
+        # Eso NO es "amenaza baja": es ausencia de intersección. Se distingue si el
+        # punto está dentro del área de estudio del mapa (cobertura) o fuera.
+        _cob = _cobertura_cercana(lat, lon)
+        res["cobertura_confirmada"] = _cob
+        if _cob is True:
+            res["estado"] = VOL_NO_INTERSECTION
+            res["fuente"]["estado"] = ("CONSULTADA — el predio no cae en zona de amenaza "
+                                       "volcánica cartografiada")
+        elif _cob is False:
+            res["estado"] = VOL_NO_COVERAGE
+            res["fuente"]["estado"] = ("CONSULTADA — el punto queda FUERA del área "
+                                       "cartografiada del mapa del SGC")
+        else:
+            res["estado"] = VOL_NO_INTERSECTION
+            res["cobertura_confirmada"] = None
+            res["fuente"]["estado"] = ("CONSULTADA — sin intersección; no fue posible "
+                                       "confirmar la cobertura del mapa en el punto")
+        res["nivel"] = "NO EVALUADO"
 
     _CACHE[clave] = (ahora, res)
     return res
 
 
+def texto_volcanico(res: Dict[str, Any]) -> Dict[str, str]:
+    """Texto ÚNICO (tabla + hallazgo) derivado del `estado` del resultado.
+
+    Un solo productor de redacción evita la contradicción de imprimir "sin zona
+    cartografiada" y "amenaza baja" para el mismo hecho (03I.1 · F8).
+    """
+    estado = (res or {}).get("estado")
+    zonas = (res or {}).get("zonas") or []
+    if estado == VOL_HAZARD or estado == VOL_LOW:
+        detalles = "; ".join(f"{z.get('grado')} — {z.get('fenomeno')} ({z.get('volcan')})"
+                             for z in zonas)
+        if estado == VOL_LOW:
+            return {
+                "fila": ("Riesgo volcanico (SGC)",
+                         "Amenaza volcanica <b>BAJA</b> declarada por el mapa oficial "
+                         "del SGC en el punto del predio."),
+                "hallazgo": ("H-VOL | Amenaza volcanica BAJA: el predio se ubica en una zona de "
+                             "amenaza baja del mapa oficial del SGC. Sin restriccion adicional, "
+                             "con seguimiento del plan de contingencia municipal. "
+                             f"Zonas detectadas: {detalles}."),
+                "alerta": "verde",
+            }
+        return {
+            "fila": ("Riesgo volcanico (SGC)",
+                     f"Amenaza volcanica <b>{str((res or {}).get('peor_grado') or '').upper()}</b> "
+                     "declarada por el mapa oficial del SGC en el punto del predio."),
+            "hallazgo": ("H-VOL | Amenaza volcanica "
+                         f"{str((res or {}).get('peor_grado') or '').upper()}: el predio se ubica "
+                         f"dentro de una zona de amenaza del mapa oficial del SGC. "
+                         f"Zonas detectadas: {detalles}."),
+            "alerta": "rojo" if (res or {}).get("nivel") == "ALTO" else "naranja",
+        }
+    if estado == VOL_NO_INTERSECTION:
+        _cob = (res or {}).get("cobertura_confirmada")
+        sufijo = ("" if _cob is True else
+                  " No fue posible confirmar que el punto esté dentro del área de "
+                  "estudio del mapa (cobertura sin verificar).")
+        return {
+            "fila": ("Riesgo volcanico (SGC)",
+                     "El servicio oficial respondio y el predio <b>NO cae</b> en ninguna zona "
+                     "de amenaza volcanica cartografiada." + sufijo),
+            "hallazgo": ("Riesgo volcanico NO EVALUADO COMO AMENAZA: el mapa oficial del SGC "
+                         "fue consultado en vivo y el predio no intersecta ninguna zona de "
+                         "amenaza cartografiada." + sufijo),
+            "alerta": "gris",
+        }
+    if estado == VOL_NO_COVERAGE:
+        return {
+            "fila": ("Riesgo volcanico (SGC)",
+                     "El predio se encuentra <b>fuera del area cartografiada</b> por el mapa "
+                     "oficial de amenaza volcanica del SGC (no hay zona que lo cubra)."),
+            "hallazgo": ("Riesgo volcanico SIN COBERTURA CARTOGRAFICA: el punto no esta cubierto "
+                         "por el mapa oficial del SGC, por lo que NO se afirma ni amenaza ni "
+                         "ausencia de amenaza. Verificar en el plan de gestion del riesgo "
+                         "municipal."),
+            "alerta": "naranja",
+        }
+    return {
+        "fila": ("Riesgo volcanico (SGC)",
+                 "NO DISPONIBLE -- el servicio del SGC no respondio al generar el dictamen "
+                 "(verificar en sgc.gov.co)"),
+        "hallazgo": ("Riesgo volcanico NO EVALUADO: el servicio del SGC no respondio al generar "
+                     "el dictamen. No se asume ausencia de amenaza."),
+        "alerta": "naranja",
+    }
+
+
 def filas_riesgo_volcanico(res: Dict[str, Any]) -> List[tuple]:
-    """Filas (label, valor) para la tabla de riesgos del dictamen."""
-    if not res or not res.get("disponible"):
-        return [("Riesgo volcanico (SGC)", "NO DISPONIBLE -- el servicio del SGC no respondio "
-                                           "al generar el dictamen (verificar en sgc.gov.co)")]
-    zonas = res.get("zonas") or []
-    if not zonas:
-        return [("Riesgo volcanico (SGC)", "SIN ZONA DE AMENAZA VOLCANICA CARTOGRAFIADA "
-                                           "en el punto del predio (mapa oficial SGC)")]
-    filas = []
-    for z in zonas:
-        volcan = str(z.get("volcan") or "N/D")
-        grado = str(z.get("grado") or "N/D")
-        fen = str(z.get("fenomeno") or "N/D")
-        filas.append((f"Riesgo volcanico -- {volcan}",
-                      f"<b>{grado.upper()}</b> -- {fen}"))
-    filas.append(("Fuente del riesgo volcanico",
-                  "Servicio Geologico Colombiano (SGC) -- consulta en vivo"))
+    """Filas (label, valor) para la tabla de riesgos del dictamen.
+
+    03I.1 · F8: la redacción sale del `estado` único (`texto_volcanico`), no de
+    `nivel`: un servicio que responde SIN intersección no puede imprimirse como
+    "amenaza baja" ni contradecir la fila de "sin zona cartografiada".
+    """
+    txt = texto_volcanico(res)
+    filas = [txt["fila"]]
+    for z in (res or {}).get("zonas") or []:
+        filas.append((f"Riesgo volcanico -- {z.get('volcan') or 'N/D'}",
+                      f"<b>{str(z.get('grado') or 'N/D').upper()}</b> -- "
+                      f"{z.get('fenomeno') or 'N/D'}"))
+    if (res or {}).get("disponible"):
+        filas.append(("Fuente del riesgo volcanico",
+                      "Servicio Geologico Colombiano (SGC) -- consulta en vivo"))
     return filas
 
 

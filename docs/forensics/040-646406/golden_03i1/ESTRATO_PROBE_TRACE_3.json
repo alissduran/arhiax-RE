@@ -1,0 +1,436 @@
+[
+ {
+  "via": "prefijo 14 = 08001010300001",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='08001010300001'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": [],
+  "rings": []
+ },
+ {
+  "via": "prefijo 15 = 080010103000010",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='080010103000010'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": [],
+  "rings": []
+ },
+ {
+  "via": "prefijo 16 = 0800101030000100",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='0800101030000100'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": [],
+  "rings": []
+ },
+ {
+  "via": "prefijo 17 = 08001010300001004",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='08001010300001004'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 1,
+  "attrs": [
+   {
+    "objectid": 695,
+    "codigo_manzana": "08001010300001004",
+    "estratificacion": "4",
+    "nombre_barrio": "Miramar",
+    "identificador": "119",
+    "localidad": "02",
+    "st_length(shape)": 419.2669285433654,
+    "st_area(shape)": 10823.9481974
+   }
+  ],
+  "rings": [
+   [
+    [
+     [
+      4799358.4318,
+      2774800.968699999
+     ],
+     [
+      4799357.8544,
+      2774800.7172999997
+     ],
+     [
+      4799348.7029,
+      2774796.694
+     ],
+     [
+      4799339.8808,
+      2774791.9920000006
+     ],
+     [
+      4799331.255,
+      2774786.939200001
+     ],
+     [
+      4799322.8862,
+      2774781.471000001
+     ],
+     [
+      4799314.8516,
+      2774775.5229
+     ],
+     [
+      4799307.0716,
+      2774769.2453000005
+     ],
+     [
+      4799299.6937,
+      2774762.4996000007
+     ],
+     [
+      4799292.5639,
+      2774755.4923
+     ],
+     [
+      4799285.9363,
+      2774748.008300001
+     ],
+     [
+      4799279.6828,
+      2774740.208900001
+     ],
+     [
+      4799229.3152,
+      2774767.8872999996
+     ],
+     [
+      4799212.5025,
+      2774777.1263999995
+     ],
+     [
+      4799217.9167,
+      2774788.144099999
+     ],
+     [
+      4799222.8915,
+      2774796.8150999993
+     ],
+     [
+      4799228.1337,
+      2774805.3271999992
+     ],
+     [
+      4799233.696,
+      2774813.6337
+     ],
+     [
+      4799239.573,
+      2774821.7205999997
+     ],
+     [
+      4799245.7822,
+      2774829.5551999994
+     ],
+     [
+      4799252.2346,
+      2774837.1909
+     ],
+     [
+      4799258.9522,
+      2774844.5944
+     ],
+     [
+      4799265.9046,
+      2774851.7775999997
+     ],
+     [
+      4799273.0351,
+      2774858.7843999993
+     ],
+     [
+      4799280.4894,
+      2774865.4453999996
+     ],
+     [
+      4799288.1504,
+      2774871.867799999
+     ],
+     [
+      4799296.0724,
+      2774877.9650999997
+     ],
+     [
+      4799303.9657,
+      2774884.0996000003
+     ],
+     [
+      4799310.8214,
+      2774877.087200001
+     ],
+     [
+      4799317.131,
+      2774869.3332
+     ],
+     [
+      4799322.4721,
+      2774860.8827
+     ],
+     [
+      4799327.8618,
+      2774852.463300001
+     ],
+     [
+      4799333.2,
+      2774844.0111
+     ],
+     [
+      4799338.6564,
+      2774835.6346000005
+     ],
+     [
+      4799344.0912,
+      2774827.2443000004
+     ],
+     [
+      4799349.5531,
+      2774818.8714000005
+     ],
+     [
+      4799354.2796,
+      2774810.0625
+     ],
+     [
+      4799358.4318,
+      2774800.968699999
+     ]
+    ]
+   ]
+  ]
+ },
+ {
+  "via": "prefijo 18 = 080010103000010040",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='080010103000010040'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": [],
+  "rings": []
+ },
+ {
+  "via": "prefijo 19 = 0800101030000100400",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='0800101030000100400'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": [],
+  "rings": []
+ },
+ {
+  "via": "prefijo 20 = 08001010300001004000",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='08001010300001004000'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": [],
+  "rings": []
+ },
+ {
+  "via": "prefijo 21 = 080010103000010040001",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='080010103000010040001'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": [],
+  "rings": []
+ },
+ {
+  "via": "prefijo 22 = 0800101030000100400019",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+  "params": {
+   "where": "codigo_manzana='0800101030000100400019'",
+   "outFields": "*",
+   "returnGeometry": "true",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": [],
+  "rings": []
+ },
+ {
+  "via": "catastro/manzanas metadata",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/manzanas/MapServer",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true
+ },
+ {
+  "via": "manzanas capa 1 punto",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/manzanas/MapServer/1/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": []
+ },
+ {
+  "via": "catastro/lotes metadata",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/lotes/MapServer",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true
+ },
+ {
+  "via": "lotes capa 1 punto",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/lotes/MapServer/1/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": []
+ },
+ {
+  "via": "catastro/datosabiertos metadata",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+  "params": {
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true
+ },
+ {
+  "via": "datosabiertos capa 100 punto",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/100/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "error": "{'code': 400, 'message': 'Invalid or missing input parameters.', 'details': []}"
+ },
+ {
+  "via": "datosabiertos capa 105 punto",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/105/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": []
+ },
+ {
+  "via": "datosabiertos capa 110 punto",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/110/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "ok": true,
+  "n_features": 0,
+  "attrs": []
+ },
+ {
+  "via": "datosabiertos capa 200 punto",
+  "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/200/query",
+  "params": {
+   "where": "1=1",
+   "outFields": "*",
+   "returnGeometry": "false",
+   "geometry": "{\"x\": -74.8386199, \"y\": 11.005378, \"spatialReference\": {\"wkid\": 4326}}",
+   "geometryType": "esriGeometryPoint",
+   "inSR": "4326",
+   "spatialRel": "esriSpatialRelIntersects",
+   "f": "json"
+  },
+  "http": 200,
+  "error": "{'code': 400, 'message': 'Invalid or missing input parameters.', 'details': []}"
+ }
+]

@@ -42,3 +42,7 @@ pytest-cache-files-*/
 tmp_*/
 .pytest_cache/
 
+# Páginas rasterizadas para revisión visual (derivadas del PDF de la corrida;
+# se regeneran con `python scripts/golden_page_review_03i1.py`).
+docs/forensics/**/paginas/
+

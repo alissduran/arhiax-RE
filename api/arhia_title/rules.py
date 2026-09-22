@@ -44,6 +44,20 @@ def ejecutar(caso):
 
 
 def identidad_inmueble(caso):
+    """TIT_B01 — consistencia registral↔catastral del área (03I.1 · F1).
+
+    Estados explícitos del contraste (un solo dato ausente NUNCA equivale a dos):
+
+        BOTH_AVAILABLE   → se compara y se decide OK / MISMATCH
+        REGISTRAL_ONLY   → hay área registral; falta la catastral (no se compara)
+        CATASTRAL_ONLY   → hay área catastral; falta la registral (no se compara)
+        BOTH_UNAVAILABLE → no hay ninguna de las dos
+        MISMATCH         → ambas existen y divergen por encima de la tolerancia
+
+    Regresión (Golden 040-646406): con área registral 58.75 m² y la catastral no
+    disponible, el dictamen afirmaba "no hay área registral ni catastral",
+    negando un dato que el propio dictamen mostraba en 6.1.
+    """
     p = caso.predio
     if not p.folio_matricula or not p.codigo_catastral:
         return [Hallazgo("TIT_B01", "Identidad del inmueble", "INFORMACION_INSUFICIENTE", "alta",
@@ -51,21 +65,57 @@ def identidad_inmueble(caso):
             base_legal="Principio de especialidad registral (Ley 1579/2012): cada inmueble debe estar individualizado por matrícula y referencia catastral.",
             implicacion="Sin identidad canónica no es viable analizar la cadena de tradición, verificar gravámenes ni estructurar garantía.",
             regla="TIT_B01", accion="Solicitar folio de matrícula (Certificado de Tradición y Libertad) y cédula catastral.", responsable="abogado")]
-    if p.area_registral and p.area_catastral:
-        diff = abs(p.area_registral - p.area_catastral) / max(p.area_registral, 1.0)
+
+    _reg = p.area_registral or None
+    _cat = p.area_catastral or None
+    if _reg and _cat:
+        estado_contraste = "BOTH_AVAILABLE"
+    elif _reg:
+        estado_contraste = "REGISTRAL_ONLY"
+    elif _cat:
+        estado_contraste = "CATASTRAL_ONLY"
+    else:
+        estado_contraste = "BOTH_UNAVAILABLE"
+
+    if estado_contraste == "BOTH_AVAILABLE":
+        diff = abs(_reg - _cat) / max(_reg, 1.0)
         if diff > TOLERANCIA_AREA:
             return [Hallazgo("TIT_B01", "Consistencia registral-catastral (área)", "INCONSISTENTE", "alta",
-                f"Diferencia de {abs(p.area_registral - p.area_catastral):.1f} m² ({diff:.0%}) entre el área registral ({p.area_registral:.1f} m²) y la catastral ({p.area_catastral:.1f} m²).",
+                f"Contraste {estado_contraste}: diferencia de {abs(_reg - _cat):.1f} m² ({diff:.0%}) entre el área registral ({_reg:.1f} m²) y la catastral ({_cat:.1f} m²).",
                 base_legal="Principio de especialidad (Ley 1579/2012, art. 10 y ss.) y concordancia registral-catastral; Código Civil art. 749 (el cuerpo cierto debe individualizarse). La rectificación de área y linderos es un trámite registral/catastral.",
                 implicacion="El área es elemento esencial del objeto en compraventa e hipoteca. Una inconsistencia del {:.0%} pone en duda la superficie real, puede reflejar un desenglobe/englobe o segregación no inscrita, y compromete la individualización. Riesgo de falsa tradición o de que el bien entregado/gravado no coincida con lo registrado.".format(diff),
                 evidencia=(Evidencia("fol", p.folio_matricula), Evidencia("cat", p.codigo_catastral)),
                 regla="TIT_B01", accion="Verificar folio completo, resolución catastral y, si procede, trámite de rectificación de área y linderos con el IGAC.", responsable="abogado")]
         return [Hallazgo("TIT_B01", "Consistencia registral-catastral (área)", "OK", "baja",
-            f"Área registral ({p.area_registral:.1f} m²) y catastral ({p.area_catastral:.1f} m²) consistentes (dif. {diff:.0%}).",
+            f"Contraste {estado_contraste}: área registral ({_reg:.1f} m²) y catastral ({_cat:.1f} m²) consistentes (dif. {diff:.0%}).",
             base_legal="Principio de especialidad (Ley 1579/2012); concordancia registral-catastral.",
             implicacion="Consistencia de área declarada como insumo; NO concluye por sí sola la correspondencia física-jurídica ni la realidad del inmueble.", regla="TIT_B01")]
+
+    if estado_contraste == "REGISTRAL_ONLY":
+        return [Hallazgo("TIT_B01", "Consistencia registral-catastral (área)", "INFORMACION_INSUFICIENTE", "media",
+            f"Contraste {estado_contraste}: área registral disponible ({_reg:.2f} m²). "
+            "Área catastral no disponible en esta ejecución; no es posible realizar la "
+            "confrontación registral-catastral.",
+            base_legal="Principio de especialidad registral (Ley 1579/2012); concordancia registral-catastral (requiere ambas áreas).",
+            implicacion=("El área registral existe y es válida como dato; lo que NO puede afirmarse es la "
+                         "concordancia con el catastro. La superficie del inmueble no queda en duda por esta sola ausencia."),
+            evidencia=(Evidencia("fol", p.folio_matricula),), regla="TIT_B01",
+            accion="Consultar el área catastral (cédula catastral / servicio catastral oficial) para completar el contraste.", responsable="abogado")]
+
+    if estado_contraste == "CATASTRAL_ONLY":
+        return [Hallazgo("TIT_B01", "Consistencia registral-catastral (área)", "INFORMACION_INSUFICIENTE", "media",
+            f"Contraste {estado_contraste}: área catastral disponible ({_cat:.2f} m²). "
+            "Área registral no disponible en esta ejecución; no es posible realizar la "
+            "confrontación registral-catastral.",
+            base_legal="Principio de especialidad registral (Ley 1579/2012); concordancia registral-catastral (requiere ambas áreas).",
+            implicacion=("El área catastral existe y es válida como dato; lo que NO puede afirmarse es la "
+                         "concordancia con el registro."),
+            evidencia=(Evidencia("cat", p.codigo_catastral),), regla="TIT_B01",
+            accion="Solicitar el folio completo (área registral) para completar el contraste.", responsable="abogado")]
+
     return [Hallazgo("TIT_B01", "Consistencia registral-catastral (área)", "INFORMACION_INSUFICIENTE", "media",
-        "No hay área registral ni catastral para comparar.", base_legal="Principio de especialidad registral.",
+        f"Contraste {estado_contraste}: no hay área registral ni catastral para comparar.",
+        base_legal="Principio de especialidad registral.",
         implicacion="Sin áreas no es posible validar la concordancia física-jurídica.", regla="TIT_B01",
         accion="Completar áreas (registral y catastral).", responsable="abogado")]
 
@@ -228,14 +278,28 @@ def pagos_y_terceros(caso):
 
 
 def amenazas_pot(caso):
-    return [
-        Hallazgo(f"GEO_B01-{a}", "Amenaza por riesgo (POT)", "RIESGO", "alta",
+    """Hallazgos de amenaza POT con la severidad del CONTRATO ÚNICO (03I.1 · F3).
+
+    Antes: severidad fija "alta" para cualquier nivel, de modo que el mismo hecho
+    salía como [Riesgo · Alta] en Titulux y como MEDIO en el capítulo de
+    hallazgos. La severidad se decide en `risk_severity` (una sola vez) y este
+    productor la consume; el nivel real y la regla viajan en la descripción.
+    """
+    from risk_severity import decidir, severidad_titulux
+    out = []
+    for a in caso.amenazas:
+        dec = decidir(a, intersecta=True, evaluado=True)
+        out.append(Hallazgo(
+            f"GEO_B01-{a}", "Amenaza por riesgo (POT)", "RIESGO",
+            severidad_titulux(dec["severidad"]),
             f"El predio intersecta la capa de amenaza por remoción en masa ({a}).",
             base_legal="Ley 388/1997 (ordenamiento territorial) y POT de Barranquilla; las zonas de amenaza condicionan licencias, pólizas y originación.",
-            implicacion=f"Aunque la amenaza sea '{a}', la entidad financiera puede exigir concepto geotécnico para originación hipotecaria y aseguradoras aplicar recargos. No es necesariamente bloqueante, pero debe documentarse.",
-            regla="GEO_B01", accion="Solicitar concepto de ingeniero geotécnico y verificar el polígono exacto de riesgo del POT.", responsable="abogado")
-        for a in caso.amenazas
-    ]
+            implicacion=(f"Nivel de amenaza declarado por la fuente: {a}. {dec['fundamento']} "
+                         f"La entidad financiera puede exigir concepto geotécnico para originación "
+                         f"hipotecaria y las aseguradoras aplicar recargos; debe documentarse. "
+                         f"[severidad determinada por {dec['regla']} v{dec['regla_version']}]"),
+            regla="GEO_B01", accion="Solicitar concepto de ingeniero geotécnico y verificar el polígono exacto de riesgo del POT.", responsable="abogado"))
+    return out
 
 
 def _tipo_titular_txt(caso) -> str:

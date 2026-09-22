@@ -97,31 +97,40 @@ def evaluar_estructurabilidad_fiduciaria(hallazgos_list):
     return {"semaforo": "VERDE", "estructurable": True, "condiciones_precedentes": []}
 
 def _severidad_geo_desde_nivel(am: dict, ri: dict):
-    """Severidad/colores del hallazgo H-GEO proporcionales al NIVEL de amenaza
-    o riesgo detectado (misma escala que score_engine: Alta/Muy Alta -> ALTO,
-    Media -> MEDIO, Baja -> severidad media-leve). Evita el absurdo de declarar
-    'Severidad ALTO' con una amenaza de nivel Baja."""
+    """Severidad/colores del hallazgo H-GEO desde el CONTRATO ÚNICO de severidad.
+
+    03I.1 · F3: la severidad ya no se decide aquí ni en Titulux: se pide a
+    `risk_severity.decidir()` (una sola tabla, regla RSK-SEV-1) y esta función solo
+    traduce la decisión a color y a implicación operacional. Así el Hallazgo final,
+    el pre-dictamen Titulux, el score y el resumen consumen la MISMA decisión.
+    """
     from reportlab.lib import colors as rl_colors
-    niveles = " | ".join([
-        str((am or {}).get("nivel") or ""),
-        str((ri or {}).get("nivel") or ""),
-    ]).upper()
-    if any(k in niveles for k in ("MUY ALTA", "MUY ALTO", "ALTA", "ALTO")):
+    from risk_severity import decidir, peor_severidad, SEV_ALTO, SEV_MEDIO
+
+    _am = decidir((am or {}).get("nivel"), intersecta=bool((am or {}).get("intersecta")),
+                  evaluado=True)
+    _ri = decidir((ri or {}).get("nivel"), intersecta=bool((ri or {}).get("intersecta")),
+                  evaluado=True)
+    severidad = peor_severidad(_am["severidad"], _ri["severidad"])
+    fundamento = " ".join(dict.fromkeys([_am["fundamento"], _ri["fundamento"]]))
+    trazabilidad = f"[{_am['regla']} v{_am['regla_version']}]"
+    if severidad == SEV_ALTO:
         return ("ALTO",
                 rl_colors.HexColor("#D92C2C"), rl_colors.HexColor("#FFF0F0"),
                 "Potencial restriccion para originacion hipotecaria y seguros: "
-                "se recomienda evaluacion geotecnica de detalle antes de estructurar garantias.")
-    if any(k in niveles for k in ("MEDIA", "MEDIO")):
+                "se recomienda evaluacion geotecnica de detalle antes de estructurar "
+                f"garantias. {fundamento} {trazabilidad}")
+    if severidad == SEV_MEDIO:
         return ("MEDIO",
                 rl_colors.HexColor("#E67E22"), rl_colors.HexColor("#FFF6EC"),
-                "Requiere evaluacion geotecnica complementaria y puede generar "
-                "condiciones o recargos en la suscripcion de polizas.")
-    # Nivel Baja/Bajo u otro con intersección: afectación presente pero menor
-    return ("MEDIO",
-            rl_colors.HexColor("#E67E22"), rl_colors.HexColor("#FFF6EC"),
-            "Afectacion de nivel Baja detectada: se recomienda verificacion "
-            "puntual por profesional competente en caso de intervencion fisica "
-            "del predio; impacto esperado menor en originacion.")
+                "Afectacion presente declarada por la fuente oficial: se recomienda "
+                "verificacion puntual por profesional competente en caso de intervencion "
+                f"fisica del predio; impacto esperado menor en originacion. {fundamento} "
+                f"{trazabilidad}")
+    return ("BAJO",
+            rl_colors.HexColor("#1A6B3A"), rl_colors.HexColor("#EBF5EE"),
+            f"Afectacion de nivel menor declarada por la fuente oficial. {fundamento} "
+            f"{trazabilidad}")
 
 
 def _num_circulo(cod):
@@ -979,6 +988,25 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         except Exception as _e_adop:
             print(f"[PDF][ADOPCION] no disponible: {_e_adop}")
 
+    # ── 03I.1 · F5: la dirección OFICIAL entra al modelo canónico ──────────────
+    # Si la identidad se declara VERIFIED_UNIT_IDENTITY contra el registro oficial
+    # de adopción, el modelo canónico NO puede seguir diciendo "Pendiente de
+    # verificacion" con torre/unidad vacías: el mismo objeto que verifica la
+    # identidad trae la dirección declarada. Función pura, sin sobrescribir
+    # evidencia previa (queda en `direccion_previa`).
+    if canonical_identity.get("identity_source") == "OFFICIAL_ADOPTION_REGISTRY":
+        try:
+            from unidad_inmobiliaria import identidad_direccion
+            _dir_of = identidad_direccion(canonical_identity)
+            if _dir_of:
+                canonical_identity.update(_dir_of)
+                print(f"[PDF][ADOPCION] direccion oficial promovida: "
+                      f"raw={_dir_of.get('direccion_raw')!r} "
+                      f"torre={_dir_of.get('torre')!r} ap={_dir_of.get('apartamento')!r} "
+                      f"unidad={_dir_of.get('unidad')!r}")
+        except Exception as _e_dir:
+            print(f"[PDF][ADOPCION] direccion oficial no promovida: {_e_dir}")
+
     # Metodo principal de valoracion (practica de la Lonja de Barranquilla, no
     # de la Res. IGAC 941): "m1" = comparacion de mercado (100% para PH terminada);
     # "m3" = capitalizacion de rentas (caso excepcional con renta demostrable).
@@ -1020,9 +1048,20 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     _STATUS_SOURCE_UNAVAILABLE = "SOURCE_UNAVAILABLE"
     try:
         from market_context import resolve_official_urban_context
+        # 03I.1 · F4: se pasa el número predial para que el estrato pueda resolverse
+        # por la MANZANA OFICIAL del predio cuando la consulta espacial por punto no
+        # intersecta ningún polígono de manzana (caso Golden). Sin default ni
+        # inferencia: la manzana sale del propio identificador catastral.
+        _num_predial_urb = (analysis.get("codigo_catastral")
+                            or (canonical_identity.get("adopcion_registro") or {}).get("numero_predial")
+                            or canonical_identity.get("codigo_catastral"))
         _oficial_urbano = resolve_official_urban_context(
             ciudad=ciudad, lat=_ubicacion.get("lat"), lon=_ubicacion.get("lon"),
-            coordinate_source=_ubicacion.get("coordinate_source"))
+            coordinate_source=_ubicacion.get("coordinate_source"),
+            numero_predial=_num_predial_urb)
+        print(f"[PDF][OFFICIAL_CONTEXT] num_predial={_num_predial_urb!r} "
+              f"estrato={_oficial_urbano.get('estrato')!r} "
+              f"origen={_oficial_urbano.get('estrato_origen')!r}")
     except Exception as _e_oc:
         _oficial_urbano = {"barrio": None, "barrio_status": _STATUS_UNRESOLVED,
                            "estrato": None, "estrato_status": _STATUS_UNRESOLVED,
@@ -1143,6 +1182,24 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         market_context["authoritative_address"] = _ubicacion.get("authoritative_address")
         market_context["address_source"] = _ubicacion.get("address_source")
         market_context["official_urban_context"] = _oficial_urbano
+        # 03I.1 · F2: resumen de procedencia urbana POR CAMPO (LIVE_OFFICIAL /
+        # PACKAGED_REFERENCE / MIXED). 6.2 y 6.3 y el capítulo 8 consumen este
+        # objeto, de modo que la fila "Fuente de capas" no puede afirmar
+        # "empaquetado, sin consulta en vivo" mientras muestra valores en vivo.
+        try:
+            from market_context import build_urban_source_summary
+            _urban_src = build_urban_source_summary(
+                official_urban_context=_oficial_urbano,
+                campos_empaquetados=["amenaza_remocion_masa", "areas_en_riesgo",
+                                     "inundacion", "riesgo_no_mitigable", "arroyos"],
+                etiqueta_empaquetados=("Geometrias oficiales del POT empaquetadas en la "
+                                       "aplicacion (cruce local STRtree, sin consulta en vivo)"))
+            market_context["urban_source_summary"] = _urban_src
+            print(f"[PDF][URBAN-SOURCE] modo={_urban_src.get('source_mode')} "
+                  f"campos={sorted(_urban_src.get('campos', {}))}")
+        except Exception as _e_us:
+            market_context["urban_source_summary"] = None
+            print(f"[PDF][URBAN-SOURCE] no disponible: {_e_us}")
         # 03H.2A (#C): la decisión de precedencia del render queda AUDITABLE
         # (qué se aplicó, qué se descartó por ambiguo y qué conflictos hubo).
         market_context["urban_render_provenance"] = _urban_provenance
@@ -1799,9 +1856,20 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _mat_circ_txt = f"Circulo Registral segun CTL: {_circ_ctl}"
         if _ctl_discrepante:
             _mat_circ_txt += f" [NO coincide con {_CIRCULO} {_NOMBRE_CIUDAD}]"
-    story.append(dt([
+    # 03I.1 · F5: si la identidad está verificada contra el registro oficial de
+    # adopción, la dirección OFICIAL canónica es la que manda en 01 (es el dato que
+    # verifica la unidad); la placa registral del CTL se conserva como evidencia
+    # (puede traer conjunto/etapa que la oficial no declare). Antes se imprimía solo
+    # la del CTL, truncada por el analizador y sin la unidad.
+    _dir_canon = str(canonical_identity.get("direccion_raw") or "").strip()
+    _dir_canon_ok = (_dir_canon and _dir_canon.lower() not in
+                     ("pendiente", "pendiente de verificacion", "n/d")
+                     and canonical_identity.get("direccion_source") == "OFFICIAL_ADOPTION_REGISTRY")
+    _dir_01 = (f"{_dir_canon} [registro oficial de adopción catastral]"
+               if _dir_canon_ok else direccion)
+    _filas_01 = [
         ("Matricula Inmobiliaria", f"{folio} ({_mat_circ_txt})"),
-        ("Direccion oficial", direccion),
+        ("Direccion oficial", _dir_01),
         # Sprint 2 (exactitud): la tipología se deriva del CTL/destino catastral real.
         # El caso de demostración (Napoli/Miramar PH) ya no puede contaminar predios
         # reales: si el CTL trae código catastral, la tipología es la real o PENDIENTE.
@@ -1826,7 +1894,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         ("Acreedor hipotecario (REAL)", acreedor_snr),
         ("ORIP", _ORIP),
         ("Fuente registral", f"Certificado SNR cargado: {Path(path_certificado).name}" if path_certificado else "Consulta referencial sin CTL"),
-    ]))
+    ]
+    # Evidencia registral separada: la placa del CTL, cuando difiere de la canónica.
+    _dir_ctl_txt = str(analysis.get("direccion") or "").strip()
+    if (_dir_ctl_txt and _dir_ctl_txt.lower() not in
+            ("pendiente", "pendiente de verificacion", "n/d")
+            and _dir_ctl_txt != (_dir_canon if _dir_canon_ok else direccion)):
+        _filas_01.append(("Direccion segun CTL (placa registral)", _dir_ctl_txt))
+    story.append(dt(_filas_01))
     story.append(Spacer(1, 8))
     
     # ── 02 LOCALIZACION ────────────────────────────────────────
@@ -2443,27 +2518,37 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                 "coordenadas del predio al momento de generar el dictamen. "
                 "Verificar en el portal oficial de la ciudad."))
     else:
-        # Barranquilla: auditoría de capas POT empaquetadas (aplica solo a BAQ)
-        _clase_suelo_txt = _clase_suelo_real.upper() if _clase_suelo_real else "SUELO URBANO"
-        _trat_txt = "Consolidacion Nivel 1B (alt 5), Nivel 2 (alt 11), Especial"
-        if _trat_par:
-            _trat_txt = f"{_trat_par} ({_ent2.get('tipo_tratamiento') or 'POT'})"
-            if _ent2.get("altura_maxima") and str(_ent2.get("altura_maxima")).lower() not in ("plan parcial",):
-                _trat_txt += f" -- Altura max: {_ent2.get('altura_maxima')}"
+        # Barranquilla: contexto urbano OFICIAL. Los valores de barrio/estrato/
+        # tratamiento/altura provienen de la capa oficial consultada en vivo
+        # (03H.1A), mientras las capas de amenaza/riesgo del POT siguen siendo
+        # geometrías EMPAQUETADAS (cruce local). 03I.1 · F2: la tabla y el resumen
+        # se construyen desde el MISMO objeto y se declara la procedencia por campo.
+        _src_urb = (market_context or {}).get("urban_source_summary") or {}
+        _modo_src = _src_urb.get("source_mode") or "SOURCE_UNAVAILABLE"
+        _clase_suelo_txt = _clase_suelo_real.upper() if _clase_suelo_real else None
+        # 03I.1 · F2: sin cadena fija de tratamiento. Si la capa oficial resolvió el
+        # polígono, se muestra ESE polígono; si no, se declara PENDIENTE.
+        _trat_txt = ("PENDIENTE (capa oficial de tratamientos sin resolver para el predio)"
+                     if not _trat_par else
+                     f"{_trat_par} ({_ent2.get('tipo_tratamiento') or 'polígono POT'})")
+        if _trat_par and _ent2.get("altura_maxima") and str(_ent2.get("altura_maxima")).lower() not in ("plan parcial",):
+            _trat_txt += f" -- Altura max: {_ent2.get('altura_maxima')}"
         pot_audit = [
             [Paragraph("<b>Layer</b>",s["header"]),Paragraph("<b>Capa</b>",s["header"]),
              Paragraph("<b>Features</b>",s["header"]),Paragraph("<b>Resultado</b>",s["header"])],
             [Paragraph("1",s["value"]),Paragraph("Clases de Suelo",s["body"]),
-             Paragraph("<b>1</b>",s["center"]),Paragraph(f"<b>{_clase_suelo_txt}</b>", s["body"])],
+             Paragraph("<b>1</b>" if _clase_suelo_txt else "<b>0</b>",s["center"]),
+             Paragraph(f"<b>{_clase_suelo_txt}</b>" if _clase_suelo_txt
+                       else "PENDIENTE (capa oficial sin valor para el punto)", s["body"])],
             [Paragraph("2",s["value"]),Paragraph("Norma Uso de Suelo",s["body"]),
-             Paragraph("<b>1</b>",s["center"]),
+             Paragraph("<b>1</b>" if _predio_destino else "<b>0</b>",s["center"]),
              Paragraph((f"<b>Uso consultado en vivo</b> (uso económico: "
-                        f"{_predio_destino or 'N/D'})") if (es_medellin or es_bogota)
-                       else "<b>ACTIVIDAD CENTRAL</b>", s["body"])],
+                        f"{_predio_destino or 'N/D'})") if _predio_destino
+                       else "PENDIENTE (destino económico no resuelto)", s["body"])],
             [Paragraph("3",s["value"]),Paragraph("Planes Parciales",s["body"]),
              Paragraph("<b>0</b>",s["center"]),Paragraph("Sin afectacion por Plan Parcial",s["alert_verde"])],
             [Paragraph("4",s["value"]),Paragraph("Tratamientos Urbanisticos",s["body"]),
-             Paragraph("<b>1</b>" if _trat_par else "<b>5</b>",s["center"]),
+             Paragraph("<b>1</b>" if _trat_par else "<b>0</b>",s["center"]),
              Paragraph(_trat_txt, s["body"])],
             [Paragraph("5",s["value"]),Paragraph("Planes de Reordenamiento",s["body"]),
              Paragraph("<b>0</b>",s["center"]),Paragraph("Sin afectacion por reordenamiento",s["alert_verde"])],
@@ -2476,7 +2561,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             ("VALIGN",(0,0),(-1,-1),"MIDDLE")]))
         story.append(t_pot)
         story.append(Spacer(1, 4))
-        story.append(dt(get_pot_summary_dt(barrio, ciudad=ciudad)))
+        # MISMO objeto que 6.3: el resumen sale de los valores oficiales ya
+        # consolidados (no de una cadena fija) y declara su procedencia.
+        story.append(dt(get_pot_summary_dt(
+            barrio, ciudad=ciudad,
+            clase_suelo=_ent2.get("clase_suelo"),
+            uso_economico=_ent2.get("uso_economico") or _predio_destino,
+            tratamiento=_ent2.get("tratamiento") or _predio_tratamiento,
+            tipo_tratamiento=(_ent2.get("codigo_tratamiento")
+                              or _ent2.get("tipo_tratamiento")),
+            altura_maxima=_ent2.get("altura_maxima"),
+            fuente_modo=_modo_src,
+            fuente_detalle=_src_urb.get("declaracion"),
+        )))
         story.append(Spacer(1, 4))
 
     # Hallazgo de amenaza/riesgo (aplica a todas las ciudades; con el filtro de
@@ -2533,7 +2630,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             story.append(alert_green(
                 f"<b>Confrontacion urbanistica:</b> {_txt_edi.rstrip('.')}. Sujeto a la "
                 "licencia de construccion y a la ficha normativa vigente."))
-        elif _est_edi in ("pendiente", "sin_norma", "sin_construccion"):
+        elif _est_edi in ("pendiente", "sin_norma", "sin_construccion",
+                          "sin_registro_construccion"):
             story.append(alert_orange(
                 f"<b>Confrontacion urbanistica:</b> {_txt_edi.rstrip('.')}."))
         # Datos de la licencia de construcción (si se adjuntó)
@@ -2838,7 +2936,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         ))
         story.append(Spacer(1, 4))
         story.append(dt([
-            ("Fuente de datos", "Capas GeoJSON oficiales del POT de Barranquilla (empaquetadas en la aplicacion)"),
+            # 03I.1 · F2: la fuente se declara desde el UrbanSourceSummary. Antes
+            # decía "empaquetadas en la aplicacion" aunque barrio/estrato/
+            # tratamiento/altura vinieran de la capa oficial EN VIVO.
+            ("Fuente de datos",
+             ((market_context or {}).get("urban_source_summary") or {}).get("declaracion")
+             or "Geometrias oficiales del POT de Barranquilla empaquetadas en la aplicacion"),
+            ("Modo de fuente (UrbanSourceSummary)",
+             ((market_context or {}).get("urban_source_summary") or {}).get("source_mode")
+             or "SOURCE_UNAVAILABLE"),
             ("Metodo de cruce", "Spatial Query Point-in-Polygon (STRtree / Shapely) sobre geometrias normalizadas"),
             ("BBOX (WGS84)", bbox_str),
             ("Total capas evaluadas", "6 (Inundacion x2, Remocion x2, Riesgo No Mitigable, Arroyos)"),
@@ -2890,25 +2996,29 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         print(f"[PDF][VOLCAN] filas no disponibles: {_e_fv}")
         story.append(dt([("Riesgo volcanico (SGC)",
                           "NO DISPONIBLE -- modulo no disponible al generar el dictamen")]))
-    _nivel_vol = (_volcan or {}).get("nivel")
-    if _nivel_vol == "ALTO":
-        story.append(alert_red(
-            "<b>H-VOL | Amenaza volcanica ALTA:</b> el predio esta dentro de una zona de amenaza "
-            "alta del mapa oficial del SGC (ver tabla). Verificar el plan de contingencia "
-            "municipal: condiciona uso del suelo, polizas de seguros y originacion de credito."))
-    elif _nivel_vol == "MEDIO":
-        story.append(alert_orange(
-            "<b>H-VOL | Amenaza volcanica MEDIA:</b> el predio esta dentro de una zona de amenaza "
-            "media del mapa oficial del SGC (ver tabla). Documentar en el expediente de credito."))
-    elif _nivel_vol == "BAJO":
-        story.append(alert_green(
-            "<b>H-VOL | Amenaza volcanica BAJA:</b> el predio se ubica en zona de amenaza baja del "
-            "mapa oficial del SGC (caida de ceniza). Sin restriccion adicional, con seguimiento "
-            "del plan de contingencia municipal."))
+    _nivel_vol = (_volcan or {}).get("nivel")  # solo trazabilidad del nivel
+    # 03I.1 · F8: el texto del hallazgo lo produce el MISMO objeto volcánico
+    # (`texto_volcanico`), consumido también por la tabla 8.2 y los receipts. Antes
+    # este bloque redactaba desde `nivel`, y un servicio que respondía SIN
+    # intersección (nivel="BAJO") imprimía "H-VOL Amenaza BAJA" junto a la fila
+    # "SIN ZONA DE AMENAZA VOLCANICA CARTOGRAFIADA".
+    try:
+        from riesgo_volcanico import texto_volcanico as _txt_vol
+        _v_txt = _txt_vol(_volcan)
+        _vol_texto, _vol_alerta = _v_txt["hallazgo"], _v_txt["alerta"]
+    except Exception as _e_tv:
+        print(f"[PDF][VOLCAN] texto no disponible: {_e_tv}")
+        _vol_texto, _vol_alerta = (
+            "<b>Riesgo volcanico NO EVALUADO:</b> el servicio del SGC no respondio al generar "
+            "el dictamen. No se asume ausencia de amenaza: verificar en sgc.gov.co.", "naranja")
+    if _vol_alerta == "rojo":
+        story.append(alert_red(_vol_texto))
+    elif _vol_alerta == "naranja":
+        story.append(alert_orange(_vol_texto))
+    elif _vol_alerta == "verde":
+        story.append(alert_green(_vol_texto))
     else:
-        story.append(alert_orange(
-            "<b>Riesgo volcanico NO EVALUADO:</b> el servicio del SGC no respondio al generar el "
-            "dictamen. No se asume ausencia de amenaza: verificar en sgc.gov.co."))
+        story.append(dt([("Riesgo volcanico (SGC)", _vol_texto)]))
     story.append(Spacer(1, 8))
 
     # ── 09 SCREENING DE CONTRAPARTES Y DEBIDA DILIGENCIA (03S.1) ──
@@ -3497,10 +3607,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(sec("17 - Sello de Integridad del Insumo (Provenance)"))
     story.append(hr())
     prov_rows = [
-        [Paragraph("<b>HASH SHA-256</b>",s["mono"]),Paragraph(P_HASH,s["mono_hash"])],
+        # 03I.1 · F13: el sello identifica la EJECUCIÓN (folio + referencia +
+        # timestamp), no el archivo: el hash de un archivo no puede ir dentro de sí
+        # mismo. Antes se rotulaba "HASH SHA-256" sin alcance y un lector podía
+        # intentar verificarlo contra el PDF y encontrar una discrepancia.
+        [Paragraph("<b>SELLO DE EJECUCION (SHA-256)</b>",s["mono"]),Paragraph(P_HASH,s["mono_hash"])],
+        [Paragraph("<b>ALCANCE DEL SELLO</b>",s["mono"]),
+         Paragraph("SHA-256 sobre folio + referencia + timestamp de emisión. Identifica la "
+                   "EJECUCIÓN que produjo este dictamen; no es el hash del archivo (un archivo "
+                   "no puede contener su propio hash). El hash del archivo emitido se publica "
+                   "en el receipt de ejecución y en el manifest de la corrida.", s["mono"])],
         [Paragraph("<b>TIMESTAMP</b>",s["mono"]),Paragraph(NOW_UTC.isoformat(),s["mono"])],
         [Paragraph("<b>REFERENCIA</b>",s["mono"]),Paragraph(CERT_NUM,s["mono"])],
-        [Paragraph("<b>ALGORITMO</b>",s["mono"]),Paragraph("SHA-256 (integridad del contenido)",s["mono"])],
+        [Paragraph("<b>ALGORITMO</b>",s["mono"]),Paragraph("SHA-256 (integridad del contenido y de la ejecución)",s["mono"])],
     ]
     tp = Table(prov_rows, colWidths=["30%","70%"])
     tp.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,-1),C_NEGRO_MONO),
@@ -3722,7 +3841,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     doc.build(story, onFirstPage=on_page, onLaterPages=on_page)
     print(f"SUCCESS: PDF GENERADO: {OUTPUT}")
     print(f"  Folio: {FOLIO}")
-    print(f"  Hash SHA-256: {P_HASH}")
+    # 03I.1 · F13: el "HASH SHA-256" que imprime el capítulo 17 es el SELLO DE
+    # EJECUCIÓN (sha256 de folio+referencia+timestamp), no el hash del archivo (un
+    # archivo no puede contener su propio hash: sería autorreferente). Se etiqueta
+    # con su alcance y se imprime aparte el hash REAL del archivo emitido.
+    print(f"  Sello de ejecucion SHA-256: {P_HASH}")
+    try:
+        _h_archivo = hashlib.sha256(Path(OUTPUT).read_bytes()).hexdigest()
+        print(f"  Hash del archivo emitido SHA-256: {_h_archivo}")
+    except Exception as _e_h:
+        print(f"  Hash del archivo emitido: no calculable ({_e_h})")
     print(f"  Timestamp: {NOW_UTC.isoformat()}")
 
     # ── NOTIFICACIÓN: documentos SARLAFT pendientes (requieren humano) ──

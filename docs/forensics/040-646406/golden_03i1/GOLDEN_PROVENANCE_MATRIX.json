@@ -1,0 +1,407 @@
+{
+ "commit_sha": "7a49762ffa97222ad1b5d30d92572b1d8ad1c9ef",
+ "pdf_sha256": "f7dfe003a3d66800a3cf9aeb5cb686142673b141706e1377046bff5a25268c72",
+ "facts": [
+  {
+   "fact": "version_plataforma",
+   "value": "ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
+   "source": "versioning.VERSION_MATRIX + git rev-parse HEAD",
+   "status": "VERIFIED_CODE",
+   "method": "resolución de versión en runtime",
+   "version": "7a49762f",
+   "chapters": [
+    "pie de página",
+    "16.b"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "commit_sha",
+   "value": "7a49762ffa97222ad1b5d30d92572b1d8ad1c9ef",
+   "source": "git rev-parse HEAD",
+   "status": "VERIFIED_CODE",
+   "method": "versioning.git_commit_sha()",
+   "version": "03I.1 §A",
+   "chapters": [
+    "pie de página",
+    "16.b"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "input_ctl",
+   "value": "certificado64640614546464261189306228pdf.pdf (124345 bytes)",
+   "source": "CTL BINARIO entregado por --ctl",
+   "status": "ORIGINAL_BINARY",
+   "method": "sha256 del archivo de entrada",
+   "version": "4493da88f4231a6b",
+   "chapters": [
+    "(insumo)"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "folio",
+   "value": "040-646406",
+   "source": "CTL (legal_analyzer) + modelo canónico",
+   "status": "VERIFIED_REGISTRAL",
+   "method": "extracción del CTL",
+   "version": "legal_analyzer",
+   "chapters": [
+    "01",
+    "05",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "codigo_catastral",
+   "value": "080010103000010040001908040002",
+   "source": "CTL (código catastral)",
+   "status": "VERIFIED_REGISTRAL",
+   "method": "identificador exacto",
+   "version": "canonical",
+   "chapters": [
+    "01",
+    "06.1",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "nupre",
+   "value": "AFT0005BOHA",
+   "source": "CTL (NUPRE)",
+   "status": "VERIFIED_REGISTRAL",
+   "method": "identificador exacto",
+   "version": "canonical",
+   "chapters": [
+    "01",
+    "06.1",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "identidad_confianza",
+   "value": "VERIFIED_UNIT_IDENTITY",
+   "source": "OFFICIAL_ADOPTION_REGISTRY",
+   "status": "MATCH_EXACT",
+   "method": "official_adoption_registry",
+   "version": "03G.1",
+   "chapters": [
+    "01",
+    "05",
+    "06",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "direccion_canonica",
+   "value": "Transversal 43 100 50 TO 8 AP 430",
+   "source": "OFFICIAL_ADOPTION_REGISTRY",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "promoción de la dirección oficial al modelo canónico (unidad_inmobiliaria)",
+   "version": "03I.1 F5",
+   "chapters": [
+    "01",
+    "02",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "unidad_canonica",
+   "value": "torre=8 ap=430 unidad=TO 8 AP 430",
+   "source": "modelo canónico (complemento declarado)",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "extracción de complemento (TO n AP n)",
+   "version": "03I.1 F5",
+   "chapters": [
+    "01",
+    "09 rol"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "area_registrada",
+   "value": 58.75,
+   "source": "CTL real vía index.extraer_datos_de_pdf",
+   "status": "VERIFIED_REGISTRAL",
+   "method": "regex AREA PRIVADA (metros + centímetros)",
+   "version": "index",
+   "chapters": [
+    "01",
+    "06.1",
+    "07",
+    "05 Titulux"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "barrio",
+   "value": "Miramar",
+   "source": "official_urban_layer",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "capa oficial de unidades administrativas",
+   "version": "03H.1A",
+   "chapters": [
+    "01",
+    "02",
+    "06.1",
+    "06.2",
+    "07",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "estrato",
+   "value": "4",
+   "source": "official_urban_layer",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "capa de estratificación (punto) o manzana oficial del número predial",
+   "version": "03I.1 F4",
+   "chapters": [
+    "06.1",
+    "07"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "tratamiento_urbanistico",
+   "value": "Consolidacion",
+   "source": "official_urban_layer",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "capa oficial de planeación (point-in-polygon)",
+   "version": "03H.1A",
+   "chapters": [
+    "06.2 tabla",
+    "06.2 resumen",
+    "06.3"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "altura_normativa",
+   "value": "11",
+   "source": "official_urban_layer",
+   "status": "VERIFIED_OFFICIAL",
+   "method": "capa oficial de planeación",
+   "version": "03H.1A",
+   "chapters": [
+    "06.2",
+    "06.3"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "urban_source_mode",
+   "value": "MIXED",
+   "source": "UrbanSourceSummary",
+   "status": "OBSERVED",
+   "method": "Procedencia MIXTA: EN VIVO (barrio, localidad, pieza_urbana, estrato, tratamiento, tipo_tratamiento) · EMPAQUETADO (altura_maxima, amenaza_remocion_masa, areas_en_riesgo, inundacion, riesgo_no_mitigable, arroyos)",
+   "version": "03I.1 F2",
+   "chapters": [
+    "06.2",
+    "08.1"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "destino_economico_render",
+   "value": null,
+   "source": "servicio catastral (capa 500 / destinos económicos)",
+   "status": "UNRESOLVED",
+   "method": "identificador exacto",
+   "version": "03H.2A",
+   "chapters": [
+    "06.1",
+    "07 uso"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "condicion_juridica_render",
+   "value": null,
+   "source": "CTL + capa de condición catastral",
+   "status": "VERIFIED",
+   "method": "observador de dictamen_data.get_catastral_dt (valor REAL del render)",
+   "version": "03I.1 J",
+   "chapters": [
+    "01",
+    "06.1"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "estrato_render_6_1",
+   "value": "4",
+   "source": "mismo `estrato` que consume el render de 6.1",
+   "status": "OBSERVED",
+   "method": "observador de dictamen_data.get_catastral_dt",
+   "version": "03I.1 J",
+   "chapters": [
+    "06.1"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "sector_metodologico",
+   "value": "Miramar",
+   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+   "status": "EXACT",
+   "method": "resolución de sector por barrio oficial",
+   "version": "03H",
+   "chapters": [
+    "07",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "value_m2",
+   "value": 6800000,
+   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+   "status": "EXACT",
+   "method": "MarketContext (autoridad ÚNICA de la tasa)",
+   "version": "03H.1A",
+   "chapters": [
+    "07"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "metodologia_mercado",
+   "value": "lonja_baq_metodologia@0.1-codiseno",
+   "source": "lonja_baq_metodologia.yaml",
+   "status": "VERIFIED_ARTIFACT",
+   "method": "sha256 4ccd5832eacf3117",
+   "version": "03I.1 F",
+   "chapters": [
+    "07",
+    "16.b"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "market_ready",
+   "value": true,
+   "source": "market_context_authorized + market_methodology_id/version",
+   "status": "OBSERVED",
+   "method": "sin bloqueantes",
+   "version": "03H/03I.1 F",
+   "chapters": [
+    "07",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "valuation_authorized",
+   "value": true,
+   "source": "identity_authorized AND market_context_authorized",
+   "status": "VERIFIED_UNIT_IDENTITY",
+   "method": "doble gate (fail-closed)",
+   "version": "03H.1",
+   "chapters": [
+    "07",
+    "16"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "valor_consolidado",
+   "value": 399500000,
+   "source": "método principal PH (m1 comparación de mercado)",
+   "status": "EMITIDO",
+   "method": "gate abierto",
+   "version": "03H.1",
+   "chapters": [
+    "07"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "poi_categorias",
+   "value": {
+    "Comercio": {
+     "status": "NO_MATCH",
+     "items": 0,
+     "fuentes": []
+    },
+    "Educacion": {
+     "status": "AVAILABLE",
+     "items": 2,
+     "fuentes": [
+      "PHOTON_OSM"
+     ]
+    },
+    "Recreacion": {
+     "status": "NO_MATCH",
+     "items": 0,
+     "fuentes": []
+    },
+    "Salud": {
+     "status": "AVAILABLE",
+     "items": 3,
+     "fuentes": [
+      "PHOTON_OSM"
+     ]
+    }
+   },
+   "source": "OSM/Overpass + Photon · intentadas=['OSM_OVERPASS', 'PHOTON_OSM'] · exitosas=['PHOTON_OSM']",
+   "status": "OBSERVED",
+   "method": "observador de poi_engine.get_poi_result",
+   "version": "03F",
+   "chapters": [
+    "03",
+    "16.b"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "riesgo_volcanico",
+   "value": "estado=NO_COVERAGE nivel=NO EVALUADO",
+   "source": "SGC (mapa oficial de amenaza volcánica)",
+   "status": "OBSERVED",
+   "method": "cobertura_confirmada=False",
+   "version": "03I.1 F8",
+   "chapters": [
+    "08.2",
+    "16.b"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "screening",
+   "value": "SCREENING_COMPLETE",
+   "source": "ScreeningSummary",
+   "status": "COVERAGE_COMPLETE",
+   "method": "sanctions-matcher/1.1.0",
+   "version": "03S.1/03S.1C",
+   "chapters": [
+    "05",
+    "09",
+    "16",
+    "16.b"
+   ],
+   "evidence_id": ""
+  },
+  {
+   "fact": "evidencia_screening",
+   "value": "9/9 · cadena=SEALED",
+   "source": "evidencia versionada por envelope",
+   "status": "SEALED",
+   "method": "c73a3fee8fccce64",
+   "version": "03S.1C",
+   "chapters": [
+    "09.3",
+    "16.b"
+   ],
+   "evidence_id": "85d9228d0def82bdcd9d05b6"
+  }
+ ],
+ "hardcoded_facts": []
+}

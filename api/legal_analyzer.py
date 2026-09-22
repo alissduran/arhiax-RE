@@ -281,15 +281,21 @@ def analizar_texto_certificado(texto):
         idx_di = texto.upper().find("DIRECCION DEL INMUEBLE")
         if idx_di >= 0:
             ventana = texto[idx_di: idx_di + 700]
+            # 03I.1 · F5: el ancho del patrón importaba. Con {4,60} la dirección del
+            # CTL REAL 040-646406 se cortaba en "... APARTAMENTOS ETAPA" y se perdía
+            # la unidad ("3 APARTAMENTO 430 TORRE 8 ETAPA 3"), de modo que la
+            # derivación de torre/apartamento quedaba vacía. El patrón no admite
+            # saltos de línea, así que ampliarlo conserva la dirección COMPLETA de la
+            # línea y sigue deteniéndose antes de la sección siguiente.
             m_cat = re.search(
-                r"([A-Z0-9ÁÉÍÓÚÑ\.\#\-/ ]{4,90}?)\s*\(?\s*DIRECCION CATASTRAL",
+                r"([A-Z0-9ÁÉÍÓÚÑ\.\#\-/ ]{4,140}?)\s*\(?\s*DIRECCION CATASTRAL",
                 ventana, re.IGNORECASE)
             if m_cat:
                 _dir_oficial = m_cat.group(1)
             else:
                 m_prim = re.search(
                     r"(?:[0-9]+\)\s*)?((?:AV|AVENIDA|CL|CLL|CALLE|CRA|KR|CARRERA|"
-                    r"TV|DG|DIAGONAL|AK)\s*[A-Z0-9ÁÉÍÓÚÑ\.\#\-/ ]{4,60})",
+                    r"TV|DG|DIAGONAL|AK)\s*[A-Z0-9ÁÉÍÓÚÑ\.\#\-/ ]{4,140})",
                     ventana, re.IGNORECASE)
                 if m_prim:
                     _dir_oficial = m_prim.group(1)
@@ -482,11 +488,37 @@ def analizar_texto_certificado(texto):
         # nombre propio. "INMOBILIARIA"/"S.A.S." sueltos NO cuentan (aparecen en
         # "MATRICULA INMOBILIARIA" y en toda sociedad). Se exige que el match NO
         # esté rodeado de palabras comunes de plantilla del certificado.
+        #
+        # 03I.1 · F7: (a) el patrón incluye el PUNTO y el salto de línea, porque sin
+        # ellos la forma societaria se truncaba ("URBANIZADORA MARVAL S.A.S." ->
+        # "URBANIZADORA MARVAL S", "MARIN\nVALENCIA S.A." -> "MARIN"); y (b) el
+        # constructor se toma del ENAJENANTE de la anotación de adquisición más
+        # reciente (misma doctrina que la titularidad), no de la primera mención del
+        # documento: en el CTL real 040-646406 la primera mención es el nombre
+        # ANTERIOR de la compañía ("URBANIZADORA MARIN VALENCIA S.A.") en
+        # anotaciones de 2021-2023, mientras que el enajenante del título vigente
+        # (anotación 006, compraventa de 22-01-2024) es "URBANIZADORA MARVAL S.A.S.".
         const_match = re.search(
-            r"(CONSTRUCTORA|URBANIZADORA|CONSTRUCTOR|CONCIVI|MARVAL)\s+([A-ZÁÉÍÓÚÑ0-9&\s]{3,30})",
+            r"(CONSTRUCTORA|URBANIZADORA|CONSTRUCTOR|CONCIVI|MARVAL)"
+            r"[ \t]+([A-ZÁÉÍÓÚÑÜ0-9&.\- \t\r\n]{3,45})",
             texto, re.IGNORECASE)
         if const_match:
             cand_const = const_match.group(0).strip()
+            cand_const_raw = cand_const
+            # 03I.1 · F7: si el nombre declara forma societaria, se corta JUSTO
+            # después de ella (evita arrastrar la contraparte siguiente:
+            # "URBANIZADORA MARVAL S.A.S. A DURAN BACCA..."). La forma societaria
+            # SIEMPRE se conserva completa.
+            _m_soc = re.search(
+                r"^(.{3,60}?\b(?:S\.?A\.?S\.?|S\.?A\.?|LTDA\.?|S\.?EN\.?C\.?|S\.?C\.?S\.?|"
+                r"S\.?C\.?A\.?|E\.?U\.?|SAS|SA|LTDA))\b",
+                cand_const, re.IGNORECASE)
+            if _m_soc and len(_m_soc.group(1).split()) <= 8:
+                # Se conserva la forma societaria TAL COMO se declaró (con puntos).
+                cand_const = _m_soc.group(1).strip().rstrip(",")
+                _resto = cand_const_raw[_m_soc.end():_m_soc.end() + 1]
+                if _resto == "." and not cand_const.endswith("."):
+                    cand_const += "."
             # Descartar coincidencias espurias (plantillas del certificado)
             if re.search(r"SUPERINTEND|REGISTRO|ORIP|NOTARIADO|MATRICULA|ESCRITURA|CERTIFICADO",
                          cand_const, re.IGNORECASE) or len(cand_const) > 45:
@@ -495,6 +527,16 @@ def analizar_texto_certificado(texto):
                 res["constructor"] = cand_const
         else:
             res["constructor"] = "N/D"
+
+        # 03I.1 · F7(b): el nombre del constructor/enajenante se toma de la
+        # anotación de ADQUISICIÓN más reciente (título vigente) cuando esa
+        # anotación identifica a una constructora/urbanizadora. Es la misma
+        # doctrina que la titularidad y el acreedor: el hecho vigente manda sobre
+        # la primera mención del documento.
+        _cand_anot = _constructor_de_adquisicion(parsed_anotaciones)
+        if _cand_anot:
+            res["constructor"] = _cand_anot
+            res["constructor_source"] = "ANOTACION_ADQUISICION_VIGENTE"
 
         # 5. Generar lista de anotaciones final
         res["anotaciones"] = [
@@ -696,6 +738,51 @@ def analizar_texto_certificado(texto):
 
 
 # ── Bloque 2 Sprint 1 — Conciliación Registral ───────────────────────────────
+
+def _constructor_de_adquisicion(parsed_anotaciones) -> Optional[str]:
+    """Constructor/enajenante de la anotación de ADQUISICIÓN más reciente (03I.1 · F7).
+
+    Devuelve el nombre SOLO si esa anotación identifica a una constructora o
+    urbanizadora; en caso contrario None (el llamador conserva lo extraído del
+    documento). No inventa: si la anotación no nombra una constructora, no se
+    atribuye ninguna.
+
+    Regresión (CTL REAL 040-646406): el documento menciona primero el nombre
+    ANTERIOR de la compañía ("URBANIZADORA MARIN VALENCIA S.A." en las
+    anotaciones 001-004, incluso como deudora hipotecaria), mientras que el
+    enajenante del título vigente (anotación 006, compraventa del 22-01-2024) es
+    "URBANIZADORA MARVAL S.A.S.". La primera mención del texto NO es el hecho
+    vigente.
+    """
+    _pat = re.compile(r"(CONSTRUCTORA|URBANIZADORA|CONSTRUCTOR|CONCIVI|MARVAL|INMOBILIARIA)",
+                      re.IGNORECASE)
+    _soc = re.compile(
+        r"^(.{3,60}?\b(?:S\.?A\.?S\.?|S\.?A\.?|LTDA\.?|S\.?EN\.?C\.?|S\.?C\.?S\.?|"
+        r"S\.?C\.?A\.?|E\.?U\.?|SAS|SA|LTDA))\.?", re.IGNORECASE)
+    _actos = ("COMPRAVENTA", "ADJUDICACION", "SUCESION", "APORTE", "DACION", "REMATE",
+              "DONACION", "PERMUTA", "USUCAPION")
+    anots = [a for a in (parsed_anotaciones or [])
+             if str(a.get("tipo") or "").strip().upper() in _actos]
+    for a in sorted(anots, key=lambda x: (str(x.get("fecha") or ""), x.get("num") or 0),
+                    reverse=True):
+        partes = str(a.get("partes") or "")
+        # Lado del ENAJENANTE: lo anterior al separador "->"/"→" o a " A: ".
+        _lado = re.split(r"->|→|\bA:\s", partes, maxsplit=1, flags=re.IGNORECASE)[0]
+        if not _pat.search(_lado):
+            continue
+        m = _pat.search(_lado)
+        cand = _lado[m.start():]
+        cand = re.split(r"\bNIT\b|\bHOY\b|\(", cand, maxsplit=1, flags=re.IGNORECASE)[0]
+        cand = " ".join(cand.split()).strip(" .,;:-")
+        _m = _soc.match(cand)
+        if _m:
+            cand = _m.group(1).strip().rstrip(",")
+            if not cand.endswith("."):
+                cand += "."
+        if 3 <= len(cand) <= 60:
+            return cand
+    return None
+
 
 def _normalizar_entidad(nombre):
     """Normaliza el nombre de una entidad financiera para comparación robusta.
