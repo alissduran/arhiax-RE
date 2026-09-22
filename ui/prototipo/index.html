@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ARHIAX RE — Consola de emisión (prototipo de diseño)</title>
+<link rel="stylesheet" href="tokens.css" />
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<!-- ── Cabecera de sesión ─────────────────────────────────────────────── -->
+<header class="topbar">
+  <div class="inner">
+    <div class="row" style="gap:var(--sp-lg)">
+      <span class="brand" style="font-size:20px">ARHIAX</span>
+      <span class="lbl">RE · Consola catastral</span>
+      <span class="chip demo" title="Este prototipo no es la aplicación en producción">PROTOTIPO</span>
+    </div>
+    <div class="row" style="gap:var(--sp-lg)">
+      <div class="meta" id="meta-plataforma" aria-live="polite">
+        <span>sin sesión</span><span class="sep">·</span><span>—</span>
+      </div>
+      <div class="row" id="caja-sesion">
+        <input id="usuario" type="text" class="mono" placeholder="USUARIO" style="width:130px" autocomplete="username" />
+        <input id="clave" type="password" placeholder="CONTRASEÑA" style="width:140px" autocomplete="current-password" />
+        <button class="btn primary" id="btn-entrar" type="button">Entrar</button>
+      </div>
+      <button class="btn flat hidden" id="btn-salir" type="button">Salir</button>
+    </div>
+  </div>
+</header>
+
+<!-- ── Módulos ─────────────────────────────────────────────────────────── -->
+<div class="wrap" style="padding-bottom:0">
+  <nav class="tabs" role="tablist" aria-label="Módulos">
+    <button class="tab" role="tab" id="tab-v1" aria-selected="true" aria-controls="view-v1" data-view="v1" type="button">1 · Consola de emisión</button>
+    <button class="tab" role="tab" id="tab-v2" aria-selected="false" aria-controls="view-v2" data-view="v2" type="button">2 · Cartera</button>
+    <button class="tab" role="tab" id="tab-v3" aria-selected="false" aria-controls="view-v3" data-view="v3" type="button">3 · Fuentes y diagnóstico</button>
+    <button class="tab" role="tab" id="tab-v4" aria-selected="false" aria-controls="view-v4" data-view="v4" disabled
+            title="Bloqueada: faltan contratos de organizaciones, cuotas y auditoría">4 · Gobernanza (bloqueada)</button>
+  </nav>
+</div>
+
+<main class="wrap" id="main">
+
+  <!-- ══ V1 · CONSOLA DE EMISIÓN ══════════════════════════════════════ -->
+  <section id="view-v1" role="tabpanel" aria-labelledby="tab-v1" class="stack lg">
+    <div class="steps">
+      <div class="step active" id="paso-1"><span class="n">1</span><div><div class="lbl">Paso 1</div><div class="t-md">Municipio y dirección</div></div></div>
+      <div class="step" id="paso-2"><span class="n">2</span><div><div class="lbl">Paso 2</div><div class="t-md">Resolución notarial / SNR</div></div></div>
+      <div class="step" id="paso-3"><span class="n">3</span><div><div class="lbl">Paso 3</div><div class="t-md">Aptitud y emisión</div></div></div>
+    </div>
+
+    <div class="grid12">
+      <!-- Columna izquierda: iniciación -->
+      <div class="col-5 stack lg">
+        <section class="panel">
+          <header><span class="t-md">Iniciación inmobiliaria</span><span class="lbl">RAD: pendiente</span></header>
+          <div class="body">
+            <div class="field">
+              <label class="lbl" for="ciudad">1 · Jurisdicción / municipio operativo</label>
+              <select id="ciudad" class="mono">
+                <option value="barranquilla">Barranquilla (Atlántico)</option>
+                <option value="medellin">Medellín (Antioquia)</option>
+                <option value="bogota">Bogotá D.C.</option>
+                <option value="pasto">Pasto (Nariño)</option>
+              </select>
+              <div class="hint" id="ciudad-nota">
+                <span>Fuentes por ciudad: se leen de <code class="mono-sm">GET /api/v1/geo/ciudades</code>.</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl" for="direccion">2 · Dirección predial</label>
+              <div class="row">
+                <input id="direccion" type="text" class="mono" placeholder="EJ: CL 79B 42 45" value="TV 43 # 100-50" />
+                <button class="btn primary" id="btn-resolver" type="button">Resolver</button>
+              </div>
+              <div id="resolver-estado" class="state info" role="status" aria-live="polite">
+                <div class="t-sm">Sin resolver</div>
+                <div class="why">Se consulta <code>GET /api/resolver-matricula</code>.</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl">3 · Alcance de certificación</label>
+              <div class="stack">
+                <label class="row"><input type="radio" name="alcance" value="titulos" checked /> <span class="t-sm">Estudio de títulos · tradición 20 años</span></label>
+                <label class="row"><input type="radio" name="alcance" value="integral" /> <span class="t-sm">Peritaje integral · títulos + POT + avalúo</span></label>
+              </div>
+            </div>
+
+            <div class="stack">
+              <button class="btn primary" id="btn-emitir" type="button" disabled>Generar dictamen</button>
+              <div class="t-xs muted" id="emitir-motivo">
+                Deshabilitado: primero resuelva la identidad del predio.
+              </div>
+              <div class="t-xs muted">
+                Acciones de escritura deshabilitadas en el prototipo (D7): no se crean casos reales.
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Columna derecha: verificación -->
+      <div class="col-7 stack lg">
+        <section class="panel">
+          <header>
+            <span class="t-md">Ficha del predio</span>
+            <span class="chip info" id="chip-ficha">SIN RESOLVER</span>
+          </header>
+          <div class="body">
+            <dl class="kv">
+              <dt>Matrícula inmobiliaria</dt><dd id="f-folio">PENDIENTE</dd>
+              <dt>Número predial</dt><dd id="f-predial">PENDIENTE</dd>
+              <dt>NUPRE</dt><dd id="f-nupre">PENDIENTE</dd>
+              <dt>Barrio / sector oficial</dt><dd id="f-barrio">PENDIENTE</dd>
+              <dt>Estrato</dt><dd id="f-estrato">PENDIENTE</dd>
+              <dt>Área privada</dt><dd id="f-area">PENDIENTE</dd>
+              <dt>Coordenada</dt><dd id="f-coord">PENDIENTE</dd>
+            </dl>
+            <div id="ficha-nota" class="state info">
+              <div class="t-sm">Ficha de verificación estructurada: <b>CONTRATO_FALTANTE (C-02)</b></div>
+              <div class="why">Hoy los estados de verdad solo existen dentro de la generación del dictamen; ver <code>docs/ui/03_MAPA_CONTRATOS_API.md</code>.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <header><span class="t-md">Trazabilidad de la resolución</span><span class="lbl mono-sm" id="trace-sello">sello: —</span></header>
+          <div class="body flush">
+            <div class="tbl-wrap">
+              <table>
+                <caption>Respuesta CRUDA del endpoint de resolución (sin interpretar).</caption>
+                <thead><tr><th scope="col">Campo</th><th scope="col">Valor</th><th scope="col">Estado</th></tr></thead>
+                <tbody id="trace-body">
+                  <tr><td colspan="3" class="muted t-sm" style="padding:var(--sp-md)">Aún no se ha consultado ninguna dirección.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <header><span class="t-md">Verificación en vivo</span><span class="lbl">3 pilares</span></header>
+          <div class="body">
+            <div class="metrics">
+              <div class="metric">
+                <div class="lbl">Catastro</div><div class="v" id="p-catastro">—</div>
+                <div class="t-xs muted" id="p-catastro-nota">requiere dictamen generado</div>
+              </div>
+              <div class="metric">
+                <div class="lbl">POT y usos</div><div class="v" id="p-pot">—</div>
+                <div class="t-xs muted" id="p-pot-nota">requiere dictamen generado</div>
+              </div>
+              <div class="metric">
+                <div class="lbl">Amenazas</div><div class="v" id="p-riesgo">—</div>
+                <div class="t-xs muted" id="p-riesgo-nota">requiere dictamen generado</div>
+              </div>
+            </div>
+            <div class="state info">
+              <div class="t-sm">Sin dictamen de referencia en esta sesión</div>
+              <div class="why">Abrir un caso de la cartera mostrará aquí sus estados reales cuando exista el contrato C-02.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ V2 · CARTERA ═════════════════════════════════════════════════ -->
+  <section id="view-v2" role="tabpanel" aria-labelledby="tab-v2" class="stack lg hidden">
+    <div class="metrics">
+      <div class="metric"><div class="lbl">Casos en cartera</div><div class="v" id="m-total">—</div><div class="t-xs muted">GET /api/dictamenes</div></div>
+      <div class="metric"><div class="lbl">Con CTL cargado</div><div class="v" id="m-ctl">—</div><div class="t-xs muted">certificado_cargado</div></div>
+      <div class="metric"><div class="lbl">Con PDF emitido</div><div class="v" id="m-pdf">—</div><div class="t-xs muted">pdf_path</div></div>
+      <div class="metric"><div class="lbl">Cuota de organización</div><div class="v">DEMO</div><div class="t-xs muted">CONTRATO_FALTANTE</div></div>
+    </div>
+
+    <section class="panel">
+      <header><span class="t-md">Cartera de dictámenes</span><span class="lbl" id="cartera-estado">sin cargar</span></header>
+      <div class="body">
+        <div class="row wrap">
+          <input type="search" id="q" placeholder="Buscar folio, dirección o barrio" style="max-width:320px" />
+          <select id="f-ciudad" class="mono" style="max-width:180px"><option value="">Toda ciudad</option></select>
+          <button class="btn" id="btn-refrescar" type="button">Refrescar</button>
+        </div>
+      </div>
+      <div class="body flush">
+        <div class="tbl-wrap">
+          <table id="tabla-cartera">
+            <caption id="cartera-caption">Sin datos cargados.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Folio</th><th scope="col">Dirección</th><th scope="col">Ciudad</th>
+                <th scope="col" class="num">Área m²</th><th scope="col" class="num">Estrato</th>
+                <th scope="col">Estado</th><th scope="col">PDF</th><th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="cartera-body">
+              <tr><td colspan="8" class="muted t-sm" style="padding:var(--sp-md)">Inicie sesión y pulse Refrescar.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ══ V3 · FUENTES ═════════════════════════════════════════════════ -->
+  <section id="view-v3" role="tabpanel" aria-labelledby="tab-v3" class="stack lg hidden">
+    <div class="grid12">
+      <div class="col-6">
+        <section class="panel">
+          <header><span class="t-md">Plataforma</span><span class="chip info">GET /api/config</span></header>
+          <div class="body"><dl class="kv" id="kv-config"><dt>estado</dt><dd>sin cargar</dd></dl></div>
+        </section>
+      </div>
+      <div class="col-6">
+        <section class="panel">
+          <header><span class="t-md">Cola de PDF</span><span class="chip info">admin</span></header>
+          <div class="body"><pre class="mono-sm" id="pre-pdf" style="margin:0;white-space:pre-wrap">sin cargar</pre></div>
+        </section>
+      </div>
+      <div class="col-12">
+        <section class="panel">
+          <header><span class="t-md">Fuentes externas</span><span class="chip info" id="chip-fuentes">estado por fuente</span></header>
+          <div class="body flush">
+            <div class="tbl-wrap">
+              <table>
+                <caption>Estado declarado por la fuente; sin dato se dice el motivo, nunca se asume.</caption>
+                <thead><tr><th scope="col">Fuente</th><th scope="col">Contrato</th><th scope="col">Estado</th><th scope="col">Motivo / detalle</th></tr></thead>
+                <tbody id="fuentes-body">
+                  <tr><td colspan="4" class="muted t-sm" style="padding:var(--sp-md)">Pulse «Consultar fuentes».</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="body"><button class="btn" id="btn-fuentes" type="button">Consultar fuentes</button></div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ V4 · GOBERNANZA (bloqueada) ══════════════════════════════════ -->
+  <section id="view-v4" role="tabpanel" aria-labelledby="tab-v4" class="stack lg hidden">
+    <div class="state warn">
+      <div class="t-md">Módulo bloqueado por contrato faltante</div>
+      <div class="why">Organizaciones, cuotas, interruptor de nodos catastrales, break-glass y auditoría no existen todavía en el backend. Se diseñan (docs/ui/03) y no se implementan.</div>
+    </div>
+    <section class="panel">
+      <header><span class="t-md">Contratos requeridos</span></header>
+      <div class="body flush">
+        <div class="tbl-wrap">
+          <table class="dense">
+            <thead><tr><th scope="col">Contrato propuesto</th><th scope="col">Para qué</th><th scope="col">Estado</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">GET|POST /api/v1/orgs</td><td>Organizaciones y miembros</td><td><span class="chip warn">FALTANTE</span></td></tr>
+              <tr><td class="mono">GET /api/v1/orgs/{id}/quota</td><td>Cuota y consumo</td><td><span class="chip warn">FALTANTE</span></td></tr>
+              <tr><td class="mono">GET|PUT /api/v1/admin/fuentes/{id}/estado</td><td>Interruptor de nodos catastrales</td><td><span class="chip warn">FALTANTE</span></td></tr>
+              <tr><td class="mono">POST /api/v1/admin/break-glass</td><td>Acceso forzado con motivo obligatorio</td><td><span class="chip warn">FALTANTE</span></td></tr>
+              <tr><td class="mono">GET /api/v1/auditoria</td><td>Bitácora inmutable y exportable</td><td><span class="chip warn">FALTANTE</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-text"></span></div>
+<script src="app.js"></script>
+</body>
+</html>
