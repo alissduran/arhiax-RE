@@ -33,10 +33,17 @@ class ValidationError(ValueError):
 
 
 def create_case(*, folio_matricula: str, direccion: str, barrio: str = "",
-                estrato: int = 4, area: float = 0.0, ciudad: str = "barranquilla",
+                estrato: Optional[int] = None, area: float = 0.0, ciudad: str = "barranquilla",
                 acreedor_real: Optional[str] = None,
                 created_by: Optional[str] = None) -> Dict[str, Any]:
-    """Crea y persiste un Case. Valida que exista folio o dirección."""
+    """Crea y persiste un Case. Valida que exista folio o dirección.
+
+    C-01: el estrato NO tiene valor por defecto. Antes esta función hacía
+    `int(estrato or 4)`: todo caso nacía con estrato 4 aunque ninguna fuente lo
+    hubiera declarado. Ahora un estrato ausente se persiste como **0 = «sin estrato
+    verificado»** (la columna es NOT NULL) y el render lo trata como PENDIENTE:
+    0 nunca es un estrato válido ni abre el gate de contexto de mercado.
+    """
     folio = (folio_matricula or "").strip()
     direccion = (direccion or "").strip()
     if not folio and not direccion:
@@ -47,10 +54,21 @@ def create_case(*, folio_matricula: str, direccion: str, barrio: str = "",
     direccion = direccion or "Pendiente"
     ciudad = _normalizar_ciudad(ciudad)
 
+    _estrato_num: Optional[int] = None
+    try:
+        if estrato not in (None, ""):
+            _estrato_num = int(str(estrato).strip())
+    except (TypeError, ValueError):
+        _estrato_num = None
+    # Solo 1..6 son estratos válidos; cualquier otro valor (incluido 0) = sin verificar.
+    if _estrato_num is not None and not (1 <= _estrato_num <= 6):
+        _estrato_num = None
+
     fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     new_id = _repo.insert(
         folio_matricula=folio, direccion=direccion, barrio=barrio or "",
-        estrato=int(estrato or 4), area=float(area or 0.0),
+        estrato=_estrato_num if _estrato_num is not None else 0,
+        area=float(area or 0.0),
         estado=_ESTADO_INICIAL, valor_consolidado=0, fecha_creacion=fecha,
         ciudad=ciudad, created_by=created_by,
     )

@@ -827,7 +827,10 @@
               direccion: sc.direccion || 'Pendiente',
               barrio: sc.barrio || '',
               area: sc.area || null,
-              estrato: (sc.estrato !== undefined && sc.estrato !== null) ? sc.estrato : 4,
+              // C-01: el estrato NO se inventa. 0 = «sin estrato verificado» y la
+              // interfaz lo declara pendiente; antes se usaba 4 por defecto.
+              estrato: (sc.estrato !== undefined && sc.estrato !== null
+                        && sc.estrato !== 0 && sc.estrato !== '') ? sc.estrato : 0,
               ciudad: sc.ciudad || 'barranquilla',
               estado: sc.estado || 'PENDIENTE_IMAGENES',
               certificado_cargado: sc.certificado_cargado || 0,

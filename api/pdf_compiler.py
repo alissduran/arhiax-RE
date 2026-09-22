@@ -929,11 +929,22 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _tipologia_texto = "PENDIENTE DE VERIFICACION (Requiere consulta catastral)"
 
     # Val data con metodologia Lonja BAQ (estrato e integracion YAML)
-    estrato = _predio_estrato_catastral or db_record.get('estrato', 4)
-    try:
-        estrato = int(str(estrato).replace("No_Aplica", "4").split("_")[0])
-    except Exception:
-        estrato = 4
+    # C-01: sin estrato verificado -> `None` (el render imprime PENDIENTE y el gate de
+    # contexto de mercado NO se abre). Antes esta línea caía a 4 por defecto y además
+    # convertía "No_Aplica" en 4, es decir: inventaba un estrato residencial.
+    def _estrato_valido(valor):
+        """Devuelve el estrato como int (1..6) o None. 0/«No_Aplica»/basura = None."""
+        if valor in (None, "", 0, "0"):
+            return None
+        _t = str(valor).replace("No_Aplica", "").split("_")[0].strip()
+        if not _t.isdigit():
+            return None
+        _n = int(_t)
+        return _n if 1 <= _n <= 6 else None
+
+    estrato = _estrato_valido(_predio_estrato_catastral)
+    if estrato is None:
+        estrato = _estrato_valido(db_record.get('estrato'))
 
     # ── Modelo canónico (identidad predial + contexto administrativo) ──────────
     # Fuente autoritativa ÚNICA consumida por Titulux, GIS, valoración, scoring y
@@ -1147,9 +1158,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         if _oficial_urbano.get("estrato_status") == _STATUS_VERIFIED_OFFICIAL:
             _mc_estrato = _oficial_urbano.get("estrato")
             _mc_estrato_status = _STATUS_VERIFIED_OFFICIAL
-        elif _predio_estrato_catastral is not None:
-            _mc_estrato, _mc_estrato_status = (_predio_estrato_catastral,
-                                               _STATUS_VERIFIED_OFFICIAL)
+        # C-01: el gate de contexto de mercado SOLO acepta el estrato de origen
+        # CATASTRAL/oficial (1..6). El estrato de la fila del caso es dato legacy sin
+        # procedencia declarada: se muestra, pero no abre el gate (antes tampoco lo
+        # hacía) y un 0 («sin estrato verificado») nunca cuenta como verificado.
+        elif _estrato_valido(_predio_estrato_catastral) is not None:
+            _mc_estrato = _predio_estrato_catastral
+            _mc_estrato_status = _STATUS_VERIFIED_OFFICIAL
         else:
             _mc_estrato = None
             _mc_estrato_status = (_oficial_urbano.get("estrato_status")

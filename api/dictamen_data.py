@@ -710,8 +710,18 @@ def get_catastral_dt(barrio, area, destino_economico=None, nupre=None,
     #                                             declarado)"
     # Nunca se afirma "no aplica" sin evidencia explícita de un destino no
     # residencial declarado.
+    # C-01: 0 (y cualquier valor fuera de 1..6) significa «sin estrato verificado»:
+    # NO se imprime como estrato del predio. Antes bastaba con que el valor no fuera
+    # None/"" para imprimirlo, de modo que un 0 de relleno se mostraba como dato.
+    _estrato_valido = False
     if estrato not in (None, "", "No_Aplica"):
-        estrato_txt = estrato
+        try:
+            _e = int(str(estrato).split("_")[0])
+            _estrato_valido = 1 <= _e <= 6
+        except (TypeError, ValueError):
+            _estrato_valido = False
+    if _estrato_valido:
+        estrato_txt = str(int(str(estrato).split("_")[0]))
     else:
         _dest_up = str(destino_economico or "").upper()
         # Un uso MIXTO ("residencial, comercial y de servicios") SIGUE siendo

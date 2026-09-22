@@ -436,37 +436,41 @@ def list_dictamenes(auth: dict = Depends(require_auth)):
     # Fuente canónica: Postgres/Neon (o SQLite local). El frontend lee de aquí.
     return list_cases()
 
-def resolver_matricula_por_direccion(direccion: str) -> tuple:
+def resolver_matricula_por_direccion(direccion: str, ciudad: str = "barranquilla") -> tuple:
+    """Compatibilidad: `(folio, barrio, estrato)` resueltos por FUENTES OFICIALES.
+
+    C-01: esta función devolvía el folio del caso Golden por coincidencia de
+    SUBCADENAS («43» y «100») y `estrato = 4` como valor POR DEFECTO. Ahora delega en
+    `address_resolution.resolver_direccion`, que consulta las capas oficiales y
+    declara cada campo con su estado. Los consumidores nuevos deben usar la respuesta
+    estructurada (`campos`), que incluye `status`, `source` y `motivo`.
     """
-    Resuelve una dirección en una matrícula catastral candidata de Barranquilla (08001).
-    Utiliza normalización y reglas de coincidencia inteligente para predios conocidos,
-    y un fallback determinista para otros predios.
-    Retorna: (folio_matricula, barrio, estrato)
-    """
-    if not direccion or direccion.strip().lower() == "pendiente":
-        return "Pendiente", "", 4
-        
-    normalized = normalize_address_colombia(direccion)
-    
-    # 1. Caso Napoli (Miramar) — activo de demostración explícito
-    if ("43" in normalized and "100" in normalized) or "NAPOLI" in normalized:
-        return "040-646406", "Miramar", 4
-        
-    # 2. Caso Calle 63 # 37-71 (El Recreo)
-    if ("63" in normalized and "37" in normalized) or "RECREO" in normalized:
-        return "040-314248", "El Recreo", 4
-        
-    # 3. Fallback para direcciones desconocidas (M-01/F-15):
-    # NO se fabrican folios simulados ni se afirma un barrio de demostración:
-    # 'Miramar' pertenece al caso demo Napoli y no puede contaminar un predio
-    # real. El barrio real se resuelve al procesar el CTL (código catastral).
-    return "Pendiente", "", 4
+    try:
+        from address_resolution import resolver_direccion, resumen_legacy
+        return resumen_legacy(resolver_direccion(direccion, ciudad=ciudad))
+    except Exception as e:  # noqa: BLE001 — el endpoint no debe romperse por el resolver
+        print(f"[ERROR] resolver_matricula_por_direccion: {e}")
+        return ("Pendiente", "", None)
 
 @app.get("/api/resolver-matricula")
-def resolve_matricula_endpoint(direccion: str, auth: bool = Depends(require_auth)):
+def resolve_matricula_endpoint(direccion: str, ciudad: str = "barranquilla",
+                               auth: bool = Depends(require_auth)):
+    """Resuelve una dirección contra las fuentes OFICIALES (C-01).
+
+    Devuelve, además del contrato anterior, `campos` con `value/status/source/motivo`
+    por campo y `fuentes` con el resultado de cada servicio consultado.
+    """
     try:
-        folio, barrio, estrato = resolver_matricula_por_direccion(direccion)
-        return {"folio_matricula": folio, "barrio": barrio, "estrato": estrato}
+        from address_resolution import resolver_direccion, resumen_legacy
+        res = resolver_direccion(direccion, ciudad=ciudad)
+        folio, barrio, estrato = resumen_legacy(res)
+        return {
+            # Contrato anterior (compatibilidad con el portal actual).
+            "folio_matricula": folio, "barrio": barrio, "estrato": estrato,
+            # Contrato nuevo: estado por campo, sin valores por defecto.
+            "consulta": res.get("consulta"), "campos": res.get("campos"),
+            "fuentes": res.get("fuentes"), "candidatos": res.get("candidatos"),
+        }
     except Exception as e:
         print(f"[ERROR] resolver-matricula: {e}")
         raise HTTPException(status_code=500, detail="No fue posible resolver la matrícula. Intente nuevamente.")
@@ -481,20 +485,23 @@ def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks
         raise HTTPException(status_code=400, detail="Debe ingresar la matrícula inmobiliaria o la dirección del predio.")
 
     barrio = ""
-    estrato = 4
+    # C-01: el estrato NO se inventa. `None` = sin estrato verificado; `create_case`
+    # lo persiste como 0 («sin estrato verificado»), que el render trata como
+    # PENDIENTE y que nunca abre el gate de contexto de mercado.
+    estrato = None
     ciudad = (payload.get("ciudad") or "barranquilla").lower().strip()
     if ciudad not in ("barranquilla", "medellin", "bogota", "pasto"):
         ciudad = "barranquilla"
 
     if not folio and direccion and direccion.lower() != "pendiente":
-        folio, barrio, estrato = resolver_matricula_por_direccion(direccion)
+        folio, barrio, estrato = resolver_matricula_por_direccion(direccion, ciudad)
 
     if not folio:
         folio = "Pendiente"
     if not direccion:
         direccion = "Pendiente"
-    if "recreo" in direccion.lower():
-        barrio = "El Recreo"
+    # C-01: se eliminó el relleno `if "recreo" in direccion: barrio = "El Recreo"`,
+    # que afirmaba un barrio por subcadena de la dirección, sin consulta.
 
     acreedor_real = payload.get("acreedor_real", None)
     username = auth.get("username") if isinstance(auth, dict) else None

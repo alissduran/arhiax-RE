@@ -28,18 +28,63 @@ class TestSmokeApi(unittest.TestCase):
         importlib.reload(index) if False else None
         self.assertIsNone(index.import_error, f"import_error no es None: {index.import_error}")
 
-    def test_resolver_matricula_casos_conocidos(self):
-        from index import resolver_matricula_por_direccion
-        self.assertEqual(resolver_matricula_por_direccion("Tv 43 # 100-50"), ("040-646406", "Miramar", 4))
-        self.assertEqual(resolver_matricula_por_direccion("Calle 63 # 37-71"), ("040-314248", "El Recreo", 4))
+    def test_resolver_matricula_no_hardcodea_casos(self):
+        """C-01: la resolución NO puede devolver folios fijos por subcadenas.
 
-    def test_resolver_matricula_fallback_y_pendiente(self):
+        Antes: `resolver_matricula_por_direccion("Tv 43 # 100-50")` devolvía el caso
+        Golden hardcodeado ("040-646406", "Miramar", 4) por coincidencia de «43» y
+        «100», y cualquier dirección desconocida devolvía estrato 4 por defecto.
+        """
         from index import resolver_matricula_por_direccion
-        # M-01: las direcciones desconocidas devuelven 'Pendiente' (no folios simulados)
-        folio, barrio, estrato = resolver_matricula_por_direccion("Carrera 5 # 20-33")
-        self.assertEqual(folio, "Pendiente")
-        self.assertEqual(estrato, 4)
-        self.assertEqual(resolver_matricula_por_direccion("Pendiente")[0], "Pendiente")
+        # Se parchean las fuentes de red para que el test sea determinista y offline.
+        import address_resolution as ar
+
+        def _sin_red(*a, **k):
+            raise RuntimeError("sin red en test")
+        _orig_geo = None
+        try:
+            import geocoder_catastral
+            _orig_geo = geocoder_catastral.geocodificar_catastro_barranquilla
+            geocoder_catastral.geocodificar_catastro_barranquilla = _sin_red
+        except Exception:  # noqa: BLE001
+            pass
+
+        def _predial_nulo(direccion, fuentes):
+            return None
+        _orig_pred = ar._predial_desde_capa_direcciones
+        ar._predial_desde_capa_direcciones = _predial_nulo
+        try:
+            folio, barrio, estrato = resolver_matricula_por_direccion("Tv 43 # 100-50")
+            self.assertEqual(folio, "Pendiente")
+            self.assertEqual(barrio, "")
+            self.assertIsNone(estrato)
+        finally:
+            ar._predial_desde_capa_direcciones = _orig_pred
+            if _orig_geo is not None:
+                import geocoder_catastral
+                geocoder_catastral.geocodificar_catastro_barranquilla = _orig_geo
+
+    def test_resolver_matricula_no_inventa_estrato(self):
+        """Sin fuentes que respondan, el estrato es None (NUNCA 4 por defecto)."""
+        from index import resolver_matricula_por_direccion
+        import address_resolution as ar
+        _orig = ar._predial_desde_capa_direcciones
+        ar._predial_desde_capa_direcciones = lambda direccion, fuentes: None
+        _orig_ent = None
+        try:
+            import catastro_predio
+            _orig_ent = catastro_predio.consultar_entorno_urbano
+            catastro_predio.consultar_entorno_urbano = lambda *a, **k: {"disponible": False}
+            folio, barrio, estrato = resolver_matricula_por_direccion("Carrera 5 # 20-33")
+            self.assertEqual(folio, "Pendiente")
+            self.assertEqual(barrio, "")
+            self.assertIsNone(estrato, "el estrato no puede tener valor por defecto")
+            self.assertEqual(resolver_matricula_por_direccion("Pendiente")[0], "Pendiente")
+        finally:
+            ar._predial_desde_capa_direcciones = _orig
+            if _orig_ent is not None:
+                import catastro_predio
+                catastro_predio.consultar_entorno_urbano = _orig_ent
 
     def test_login_endpoint_ok(self):
         """El endpoint de login acepta la contraseña correcta (probado sin capa HTTP,
