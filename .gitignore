@@ -22,6 +22,10 @@ output_referencia/dictamen_napoli.pdf.tmp
 *.rar
 *.docx
 
+# Excepción: las presentaciones comerciales SÍ se versionan (son entregables que
+# deben poder descargarse y compartirse desde el repositorio).
+!presentacion/*.pdf
+
 # Si deseas conservar los PDFs/ZIPs de referencia específicos, descomenta:
 # !motor_tma_lonja_baq_v1.0.zip
 
