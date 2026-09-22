@@ -11,6 +11,10 @@ funciones del producto.
 - **Slice aplicada**: 03I.1 en el árbol de trabajo. El manifest registra **ambas**
   identidades: `commit_sha` (HEAD) y `arbol_de_trabajo` (sha256 del `git diff HEAD`
   `4b03ee077ac07c5b…`, 35 archivos). El pie del PDF imprime `commit 7a49762f`.
+- **Commit de evidencia de esta slice**: `73287bd` (producto + tests + artefactos).
+  Re-ejecutar `python scripts/golden_run_03i1.py --ctl <CTL.pdf>` sobre él reproduce
+  el mismo contenido (el único cambio sería el SHA impreso en el pie y la identidad
+  del árbol, ya limpia).
 - **PDF**: `ARHIAX_Dictamen_040-646406_03I1.pdf` · 16 páginas · sha256
   `f7dfe003a3d66800a3cf9aeb5cb686142673b141706e1377046bff5a25268c72`.
 - **Insumo**: `certificado64640614546464261189306228pdf.pdf` (5 páginas, 124 345 B,
