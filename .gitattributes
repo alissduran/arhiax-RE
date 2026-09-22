@@ -1,0 +1,11 @@
+# Binarios versionados: NUNCA normalizar saltos de línea.
+# Sin esta regla, core.autocrlf=true (Windows) puede reescribir el archivo de trabajo
+# y corromper un PDF/PNG descargado desde el repositorio.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.zip binary
+*.docx binary
+*.xlsx binary
