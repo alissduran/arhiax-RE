@@ -52,6 +52,21 @@ STATUS_LEGACY = "LEGACY_INVALID_FOR_RELEASE"
 
 MARCA_LEGACY = "LEGACY / INVALID_FOR_RELEASE"
 
+# ── Política de liberación (DECISIÓN DEL RESPONSABLE DEL PRODUCTO) ────────────
+# Decisión vigente: **MARCAR en producción**.
+#
+#   · MARCAR   — un núcleo anterior al sancionado NO impide emitir el dictamen: el
+#                PDF sale con el banderín LEGACY / INVALID_FOR_RELEASE y el motivo en
+#                el capítulo 16 y en la traza 16.B. El negocio nunca se queda sin
+#                documento y la marca impide que circule como vigente.
+#   · BLOQUEAR — fail-closed: la generación falla y NO se emite PDF alguno.
+#
+# El bloqueo sigue disponible como override explícito con
+# `ARHIAX_PERMITIR_LEGACY=0` (recomendado para entornos regulados o para la prueba
+# de un release). No cambiar `POLITICA_POR_DEFECTO` sin una decisión del producto:
+# hay una prueba que la fija (`tests/test_release_gate_sagrilaft.py`).
+POLITICA_POR_DEFECTO = "MARCAR"          # "MARCAR" | "BLOQUEAR"
+
 
 @dataclass
 class NúcleoVigente:
@@ -176,7 +191,10 @@ def evaluar_nucleo(permitir_legacy: Optional[bool] = None) -> Dict[str, Any]:
 
     legacy = bool(motivos)
     if permitir_legacy is None:
-        permitir_legacy = os.environ.get("ARHIAX_PERMITIR_LEGACY", "1") == "1"
+        # La política documentada manda; la variable de entorno es un override.
+        _env = os.environ.get("ARHIAX_PERMITIR_LEGACY")
+        permitir_legacy = ((POLITICA_POR_DEFECTO == "MARCAR") if _env is None
+                           else _env.strip() == "1")
 
     return {
         "status": STATUS_LEGACY if legacy else STATUS_VALID,
@@ -187,9 +205,9 @@ def evaluar_nucleo(permitir_legacy: Optional[bool] = None) -> Dict[str, Any]:
                     "parsers": nu.parsers, "sources": list(nu.sources),
                     "commit": nu.commit},
         "ancestria": anc,
-        # Por defecto el PDF se emite MARCADO (no se bloquea): el negocio necesita el
-        # documento, y la marca impide que circule como vigente. Con
-        # ARHIAX_PERMITIR_LEGACY=0 la generación se bloquea.
+        # Política vigente: MARCAR (el PDF se emite con el banderín). El bloqueo solo
+        # con ARHIAX_PERMITIR_LEGACY=0 o si el producto cambia POLITICA_POR_DEFECTO.
+        "politica": POLITICA_POR_DEFECTO,
         "bloquear": bool(legacy and not permitir_legacy),
     }
 

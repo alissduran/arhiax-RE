@@ -11,6 +11,22 @@ generado con el CTL original.
   parsers `onu_xml/1.1.0`, `ofac_sdn_xml/1.1.0`, `uk_sanctions_list_xml/1.1.0` ·
   fuentes `UN_CONSOLIDATED`, `OFAC_SDN`, `UK_SANCTIONS_LIST`
 
+## Política de liberación (decisión vigente)
+
+**Marcar en producción.** Un núcleo anterior al sancionado no impide emitir el
+dictamen: el PDF sale con el banderín **LEGACY / INVALID_FOR_RELEASE** y el motivo en
+el capítulo 16 y en la traza 16.B, de modo que el negocio nunca se queda sin documento
+y la marca impide que circule como vigente.
+
+- La política vive en `sanctions.release_gate.POLITICA_POR_DEFECTO` (`"MARCAR"`) y hay
+  una prueba que la fija: cambiarla exige decisión del producto y actualizar
+  `tests/test_release_gate_sagrilaft.py`.
+- El **bloqueo fail-closed** sigue disponible como override explícito con
+  `ARHIAX_PERMITIR_LEGACY=0` (recomendado para entornos regulados o para probar un
+  release). Con `=1` se fuerza marcar aunque la política cambiara.
+- Comprobado con una **prueba de integración**: con un núcleo antiguo simulado, el PDF
+  generado contiene el banderín, el motor declarado y la traza del núcleo.
+
 ## Los 10 puntos
 
 | # | Punto | Estado | Evidencia |
@@ -24,7 +40,7 @@ generado con el CTL original.
 | 7 | UIAF/SIREL **no** es columna de screening | PASS | `fuentes_activas=("onu","ofac","uk")`; el PDF declara «Fuentes configuradas: ONU, OFAC SDN, UKSL» y solo menciona UIAF en la nota de alcance que explica que **no** es una lista |
 | 8 | Sin encabezado legacy | PASS | el capítulo es **«Screening de Contrapartes y Debida Diligencia»**; la cadena «Cumplimiento SAGRILAFT (ficha estructural…)» no existe en el código ni en el PDF |
 | 9 | Sin `PENDIENTE_PLATAFORMA_EXTERNA` con `SourceOutcomes` reales | PASS | el literal no existe en el código ni aparece en el PDF; los estados por fuente son reales (`CACHED_FRESH`, cobertura, parser) |
-| 10 | Núcleo anterior al sancionado → `LEGACY / INVALID_FOR_RELEASE` o bloqueo | PASS | `api/sanctions/release_gate.py` evalúa matcher, modelo de sujetos, parsers y fuentes; si algo es menor, **marca** el PDF (banderín rojo en 16 + filas en 16.B) y con `ARHIAX_PERMITIR_LEGACY=0` **bloquea** la generación. Además verifica la ancestría del commit (`acc8a949`) cuando hay repositorio; con `NOT_ANCESTOR` también marca |
+| 10 | Núcleo anterior al sancionado → `LEGACY / INVALID_FOR_RELEASE` o bloqueo | PASS | `api/sanctions/release_gate.py` evalúa matcher, modelo de sujetos, parsers y fuentes; si algo es menor, **marca** el PDF (banderín rojo en 16 + filas en 16.B) según la política vigente, y con `ARHIAX_PERMITIR_LEGACY=0` **bloquea** la generación. Además verifica la ancestría del commit (`acc8a949`) cuando hay repositorio; con `NOT_ANCESTOR` también marca |
 
 ## Trazabilidad del núcleo en el dictamen (16.B)
 
