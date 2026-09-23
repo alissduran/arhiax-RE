@@ -1,54 +1,49 @@
 {
  "versionado": {
-  "GIT_COMMIT_SHA": "7a49762ffa97222ad1b5d30d92572b1d8ad1c9ef",
+  "GIT_COMMIT_SHA": "3ac0c3a6172264a4d3d13e0f5352a3729ae6b252",
   "ARHIAX_RE_VERSION": "1.4.0",
   "DICTUS_ENGINE_VERSION": "1.4.0",
   "GIS_ADAPTER_VERSION": "1.2.0",
   "TITULUX_VERSION": "1.1.0",
   "RULESET_VERSION": "1.3.0",
-  "version_line": "ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
+  "version_line": "ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
   "arbol_de_trabajo": {
    "dirty": true,
    "files": [
-    "M api/arhia_title/rules.py",
-    "M api/catastro_predio.py",
-    "M api/dictamen_data.py",
-    "M api/edificabilidad.py",
-    "M api/legal_analyzer.py",
-    "M api/market_context.py",
+    "M api/canonical.py",
     "M api/pdf_compiler.py",
-    "M api/receipts.py",
-    "M api/riesgo_volcanico.py",
-    "M api/score_engine.py",
+    "M api/sanctions/subjects.py",
+    "M api/titulux_bridge.py",
     "M api/unidad_inmobiliaria.py",
-    "M tests/test_coherencia_bogota.py",
-    "M tests/test_edificabilidad.py",
-    "M tests/test_remediacion_03h2.py",
-    "M tests/test_remediacion_03h2a.py",
-    "M tests/test_riesgo_volcanico.py",
-    "?? api/risk_severity.py",
+    "M docs/forensics/040-646406/golden_03i1/GOLDEN_CROSS_CHAPTER_MATRIX.md",
+    "M docs/forensics/040-646406/golden_03i1/GOLDEN_EXECUTION_MANIFEST.json",
+    "M docs/forensics/040-646406/golden_03i1/GOLDEN_INTERNAL_STATE.json",
+    "M docs/forensics/040-646406/golden_03i1/GOLDEN_PDF_TEXT.txt",
+    "M docs/forensics/040-646406/golden_03i1/GOLDEN_PROVENANCE_MATRIX.json",
+    "M docs/forensics/040-646406/golden_03i1/GOLDEN_PROVENANCE_MATRIX.md",
+    "?? api/sanctions/release_gate.py",
+    "?? api/tipologia.py",
     "?? debug_pasto_240_211101_out.txt",
     "?? debug_poi_ab_out.txt",
     "?? debug_poi_photon_out.txt",
-    "?? docs/forensics/040-646406/REMEDIATION_03I1.md",
-    "?? docs/forensics/040-646406/golden_03i1/",
-    "?? presentacion/",
+    "?? presentacion/ARHIAX_RE_Confianza_Transactional.pdf",
+    "?? presentacion/ARHIAX_RE_Entrega_Completa.pdf",
+    "?? presentacion/ARHIAx_Igama_Presentacion.html",
+    "?? presentacion/ARHIAx_Igama_Presentacion.pdf",
+    "?? presentacion/assets/",
+    "?? presentacion/generar_entrega_documento.py",
+    "?? presentacion/generar_presentacion_5_slides.py",
     "?? scripts/debug_pasto_240_211101.py",
     "?? scripts/debug_poi_ab.py",
     "?? scripts/debug_poi_photon.py",
-    "?? scripts/estrato_probe_03i1.py",
-    "?? scripts/estrato_probe_03i1_r2.py",
-    "?? scripts/estrato_probe_03i1_r3.py",
-    "?? scripts/estrato_probe_03i1_r4.py",
-    "?? scripts/golden_coherence_03i1.py",
-    "?? scripts/golden_matrices_03i1.py",
-    "?? scripts/golden_page_review_03i1.py",
-    "?? scripts/golden_run_03i1.py",
-    "?? tests/_fakes_03i1.py",
-    "?? tests/test_remediacion_03i1.py"
+    "?? scripts/sagrilaft_release_gate.py",
+    "?? tests/test_03i2_coherencia_dictamen.py",
+    "?? tests/test_release_gate_sagrilaft.py",
+    "?? tmp_audit_gate.py",
+    "?? tmp_entrega_pdf.py"
    ],
-   "diff_sha256": "daa24a9fb4c82cd6b0e435ca32299a09aec78413301cbe5f1d0b6c805a51ffe3",
-   "n_files": 36
+   "diff_sha256": "437092e8800aa74cefb82df898819f1a1c072ec4e63d723e15f645ae015858ae",
+   "n_files": 31
   }
  },
  "input": {
@@ -100,8 +95,8 @@
   }
  },
  "coordinates": {
-  "lat": 11.006116,
-  "lon": -74.837532,
+  "lat": 11.005378,
+  "lon": -74.8386199,
   "source": "OFFICIAL_ADOPTION_ADDRESS_GEOCODE",
   "verified": true,
   "authoritative_address": "Transversal 43 100 50 TO 8 AP 430",
@@ -113,12 +108,32 @@
   "localidad": "02",
   "estrato": "4",
   "estrato_status": "VERIFIED_OFFICIAL",
-  "estrato_origen": null,
-  "estrato_trace": null,
-  "tratamiento": "Consolidacion",
+  "estrato_origen": "MANZANA_OFICIAL_DEL_NUMERO_PREDIAL",
+  "estrato_trace": {
+   "manzana": {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
+    "consultas": [
+     {
+      "via": "estratificacion por prefijo del numero predial",
+      "where": "codigo_manzana IN ('08001010300001','080010103000010','0800101030000100','08001010300001004','080010103000010040','0800101030000100400','08001010300001004000','080010103000010040001','0800101030000100400019')",
+      "n_features": 1,
+      "disponible": true,
+      "error": null
+     }
+    ],
+    "corroboracion_manzana_catastral": {
+     "where": "codigo='08001010300001004'",
+     "n_features": 0,
+     "disponible": false
+    }
+   },
+   "estado": "VERIFIED_OFFICIAL",
+   "motivo": null
+  },
+  "tratamiento": "Desarrollo",
   "tratamiento_status": "VERIFIED_OFFICIAL",
-  "tipo_tratamiento": "Nivel 2",
-  "altura_maxima": "11",
+  "tipo_tratamiento": "Bajo",
+  "altura_maxima": "8",
   "altura_status": "VERIFIED_OFFICIAL",
   "pieza_urbana": 6,
   "codigo_manzana": "08001010300001004",
@@ -158,19 +173,19 @@
     "modo": "LIVE_OFFICIAL"
    },
    "tratamiento": {
-    "value": "Consolidacion",
+    "value": "Desarrollo",
     "status": "VERIFIED_OFFICIAL",
     "fuente": "official_urban_layer",
     "modo": "LIVE_OFFICIAL"
    },
    "tipo_tratamiento": {
-    "value": "Nivel 2",
+    "value": "Bajo",
     "status": "VERIFIED_OFFICIAL",
     "fuente": "official_urban_layer",
     "modo": "LIVE_OFFICIAL"
    },
    "altura_maxima": {
-    "value": "11",
+    "value": "8",
     "status": null,
     "fuente": null,
     "modo": "PACKAGED_REFERENCE"
@@ -262,71 +277,118 @@
  },
  "poi": {
   "sources_attempted": [
-   "OSM_OVERPASS",
-   "PHOTON_OSM"
+   "OSM_OVERPASS"
   ],
   "sources_succeeded": [
-   "PHOTON_OSM"
+   "OSM_OVERPASS"
   ],
   "categorias": {
    "Comercio": {
-    "status": "NO_MATCH",
-    "item_count": 0,
-    "items": [],
-    "fuentes_de_items": []
-   },
-   "Educacion": {
     "status": "AVAILABLE",
-    "item_count": 2,
+    "item_count": 3,
     "items": [
      {
-      "name": "American School",
-      "type": "Educacion (Colegio)",
-      "distance": 1397.4,
-      "source": "PHOTON_OSM"
+      "name": "C.C. Miramar",
+      "type": "Comercio (Mall)",
+      "distance": 424.4,
+      "source": "OSM_OVERPASS"
      },
      {
-      "name": "Colegio Real / Royal School",
-      "type": "Educacion (Colegio)",
-      "distance": 1751.2,
-      "source": "PHOTON_OSM"
+      "name": "Ara",
+      "type": "Comercio (Supermarket)",
+      "distance": 977.6,
+      "source": "OSM_OVERPASS"
+     },
+     {
+      "name": "Olímpica - Villa Santos",
+      "type": "Comercio (Supermarket)",
+      "distance": 983.0,
+      "source": "OSM_OVERPASS"
      }
     ],
     "fuentes_de_items": [
-     "PHOTON_OSM"
+     "OSM_OVERPASS"
+    ]
+   },
+   "Educacion": {
+    "status": "AVAILABLE",
+    "item_count": 3,
+    "items": [
+     {
+      "name": "Living Explorer Sede Miramar",
+      "type": "Educacion (School)",
+      "distance": 755.3,
+      "source": "OSM_OVERPASS"
+     },
+     {
+      "name": "Neane Kinder Garden",
+      "type": "Educacion (School)",
+      "distance": 787.3,
+      "source": "OSM_OVERPASS"
+     },
+     {
+      "name": "Ludoteca Magic Kingdom",
+      "type": "Educacion (Kindergarten)",
+      "distance": 1092.7,
+      "source": "OSM_OVERPASS"
+     }
+    ],
+    "fuentes_de_items": [
+     "OSM_OVERPASS"
     ]
    },
    "Recreacion": {
-    "status": "NO_MATCH",
-    "item_count": 0,
-    "items": [],
-    "fuentes_de_items": []
+    "status": "AVAILABLE",
+    "item_count": 3,
+    "items": [
+     {
+      "name": "Parque Miramar",
+      "type": "Recreacion (Park)",
+      "distance": 302.9,
+      "source": "OSM_OVERPASS"
+     },
+     {
+      "name": "Mirador de Miramar",
+      "type": "Recreacion (Park)",
+      "distance": 536.6,
+      "source": "OSM_OVERPASS"
+     },
+     {
+      "name": "Parque entrada 1 alameda del rio",
+      "type": "Recreacion (Park)",
+      "distance": 876.3,
+      "source": "OSM_OVERPASS"
+     }
+    ],
+    "fuentes_de_items": [
+     "OSM_OVERPASS"
+    ]
    },
    "Salud": {
     "status": "AVAILABLE",
     "item_count": 3,
     "items": [
      {
-      "name": "Clínica de Fracturas",
-      "type": "Salud (Clinica)",
-      "distance": 1882.4,
-      "source": "PHOTON_OSM"
+      "name": "Instituto de rehabilitación cardiopulmonar del Caribe",
+      "type": "Salud (Clinic)",
+      "distance": 870.3,
+      "source": "OSM_OVERPASS"
      },
      {
-      "name": "Clínica Oftalmológica del Caribe",
-      "type": "Salud (Clinica)",
-      "distance": 1923.8,
-      "source": "PHOTON_OSM"
+      "name": "Dr, Scholl's Barranquilla",
+      "type": "Salud (Clinic)",
+      "distance": 1003.1,
+      "source": "OSM_OVERPASS"
      },
      {
-      "name": "Clínica Mediesp",
-      "type": "Salud (Clinica)",
-      "distance": 1958.6,
-      "source": "PHOTON_OSM"
+      "name": "Clinialergias",
+      "type": "Salud (Clinic)",
+      "distance": 1242.0,
+      "source": "OSM_OVERPASS"
      }
     ],
     "fuentes_de_items": [
-     "PHOTON_OSM"
+     "OSM_OVERPASS"
     ]
    }
   }
@@ -486,9 +548,9 @@
     "matching_reasons": [
      "mejor similitud 0.564 (bajo umbral)"
     ],
-    "snapshot_id": "UN_CONSOLIDATED:39e07e4793a740a0",
-    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
-    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
+    "snapshot_id": "UN_CONSOLIDATED:c9eb18eb830bdd9e",
+    "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
+    "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
     "parser_version": "onu_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -503,9 +565,9 @@
     "matching_reasons": [
      "mejor similitud 0.581 (bajo umbral)"
     ],
-    "snapshot_id": "OFAC_SDN:30c2a70887d694f7",
-    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
-    "snapshot_effective_date": "09/18/2026",
+    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -537,9 +599,9 @@
     "matching_reasons": [
      "mejor similitud 0.500 (bajo umbral)"
     ],
-    "snapshot_id": "UN_CONSOLIDATED:39e07e4793a740a0",
-    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
-    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
+    "snapshot_id": "UN_CONSOLIDATED:c9eb18eb830bdd9e",
+    "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
+    "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
     "parser_version": "onu_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -554,9 +616,9 @@
     "matching_reasons": [
      "mejor similitud 0.683 (bajo umbral)"
     ],
-    "snapshot_id": "OFAC_SDN:30c2a70887d694f7",
-    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
-    "snapshot_effective_date": "09/18/2026",
+    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -588,9 +650,9 @@
     "matching_reasons": [
      "mejor similitud 0.526 (bajo umbral)"
     ],
-    "snapshot_id": "UN_CONSOLIDATED:39e07e4793a740a0",
-    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
-    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
+    "snapshot_id": "UN_CONSOLIDATED:c9eb18eb830bdd9e",
+    "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
+    "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
     "parser_version": "onu_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -605,9 +667,9 @@
     "matching_reasons": [
      "mejor similitud 0.667 (bajo umbral)"
     ],
-    "snapshot_id": "OFAC_SDN:30c2a70887d694f7",
-    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
-    "snapshot_effective_date": "09/18/2026",
+    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -633,14 +695,14 @@
   ],
   "snapshots": [
    {
-    "snapshot_id": "OFAC_SDN:30c2a70887d694f7",
+    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
     "source_id": "OFAC_SDN",
     "authority": "US Department of the Treasury — OFAC (Sanctions List Service)",
-    "retrieved_at": "2026-09-22T14:32:32.508148Z",
-    "effective_date": "09/18/2026",
+    "retrieved_at": "2026-09-23T14:34:34.595440Z",
+    "effective_date": "09/23/2026",
     "source_url": "https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.XML",
-    "sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
-    "record_count": 19393,
+    "sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "record_count": 19391,
     "parser_version": "ofac_sdn_xml/1.1.0",
     "acquisition_status": "OPERATIVA",
     "freshness": "CACHED_FRESH",
@@ -651,7 +713,7 @@
     "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
     "source_id": "UK_SANCTIONS_LIST",
     "authority": "UK FCDO / OFSI (UK Sanctions List)",
-    "retrieved_at": "2026-09-22T14:32:47.127887Z",
+    "retrieved_at": "2026-09-23T14:34:46.101517Z",
     "effective_date": "21/09/2026",
     "source_url": "https://sanctionslist.fcdo.gov.uk/docs/UK-Sanctions-List.xml",
     "sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
@@ -663,13 +725,13 @@
     "refresh_error": null
    },
    {
-    "snapshot_id": "UN_CONSOLIDATED:39e07e4793a740a0",
+    "snapshot_id": "UN_CONSOLIDATED:c9eb18eb830bdd9e",
     "source_id": "UN_CONSOLIDATED",
     "authority": "United Nations Security Council",
-    "retrieved_at": "2026-09-22T14:32:09.246478Z",
-    "effective_date": "2026-09-21T23:00:06.615Z",
+    "retrieved_at": "2026-09-23T14:34:11.391737Z",
+    "effective_date": "2026-09-22T23:00:06.060Z",
     "source_url": "https://scsanctions.un.org/resources/xml/en/consolidated.xml",
-    "sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
+    "sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
     "record_count": 1011,
     "parser_version": "onu_xml/1.1.0",
     "acquisition_status": "OPERATIVA",
@@ -687,16 +749,16 @@
   "matched": [],
   "evidence_records": [
    {
-    "evidence_id": "85d9228d0def82bdcd9d05b6",
+    "evidence_id": "df9118fbd1b11ea0f7bf7225",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
     "document_number_masked": "1045******X",
     "source_id": "UN_CONSOLIDATED",
-    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
-    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
-    "query_hash": "c73a3fee8fccce6485725ade47b6a215ed86e8ca5d4777ce41069d27a97871c2",
-    "screened_at": "2026-09-22T17:58:33.248741Z",
+    "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
+    "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
+    "query_hash": "18e03c695f7b30d5823506e75b984674c5d2c7ecce0c97d82a546dc24c3ed6fe",
+    "screened_at": "2026-09-23T14:56:36.653864Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5641,
@@ -706,23 +768,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "85d9228d0def82bdcd9d05b698e64e56a60d82df88388a389d316003cec5811e",
+    "evidence_hash": "df9118fbd1b11ea0f7bf7225409b583e595d81e15e831111147068da3fe5f6da",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
-    "evidence_content_hash": "d9cdf3805b5a68974069d40ac5fd2fc89a3c7b3b7b9c2db02e8bb3da68bb0eae"
+    "evidence_content_hash": "98e36bdf0036f93ad21de08c90de782d490f04269b52bb0fa3deadaf4eeb9151"
    },
    {
-    "evidence_id": "f8e9dd09aa777ef006585c06",
+    "evidence_id": "85e5ef9efcb2c0d2b8596eb9",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
     "document_number_masked": "1045******X",
     "source_id": "OFAC_SDN",
-    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
-    "snapshot_effective_date": "09/18/2026",
-    "query_hash": "22b234f596462e311d535cc2f542a1e7b2974a868eab4731e82a87298ce51ce3",
-    "screened_at": "2026-09-22T17:58:33.249447Z",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
+    "query_hash": "a47883a6b4ccc730fb6121766a89efe0a5bfc10b170dbbe5f83a0004ac276d9f",
+    "screened_at": "2026-09-23T14:56:36.655971Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5806,
@@ -732,14 +794,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "f8e9dd09aa777ef006585c061176816ddf17b502f3f81ae58a14d3552c1ca15a",
+    "evidence_hash": "85e5ef9efcb2c0d2b8596eb9ee8be0d4279664491d983cb13e39afc21c932fef",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
-    "evidence_content_hash": "3722ab4775e7d88399e912b5bab15f236589b7cc45a868fc2d7aae9b4fa7126f"
+    "evidence_content_hash": "89a218c902974de5573737089b6a4244f4706f67a4362957099f3936d23972e7"
    },
    {
-    "evidence_id": "4882965f542e7fcadabfa2b1",
+    "evidence_id": "def63389ed0a58c5a58b2608",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
@@ -748,7 +810,7 @@
     "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
     "snapshot_effective_date": "21/09/2026",
     "query_hash": "87ff6c8f353af3b24752160f12c611285117272ae8776e64aec95673fbf4be39",
-    "screened_at": "2026-09-22T17:58:33.250140Z",
+    "screened_at": "2026-09-23T14:56:36.657517Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5882,
@@ -758,23 +820,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "4882965f542e7fcadabfa2b1c99725fe9cd53ebf596600c3f2b24dd3e34d4bbf",
+    "evidence_hash": "def63389ed0a58c5a58b260840c4a86a0d7e848cdc51fbc1fbd92168bd72289e",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
     "evidence_content_hash": "2bfcf126ead8b0d88239f769a5d6e65490061cd8a4605331fb704a71e867dd45"
    },
    {
-    "evidence_id": "1e59e582913c664d822146b9",
+    "evidence_id": "83119a1435d6362264f9148b",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
     "document_number_masked": "8600*****4",
     "source_id": "UN_CONSOLIDATED",
-    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
-    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
-    "query_hash": "e22b4aa87e92998e313b1c04225538417ed2fb8380bf76b952dee59f974fdde8",
-    "screened_at": "2026-09-22T17:58:33.250678Z",
+    "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
+    "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
+    "query_hash": "3ce497ebcfa47bc41cd17c463d2c71d1ff09064e8e906bba8831651db48ca475",
+    "screened_at": "2026-09-23T14:56:36.658665Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5,
@@ -784,23 +846,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "1e59e582913c664d822146b952c6a0a5ca87f260b98005268bacaa5c6d30e4c6",
+    "evidence_hash": "83119a1435d6362264f9148b6f29f5650546ddf5c11d94d1a42cd108e57a5e1c",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
-    "evidence_content_hash": "8c00ea92e4b0c8da52f3c155bb7c19496ad7cdcccbef7981d24031d00021c9be"
+    "evidence_content_hash": "e860a0850df22c999d8e68803c6034a339a353743b93ca7a734edf1b6f553750"
    },
    {
-    "evidence_id": "1f14e43459c384b5b661b5ea",
+    "evidence_id": "9af00709617ea62ebaec8069",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
     "document_number_masked": "8600*****4",
     "source_id": "OFAC_SDN",
-    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
-    "snapshot_effective_date": "09/18/2026",
-    "query_hash": "862fd1ba59dc236e34f373e49a4e58338c26f178f804e5bdfd3086c476e2bd21",
-    "screened_at": "2026-09-22T17:58:33.251197Z",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
+    "query_hash": "8ab4110c5989ab290accac739a3ffe77b9e8ff279819ab586307a629a89654c9",
+    "screened_at": "2026-09-23T14:56:36.660428Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6829,
@@ -810,14 +872,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "1f14e43459c384b5b661b5eac44c0a49a1077d3686aeb23d94f1a68deb959f2a",
+    "evidence_hash": "9af00709617ea62ebaec8069623db1c3c2a741c382d62ae18ab3e747ff3beac3",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
-    "evidence_content_hash": "05718e6bba546767aa1dabe2d3c9af96d50129709f6efdb6a1614b5b7556597e"
+    "evidence_content_hash": "1f3b2cb3b6ee3cece8f53f6bb7c9cb42fd2405abcb7e5dc859e13ae8c8cc171a"
    },
    {
-    "evidence_id": "46d7c5ab68a960166f6384a5",
+    "evidence_id": "3381a2fc50c870907df61013",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
@@ -826,7 +888,7 @@
     "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
     "snapshot_effective_date": "21/09/2026",
     "query_hash": "7a092e6b93ec384851dad82c123c0e9ac79573c1acc3bce396025b57366da817",
-    "screened_at": "2026-09-22T17:58:33.251859Z",
+    "screened_at": "2026-09-23T14:56:36.661604Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5641,
@@ -836,23 +898,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "46d7c5ab68a960166f6384a59332e6e26c9d9a1056bd8a5fad363b038f7c5425",
+    "evidence_hash": "3381a2fc50c870907df610138b57f69b81e8d2f14c928f46f8c4c4108268d834",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
     "evidence_content_hash": "31be91334a6cf8eaa7338dccb2332989bb3748088bd671cdc31465d0b3a642b1"
    },
    {
-    "evidence_id": "b19452fa5cd687a4d3433177",
+    "evidence_id": "8221295f085b88e5c1662839",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
     "document_number_masked": "N/D",
     "source_id": "UN_CONSOLIDATED",
-    "snapshot_sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
-    "snapshot_effective_date": "2026-09-21T23:00:06.615Z",
-    "query_hash": "9f41dc7d0eecaaf44b21569b6236e46ffeffdcabf6572111d3508ed048abefd0",
-    "screened_at": "2026-09-22T17:58:33.252409Z",
+    "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
+    "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
+    "query_hash": "a5a88f899bff77de6bb7452d83dea1596b2927f279142e5b665d3211b76453a7",
+    "screened_at": "2026-09-23T14:56:36.664960Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5263,
@@ -862,23 +924,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "b19452fa5cd687a4d343317705efaed0140acd10bc3db3c087f3682d7a4cab10",
+    "evidence_hash": "8221295f085b88e5c16628397b8e0024eb8f0df095cae4b2f1b430042981c988",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
-    "evidence_content_hash": "193f5aeb825bae65c9af4fdbee0fcb12572a9888924ad079a336447468c470e6"
+    "evidence_content_hash": "fff2a1a7bb959b05f424524ca3725d2910deb0ddf7efb5dc98d25c9ecccf7532"
    },
    {
-    "evidence_id": "de3eaf51bbb65f0736c4aa13",
+    "evidence_id": "94ee1c14e3b3bc9ec61401f7",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
     "document_number_masked": "N/D",
     "source_id": "OFAC_SDN",
-    "snapshot_sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
-    "snapshot_effective_date": "09/18/2026",
-    "query_hash": "a7fc1e286904cfa9e2c36214a03a1fcdf3992b999a49e46222108c49167bbc4e",
-    "screened_at": "2026-09-22T17:58:33.253091Z",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
+    "query_hash": "80050a97643f4a6700e0393be601746a3416d98406f76374e56a8bccf5927bc9",
+    "screened_at": "2026-09-23T14:56:36.666085Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6667,
@@ -888,14 +950,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "de3eaf51bbb65f0736c4aa138bc795f0e6d0639eed64803a35c5a6fbe016d55a",
+    "evidence_hash": "94ee1c14e3b3bc9ec61401f7b168d017996ee731fa033b483e03a7bf7ee38186",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
-    "evidence_content_hash": "81b76168c61531045a8f696296f792f8aad74570cb6cb83fcd3c46281b83a57a"
+    "evidence_content_hash": "0c75cda26b8d63215844622a7d03ef7e33ee1b458cdd3fc303b48d822cb81bc4"
    },
    {
-    "evidence_id": "046eb61a899d61522a2891f5",
+    "evidence_id": "28c69480d9e6aea23fa060b7",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
@@ -904,7 +966,7 @@
     "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
     "snapshot_effective_date": "21/09/2026",
     "query_hash": "18404c2adcf3685bb7f2ac7592009cb72864d451809fdd139b17890374a1e90f",
-    "screened_at": "2026-09-22T17:58:33.253623Z",
+    "screened_at": "2026-09-23T14:56:36.667192Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6047,
@@ -914,7 +976,7 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "046eb61a899d61522a2891f5a592e520367c2126580fc64ee7839fd997939a5b",
+    "evidence_hash": "28c69480d9e6aea23fa060b7bc3541482cefa84a051903093c936901a3a0b330",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
@@ -945,7 +1007,7 @@
   "cap_rate": 0.0485
  },
  "receipts": {
-  "generated_at": "2026-09-22T17:58:36.040431+00:00",
+  "generated_at": "2026-09-23T14:57:00.891405+00:00",
   "ciudad": "barranquilla",
   "versionado": {
    "ARHIAX_RE_VERSION": "1.4.0",
@@ -953,7 +1015,7 @@
    "GIS_ADAPTER_VERSION": "1.2.0",
    "TITULUX_VERSION": "1.1.0",
    "RULESET_VERSION": "1.3.0",
-   "GIT_COMMIT_SHA": "7a49762ffa97222ad1b5d30d92572b1d8ad1c9ef"
+   "GIT_COMMIT_SHA": "3ac0c3a6172264a4d3d13e0f5352a3729ae6b252"
   },
   "ctl_adjuntado": true,
   "catastro": {
@@ -989,7 +1051,7 @@
   "contexto_urbano": {
    "estrato": "4",
    "estrato_status": "VERIFIED_OFFICIAL",
-   "estrato_origen": null,
+   "estrato_origen": "MANZANA_OFICIAL_DEL_NUMERO_PREDIAL",
    "urban_source_mode": "MIXED"
   },
   "geo_evaluado": false,
@@ -997,16 +1059,16 @@
    "disponible": true,
    "categorias": {
     "Comercio": {
-     "status": "NO_MATCH",
-     "count": 0
+     "status": "AVAILABLE",
+     "count": 3
     },
     "Educacion": {
      "status": "AVAILABLE",
-     "count": 2
+     "count": 3
     },
     "Recreacion": {
-     "status": "NO_MATCH",
-     "count": 0
+     "status": "AVAILABLE",
+     "count": 3
     },
     "Salud": {
      "status": "AVAILABLE",
@@ -1048,8 +1110,8 @@
      "source_id": "UN_CONSOLIDATED",
      "sigla": "UN_CONSOLIDATED",
      "freshness": "CACHED_FRESH",
-     "effective_date": "2026-09-21T23:00:06.615Z",
-     "sha256": "39e07e4793a740a067c85b6ba96ba9a63f143ecfbfbbb8b84ffcc6e6d29cffac",
+     "effective_date": "2026-09-22T23:00:06.060Z",
+     "sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
      "record_count": 1011,
      "parser_version": "onu_xml/1.1.0"
     },
@@ -1057,9 +1119,9 @@
      "source_id": "OFAC_SDN",
      "sigla": "OFAC_SDN",
      "freshness": "CACHED_FRESH",
-     "effective_date": "09/18/2026",
-     "sha256": "30c2a70887d694f7242254e96d505a9bc67b19ef4c246ae9fc7d21ad7e9101b9",
-     "record_count": 19393,
+     "effective_date": "09/23/2026",
+     "sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+     "record_count": 19391,
      "parser_version": "ofac_sdn_xml/1.1.0"
     },
     {
@@ -1074,8 +1136,8 @@
    ]
   },
   "geocodificacion": {
-   "lat": 11.006116,
-   "lon": -74.837532
+   "lat": 11.005378,
+   "lon": -74.8386199
   }
  },
  "gate": {

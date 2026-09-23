@@ -1,14 +1,14 @@
 {
- "commit_sha": "7a49762ffa97222ad1b5d30d92572b1d8ad1c9ef",
- "pdf_sha256": "f7dfe003a3d66800a3cf9aeb5cb686142673b141706e1377046bff5a25268c72",
+ "commit_sha": "3ac0c3a6172264a4d3d13e0f5352a3729ae6b252",
+ "pdf_sha256": "6fda6f8126a23e1fdd22522d32461bf4e8328ceade0f6bd1c414e0f8c1d0bffa",
  "facts": [
   {
    "fact": "version_plataforma",
-   "value": "ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
+   "value": "ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
    "source": "versioning.VERSION_MATRIX + git rev-parse HEAD",
    "status": "VERIFIED_CODE",
    "method": "resolución de versión en runtime",
-   "version": "7a49762f",
+   "version": "3ac0c3a6",
    "chapters": [
     "pie de página",
     "16.b"
@@ -17,7 +17,7 @@
   },
   {
    "fact": "commit_sha",
-   "value": "7a49762ffa97222ad1b5d30d92572b1d8ad1c9ef",
+   "value": "3ac0c3a6172264a4d3d13e0f5352a3729ae6b252",
    "source": "git rev-parse HEAD",
    "status": "VERIFIED_CODE",
    "method": "versioning.git_commit_sha()",
@@ -159,7 +159,7 @@
   {
    "fact": "estrato",
    "value": "4",
-   "source": "official_urban_layer",
+   "source": "MANZANA_OFICIAL_DEL_NUMERO_PREDIAL",
    "status": "VERIFIED_OFFICIAL",
    "method": "capa de estratificación (punto) o manzana oficial del número predial",
    "version": "03I.1 F4",
@@ -171,7 +171,7 @@
   },
   {
    "fact": "tratamiento_urbanistico",
-   "value": "Consolidacion",
+   "value": "Desarrollo",
    "source": "official_urban_layer",
    "status": "VERIFIED_OFFICIAL",
    "method": "capa oficial de planeación (point-in-polygon)",
@@ -185,7 +185,7 @@
   },
   {
    "fact": "altura_normativa",
-   "value": "11",
+   "value": "8",
    "source": "official_urban_layer",
    "status": "VERIFIED_OFFICIAL",
    "method": "capa oficial de planeación",
@@ -327,31 +327,35 @@
    "fact": "poi_categorias",
    "value": {
     "Comercio": {
-     "status": "NO_MATCH",
-     "items": 0,
-     "fuentes": []
+     "status": "AVAILABLE",
+     "items": 3,
+     "fuentes": [
+      "OSM_OVERPASS"
+     ]
     },
     "Educacion": {
      "status": "AVAILABLE",
-     "items": 2,
+     "items": 3,
      "fuentes": [
-      "PHOTON_OSM"
+      "OSM_OVERPASS"
      ]
     },
     "Recreacion": {
-     "status": "NO_MATCH",
-     "items": 0,
-     "fuentes": []
+     "status": "AVAILABLE",
+     "items": 3,
+     "fuentes": [
+      "OSM_OVERPASS"
+     ]
     },
     "Salud": {
      "status": "AVAILABLE",
      "items": 3,
      "fuentes": [
-      "PHOTON_OSM"
+      "OSM_OVERPASS"
      ]
     }
    },
-   "source": "OSM/Overpass + Photon · intentadas=['OSM_OVERPASS', 'PHOTON_OSM'] · exitosas=['PHOTON_OSM']",
+   "source": "OSM/Overpass + Photon · intentadas=['OSM_OVERPASS'] · exitosas=['OSM_OVERPASS']",
    "status": "OBSERVED",
    "method": "observador de poi_engine.get_poi_result",
    "version": "03F",
@@ -394,13 +398,13 @@
    "value": "9/9 · cadena=SEALED",
    "source": "evidencia versionada por envelope",
    "status": "SEALED",
-   "method": "c73a3fee8fccce64",
+   "method": "18e03c695f7b30d5",
    "version": "03S.1C",
    "chapters": [
     "09.3",
     "16.b"
    ],
-   "evidence_id": "85d9228d0def82bdcd9d05b6"
+   "evidence_id": "df9118fbd1b11ea0f7bf7225"
   }
  ],
  "hardcoded_facts": []

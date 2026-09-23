@@ -896,37 +896,24 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             print(f"[PDF][CONDICION] inferencia desde CTL no disponible: {_e_cond}")
 
     # Tipología derivada del destino económico catastral + CTL (descripción).
-    # Si el CTL dice BODEGA o el destino es Industrial/Comercial → nunca PH.
-    _tipologia_texto = None
-    _desc_ctl = (analysis.get("descripcion_ctl") or "").upper()
-    if predio_real and _predio_destino:
-        _dest_up = str(_predio_destino).upper()
-        if "INDUSTRIAL" in _dest_up or "BODEGA" in _desc_ctl:
-            _tipologia_texto = "Bodega -- Uso Industrial (No Propiedad Horizontal)"
-        elif "COMERCIAL" in _dest_up or "OFICINA" in _dest_up:
-            # Evitar duplicación cuando el destino ya empieza con 'Comercial'
-            # (p. ej. 'Comercial y Servicios' -> 'Uso Comercial y Servicios').
-            _tipologia_texto = f"Uso {_predio_destino} (Según catastro)"
-        else:
-            _tipologia_texto = f"Uso {_predio_destino} (Según catastro)"
-    elif "BODEGA" in _desc_ctl:
-        _tipologia_texto = "Bodega -- Uso Industrial (No Propiedad Horizontal)"
-    if _tipologia_texto is None:
-        # 03D.2: la PH detectada desde el CTL (condición jurídica / coeficiente /
-        # apartamento) se refleja en la tipología, aunque el catastro no haya
-        # resuelto el predio; sin evidencia queda PENDIENTE (nunca se asume PH).
-        if "Propiedad Horizontal" in str(_predio_condicion or ""):
-            # 03H.2A (#G): distinguir el ORIGEN. Si la condición vino del servicio
-            # catastral temático NO se etiqueta como "inferido del CTL".
-            if _condicion_source in (_CD_SOURCE_THEM_EXACT, _CD_SOURCE_THEM_SPATIAL):
-                _tipologia_texto = ("Apartamento -- Propiedad Horizontal "
-                                    "(condición catastral)")
-            else:
-                _tipologia_texto = "Apartamento -- Propiedad Horizontal (inferido del CTL)"
-        elif is_miramar and not path_certificado:
-            _tipologia_texto = "Apartamento -- Propiedad Horizontal (NO VIS)"
-        else:
-            _tipologia_texto = "PENDIENTE DE VERIFICACION (Requiere consulta catastral)"
+    #
+    # 03I.2 · D-2: USO ≠ TIPOLOGÍA. La decisión vive en `tipologia.tipologia_de_predio`
+    # (función pura y testeable): un uso catastral solo manda cuando CONTRADICE la PH
+    # (industrial/bodega/comercial/oficina/lote/garaje). Antes, con el catastro
+    # respondiendo, el destino «Habitacional» se escribía como tipología («Uso
+    # Habitacional (Según catastro)»), tapaba la evidencia registral de propiedad
+    # horizontal y el gate de mercado cerraba la valoración por tipología no verificada.
+    from tipologia import tipologia_de_predio as _tipologia_de_predio
+    _tipologia_texto = _tipologia_de_predio(
+        destino_economico=_predio_destino,
+        descripcion_ctl=analysis.get("descripcion_ctl"),
+        condicion_juridica=_predio_condicion,
+        condicion_source=_condicion_source,
+        fuentes_tematicas=(_CD_SOURCE_THEM_EXACT, _CD_SOURCE_THEM_SPATIAL),
+        predio_resuelto=bool(predio_real),
+        es_caso_demo=bool(is_miramar and not path_certificado),
+        tiene_ctl=bool(path_certificado),
+    )
 
     # Val data con metodologia Lonja BAQ (estrato e integracion YAML)
     # C-01: sin estrato verificado -> `None` (el render imprime PENDIENTE y el gate de
@@ -1810,11 +1797,25 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     else:
         try:
             from titulux_bridge import ejecutar_titulux
+            # 03I.2 · D-3: el área catastral del TERRENO no es comparable con el área
+            # privada de una UNIDAD en propiedad horizontal. La regla vive en
+            # `unidad_inmobiliaria.area_catastral_comparable` (pura y testeable).
+            from unidad_inmobiliaria import area_catastral_comparable
+            _es_unidad_ph_contraste = ("Propiedad Horizontal" in str(_tipologia_texto or ""))
+            _area_cat_contraste = area_catastral_comparable(_es_unidad_ph_contraste,
+                                                            _predio_area_catastral)
+            if _es_unidad_ph_contraste and _predio_area_catastral:
+                print(f"[PDF][AREA] unidad PH: el área catastral de terreno "
+                      f"({_predio_area_catastral} m²) NO se usa como área comparable "
+                      f"del apartamento; contraste = REGISTRAL_ONLY")
             _titulux = ejecutar_titulux(
                 analysis, db_record, val_data, geo_eval,
-                area_catastral=_predio_area_catastral,
+                area_catastral=_area_cat_contraste,
                 identidad=canonical_identity,
-                fuentes_activas=("onu", "ofac", "uiaf", "uk"),
+                # 03I.2 · gate de release #7: UIAF/SIREL NO es una lista de screening
+                # (es el canal de reporte regulatorio), así que no viaja como fuente
+                # activa ni aparece como columna en los capítulos 05/09/16.
+                fuentes_activas=("onu", "ofac", "uk"),
                 cache_dir=_listas_cache,
                 timeout_listas=90,
             )
@@ -3048,6 +3049,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     from sanctions.engine import (
         summary_desde_dict, sigla, SCOPE_NOTE,
     )
+    # 03I.2 · gates 4/5/7: productor único de tipo y documento del sujeto (los mismos
+    # que usan 05 y 16) y fuentes activas SIN UIAF (no es lista de screening).
+    from sanctions.subjects import (
+        person_type_label as _person_type_label,
+        documento_para_dictamen as _documento_dictamen,
+    )
     from sanctions import legal as _legal_sanciones
 
     _summary = summary_desde_dict((_titulux or {}).get("screening_summary"))
@@ -3124,16 +3131,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _cab.append(Paragraph(f"<b>{sigla(_sid)}</b>", s["header"]))
         _cab.append(Paragraph("<b>Resultado</b>", s["header"]))
         _filas_scr = [_cab]
-        _PERSONA_TXT = {"NATURAL_PERSON": "Natural", "LEGAL_ENTITY": "Jurídica",
-                        "UNKNOWN": "No determinado"}
         for _env in _summary.subjects:
             _outs = {o.source_id: o for o in _summary.outcomes_de(_env.subject_id)}
             _celdas = [
                 Paragraph(_env.canonical_name or "—", s["body"]),
-                Paragraph(_PERSONA_TXT.get(_env.person_type, "No determinado"), s["body"]),
-                Paragraph(" ".join(x for x in ((_env.document_type or "").upper(),
-                                               _env.document_number or "") if x) or "N/D",
-                          s["body"]),
+                # 03I.2 · gates 4 y 5: el tipo y el documento salen del productor ÚNICO
+                # de la capa de sanciones (mismo texto que 05 y 16), y un documento que
+                # la fuente sí trae nunca se imprime como «N/D» mudo.
+                Paragraph(_person_type_label(_env), s["body"]),
+                Paragraph(_documento_dictamen(_env), s["body"]),
                 Paragraph(" / ".join(_env.roles) or "—", s["body"]),
             ]
             for _sid in _fuentes_tabla:
@@ -3611,11 +3617,47 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
 
     story.append(sec("16 - Declaracion de Alcance"))
     story.append(hr())
+    # ── 03I.2 · gate de release #10 ───────────────────────────────────────────
+    # Si el núcleo SAGRILAFT en ejecución es anterior al mínimo sancionado, el
+    # dictamen NO puede circular como vigente: se marca LEGACY / INVALID_FOR_RELEASE
+    # (o se bloquea la generación con ARHIAX_PERMITIR_LEGACY=0).
+    _release_gate = None
+    try:
+        from sanctions.release_gate import evaluar_nucleo, MARCA_LEGACY
+        _release_gate = evaluar_nucleo()
+    except Exception as _e_rg:
+        print(f"[PDF][RELEASE-GATE] no evaluable: {_e_rg}")
+    if _release_gate and _release_gate.get("bloquear"):
+        from consistency import InconsistenciaBloqueante as _IncBloqueante
+        raise _IncBloqueante(
+            "Generación bloqueada por el gate de release SAGRILAFT: "
+            + "; ".join(_release_gate.get("motivos") or []))
+    if _release_gate and _release_gate.get("marca"):
+        print("[PDF][RELEASE-GATE] " + MARCA_LEGACY + ": "
+              + "; ".join(_release_gate.get("motivos") or []))
+        story.append(alert_red(
+            f"<b>{MARCA_LEGACY}</b> · este dictamen se generó con un núcleo de "
+            "screening anterior al mínimo sancionado, por lo que NO es válido para "
+            "liberación. Motivos: "
+            + "; ".join(_release_gate.get("motivos") or []) + "."))
+        story.append(Spacer(1, 4))
+        story.append(dt([("Estado del núcleo de screening", MARCA_LEGACY)]))
+        story.append(Spacer(1, 4))
+    elif _release_gate:
+        print("[PDF][RELEASE-GATE] VALID_FOR_RELEASE")
     story.append(dt(get_alcance_dt(barrio, ciudad=ciudad, receipts=_receipts)))
     story.append(Spacer(1, 6))
     # Traza técnica de ejecución (Case → Technical Trace)
     story.append(sub("16.B Traza tecnica de ejecucion (receipts)"))
     story.append(dt(receipt_rows(_receipts)))
+    # 03I.2 · gate de release #10: el núcleo sancionado viaja en la traza técnica.
+    if _release_gate:
+        try:
+            from sanctions.release_gate import filas_release_gate
+            story.append(Spacer(1, 4))
+            story.append(dt(filas_release_gate(_release_gate)))
+        except Exception as _e_frg:  # noqa: BLE001
+            print(f"[PDF][RELEASE-GATE] filas no disponibles: {_e_frg}")
     story.append(Spacer(1, 8))
 
     # ── 17 PROVENANCE ──────────────────────────────────────────

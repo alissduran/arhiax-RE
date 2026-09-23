@@ -110,6 +110,25 @@ def extraer_unidad(direccion: Optional[str]) -> Dict[str, Any]:
     return out
 
 
+def area_catastral_comparable(es_unidad_ph: bool, area_catastral):
+    """¿El área catastral disponible es comparable con el área registral? (03I.2 · D-3)
+
+    Para una UNIDAD en propiedad horizontal, el área catastral del TERRENO (el lote:
+    22.05 m²) NO es comparable con el área privada registral del apartamento
+    (58.75 m²). Pasarla como «área catastral» producía un hallazgo ALTO falso de
+    «inconsistencia registral-catastral»; el estado correcto es REGISTRAL_ONLY.
+
+    Devuelve el área comparable, o None cuando no debe compararse (se declara).
+    """
+    if es_unidad_ph:
+        return None
+    try:
+        valor = float(area_catastral or 0.0)
+    except (TypeError, ValueError):
+        return None
+    return valor if valor > 0 else None
+
+
 def identidad_direccion(canonical_identity: Optional[Dict[str, Any]],
                         direccion_oficial: Optional[str] = None,
                         *, fuente: str = "OFFICIAL_ADOPTION_REGISTRY") -> Dict[str, Any]:

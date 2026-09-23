@@ -1,5 +1,5 @@
 ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
 Pag. 1
 ARHIAX
 Motor Geo-Provenance · Informe Base LAI
@@ -7,8 +7,8 @@ Estandar
 Sinergia Consulting Group · Edición Completa v1.0
  Referencia N°: ARHIAX-LAI-2026-0001
  Folio: 040-646406
- Emitido: 22 Sep 2026 17:57 UTC
- DOC-ID: 79cee62c1b17eec2..
+ Emitido: 23 Sep 2026 14:55 UTC
+ DOC-ID: c3ff68bdf19b3ece..
 ■ INFORME BASE LAI — RESULTADO PRELIMINAR: 1 ALTO · 2 MEDIO · 0 INFORMATIVO (BLOQUEADO / semáforo
 ROJO)
 00 - Naturaleza de este Documento
@@ -55,14 +55,14 @@ Dirección según CTL (placa registral)
 TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS
 ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3
 02 - Localización Geográfica del Inmueble
-Vista satelital del inmueble en el Miramar, Barranquilla. Coordenadas de ubicación: 11.00612 N, -74.83753 W. [FUENTE:
+Vista satelital del inmueble en el Miramar, Barranquilla. Coordenadas de ubicación: 11.00538 N, -74.83862 W. [FUENTE:
 GMAPS-SAT]
 
 ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
 Pag. 2
 Coordenadas WGS84
-Lat: 11.00612 N | Lon: -74.83753 W
+Lat: 11.00538 N | Lon: -74.83862 W
 Sector urbano
 Barranquilla / Miramar
 Barrio / sector oficial
@@ -79,20 +79,20 @@ Elevación
 Estado Fachada
 Descripción / Incidencia
 09:00 COT
-100.61°
-46.04°
+101.18°
+46.02°
 Sol Directo
 Exposición directa a la radiación solar.
-Ángulo de incidencia: 9.4°.
+Ángulo de incidencia: 8.8°.
 12:00 COT
-190.88°
-79.45°
+190.97°
+79.05°
 Sol Directo
 Exposición directa a la radiación solar.
-Ángulo de incidencia: 80.9°.
+Ángulo de incidencia: 81.0°.
 15:00 COT
-260.67°
-42.18°
+260.2°
+42.0°
 Sombra (Orientación)
 El sol está detrás del inmueble (fachada
 opuesta).
@@ -100,8 +100,8 @@ Fig. 2 - Simulación GEOMETRICA de Sombras Proyectadas a las 9:00 AM (Izquierda)
  posición solar + huella y altura del edificio según catastro). No es un render fotorealista; verificar en campo.
 03 - Análisis de Equipamiento Urbano y Puntos de Interes (POI)
 Análisis de accesibilidad y cobertura de equipamientos urbanos en un radio de 2.0 km en torno a las coordenadas del predio (Lat:
-11.00612, Lon: -74.83753). Los datos fueron extraidos de la base geográfica de OpenStreetMap (OSM) y ordenados por proximidad
-geodésica real. [FUENTE: OpenStreetMap vía Photon]
+11.00538, Lon: -74.83862). Los datos fueron extraidos de la base geográfica de OpenStreetMap (OSM) y ordenados por proximidad
+geodésica real. [FUENTE: OpenStreetMap / Overpass API]
 Categoría
 Nombre del Equipamiento
 Tipo de Servicio
@@ -111,45 +111,76 @@ Tiempo
 Caminata
 (Aprox)
 Salud
-Clínica de Fracturas
-Salud (Clinica)
-1882 m
-~26 min (Vehí
-culo/Bici)
+Instituto de rehabilitación cardiopulmonar
+del Caribe
+Salud (Clinic)
+870 m
+~12 min a pie
 Salud
-Clínica Oftalmológica del Caribe
-Salud (Clinica)
-1923 m
-~27 min (Vehí
-culo/Bici)
+Dr, Scholl's Barranquilla
+Salud (Clinic)
+1003 m
+~14 min a pie
 Salud
-Clínica Mediesp
-Salud (Clinica)
-1958 m
-~27 min (Vehí
+Clinialergias
+Salud (Clinic)
+1242 m
+~17 min (Vehí
 culo/Bici)
 Educación
-American School
-Educación (Colegio)
-1397 m
-~19 min (Vehí
-culo/Bici)
+Living Explorer Sede Miramar
+Educación (School)
+755 m
+~10 min a pie
+Educación
+Neane Kinder Garden
+Educación (School)
+787 m
+~11 min a pie
+Educación
+Ludoteca Magic Kingdom
+Educación (Kindergarten)
+1092 m
+~15 min a pie
 
 ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
 Pag. 3
-Educación
-Colegio Real / Royal School
-Educación (Colegio)
-1751 m
-~24 min (Vehí
-culo/Bici)
+Comercio
+C.C. Miramar
+Comercio (Mall)
+424 m
+~6 min a pie
+Comercio
+Ara
+Comercio (Supermarket)
+977 m
+~14 min a pie
+Comercio
+Olímpica - Villa Santos
+Comercio (Supermarket)
+983 m
+~14 min a pie
+Recreación
+Parque Miramar
+Recreación (Park)
+302 m
+~4 min a pie
+Recreación
+Mirador de Miramar
+Recreación (Park)
+536 m
+~7 min a pie
+Recreación
+Parque entrada 1 alameda del rio
+Recreación (Park)
+876 m
+~12 min a pie
  Fig. 3 - Distribución Espacial de Equipamientos Urbanos y Puntos de Interes (POI) en el radio de 2.0 km de la propiedad (Elaboración Propia usando
  OpenStreetMap y Pillow).
 EVALUACIÓN DE COBERTURA: En un radio de 2.0 km en torno al inmueble en Miramar (Barranquilla.) se verificaron
-equipamientos de salud, educación. No se encontraron equipamientos verificables de comercio dentro del radio
-consultado. No se encontraron equipamientos verificables de recreación dentro del radio consultado. La accesibilidad
-peatonal y vehicular queda sujeta a verificación de campo.
+equipamientos de salud, educación, comercio, recreación. La accesibilidad peatonal y vehicular queda sujeta a verificación
+de campo.
 04 - Análisis Registral SNR -- Cadena de Tradición [CTL PROCESADO]
 Análisis del Certificado de Tradición y Libertad adjuntado. Folio de matrícula: 040-646406. [FUENTE: CERTIFICADO ADJUNTADO
 POR EL USUARIO - NO ES CONSULTA SNR EN VIVO]
@@ -168,6 +199,10 @@ COMERCIAL AV VILLAS
 S.A.NIT# 8600358275
 CANCELADA -- Anot. 005
 la extingue
+
+ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+Pag. 4
 002
 12-04-2023
 OTRO
@@ -184,10 +219,6 @@ VALENCIA S.A. HOY
 URBANIZADORA MARVAL
 S.A.S. NIT.8300120533
 VIGENTE
-
-ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
-Pag. 4
 004
 22-01-2024
 OTRO
@@ -257,6 +288,10 @@ TIT_B04-7
 Gravamen vigente: hipoteca
 Riesgo
 Alta
+
+ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+Pag. 5
 TIT_B04-8
 Gravamen vigente: afectación
 Riesgo
@@ -265,20 +300,10 @@ TIT_B05
 Cancelaciones de hipoteca
 Riesgo
 Alta
-GEO_B01-Medi
-a
+GEO_B01-Baja
 Amenaza por riesgo (POT)
 Riesgo
 Media
-GEO_B01-Medi
-o
-Amenaza por riesgo (POT)
-Riesgo
-Media
-
-ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
-Pag. 5
 SAG_B01
 Screening de contrapartes en listas
 Conforme
@@ -301,10 +326,7 @@ ESPECIFICACIÓN: LIMITACIÓN AL. Base legal: Afectación/limitación al dominio 
 patrimonio familiar). Acción sugerida: Calificar vigencia y prelación; plan de cancelación o levantamiento.
 TIT_B05 — Cancelaciones de hipoteca [Riesgo · Alta]: 1 hipoteca(s) vigente(s) sin cancelación registrada. Base legal: Cancelación de
 hipoteca (Código Civil art. 2457); Ley 1579/2012. Acción sugerida: Obtener título de cancelación y verificar su inscripción.
-GEO_B01-Media — Amenaza por riesgo (POT) [Riesgo · Media]: El predio intersecta la capa de amenaza por remoción en masa (Media).
-Base legal: Ley 388/1997 (ordenamiento territorial) y POT de Barranquilla; las zonas de amenaza condicionan licencias, pólizas y
-originación. Acción sugerida: Solicitar concepto de ingeniero geotécnico y verificar el polígono exacto de riesgo del POT.
-GEO_B01-Medio — Amenaza por riesgo (POT) [Riesgo · Media]: El predio intersecta la capa de amenaza por remoción en masa (Medio).
+GEO_B01-Baja — Amenaza por riesgo (POT) [Riesgo · Media]: El predio intersecta la capa de amenaza por remoción en masa (Baja).
 Base legal: Ley 388/1997 (ordenamiento territorial) y POT de Barranquilla; las zonas de amenaza condicionan licencias, pólizas y
 originación. Acción sugerida: Solicitar concepto de ingeniero geotécnico y verificar el polígono exacto de riesgo del POT.
 Conclusión preliminar (autoria separada)
@@ -334,22 +356,16 @@ Condición jurídica
 Propiedad Horizontal (inferido del CTL adjunto)
 Tipo de construcción
 Pendiente de verificación
-Estrato
-4
 
 ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
 Pag. 6
+Estrato
+4
 6.1B Verificación Catastral en Vivo
-Estado
-CONSULTADA (servicio abierto Alcaldía de Barranquilla)
-Código catastral (terreno, referencia espacial)
-N/D
-Features terreno / datos adicionales
-5 / 5
-Fuente en vivo
-https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/Map
-Server
+Verificación catastral en vivo NO DISPONIBLE: el servicio abierto de Barranquilla no respondió al momento de generar el
+dictamen o el predio no se resolvió por código catastral/NUPRE. La información catastral de esta sección debe verificarse
+antes de usarse en una decisión.
 6.2 POT -- Cruce de Capas de Ordenamiento
 Layer
 Capa
@@ -370,7 +386,7 @@ Sin afectación por Plan Parcial
 4
 Tratamientos Urbanísticos
  1
-Consolidación (Nivel 2) -- Altura max: 11
+Desarrollo (Bajo) -- Altura max: 8
 5
 Planes de Reordenamiento
  0
@@ -380,9 +396,9 @@ PENDIENTE (consulta en vivo no disponible)
 Norma uso de suelo
 PENDIENTE (consulta en vivo no disponible)
 Tratamiento urbanístico
-Consolidación (Nivel 2) -- polígono POT consultado en vivo
+Desarrollo (Bajo) -- polígono POT consultado en vivo
 Altura máxima según tratamiento
-Hasta 11 pisos (capa oficial de tratamientos)
+Hasta 8 pisos (capa oficial de tratamientos)
 Planes Parciales
 NO EVALUADO en capas abiertas (verificar en Planeación)
 Planes de Reordenamiento
@@ -396,34 +412,28 @@ HALLAZGO MEDIO: El predio intersecta capas de amenaza/riesgo del POT de Barranqu
 norma urbanística del polígono específico y la afectación por riesgo.
 6.3 Edificabilidad y Altura Máxima (Norma Urbanística)
 Tratamiento urbanístico
-Consolidación (Nivel 2)
+Desarrollo (Bajo)
 Altura normativa máxima
-Hasta 11 pisos (POT Barranquilla)
+Hasta 8 pisos (POT Barranquilla)
 Pisos construidos (catastro)
-N/D — la capa de construcción no devolvió registro en el punto consultado (no
-se afirma ausencia de edificación)
+PENDIENTE — fuente de construcción no disponible en esta ejecución.
 Confrontación (construido vs. norma)
-No se compara: la capa de construcción no devolvió registro en el punto
-geocodificado (el punto puede corresponder a la vía o el registro estar asociado
-a la unidad predial). No se afirma ausencia de edificación ni lote disponible;
-verificar la construcción por código catastral / unidad predial.
-Confrontación urbanística: No se compara: la capa de construcción no devolvió registro en el punto geocodificado (el
-punto puede corresponder a la vía o el registro estar asociado a la unidad predial). No se afirma ausencia de edificación ni
-lote disponible; verificar la construcción por código catastral / unidad predial.
+No se compara: la fuente de construcción (capa catastral) no estuvo disponible
+en esta ejecución.
 Fuente normativa: POT Barranquilla -- capa oficial 'Tratamientos urbanísticos' (datos abiertos Alcaldía). Consulta oficial:
 miciudad.barranquilla.gov.co. La altura de la capa es referencial con la fecha de la norma: la licencia aprobada puede tener
 derechos adquiridos y la norma puede estar en revisión; la autoridad competente es la curaduría urbana o la oficina de planeación
 de la ciudad.
-
-ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
-Pag. 7
 07 - Estimación Referencial de Mercado (NO es avalúo)
 Determinación del valor comercial y rango de valor estimado del inmueble. Para propiedad horizontal terminada el método principal
 es Comparación de Mercado M1 (100%); Capitalización de Rentas M3 se usa solo en casos excepcionales con renta
 demostrable (practica de la Lonja de Barranquilla). El Método de Costo de Reposición M2 se calibra según parámetros de mercado
 y costos de construcción vigentes. ARHIAX opera como asistente de conformidad valuatoria: sugiere y compara; la selección
 definitiva del método, los supuestos, el valor y la firma son del avaluador inscrito en el RAA. [FUENTE: ESTIMACIÓN
+
+ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+Pag. 7
 REFERENCIAL DE MERCADO ARHIAX (AUTOMÁTICA)]
 Valor central estimado (referencial)
 $ 399.500.000 COP (Equivalente a $ 6.800.000 / m2)
@@ -469,45 +479,45 @@ Features
 Resultado
 0
 Amenaza por Inundación
--74.840,11.004,-74.835,11.009
+-74.841,11.003,-74.836,11.008
  0
 SIN AFECTACIÓN
 1
 Amenaza por Inundación
 (Historica)
--74.840,11.004,-74.835,11.009
+-74.841,11.003,-74.836,11.008
  0
 SIN AFECTACIÓN
 2
 Amenaza por Remoción en Masa
--74.840,11.004,-74.835,11.009
+-74.841,11.003,-74.836,11.008
  1
-AMENAZA MEDIA
+AMENAZA BAJA
 3
 Amenaza por Remoción en Masa
 (Historica)
--74.840,11.004,-74.835,11.009
+-74.841,11.003,-74.836,11.008
  0
 SIN AFECTACIÓN
 4
 Zonas de Riesgo No Mitigable
--74.840,11.004,-74.835,11.009
- 1
-RIESGO MEDIO
-5
-Arroyos y Cauces Urbanos
--74.840,11.004,-74.835,11.009
+-74.841,11.003,-74.836,11.008
  0
 SIN AFECTACIÓN
-
-ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
-Pag. 8
+5
+Arroyos y Cauces Urbanos
+-74.841,11.003,-74.836,11.008
+ 0
+SIN AFECTACIÓN
 Metodología de cruce: Se construyo un Bounding Box (BBOX) en WGS84 centrado en las coordenadas de la dirección evaluada:
 TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3 (Lat:
-11.00612, Lon: -74.83753), con un buffer espacial de ~250m. Se ejecutó el cruce espacial pericial contra las capas oficiales del
-POT. Diagnostico consolidado: El predio ubicado en (11.00612, -74.83753) presenta evaluación de Amenaza Media por remoción
-en masa y zonificación de Riesgo Medio según el Plan de Ordenamiento Territorial (POT) de Barranquilla.
+11.00538, Lon: -74.83862), con un buffer espacial de ~250m. Se ejecutó el cruce espacial pericial contra las capas oficiales del
+POT. Diagnostico consolidado: El predio ubicado en (11.00538, -74.83862) presenta evaluación de Amenaza Baja por remoción en
+masa y zonificación de Sin Riesgo Identificado según el Plan de Ordenamiento Territorial (POT) de Barranquilla.
+
+ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+Pag. 8
 Fuente de datos
 Procedencia MIXTA: EN VIVO (barrio, localidad, pieza_urbana, estrato,
 tratamiento, tipo_tratamiento) · EMPAQUETADO (altura_máxima,
@@ -519,13 +529,13 @@ Método de cruce
 Spatial Query Point-in-Polygon (STRtree / Shapely) sobre geometrias
 normalizadas
 BBOX (WGS84)
--74.840,11.004,-74.835,11.009
+-74.841,11.003,-74.836,11.008
 Total capas evaluadas
 6 (Inundación x2, Remoción x2, Riesgo No Mitigable, Arroyos)
 Clasificación resultante
-EVALUACIÓN GEOTÉCNICA POT: AMENAZA MEDIA
-HALLAZGO MEDIO (MEDIA): el predio intersecta capas de amenaza/riesgo del POT de Barranquilla (ver detalle en la tabla
-anterior). Se recomienda evaluación geotécnica complementaria.
+EVALUACIÓN GEOTÉCNICA POT: AMENAZA BAJA
+AFECTACIÓN DE NIVEL BAJA: el predio intersecta capas de amenaza/riesgo del POT de Barranquilla (ver detalle en la
+tabla anterior). Se recomienda verificación puntual por profesional competente en caso de intervención física del predio.
 8.2 Riesgo Volcanico (SGC -- mapa oficial de amenaza)
 Riesgo volcanico (SGC)
 El predio se encuentra fuera del área cartografiada por el mapa oficial de
@@ -550,9 +560,9 @@ screeningado(s)
 Fuentes consultadas
 ONU · OFAC SDN · UKSL
 Hash de integridad de la ficha
-AA17213B186104FDCB1181CE
+3035EAF1D1ACD2428FA4D3C9
 Timestamp de generación (UTC)
-2026-09-22T17:58:36.019597Z
+2026-09-23T14:57:00.780429Z
 TITULAR_ACTUAL: DURAN BACCA ALISSON
 Persona natural | Documento: CC 1045718995X | Hash: 26D01E42E0BBF0B5 |
 SCREENINGADO | Participación: 50% | Advertencias:
@@ -561,15 +571,15 @@ ACREEDOR_HIPOTECARIO: BANCO DE
 BOGOTÁ S.A.
 Persona jurídica | Documento: NIT 8600029644 | Hash: 13D8895BCAD92CED |
 SCREENINGADO
-
-ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
-Pag. 9
 CONSTRUCTOR_ENAJENANTE:
 URBANIZADORA MARVAL S.A.S.
 Persona jurídica | Documento: N/D | Hash: 0212A4D46619B3E1 |
 SCREENINGADO | Advertencias: DOCUMENT_MISSING,
 PERSON_TYPE_INFERRED_FROM_LEGAL_FORM
+
+ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+Pag. 9
 Semántica de los hashes
 Cada hash SHA-256 sella un ARTEFACTO concreto: el sujeto canónico, el
 snapshot de la lista oficial, la consulta y el envelope de evidencia. Prueban
@@ -640,7 +650,10 @@ NO MATCH
 URBANIZADORA MARVAL
 S.A.S.
 Jurídica
-N/D
+NO
+DECLARADO
+EN LA
+FUENTE
 CONSTRUCT
 OR_ENAJENA
 NTE
@@ -675,11 +688,11 @@ Council
 consultado contra
 snapshot oficial
 versionado
-2026-09-21T23:00:
-06.615Z
+2026-09-22T23:00:
+06.060Z
 1011
-39e07e4793a7
-40a0
+c9eb18eb830b
+dd9e
 OFAC SDN
 OFAC_SDN
 parser ofac_sdn_
@@ -690,13 +703,13 @@ Treasury — OFAC
 consultado contra
 snapshot oficial
 versionado
-09/18/2026
-19393
-30c2a70887d6
-94f7
+09/23/2026
+19391
+d533a38ee0a8
+dc1d
 
 ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
 Pag. 10
 Fuente
 Autoridad
@@ -761,7 +774,7 @@ BANCO DE BOGOTÁ S.A y tramitar la CANCELACIÓN de la hipoteca ante la ORIP. No 
 cualquier operación sobre el apartamento hasta que el gravamen se levante.
 
 ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
 Pag. 11
 Severidad: MEDIO
  Fuente: SNR Registral
@@ -775,14 +788,15 @@ titulares/beneficiarios ante notaria.
 Severidad: MEDIO
  Fuente: POT BAQ -- Capas GeoJSON
  (STRtree ARHIAX RE)
-H-GEO | Afectación por Amenaza/Riesgo Detectada (Medio)
+H-GEO | Afectación por Amenaza/Riesgo Detectada (Baja)
 Descripción: El motor geoespacial detectó intersección del predio con zonas de riesgo del POT de Barranquilla. Amenaza
-remoción en masa: Media | Áreas en riesgo: Medio | Clase de suelo: Urbano (01). El predio ubicado en (11.00612, -74.83753)
-presenta evaluación de Amenaza Media por remoción en masa y zonificación de Riesgo Medio según el Plan de Ordenamiento
-Territorial (POT) de Barranquilla.
+remoción en masa: Baja | Áreas en riesgo: Sin riesgo identificado | Clase de suelo: Urbano (01). El predio ubicado en (11.00538,
+-74.83862) presenta evaluación de Amenaza Baja por remoción en masa y zonificación de Sin Riesgo Identificado según el Plan
+de Ordenamiento Territorial (POT) de Barranquilla.
 Implicación operacional: Afectación presente declarada por la fuente oficial: se recomienda verificación puntual por profesional
-competente en caso de intervención física del predio; impacto esperado menor en originación. Amenaza de nivel MEDIA
-declarada por la fuente oficial. Amenaza de nivel MEDIO declarada por la fuente oficial. [RSK-SEV-1 v1.0.0]
+competente en caso de intervención física del predio; impacto esperado menor en originación. Afectación PRESENTE de nivel
+BAJA: exige verificación puntual y no puede reportarse como amenaza alta. Sin intersección con las capas consultadas.
+[RSK-SEV-1 v1.0.0]
 11 - Resumen de Hallazgos
 El motor ARHIAX identificó 3 hallazgos sobre este activo.
  1
@@ -800,7 +814,7 @@ MEDIO
 H-02 | Afectación/Limitación Vigente (Anot. 008)
 SNR Registral
 MEDIO
-H-GEO | Afectación por Amenaza/Riesgo Detectada (Medio)
+H-GEO | Afectación por Amenaza/Riesgo Detectada (Baja)
 POT BAQ -- Capas GeoJSON
 (STRtree ARHIAX RE)
 12 - Score Actuarial Integrado
@@ -810,31 +824,31 @@ si existe un hallazgo ALTO (por ejemplo, una hipoteca vigente), el resultado int
 sea alto: el puntaje no puede verse como favorable mientras haya una condición que deba resolverse primero.
  46 / 100
  Score Registral
- 84 / 100
+ 95 / 100
  Score Hidrológico
  100 / 100
  Score Jurídico
  55 / 100
  Score Integrado ARHIAX
+
+ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+Pag. 12
 Score Registral (46/100)
 -30 pts: Hipoteca vigente a favor de BANCO DE BOGOTÁ S.A (Anot. 007); -12
 pts: Afectación/Limitación Vigente (Anot. 008); -12 pts: Afectación por
-Amenaza/Riesgo Detectada (Medio)
-
-ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
-Pag. 12
+Amenaza/Riesgo Detectada (Baja)
 Score Jurídico (100/100)
 Sin penalizaciones jurídicas
-Score Hidrológico (84/100)
--8 pts: Amenaza remoción en masa MEDIA (severidad MEDIO · RSK-SEV-1
-v1.0.0); -8 pts: Área en riesgo MEDIO (severidad MEDIO · RSK-SEV-1 v1.0.0)
+Score Hidrológico (95/100)
+-5 pts: Amenaza remoción en masa BAJA (severidad MEDIO · RSK-SEV-1
+v1.0.0)
 Score Catastral (100/100)
 Área validada: 58.75 m² — Score pleno
 Score Integrado
 Perfil BLOQUEADO (hallazgos de severidad ALTO activos): score integrado
 topeado en 55.0/100. Registral: 46.0/100 · Jurídico: 100/100 · Hidrológico:
-84.0/100 · Catastral: 100/100. Metodología ponderada LAI v1.0 (40/30/20/10).
+95.0/100 · Catastral: 100/100. Metodología ponderada LAI v1.0 (40/30/20/10).
 13 - Estructurabilidad Fiduciaria y Carga Económica
 Estructurabilidad fiduciaria: BLOQUEADA (semaforo ROJO). El activo NO es estructurable como garantia fiduciaria en su
 estado registral actual. Condiciones precedentes para habilitarlo: (1) H-01 | Hipoteca vigente a favor de BANCO DE
@@ -869,12 +883,12 @@ inmueble libre.
 R-02 | Levantamiento de Limitación Anot. 008
 Tramitar la desafectación/levantamiento de la limitación mediante escritura pública conjunta y su registro en el folio SNR.
 15 - Ruta de Verificación Profesional
-Los siguientes pasos deben ejecutarse en el orden indicado para cerrar los hallazgos activos del activo e habilitar su estructuración
-o transferencia. Actor responsable y plazo estimado se indican por paso.
 
 ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
 Pag. 13
+Los siguientes pasos deben ejecutarse en el orden indicado para cerrar los hallazgos activos del activo e habilitar su estructuración
+o transferencia. Actor responsable y plazo estimado se indican por paso.
 Paso 1 [SNR Registral]
 Solicitar extracto oficial del crédito hipotecario al banco acreedor registrado en el SNR. Verificar: saldo insoluto, cuota mensual,
 fecha de vencimiento, tasa vigente y cláusulas de prepago. Si el acreedor declarado difiere del SNR, ver Paso de Cesión.
@@ -907,11 +921,11 @@ NO sustituye avalúo elaborado por avaluador inscrito en el RAA (Ley
 1673/2013)
 16.B Traza técnica de ejecución (receipts)
 Generado
-2026-09-22T17:58:36.040431+00:00
+2026-09-23T14:57:00.891405+00:00
 Versión ARHIAX RE
 1.4.0
 Commit (git SHA)
-7a49762ffa97
+3ac0c3a61722
 Motor dictus / GIS / Titulux / reglas
 1.4.0 / 1.2.0 / 1.1.0 / 1.3.0
 CTL adjuntado
@@ -922,25 +936,39 @@ MATCH_EXACT · NUPRE AFT0005BOHA · Código catastral
 Riesgo volcánico (SGC)
 CONSULTADO · NO EVALUADO
 Equipamiento urbano (POI)
-CONSULTADO · Comercio NO_MATCH; Educación AVAILABLE (2);
-Recreación NO_MATCH; Salud AVAILABLE (3)
+CONSULTADO · Comercio AVAILABLE (3); Educación AVAILABLE (3);
+Recreación AVAILABLE (3); Salud AVAILABLE (3)
 Screening de contrapartes
 COMPLETO · 3 sujeto(s) screeningado(s) de 3 declarado(s) · cobertura:
 COVERAGE_COMPLETE · evidencia: 9/9 envelopes · cadena SEALED
-17 - Sello de Integridad del Insumo (Provenance)
 
 ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
 Pag. 14
+Núcleo Sagrilaft
+VIGENTE · núcleo sancionado
+Motor de screening
+sanctions-matcher/1.1.0
+Modelo de sujetos
+canonical-subjects/1.0.0
+Parsers
+ofac_sdn_xml ofac_sdn_xml/1.1.0 · onu_xml onu_xml/1.1.0 ·
+uk_ofsi_legacy_xml uk_ofsi_legacy_xml/1.0.0 · uk_sanctions_list_xml
+uk_sanctions_list_xml/1.1.0
+Fuentes del núcleo
+OFAC_SDN · UK_SANCTIONS_LIST · UN_CONSOLIDATED
+Ancestría del núcleo
+VERIFIED · 3ac0c3a6 desciende de acc8a949
+17 - Sello de Integridad del Insumo (Provenance)
 SELLO DE EJECUCIÓN (SHA-256)
-79cee62c1b17eec2ea819866a506d3bdbe1889fb338fa6f634ed0addf55ab31a
+c3ff68bdf19b3ece8aa81d5bc04c8568ec7f46fd6a3f90f22165995ebf7c6b15
 ALCANCE DEL SELLO
 SHA-256 sobre folio + referencia + timestamp de emisión. Identifica la
 EJECUCIÓN que produjo este dictamen; no es el hash del archivo (un archivo no
 puede contener su propio hash). El hash del archivo emitido se publica en el
 receipt de ejecución y en el manifest de la corrida.
 TIMESTAMP
-2026-09-22T17:57:42.441555+00:00
+2026-09-23T14:55:32.706553+00:00
 REFERENCIA
 ARHIAX-LAI-2026-0001
 ALGORITMO
@@ -989,6 +1017,10 @@ Reproyección
 Automática por ArcGIS Server al CRS nativo del servicio
 CRS nativo predominante
 EPSG:9377 (CTM12 -- Origen Único Nacional de Colombia)
+
+ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+Pag. 15
 Motor de transformación
 ArcGIS Server (Esri) -- Transformación MAGNA-SIRGAS <-> WGS84
 Parámetros CTM12
@@ -1004,10 +1036,6 @@ de riesgos (< 1 metro en la zona de Barranquilla), dado que ambos marcos (WGS84/
 nivel centimetrico. Sin embargo, se documentan las siguientes limitaciones:
 Precisión de la reproyección
 < 1 metro (WGS84 <-> MAGNA-SIRGAS en zona Barranquilla)
-
-ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
-Pag. 15
 Precisión del BBOX
 ~250m de buffer en cada dirección -- suficiente para intersección de polígonos
 Riesgo en zonas limitrofes
@@ -1029,7 +1057,7 @@ MAGNA-SIRGAS/CTM12 es suficiente para análisis urbanístico, de riesgos y catas
 topográficos o deslindes, se requiere trabajo de campo en CTM12 nativo.
 
 ARHIAX Informe Base LAI | Folio 040-646406 | ARHIAX-LAI-2026-0001 | Insumo base de fuentes públicas · No sustituye estudio de titulos ni avalúo · Sujeto a verificación profesional.
-ARHIAX RE v1.4.0 · commit 7a49762f · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
+ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0
 Pag. 16
  TITULUX
  ARHIAX Confianza Predial

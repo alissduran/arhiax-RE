@@ -109,12 +109,19 @@ def main() -> int:
 
     _tits = [_familia(m.group(1)) for m in
              re.finditer(r"geo_b01-\w*\s*[ao]?\s*amenaza por riesgo \(pot\) riesgo (\w+)", txt)]
-    _hal = re.search(r"h-geo \| afectacion por amenaza/riesgo detectada \((\w+)\)", txt)
+    # OJO: el título del H-GEO lleva el NIVEL entre paréntesis («(Baja)»), no la
+    # severidad; la severidad declarada va en el campo «Severidad: …» del bloque (en
+    # el PDF, junto a la fuente del POT). Comparar Titulux contra el NIVEL era un
+    # falso negativo de este verificador.
+    _hal_sev = re.search(r"severidad: (\w+) fuente: pot", txt)
+    _hal_titulo = re.search(r"h-geo \| afectacion por amenaza/riesgo detectada \((\w+)\)", txt)
     _regla = "rsk-sev-1 v1.0.0"
+    _sev_hal = _familia(_hal_sev.group(1)) if _hal_sev else None
     ck("severidad Titulux == Hallazgo final",
-       bool(_tits) and bool(_hal) and all(t == _familia(_hal.group(1)) for t in _tits)
+       bool(_tits) and _sev_hal is not None and all(t == _sev_hal for t in _tits)
        and _regla in txt,
-       f"Titulux={_tits} · H-GEO={_familia(_hal.group(1)) if _hal else None} · "
+       f"Titulux={_tits} · H-GEO severidad={_sev_hal} "
+       f"(nivel del título={_hal_titulo.group(1) if _hal_titulo else None}) · "
        f"regla trazada en el dictamen: {'sí' if _regla in txt else 'no'}")
 
     ck("constructor = URBANIZADORA MARVAL S.A.S.",

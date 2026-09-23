@@ -319,6 +319,9 @@ def _screening_legado(summary) -> list:
     """Vista legada por sujeto (compatibilidad de consumidores), derivada del
     resumen único. La autoridad es `screening_summary`."""
     from sanctions.engine import sigla
+    # 03I.2 · gates 4 y 5: productor único de tipo y documento del sujeto (compartido
+    # con los capítulos 09 y 16).
+    from sanctions.subjects import person_type_label, documento_para_dictamen
 
     out = []
     for e in summary.subjects:
@@ -341,12 +344,13 @@ def _screening_legado(summary) -> list:
                 "snapshot_id": o.snapshot_id,
             })
         out.append({
-            "sujeto": e.canonical_name, "tipo": ("natural" if e.person_type == "NATURAL_PERSON"
-                                                 else ("juridica" if e.person_type == "LEGAL_ENTITY"
-                                                       else "unknown")),
+            "sujeto": e.canonical_name,
+            # 03I.2 · gates 4 y 5: MISMO productor que el capítulo 09 y el 16. Antes este
+            # capítulo construía su propio tipo («natural»/«juridica») y su propio
+            # documento («N/D»), y podía divergir del resto del dictamen.
+            "tipo": person_type_label(e).lower(),
             "sujeto_id": e.subject_id, "person_type": e.person_type,
-            "documento": " ".join(x for x in ((e.document_type or "").upper(),
-                                              e.document_number or "") if x) or "N/D",
+            "documento": documento_para_dictamen(e),
             "roles": list(e.roles), "participacion": e.participation,
             "resultado": peor, "fuentes": fuentes,
             "completo": (summary.status == "SCREENING_COMPLETE"),

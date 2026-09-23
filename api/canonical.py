@@ -586,6 +586,15 @@ def build_canonical_property_identity(
         "resolution_status": resolver_status,
         "resolution_method": metodo_resolucion,
         "resolution_confidence": resolution_confidence,
+        # 03I.2 · D-1: `identity_verified` se DERIVA de la confianza canónica, que es
+        # «la semántica normalizada ÚNICA que consume el gate de valoración» (ver
+        # `_estado_y_confianza`). Antes solo lo fijaba el camino del registro de
+        # adopción, así que cuando la identidad se resolvía contra el catastro vivo
+        # (p. ej. MATCH_BY_NUPRE con VERIFIED_UNIT_IDENTITY) el campo quedaba ausente
+        # y el gate de mercado bloqueaba la valoración por «identity_verified != True»
+        # mientras el modelo declaraba la identidad como verificada: dos verdades.
+        # El registro de adopción puede refinarlo después (misma semántica).
+        "identity_verified": resolution_confidence == RESOLUTION_VERIFIED_UNIT,
         "ciudad": ciudad,
         "folio_snr": folio or None,
         "nupre": nupre,

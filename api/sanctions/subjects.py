@@ -46,11 +46,35 @@ MOTIVO_POR_ROL = {
 
 # Advertencias de identidad (vocabulario cerrado).
 W_DOC_MISSING = "DOCUMENT_MISSING"
+W_DOC_EXTRACTION_FAILED = "DOCUMENT_EXTRACTION_FAILED"
 W_PERSON_TYPE_UNKNOWN = "PERSON_TYPE_UNKNOWN"
 W_PERSON_TYPE_FROM_LEGAL_FORM = "PERSON_TYPE_INFERRED_FROM_LEGAL_FORM"
 W_DOC_NON_STANDARD = "DOCUMENT_NON_STANDARD_FORMAT"
 W_NAME_PLACEHOLDER = "NAME_IS_PLACEHOLDER"
 W_NOT_FUSED = "MULTIPLE_NAME_VARIANTS_NOT_FUSED"
+
+# ── Etiquetas ÚNICAS para el dictamen (05 = 09 = 16) ──────────────────────────
+# Gate de release #5: el tipo de persona del sujeto debe ser el MISMO en los tres
+# capítulos. Un solo mapa, consumido por los tres, lo garantiza por construcción.
+PERSON_TYPE_LABEL = {
+    PERSON_NATURAL: "Natural",
+    PERSON_LEGAL: "Jurídica",
+    PERSON_UNKNOWN: "No determinado",
+}
+
+# Versión del MODELO DE SUJETOS (núcleo SAGRILAFT). Viaja al gate de release (#10).
+SUBJECT_MODEL_VERSION = "canonical-subjects/1.0.0"
+
+# Gate de release #4: si el documento ESTÁ en el CTL, el dictamen no puede imprimir
+# «ID=N/D» sin declarar el fallo de extracción. Un solo texto por situación.
+DOC_NO_DECLARADO = "NO DECLARADO EN LA FUENTE"
+DOC_NO_EXTRAIDO = "NO EXTRAÍDO (fallo de extracción declarado)"
+
+# Señales de que la fuente SÍ trae un documento aunque el extractor no lo capturara:
+# sigla de documento o una corrida de 6+ dígitos (cédulas, NIT, matrículas).
+_RE_DOC_INDICIO = re.compile(
+    r"(?i)\b(CC|C\.C\.?|CEDULA(?:\s+DE\s+CIUDADANIA)?|NIT|N\.I\.T\.?|CE|C\.E\.?|"
+    r"PASAPORTE|PASSPORT|TI|T\.I\.?|RC|NUIP)\b|\b\d{6,}\b")
 
 # Longitud mínima de una variante declarada para consultarla por separado
 # (evita consultar siglas/muletillas que generarían ruido de homónimos).
@@ -185,6 +209,29 @@ def variantes_declaradas(nombre: str) -> Tuple[str, ...]:
     return tuple(out)
 
 
+def person_type_label(envelope) -> str:
+    """Etiqueta ÚNICA del tipo de persona para el dictamen (05 = 09 = 16)."""
+    return PERSON_TYPE_LABEL.get(getattr(envelope, "person_type", None), "No determinado")
+
+
+def documento_para_dictamen(envelope) -> str:
+    """Documento del sujeto tal como debe imprimirse (gate de release #4).
+
+    · documento extraído  -> «CC 1045718995X»
+    · sin documento y con señal de documento en la fuente -> declara el fallo de
+      extracción (nunca un «N/D» mudo).
+    · sin documento en la fuente -> «NO DECLARADO EN LA FUENTE».
+    """
+    tipo = str(getattr(envelope, "document_type", None) or "").upper().strip()
+    num = str(getattr(envelope, "document_number", None) or "").strip()
+    if tipo or num:
+        return " ".join(x for x in (tipo, num) if x)
+    warns = tuple(getattr(envelope, "identity_warnings", ()) or ())
+    if W_DOC_EXTRACTION_FAILED in warns:
+        return DOC_NO_EXTRAIDO
+    return DOC_NO_DECLARADO
+
+
 def parse_person(raw: str) -> Dict[str, Any]:
     """Descompone un string del CTL en nombre/documento/participación.
 
@@ -206,6 +253,10 @@ def parse_person(raw: str) -> Dict[str, Any]:
     warnings: List[str] = []
     if tipo_doc is None:
         warnings.append(W_DOC_MISSING)
+        # Gate de release #4: si la fuente trae una señal de documento (sigla o una
+        # corrida de 6+ dígitos) y el extractor no la capturó, el fallo se DECLARA.
+        if _RE_DOC_INDICIO.search(texto):
+            warnings.append(W_DOC_EXTRACTION_FAILED)
     elif not re.fullmatch(r"\d{5,15}", numero or ""):
         warnings.append(W_DOC_NON_STANDARD)
     if "/" in nombre and len(nombre.split("/")[-1].split()) <= 3:
