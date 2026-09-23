@@ -138,7 +138,21 @@ def build_execution_receipts(
         # verdad que los capítulos 05/09/16): estado canónico, sujetos, fuentes y
         # frescura REAL de cada snapshot.
         "sarlaft": _screening_receipt(titulux),
-        "geocodificacion": {"lat": lat, "lon": lon},
+        # 03I.2B §N: la geocodificación viaja con PROCEDENCIA (fuente, capa, feature,
+        # método y alcance). Antes solo viajaban lat/lon: el recibo no permitía saber
+        # si el punto era geometría oficial del predio o un centroide de referencia.
+        "geocodificacion": {
+            "lat": lat, "lon": lon,
+            "coordinate_source": _mc.get("coordinate_source"),
+            "coordinate_source_verified": _mc.get("coordinate_source_verified"),
+            "provenance": _mc.get("coordinate_provenance") or {},
+            "source_system": (_mc.get("coordinate_provenance") or {}).get("source_system"),
+            "source_layer": (_mc.get("coordinate_provenance") or {}).get("layer"),
+            "source_feature_id": (_mc.get("coordinate_provenance") or {}).get("feature_id"),
+            "resolution_method": (_mc.get("coordinate_provenance") or {}).get("resolution_method"),
+            "coordinate_scope": _mc.get("coordinate_scope"),
+            "official_predio_rejected_reason": _mc.get("official_predio_rejected_reason"),
+        },
     }
 
 
@@ -309,4 +323,25 @@ def receipt_rows(receipts: Optional[Dict[str, Any]]) -> List[Tuple[str, str]]:
     else:
         filas.append(("Screening de contrapartes",
                       "NO EJECUTADO · " + (sag.get("reason") or "sin fuentes disponibles")))
+    # 03I.2B §N: procedencia de la COORDENADA que abrió el contexto de mercado.
+    # Sin esta fila, «OFFICIAL_PREDIO» no sería auditable en el dictamen impreso.
+    geo = receipts.get("geocodificacion") or {}
+    if geo.get("lat") is not None and geo.get("lon") is not None:
+        _prov = geo.get("provenance") or {}
+        _det_geo = [f"{geo.get('coordinate_source') or 'UNRESOLVED'}"
+                    + (" (verificada)" if geo.get("coordinate_source_verified") else "")]
+        if _prov.get("source_system"):
+            _det_geo.append(f"fuente {_prov['source_system']}")
+        if _prov.get("layer"):
+            _det_geo.append(f"capa {_prov['layer']}")
+        if _prov.get("feature_id"):
+            _det_geo.append(f"feature {_prov['feature_id']}")
+        if _prov.get("resolution_method"):
+            _det_geo.append(f"método {_prov['resolution_method']}")
+        if geo.get("coordinate_scope"):
+            _det_geo.append(str(geo["coordinate_scope"]))
+        if geo.get("official_predio_rejected_reason"):
+            _det_geo.append("geometría del predio NO promovida: "
+                            + str(geo["official_predio_rejected_reason"]))
+        filas.append(("Ubicación de mercado (coordenada)", " · ".join(_det_geo)))
     return filas

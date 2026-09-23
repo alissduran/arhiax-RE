@@ -425,16 +425,18 @@ def _building_context_por_coordenadas(*, lat, lon, coordinate_verified,
 
 
 def _gate_liberacion_inicial():
-    """Evalúa el gate de liberación ANTES de construir el dictamen (03I.2A §3).
+    """Evalúa y VALIDA el gate de liberación ANTES de construir el dictamen.
 
-    Devuelve siempre un dict (nunca None). Si el propio evaluador no se puede
-    importar, aplica la política del entorno con la última línea de defensa
-    (`release_env`, módulo sin dependencias) y, si ni eso estuviera disponible,
-    BLOQUEA: jamás se emite un PDF vigente sin haber podido comprobar el núcleo.
+    03I.2A §3 + 03I.2B §A/§B: el resultado del wrapper pasa obligatoriamente por
+    `validate_release_decision`. Un contrato malformado (`None`, `{}`, un string, o
+    campos faltantes) NO puede leerse como «no bloqueante»: se convierte en un fallo
+    explícito y se aplica la política del entorno. Si ni el validador ni `release_env`
+    estuvieran disponibles, se BLOQUEA: jamás se emite un PDF vigente sin contrato.
     """
     try:
-        from sanctions.release_gate import evaluar_release_seguro
-        return evaluar_release_seguro()
+        from sanctions.release_gate import (evaluar_release_seguro,
+                                            validate_release_decision)
+        return validate_release_decision(evaluar_release_seguro())
     except Exception as _e_imp:  # noqa: BLE001 — defensa en profundidad
         try:
             from release_env import (normalizar_entorno, politica_para,
@@ -461,6 +463,12 @@ def _gate_liberacion_inicial():
                 "reasons": [f"no se pudo cargar el release gate: {type(_e_imp).__name__}"],
                 "core_versions": {}, "ancestry": {"estado": "UNKNOWN",
                                                   "detalle": "gate no importable"},
+                "contract_valid": False,
+                "contract_problems": [
+                    "no se pudo cargar/validar el contrato del gate "
+                    f"({type(_e_imp).__name__}): se aplica la política del entorno"
+                ],
+                "reasons_source": "IMPORT_FALLBACK",
             }
         except Exception as _e_env:  # noqa: BLE001 — sin política: fail-closed
             return {
@@ -475,6 +483,13 @@ def _gate_liberacion_inicial():
                 "reasons": [f"política de entorno no disponible: {type(_e_env).__name__}"],
                 "core_versions": {}, "ancestry": {"estado": "UNKNOWN",
                                                   "detalle": "entorno no evaluable"},
+                "contract_valid": False,
+                "contract_problems": [
+                    "no se pudo cargar/validar el contrato del gate "
+                    f"({type(_e_imp).__name__}) ni la política de entorno "
+                    f"({type(_e_env).__name__}): se BLOQUEA"
+                ],
+                "reasons_source": "FAIL_CLOSED",
             }
 
 
@@ -1276,6 +1291,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         market_context["coordinate_source_verified"] = _ubicacion.get("coordinate_source_verified")
         market_context["authoritative_address"] = _ubicacion.get("authoritative_address")
         market_context["address_source"] = _ubicacion.get("address_source")
+        # 03I.2B §N: PROCEDENCIA de la coordenada. Sin ella, «OFFICIAL_PREDIO» sería
+        # una etiqueta sin evidencia: el receipt y el manifest deben poder auditar
+        # de qué servicio, capa y feature salió el punto que abrió el gate.
+        market_context["coordinate_provenance"] = _ubicacion.get("coordinate_provenance") or {}
+        market_context["coordinate_scope"] = _ubicacion.get("coordinate_scope")
+        market_context["official_predio_rejected_reason"] = _ubicacion.get(
+            "official_predio_rejected_reason")
+        print(f"[PDF][COORD-PROVENANCE] source={_ubicacion.get('coordinate_source')!r} "
+              f"system={_ubicacion.get('source_system')!r} "
+              f"layer={_ubicacion.get('source_layer')!r} "
+              f"feature_id={_ubicacion.get('source_feature_id')!r} "
+              f"method={_ubicacion.get('resolution_method')!r} "
+              f"verificado={_ubicacion.get('coordinate_source_verified')}")
         market_context["official_urban_context"] = _oficial_urbano
         # 03I.1 · F2: resumen de procedencia urbana POR CAMPO (LIVE_OFFICIAL /
         # PACKAGED_REFERENCE / MIXED). 6.2 y 6.3 y el capítulo 8 consumen este
@@ -3759,6 +3787,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             + "; ".join(_release_gate.get("reasons") or ["sin motivo declarado"]) + "."))
         story.append(Spacer(1, 4))
         story.append(dt([("Estado del núcleo de screening", _release_gate.get("marca"))]))
+        story.append(Spacer(1, 4))
+    # 03I.2B §A/§B: la validez del CONTRATO de decisión se declara siempre, para que
+    # un contrato malformado no pueda pasar por «no bloqueante» sin dejar rastro.
+    if _release_gate.get("contract_valid") is False:
+        story.append(alert_red(
+            "<b>CONTRATO DE LIBERACION INVALIDO</b> · el gate no pudo validar su propia "
+            "decisión; se aplicó la política del entorno (fail-closed). Problemas: "
+            + "; ".join(_release_gate.get("contract_problems")
+                        or ["no declarados"]) + "."))
         story.append(Spacer(1, 4))
     story.append(dt(get_alcance_dt(barrio, ciudad=ciudad, receipts=_receipts)))
     story.append(Spacer(1, 6))

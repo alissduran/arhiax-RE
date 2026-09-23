@@ -38,6 +38,12 @@ import requests
 UA = {"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
 BASE = "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services"
 
+# 03I.2B · H-1: origen declarado de las coordenadas (mismo vocabulario que los
+# demás catastros: el consumidor de mercado NO debe adivinar la procedencia).
+SOURCE_SYSTEM_BOGOTA = "CATASTRO_MUNICIPAL_BOGOTA_ARCGIS"
+ORIGEN_GEOMETRIA_OFICIAL = "GEOMETRIA_OFICIAL_PREDIO"
+ORIGEN_HINT = "HINT_NO_OFICIAL"
+
 TIMEOUT = 7.0
 TTL_CACHE = 3600
 
@@ -465,6 +471,23 @@ def enriquecer_por_punto(lat: float = None, lon: float = None,
     res["lat"] = _lat_ref
     res["lon"] = _lon_ref
     res["resolucion"] = "por_punto_referencial"
+    # 03I.2B · H-1: el centroide del LOTE oficial (por LOTCODIGO del predio) es
+    # geometría oficial del predio; el punto de placa geocodificado NO lo es.
+    if _centro_lote:
+        res["coordenada_origen"] = ORIGEN_GEOMETRIA_OFICIAL
+        res["coordenada_provenance"] = {
+            "source_system": SOURCE_SYSTEM_BOGOTA,
+            "layer": "catastro/lote",
+            "feature_id": str(codigo_lote).strip(),
+            "feature_id_kind": "LOTCODIGO",
+            "geometry_type": "Polygon",
+            "resolution_method": "CENTROIDE_DE_GEOMETRIA_OFICIAL_DEL_LOTE",
+            "predio_globalid": str(codigo_lote).strip(),
+            "numero_predial": str(codigo_lote).strip(),
+            "link_verificado": True,
+        }
+    else:
+        res["coordenada_origen"] = ORIGEN_HINT
     res["entorno"] = consultar_entorno_urbano(_lat_ref, _lon_ref,
                                               codigo_lote=codigo_lote)
     # Pasar el código de lote para elegir la construcción del EDIFICIO del
@@ -477,6 +500,12 @@ def enriquecer_por_punto(lat: float = None, lon: float = None,
     res["disponible"] = bool(res["entorno"].get("disponible")
                              or res["construccion"].get("disponible")
                              or res["amenazas"].get("disponible"))
+    if _centro_lote:
+        # 03I.2B · H-1: si se obtuvo la geometría OFICIAL del lote, el predio quedó
+        # resuelto aunque las capas de contexto no respondan: `disponible` describe la
+        # resolución del predio, no la disponibilidad de capas auxiliares.
+        res["disponible"] = True
+        res["error"] = None
     if not res["disponible"]:
         res["error"] = "sin coincidencia catastral en Bogotá para el punto"
     return res

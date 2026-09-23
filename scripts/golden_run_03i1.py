@@ -337,6 +337,11 @@ def main(argv=None) -> int:
             "verified": mc.get("coordinate_source_verified"),
             "authoritative_address": mc.get("authoritative_address"),
             "address_source": mc.get("address_source"),
+            # 03I.2B §N/§H: procedencia de la coordenada (H-1), observable de solo
+            # lectura: de qué servicio, capa y feature salió el punto del gate.
+            "provenance": mc.get("coordinate_provenance") or {},
+            "scope": mc.get("coordinate_scope"),
+            "official_predio_rejected_reason": mc.get("official_predio_rejected_reason"),
         },
         "urban": {
             "barrio": _urb.get("barrio"), "barrio_status": _urb.get("barrio_status"),

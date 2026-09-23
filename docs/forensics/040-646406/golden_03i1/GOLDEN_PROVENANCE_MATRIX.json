@@ -1,14 +1,14 @@
 {
- "commit_sha": "a9e55719540f49764ca1ace16fcd9ac6e7a60f52",
- "pdf_sha256": "a3084393af69e010767e50554e83168093d74bd6ca4ad66198bcb3181f7534fa",
+ "commit_sha": "afbf645deb2db95cd0c34030e0ddc043a5bd4a68",
+ "pdf_sha256": "0aea190b0c6d9330dfe3f352e5a883e5671954bb06e8723e35aef1888c377dfa",
  "facts": [
   {
    "fact": "version_plataforma",
-   "value": "ARHIAX RE v1.4.0 · commit a9e55719 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
+   "value": "ARHIAX RE v1.4.0 · commit afbf645d · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
    "source": "versioning.VERSION_MATRIX + git rev-parse HEAD",
    "status": "VERIFIED_CODE",
    "method": "resolución de versión en runtime",
-   "version": "a9e55719",
+   "version": "afbf645d",
    "chapters": [
     "pie de página",
     "16.b"
@@ -17,7 +17,7 @@
   },
   {
    "fact": "commit_sha",
-   "value": "a9e55719540f49764ca1ace16fcd9ac6e7a60f52",
+   "value": "afbf645deb2db95cd0c34030e0ddc043a5bd4a68",
    "source": "git rev-parse HEAD",
    "status": "VERIFIED_CODE",
    "method": "versioning.git_commit_sha()",
@@ -30,7 +30,7 @@
   },
   {
    "fact": "input_ctl",
-   "value": "certificado64640614546464261189306228pdf.pdf (124345 bytes)",
+   "value": "CTL_040-646406_ORIGINAL.pdf (124345 bytes)",
    "source": "CTL BINARIO entregado por --ctl",
    "status": "ORIGINAL_BINARY",
    "method": "sha256 del archivo de entrada",
@@ -141,9 +141,9 @@
   },
   {
    "fact": "barrio",
-   "value": null,
-   "source": null,
-   "status": "UNRESOLVED",
+   "value": "Miramar",
+   "source": "official_urban_layer",
+   "status": "VERIFIED_OFFICIAL",
    "method": "capa oficial de unidades administrativas",
    "version": "03H.1A",
    "chapters": [
@@ -158,9 +158,9 @@
   },
   {
    "fact": "estrato",
-   "value": null,
-   "source": null,
-   "status": "UNRESOLVED",
+   "value": "4",
+   "source": "official_urban_layer",
+   "status": "VERIFIED_OFFICIAL",
    "method": "capa de estratificación (punto) o manzana oficial del número predial",
    "version": "03I.1 F4",
    "chapters": [
@@ -171,9 +171,9 @@
   },
   {
    "fact": "tratamiento_urbanistico",
-   "value": null,
-   "source": null,
-   "status": "UNRESOLVED",
+   "value": "Consolidacion",
+   "source": "official_urban_layer",
+   "status": "VERIFIED_OFFICIAL",
    "method": "capa oficial de planeación (point-in-polygon)",
    "version": "03H.1A",
    "chapters": [
@@ -185,9 +185,9 @@
   },
   {
    "fact": "altura_normativa",
-   "value": null,
-   "source": null,
-   "status": "UNRESOLVED",
+   "value": "11",
+   "source": "official_urban_layer",
+   "status": "VERIFIED_OFFICIAL",
    "method": "capa oficial de planeación",
    "version": "03H.1A",
    "chapters": [
@@ -198,10 +198,10 @@
   },
   {
    "fact": "urban_source_mode",
-   "value": "PACKAGED_REFERENCE",
+   "value": "MIXED",
    "source": "UrbanSourceSummary",
    "status": "OBSERVED",
-   "method": "Los valores urbanos mostrados provienen de geometrias empaquetadas en la aplicacion (sin consulta en vivo).",
+   "method": "Procedencia MIXTA: EN VIVO (barrio, localidad, pieza_urbana, estrato, tratamiento, tipo_tratamiento) · EMPAQUETADO (altura_maxima, amenaza_remocion_masa, areas_en_riesgo, inundacion, riesgo_no_mitigable, arroyos)",
    "version": "03I.1 F2",
    "chapters": [
     "06.2",
@@ -237,7 +237,7 @@
   },
   {
    "fact": "estrato_render_6_1",
-   "value": "Medio_4",
+   "value": "4",
    "source": "mismo `estrato` que consume el render de 6.1",
    "status": "OBSERVED",
    "method": "observador de dictamen_data.get_catastral_dt",
@@ -249,9 +249,9 @@
   },
   {
    "fact": "sector_metodologico",
-   "value": null,
-   "source": null,
-   "status": "NO_MATCH",
+   "value": "Miramar",
+   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+   "status": "EXACT",
    "method": "resolución de sector por barrio oficial",
    "version": "03H",
    "chapters": [
@@ -262,9 +262,9 @@
   },
   {
    "fact": "value_m2",
-   "value": null,
-   "source": null,
-   "status": "NO_MATCH",
+   "value": 6800000,
+   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+   "status": "EXACT",
    "method": "MarketContext (autoridad ÚNICA de la tasa)",
    "version": "03H.1A",
    "chapters": [
@@ -287,10 +287,10 @@
   },
   {
    "fact": "market_ready",
-   "value": false,
+   "value": true,
    "source": "market_context_authorized + market_methodology_id/version",
    "status": "OBSERVED",
-   "method": "barrio no verificado (requiere VERIFIED_OFFICIAL/GEOGRAPHIC); estrato no verificado (requiere VERIFIED_OFFICIAL); sector metodológico no resuelto (match_type=NO_MATCH); market_rate_source ausente (sin tasa de mercado autorizada); market rate value missing/invalid",
+   "method": "sin bloqueantes",
    "version": "03H/03I.1 F",
    "chapters": [
     "07",
@@ -300,7 +300,7 @@
   },
   {
    "fact": "valuation_authorized",
-   "value": false,
+   "value": true,
    "source": "identity_authorized AND market_context_authorized",
    "status": "VERIFIED_UNIT_IDENTITY",
    "method": "doble gate (fail-closed)",
@@ -313,10 +313,10 @@
   },
   {
    "fact": "valor_consolidado",
-   "value": 0,
+   "value": 399500000,
    "source": "método principal PH (m1 comparación de mercado)",
-   "status": "NO EMITIDO",
-   "method": "valoración no autorizada (identidad o contexto de mercado insuficiente)",
+   "status": "EMITIDO",
+   "method": "gate abierto",
    "version": "03H.1",
    "chapters": [
     "07"
@@ -404,7 +404,7 @@
     "09.3",
     "16.b"
    ],
-   "evidence_id": "16786f4014070fb3ee12d880"
+   "evidence_id": "b43e6f55143c445d352c8a2e"
   }
  ],
  "hardcoded_facts": []

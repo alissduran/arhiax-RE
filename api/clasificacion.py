@@ -206,8 +206,34 @@ def clasificar_inmueble(*, condicion_juridica: Optional[str] = None,
 
 # ── Texto para el dictamen (compatibilidad con el render existente) ───────────
 
+def etiqueta_uso(uso: Optional[Dict[str, Any]]) -> Optional[str]:
+    """Etiqueta del uso SOLO si la fuente lo declaró. `None` si no hay uso.
+
+    Defecto R2 (03I.2B): el render escribía «Bodega -- Uso Industrial» de forma FIJA
+    para toda bodega. Con `economic_use = COMERCIAL` el dictamen afirmaba un uso
+    industrial que ninguna fuente declaraba — un uso inventado en el documento que
+    sostiene la due diligence. Ahora la etiqueta procede exclusivamente de la
+    dimensión `economic_use` (su representación exacta si la fuente la trae).
+    """
+    valor = (uso or {}).get("value")
+    if not valor:
+        return None
+    return str((uso or {}).get("raw") or str(valor).title()).strip() or None
+
+
+def sufijo_uso(uso: Optional[Dict[str, Any]]) -> str:
+    """« -- Uso X» cuando X existe; cadena vacía cuando no. Nunca deduce el uso."""
+    etq = etiqueta_uso(uso)
+    return f" -- Uso {etq}" if etq else ""
+
+
 def texto_tipologia(clasificacion: Dict[str, Any]) -> str:
-    """Texto único de tipología a partir de la clasificación (nunca mezcla uso)."""
+    """Texto único de tipología a partir de la clasificación (nunca mezcla uso).
+
+    Invariante (03I.2B §D/§E/§F): **el uso se imprime si y solo si la fuente lo
+    declaró**. El nombre de la tipología física jamás se traduce a un uso, y un uso
+    ausente nunca se rellena con el uso «típico» de la tipología.
+    """
     reg = (clasificacion or {}).get("juridical_regime") or {}
     uso = (clasificacion or {}).get("economic_use") or {}
     tip = (clasificacion or {}).get("physical_typology") or {}
@@ -220,26 +246,30 @@ def texto_tipologia(clasificacion: Dict[str, Any]) -> str:
     _sufijo_ph = ("(condición catastral)" if reg.get("status") == ST_VERIFIED_TEMATICO
                   else ("(inferido del CTL)" if _es_ph else ""))
     _tip_val = tip.get("value")
+    _txt_uso = sufijo_uso(uso)
 
-    if _tip_val == TIP_BODEGA:
-        return "Bodega -- Uso Industrial"
+    if _tip_val in (TIP_BODEGA, TIP_LOCAL, TIP_OFICINA, TIP_GARAJE, TIP_CASA):
+        _nombre = {TIP_BODEGA: "Bodega", TIP_LOCAL: "Local", TIP_OFICINA: "Oficina",
+                   TIP_GARAJE: "Garaje", TIP_CASA: "Casa"}[_tip_val]
+        _base = (f"{_nombre} en Propiedad Horizontal {_sufijo_ph}".strip()
+                 if _es_ph else _nombre)
+        # El uso declarado se anexa; sin uso declarado, la tipología se declara sola.
+        return _base + _txt_uso
     if _tip_val in (TIP_APARTAMENTO, TIP_UNIDAD_PH):
+        # La vivienda en PH ya declara su régimen y su unidad: el texto es contrato de
+        # compatibilidad (TIPOLOGIA_PH_*) y NO se le anexa uso, para no alterar un
+        # artefacto Golden aceptado sin que exista defecto que corregir. El uso vive en
+        # su propia dimensión y en el recibo de clasificación.
         if _es_ph:
             _unidad = "Apartamento" if _tip_val == TIP_APARTAMENTO else "Unidad"
             return f"{_unidad} -- Propiedad Horizontal {_sufijo_ph}".strip()
         return "Apartamento (sin régimen de propiedad horizontal declarado)"
-    if _tip_val in (TIP_LOCAL, TIP_OFICINA, TIP_GARAJE, TIP_CASA):
-        _nombre = {"LOCAL": "Local", "OFICINA": "Oficina", "GARAJE": "Garaje",
-                   "CASA": "Casa"}[_tip_val]
-        if _es_ph:
-            return f"{_nombre} en Propiedad Horizontal {_sufijo_ph}".strip()
-        return _nombre
     if tip.get("status") == ST_CONFLICT or reg.get("status") == ST_CONFLICT:
         return "PENDIENTE DE VERIFICACION (conflicto de régimen jurídico entre fuentes)"
     if uso.get("value"):
         # Sin evidencia de régimen ni de unidad física: se declara el USO como uso,
         # con la representación exacta que declaró la fuente.
-        _etq = str(uso.get("raw") or str(uso["value"]).title())
+        _etq = etiqueta_uso(uso)
         if _es_ph:
             return f"Unidad en Propiedad Horizontal -- uso {_etq}"
         return f"Uso {_etq} (Según catastro)"

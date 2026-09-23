@@ -103,9 +103,21 @@ class TestExactitudPredioReal(unittest.TestCase):
         cp._CACHE.clear()
         try:
             cp.consultar_predio_por_codigo = fake_predio
+            # 03I.2B · H-1: el productor REAL declara la procedencia de la
+            # coordenada (capa 105 enlazada por cr_predio_guid == globalid del
+            # predio). El fixture se completa con esa misma evidencia para
+            # representar la respuesta oficial, no una promoción sin respaldo.
             cp.consultar_direccion_y_punto = lambda g, c: {
                 "disponible": True, "direccion_oficial": "Calle 40 # 50B-64 BG 3",
-                "lat": 10.99029, "lon": -74.78022}
+                "lat": 10.99029, "lon": -74.78022,
+                "source_system": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+                "layer": "105 · direccion",
+                "feature_id": "cce87699-1362-42f6-a612-eeee8a35e4f3",
+                "feature_id_kind": "cr_predio_guid",
+                "geometry_type": "Point",
+                "resolution_method": "DIRECCION_OFICIAL_LIGADA_POR_GUID",
+                "predio_globalid_consultado": "cce87699-1362-42f6-a612-eeee8a35e4f3",
+                "link_verificado": True}
             cp.consultar_condicion_destino = lambda c, lat, lon: {
                 "disponible": True, "condicion_juridica": "No propiedad horizontal",
                 "destino_vigente": "Industrial"}

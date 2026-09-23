@@ -50,6 +50,16 @@ CAPA_DIRECCION = 105
 CAPA_CONSTRUCCION = 310
 CAPA_MANZANA = 320
 
+# ── 03I.2B · H-1: procedencia de la GEOMETRÍA OFICIAL ─────────────────────────
+# El sistema de origen que se declara en la procedencia de cada coordenada. Sin
+# esta declaración la coordenada NO puede promover a fuente autorizada.
+SOURCE_SYSTEM_CATASTRO = "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS"
+# Orígenes posibles de las coordenadas de un predio (declarados por el PRODUCTOR,
+# nunca deducidos aguas abajo por el consumidor):
+ORIGEN_DIRECCION_LIGADA = "DIRECCION_OFICIAL_LIGADA_AL_PREDIO"
+ORIGEN_GEOMETRIA_OFICIAL = "GEOMETRIA_OFICIAL_PREDIO"
+ORIGEN_HINT = "HINT_NO_OFICIAL"
+
 TIMEOUT = 5.0
 TTL_CACHE = 3600  # 1 hora
 
@@ -352,11 +362,23 @@ def consultar_predio_por_codigo(codigo_catastral: str = None, nupre: str = None)
 
 # ── 2. Dirección oficial y coordenadas (capa 105 por cr_predio_guid) ─────────
 
+def _sin_llaves(guid) -> str:
+    """Normaliza un GUID ArcGIS (con o sin llaves, cualquier caja) para comparar."""
+    return str(guid or "").strip().strip("{}").lower()
+
+
 def consultar_direccion_y_punto(globalid_predio: str = None, codigo_catastral: str = None) -> dict[str, Any]:
     """Busca la dirección oficial del predio en la capa 105 y su punto.
 
     Se enlaza por cr_predio_guid = globalid del predio (capa 500). Si no hay
     globalid, cae a búsqueda textual por código catastral en los GUIDs.
+
+    03I.2B · H-1: además de lat/lon, la función declara la PROCEDENCIA que permite
+    auditar si esa coordenada es geometría oficial DEL PREDIO CONSULTADO:
+    `feature_id` (cr_predio_guid de la dirección devuelta), `geometry_type`,
+    `resolution_method`, `link_verificado` (la dirección pertenece al globalid
+    consultado) y `source_system`. Sin `link_verificado=True` la coordenada NO es
+    promovible a `OFFICIAL_PREDIO`.
     """
     if not globalid_predio and not codigo_catastral:
         return {"disponible": False, "error": "sin globalid ni código"}
@@ -409,6 +431,20 @@ def consultar_direccion_y_punto(globalid_predio: str = None, codigo_catastral: s
             "complemento": comp,
             "lat": c[1], "lon": c[0],
             "cr_terreno_guid": p.get("cr_terreno_guid"),
+            # H-1: procedencia de la geometría (capa 105, punto de dirección).
+            "source_system": SOURCE_SYSTEM_CATASTRO,
+            "layer": f"{CAPA_DIRECCION} · direccion",
+            "feature_id": _sin_llaves(p.get("cr_predio_guid")),
+            "feature_id_kind": "cr_predio_guid",
+            "geometry_type": (f.get("geometry") or {}).get("type"),
+            "resolution_method": "DIRECCION_OFICIAL_LIGADA_POR_GUID",
+            "predio_globalid_consultado": _sin_llaves(globalid_predio),
+            # El enlace se VERIFICA contra el globalid consultado: un servidor que
+            # ignore el WHERE no puede colar una dirección de otro predio.
+            "link_verificado": bool(
+                _sin_llaves(p.get("cr_predio_guid"))
+                and _sin_llaves(p.get("cr_predio_guid")) == _sin_llaves(globalid_predio)),
+            "es_direccion_principal": p.get("es_direccion_principal"),
         })
         break
     _cache_set(cache_key, res)
@@ -874,16 +910,50 @@ def enriquecer_desde_ctl(codigo_catastral: str = None, nupre: str = None,
     # Coordenadas por dirección oficial (capa 105 enlazada por globalid)
     dir_info = consultar_direccion_y_punto(base.get("globalid"), codigo_catastral)
     lat, lon = None, None
-    if dir_info.get("disponible"):
+    # H-1: el ORIGEN de las coordenadas se declara aquí, en el productor. Un
+    # consumidor (market_context) no puede adivinar si un lat/lon es geometría
+    # oficial del predio o un simple «hint»: si el CTL no trae geometría oficial,
+    # el hint NO es promovible a fuente autorizada.
+    origen = None
+    provenance: dict[str, Any] = {}
+    if dir_info.get("disponible") and dir_info.get("link_verificado"):
         res["direccion_oficial"] = dir_info.get("direccion_oficial")
         res["direccion_complemento"] = dir_info.get("complemento")
         res["cr_terreno_guid"] = dir_info.get("cr_terreno_guid")
         lat, lon = dir_info.get("lat"), dir_info.get("lon")
-    elif lat_hint is not None and lon_hint is not None:
+        if lat is not None and lon is not None:
+            origen = ORIGEN_DIRECCION_LIGADA
+            provenance = {
+                "source_system": dir_info.get("source_system") or SOURCE_SYSTEM_CATASTRO,
+                "layer": dir_info.get("layer") or f"{CAPA_DIRECCION} · direccion",
+                "feature_id": dir_info.get("feature_id"),
+                "feature_id_kind": dir_info.get("feature_id_kind"),
+                "geometry_type": dir_info.get("geometry_type"),
+                "resolution_method": dir_info.get("resolution_method"),
+                "predio_globalid": _sin_llaves(base.get("globalid")),
+                "numero_predial": base.get("numero_predial_nacional") or codigo_catastral,
+                "nupre": base.get("nupre") or nupre,
+                "direccion_origen": dir_info.get("direccion_oficial"),
+                "link_verificado": True,
+            }
+    elif dir_info.get("disponible"):
+        # La capa respondió pero la dirección NO pertenece a este predio (o no trae
+        # la clave de enlace): se conservan los datos descriptivos y se NIEGA la
+        # promoción de la coordenada.
+        res["direccion_oficial"] = dir_info.get("direccion_oficial")
+        res["direccion_complemento"] = dir_info.get("complemento")
+        res["direccion_no_promovida"] = "enlace cr_predio_guid != globalid del predio"
+    if lat is None and lat_hint is not None and lon_hint is not None:
+        # Hint: coordenada aportada desde fuera (geocodificación de una dirección).
+        # Se usa para consultar capas, pero NUNCA se etiqueta como oficial.
         lat, lon = lat_hint, lon_hint
+        origen = ORIGEN_HINT
     if lat is not None and lon is not None:
         res["lat"] = lat
         res["lon"] = lon
+        res["coordenada_origen"] = origen
+        if provenance:
+            res["coordenada_provenance"] = provenance
 
     # Construcción + condición/destino + entorno, solo si hay coordenadas
     if lat is not None and lon is not None:

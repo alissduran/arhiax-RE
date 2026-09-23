@@ -29,6 +29,12 @@ import requests
 UA = {"User-Agent": "ARHIAX-RE/1.0 (Sinergia Consulting Group)"}
 BASE = "https://www.medellin.gov.co/servidormapas/rest/services"
 
+# 03I.2B · H-1: origen declarado de las coordenadas (mismo vocabulario que
+# catastro_predio.py, para que el consumidor de mercado no tenga que adivinar).
+SOURCE_SYSTEM_MEDELLIN = "CATASTRO_MUNICIPAL_MEDELLIN_ARCGIS"
+ORIGEN_GEOMETRIA_OFICIAL = "GEOMETRIA_OFICIAL_PREDIO"
+ORIGEN_HINT = "HINT_NO_OFICIAL"
+
 TIMEOUT = 6.0
 TTL_CACHE = 3600
 
@@ -451,6 +457,9 @@ def enriquecer_por_punto(lat: float = None, lon: float = None) -> dict[str, Any]
     res["disponible"] = True
     res["lat"] = float(lat)
     res["lon"] = float(lon)
+    # H-1: el punto es el que aportó el caso (geocodificación o formulario), no la
+    # geometría oficial del predio: se declara como hint y NO promueve.
+    res["coordenada_origen"] = ORIGEN_HINT
     # La resolución por punto es REFERENCIAL (uso del predio más cercano a las
     # coordenadas). No se afirma una dirección catastral exacta: el usuario ya
     # aportó la dirección; se deja sin direccion_oficial para no pisarla.
@@ -474,12 +483,34 @@ def enriquecer_desde_ctl(codigo_catastral: str = None, nupre: str = None,
 
     res: dict[str, Any] = {"disponible": True, "error": None, "predio": base}
     lat, lon = base.get("lat"), base.get("lon")
+    # 03I.2B · H-1: el punto del REGISTRO catastral (campo latitud/longitud del predio
+    # consultado por código/NUPRE) es geometría oficial del predio; el hint NO lo es.
+    _origen = ORIGEN_GEOMETRIA_OFICIAL if (lat is not None and lon is not None) else None
     if (lat is None or lon is None) and lat_hint is not None:
         lat, lon = lat_hint, lon_hint
+        _origen = ORIGEN_HINT
     if lat is not None and lon is not None:
         res["lat"] = float(lat)
         res["lon"] = float(lon)
         res["direccion_oficial"] = base.get("direccion_cruda")
+        res["coordenada_origen"] = _origen
+        if _origen == ORIGEN_GEOMETRIA_OFICIAL:
+            _num = base.get("numero_predial_nacional") or codigo_catastral
+            _gid = base.get("globalid") or _num
+            res["coordenada_provenance"] = {
+                "source_system": SOURCE_SYSTEM_MEDELLIN,
+                "layer": "VC_Catastro l3 (uso del predio)",
+                "feature_id": _gid,
+                "feature_id_kind": ("globalid" if base.get("globalid")
+                                    else "numero_predial_nacional"),
+                "geometry_type": "Point",
+                "resolution_method": "PUNTO_OFICIAL_DEL_REGISTRO_CATASTRAL",
+                "predio_globalid": _gid,
+                "numero_predial": _num,
+                "nupre": base.get("nupre") or nupre,
+                "direccion_origen": base.get("direccion_cruda"),
+                "link_verificado": True,
+            }
         res["entorno"] = consultar_entorno_urbano(float(lat), float(lon))
         res["lote"] = consultar_lote_y_construccion(float(lat), float(lon))
         res["amenazas"] = consultar_amenazas(float(lat), float(lon))

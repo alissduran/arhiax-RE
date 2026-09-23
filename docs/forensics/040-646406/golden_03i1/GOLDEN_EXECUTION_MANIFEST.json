@@ -1,39 +1,29 @@
 {
- "generated_at": "2026-09-23T17:14:00.104408+00:00",
+ "generated_at": "2026-09-23T21:40:28.059996+00:00",
  "prompt": "03I.1 — DICTUS PRODUCT COHERENCE CLOSURE",
- "commit_sha": "a9e55719540f49764ca1ace16fcd9ac6e7a60f52",
+ "commit_sha": "afbf645deb2db95cd0c34030e0ddc043a5bd4a68",
  "versions": {
-  "GIT_COMMIT_SHA": "a9e55719540f49764ca1ace16fcd9ac6e7a60f52",
+  "GIT_COMMIT_SHA": "afbf645deb2db95cd0c34030e0ddc043a5bd4a68",
   "ARHIAX_RE_VERSION": "1.4.0",
   "DICTUS_ENGINE_VERSION": "1.4.0",
   "GIS_ADAPTER_VERSION": "1.2.0",
   "TITULUX_VERSION": "1.1.0",
   "RULESET_VERSION": "1.3.0"
  },
- "version_line": "ARHIAX RE v1.4.0 · commit a9e55719 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
+ "version_line": "ARHIAX RE v1.4.0 · commit afbf645d · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
  "arbol_de_trabajo": {
   "dirty": true,
   "files": [
-   "M api/ortografia.py",
+   "M api/catastro_predio.py",
+   "M api/catastro_predio_bogota.py",
+   "M api/catastro_predio_medellin.py",
+   "M api/clasificacion.py",
+   "M api/market_context.py",
    "M api/pdf_compiler.py",
    "M api/receipts.py",
    "M api/sanctions/release_gate.py",
-   "M api/sanctions/subjects.py",
-   "M api/sarlaft_engine.py",
-   "M api/tipologia.py",
-   "M api/titulux_bridge.py",
-   "M docs/forensics/040-646406/golden_03i1/GOLDEN_CROSS_CHAPTER_MATRIX.md",
-   "M docs/forensics/040-646406/golden_03i1/GOLDEN_EXECUTION_MANIFEST.json",
-   "M docs/forensics/040-646406/golden_03i1/GOLDEN_INTERNAL_STATE.json",
-   "M docs/forensics/040-646406/golden_03i1/GOLDEN_PDF_TEXT.txt",
-   "M docs/forensics/040-646406/golden_03i1/GOLDEN_PROVENANCE_MATRIX.json",
-   "M docs/forensics/040-646406/golden_03i1/GOLDEN_PROVENANCE_MATRIX.md",
-   "M scripts/golden_coherence_03i1.py",
-   "M scripts/sagrilaft_release_gate.py",
-   "M tests/test_03i2_coherencia_dictamen.py",
-   "M tests/test_release_gate_sagrilaft.py",
-   "?? api/clasificacion.py",
-   "?? api/release_env.py",
+   "M scripts/golden_run_03i1.py",
+   "M tests/test_exactitud_predio.py",
    "?? debug_pasto_240_211101_out.txt",
    "?? debug_poi_ab_out.txt",
    "?? debug_poi_photon_out.txt",
@@ -47,12 +37,12 @@
    "?? scripts/debug_pasto_240_211101.py",
    "?? scripts/debug_poi_ab.py",
    "?? scripts/debug_poi_photon.py",
-   "?? tests/test_03i2a_release_fail_closed.py",
+   "?? tests/test_03i2b_contrato_tipologia_coordenadas.py",
    "?? tmp_audit_gate.py",
    "?? tmp_entrega_pdf.py"
   ],
-  "diff_sha256": "bbf1e9067dc556b5394157d30639715ef2927073df0091a7cdbce918f717d5af",
-  "n_files": 36
+  "diff_sha256": null,
+  "n_files": 26
  },
  "environment": {
   "python": "3.14.4",
@@ -69,7 +59,7 @@
  },
  "inputs": {
   "ctl": {
-   "path": "C:\\Users\\aliss\\Downloads\\certificado64640614546464261189306228pdf.pdf",
+   "path": "C:\\Users\\aliss\\.gemini\\antigravity-ide\\scratch\\20260825_DeepSeek_Harness_Web\\arhiax-RE\\docs\\forensics\\040-646406\\golden_03i1\\inputs\\CTL_040-646406_ORIGINAL.pdf",
    "sha256": "4493da88f4231a6b9a0e966cefe4b14030d53a0e00f86ba3efc1d0f61e6ddf87",
    "size": 124345,
    "input_type": "ORIGINAL_BINARY"
@@ -97,7 +87,7 @@
   "resolution_confidence": "VERIFIED_UNIT_IDENTITY",
   "identity_verified": true,
   "identity_source": null,
-  "market_context_ready": false,
+  "market_context_ready": true,
   "adopcion_registro": null,
   "identificadores": {
    "nupre": {
@@ -113,39 +103,115 @@
   }
  },
  "coordinates": {
-  "lat": 11.005378,
-  "lon": -74.8386199,
-  "source": "FORM_ADDRESS_GEOCODE",
-  "verified": false,
+  "lat": 11.006055954316363,
+  "lon": -74.8375696549899,
+  "source": "OFFICIAL_PREDIO",
+  "verified": true,
   "authoritative_address": null,
-  "address_source": null
+  "address_source": null,
+  "provenance": {
+   "source_system": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+   "layer": "105 · direccion",
+   "feature_id": "6c663607-5509-401f-b57d-384d2beeeac1",
+   "feature_id_kind": "cr_predio_guid",
+   "geometry_type": "Point",
+   "resolution_method": "DIRECCION_OFICIAL_LIGADA_POR_GUID",
+   "predio_globalid": "6c663607-5509-401f-b57d-384d2beeeac1",
+   "numero_predial": "080010103000010040001908040002",
+   "nupre": "AFT0005BOHA",
+   "direccion_origen": "Transversal 43 # 100-50 TO 8 AP 430",
+   "link_verificado": true
+  },
+  "scope": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación",
+  "official_predio_rejected_reason": null
  },
  "urban_sources": {
-  "barrio": null,
-  "barrio_status": "UNRESOLVED",
-  "localidad": null,
-  "estrato": null,
-  "estrato_status": "UNRESOLVED",
+  "barrio": "Miramar",
+  "barrio_status": "VERIFIED_OFFICIAL",
+  "localidad": "02",
+  "estrato": "4",
+  "estrato_status": "VERIFIED_OFFICIAL",
   "estrato_origen": null,
   "estrato_trace": null,
-  "tratamiento": null,
-  "tratamiento_status": "UNRESOLVED",
-  "tipo_tratamiento": null,
-  "altura_maxima": null,
-  "altura_status": "UNRESOLVED",
-  "pieza_urbana": null,
-  "codigo_manzana": null,
-  "source": null,
-  "context_status": "COORDINATE_SOURCE_NOT_AUTHORIZED",
+  "tratamiento": "Consolidacion",
+  "tratamiento_status": "VERIFIED_OFFICIAL",
+  "tipo_tratamiento": "Nivel 2",
+  "altura_maxima": "11",
+  "altura_status": "VERIFIED_OFFICIAL",
+  "pieza_urbana": 6,
+  "codigo_manzana": "08001010300001004",
+  "source": "official_urban_layer",
+  "context_status": "OK",
   "campos_ambiguos": [],
-  "predio_entorno": {},
+  "predio_entorno": {
+   "barrio": "Miramar",
+   "estrato": "4",
+   "tratamiento": "Consolidacion",
+   "tipo_tratamiento": "Nivel 2",
+   "altura_maxima": "11",
+   "localidad": "02",
+   "codigo_manzana": "08001010300001004"
+  },
   "predio_destino_catastral": "Habitacional",
   "predio_condicion": null,
-  "predio_construccion": {}
+  "predio_construccion": {
+   "disponible": false,
+   "error": "sin construcción",
+   "tipo_construccion": null,
+   "total_pisos": null,
+   "altura_total_construccion": null,
+   "area_construida": null,
+   "resolution_method": "spatial",
+   "construction_status": "NO_MATCH",
+   "source_disponible": true,
+   "source_error": null
+  }
  },
  "urban_source_summary": {
-  "source_mode": "PACKAGED_REFERENCE",
+  "source_mode": "MIXED",
   "campos": {
+   "barrio": {
+    "value": "Miramar",
+    "status": "VERIFIED_OFFICIAL",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "localidad": {
+    "value": "02",
+    "status": "OK",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "pieza_urbana": {
+    "value": 6,
+    "status": "OK",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "estrato": {
+    "value": "4",
+    "status": "VERIFIED_OFFICIAL",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "tratamiento": {
+    "value": "Consolidacion",
+    "status": "VERIFIED_OFFICIAL",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "tipo_tratamiento": {
+    "value": "Nivel 2",
+    "status": "VERIFIED_OFFICIAL",
+    "fuente": "official_urban_layer",
+    "modo": "LIVE_OFFICIAL"
+   },
+   "altura_maxima": {
+    "value": "11",
+    "status": null,
+    "fuente": null,
+    "modo": "PACKAGED_REFERENCE"
+   },
    "amenaza_remocion_masa": {
     "value": null,
     "status": null,
@@ -177,38 +243,32 @@
     "modo": "PACKAGED_REFERENCE"
    }
   },
-  "fuente_oficial": null,
-  "context_status": "COORDINATE_SOURCE_NOT_AUTHORIZED",
-  "declaracion": "Los valores urbanos mostrados provienen de geometrias empaquetadas en la aplicacion (sin consulta en vivo)."
+  "fuente_oficial": "official_urban_layer",
+  "context_status": "OK",
+  "declaracion": "Procedencia MIXTA: EN VIVO (barrio, localidad, pieza_urbana, estrato, tratamiento, tipo_tratamiento) · EMPAQUETADO (altura_maxima, amenaza_remocion_masa, areas_en_riesgo, inundacion, riesgo_no_mitigable, arroyos)"
  },
  "market": {
-  "ready": false,
-  "blockers": [
-   "barrio no verificado (requiere VERIFIED_OFFICIAL/GEOGRAPHIC)",
-   "estrato no verificado (requiere VERIFIED_OFFICIAL)",
-   "sector metodológico no resuelto (match_type=NO_MATCH)",
-   "market_rate_source ausente (sin tasa de mercado autorizada)",
-   "market rate value missing/invalid"
-  ],
-  "sector": null,
-  "match_type": "NO_MATCH",
-  "value_m2": null,
-  "rate_source": null,
-  "rate_date": null,
+  "ready": true,
+  "blockers": [],
+  "sector": "Miramar",
+  "match_type": "EXACT",
+  "value_m2": 6800000,
+  "rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+  "rate_date": "Q3-2026",
   "methodology_version": "0.1-codiseno",
   "market_methodology_id": "lonja_baq_metodologia",
   "market_methodology_version": "0.1-codiseno",
   "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
   "market_methodology_file": "lonja_baq_metodologia.yaml",
   "estrato": {
-   "value": null,
-   "status": "UNRESOLVED",
-   "source": null
+   "value": "4",
+   "status": "VERIFIED_OFFICIAL",
+   "source": "estratificación oficial"
   },
   "barrio": {
-   "value": null,
-   "status": "UNRESOLVED",
-   "source": null
+   "value": "Miramar",
+   "status": "VERIFIED_OFFICIAL",
+   "source": "official POT / Alcaldía"
   },
   "tipologia": {
    "value": "Unidad -- Propiedad Horizontal (inferido del CTL)",
@@ -222,10 +282,19 @@
   },
   "urban_render_provenance": {
    "authority": "OfficialUrbanContext",
-   "aplicados": {},
+   "aplicados": {
+    "barrio": "coincide",
+    "estrato": "coincide",
+    "tratamiento": "coincide",
+    "tipo_tratamiento": "coincide",
+    "altura_maxima": "coincide",
+    "localidad": "coincide",
+    "pieza_urbana": "coincide",
+    "codigo_manzana": "coincide"
+   },
    "conflictos": [],
    "no_aplicados": [],
-   "context_status": "COORDINATE_SOURCE_NOT_AUTHORIZED"
+   "context_status": "OK"
   }
  },
  "poi": {
@@ -243,19 +312,19 @@
      {
       "name": "C.C. Miramar",
       "type": "Comercio (Mall)",
-      "distance": 424.4,
-      "source": "OSM_OVERPASS"
-     },
-     {
-      "name": "Ara",
-      "type": "Comercio (Supermarket)",
-      "distance": 977.6,
+      "distance": 384.5,
       "source": "OSM_OVERPASS"
      },
      {
       "name": "Olímpica - Villa Santos",
       "type": "Comercio (Supermarket)",
-      "distance": 983.0,
+      "distance": 850.1,
+      "source": "OSM_OVERPASS"
+     },
+     {
+      "name": "Ara",
+      "type": "Comercio (Supermarket)",
+      "distance": 876.6,
       "source": "OSM_OVERPASS"
      }
     ],
@@ -270,19 +339,19 @@
      {
       "name": "Living Explorer Sede Miramar",
       "type": "Educacion (School)",
-      "distance": 755.3,
+      "distance": 645.4,
       "source": "OSM_OVERPASS"
      },
      {
       "name": "Neane Kinder Garden",
       "type": "Educacion (School)",
-      "distance": 787.3,
+      "distance": 672.4,
       "source": "OSM_OVERPASS"
      },
      {
       "name": "Ludoteca Magic Kingdom",
       "type": "Educacion (Kindergarten)",
-      "distance": 1092.7,
+      "distance": 1052.5,
       "source": "OSM_OVERPASS"
      }
     ],
@@ -297,19 +366,19 @@
      {
       "name": "Parque Miramar",
       "type": "Recreacion (Park)",
-      "distance": 302.9,
+      "distance": 310.5,
       "source": "OSM_OVERPASS"
      },
      {
       "name": "Mirador de Miramar",
       "type": "Recreacion (Park)",
-      "distance": 536.6,
+      "distance": 518.7,
       "source": "OSM_OVERPASS"
      },
      {
-      "name": "Parque entrada 1 alameda del rio",
+      "name": "Pista Ciclomontañismo y Senderismo de Miramar",
       "type": "Recreacion (Park)",
-      "distance": 876.3,
+      "distance": 930.9,
       "source": "OSM_OVERPASS"
      }
     ],
@@ -324,19 +393,19 @@
      {
       "name": "Instituto de rehabilitación cardiopulmonar del Caribe",
       "type": "Salud (Clinic)",
-      "distance": 870.3,
+      "distance": 771.9,
       "source": "OSM_OVERPASS"
      },
      {
       "name": "Dr, Scholl's Barranquilla",
       "type": "Salud (Clinic)",
-      "distance": 1003.1,
+      "distance": 909.1,
       "source": "OSM_OVERPASS"
      },
      {
       "name": "Clinialergias",
       "type": "Salud (Clinic)",
-      "distance": 1242.0,
+      "distance": 1105.3,
       "source": "OSM_OVERPASS"
      }
     ],
@@ -650,7 +719,7 @@
   "matched": [],
   "evidence_records": [
    {
-    "evidence_id": "16786f4014070fb3ee12d880",
+    "evidence_id": "b43e6f55143c445d352c8a2e",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
@@ -659,7 +728,7 @@
     "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
     "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
     "query_hash": "18e03c695f7b30d5823506e75b984674c5d2c7ecce0c97d82a546dc24c3ed6fe",
-    "screened_at": "2026-09-23T17:13:55.425098Z",
+    "screened_at": "2026-09-23T21:40:05.198944Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5641,
@@ -669,14 +738,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "16786f4014070fb3ee12d880e3adce7be5fc0690a69bc823d9e31abd463c42f2",
+    "evidence_hash": "b43e6f55143c445d352c8a2ed47a5d4bbe6d4f45b4686cdff2487dcf60ba4b88",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
     "evidence_content_hash": "98e36bdf0036f93ad21de08c90de782d490f04269b52bb0fa3deadaf4eeb9151"
    },
    {
-    "evidence_id": "c5949d5e31d060f7d743458f",
+    "evidence_id": "881f74b30f49b45e68cf92d0",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
@@ -685,7 +754,7 @@
     "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
     "snapshot_effective_date": "09/23/2026",
     "query_hash": "a47883a6b4ccc730fb6121766a89efe0a5bfc10b170dbbe5f83a0004ac276d9f",
-    "screened_at": "2026-09-23T17:13:55.425826Z",
+    "screened_at": "2026-09-23T21:40:05.200050Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5806,
@@ -695,14 +764,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "c5949d5e31d060f7d743458f1b5811aec1319305fab0ebd1e9aa7a4cc3ae7841",
+    "evidence_hash": "881f74b30f49b45e68cf92d0e441ba2f91081b798e10c698536c05625ebf0812",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
     "evidence_content_hash": "89a218c902974de5573737089b6a4244f4706f67a4362957099f3936d23972e7"
    },
    {
-    "evidence_id": "937887f0a6e74fbab79cf434",
+    "evidence_id": "74bf2bf084cb214fc7284085",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
@@ -711,7 +780,7 @@
     "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
     "snapshot_effective_date": "21/09/2026",
     "query_hash": "87ff6c8f353af3b24752160f12c611285117272ae8776e64aec95673fbf4be39",
-    "screened_at": "2026-09-23T17:13:55.426344Z",
+    "screened_at": "2026-09-23T21:40:05.201085Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5882,
@@ -721,14 +790,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "937887f0a6e74fbab79cf434d082029cb944b263767f1f69d3ab4c54d10e8d69",
+    "evidence_hash": "74bf2bf084cb214fc72840851c81062f51607e20f8be749f55490e66ccc6088e",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
     "evidence_content_hash": "2bfcf126ead8b0d88239f769a5d6e65490061cd8a4605331fb704a71e867dd45"
    },
    {
-    "evidence_id": "5cb555085da46ab9216f83e7",
+    "evidence_id": "e82c0dfd177bd0ad060dce45",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
@@ -737,7 +806,7 @@
     "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
     "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
     "query_hash": "3ce497ebcfa47bc41cd17c463d2c71d1ff09064e8e906bba8831651db48ca475",
-    "screened_at": "2026-09-23T17:13:55.426773Z",
+    "screened_at": "2026-09-23T21:40:05.202461Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5,
@@ -747,14 +816,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "5cb555085da46ab9216f83e70ad9b3a3debadf9ee5f1ea05ebdede77caf03c57",
+    "evidence_hash": "e82c0dfd177bd0ad060dce45b178208c263918a6c09594cef8ef8bcece7e8cf6",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
     "evidence_content_hash": "e860a0850df22c999d8e68803c6034a339a353743b93ca7a734edf1b6f553750"
    },
    {
-    "evidence_id": "20c3829ea095e55f27b98942",
+    "evidence_id": "4aad1145f1a835b13f3c6873",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
@@ -763,7 +832,7 @@
     "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
     "snapshot_effective_date": "09/23/2026",
     "query_hash": "8ab4110c5989ab290accac739a3ffe77b9e8ff279819ab586307a629a89654c9",
-    "screened_at": "2026-09-23T17:13:55.427233Z",
+    "screened_at": "2026-09-23T21:40:05.203044Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6829,
@@ -773,14 +842,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "20c3829ea095e55f27b98942091019971402d87205950cc2c7da143fd102c8c7",
+    "evidence_hash": "4aad1145f1a835b13f3c6873fb3452db1b5bdd52fcf9ad2195f8703f7f029428",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
     "evidence_content_hash": "1f3b2cb3b6ee3cece8f53f6bb7c9cb42fd2405abcb7e5dc859e13ae8c8cc171a"
    },
    {
-    "evidence_id": "52d1785e139203795d315cf9",
+    "evidence_id": "71316d4ce57c2deafbdb940a",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
@@ -789,7 +858,7 @@
     "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
     "snapshot_effective_date": "21/09/2026",
     "query_hash": "7a092e6b93ec384851dad82c123c0e9ac79573c1acc3bce396025b57366da817",
-    "screened_at": "2026-09-23T17:13:55.427625Z",
+    "screened_at": "2026-09-23T21:40:05.203459Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5641,
@@ -799,14 +868,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "52d1785e139203795d315cf9c76d276270a93434565c8420f0567d6b470a7789",
+    "evidence_hash": "71316d4ce57c2deafbdb940a4c5650a5e548538978b197d442af4251236c9924",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
     "evidence_content_hash": "31be91334a6cf8eaa7338dccb2332989bb3748088bd671cdc31465d0b3a642b1"
    },
    {
-    "evidence_id": "305e0b5da275bd918ada15c3",
+    "evidence_id": "d63efa4493bc1f4abcfedbae",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
@@ -815,7 +884,7 @@
     "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
     "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
     "query_hash": "a5a88f899bff77de6bb7452d83dea1596b2927f279142e5b665d3211b76453a7",
-    "screened_at": "2026-09-23T17:13:55.428011Z",
+    "screened_at": "2026-09-23T21:40:05.203879Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5263,
@@ -825,14 +894,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "305e0b5da275bd918ada15c33368088c3616dd1d65b868d35169511d2ca6a282",
+    "evidence_hash": "d63efa4493bc1f4abcfedbaeb19f26082b3c0e8356445f44235af74b5af41ea4",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
     "evidence_content_hash": "fff2a1a7bb959b05f424524ca3725d2910deb0ddf7efb5dc98d25c9ecccf7532"
    },
    {
-    "evidence_id": "34b48aa2b8caf690a4cc8039",
+    "evidence_id": "6334a5407e281751fbc27271",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
@@ -841,7 +910,7 @@
     "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
     "snapshot_effective_date": "09/23/2026",
     "query_hash": "80050a97643f4a6700e0393be601746a3416d98406f76374e56a8bccf5927bc9",
-    "screened_at": "2026-09-23T17:13:55.428397Z",
+    "screened_at": "2026-09-23T21:40:05.204461Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6667,
@@ -851,14 +920,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "34b48aa2b8caf690a4cc8039be3dc3b90bc041d3aba3962491908a5f7806b275",
+    "evidence_hash": "6334a5407e281751fbc272712be22b141f1a0167603f5b1a5359eee41e2c2fc5",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
     "evidence_content_hash": "0c75cda26b8d63215844622a7d03ef7e33ee1b458cdd3fc303b48d822cb81bc4"
    },
    {
-    "evidence_id": "d2e295c5b05b76ef723bcd0b",
+    "evidence_id": "448c6554f6669d806c9df667",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
@@ -867,7 +936,7 @@
     "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
     "snapshot_effective_date": "21/09/2026",
     "query_hash": "18404c2adcf3685bb7f2ac7592009cb72864d451809fdd139b17890374a1e90f",
-    "screened_at": "2026-09-23T17:13:55.428772Z",
+    "screened_at": "2026-09-23T21:40:05.204968Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6047,
@@ -877,7 +946,7 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "d2e295c5b05b76ef723bcd0b708126d2339bb44380854958c2a14a7f33b7eee7",
+    "evidence_hash": "448c6554f6669d806c9df6672b56fb8c4923d68126c2a679d11a85162c080644",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
@@ -887,29 +956,29 @@
  },
  "valuation": {
   "authorization": {
-   "allowed": false,
+   "allowed": true,
    "identity_authorized": true,
-   "market_context_authorized": false,
+   "market_context_authorized": true,
    "identity_level": "VERIFIED_UNIT_IDENTITY"
   },
-  "metodologia_aplica": false,
-  "motivo_no_aplica": "valoración no autorizada (identidad o contexto de mercado insuficiente)",
-  "value_m2": null,
-  "source_m2": null,
-  "sector": null,
-  "match_type": null,
-  "consolidado": 0,
-  "m1": 0,
-  "m2": 0,
-  "m3": 0,
-  "banda_baja": 0,
-  "banda_alta": 0,
-  "canon_mensual": 0,
+  "metodologia_aplica": true,
+  "motivo_no_aplica": null,
+  "value_m2": 6800000,
+  "source_m2": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+  "sector": "Miramar",
+  "match_type": "EXACT",
+  "consolidado": 399500000,
+  "m1": 407490000,
+  "m2": 295690000,
+  "m3": 446700000,
+  "banda_baja": 373532500,
+  "banda_alta": 435455000,
+  "canon_mensual": 2149310,
   "cap_rate": 0.0485
  },
  "outputs": {
-  "pdf": "docs\\forensics\\040-646406\\golden_03i1\\ARHIAX_Dictamen_040-646406_03I2A.pdf",
-  "pdf_sha256": "a3084393af69e010767e50554e83168093d74bd6ca4ad66198bcb3181f7534fa"
+  "pdf": "docs\\forensics\\040-646406\\golden_03i1\\ARHIAX_Dictamen_040-646406_03I2B.pdf",
+  "pdf_sha256": "0aea190b0c6d9330dfe3f352e5a883e5671954bb06e8723e35aef1888c377dfa"
  },
  "qa_instrumentation": {
   "observadores": [

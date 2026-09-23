@@ -19,6 +19,7 @@ Regla dura: NUNCA fallback silencioso.
 
 from __future__ import annotations
 
+import math
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -328,6 +329,197 @@ def coordinate_source_verified(coordinate_source: Optional[str]) -> bool:
     return coordinate_source in _COORD_SOURCES_VERIFIED
 
 
+# ── 03I.2B · H-1: elegibilidad ESTRICTA de la geometría oficial del predio ────
+# Antes, `resolve_market_location` promovía CUALQUIER `predio_real["lat"]` a
+# `OFFICIAL_PREDIO`: un «hint» geocodificado (o un punto referencial por cercanía)
+# entraba al gate de valoración con la etiqueta de geometría oficial. La promoción
+# ahora exige 7 criterios explícitos y evidencia declarada por el PRODUCTOR.
+PREDIO_ORIGENES_ELEGIBLES = frozenset({
+    "DIRECCION_OFICIAL_LIGADA_AL_PREDIO",   # punto de la dirección oficial enlazada
+    "GEOMETRIA_OFICIAL_PREDIO",             # geometría propia del predio (capa/lote)
+})
+# Métodos y tipos de geometría NO admisibles como geometría oficial del predio.
+# (Se listan métodos CONCRETOS, no la palabra «centroide» a secas: el centroide de
+#  una geometría OFICIAL del predio sí es geometría oficial del predio.)
+_METHOD_BLOCKLIST = ("GEOCODE", "HINT", "CENTROIDE_DE_BARRIO", "CENTROIDE_DE_CIUDAD",
+                     "CITY_CENTROID", "BARRIO_DEMO", "DEMO", "ESTIMAD", "INTERPOLA",
+                     "PLACA")
+_GEOMETRY_TYPES_OK = frozenset({"Point", "Polygon", "MultiPolygon"})
+_PROV_REQUIRED = ("source_system", "layer", "feature_id", "geometry_type",
+                  "resolution_method", "predio_globalid")
+# Claves de enlace que SÍ identifican oficialmente un predio. Una geometría cuyo
+# `feature_id` provenga de un campo fuera de esta lista no acredita el predio.
+_ID_KINDS_OFICIALES = frozenset({"cr_predio_guid", "globalid", "numero_predial_nacional",
+                                 "lotcodigo", "codigo_lote", "nupre"})
+# Cajas de cordura municipal: una coordenada proyectada (millones) o de otro país
+# no puede pasar por geometría oficial del predio de ESTE caso.
+_BBOX_CIUDAD = {
+    "barranquilla": (10.70, 11.15, -75.05, -74.55),
+    "bogota": (3.70, 4.85, -74.30, -73.95),
+    "bogotá": (3.70, 4.85, -74.30, -73.95),
+    "medellin": (6.10, 6.40, -75.65, -75.45),
+    "medellín": (6.10, 6.40, -75.65, -75.45),
+    "pasto": (1.10, 1.35, -77.40, -77.20),
+}
+BBox = Tuple[float, float, float, float]
+# La geometría oficial acredita el PREDIO, no la unidad privada. Se documenta en
+# el objeto para que ningún consumidor lea más de lo que la fuente sostiene.
+COORD_SCOPE_OFICIAL_PREDIO = ("geometría oficial del PREDIO (lote/edificio): NO acredita "
+                              "la posición del apartamento dentro de la edificación")
+
+
+def _bbox_de(ciudad: Optional[str], *, es_bogota: bool = False,
+             es_medellin: bool = False, es_pasto: bool = False) -> Optional[BBox]:
+    if es_bogota:
+        return _BBOX_CIUDAD["bogota"]
+    if es_medellin:
+        return _BBOX_CIUDAD["medellin"]
+    if es_pasto:
+        return _BBOX_CIUDAD["pasto"]
+    return _BBOX_CIUDAD.get(str(ciudad or "").strip().lower())
+
+
+def _sin_llaves(guid) -> str:
+    return str(guid or "").strip().strip("{}").lower()
+
+
+def evaluar_geometria_oficial_predio(*, predio_real: Optional[Dict[str, Any]],
+                                     ciudad: Optional[str] = None,
+                                     es_bogota: bool = False,
+                                     es_medellin: bool = False,
+                                     es_pasto: bool = False) -> Dict[str, Any]:
+    """H-1: ¿puede esta coordenada declararse `OFFICIAL_PREDIO`? (7 criterios)
+
+    1. El predio está RESUELTO y disponible (`disponible` no es False) y trae lat/lon.
+    2. El PRODUCTOR declara un origen elegible (`coordenada_origen`) — nunca se
+       deduce del hecho de que existan lat/lon.
+    3. Vínculo oficial verificado: `feature_id` == globalid del predio (y
+       `link_verificado` no es False cuando el productor lo declara).
+    4. Identificadores oficiales presentes (globalid, o número predial + NUPRE).
+    5. Procedencia COMPLETA: `source_system`, `layer`, `feature_id`, `geometry_type`,
+       `resolution_method` y `predio_globalid` no vacíos.
+    6. Método y tipo de geometría admisibles (ni geocode, ni hint, ni centroide, ni
+       demo; geometría Point/Polygon/MultiPolygon).
+    7. Cordura espacial: lat/lon finitas, no degeneradas y dentro de la caja del
+       municipio del caso.
+
+    Devuelve `{"eligible", "reason", "provenance", "bbox"}`. NUNCA lanza.
+    """
+    out: Dict[str, Any] = {"eligible": False, "reason": None, "provenance": {},
+                           "bbox": None}
+    pr = predio_real or {}
+    # (1)
+    if not pr:
+        out["reason"] = "sin predio resuelto"
+        return out
+    if pr.get("disponible") is False:
+        out["reason"] = "el predio no está disponible (disponible=False)"
+        return out
+    lat, lon = pr.get("lat"), pr.get("lon")
+    if lat is None or lon is None:
+        out["reason"] = "el predio no aporta lat/lon"
+        return out
+    try:
+        lat_f, lon_f = float(lat), float(lon)
+    except (TypeError, ValueError):
+        out["reason"] = f"lat/lon no numéricos: {lat!r}/{lon!r}"
+        return out
+    # (2)
+    origen = str(pr.get("coordenada_origen") or "").strip()
+    if origen not in PREDIO_ORIGENES_ELEGIBLES:
+        out["reason"] = (f"origen no elegible declarado por el productor: "
+                         f"{origen or 'AUSENTE'}")
+        return out
+    # (5) procedencia completa
+    prov = pr.get("coordenada_provenance")
+    if not isinstance(prov, dict):
+        out["reason"] = "procedencia de la coordenada ausente (coordenada_provenance)"
+        return out
+    faltan = [k for k in _PROV_REQUIRED
+              if prov.get(k) is None or str(prov.get(k)).strip() == ""]
+    if faltan:
+        out["reason"] = "procedencia incompleta: faltan " + ", ".join(sorted(faltan))
+        return out
+    out["provenance"] = dict(prov)
+    # (4) identificadores oficiales del predio
+    pred = pr.get("predio") or {}
+    globalid = _sin_llaves(pred.get("globalid") or pr.get("globalid"))
+    num_predial = str(pred.get("numero_predial_nacional") or pred.get("numero_predial")
+                      or pr.get("numero_predial") or "").strip()
+    nupre = str(pred.get("nupre") or pred.get("codigo_homologado")
+                or pr.get("nupre") or "").strip()
+    _kind = str(prov.get("feature_id_kind") or "").strip().lower()
+    _por_clave_oficial = bool(_kind in _ID_KINDS_OFICIALES
+                              and str(prov.get("feature_id") or "").strip())
+    if not globalid and not (num_predial and nupre) and not _por_clave_oficial:
+        out["reason"] = ("sin identificadores oficiales del predio (globalid, número "
+                         "predial + NUPRE o clave de enlace oficial declarada)")
+        return out
+    # (3) vínculo verificado entre la geometría y ESTE predio
+    if prov.get("link_verificado") is False:
+        out["reason"] = "vínculo de la coordenada con el predio NO verificado"
+        return out
+    fid = _sin_llaves(prov.get("feature_id"))
+    if not fid:
+        out["reason"] = "feature_id vacío: la geometría no es trazable a una feature"
+        return out
+    _pg = _sin_llaves(prov.get("predio_globalid"))
+    if origen == "DIRECCION_OFICIAL_LIGADA_AL_PREDIO":
+        if not globalid:
+            out["reason"] = ("origen por dirección oficial pero el predio no declara "
+                             "globalid con el que verificar el enlace")
+            return out
+        if fid != globalid or _pg != globalid:
+            out["reason"] = (f"el enlace no coincide con el predio: feature_id={fid!r} "
+                             f"predio_globalid={_pg!r} globalid={globalid!r}")
+            return out
+    else:
+        # Geometría propia del predio: la procedencia debe identificar el MISMO
+        # predio por un identificador oficial (globalid, número predial, NUPRE) o por
+        # la misma clave de enlace declarada como oficial.
+        _ids = {globalid, _sin_llaves(num_predial), _sin_llaves(nupre)} - {""}
+        if not _pg:
+            out["reason"] = "la procedencia no declara el predio de la geometría"
+            return out
+        if _pg != fid and _pg not in _ids:
+            out["reason"] = ("la procedencia no acredita el mismo predio "
+                             f"(predio_globalid={_pg!r}, feature_id={fid!r})")
+            return out
+    # (6) método y tipo de geometría
+    _metodo = str(prov.get("resolution_method") or "").upper()
+    _bloq = [b for b in _METHOD_BLOCKLIST if b in _metodo]
+    if _bloq:
+        out["reason"] = (f"método de resolución no admisible para geometría oficial: "
+                         f"{prov.get('resolution_method')!r}")
+        return out
+    if str(prov.get("geometry_type")) not in _GEOMETRY_TYPES_OK:
+        out["reason"] = (f"tipo de geometría no admisible: "
+                         f"{prov.get('geometry_type')!r}")
+        return out
+    # (7) cordura espacial
+    if not (math.isfinite(lat_f) and math.isfinite(lon_f)):
+        out["reason"] = "lat/lon no finitas"
+        return out
+    if abs(lat_f) < 1e-6 and abs(lon_f) < 1e-6:
+        out["reason"] = "coordenada degenerada (0, 0)"
+        return out
+    bbox = _bbox_de(ciudad, es_bogota=es_bogota, es_medellin=es_medellin,
+                    es_pasto=es_pasto)
+    out["bbox"] = bbox
+    if bbox is not None:
+        s, n, w, e = bbox
+        if not (s <= lat_f <= n and w <= lon_f <= e):
+            out["reason"] = (f"coordenada fuera de la caja del municipio {ciudad!r}: "
+                            f"({lat_f}, {lon_f})")
+            return out
+    elif not (-90.0 <= lat_f <= 90.0 and -180.0 <= lon_f <= 180.0):
+        out["reason"] = f"lat/lon fuera de rango geográfico: ({lat_f}, {lon_f})"
+        return out
+    out["eligible"] = True
+    out["reason"] = "geometría oficial del predio con procedencia verificada"
+    return out
+
+
 def _geocodificador(geocoder=None):
     if geocoder is not None:
         return geocoder
@@ -368,6 +560,9 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
     coordinate_source = COORD_UNRESOLVED
     geocoder_source = None
     geocoder_confidence = None
+    coordinate_provenance: Dict[str, Any] = {}
+    matched_nupre = None
+    matched_predial = None
     _geo = _geocodificador(geocoder)
 
     def _geocodificar(texto):
@@ -392,11 +587,23 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
             return r[0], r[1]
         return None, None
 
-    # 1) coordenadas OFICIALES del predio resuelto (si las hay)
-    if predio_real and predio_real.get("lat") is not None and predio_real.get("lon") is not None:
+    # 1) geometría OFICIAL del predio resuelto — SOLO si supera los 7 criterios H-1
+    # (antes bastaba con que `predio_real` trajera lat/lon: un hint geocodificado o
+    #  un punto referencial entraban al gate etiquetados como oficiales).
+    _eleg = evaluar_geometria_oficial_predio(
+        predio_real=predio_real, ciudad=ciudad, es_bogota=es_bogota,
+        es_medellin=es_medellin, es_pasto=es_pasto)
+    _predio_elegible = bool(_eleg.get("eligible"))
+    if _predio_elegible:
         lat, lon = predio_real["lat"], predio_real["lon"]
         coordinate_source = COORD_OFFICIAL_PREDIO
         source_address = predio_real.get("direccion_oficial") or None
+        coordinate_provenance = dict(_eleg.get("provenance") or {})
+        matched_nupre = coordinate_provenance.get("nupre")
+        matched_predial = coordinate_provenance.get("numero_predial")
+    elif predio_real:
+        print(f"[MARKET][H1] geometria del predio NO promovida a OFFICIAL_PREDIO: "
+              f"{_eleg.get('reason')}")
 
     # 2) dirección oficial de adopción -> geocodificar ESA dirección
     if lat is None and authoritative_address:
@@ -405,18 +612,39 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
             lat, lon = _la, _lo
             coordinate_source = COORD_OFFICIAL_ADDRESS_GEOCODE
             source_address = authoritative_address
+            coordinate_provenance = {
+                "source_system": "REGISTRO_OFICIAL_DE_ADOPCION",
+                "layer": None,
+                "feature_id": None,
+                "geometry_type": "Point",
+                "resolution_method": "GEOCODE_DIRECCION_OFICIAL_DE_ADOPCION",
+                "direccion_origen": authoritative_address,
+                "link_verificado": None,
+            }
 
     # 3) coordenadas ya geocodificadas (CTL) — conservan su origen REAL
     if lat is None and lat_geo is not None and lon_geo is not None:
         lat, lon = lat_geo, lon_geo
         coordinate_source = lat_geo_source or COORD_CTL_ADDRESS_GEOCODE
         source_address = db_direccion
+        coordinate_provenance = {
+            "source_system": "GEOCODER_DE_DIRECCION_DEL_CTL",
+            "resolution_method": "GEOCODE_DIRECCION_CTL",
+            "geometry_type": "Point",
+            "direccion_origen": db_direccion,
+            "declared_source": lat_geo_source,
+        }
 
     # 4) coordenadas de la base de datos (NO autorizadas)
     if lat is None and (db_lat or db_lon):
         lat, lon = db_lat, db_lon
         coordinate_source = COORD_DB_COORDINATES
         source_address = db_direccion
+        coordinate_provenance = {
+            "source_system": "BASE_DE_DATOS_DEL_CASO",
+            "resolution_method": "COORDENADAS_PERSISTIDAS",
+            "geometry_type": "Point",
+        }
 
     # 5) geocodificar la dirección del formulario
     if lat is None and db_direccion:
@@ -425,6 +653,12 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
             lat, lon = _la, _lo
             coordinate_source = COORD_FORM_ADDRESS_GEOCODE
             source_address = db_direccion
+            coordinate_provenance = {
+                "source_system": geocoder_source or "GEOCODER_EXTERNO",
+                "resolution_method": "GEOCODE_DIRECCION_DEL_FORMULARIO",
+                "geometry_type": "Point",
+                "direccion_origen": db_direccion,
+            }
 
     # 6) centroides/demo — NUNCA autorizados para el gate
     if lat is None:
@@ -447,6 +681,12 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
         else:
             lat, lon = (10.9685, -74.7813)
             coordinate_source = COORD_CITY_CENTROID
+        coordinate_provenance = {
+            "source_system": "CENTROIDE_DE_REFERENCIA",
+            "resolution_method": "CENTROIDE_DE_BARRIO_O_CIUDAD",
+            "geometry_type": "Point",
+            "nota": "coordenada de referencia: NO acredita el predio",
+        }
 
     return {
         "authoritative_address": authoritative_address,
@@ -457,6 +697,21 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
         "coordinate_source_verified": coordinate_source_verified(coordinate_source),
         "geocoder_source": geocoder_source,
         "geocoder_confidence": geocoder_confidence,
+        # 03I.2B §H/§N: procedencia de la coordenada (auditable en receipt/manifest).
+        "coordinate_provenance": coordinate_provenance,
+        "source_feature_id": coordinate_provenance.get("feature_id"),
+        "source_layer": coordinate_provenance.get("layer"),
+        "source_system": coordinate_provenance.get("source_system"),
+        "resolution_method": coordinate_provenance.get("resolution_method"),
+        "matched_nupre": matched_nupre,
+        "matched_predial": matched_predial,
+        # H-1: qué acredita y qué NO acredita esta geometría.
+        "coordinate_scope": (COORD_SCOPE_OFICIAL_PREDIO
+                             if coordinate_source == COORD_OFFICIAL_PREDIO else None),
+        # Motivo declarado cuando la geometría del predio NO pudo promoverse.
+        "official_predio_rejected_reason": (None if _predio_elegible
+                                            else (_eleg.get("reason") if predio_real
+                                                  else None)),
     }
 
 
