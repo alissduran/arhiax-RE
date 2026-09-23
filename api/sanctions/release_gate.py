@@ -49,23 +49,43 @@ SAGRILAFT_CORE_COMMIT = "acc8a9493a1cfe9dace5d638fb3bf9a0a74cf29f"
 
 STATUS_VALID = "VALID_FOR_RELEASE"
 STATUS_LEGACY = "LEGACY_INVALID_FOR_RELEASE"
+STATUS_GATE_FAILED = "GATE_EVALUATION_FAILED"
+
+EVAL_OK = "EVALUATED"
+EVAL_FAILED = "EVALUATION_FAILED"
 
 MARCA_LEGACY = "LEGACY / INVALID_FOR_RELEASE"
+MARCA_GATE_NO_EVALUABLE = "RELEASE GATE NOT EVALUABLE / INVALID_FOR_RELEASE"
 
-# ── Política de liberación (DECISIÓN DEL RESPONSABLE DEL PRODUCTO) ────────────
-# Decisión vigente: **MARCAR en producción**.
-#
-#   · MARCAR   — un núcleo anterior al sancionado NO impide emitir el dictamen: el
-#                PDF sale con el banderín LEGACY / INVALID_FOR_RELEASE y el motivo en
-#                el capítulo 16 y en la traza 16.B. El negocio nunca se queda sin
-#                documento y la marca impide que circule como vigente.
-#   · BLOQUEAR — fail-closed: la generación falla y NO se emite PDF alguno.
-#
-# El bloqueo sigue disponible como override explícito con
-# `ARHIAX_PERMITIR_LEGACY=0` (recomendado para entornos regulados o para la prueba
-# de un release). No cambiar `POLITICA_POR_DEFECTO` sin una decisión del producto:
-# hay una prueba que la fija (`tests/test_release_gate_sagrilaft.py`).
-POLITICA_POR_DEFECTO = "MARCAR"          # "MARCAR" | "BLOQUEAR"
+# ── Política de liberación por ENTORNO (03I.2A) ───────────────────────────────
+# La política ya NO es global: depende de `ARHIAX_ENV` y vive en `release_env`
+# (módulo sin dependencias, para que la última línea de defensa esté siempre
+# disponible). Resumen: DEV/TEST marcan, STAGING/PRODUCTION bloquean.
+try:
+    from release_env import (  # type: ignore
+        ENTORNO_CONSERVADOR, ENV_DEVELOPMENT, ENV_PRODUCTION, ENV_STAGING, ENV_TEST,
+        ENTORNOS, OVERRIDE_VAR, OVERRIDE_VAR_LEGACY, POLICY_BLOCK, POLICY_MARK,
+        POLITICA_POR_ENTORNO, matriz_legible, normalizar_entorno, override_activo,
+        politica_para,
+    )
+except ImportError:  # pragma: no cover — api/ no está en sys.path (import como paquete)
+    import sys as _sys
+    from pathlib import Path as _Path
+    _sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
+    from release_env import (  # type: ignore
+        ENTORNO_CONSERVADOR, ENV_DEVELOPMENT, ENV_PRODUCTION, ENV_STAGING, ENV_TEST,
+        ENTORNOS, OVERRIDE_VAR, OVERRIDE_VAR_LEGACY, POLICY_BLOCK, POLICY_MARK,
+        POLITICA_POR_ENTORNO, matriz_legible, normalizar_entorno, override_activo,
+        politica_para,
+    )
+
+__all__ = [
+    "SAGRILAFT_CORE_MIN", "SAGRILAFT_CORE_COMMIT", "STATUS_VALID", "STATUS_LEGACY",
+    "STATUS_GATE_FAILED", "EVAL_OK", "EVAL_FAILED", "MARCA_LEGACY",
+    "MARCA_GATE_NO_EVALUABLE", "POLITICA_POR_ENTORNO", "normalizar_entorno",
+    "politica_para", "override_activo", "evaluar_nucleo", "evaluar_release_seguro",
+    "filas_release_gate", "filas_receipt_liberacion", "matriz_legible",
+]
 
 
 @dataclass
@@ -191,10 +211,10 @@ def evaluar_nucleo(permitir_legacy: Optional[bool] = None) -> Dict[str, Any]:
 
     legacy = bool(motivos)
     if permitir_legacy is None:
-        # La política documentada manda; la variable de entorno es un override.
-        _env = os.environ.get("ARHIAX_PERMITIR_LEGACY")
-        permitir_legacy = ((POLITICA_POR_DEFECTO == "MARCAR") if _env is None
-                           else _env.strip() == "1")
+        # Compatibilidad: sin argumento se aplica la política del ENTORNO
+        # (DEV/TEST marcan; STAGING/PRODUCTION bloquean). El camino del dictamen NO
+        # usa esto: usa `evaluar_release_seguro()`, que es el único autorizado.
+        permitir_legacy = politica_para(normalizar_entorno()["environment"]) == POLICY_MARK
 
     return {
         "status": STATUS_LEGACY if legacy else STATUS_VALID,
@@ -205,17 +225,102 @@ def evaluar_nucleo(permitir_legacy: Optional[bool] = None) -> Dict[str, Any]:
                     "parsers": nu.parsers, "sources": list(nu.sources),
                     "commit": nu.commit},
         "ancestria": anc,
-        # Política vigente: MARCAR (el PDF se emite con el banderín). El bloqueo solo
-        # con ARHIAX_PERMITIR_LEGACY=0 o si el producto cambia POLITICA_POR_DEFECTO.
-        "politica": POLITICA_POR_DEFECTO,
         "bloquear": bool(legacy and not permitir_legacy),
     }
 
 
+def evaluar_release_seguro(*, permitir_legacy=None, entorno: Optional[str] = None,
+                           evaluador=None) -> Dict[str, Any]:
+    """ÚNICA función autorizada para decidir la liberación de un dictamen (03I.2A).
+
+    Nunca lanza y nunca devuelve None: si la evaluación del núcleo falla, devuelve
+    `EVALUATION_FAILED` / `GATE_EVALUATION_FAILED` con el motivo saneado y aplica la
+    política del entorno. Un fallo interno del gate JAMÁS puede producir un PDF
+    vigente.
+
+    Returns:
+        {
+          evaluation_status: EVALUATED | EVALUATION_FAILED,
+          release_status: VALID_FOR_RELEASE | LEGACY_INVALID_FOR_RELEASE |
+                          GATE_EVALUATION_FAILED,
+          policy: MARK | BLOCK,
+          environment, environment_declared, environment_raw, assumed_conservative,
+          blocking: bool, mark: bool, marca: str|None,
+          override_used: bool, override_variable: str|None, override_deprecated: bool,
+          reasons: [...], core_versions: {...}, ancestry: {...},
+        }
+    """
+    env = normalizar_entorno(entorno)
+    _eval = evaluador or evaluar_nucleo
+
+    core: Dict[str, Any] = {}
+    ancestry: Dict[str, Any] = {"estado": "UNKNOWN", "detalle": "no evaluable"}
+    reasons: List[str] = []
+    try:
+        base = _eval(permitir_legacy=True) or {}
+        evaluation_status = EVAL_OK
+        release_status = base.get("status") or STATUS_GATE_FAILED
+        if release_status not in (STATUS_VALID, STATUS_LEGACY):
+            evaluation_status = EVAL_FAILED
+            release_status = STATUS_GATE_FAILED
+            reasons.append(f"estado de núcleo no reconocido: {base.get('status')!r}")
+        reasons.extend(base.get("motivos") or [])
+        core = base.get("vigente") or {}
+        ancestry = base.get("ancestria") or ancestry
+    except Exception as e:  # noqa: BLE001 — fail-closed: nunca se propaga, nunca es válido
+        evaluation_status = EVAL_FAILED
+        release_status = STATUS_GATE_FAILED
+        reasons = [_sanitizar_motivo(e)]
+        core, ancestry = {}, {"estado": "UNKNOWN", "detalle": "evaluación fallida"}
+
+    policy = politica_para(env["environment"])
+    override = {"activo": False, "variable": None, "deprecada": False}
+    if release_status != STATUS_VALID and policy == POLICY_BLOCK:
+        if permitir_legacy is False:
+            policy = POLICY_BLOCK                     # forzado explícitamente
+        else:
+            override = override_activo()
+            if override["activo"]:
+                policy = POLICY_MARK                  # excepcional y registrado
+
+    blocking = (release_status != STATUS_VALID) and (policy == POLICY_BLOCK)
+    mark = release_status != STATUS_VALID
+    marca = (MARCA_GATE_NO_EVALUABLE if release_status == STATUS_GATE_FAILED
+             else (MARCA_LEGACY if release_status == STATUS_LEGACY else None))
+
+    return {
+        "evaluation_status": evaluation_status,
+        "release_status": release_status,
+        "policy": policy,
+        "environment": env["environment"],
+        "environment_declared": env["declared"],
+        "environment_raw": env["raw"],
+        "assumed_conservative": env["assumed_conservative"],
+        "blocking": blocking,
+        "mark": mark,
+        "marca": marca,
+        "override_used": bool(override["activo"] and policy == POLICY_MARK
+                              and release_status != STATUS_VALID),
+        "override_variable": override["variable"] if override["activo"] else None,
+        "override_deprecated": bool(override.get("deprecada")),
+        "reasons": reasons,
+        "core_versions": core,
+        "ancestry": ancestry,
+    }
+
+
+def _sanitizar_motivo(exc: BaseException) -> str:
+    """Motivo legible y saneado de la excepción (sin rutas ni secretos)."""
+    nombre = type(exc).__name__
+    texto = str(exc) or ""
+    texto = texto.replace("\\", "/").split("/")[-1]     # nunca rutas completas
+    return f"evaluación del núcleo fallida: {nombre}: {texto[:160]}"
+
+
 def filas_release_gate(evaluacion: Optional[Dict[str, Any]] = None) -> List[Tuple[str, str]]:
     """Filas legibles para el capítulo 16.B (traza técnica)."""
-    ev = evaluacion or evaluar_nucleo()
-    vig = ev.get("vigente") or {}
+    ev = evaluacion or evaluar_release_seguro()
+    vig = ev.get("core_versions") or ev.get("vigente") or {}
     filas = [
         ("Núcleo Sagrilaft", ev.get("marca") or "VIGENTE · núcleo sancionado"),
         ("Motor de screening", str(vig.get("matcher") or "no declarado")),
@@ -223,9 +328,39 @@ def filas_release_gate(evaluacion: Optional[Dict[str, Any]] = None) -> List[Tupl
         ("Parsers", " · ".join(f"{k} {v}" for k, v in sorted((vig.get("parsers") or {}).items()))
          or "no declarados"),
         ("Fuentes del núcleo", " · ".join(vig.get("sources") or []) or "no declaradas"),
-        ("Ancestría del núcleo", f"{(ev.get('ancestria') or {}).get('estado')} · "
-                                 f"{(ev.get('ancestria') or {}).get('detalle')}"),
+        ("Ancestría del núcleo", f"{(ev.get('ancestry') or ev.get('ancestria') or {}).get('estado')} · "
+         f"{(ev.get('ancestry') or ev.get('ancestria') or {}).get('detalle')}"),
     ]
-    if ev.get("motivos"):
-        filas.append(("Motivos de marca LEGACY", "; ".join(ev["motivos"])))
+    if ev.get("reasons") or ev.get("motivos"):
+        filas.append(("Motivos de la marca", "; ".join(ev.get("reasons") or ev["motivos"])))
     return filas
+
+
+def filas_receipt_liberacion(evaluacion: Dict[str, Any]) -> List[Tuple[str, str]]:
+    """Receipt de liberación (03I.2A §12): todo lo que decide el gate, sin secretos.
+
+    No se registran variables de entorno completas ni credenciales: solo el NOMBRE de
+    la variable de override y su uso.
+    """
+    ev = evaluacion or {}
+    vig = ev.get("core_versions") or {}
+    anc = ev.get("ancestry") or {}
+    return [
+        # Nombres EXACTOS exigidos por el release gate (03I.2A §12).
+        ("release_gate_evaluation_status", str(ev.get("evaluation_status") or "—")),
+        ("release_gate_status", str(ev.get("release_status") or "—")),
+        ("release_gate_policy", str(ev.get("policy") or "—")),
+        ("environment", f"{ev.get('environment')}"
+                        + ("" if ev.get("environment_declared") else
+                           f" (asumido conservador; ARHIAX_ENV={ev.get('environment_raw')!r})")),
+        ("blocking", str(bool(ev.get("blocking")))),
+        ("override_used", str(bool(ev.get("override_used")))
+         + (f" · variable {ev.get('override_variable')}" if ev.get("override_used") else "")),
+        ("reasons", "; ".join(ev.get("reasons") or []) or "sin motivos"),
+        ("matcher_version", str(vig.get("matcher") or "—")),
+        ("subject_model_version", str(vig.get("subject_model") or "—")),
+        ("parser_versions", " · ".join(f"{k}={v}" for k, v in sorted((vig.get("parsers") or {}).items()))
+         or "—"),
+        ("sources", " · ".join(vig.get("sources") or []) or "—"),
+        ("ancestry", f"{anc.get('estado')} · {anc.get('detalle')}"),
+    ]

@@ -15,6 +15,7 @@ Cada prueba corresponde a un punto del gate de liberación:
 """
 import sys
 import unittest
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -120,9 +121,15 @@ class TestPuntos5y6UnaSolaVerdad(unittest.TestCase):
     def test_05_los_tres_capitulos_usan_el_mismo_productor(self):
         pc = (ROOT / "api" / "pdf_compiler.py").read_text(encoding="utf-8")
         tb = (ROOT / "api" / "titulux_bridge.py").read_text(encoding="utf-8")
-        for fn in ("person_type_label", "documento_para_dictamen"):
+        for fn in ("fila_sujeto_dictamen",):
             self.assertIn(fn, pc, f"pdf_compiler no usa {fn}")
             self.assertIn(fn, tb, f"titulux_bridge no usa {fn}")
+        # El invariante REAL (mismo valor serializado en 05, 09 y 16) se prueba por
+        # comportamiento en:
+        #   tests/test_03i2a_release_fail_closed.py::TestSujetos050916
+        se = (ROOT / "api" / "sarlaft_engine.py").read_text(encoding="utf-8")
+        self.assertIn("fila_sujeto_dictamen", se,
+                      "la ficha del capítulo 05 no usa el productor único")
 
     def test_05_etiquetas_unicas(self):
         from sanctions.subjects import person_type_label
@@ -202,7 +209,7 @@ class TestPunto10NucleoSancionado(unittest.TestCase):
             sources=(), commit=None)
         try:
             ev = rg.evaluar_nucleo(permitir_legacy=False)
-            self.assertTrue(ev["bloquear"], "con ARHIAX_PERMITIR_LEGACY=0 debe bloquear")
+            self.assertTrue(ev["bloquear"], "con permitir_legacy=False debe bloquear")
         finally:
             rg.nucleo_vigente = _orig
 
@@ -223,68 +230,83 @@ class TestPunto10NucleoSancionado(unittest.TestCase):
 
 
 class TestPoliticaDeLiberacion(unittest.TestCase):
-    """Política decidida por el producto: MARCAR (no bloquear) en producción."""
+    """03I.2A: la política es POR ENTORNO; el gate no evaluable nunca es válido."""
 
-    def test_politica_por_defecto_es_marcar(self):
-        from sanctions.release_gate import POLITICA_POR_DEFECTO, evaluar_nucleo
-        self.assertEqual(POLITICA_POR_DEFECTO, "MARCAR",
-                         "cambiar la política requiere decisión del producto y "
-                         "actualizar esta prueba")
-        self.assertEqual(evaluar_nucleo()["politica"], "MARCAR")
-
-    def test_sin_variable_de_entorno_y_nucleo_antiguo_se_marca_no_se_bloquea(self):
+    def setUp(self):
         import os
+        self._env = {k: os.environ.get(k) for k in
+                     ("ARHIAX_ENV", "ARHIAX_ALLOW_LEGACY_RELEASE",
+                      "ARHIAX_PERMITIR_LEGACY")}
+        for k in self._env:
+            os.environ.pop(k, None)
+
+    def tearDown(self):
+        import os
+        for k, v in self._env.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+
+    def _nucleo_antiguo(self):
         from sanctions import release_gate as rg
-        _orig = rg.nucleo_vigente
-        _env = os.environ.pop("ARHIAX_PERMITIR_LEGACY", None)
-        rg.nucleo_vigente = lambda: rg.NúcleoVigente(
+        return rg.NúcleoVigente(
             matcher="sanctions-matcher/1.0.0", subject_model="canonical-subjects/1.0.0",
             parsers={}, sources=(), commit=None)
-        try:
-            ev = rg.evaluar_nucleo()
-            self.assertEqual(ev["status"], rg.STATUS_LEGACY)
-            self.assertEqual(ev["marca"], rg.MARCA_LEGACY)
-            self.assertFalse(ev["bloquear"],
-                             "la política vigente es marcar: el dictamen se emite marcado")
-        finally:
-            rg.nucleo_vigente = _orig
-            if _env is not None:
-                os.environ["ARHIAX_PERMITIR_LEGACY"] = _env
 
-    def test_la_variable_de_entorno_es_un_override(self):
+    def test_matriz_por_entorno(self):
+        from release_env import POLITICA_POR_ENTORNO
+        self.assertEqual(POLITICA_POR_ENTORNO["development"], "MARK")
+        self.assertEqual(POLITICA_POR_ENTORNO["test"], "MARK")
+        self.assertEqual(POLITICA_POR_ENTORNO["staging"], "BLOCK")
+        self.assertEqual(POLITICA_POR_ENTORNO["production"], "BLOCK")
+
+    def test_nucleo_antiguo_en_development_se_marca_no_se_bloquea(self):
         import os
         from sanctions import release_gate as rg
-        _orig = rg.nucleo_vigente
-        _env = os.environ.get("ARHIAX_PERMITIR_LEGACY")
-        rg.nucleo_vigente = lambda: rg.NúcleoVigente(
-            matcher="sanctions-matcher/1.0.0", subject_model=None, parsers={},
-            sources=(), commit=None)
-        try:
-            os.environ["ARHIAX_PERMITIR_LEGACY"] = "0"
-            self.assertTrue(rg.evaluar_nucleo()["bloquear"],
-                            "con ARHIAX_PERMITIR_LEGACY=0 la generación se bloquea")
-            os.environ["ARHIAX_PERMITIR_LEGACY"] = "1"
-            self.assertFalse(rg.evaluar_nucleo()["bloquear"])
-        finally:
-            rg.nucleo_vigente = _orig
-            if _env is None:
-                os.environ.pop("ARHIAX_PERMITIR_LEGACY", None)
-            else:
-                os.environ["ARHIAX_PERMITIR_LEGACY"] = _env
+        os.environ["ARHIAX_ENV"] = "development"
+        with mock.patch.object(rg, "nucleo_vigente", lambda: self._nucleo_antiguo()):
+            ev = rg.evaluar_release_seguro()
+        self.assertEqual(ev["release_status"], rg.STATUS_LEGACY)
+        self.assertEqual(ev["marca"], rg.MARCA_LEGACY)
+        self.assertFalse(ev["bloquear"] if "bloquear" in ev else ev["blocking"],
+                         "en desarrollo la política es marcar")
+
+    def test_nucleo_antiguo_en_produccion_bloquea(self):
+        import os
+        from sanctions import release_gate as rg
+        os.environ["ARHIAX_ENV"] = "production"
+        with mock.patch.object(rg, "nucleo_vigente", lambda: self._nucleo_antiguo()):
+            ev = rg.evaluar_release_seguro()
+        self.assertTrue(ev["blocking"])
+        self.assertEqual(ev["policy"], "BLOCK")
+
+    def test_el_override_excepcional_permite_marcar_en_produccion(self):
+        import os
+        from sanctions import release_gate as rg
+        os.environ["ARHIAX_ENV"] = "production"
+        os.environ["ARHIAX_ALLOW_LEGACY_RELEASE"] = "1"
+        with mock.patch.object(rg, "nucleo_vigente", lambda: self._nucleo_antiguo()):
+            ev = rg.evaluar_release_seguro()
+        self.assertFalse(ev["blocking"])
+        self.assertTrue(ev["override_used"])
+        self.assertNotEqual(ev["release_status"], "VALID_FOR_RELEASE",
+                            "el override NUNCA convierte el artefacto en vigente")
 
     def test_el_banderin_se_imprime_en_un_pdf_real_con_nucleo_antiguo(self):
-        """Prueba de integración: la marca tiene que VERSE en el documento emitido."""
+        """Integración: la marca tiene que VERSE en el documento emitido.
+
+        Se ejecuta en DEVELOPMENT porque es el entorno donde la política permite
+        emitir el artefacto marcado (en staging/producción se bloquea, cubierto por
+        `tests/test_03i2a_release_fail_closed.py`).
+        """
+        import os
         from sanctions import release_gate as rg
         from test_remediacion_03h2a import _compilar_golden, _texto_pdf
 
-        _orig = rg.nucleo_vigente
-        rg.nucleo_vigente = lambda: rg.NúcleoVigente(
-            matcher="sanctions-matcher/1.0.0", subject_model="canonical-subjects/1.0.0",
-            parsers={}, sources=(), commit=None)
-        try:
+        os.environ["ARHIAX_ENV"] = "development"
+        with mock.patch.object(rg, "nucleo_vigente", lambda: self._nucleo_antiguo()):
             txt = _texto_pdf(_compilar_golden(tmp_name="pdf_legacy.pdf"))
-        finally:
-            rg.nucleo_vigente = _orig
         n = " ".join(txt.split()).upper()
         self.assertIn("LEGACY / INVALID_FOR_RELEASE", n,
                       "un dictamen con núcleo antiguo debe llevar la marca impresa")

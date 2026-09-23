@@ -321,7 +321,8 @@ def _screening_legado(summary) -> list:
     from sanctions.engine import sigla
     # 03I.2 · gates 4 y 5: productor único de tipo y documento del sujeto (compartido
     # con los capítulos 09 y 16).
-    from sanctions.subjects import person_type_label, documento_para_dictamen
+    from sanctions.subjects import (person_type_label, documento_para_dictamen,
+                                    fila_sujeto_dictamen)
 
     out = []
     for e in summary.subjects:
@@ -343,14 +344,17 @@ def _screening_legado(summary) -> list:
                 "motivos": list(o.matching_reasons),
                 "snapshot_id": o.snapshot_id,
             })
+        _fila = fila_sujeto_dictamen(e)
         out.append({
-            "sujeto": e.canonical_name,
-            # 03I.2 · gates 4 y 5: MISMO productor que el capítulo 09 y el 16. Antes este
-            # capítulo construía su propio tipo («natural»/«juridica») y su propio
-            # documento («N/D»), y podía divergir del resto del dictamen.
+            "sujeto": _fila["canonical_name"],
+            # 03I.2 · gates 4 y 5 + 03I.2A §13: MISMO productor que los capítulos 09 y
+            # 16 (nombre, tipo, etiqueta y documento). `tipo` conserva la forma legada
+            # en minúsculas por compatibilidad; `person_type_label` es el valor canónico
+            # que el dictamen imprime en los tres capítulos.
             "tipo": person_type_label(e).lower(),
+            "person_type_label": _fila["person_type_label"],
             "sujeto_id": e.subject_id, "person_type": e.person_type,
-            "documento": documento_para_dictamen(e),
+            "documento": _fila["document"],
             "roles": list(e.roles), "participacion": e.participation,
             "resultado": peor, "fuentes": fuentes,
             "completo": (summary.status == "SCREENING_COMPLETE"),

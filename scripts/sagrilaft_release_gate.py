@@ -32,6 +32,47 @@ def _txt_pdf(pdf: Path) -> str:
     return re.sub(r"\s+", " ", _sin_acentos("\n".join(p.get_text() for p in doc))).lower()
 
 
+# Sujetos del caso Golden con su tipo y documento esperados (§13/§14 del prompt).
+_SUJETOS_GOLDEN = (
+    {"nombre": "BANCO DE BOGOTA S.A.", "tipo": "juridica", "documento": "nit 8600029644"},
+    {"nombre": "DURAN BACCA ALISSON", "tipo": "natural", "documento": "cc 1045718995x"},
+)
+
+
+def _sujetos_esperados():
+    return list(_SUJETOS_GOLDEN)
+
+
+def _regiones(txt: str):
+    """Recorta el texto del dictamen en los capítulos 05, 09 y 16.B."""
+    def _entre(marca_ini, marca_fin):
+        i = txt.find(marca_ini)
+        if i < 0:
+            return ""
+        j = txt.find(marca_fin, i + len(marca_ini)) if marca_fin else -1
+        return txt[i:(j if j > 0 else len(txt))]
+
+    r05 = _entre("05 - pre-dictamen", "06 - ")
+    r09 = _entre("09 - screening", "10 - ")
+    r16 = _entre("16.b", None)
+    return r05, r09, r16
+
+
+def _ventana_ok(region: str, sujeto: dict, ancho: int = 90) -> bool:
+    """¿La región muestra el nombre con su etiqueta de tipo y su documento al lado?"""
+    if not region:
+        return False
+    nombre = _sin_acentos(sujeto["nombre"]).lower()
+    pos = region.find(nombre)
+    while pos >= 0:
+        ventana = region[pos:pos + ancho]
+        if _sin_acentos(sujeto["tipo"]).lower() in ventana \
+                and _sin_acentos(sujeto["documento"]).lower() in ventana:
+            return True
+        pos = region.find(nombre, pos + 1)
+    return False
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pdf", help="dictamen PDF a auditar (opcional)")
@@ -101,13 +142,30 @@ def main(argv=None) -> int:
     ck(4, "documento presente -> nunca «ID=N/D»; fallo de extracción declarado", ok4,
        f"con doc={_d1!r} · sin doc={_d2!r} · fallo={_d3!r}")
 
-    # ── 5. 05 = 09 = 16 (un solo mapa de etiquetas) ──────────────────────────
+    # ── 5. 05 = 09 = 16 (conductual: mismo valor en los tres capítulos) ───────
     _pc = (ROOT / "api" / "pdf_compiler.py").read_text(encoding="utf-8")
     _tb = (ROOT / "api" / "titulux_bridge.py").read_text(encoding="utf-8")
-    _comparte = ("person_type_label" in _pc and "person_type_label" in _tb
-                 and "documento_para_dictamen" in _pc and "documento_para_dictamen" in _tb)
-    ck(5, "tipo de sujeto igual en 05, 09 y 16 (productor único)", _comparte,
-       "pdf_compiler (09, 16) y titulux_bridge (05) usan sanctions.subjects")
+    _se = (ROOT / "api" / "sarlaft_engine.py").read_text(encoding="utf-8")
+    _productor_unico = all("fila_sujeto_dictamen" in x for x in (_pc, _tb, _se))
+    if args.pdf:
+        _t5 = _txt_pdf(Path(args.pdf))          # ya sin acentos, en minúsculas
+        _sujetos = _sujetos_esperados()
+        _r05, _r09, _r16 = _regiones(_t5)
+        _detalle5 = []
+        _ok5 = True
+        for _s in _sujetos:
+            _res = {reg: _ventana_ok(_txt, _s) for reg, _txt in
+                    (("05", _r05), ("09", _r09), ("16", _r16))}
+            _ok5 = _ok5 and all(_res.values())
+            _detalle5.append(f"{_s['nombre']}→05:{_res['05']}/09:{_res['09']}/16:{_res['16']}")
+        ck(5, "tipo de sujeto igual en 05, 09 y 16 (conductual, sobre el PDF)",
+           _ok5 and _productor_unico,
+           "productor único + mismas etiquetas/documentos en los tres capítulos: "
+           + " · ".join(_detalle5))
+    else:
+        ck(5, "tipo de sujeto igual en 05, 09 y 16 (productor único)", _productor_unico,
+           "pdf_compiler (09, 16), titulux_bridge (05/16) y sarlaft_engine (05) usan "
+           "sanctions.subjects.fila_sujeto_dictamen")
 
     # ── 6. 09 y 16 consumen la MISMA ScreeningSummary ───────────────────────
     _una_sola = ("summary_desde_dict" in _pc and "screening_summary" in _pc
@@ -155,22 +213,27 @@ def main(argv=None) -> int:
     ck(9, "sin PENDIENTE_PLATAFORMA_EXTERNA con SourceOutcomes reales", ok9,
        f"no aparece en {len(_usos)} archivo(s)" if _usos else "no existe en el código ni en el PDF")
 
-    # ── 10. núcleo sancionado: LEGACY si es anterior ────────────────────────
-    from sanctions.release_gate import (evaluar_nucleo, SAGRILAFT_CORE_MIN, MARCA_LEGACY,
-                                        STATUS_VALID)
-    ev = evaluar_nucleo()
-    _ok10 = ev["status"] == STATUS_VALID
+    # ── 10. núcleo sancionado + política por entorno (fail-closed) ──────────
+    from sanctions.release_gate import (evaluar_release_seguro, SAGRILAFT_CORE_MIN,
+                                        MARCA_LEGACY, MARCA_GATE_NO_EVALUABLE,
+                                        STATUS_VALID, STATUS_GATE_FAILED)
+    ev = evaluar_release_seguro()
+    _ok10 = ev["release_status"] == STATUS_VALID
+    _ev10 = (f"entorno {ev['environment']} (declarado={ev['environment_declared']}) · "
+             f"política {ev['policy']} · {ev['release_status']} · "
+             f"matcher {ev['core_versions'].get('matcher')} · "
+             f"modelo {ev['core_versions'].get('subject_model')} · "
+             f"ancestría {ev['ancestry'].get('estado')}")
     if args.pdf:
         _t10 = _txt_pdf(Path(args.pdf))
-        _marca_en_pdf = "legacy / invalid_for_release" in _t10
-        _ok10 = _ok10 and not _marca_en_pdf
-        _ev10 = (f"{ev['status']} · {ev['vigente']['matcher']} · "
-                 f"marca en PDF: {'sí' if _marca_en_pdf else 'no'}")
-    else:
-        _ev10 = (f"{ev['status']} · matcher {ev['vigente']['matcher']} · "
-                 f"modelo {ev['vigente']['subject_model']} · "
-                 f"ancestría {ev['ancestria']['estado']}")
-    ck(10, "núcleo sancionado (mínimo) evaluado en cada PDF", _ok10, _ev10)
+        _marcado = (MARCA_LEGACY.lower() in _t10
+                    or MARCA_GATE_NO_EVALUABLE.lower() in _t10)
+        _ok10 = _ok10 and not _marcado
+        _ev10 += f" · PDF marcado: {'sí' if _marcado else 'no'}"
+    if ev["evaluation_status"] == "EVALUATION_FAILED":
+        _ok10 = False
+        _ev10 += " · EVALUACIÓN FALLIDA (fail-closed: en staging/producción no se emite)"
+    ck(10, "núcleo sancionado (mínimo) y política del entorno", _ok10, _ev10)
 
     print("=" * 78)
     print("SAGRILAFT / SCREENING RELEASE GATE — 10 puntos")

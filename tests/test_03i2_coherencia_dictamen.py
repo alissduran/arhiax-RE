@@ -79,18 +79,44 @@ class TestD2TipologiaNoEsUso(unittest.TestCase):
         self.assertNotIn("Uso Habitacional", t)
 
     def test_condicion_catastral_se_etiqueta_como_tal(self):
+        """Con evidencia física (tipo de predio SNR) la unidad se nombra y se etiqueta."""
         from tipologia import TIPOLOGIA_PH_CATASTRAL
         t = self._tip(destino_economico="Habitacional", predio_resuelto=True,
                       condicion_juridica="Propiedad Horizontal",
                       condicion_source="thematic_exact",
-                      fuentes_tematicas=("thematic_exact", "thematic_spatial"))
+                      fuentes_tematicas=("thematic_exact", "thematic_spatial"),
+                      tipologia_fisica_fuente="APARTAMENTO")
         self.assertEqual(t, TIPOLOGIA_PH_CATASTRAL)
 
-    def test_uso_industrial_contradice_la_ph(self):
-        from tipologia import TIPOLOGIA_BODEGA
+    def test_ph_sin_evidencia_fisica_no_inventa_la_unidad(self):
+        """03I.2A §18: sin evidencia registral/catastral de la unidad física, la
+        tipología NO se inventa: se declara la unidad en PH y su uso."""
+        t = self._tip(destino_economico="Habitacional", predio_resuelto=True,
+                      condicion_juridica="Propiedad Horizontal",
+                      condicion_source="thematic_exact",
+                      fuentes_tematicas=("thematic_exact", "thematic_spatial"))
+        self.assertIn("Propiedad Horizontal", t)
+        self.assertIn("Unidad", t)
+
+    def test_uso_industrial_no_borra_la_ph(self):
+        """03I.2A §16: un uso industrial NO elimina el régimen de propiedad horizontal.
+
+        Antes, ver «Industrial» en el destino económico bastaba para escribir «No
+        Propiedad Horizontal» en la tipología, borrando evidencia registral válida.
+        """
         t = self._tip(destino_economico="Industrial", predio_resuelto=True,
                       condicion_juridica="Propiedad Horizontal")
+        self.assertIn("Propiedad Horizontal", t)
+        self.assertNotIn("No Propiedad Horizontal", t)
+        self.assertIn("Industrial", t)
+
+    def test_bodega_solo_con_evidencia_registral(self):
+        """La tipología Bodega aparece solo si la fuente la acredita."""
+        from tipologia import TIPOLOGIA_BODEGA
+        t = self._tip(destino_economico="Industrial", predio_resuelto=True,
+                      descripcion_ctl="BODEGA 3 MANZANA 4")
         self.assertEqual(t, TIPOLOGIA_BODEGA)
+        self.assertNotIn("No Propiedad Horizontal", t)
 
     def test_comercial_es_uso_y_se_declara_como_uso(self):
         t = self._tip(destino_economico="Comercial y Servicios", predio_resuelto=True)

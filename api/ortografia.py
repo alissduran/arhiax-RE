@@ -137,10 +137,26 @@ _SEGMENTO = re.compile(r"(<[^>]*>|[A-Za-zÁÉÍÓÚáéíóúÑñ]+|[^A-Za-zÁÉ
 _RE_URL = re.compile(r"(?:https?://|www\.)[^\s<>\"'\)]+", re.IGNORECASE)
 
 
+def _es_identificador(partes, idx):
+    """¿El token `partes[idx]` forma parte de un identificador de máquina?
+
+    03I.2A: la regla productiva «-ion → -ión» acentuaba IDENTIFICADORES y los
+    corrompía (`GATE_EVALUATION_STATUS` → `GATE_EVALUATIÓN_STATUS`,
+    `matcher_version` → `matcher_versión`). Un identificador no es prosa: si el token
+    está pegado a '_' o a dígitos (por la izquierda o la derecha), se deja VERBATIM.
+    """
+    if idx > 0 and ("_" in partes[idx - 1] or any(ch.isdigit() for ch in partes[idx - 1])):
+        return True
+    if idx + 1 < len(partes) and ("_" in partes[idx + 1]
+                                  or any(ch.isdigit() for ch in partes[idx + 1])):
+        return True
+    return False
+
+
 def corregir_es(texto):
     """Corrige la ortografía (tildes) de un texto plano o con etiquetas HTML
     simples, sin alterar las etiquetas ni las URLs (un 'medellin' dentro de
-    'www.medellin.gov.co' no debe acentuarse)."""
+    'www.medellin.gov.co' no debe acentuarse) ni los identificadores de máquina."""
     if not texto or not isinstance(texto, str):
         return texto
     # Proteger URLs para no acentuar palabras dentro de dominios/rutas
@@ -155,9 +171,13 @@ def corregir_es(texto):
     # pronombre átono es verbo; en los demás casos del dominio, adjetivo.
     _PREV_VERBO_PUBLICA = {"no", "se", "lo", "la", "los", "las"}
     prev_token = None
-    for p in partes:
+    for idx, p in enumerate(partes):
         if p.startswith("<") or "\x00" in p or not re.match(r"^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$", p):
             salida.append(p)
+            continue
+        if _es_identificador(partes, idx):
+            salida.append(p)          # identificador de máquina: verbatim
+            prev_token = p.lower()
             continue
         lower = p.lower()
         if (lower == "publica" and prev_token in _PREV_VERBO_PUBLICA

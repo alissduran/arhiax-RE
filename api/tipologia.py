@@ -1,33 +1,29 @@
 # -*- coding: utf-8 -*-
-"""Tipología del predio (03I.2 · D-2) — función PURA y testeable.
+"""Tipología del predio — ADAPTER de compatibilidad (03I.2A §17).
 
-USO ≠ TIPOLOGÍA. El destino económico catastral («Habitacional») describe un USO; la
-tipología describe QUÉ es el inmueble (apartamento en propiedad horizontal, casa,
-bodega, lote). Confundirlos produjo dos defectos reales en el mismo dictamen:
+La lógica de clasificación vive en `clasificacion.clasificar_inmueble`, que separa
+las TRES dimensiones (régimen jurídico, uso económico y tipología física). Esta
+función se mantiene porque el render y los módulos existentes consumen **un texto**,
+y ese texto se deriva de la clasificación: nunca de mezclar uso con régimen.
 
-  · el capítulo 01 mostraba «Uso Habitacional (Según catastro)» como tipología,
-    tapando la evidencia registral de propiedad horizontal del CTL, y
-  · el gate de contexto de mercado cerraba la valoración por «tipología no
-    verificada (requiere VERIFIED_REGISTRAL/CATASTRAL)», dejando el dictamen sin
-    estimación económica.
-
-REGLA: un uso catastral solo manda cuando CONTRADICE la propiedad horizontal
-(industrial, bodega, comercial, oficina, lote, garaje). Si el destino es residencial
-o vacío, manda la evidencia de PH del registro/CTL; y si no hay evidencia de PH, se
-declara el uso COMO USO (nunca como tipología).
+Historia del defecto (03I.2 · D-2): el destino económico catastral («Habitacional»,
+«Comercial», «Oficina») se escribía como si fuera la tipología, borrando la evidencia
+registral de propiedad horizontal. Ahora el régimen manda sobre su propia dimensión y
+un uso **nunca** decide el régimen.
 """
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Dict, Optional
 
+from clasificacion import clasificar_inmueble, texto_tipologia
+
+# Textos de compatibilidad (mismos valores que el render ya usa).
 TIPOLOGIA_SIN_CONSULTA = "PENDIENTE DE VERIFICACION (Requiere consulta catastral)"
-TIPOLOGIA_BODEGA = "Bodega -- Uso Industrial (No Propiedad Horizontal)"
+TIPOLOGIA_BODEGA = "Bodega -- Uso Industrial"
 TIPOLOGIA_PH_CATASTRAL = "Apartamento -- Propiedad Horizontal (condición catastral)"
 TIPOLOGIA_PH_CTL = "Apartamento -- Propiedad Horizontal (inferido del CTL)"
 TIPOLOGIA_PH_DEMO = "Apartamento -- Propiedad Horizontal (NO VIS)"
-
-_USOS_NO_RESIDENCIALES = ("COMERCIAL", "OFICINA", "LOTE", "GARAJE")
 
 
 def tipologia_de_predio(*, destino_economico: Optional[str],
@@ -37,24 +33,29 @@ def tipologia_de_predio(*, destino_economico: Optional[str],
                         fuentes_tematicas=(),
                         predio_resuelto: bool = False,
                         es_caso_demo: bool = False,
-                        tiene_ctl: bool = True) -> str:
-    """Devuelve la tipología del inmueble (texto único del dictamen)."""
-    _desc = str(descripcion_ctl or "").upper()
-    _dest = str(destino_economico or "").upper()
-
-    if "INDUSTRIAL" in _dest or "BODEGA" in _desc:
-        return TIPOLOGIA_BODEGA
-    if predio_resuelto and _dest and ("COMERCIAL" in _dest or "OFICINA" in _dest
-                                      or "LOTE" in _dest or "GARAJE" in _dest):
-        return f"Uso {destino_economico} (Según catastro)"
-
-    if "Propiedad Horizontal" in str(condicion_juridica or ""):
-        if condicion_source and condicion_source in tuple(fuentes_tematicas):
-            return TIPOLOGIA_PH_CATASTRAL
-        return TIPOLOGIA_PH_CTL
-    if es_caso_demo and not tiene_ctl:
+                        tiene_ctl: bool = True,
+                        descripcion_catastral: Optional[str] = None,
+                        tipologia_fisica_fuente: Optional[str] = None,
+                        tipologia_source: Optional[str] = None) -> str:
+    """Devuelve el TEXTO de tipología del dictamen (adapter de compatibilidad)."""
+    clas = clasificar_inmueble(
+        condicion_juridica=condicion_juridica,
+        condicion_source=condicion_source,
+        destino_economico=destino_economico,
+        descripcion_registral=descripcion_ctl,
+        descripcion_catastral=descripcion_catastral,
+        tipologia_fisica_fuente=tipologia_fisica_fuente,
+        tipologia_source=tipologia_source,
+    )
+    texto = texto_tipologia(clas)
+    # Caso de demostración explícito (sin CTL): no se confunde con una resolución real.
+    if (es_caso_demo and not tiene_ctl
+            and clas["physical_typology"].get("value") is None
+            and clas["juridical_regime"].get("value") is None):
         return TIPOLOGIA_PH_DEMO
-    if predio_resuelto and destino_economico:
-        # Sin evidencia de PH: el uso es lo único disponible y se declara COMO USO.
-        return f"Uso {destino_economico} (Según catastro)"
-    return TIPOLOGIA_SIN_CONSULTA
+    return texto
+
+
+def clasificacion_de_predio(**kwargs) -> Dict[str, Any]:
+    """Acceso directo a la clasificación completa (tres dimensiones + conflictos)."""
+    return clasificar_inmueble(**kwargs)

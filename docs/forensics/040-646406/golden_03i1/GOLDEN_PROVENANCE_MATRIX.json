@@ -1,14 +1,14 @@
 {
- "commit_sha": "3ac0c3a6172264a4d3d13e0f5352a3729ae6b252",
- "pdf_sha256": "6fda6f8126a23e1fdd22522d32461bf4e8328ceade0f6bd1c414e0f8c1d0bffa",
+ "commit_sha": "a9e55719540f49764ca1ace16fcd9ac6e7a60f52",
+ "pdf_sha256": "a3084393af69e010767e50554e83168093d74bd6ca4ad66198bcb3181f7534fa",
  "facts": [
   {
    "fact": "version_plataforma",
-   "value": "ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
+   "value": "ARHIAX RE v1.4.0 · commit a9e55719 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
    "source": "versioning.VERSION_MATRIX + git rev-parse HEAD",
    "status": "VERIFIED_CODE",
    "method": "resolución de versión en runtime",
-   "version": "3ac0c3a6",
+   "version": "a9e55719",
    "chapters": [
     "pie de página",
     "16.b"
@@ -17,7 +17,7 @@
   },
   {
    "fact": "commit_sha",
-   "value": "3ac0c3a6172264a4d3d13e0f5352a3729ae6b252",
+   "value": "a9e55719540f49764ca1ace16fcd9ac6e7a60f52",
    "source": "git rev-parse HEAD",
    "status": "VERIFIED_CODE",
    "method": "versioning.git_commit_sha()",
@@ -85,9 +85,9 @@
   {
    "fact": "identidad_confianza",
    "value": "VERIFIED_UNIT_IDENTITY",
-   "source": "OFFICIAL_ADOPTION_REGISTRY",
+   "source": "modelo canónico",
    "status": "MATCH_EXACT",
-   "method": "official_adoption_registry",
+   "method": "nupre",
    "version": "03G.1",
    "chapters": [
     "01",
@@ -99,9 +99,9 @@
   },
   {
    "fact": "direccion_canonica",
-   "value": "Transversal 43 100 50 TO 8 AP 430",
-   "source": "OFFICIAL_ADOPTION_REGISTRY",
-   "status": "VERIFIED_OFFICIAL",
+   "value": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3",
+   "source": "modelo canónico",
+   "status": "NO_VERIFICADA",
    "method": "promoción de la dirección oficial al modelo canónico (unidad_inmobiliaria)",
    "version": "03I.1 F5",
    "chapters": [
@@ -113,7 +113,7 @@
   },
   {
    "fact": "unidad_canonica",
-   "value": "torre=8 ap=430 unidad=TO 8 AP 430",
+   "value": "torre=8 ap=430 unidad=APARTAMENTO 430 TORRE 8",
    "source": "modelo canónico (complemento declarado)",
    "status": "VERIFIED_OFFICIAL",
    "method": "extracción de complemento (TO n AP n)",
@@ -141,9 +141,9 @@
   },
   {
    "fact": "barrio",
-   "value": "Miramar",
-   "source": "official_urban_layer",
-   "status": "VERIFIED_OFFICIAL",
+   "value": null,
+   "source": null,
+   "status": "UNRESOLVED",
    "method": "capa oficial de unidades administrativas",
    "version": "03H.1A",
    "chapters": [
@@ -158,9 +158,9 @@
   },
   {
    "fact": "estrato",
-   "value": "4",
-   "source": "MANZANA_OFICIAL_DEL_NUMERO_PREDIAL",
-   "status": "VERIFIED_OFFICIAL",
+   "value": null,
+   "source": null,
+   "status": "UNRESOLVED",
    "method": "capa de estratificación (punto) o manzana oficial del número predial",
    "version": "03I.1 F4",
    "chapters": [
@@ -171,9 +171,9 @@
   },
   {
    "fact": "tratamiento_urbanistico",
-   "value": "Desarrollo",
-   "source": "official_urban_layer",
-   "status": "VERIFIED_OFFICIAL",
+   "value": null,
+   "source": null,
+   "status": "UNRESOLVED",
    "method": "capa oficial de planeación (point-in-polygon)",
    "version": "03H.1A",
    "chapters": [
@@ -185,9 +185,9 @@
   },
   {
    "fact": "altura_normativa",
-   "value": "8",
-   "source": "official_urban_layer",
-   "status": "VERIFIED_OFFICIAL",
+   "value": null,
+   "source": null,
+   "status": "UNRESOLVED",
    "method": "capa oficial de planeación",
    "version": "03H.1A",
    "chapters": [
@@ -198,10 +198,10 @@
   },
   {
    "fact": "urban_source_mode",
-   "value": "MIXED",
+   "value": "PACKAGED_REFERENCE",
    "source": "UrbanSourceSummary",
    "status": "OBSERVED",
-   "method": "Procedencia MIXTA: EN VIVO (barrio, localidad, pieza_urbana, estrato, tratamiento, tipo_tratamiento) · EMPAQUETADO (altura_maxima, amenaza_remocion_masa, areas_en_riesgo, inundacion, riesgo_no_mitigable, arroyos)",
+   "method": "Los valores urbanos mostrados provienen de geometrias empaquetadas en la aplicacion (sin consulta en vivo).",
    "version": "03I.1 F2",
    "chapters": [
     "06.2",
@@ -211,7 +211,7 @@
   },
   {
    "fact": "destino_economico_render",
-   "value": null,
+   "value": "Habitacional",
    "source": "servicio catastral (capa 500 / destinos económicos)",
    "status": "UNRESOLVED",
    "method": "identificador exacto",
@@ -237,7 +237,7 @@
   },
   {
    "fact": "estrato_render_6_1",
-   "value": "4",
+   "value": "Medio_4",
    "source": "mismo `estrato` que consume el render de 6.1",
    "status": "OBSERVED",
    "method": "observador de dictamen_data.get_catastral_dt",
@@ -249,9 +249,9 @@
   },
   {
    "fact": "sector_metodologico",
-   "value": "Miramar",
-   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
-   "status": "EXACT",
+   "value": null,
+   "source": null,
+   "status": "NO_MATCH",
    "method": "resolución de sector por barrio oficial",
    "version": "03H",
    "chapters": [
@@ -262,9 +262,9 @@
   },
   {
    "fact": "value_m2",
-   "value": 6800000,
-   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
-   "status": "EXACT",
+   "value": null,
+   "source": null,
+   "status": "NO_MATCH",
    "method": "MarketContext (autoridad ÚNICA de la tasa)",
    "version": "03H.1A",
    "chapters": [
@@ -287,10 +287,10 @@
   },
   {
    "fact": "market_ready",
-   "value": true,
+   "value": false,
    "source": "market_context_authorized + market_methodology_id/version",
    "status": "OBSERVED",
-   "method": "sin bloqueantes",
+   "method": "barrio no verificado (requiere VERIFIED_OFFICIAL/GEOGRAPHIC); estrato no verificado (requiere VERIFIED_OFFICIAL); sector metodológico no resuelto (match_type=NO_MATCH); market_rate_source ausente (sin tasa de mercado autorizada); market rate value missing/invalid",
    "version": "03H/03I.1 F",
    "chapters": [
     "07",
@@ -300,7 +300,7 @@
   },
   {
    "fact": "valuation_authorized",
-   "value": true,
+   "value": false,
    "source": "identity_authorized AND market_context_authorized",
    "status": "VERIFIED_UNIT_IDENTITY",
    "method": "doble gate (fail-closed)",
@@ -313,10 +313,10 @@
   },
   {
    "fact": "valor_consolidado",
-   "value": 399500000,
+   "value": 0,
    "source": "método principal PH (m1 comparación de mercado)",
-   "status": "EMITIDO",
-   "method": "gate abierto",
+   "status": "NO EMITIDO",
+   "method": "valoración no autorizada (identidad o contexto de mercado insuficiente)",
    "version": "03H.1",
    "chapters": [
     "07"
@@ -404,7 +404,7 @@
     "09.3",
     "16.b"
    ],
-   "evidence_id": "df9118fbd1b11ea0f7bf7225"
+   "evidence_id": "16786f4014070fb3ee12d880"
   }
  ],
  "hardcoded_facts": []

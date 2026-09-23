@@ -157,8 +157,27 @@ def _screening_receipt(titulux: Optional[Dict[str, Any]]) -> Dict[str, Any]:
             "fuentes": [], "reason": "", "ejecutado": False,
         }
     _snaps = {s.get("source_id"): s for s in (_sum.get("snapshots") or [])}
+    # 03I.2A §13: el recibo lleva la MISMA fila de sujeto que los capítulos 05 y 09
+    # (nombre, tipo, etiqueta, documento y subject_id idénticos en los tres).
+    _sujetos_detalle = []
+    try:
+        from sanctions.subjects import fila_sujeto_dictamen
+        for _s in (_sum.get("subjects") or []):
+            if isinstance(_s, dict):
+                _sujetos_detalle.append({
+                    "subject_id": _s.get("subject_id"),
+                    "canonical_name": _s.get("canonical_name"),
+                    "person_type": _s.get("person_type"),
+                    "person_type_label": _s.get("person_type_label"),
+                    "document": _s.get("document") or _s.get("documento"),
+                })
+            else:
+                _sujetos_detalle.append(fila_sujeto_dictamen(_s))
+    except Exception:  # noqa: BLE001 — el recibo nunca debe tumbar el dictamen
+        _sujetos_detalle = []
     return {
         "status": _sum.get("status"),
+        "sujetos_detalle": _sujetos_detalle,
         "etiqueta": {
             "SCREENING_COMPLETE": "COMPLETO",
             "SCREENING_PARTIAL": "PARCIAL",
@@ -278,6 +297,15 @@ def receipt_rows(receipts: Optional[Dict[str, Any]]) -> List[Tuple[str, str]]:
         filas.append(("Screening de contrapartes",
                       "{} · {}".format(sag.get("etiqueta") or "—",
                                        " · ".join(x for x in _detalle_sag if x))))
+        # 03I.2A §13: misma fila de sujeto que 05 y 09 (nombre | tipo | documento |
+        # subject_id). Es el valor que el dictamen afirma sobre cada contraparte.
+        for _s in (sag.get("sujetos_detalle") or []):
+            filas.append((f"  · Contraparte {_s.get('subject_id') or '—'}",
+                          "{} | {} | {} | {}".format(
+                              _s.get("canonical_name") or "—",
+                              _s.get("person_type_label") or "No determinado",
+                              _s.get("document") or "—",
+                              _s.get("subject_id") or "—")))
     else:
         filas.append(("Screening de contrapartes",
                       "NO EJECUTADO · " + (sag.get("reason") or "sin fuentes disponibles")))

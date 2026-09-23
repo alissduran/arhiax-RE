@@ -1,32 +1,39 @@
 {
- "generated_at": "2026-09-23T14:57:02.991645+00:00",
+ "generated_at": "2026-09-23T17:14:00.104408+00:00",
  "prompt": "03I.1 — DICTUS PRODUCT COHERENCE CLOSURE",
- "commit_sha": "3ac0c3a6172264a4d3d13e0f5352a3729ae6b252",
+ "commit_sha": "a9e55719540f49764ca1ace16fcd9ac6e7a60f52",
  "versions": {
-  "GIT_COMMIT_SHA": "3ac0c3a6172264a4d3d13e0f5352a3729ae6b252",
+  "GIT_COMMIT_SHA": "a9e55719540f49764ca1ace16fcd9ac6e7a60f52",
   "ARHIAX_RE_VERSION": "1.4.0",
   "DICTUS_ENGINE_VERSION": "1.4.0",
   "GIS_ADAPTER_VERSION": "1.2.0",
   "TITULUX_VERSION": "1.1.0",
   "RULESET_VERSION": "1.3.0"
  },
- "version_line": "ARHIAX RE v1.4.0 · commit 3ac0c3a6 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
+ "version_line": "ARHIAX RE v1.4.0 · commit a9e55719 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
  "arbol_de_trabajo": {
   "dirty": true,
   "files": [
-   "M api/canonical.py",
+   "M api/ortografia.py",
    "M api/pdf_compiler.py",
+   "M api/receipts.py",
+   "M api/sanctions/release_gate.py",
    "M api/sanctions/subjects.py",
+   "M api/sarlaft_engine.py",
+   "M api/tipologia.py",
    "M api/titulux_bridge.py",
-   "M api/unidad_inmobiliaria.py",
    "M docs/forensics/040-646406/golden_03i1/GOLDEN_CROSS_CHAPTER_MATRIX.md",
    "M docs/forensics/040-646406/golden_03i1/GOLDEN_EXECUTION_MANIFEST.json",
    "M docs/forensics/040-646406/golden_03i1/GOLDEN_INTERNAL_STATE.json",
    "M docs/forensics/040-646406/golden_03i1/GOLDEN_PDF_TEXT.txt",
    "M docs/forensics/040-646406/golden_03i1/GOLDEN_PROVENANCE_MATRIX.json",
    "M docs/forensics/040-646406/golden_03i1/GOLDEN_PROVENANCE_MATRIX.md",
-   "?? api/sanctions/release_gate.py",
-   "?? api/tipologia.py",
+   "M scripts/golden_coherence_03i1.py",
+   "M scripts/sagrilaft_release_gate.py",
+   "M tests/test_03i2_coherencia_dictamen.py",
+   "M tests/test_release_gate_sagrilaft.py",
+   "?? api/clasificacion.py",
+   "?? api/release_env.py",
    "?? debug_pasto_240_211101_out.txt",
    "?? debug_poi_ab_out.txt",
    "?? debug_poi_photon_out.txt",
@@ -40,14 +47,12 @@
    "?? scripts/debug_pasto_240_211101.py",
    "?? scripts/debug_poi_ab.py",
    "?? scripts/debug_poi_photon.py",
-   "?? scripts/sagrilaft_release_gate.py",
-   "?? tests/test_03i2_coherencia_dictamen.py",
-   "?? tests/test_release_gate_sagrilaft.py",
+   "?? tests/test_03i2a_release_fail_closed.py",
    "?? tmp_audit_gate.py",
    "?? tmp_entrega_pdf.py"
   ],
-  "diff_sha256": "437092e8800aa74cefb82df898819f1a1c072ec4e63d723e15f645ae015858ae",
-  "n_files": 31
+  "diff_sha256": "bbf1e9067dc556b5394157d30639715ef2927073df0091a7cdbce918f717d5af",
+  "n_files": 36
  },
  "environment": {
   "python": "3.14.4",
@@ -59,8 +64,8 @@
   "folio": "040-646406",
   "codigo_catastral": "080010103000010040001908040002",
   "nupre": "AFT0005BOHA",
-  "direccion_canonica": "Transversal 43 100 50 TO 8 AP 430",
-  "unidad_canonica": "TO 8 AP 430"
+  "direccion_canonica": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3",
+  "unidad_canonica": "APARTAMENTO 430 TORRE 8"
  },
  "inputs": {
   "ctl": {
@@ -78,138 +83,69 @@
   "folio": "040-646406",
   "nupre": "AFT0005BOHA",
   "codigo_catastral": "080010103000010040001908040002",
-  "direccion_raw": "Transversal 43 100 50 TO 8 AP 430",
-  "direccion_base": "Transversal 43 100 50",
-  "direccion_normalizada": "TRANSVERSAL 43 100 50",
-  "direccion_source": "OFFICIAL_ADOPTION_REGISTRY",
-  "direccion_previa": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3",
+  "direccion_raw": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3",
+  "direccion_base": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 ETAPA 3",
+  "direccion_normalizada": null,
+  "direccion_source": null,
+  "direccion_previa": null,
   "torre": "8",
   "apartamento": "430",
-  "unidad": "TO 8 AP 430",
-  "estado": "MATCH_EXACT",
-  "resolution_status": null,
-  "resolution_method": "official_adoption_registry",
+  "unidad": "APARTAMENTO 430 TORRE 8",
+  "estado": "MATCH_BY_NUPRE",
+  "resolution_status": "EXACT",
+  "resolution_method": "nupre",
   "resolution_confidence": "VERIFIED_UNIT_IDENTITY",
   "identity_verified": true,
-  "identity_source": "OFFICIAL_ADOPTION_REGISTRY",
-  "market_context_ready": true,
-  "adopcion_registro": {
-   "numero_predial": "080010103000010040001908040002",
-   "codigo_homologado": "AFT0005BOHA",
-   "fmi": "646406",
-   "codigo_registral": "040",
-   "direccion": "Transversal 43 100 50 TO 8 AP 430",
-   "area_terreno": null
-  },
+  "identity_source": null,
+  "market_context_ready": false,
+  "adopcion_registro": null,
   "identificadores": {
    "nupre": {
     "value": "AFT0005BOHA",
-    "source": "CTL (NUPRE)",
-    "match_status": "RESUELTO"
+    "source": "geoportal municipal (codigo_homologado)",
+    "match_status": "EXACT"
    },
    "codigo_catastral": {
     "value": "080010103000010040001908040002",
-    "source": "CTL (CODIGO CATASTRAL)",
-    "match_status": "RESUELTO"
+    "source": "geoportal municipal (numero_predial_nacional)",
+    "match_status": "EXACT"
    }
   }
  },
  "coordinates": {
   "lat": 11.005378,
   "lon": -74.8386199,
-  "source": "OFFICIAL_ADOPTION_ADDRESS_GEOCODE",
-  "verified": true,
-  "authoritative_address": "Transversal 43 100 50 TO 8 AP 430",
-  "address_source": "OFFICIAL_ADOPTION_REGISTRY"
+  "source": "FORM_ADDRESS_GEOCODE",
+  "verified": false,
+  "authoritative_address": null,
+  "address_source": null
  },
  "urban_sources": {
-  "barrio": "Miramar",
-  "barrio_status": "VERIFIED_OFFICIAL",
-  "localidad": "02",
-  "estrato": "4",
-  "estrato_status": "VERIFIED_OFFICIAL",
-  "estrato_origen": "MANZANA_OFICIAL_DEL_NUMERO_PREDIAL",
-  "estrato_trace": {
-   "manzana": {
-    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1/query",
-    "consultas": [
-     {
-      "via": "estratificacion por prefijo del numero predial",
-      "where": "codigo_manzana IN ('08001010300001','080010103000010','0800101030000100','08001010300001004','080010103000010040','0800101030000100400','08001010300001004000','080010103000010040001','0800101030000100400019')",
-      "n_features": 1,
-      "disponible": true,
-      "error": null
-     }
-    ],
-    "corroboracion_manzana_catastral": {
-     "where": "codigo='08001010300001004'",
-     "n_features": 0,
-     "disponible": false
-    }
-   },
-   "estado": "VERIFIED_OFFICIAL",
-   "motivo": null
-  },
-  "tratamiento": "Desarrollo",
-  "tratamiento_status": "VERIFIED_OFFICIAL",
-  "tipo_tratamiento": "Bajo",
-  "altura_maxima": "8",
-  "altura_status": "VERIFIED_OFFICIAL",
-  "pieza_urbana": 6,
-  "codigo_manzana": "08001010300001004",
-  "source": "official_urban_layer",
-  "context_status": "OK",
+  "barrio": null,
+  "barrio_status": "UNRESOLVED",
+  "localidad": null,
+  "estrato": null,
+  "estrato_status": "UNRESOLVED",
+  "estrato_origen": null,
+  "estrato_trace": null,
+  "tratamiento": null,
+  "tratamiento_status": "UNRESOLVED",
+  "tipo_tratamiento": null,
+  "altura_maxima": null,
+  "altura_status": "UNRESOLVED",
+  "pieza_urbana": null,
+  "codigo_manzana": null,
+  "source": null,
+  "context_status": "COORDINATE_SOURCE_NOT_AUTHORIZED",
   "campos_ambiguos": [],
   "predio_entorno": {},
-  "predio_destino_catastral": null,
+  "predio_destino_catastral": "Habitacional",
   "predio_condicion": null,
   "predio_construccion": {}
  },
  "urban_source_summary": {
-  "source_mode": "MIXED",
+  "source_mode": "PACKAGED_REFERENCE",
   "campos": {
-   "barrio": {
-    "value": "Miramar",
-    "status": "VERIFIED_OFFICIAL",
-    "fuente": "official_urban_layer",
-    "modo": "LIVE_OFFICIAL"
-   },
-   "localidad": {
-    "value": "02",
-    "status": "OK",
-    "fuente": "official_urban_layer",
-    "modo": "LIVE_OFFICIAL"
-   },
-   "pieza_urbana": {
-    "value": 6,
-    "status": "OK",
-    "fuente": "official_urban_layer",
-    "modo": "LIVE_OFFICIAL"
-   },
-   "estrato": {
-    "value": "4",
-    "status": "VERIFIED_OFFICIAL",
-    "fuente": "official_urban_layer",
-    "modo": "LIVE_OFFICIAL"
-   },
-   "tratamiento": {
-    "value": "Desarrollo",
-    "status": "VERIFIED_OFFICIAL",
-    "fuente": "official_urban_layer",
-    "modo": "LIVE_OFFICIAL"
-   },
-   "tipo_tratamiento": {
-    "value": "Bajo",
-    "status": "VERIFIED_OFFICIAL",
-    "fuente": "official_urban_layer",
-    "modo": "LIVE_OFFICIAL"
-   },
-   "altura_maxima": {
-    "value": "8",
-    "status": null,
-    "fuente": null,
-    "modo": "PACKAGED_REFERENCE"
-   },
    "amenaza_remocion_masa": {
     "value": null,
     "status": null,
@@ -241,58 +177,55 @@
     "modo": "PACKAGED_REFERENCE"
    }
   },
-  "fuente_oficial": "official_urban_layer",
-  "context_status": "OK",
-  "declaracion": "Procedencia MIXTA: EN VIVO (barrio, localidad, pieza_urbana, estrato, tratamiento, tipo_tratamiento) · EMPAQUETADO (altura_maxima, amenaza_remocion_masa, areas_en_riesgo, inundacion, riesgo_no_mitigable, arroyos)"
+  "fuente_oficial": null,
+  "context_status": "COORDINATE_SOURCE_NOT_AUTHORIZED",
+  "declaracion": "Los valores urbanos mostrados provienen de geometrias empaquetadas en la aplicacion (sin consulta en vivo)."
  },
  "market": {
-  "ready": true,
-  "blockers": [],
-  "sector": "Miramar",
-  "match_type": "EXACT",
-  "value_m2": 6800000,
-  "rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
-  "rate_date": "Q3-2026",
+  "ready": false,
+  "blockers": [
+   "barrio no verificado (requiere VERIFIED_OFFICIAL/GEOGRAPHIC)",
+   "estrato no verificado (requiere VERIFIED_OFFICIAL)",
+   "sector metodológico no resuelto (match_type=NO_MATCH)",
+   "market_rate_source ausente (sin tasa de mercado autorizada)",
+   "market rate value missing/invalid"
+  ],
+  "sector": null,
+  "match_type": "NO_MATCH",
+  "value_m2": null,
+  "rate_source": null,
+  "rate_date": null,
   "methodology_version": "0.1-codiseno",
   "market_methodology_id": "lonja_baq_metodologia",
   "market_methodology_version": "0.1-codiseno",
   "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
   "market_methodology_file": "lonja_baq_metodologia.yaml",
   "estrato": {
-   "value": "4",
-   "status": "VERIFIED_OFFICIAL",
-   "source": "estratificación oficial"
-  },
-  "barrio": {
-   "value": "Miramar",
-   "status": "VERIFIED_OFFICIAL",
-   "source": "official POT / Alcaldía"
-  },
-  "tipologia": {
-   "value": "Apartamento -- Propiedad Horizontal (inferido del CTL)",
-   "status": "VERIFIED_REGISTRAL",
-   "source": "CTL + registro oficial"
-  },
-  "uso": {
    "value": null,
    "status": "UNRESOLVED",
    "source": null
   },
+  "barrio": {
+   "value": null,
+   "status": "UNRESOLVED",
+   "source": null
+  },
+  "tipologia": {
+   "value": "Unidad -- Propiedad Horizontal (inferido del CTL)",
+   "status": "VERIFIED_REGISTRAL",
+   "source": "CTL + registro oficial"
+  },
+  "uso": {
+   "value": "Habitacional",
+   "status": "VERIFIED_OFFICIAL",
+   "source": null
+  },
   "urban_render_provenance": {
    "authority": "OfficialUrbanContext",
-   "aplicados": {
-    "barrio": "official_urban_context",
-    "estrato": "official_urban_context",
-    "tratamiento": "official_urban_context",
-    "tipo_tratamiento": "official_urban_context",
-    "altura_maxima": "official_urban_context",
-    "localidad": "official_urban_context",
-    "pieza_urbana": "official_urban_context",
-    "codigo_manzana": "official_urban_context"
-   },
+   "aplicados": {},
    "conflictos": [],
    "no_aplicados": [],
-   "context_status": "OK"
+   "context_status": "COORDINATE_SOURCE_NOT_AUTHORIZED"
   }
  },
  "poi": {
@@ -717,7 +650,7 @@
   "matched": [],
   "evidence_records": [
    {
-    "evidence_id": "df9118fbd1b11ea0f7bf7225",
+    "evidence_id": "16786f4014070fb3ee12d880",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
@@ -726,7 +659,7 @@
     "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
     "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
     "query_hash": "18e03c695f7b30d5823506e75b984674c5d2c7ecce0c97d82a546dc24c3ed6fe",
-    "screened_at": "2026-09-23T14:56:36.653864Z",
+    "screened_at": "2026-09-23T17:13:55.425098Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5641,
@@ -736,14 +669,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "df9118fbd1b11ea0f7bf7225409b583e595d81e15e831111147068da3fe5f6da",
+    "evidence_hash": "16786f4014070fb3ee12d880e3adce7be5fc0690a69bc823d9e31abd463c42f2",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
     "evidence_content_hash": "98e36bdf0036f93ad21de08c90de782d490f04269b52bb0fa3deadaf4eeb9151"
    },
    {
-    "evidence_id": "85e5ef9efcb2c0d2b8596eb9",
+    "evidence_id": "c5949d5e31d060f7d743458f",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
@@ -752,7 +685,7 @@
     "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
     "snapshot_effective_date": "09/23/2026",
     "query_hash": "a47883a6b4ccc730fb6121766a89efe0a5bfc10b170dbbe5f83a0004ac276d9f",
-    "screened_at": "2026-09-23T14:56:36.655971Z",
+    "screened_at": "2026-09-23T17:13:55.425826Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5806,
@@ -762,14 +695,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "85e5ef9efcb2c0d2b8596eb9ee8be0d4279664491d983cb13e39afc21c932fef",
+    "evidence_hash": "c5949d5e31d060f7d743458f1b5811aec1319305fab0ebd1e9aa7a4cc3ae7841",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
     "evidence_content_hash": "89a218c902974de5573737089b6a4244f4706f67a4362957099f3936d23972e7"
    },
    {
-    "evidence_id": "def63389ed0a58c5a58b2608",
+    "evidence_id": "937887f0a6e74fbab79cf434",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
@@ -778,7 +711,7 @@
     "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
     "snapshot_effective_date": "21/09/2026",
     "query_hash": "87ff6c8f353af3b24752160f12c611285117272ae8776e64aec95673fbf4be39",
-    "screened_at": "2026-09-23T14:56:36.657517Z",
+    "screened_at": "2026-09-23T17:13:55.426344Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5882,
@@ -788,14 +721,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "def63389ed0a58c5a58b260840c4a86a0d7e848cdc51fbc1fbd92168bd72289e",
+    "evidence_hash": "937887f0a6e74fbab79cf434d082029cb944b263767f1f69d3ab4c54d10e8d69",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
     "evidence_content_hash": "2bfcf126ead8b0d88239f769a5d6e65490061cd8a4605331fb704a71e867dd45"
    },
    {
-    "evidence_id": "83119a1435d6362264f9148b",
+    "evidence_id": "5cb555085da46ab9216f83e7",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
@@ -804,7 +737,7 @@
     "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
     "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
     "query_hash": "3ce497ebcfa47bc41cd17c463d2c71d1ff09064e8e906bba8831651db48ca475",
-    "screened_at": "2026-09-23T14:56:36.658665Z",
+    "screened_at": "2026-09-23T17:13:55.426773Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5,
@@ -814,14 +747,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "83119a1435d6362264f9148b6f29f5650546ddf5c11d94d1a42cd108e57a5e1c",
+    "evidence_hash": "5cb555085da46ab9216f83e70ad9b3a3debadf9ee5f1ea05ebdede77caf03c57",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
     "evidence_content_hash": "e860a0850df22c999d8e68803c6034a339a353743b93ca7a734edf1b6f553750"
    },
    {
-    "evidence_id": "9af00709617ea62ebaec8069",
+    "evidence_id": "20c3829ea095e55f27b98942",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
@@ -830,7 +763,7 @@
     "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
     "snapshot_effective_date": "09/23/2026",
     "query_hash": "8ab4110c5989ab290accac739a3ffe77b9e8ff279819ab586307a629a89654c9",
-    "screened_at": "2026-09-23T14:56:36.660428Z",
+    "screened_at": "2026-09-23T17:13:55.427233Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6829,
@@ -840,14 +773,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "9af00709617ea62ebaec8069623db1c3c2a741c382d62ae18ab3e747ff3beac3",
+    "evidence_hash": "20c3829ea095e55f27b98942091019971402d87205950cc2c7da143fd102c8c7",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
     "evidence_content_hash": "1f3b2cb3b6ee3cece8f53f6bb7c9cb42fd2405abcb7e5dc859e13ae8c8cc171a"
    },
    {
-    "evidence_id": "3381a2fc50c870907df61013",
+    "evidence_id": "52d1785e139203795d315cf9",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
@@ -856,7 +789,7 @@
     "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
     "snapshot_effective_date": "21/09/2026",
     "query_hash": "7a092e6b93ec384851dad82c123c0e9ac79573c1acc3bce396025b57366da817",
-    "screened_at": "2026-09-23T14:56:36.661604Z",
+    "screened_at": "2026-09-23T17:13:55.427625Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5641,
@@ -866,14 +799,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "3381a2fc50c870907df610138b57f69b81e8d2f14c928f46f8c4c4108268d834",
+    "evidence_hash": "52d1785e139203795d315cf9c76d276270a93434565c8420f0567d6b470a7789",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
     "evidence_content_hash": "31be91334a6cf8eaa7338dccb2332989bb3748088bd671cdc31465d0b3a642b1"
    },
    {
-    "evidence_id": "8221295f085b88e5c1662839",
+    "evidence_id": "305e0b5da275bd918ada15c3",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
@@ -882,7 +815,7 @@
     "snapshot_sha256": "c9eb18eb830bdd9e9a187e30409d37f7c6f319e635501ca0329778a098499a76",
     "snapshot_effective_date": "2026-09-22T23:00:06.060Z",
     "query_hash": "a5a88f899bff77de6bb7452d83dea1596b2927f279142e5b665d3211b76453a7",
-    "screened_at": "2026-09-23T14:56:36.664960Z",
+    "screened_at": "2026-09-23T17:13:55.428011Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5263,
@@ -892,14 +825,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "8221295f085b88e5c16628397b8e0024eb8f0df095cae4b2f1b430042981c988",
+    "evidence_hash": "305e0b5da275bd918ada15c33368088c3616dd1d65b868d35169511d2ca6a282",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
     "evidence_content_hash": "fff2a1a7bb959b05f424524ca3725d2910deb0ddf7efb5dc98d25c9ecccf7532"
    },
    {
-    "evidence_id": "94ee1c14e3b3bc9ec61401f7",
+    "evidence_id": "34b48aa2b8caf690a4cc8039",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
@@ -908,7 +841,7 @@
     "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
     "snapshot_effective_date": "09/23/2026",
     "query_hash": "80050a97643f4a6700e0393be601746a3416d98406f76374e56a8bccf5927bc9",
-    "screened_at": "2026-09-23T14:56:36.666085Z",
+    "screened_at": "2026-09-23T17:13:55.428397Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6667,
@@ -918,14 +851,14 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "94ee1c14e3b3bc9ec61401f7b168d017996ee731fa033b483e03a7bf7ee38186",
+    "evidence_hash": "34b48aa2b8caf690a4cc8039be3dc3b90bc041d3aba3962491908a5f7806b275",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
     "evidence_content_hash": "0c75cda26b8d63215844622a7d03ef7e33ee1b458cdd3fc303b48d822cb81bc4"
    },
    {
-    "evidence_id": "28c69480d9e6aea23fa060b7",
+    "evidence_id": "d2e295c5b05b76ef723bcd0b",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
@@ -934,7 +867,7 @@
     "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
     "snapshot_effective_date": "21/09/2026",
     "query_hash": "18404c2adcf3685bb7f2ac7592009cb72864d451809fdd139b17890374a1e90f",
-    "screened_at": "2026-09-23T14:56:36.667192Z",
+    "screened_at": "2026-09-23T17:13:55.428772Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6047,
@@ -944,7 +877,7 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "28c69480d9e6aea23fa060b7bc3541482cefa84a051903093c936901a3a0b330",
+    "evidence_hash": "d2e295c5b05b76ef723bcd0b708126d2339bb44380854958c2a14a7f33b7eee7",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
@@ -954,29 +887,29 @@
  },
  "valuation": {
   "authorization": {
-   "allowed": true,
+   "allowed": false,
    "identity_authorized": true,
-   "market_context_authorized": true,
+   "market_context_authorized": false,
    "identity_level": "VERIFIED_UNIT_IDENTITY"
   },
-  "metodologia_aplica": true,
-  "motivo_no_aplica": null,
-  "value_m2": 6800000,
-  "source_m2": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
-  "sector": "Miramar",
-  "match_type": "EXACT",
-  "consolidado": 399500000,
-  "m1": 407490000,
-  "m2": 295690000,
-  "m3": 446700000,
-  "banda_baja": 373532500,
-  "banda_alta": 435455000,
-  "canon_mensual": 2149310,
+  "metodologia_aplica": false,
+  "motivo_no_aplica": "valoración no autorizada (identidad o contexto de mercado insuficiente)",
+  "value_m2": null,
+  "source_m2": null,
+  "sector": null,
+  "match_type": null,
+  "consolidado": 0,
+  "m1": 0,
+  "m2": 0,
+  "m3": 0,
+  "banda_baja": 0,
+  "banda_alta": 0,
+  "canon_mensual": 0,
   "cap_rate": 0.0485
  },
  "outputs": {
-  "pdf": "docs\\forensics\\040-646406\\golden_03i1\\ARHIAX_Dictamen_040-646406_03I2.pdf",
-  "pdf_sha256": "6fda6f8126a23e1fdd22522d32461bf4e8328ceade0f6bd1c414e0f8c1d0bffa"
+  "pdf": "docs\\forensics\\040-646406\\golden_03i1\\ARHIAX_Dictamen_040-646406_03I2A.pdf",
+  "pdf_sha256": "a3084393af69e010767e50554e83168093d74bd6ca4ad66198bcb3181f7534fa"
  },
  "qa_instrumentation": {
   "observadores": [

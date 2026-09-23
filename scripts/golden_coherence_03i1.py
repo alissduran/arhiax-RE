@@ -85,11 +85,21 @@ def main() -> int:
     _trat = _sin_acentos(str(urb.get("tratamiento") or "")).lower()
     _alt = str(urb.get("altura_maxima") or "")
     _resumen_ok = ("poligono pot consultado en vivo" in txt)
-    ck("6.2 == 6.3 (mismo objeto urbano)",
-       bool(_trat) and _trat in txt and _resumen_ok
-       and (f"hasta {_alt} pisos" in txt if _alt else True),
-       f"tratamiento={urb.get('tratamiento')!r} tipo={urb.get('tipo_tratamiento')!r} "
-       f"altura={_alt!r} · resumen desde el contexto oficial")
+    # 03I.2A: si la capa oficial NO resolvió el tratamiento (fuente no disponible), el
+    # criterio no puede exigir un texto que no existe: se exige COHERENCIA — que 6.2 y
+    # 6.3 declaren PENDIENTE y que no se invente ningún tratamiento.
+    if _trat:
+        ck("6.2 == 6.3 (mismo objeto urbano)",
+           _trat in txt and _resumen_ok and (f"hasta {_alt} pisos" in txt if _alt else True),
+           f"tratamiento={urb.get('tratamiento')!r} tipo={urb.get('tipo_tratamiento')!r} "
+           f"altura={_alt!r} · resumen desde el contexto oficial")
+    else:
+        _pend_62 = "pendiente" in txt
+        _inventado = any(t in txt for t in ("consolidacion (nivel", "nivel 2)", "hasta 11 pisos"))
+        ck("6.2 == 6.3 (mismo objeto urbano)",
+           _pend_62 and not _inventado,
+           "la capa oficial de planeación no resolvió el polígono: 6.2 y 6.3 declaran "
+           "PENDIENTE y no se inventa tratamiento ni altura")
 
     _modo = ((st.get("urban_source_summary") or {}).get("source_mode") or "").upper()
     ck("fuente urbana coherente (UrbanSourceSummary)",

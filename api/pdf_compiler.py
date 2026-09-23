@@ -424,7 +424,83 @@ def _building_context_por_coordenadas(*, lat, lon, coordinate_verified,
         return {}
 
 
+def _gate_liberacion_inicial():
+    """Evalúa el gate de liberación ANTES de construir el dictamen (03I.2A §3).
+
+    Devuelve siempre un dict (nunca None). Si el propio evaluador no se puede
+    importar, aplica la política del entorno con la última línea de defensa
+    (`release_env`, módulo sin dependencias) y, si ni eso estuviera disponible,
+    BLOQUEA: jamás se emite un PDF vigente sin haber podido comprobar el núcleo.
+    """
+    try:
+        from sanctions.release_gate import evaluar_release_seguro
+        return evaluar_release_seguro()
+    except Exception as _e_imp:  # noqa: BLE001 — defensa en profundidad
+        try:
+            from release_env import (normalizar_entorno, politica_para,
+                                     override_activo, POLICY_BLOCK)
+            env = normalizar_entorno()
+            _ov = override_activo()
+            policy = politica_para(env["environment"])
+            if policy == POLICY_BLOCK and _ov["activo"]:
+                policy = "MARK"
+            return {
+                "evaluation_status": "EVALUATION_FAILED",
+                "release_status": "GATE_EVALUATION_FAILED",
+                "policy": policy,
+                "environment": env["environment"],
+                "environment_declared": env["declared"],
+                "environment_raw": env["raw"],
+                "assumed_conservative": env["assumed_conservative"],
+                "blocking": policy == POLICY_BLOCK,
+                "mark": True,
+                "marca": "RELEASE GATE NOT EVALUABLE / INVALID_FOR_RELEASE",
+                "override_used": bool(_ov["activo"] and policy == "MARK"),
+                "override_variable": _ov["variable"] if _ov["activo"] else None,
+                "override_deprecated": bool(_ov.get("deprecada")),
+                "reasons": [f"no se pudo cargar el release gate: {type(_e_imp).__name__}"],
+                "core_versions": {}, "ancestry": {"estado": "UNKNOWN",
+                                                  "detalle": "gate no importable"},
+            }
+        except Exception as _e_env:  # noqa: BLE001 — sin política: fail-closed
+            return {
+                "evaluation_status": "EVALUATION_FAILED",
+                "release_status": "GATE_EVALUATION_FAILED",
+                "policy": "BLOCK", "environment": "unknown", "environment_declared": False,
+                "environment_raw": None, "assumed_conservative": True,
+                "blocking": True, "mark": True,
+                "marca": "RELEASE GATE NOT EVALUABLE / INVALID_FOR_RELEASE",
+                "override_used": False, "override_variable": None,
+                "override_deprecated": False,
+                "reasons": [f"política de entorno no disponible: {type(_e_env).__name__}"],
+                "core_versions": {}, "ancestry": {"estado": "UNKNOWN",
+                                                  "detalle": "entorno no evaluable"},
+            }
+
+
 def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
+    # ── 03I.2A §3/§4: el gate de liberación se evalúa ANTES de construir nada ────
+    # Si bloquea, se lanza la excepción bloqueante aquí: no se construye historia, no
+    # se abre archivo y NO queda PDF parcial. Si marca, el banderín se imprime en el
+    # capítulo 16 y el recibo de liberación en 16.B.
+    release_gate = _gate_liberacion_inicial()
+    if release_gate.get("blocking"):
+        from consistency import InconsistenciaBloqueante
+        raise InconsistenciaBloqueante(
+            "Dictamen NO liberable: el release gate bloquea en el entorno "
+            f"{release_gate.get('environment')!r} "
+            f"({release_gate.get('release_status')}): "
+            + "; ".join(release_gate.get("reasons") or ["sin motivo declarado"]))
+    if release_gate.get("mark"):
+        print(f"[PDF][RELEASE-GATE] {release_gate.get('marca')} · "
+              f"env={release_gate.get('environment')} "
+              f"policy={release_gate.get('policy')} "
+              f"eval={release_gate.get('evaluation_status')} · "
+              + "; ".join(release_gate.get("reasons") or []))
+    else:
+        print(f"[PDF][RELEASE-GATE] {release_gate.get('release_status')} · "
+              f"env={release_gate.get('environment')}")
+
     # Ciudad del predio (Sprint 3: barranquilla activa; medellin y bogota en
     # expansión). Controla qué catastro/POT se consulta y qué textos se imprimen.
     ciudad = (db_record.get('ciudad') or 'barranquilla').lower().strip()
@@ -895,14 +971,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         except Exception as _e_cond:
             print(f"[PDF][CONDICION] inferencia desde CTL no disponible: {_e_cond}")
 
-    # Tipología derivada del destino económico catastral + CTL (descripción).
-    #
-    # 03I.2 · D-2: USO ≠ TIPOLOGÍA. La decisión vive en `tipologia.tipologia_de_predio`
-    # (función pura y testeable): un uso catastral solo manda cuando CONTRADICE la PH
-    # (industrial/bodega/comercial/oficina/lote/garaje). Antes, con el catastro
-    # respondiendo, el destino «Habitacional» se escribía como tipología («Uso
-    # Habitacional (Según catastro)»), tapaba la evidencia registral de propiedad
-    # horizontal y el gate de mercado cerraba la valoración por tipología no verificada.
+    # Tipología: TRES dimensiones separadas (03I.2A §16-§21). El régimen jurídico, el
+    # uso económico y la tipología física se resuelven cada uno con SU evidencia; un
+    # uso (comercial/oficina/industrial/garaje) NUNCA decide el régimen. El texto del
+    # render se deriva de esa clasificación.
+    from clasificacion import clasificar_inmueble, estado_aceptable_para_mercado
+    _clasif = clasificar_inmueble(
+        condicion_juridica=_predio_condicion,
+        condicion_source=_condicion_source,
+        destino_economico=_predio_destino,
+        descripcion_registral=analysis.get("descripcion_ctl"),
+        tipologia_fisica_fuente=analysis.get("tipo_predio_snr"),
+        tipologia_source="registro/CTL (tipo de predio SNR)",
+    )
     from tipologia import tipologia_de_predio as _tipologia_de_predio
     _tipologia_texto = _tipologia_de_predio(
         destino_economico=_predio_destino,
@@ -913,7 +994,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         predio_resuelto=bool(predio_real),
         es_caso_demo=bool(is_miramar and not path_certificado),
         tiene_ctl=bool(path_certificado),
+        tipologia_fisica_fuente=analysis.get("tipo_predio_snr"),
+        tipologia_source="registro/CTL (tipo de predio SNR)",
     )
+    _mercado_clasif_ok, _mercado_clasif_detalle = estado_aceptable_para_mercado(_clasif)
+    print(f"[PDF][CLASIFICACION] regimen={_clasif['juridical_regime'].get('value')} "
+          f"({_clasif['juridical_regime'].get('status')}) · "
+          f"uso={_clasif['economic_use'].get('value')} · "
+          f"tipologia={_clasif['physical_typology'].get('value')} "
+          f"({_clasif['physical_typology'].get('status')}) · "
+          f"mercado={_mercado_clasif_ok} ({_mercado_clasif_detalle})")
 
     # Val data con metodologia Lonja BAQ (estrato e integracion YAML)
     # C-01: sin estrato verificado -> `None` (el render imprime PENDIENTE y el gate de
@@ -1157,13 +1247,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             _mc_estrato_status = (_oficial_urbano.get("estrato_status")
                                   or _STATUS_UNRESOLVED)
 
-        _tipologia_status = (
-            _STATUS_VERIFIED_CATASTRAL
-            if (_condicion_source in (_CD_SOURCE_THEM_EXACT, _CD_SOURCE_THEM_SPATIAL)
-                and "Propiedad Horizontal" in str(_tipologia_texto or ""))
-            else (_STATUS_VERIFIED_REGISTRAL
-                  if "Propiedad Horizontal" in str(_tipologia_texto or "")
-                  else _STATUS_UNRESOLVED))
+        # 03I.2A §20: el estado de tipología para el gate de mercado se deriva de la
+        # CLASIFICACIÓN (régimen jurídico / tipología física), no del texto ni del uso.
+        # Un «Uso Comercial» declarado por sí solo NO habilita la valoración.
+        if not _mercado_clasif_ok:
+            _tipologia_status = _STATUS_UNRESOLVED
+        elif _clasif["juridical_regime"].get("status") in ("VERIFIED_CATASTRAL",
+                                                           "VERIFIED_CATASTRAL_TEMATICO"):
+            _tipologia_status = _STATUS_VERIFIED_CATASTRAL
+        else:
+            _tipologia_status = _STATUS_VERIFIED_REGISTRAL
         _sector = resolve_market_sector(_mc_barrio)
         market_context = build_market_context(
             identity_verified=bool(canonical_identity.get("identity_verified")),
@@ -2244,6 +2337,17 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     story.append(Spacer(1, 8))
 
     # ── 05 PRE-DICTAMEN JURIDICO (TITULUX · CONFIANZA PREDIAL) ──
+    # 03I.2A §13: el resumen ÚNICO de screening se deriva aquí una vez y lo consumen
+    # los tres capítulos (05, 09 y 16.B). Antes el 09 lo derivaba por su cuenta y el
+    # 05 no imprimía las contrapartes, de modo que el invariante «05 = 09 = 16» solo
+    # se podía comprobar por presencia de código, no por valor renderizado.
+    try:
+        from sanctions.engine import summary_desde_dict as _resumen_desde_dict
+        _screening_summary = _resumen_desde_dict((_titulux or {}).get("screening_summary"))
+    except Exception as _e_sum05:  # noqa: BLE001
+        _screening_summary = None
+        print(f"[PDF][SCREENING] resumen único no derivable: {_e_sum05}")
+
     story.append(sec("05 - Pre-dictamen juridico (Titulux)"))
     story.append(hr())
     story.append(body(
@@ -2254,6 +2358,23 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         "siempre como insumo del profesional competente. El <b>screening de contrapartes</b> de los "
         "nombres del caso se reporta en la seccion 09."))
     story.append(Spacer(1, 6))
+
+    # Contrapartes del caso con el MISMO valor que imprimen 09 y 16.B.
+    try:
+        if _screening_summary is not None and tuple(_screening_summary.subjects):
+            from sanctions.subjects import fila_sujeto_dictamen as _fila_sujeto_05
+            _filas_cp = []
+            for _e_cp in _screening_summary.subjects:
+                _f_cp = _fila_sujeto_05(_e_cp)
+                _filas_cp.append((
+                    _f_cp["canonical_name"] or "—",
+                    f"{_f_cp['person_type_label']} · {_f_cp['document']} · "
+                    f"{' / '.join(_f_cp['roles']) or '—'}"))
+            story.append(sub("Contrapartes del caso (mismo detalle que 09 y 16.B)"))
+            story.append(dt(_filas_cp))
+            story.append(Spacer(1, 6))
+    except Exception as _e_cp:  # noqa: BLE001
+        print(f"[PDF][SCREENING] contrapartes de 05 no disponibles: {_e_cp}")
 
     _ESTADO_ES = {
         "OK": "Conforme", "OBSERVACION": "Observacion", "RIESGO": "Riesgo",
@@ -3049,15 +3170,16 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     from sanctions.engine import (
         summary_desde_dict, sigla, SCOPE_NOTE,
     )
-    # 03I.2 · gates 4/5/7: productor único de tipo y documento del sujeto (los mismos
-    # que usan 05 y 16) y fuentes activas SIN UIAF (no es lista de screening).
+    # 03I.2 · gates 4/5/7 + 03I.2A §13: productor único de la fila del sujeto (el mismo
+    # que consumen los capítulos 05 y 16) y fuentes activas SIN UIAF (no es lista).
     from sanctions.subjects import (
-        person_type_label as _person_type_label,
-        documento_para_dictamen as _documento_dictamen,
+        fila_sujeto_dictamen as _fila_sujeto_dictamen,
     )
     from sanctions import legal as _legal_sanciones
 
-    _summary = summary_desde_dict((_titulux or {}).get("screening_summary"))
+    # 03I.2A §13: el MISMO resumen derivado antes (capítulo 05) alimenta el 09 y el 16.
+    _summary = (_screening_summary if _screening_summary is not None
+                else summary_desde_dict((_titulux or {}).get("screening_summary")))
     story.append(sec("09 - Screening de Contrapartes y Debida Diligencia"))
     story.append(hr())
     story.append(sub("Apoyo automatizado al proceso LA/FT/SAGRILAFT"))
@@ -3133,14 +3255,14 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         _filas_scr = [_cab]
         for _env in _summary.subjects:
             _outs = {o.source_id: o for o in _summary.outcomes_de(_env.subject_id)}
+            # 03I.2A §13: la fila del sujeto sale del productor ÚNICO de la capa de
+            # sanciones — el mismo que usan el capítulo 05 y el recibo 16.B.
+            _fila_suj = _fila_sujeto_dictamen(_env)
             _celdas = [
-                Paragraph(_env.canonical_name or "—", s["body"]),
-                # 03I.2 · gates 4 y 5: el tipo y el documento salen del productor ÚNICO
-                # de la capa de sanciones (mismo texto que 05 y 16), y un documento que
-                # la fuente sí trae nunca se imprime como «N/D» mudo.
-                Paragraph(_person_type_label(_env), s["body"]),
-                Paragraph(_documento_dictamen(_env), s["body"]),
-                Paragraph(" / ".join(_env.roles) or "—", s["body"]),
+                Paragraph(_fila_suj["canonical_name"] or "—", s["body"]),
+                Paragraph(_fila_suj["person_type_label"], s["body"]),
+                Paragraph(_fila_suj["document"], s["body"]),
+                Paragraph(" / ".join(_fila_suj["roles"]) or "—", s["body"]),
             ]
             for _sid in _fuentes_tabla:
                 _o = _outs.get(_sid)
@@ -3621,43 +3743,39 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # Si el núcleo SAGRILAFT en ejecución es anterior al mínimo sancionado, el
     # dictamen NO puede circular como vigente: se marca LEGACY / INVALID_FOR_RELEASE
     # (o se bloquea la generación con ARHIAX_PERMITIR_LEGACY=0).
-    _release_gate = None
-    try:
-        from sanctions.release_gate import evaluar_nucleo, MARCA_LEGACY
-        _release_gate = evaluar_nucleo()
-    except Exception as _e_rg:
-        print(f"[PDF][RELEASE-GATE] no evaluable: {_e_rg}")
-    if _release_gate and _release_gate.get("bloquear"):
-        from consistency import InconsistenciaBloqueante as _IncBloqueante
-        raise _IncBloqueante(
-            "Generación bloqueada por el gate de release SAGRILAFT: "
-            + "; ".join(_release_gate.get("motivos") or []))
-    if _release_gate and _release_gate.get("marca"):
-        print("[PDF][RELEASE-GATE] " + MARCA_LEGACY + ": "
-              + "; ".join(_release_gate.get("motivos") or []))
+    _release_gate = release_gate   # evaluado al inicio (§3): una sola evaluación
+    if _release_gate.get("mark"):
+        _estado_txt = {
+            "GATE_EVALUATION_FAILED": ("EVALUACION DEL GATE FALLIDA "
+                                       "(GATE_EVALUATION_FAILED)"),
+            "LEGACY_INVALID_FOR_RELEASE": ("NUCLEO DE SCREENING ANTERIOR AL SANCIONADO "
+                                           "(LEGACY_INVALID_FOR_RELEASE)"),
+        }.get(_release_gate.get("release_status"), str(_release_gate.get("release_status")))
         story.append(alert_red(
-            f"<b>{MARCA_LEGACY}</b> · este dictamen se generó con un núcleo de "
-            "screening anterior al mínimo sancionado, por lo que NO es válido para "
-            "liberación. Motivos: "
-            + "; ".join(_release_gate.get("motivos") or []) + "."))
+            f"<b>{_release_gate.get('marca')}</b> · este dictamen NO es válido para "
+            f"liberación. Estado: {_estado_txt}. Entorno: "
+            f"{_release_gate.get('environment')} · política {_release_gate.get('policy')} · "
+            f"evaluación {_release_gate.get('evaluation_status')}. Motivos: "
+            + "; ".join(_release_gate.get("reasons") or ["sin motivo declarado"]) + "."))
         story.append(Spacer(1, 4))
-        story.append(dt([("Estado del núcleo de screening", MARCA_LEGACY)]))
+        story.append(dt([("Estado del núcleo de screening", _release_gate.get("marca"))]))
         story.append(Spacer(1, 4))
-    elif _release_gate:
-        print("[PDF][RELEASE-GATE] VALID_FOR_RELEASE")
     story.append(dt(get_alcance_dt(barrio, ciudad=ciudad, receipts=_receipts)))
     story.append(Spacer(1, 6))
     # Traza técnica de ejecución (Case → Technical Trace)
     story.append(sub("16.B Traza tecnica de ejecucion (receipts)"))
     story.append(dt(receipt_rows(_receipts)))
-    # 03I.2 · gate de release #10: el núcleo sancionado viaja en la traza técnica.
-    if _release_gate:
-        try:
-            from sanctions.release_gate import filas_release_gate
-            story.append(Spacer(1, 4))
-            story.append(dt(filas_release_gate(_release_gate)))
-        except Exception as _e_frg:  # noqa: BLE001
-            print(f"[PDF][RELEASE-GATE] filas no disponibles: {_e_frg}")
+    # 03I.2A §12: recibo de liberación (gate + núcleo + entorno), siempre impreso.
+    try:
+        from sanctions.release_gate import filas_receipt_liberacion
+        story.append(Spacer(1, 4))
+        story.append(sub("16.C Recibo de liberacion (release gate)"))
+        story.append(dt(filas_receipt_liberacion(_release_gate)))
+    except Exception as _e_rr:  # noqa: BLE001
+        print(f"[PDF][RELEASE-GATE] recibo no disponible: {_e_rr}")
+        story.append(Spacer(1, 4))
+        story.append(dt([("gate_release_status",
+                          str(_release_gate.get("release_status") or "—"))]))
     story.append(Spacer(1, 8))
 
     # ── 17 PROVENANCE ──────────────────────────────────────────
@@ -3893,9 +4011,30 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
 
     # ── BUILD PDF ──────────────────────────────────────────────
     # Un único documento: dictamen + anexos juntos.
-    doc = SimpleDocTemplate(OUTPUT, pagesize=letter,
+    #
+    # 03I.2A §4: ESCRITURA ATÓMICA. ReportLab abre el archivo al empezar a construir;
+    # si algo falla a mitad, quedaría un PDF PARCIAL en la ruta final. Se construye en
+    # un temporal y solo se publica con `os.replace` (atómico en el mismo volumen); si
+    # la construcción o el propio gate fallan, el temporal se elimina y la ruta final
+    # NUNCA existe a medias.
+    _tmp_output = f"{OUTPUT}.part-{os.getpid()}"
+    if os.path.exists(_tmp_output):
+        try:
+            os.remove(_tmp_output)
+        except OSError:
+            pass
+    doc = SimpleDocTemplate(_tmp_output, pagesize=letter,
         topMargin=1.2*cm, bottomMargin=1.5*cm, leftMargin=1.8*cm, rightMargin=1.8*cm)
-    doc.build(story, onFirstPage=on_page, onLaterPages=on_page)
+    try:
+        doc.build(story, onFirstPage=on_page, onLaterPages=on_page)
+        os.replace(_tmp_output, OUTPUT)          # publicación atómica
+    except BaseException:
+        try:
+            if os.path.exists(_tmp_output):
+                os.remove(_tmp_output)
+        except OSError:
+            pass
+        raise
     print(f"SUCCESS: PDF GENERADO: {OUTPUT}")
     print(f"  Folio: {FOLIO}")
     # 03I.1 · F13: el "HASH SHA-256" que imprime el capítulo 17 es el SELLO DE

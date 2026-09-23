@@ -89,13 +89,16 @@ _PLACEHOLDERS = {
 }
 
 # Formas societarias / denominaciones que acreditan persona jurídica.
+# 03I.2A §15: NO se incluyen marcas ni nombres propios de un caso (antes figuraba
+# "MARVAL", que es la firma constructora del caso Golden y no una forma jurídica ni
+# una categoría genérica). El constructor del Golden se clasifica por "URBANIZADORA"
+# y/o por su NIT y forma societaria, que sí son señales legítimas.
 _LEGAL_TOKENS = {
     "SA", "SAS", "LTDA", "EU", "SCA", "SC", "CORP", "INC", "LLC", "GMBH",
     "FUNDACION", "SOCIEDAD", "BANCO", "BANCOLOMBIA", "FIDUCIARIA", "CORPORACION",
     "CONSTRUCTORA", "URBANIZADORA", "INMOBILIARIA", "COMPANIA", "CIA", "EMPRESA",
     "GRUPO", "COOPERATIVA", "ASOCIACION", "FONDO", "PATRIMONIO", "ENTIDAD",
     "SUCURSAL", "ESTABLECIMIENTO", "ALCALDIA", "MUNICIPIO", "NOTARIA",
-    "MARVAL",  # marca usada como firma constructora en el caso Golden
 }
 
 _DOC_ALIASES = {
@@ -230,6 +233,27 @@ def documento_para_dictamen(envelope) -> str:
     if W_DOC_EXTRACTION_FAILED in warns:
         return DOC_NO_EXTRAIDO
     return DOC_NO_DECLARADO
+
+
+def fila_sujeto_dictamen(envelope) -> Dict[str, Any]:
+    """Fila ÚNICA del sujeto para el dictamen (03I.2A §13).
+
+    Los capítulos 05, 09 y 16 consumen ESTA función, de modo que el nombre canónico,
+    el tipo de persona, la etiqueta, el documento, los roles y el `subject_id` son el
+    MISMO valor en los tres (no basta con que compartan el mapa de etiquetas: tiene
+    que ser el mismo valor serializado).
+    """
+    return {
+        "subject_id": getattr(envelope, "subject_id", None),
+        "canonical_name": getattr(envelope, "canonical_name", None),
+        "person_type": getattr(envelope, "person_type", None),
+        "person_type_label": person_type_label(envelope),
+        "document": documento_para_dictamen(envelope),
+        "document_type": getattr(envelope, "document_type", None),
+        "document_number": getattr(envelope, "document_number", None),
+        "roles": list(getattr(envelope, "roles", ()) or ()),
+        "identity_warnings": list(getattr(envelope, "identity_warnings", ()) or ()),
+    }
 
 
 def parse_person(raw: str) -> Dict[str, Any]:

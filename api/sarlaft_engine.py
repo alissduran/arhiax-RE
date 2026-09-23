@@ -65,26 +65,34 @@ def _hash_nombre(nombre: str) -> str:
 
 
 _PERSONA_TXT = {
-    "NATURAL_PERSON": "Persona natural",
-    "LEGAL_ENTITY": "Persona jurídica",
+    "NATURAL_PERSON": "Natural",
+    "LEGAL_ENTITY": "Jurídica",
     "UNKNOWN": "No determinado",
 }
 
 
 def _sujetos_desde_envelopes(subjects):
-    """Ficha por sujeto desde los envelopes canónicos (misma fuente que la tabla)."""
+    """Ficha por sujeto desde los envelopes canónicos (misma fuente que la tabla).
+
+    03I.2A §13: la ficha del capítulo 05 usa el MISMO productor de fila que los
+    capítulos 09 y 16 (`sanctions.subjects.fila_sujeto_dictamen`), de modo que nombre,
+    tipo, etiqueta, documento y `subject_id` son idénticos en los tres. Antes esta
+    ficha escribía su propia etiqueta («Persona jurídica») y su propio documento
+    («N/D»), y podía divergir del resto del dictamen (gate #4).
+    """
+    from sanctions.subjects import fila_sujeto_dictamen  # import local: capa de sanciones
     out = []
     for e in subjects:
-        _doc = " ".join(x for x in (
-            (e.document_type or "").upper(), e.document_number or "") if x).strip()
+        fila = fila_sujeto_dictamen(e)
         out.append({
             "rol": " / ".join(e.roles) or "PARTE",
-            "nombre_declarado": e.canonical_name,
-            "nombre_normalizado": _normalizar_nombre(e.canonical_name),
-            "hash_sha256_16": _hash_nombre(e.canonical_name),
-            "tipo_persona": e.person_type,
-            "tipo_persona_txt": _PERSONA_TXT.get(e.person_type, "No determinado"),
-            "identificacion": _doc or "N/D",
+            "nombre_declarado": fila["canonical_name"],
+            "nombre_normalizado": _normalizar_nombre(fila["canonical_name"]),
+            "hash_sha256_16": _hash_nombre(fila["canonical_name"]),
+            "tipo_persona": fila["person_type"],
+            "tipo_persona_txt": fila["person_type_label"],
+            "identificacion": fila["document"],
+            "subject_id": fila["subject_id"],
             "participacion": e.participation,
             "motivo": e.reason_for_screening,
             "identidad_confianza": e.identity_confidence,
