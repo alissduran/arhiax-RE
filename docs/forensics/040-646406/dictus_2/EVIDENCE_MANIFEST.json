@@ -1,0 +1,122 @@
+{
+ "master_manifest_version": "dictus-master-manifest/1.0.0",
+ "dictus_id": "DX-040-646406-20260924",
+ "property": "predio 040-646406",
+ "generated_at": "2026-09-24T01:31:39.192943+00:00",
+ "evidencias": [
+  {
+   "evidence_id": "EV-IDENTIDAD",
+   "evidence_type": "IDENTIDAD_CANONICA",
+   "source": "SNR + geoportal municipal",
+   "source_version": "nupre",
+   "subject": "predio 040-646406",
+   "timestamp": "2026-09-24T01:31:39.192943+00:00",
+   "content_hash": "ab5e4e0b50261a36e355e762ecb081c5df89f7e25a30df245cd7e247e88962aa",
+   "status": "SELLADA"
+  },
+  {
+   "evidence_id": "EV-GEOMETRIA",
+   "evidence_type": "GEOMETRIA_OFICIAL",
+   "source": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+   "source_version": "DIRECCION_OFICIAL_LIGADA_POR_GUID",
+   "subject": "predio 040-646406",
+   "timestamp": "2026-09-24T01:31:39.192943+00:00",
+   "content_hash": "ab5e4e0b50261a36e355e762ecb081c5df89f7e25a30df245cd7e247e88962aa",
+   "status": "SELLADA"
+  },
+  {
+   "evidence_id": "EV-URBANO",
+   "evidence_type": "CAPAS_OFICIALES_MUNICIPALES",
+   "source": "official_urban_layer",
+   "source_version": "MIXED",
+   "subject": "predio 040-646406",
+   "timestamp": "2026-09-24T01:31:39.192943+00:00",
+   "content_hash": "ab5e4e0b50261a36e355e762ecb081c5df89f7e25a30df245cd7e247e88962aa",
+   "status": "SELLADA"
+  },
+  {
+   "evidence_id": "EV-MERCADO",
+   "evidence_type": "METODOLOGIA_DE_MERCADO",
+   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+   "source_version": "0.1-codiseno",
+   "subject": "predio 040-646406",
+   "timestamp": "2026-09-24T01:31:39.192943+00:00",
+   "content_hash": "ab5e4e0b50261a36e355e762ecb081c5df89f7e25a30df245cd7e247e88962aa",
+   "status": "SELLADA"
+  },
+  {
+   "evidence_id": "EV-VALORACION",
+   "evidence_type": "VALORACION",
+   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+   "source_version": "0.1-codiseno",
+   "subject": "predio 040-646406",
+   "timestamp": "2026-09-24T01:31:39.192943+00:00",
+   "content_hash": "ab5e4e0b50261a36e355e762ecb081c5df89f7e25a30df245cd7e247e88962aa",
+   "status": "SELLADA"
+  },
+  {
+   "evidence_id": "EV-CONTRAPARTES",
+   "evidence_type": "SCREENING_CONTRAPARTES",
+   "source": "listas restrictivas y sancionatorias aplicables",
+   "source_version": "sanctions-matcher/1.1.0",
+   "subject": "contrapartes del caso",
+   "timestamp": "2026-09-24T01:31:39.192943+00:00",
+   "content_hash": "ab5e4e0b50261a36e355e762ecb081c5df89f7e25a30df245cd7e247e88962aa",
+   "status": "SELLADA"
+  },
+  {
+   "evidence_id": "EV-EQUIPAMIENTO",
+   "evidence_type": "EQUIPAMIENTO_URBANO",
+   "source": "proveedor de mapas abierto",
+   "source_version": null,
+   "subject": "predio 040-646406",
+   "timestamp": "2026-09-24T01:31:39.192943+00:00",
+   "content_hash": "ab5e4e0b50261a36e355e762ecb081c5df89f7e25a30df245cd7e247e88962aa",
+   "status": "SELLADA"
+  },
+  {
+   "evidence_id": "EV-AMENAZAS",
+   "evidence_type": "AMENAZAS_Y_RIESGO",
+   "source": "servicios municipales y SGC",
+   "source_version": null,
+   "subject": "predio 040-646406",
+   "timestamp": "2026-09-24T01:31:39.192943+00:00",
+   "content_hash": "ab5e4e0b50261a36e355e762ecb081c5df89f7e25a30df245cd7e247e88962aa",
+   "status": "SELLADA"
+  },
+  {
+   "evidence_id": "EV-LIBERACION",
+   "evidence_type": "RELEASE_GATE",
+   "source": "núcleo de screening sancionado",
+   "source_version": null,
+   "subject": "documento",
+   "timestamp": "2026-09-24T01:31:39.192943+00:00",
+   "content_hash": "ab5e4e0b50261a36e355e762ecb081c5df89f7e25a30df245cd7e247e88962aa",
+   "status": "NO_LIBERADO"
+  },
+  {
+   "evidence_id": "EV-COHERENCIA",
+   "evidence_type": "COHERENCIA_HISTORICA",
+   "source": "expediente histórico del mismo inmueble",
+   "source_version": "dictus-historical-consistency/1.0.0",
+   "subject": "predio 040-646406",
+   "timestamp": "2026-09-24T01:31:39.192943+00:00",
+   "content_hash": "ab5e4e0b50261a36e355e762ecb081c5df89f7e25a30df245cd7e247e88962aa",
+   "status": "CONFLICTO_ABIERTO"
+  }
+ ],
+ "evidence_count": 10,
+ "fuentes": [
+  "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+  "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+  "SNR + geoportal municipal",
+  "expediente histórico del mismo inmueble",
+  "listas restrictivas y sancionatorias aplicables",
+  "núcleo de screening sancionado",
+  "official_urban_layer",
+  "proveedor de mapas abierto",
+  "servicios municipales y SGC"
+ ],
+ "selladas": 8,
+ "estado": "PARCIAL_CON_DECLARACIONES"
+}

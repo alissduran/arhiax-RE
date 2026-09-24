@@ -1,0 +1,28 @@
+{
+ "dictus_id": "DX-040-646406-20260924",
+ "master_manifest_version": "dictus-master-manifest/1.0.0",
+ "master_hash": "dc355d4553a80509cd84e3cdbb2888fb486b33cb4b067aae64fb0df7fc2e9c4b",
+ "master_hash_abreviado": "DC355D4553A8…9C4B",
+ "pdf_binary_sha256": "51be125f7e25b2c40ac5a36f249e086d7b2489ff03eb9a467733973c8ff929e6",
+ "nota": "DICTUS_MASTER_HASH sella el conjunto canónico de hechos y evidencias; pdf_binary_sha256 sella el archivo entregado. Son hashes distintos y no se sustituyen entre sí.",
+ "verify": {
+  "master_hash_registrado": "dc355d4553a80509cd84e3cdbb2888fb486b33cb4b067aae64fb0df7fc2e9c4b",
+  "master_hash_recalculado": "dc355d4553a80509cd84e3cdbb2888fb486b33cb4b067aae64fb0df7fc2e9c4b",
+  "match": true,
+  "generated_at": "2026-09-24T01:31:39.192943+00:00",
+  "evidence_count": 10,
+  "seal_status": "PARCIAL_CON_DECLARACIONES",
+  "master_manifest_version": "dictus-master-manifest/1.0.0"
+ },
+ "historico": {
+  "veredicto": "CONFLICTOS_ABIERTOS",
+  "conflictos_abiertos": [
+   "altura_maxima",
+   "amenaza",
+   "coordenada",
+   "titulares",
+   "tratamiento",
+   "uso_pot"
+  ]
+ }
+}
