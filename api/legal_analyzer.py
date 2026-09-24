@@ -5,9 +5,21 @@ Parsea el texto de un CTL y genera anotaciones, titulares, constructor
 y hallazgos dinamicos reales.
 """
 
+# 03I.3 — DEFECTO CORREGIDO: `_constructor_de_adquisicion` estaba anotada con
+# `Optional[str]` sin importar `Optional`. En Python ≥ 3.14 (PEP 649) las
+# anotaciones se evalúan de forma diferida y el módulo importaba igual; en el
+# runtime de Vercel (3.12/3.13) se evalúan al definir la función y el módulo
+# fallaba al importarse con `NameError: name 'Optional' is not defined`, lo que
+# hacía fallar la compilación del dictamen («El servidor no pudo compilar el
+# dictamen»). Se importa el nombre Y se activan las anotaciones diferidas, para
+# que ningún nombre sin resolver pueda volver a romper el import en producción.
+from __future__ import annotations
+
 import re
 import os
 import sys
+from typing import Optional
+
 import pypdf
 from pathlib import Path
 
