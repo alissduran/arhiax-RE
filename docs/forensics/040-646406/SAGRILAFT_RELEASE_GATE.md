@@ -9,8 +9,10 @@ y el **contrato de decisión validado** por el compilador (03I.2B · R1).
   `tests/test_03i2a_release_fail_closed.py` (33 pruebas: fail-closed por entorno,
   clasificación A–H, sujetos 05/09/16 y vocabulario de persona jurídica) y
   `tests/test_03i2b_contrato_tipologia_coordenadas.py` (29 pruebas: §C contrato C1–C7,
-  §F render F1–F6, §M coordenadas M1–M11, §Q liberación end-to-end Q1–Q5)
-- Dictamen auditado: `docs/forensics/040-646406/golden_03i1/ARHIAX_Dictamen_040-646406_03I2B.pdf`
+  §F render F1–F6, §M coordenadas M1–M11, §Q liberación end-to-end Q1–Q5) y
+  `tests/test_03i2ba_canonical_binding.py` (12 pruebas: §8.A–G del binding canónico,
+  regresión del GUID de enlace y render del recibo)
+- Dictamen auditado: `docs/forensics/040-646406/golden_03i1/ARHIAX_Dictamen_040-646406_03I2BA.pdf`
 - Núcleo sancionado: `sanctions-matcher/1.1.0` · `canonical-subjects/1.0.0` ·
   parsers `onu_xml/1.1.0`, `ofac_sdn_xml/1.1.0`, `uk_sanctions_list_xml/1.1.0` ·
   fuentes `UN_CONSOLIDATED`, `OFAC_SDN`, `UK_SANCTIONS_LIST`
@@ -158,6 +160,55 @@ por código/NUPRE) y `catastro_predio_bogota` (centroide de la geometría oficia
 `LOTCODIGO`). Los «hints» de las tres ciudades se declaran `HINT_NO_OFICIAL` y **no**
 promueven.
 
+## 03I.2B-A · Binding con la identidad CANÓNICA (criterio 8)
+
+**Defecto.** H-1 verificaba que la geometría estuviera ligada **internamente** a
+`predio_real`, pero no que ese predio fuera el MISMO `CanonicalPropertyIdentity` que
+gobierna el Dictus. Con `canonical_identity.nupre = AFT_X` y `predio_real.nupre = AFT_Y`
+—geometría impecable, procedencia completa— la coordenada podía declararse
+`OFFICIAL_PREDIO`: geometría **de otro predio** etiquetada como oficial del caso.
+
+**Regla.**
+
+```
+OFFICIAL_PREDIO = geometría oficial válida (7 criterios H-1)
+                  AND predio_real COMPATIBLE con CanonicalPropertyIdentity
+```
+
+`_evaluar_binding_canonico()` compara **solo lo que ambas partes publican** y **nunca elige
+en silencio**:
+
+| Situación | Resultado |
+|---|---|
+| canónico NUPRE == predio/procedencia NUPRE y predial == predial | `VERIFIED` |
+| NUPRE canónico ≠ NUPRE del predio | `MISMATCH` (`CANONICAL_IDENTITY_MISMATCH`) |
+| número predial canónico ≠ número predial del predio | `MISMATCH` |
+| `provenance.nupre` ≠ `predio_real.predio.nupre` (desacuerdo interno) | `MISMATCH` |
+| el canónico no publica los identificadores que el predio declara (o al revés) | `NOT_COMPARABLE` |
+| sin `canonical_identity` | `NOT_COMPARABLE` |
+
+- **`NOT_COMPARABLE` no es `VERIFIED`** y **no promueve**: sin campos comparables no hay
+  compatibilidad acreditada (fail-closed), y el motivo queda declarado.
+- **Normalización honesta**: NUPRE sin espacios ni caja; número predial **solo por
+  dígitos**; un `predio_globalid` que es un **GUID** de enlace **no** se compara como
+  número predial (sus dígitos no son el número predial del predio — falso `MISMATCH`
+  detectado por la prueba viva del Golden y corregido).
+- **Espacios de nombres (§5)**: los códigos MUNICIPALES (p. ej. `LOTCODIGO` de Bogotá) se
+  comparan contra la clave municipal del canónico si existe (`matricula_municipal` /
+  `codigo_anterior`) y se declaran con alcance `MUNICIPAL_KEY`. Comparar un `LOTCODIGO`
+  contra un número predial de 30 dígitos sería fingir una equivalencia inexistente. En
+  Bogotá, mientras el canónico no declare clave municipal, la geometría del lote queda
+  `NOT_COMPARABLE` (no se promueve) y la ubicación sigue resolviéndose por una fuente
+  **autorizada** (`CTL_ADDRESS_GEOCODE`): no se pierde el gate, se pierde la etiqueta que
+  no estaba acreditada.
+
+**Dónde se declara (§7/§9).** `canonical_binding_status`, `canonical_binding_fields`,
+`canonical_binding_scope` y `canonical_binding_detail` viajan en
+`coordinate_provenance`, en el objeto de ubicación, en el recibo 16.B (**«binding canónico
+VERIFIED (nupre, numero_predial)»**), en el manifest y en el estado interno del QA. Se
+declaran **siempre**, incluso cuando la geometría del predio NO se promovió (un `MISMATCH`
+o un `NOT_COMPARABLE` también son auditables).
+
 ## Clasificación: uso ≠ régimen jurídico ≠ tipología física (§16-§21)
 
 `api/clasificacion.py` resuelve **tres dimensiones independientes** —régimen jurídico,
@@ -267,13 +318,17 @@ producción (BLOCK). Artefacto:
 | Coherencia §K | **19/19** |
 | Matrices | **0 contradicciones / 12 checks** · **28 facts / 0 hardcodeados** |
 | Coordenada (H-1) | **`OFFICIAL_PREDIO` (verificada)** · `source_system=CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS` · `layer=105 · direccion` · `feature_id=6c663607-5509-401f-b57d-384d2beeeac1` · `método=DIRECCION_OFICIAL_LIGADA_POR_GUID` · `(11.006056, -74.837570)` · sin geocodificador externo |
+| Binding canónico (03I.2B-A) | **`VERIFIED`** · campos `['nupre', 'numero_predial']` · alcance `NATIONAL_IDENTIFIERS` · impreso en el recibo: «binding canónico VERIFIED (nupre, numero_predial)» |
 | Alcance declarado | «geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación» |
 | Clasificación | régimen `PROPIEDAD_HORIZONTAL (VERIFIED_REGISTRAL)` · uso `HABITACIONAL` · tipología `UNIDAD_EN_PROPIEDAD_HORIZONTAL` (la unidad física no se inventa) |
 | Valoración | **CASO A: emitida** (`$399.500.000`, banda 373.5–455.5 M; `identity_authorized=True`, `market_context_authorized=True`, `VERIFIED_UNIT_IDENTITY`) |
 | Sujetos 05 = 09 = 16 | `BANCO DE BOGOTA S.A. → Jurídica → NIT 8600029644` y `DURAN BACCA ALISSON → Natural → CC 1045718995X` en los tres capítulos |
 | Screening | `SCREENING_COMPLETE`, evidencia **9/9**, cadena `SEALED` |
-| Suite offline | **711 passed, 0 failed, 11 deselected** (línea base 682 + 29 pruebas de 03I.2B) |
+| Suite offline | **723 passed, 0 failed, 1 skipped, 11 deselected** (línea base 682 + 29 de 03I.2B + 12 de 03I.2B-A; el omitido es la prueba de binding que exige red y se ejecuta con `ARHIAX_NETWORK_TESTS=1`: **PASS**) |
 | `compileall api tests scripts` | limpio |
+
+Artefacto de esta corrida: `golden_03i1/ARHIAX_Dictamen_040-646406_03I2BA.pdf`
+(`sha256 de57fe14e4fa28b3…`, sello `d1cb939e2f3ad0d0…`).
 
 > El criterio §O se cumple por el **caso A**: con geometría oficial exacta disponible la
 > valoración se emitió **usando esa geometría**. No se usó `FORM_ADDRESS_GEOCODE` mientras

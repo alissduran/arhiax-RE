@@ -20,6 +20,7 @@ Regla dura: NUNCA fallback silencioso.
 from __future__ import annotations
 
 import math
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -367,6 +368,258 @@ BBox = Tuple[float, float, float, float]
 COORD_SCOPE_OFICIAL_PREDIO = ("geometría oficial del PREDIO (lote/edificio): NO acredita "
                               "la posición del apartamento dentro de la edificación")
 
+# ── 03I.2B-A: binding con la identidad CANÓNICA del caso ──────────────────────
+# H-1 verificaba que la geometría estuviera ligada INTERNAMENTE a `predio_real`,
+# pero no que ese predio fuera el MISMO `CanonicalPropertyIdentity` que gobierna el
+# Dictus: con `canonical.nupre = AFT_X` y `predio_real.nupre = AFT_Y` la coordenada
+# podía declararse `OFFICIAL_PREDIO` (geometría de otro predio etiquetada como
+# oficial del caso). El binding cierra esa vía sin elegir en silencio un identificador.
+BINDING_VERIFIED = "VERIFIED"
+BINDING_NOT_COMPARABLE = "NOT_COMPARABLE"
+BINDING_MISMATCH = "MISMATCH"
+
+REASON_BINDING_MISMATCH = "CANONICAL_IDENTITY_MISMATCH"
+REASON_BINDING_NOT_COMPARABLE = "CANONICAL_IDENTITY_NOT_COMPARABLE"
+
+# Alcance del binding efectivamente acreditado (se declara, nunca se sobreentiende).
+BINDING_SCOPE_NACIONAL = "NATIONAL_IDENTIFIERS"   # NUPRE / número predial nacional
+BINDING_SCOPE_MUNICIPAL = "MUNICIPAL_KEY"         # clave municipal (p. ej. LOTCODIGO)
+BINDING_SCOPE_NINGUNO = "NONE"                    # nada comparable: NO es VERIFIED
+
+# Claves de enlace cuyo NOMBRE pertenece al espacio de identificadores nacionales.
+_ID_KINDS_NACIONALES = frozenset({"cr_predio_guid", "globalid", "numero_predial_nacional",
+                                  "codigo_catastral", "nupre"})
+# Claves de enlace que son códigos MUNICIPALES (otro espacio de nombres: compararlos
+# con el número predial nacional sería fingir una equivalencia que no existe).
+_ID_KINDS_MUNICIPALES = frozenset({"lotcodigo", "codigo_lote", "matricula_municipal",
+                                   "codigo_predial_municipal"})
+
+
+def _norm_nupre(valor) -> Optional[str]:
+    """NUPRE normalizado (alfanumérico, sin espacios, mayúsculas). None si vacío."""
+    t = "".join(str(valor or "").split()).upper()
+    return t or None
+
+
+def _norm_predial(valor) -> Optional[str]:
+    """Número predial normalizado: SOLO dígitos (separadores no son información).
+
+    Si el valor no aporta ningún dígito (una clave municipal alfabética, por
+    ejemplo) devuelve None: no se finge que sea un número predial.
+    """
+    t = "".join(ch for ch in str(valor or "") if ch.isdigit())
+    return t or None
+
+
+_RE_GUID = re.compile(
+    r"^\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}?$")
+
+
+def _es_guid(valor) -> bool:
+    """True si el valor es un GUID de ArcGIS (clave de enlace, NO identificador
+    predial). Un GUID no puede compararse como número predial: sus dígitos no son
+    el número predial del predio."""
+    return bool(_RE_GUID.match(str(valor or "").strip()))
+
+
+def _identificadores_canonicos(canonical_identity: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """Extrae los identificadores del `CanonicalPropertyIdentity` (sin inventar).
+
+    Fuentes, en orden: `identificadores.<campo>.value` (con su trazabilidad
+    canónica) y los campos planos del mismo objeto. El número predial también puede
+    venir del registro oficial de adopción cuando el geoportal no lo publica.
+    """
+    cid = canonical_identity or {}
+    ids = cid.get("identificadores") or {}
+
+    def _campo(nombre: str, *alias: str):
+        v = (ids.get(nombre) or {}).get("value") if isinstance(ids.get(nombre), dict) else None
+        for cand in (v,) + tuple(cid.get(a) for a in (nombre,) + alias):
+            if cand is not None and str(cand).strip():
+                return str(cand).strip()
+        return None
+
+    _adop = cid.get("adopcion_registro") or {}
+    _predial_adop = ((_adop.get("numero_predial") or _adop.get("codigo_catastral"))
+                     if isinstance(_adop, dict) else None)
+    return {
+        "nupre": _norm_nupre(_campo("nupre")),
+        "numero_predial": _norm_predial(_campo("codigo_catastral") or _predial_adop),
+        "municipal": _norm_nupre(_campo("matricula_municipal") or _campo("codigo_anterior")),
+        "folio": str(cid.get("folio_snr") or "").strip() or None,
+        "identity_verified": cid.get("identity_verified") is True,
+        "resolution_confidence": cid.get("resolution_confidence"),
+    }
+
+
+def _identificadores_del_predio(predio_real: Optional[Dict[str, Any]]) -> Dict[str, list]:
+    """Identificadores que declaran `predio_real` y su procedencia, POR ESPACIO.
+
+    Devuelve, por espacio de nombres, la lista de valores declarados (con su
+    origen) para poder exigir que TODOS coincidan: si el registro del predio y su
+    procedencia discrepan entre sí, el binding es MISMATCH, no una elección.
+    """
+    pr = predio_real or {}
+    pred = pr.get("predio") or {}
+    prov = pr.get("coordenada_provenance") or {}
+    nupre: List[Dict[str, Any]] = []
+    predial: List[Dict[str, Any]] = []
+    municipal: List[Dict[str, Any]] = []
+
+    def _add(destino, valor, origen):
+        if destino is predial:
+            n = _norm_predial(valor)
+        else:
+            # NUPRE y clave municipal se comparan como cadenas alfanuméricas.
+            n = _norm_nupre(valor)
+        if n:
+            destino.append({"valor": n, "origen": origen})
+
+    # Identificador de ENLACE de la geometría (nombra el espacio de nombres).
+    _kind = str(prov.get("feature_id_kind") or "").strip().lower()
+    _es_municipal = _kind in _ID_KINDS_MUNICIPALES
+    # `predio_globalid` es la clave de ENLACE con la feature: solo es un
+    # identificador del predio cuando la procedencia declara que ese campo contiene
+    # un identificador (número predial / clave municipal). Con `cr_predio_guid` o
+    # `globalid` es un GUID y NO puede compararse como número predial: los dígitos
+    # de un GUID no son el número predial del predio (falso MISMATCH en la corrida
+    # viva del Golden, detectado por `test_f_golden_binding_verificado`).
+    _gid = prov.get("predio_globalid")
+    _gid_es_identificador = bool(
+        _gid and _kind not in ("", "cr_predio_guid", "globalid") and not _es_guid(_gid))
+    # Los identificadores del REGISTRO del predio son nacionales (globalid /
+    # número predial nacional / NUPRE) salvo que el productor declare lo contrario.
+    _add(nupre, pred.get("nupre"), "predio_real.predio.nupre")
+    _add(nupre, pred.get("codigo_homologado"), "predio_real.predio.codigo_homologado")
+    _add(nupre, pr.get("nupre"), "predio_real.nupre")
+    _add(predial, pred.get("numero_predial_nacional"),
+         "predio_real.predio.numero_predial_nacional")
+    _add(predial, pred.get("numero_predial"), "predio_real.predio.numero_predial")
+    _add(predial, pr.get("numero_predial"), "predio_real.numero_predial")
+    # La PROCEDENCIA declara el predio de la geometría: mismo espacio de nombres
+    # que su propia clave de enlace.
+    if _es_municipal:
+        _add(municipal, prov.get("numero_predial"), "provenance.numero_predial")
+        if _gid_es_identificador:
+            _add(municipal, _gid, "provenance.predio_globalid")
+    else:
+        _add(nupre, prov.get("nupre"), "provenance.nupre")
+        _add(predial, prov.get("numero_predial"), "provenance.numero_predial")
+        if _gid_es_identificador:
+            _add(predial, _gid, "provenance.predio_globalid")
+    return {"nupre": nupre, "numero_predial": predial, "municipal": municipal,
+            "feature_id_kind": _kind or None, "es_municipal": _es_municipal,
+            "link_key_es_guid": bool(_gid and _es_guid(_gid))}
+
+
+def _evaluar_binding_canonico(
+        *, canonical_identity: Optional[Dict[str, Any]],
+        predio_real: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """03I.2B-A: ¿la geometría es del MISMO predio que gobierna el Dictus?
+
+    Compara SOLO lo que ambas partes declaran (nunca exige un identificador que la
+    ciudad no publica) y **nunca elige en silencio**: toda discrepancia explícita
+    produce `MISMATCH`; la ausencia total de campos comparables produce
+    `NOT_COMPARABLE` (que NO es una verificación).
+
+    Returns:
+        {"status", "reason", "scope", "fields", "detail"}
+    """
+    can = _identificadores_canonicos(canonical_identity)
+    pri = _identificadores_del_predio(predio_real)
+    detail: Dict[str, Any] = {}
+    campos: List[str] = []
+    causas: List[str] = []
+    verificados = 0
+
+    # 1) NUPRE (espacio nacional)
+    if can["nupre"]:
+        declarados = pri["nupre"]
+        detail["nupre"] = {"canonical": can["nupre"],
+                           "predio": [d["valor"] for d in declarados],
+                           "comparable": bool(declarados)}
+        if declarados:
+            campos.append("nupre")
+            malos = [d for d in declarados if d["valor"] != can["nupre"]]
+            if malos:
+                causas.append("nupre: canónico " + can["nupre"] + " vs "
+                              + ", ".join(f"{d['valor']} ({d['origen']})" for d in malos))
+            else:
+                verificados += 1
+
+    # 2) Número predial nacional
+    if can["numero_predial"]:
+        declarados = pri["numero_predial"]
+        detail["numero_predial"] = {"canonical": can["numero_predial"],
+                                   "predio": [d["valor"] for d in declarados],
+                                   "comparable": bool(declarados)}
+        if declarados:
+            campos.append("numero_predial")
+            malos = [d for d in declarados if d["valor"] != can["numero_predial"]]
+            if malos:
+                causas.append("numero_predial: canónico " + can["numero_predial"] + " vs "
+                              + ", ".join(f"{d['valor']} ({d['origen']})" for d in malos))
+            else:
+                verificados += 1
+
+    # 3) Clave MUNICIPAL (p. ej. LOTCODIGO): solo se compara contra la clave
+    # municipal del canónico; contra el número predial nacional sería fingir una
+    # equivalencia entre espacios de nombres distintos.
+    _municipal_predio = pri["municipal"]
+    if _municipal_predio:
+        if can["municipal"]:
+            detail["municipal"] = {"canonical": can["municipal"],
+                                   "predio": [d["valor"] for d in _municipal_predio],
+                                   "comparable": True}
+            campos.append("municipal")
+            malos = [d for d in _municipal_predio if d["valor"] != can["municipal"]]
+            if malos:
+                causas.append("clave municipal: canónico " + can["municipal"] + " vs "
+                              + ", ".join(f"{d['valor']} ({d['origen']})" for d in malos))
+            else:
+                verificados += 1
+        else:
+            detail["municipal"] = {"canonical": None,
+                                   "predio": [d["valor"] for d in _municipal_predio],
+                                   "comparable": False,
+                                   "nota": ("el canónico no declara clave municipal: "
+                                            "la geometría no puede ligarse a la identidad "
+                                            "canónica con este identificador")}
+
+    # Discrepancias INTERNAS del lado del predio (registro vs procedencia).
+    for _campo, _vals in (("nupre", pri["nupre"]), ("numero_predial", pri["numero_predial"]),
+                          ("municipal", _municipal_predio)):
+        _unicos = {d["valor"] for d in _vals}
+        if len(_unicos) > 1:
+            causas.append(f"{_campo}: el registro del predio y su procedencia discrepan "
+                          + " / ".join(sorted(
+                              f"{d['valor']} ({d['origen']})" for d in _vals)))
+
+    if causas:
+        return {"status": BINDING_MISMATCH,
+                "reason": f"{REASON_BINDING_MISMATCH}: " + "; ".join(causas),
+                "scope": (BINDING_SCOPE_MUNICIPAL if pri["es_municipal"]
+                          else BINDING_SCOPE_NACIONAL),
+                "fields": campos, "detail": detail}
+    if verificados:
+        return {"status": BINDING_VERIFIED,
+                "reason": ("predio de la geometría == predio de la identidad canónica "
+                           "(" + ", ".join(campos) + ")"),
+                "scope": (BINDING_SCOPE_MUNICIPAL if campos == ["municipal"]
+                          else BINDING_SCOPE_NACIONAL),
+                "fields": campos, "detail": detail}
+    return {"status": BINDING_NOT_COMPARABLE,
+            "reason": (f"{REASON_BINDING_NOT_COMPARABLE}: "
+                       + ("la identidad canónica no declara NUPRE ni número predial"
+                          if not (can["nupre"] or can["numero_predial"])
+                          else "el predio de la geometría no declara los identificadores "
+                               "que el canónico sí declara")
+                       + (f" · clave de enlace de la geometría: {pri['feature_id_kind']}"
+                          if pri["feature_id_kind"] else "")),
+            "scope": (BINDING_SCOPE_MUNICIPAL if pri["es_municipal"]
+                      else BINDING_SCOPE_NINGUNO),
+            "fields": [], "detail": detail}
+
 
 def _bbox_de(ciudad: Optional[str], *, es_bogota: bool = False,
              es_medellin: bool = False, es_pasto: bool = False) -> Optional[BBox]:
@@ -384,11 +637,12 @@ def _sin_llaves(guid) -> str:
 
 
 def evaluar_geometria_oficial_predio(*, predio_real: Optional[Dict[str, Any]],
+                                     canonical_identity: Optional[Dict[str, Any]] = None,
                                      ciudad: Optional[str] = None,
                                      es_bogota: bool = False,
                                      es_medellin: bool = False,
                                      es_pasto: bool = False) -> Dict[str, Any]:
-    """H-1: ¿puede esta coordenada declararse `OFFICIAL_PREDIO`? (7 criterios)
+    """H-1 + 03I.2B-A: ¿puede esta coordenada declararse `OFFICIAL_PREDIO`?
 
     1. El predio está RESUELTO y disponible (`disponible` no es False) y trae lat/lon.
     2. El PRODUCTOR declara un origen elegible (`coordenada_origen`) — nunca se
@@ -402,11 +656,16 @@ def evaluar_geometria_oficial_predio(*, predio_real: Optional[Dict[str, Any]],
        demo; geometría Point/Polygon/MultiPolygon).
     7. Cordura espacial: lat/lon finitas, no degeneradas y dentro de la caja del
        municipio del caso.
+    8. **Binding canónico (03I.2B-A)**: `predio_real` debe ser COMPATIBLE con el
+       `CanonicalPropertyIdentity` que gobierna el Dictus. La geometría ligada a
+       «otro predio» (aunque sea oficial y esté internamente bien documentada) no es
+       la geometría oficial de ESTE caso.
 
-    Devuelve `{"eligible", "reason", "provenance", "bbox"}`. NUNCA lanza.
+    Devuelve `{"eligible", "reason", "provenance", "bbox", "canonical_binding"}`.
+    NUNCA lanza.
     """
     out: Dict[str, Any] = {"eligible": False, "reason": None, "provenance": {},
-                           "bbox": None}
+                           "bbox": None, "canonical_binding": {}}
     pr = predio_real or {}
     # (1)
     if not pr:
@@ -515,8 +774,28 @@ def evaluar_geometria_oficial_predio(*, predio_real: Optional[Dict[str, Any]],
     elif not (-90.0 <= lat_f <= 90.0 and -180.0 <= lon_f <= 180.0):
         out["reason"] = f"lat/lon fuera de rango geográfico: ({lat_f}, {lon_f})"
         return out
+    # (8) 03I.2B-A: binding con la IDENTIDAD CANÓNICA del caso. Una geometría
+    # oficial de OTRO predio no es la geometría oficial de este caso, por muy bien
+    # documentada que esté. `NOT_COMPARABLE` NO es una verificación: sin campos
+    # comparables no se promueve (fail-closed), y el motivo queda declarado.
+    binding = _evaluar_binding_canonico(canonical_identity=canonical_identity,
+                                        predio_real=pr)
+    out["canonical_binding"] = binding
+    if binding["status"] == BINDING_MISMATCH:
+        out["reason"] = binding["reason"]
+        return out
+    if binding["status"] != BINDING_VERIFIED:
+        out["reason"] = binding["reason"]
+        return out
+    _prov = dict(out["provenance"])
+    _prov["canonical_binding_status"] = binding["status"]
+    _prov["canonical_binding_fields"] = list(binding["fields"])
+    _prov["canonical_binding_scope"] = binding["scope"]
+    _prov["canonical_binding_detail"] = binding["detail"]
+    out["provenance"] = _prov
     out["eligible"] = True
-    out["reason"] = "geometría oficial del predio con procedencia verificada"
+    out["reason"] = ("geometría oficial del predio con procedencia verificada y binding "
+                     "canónico " + binding["status"])
     return out
 
 
@@ -587,13 +866,17 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
             return r[0], r[1]
         return None, None
 
-    # 1) geometría OFICIAL del predio resuelto — SOLO si supera los 7 criterios H-1
-    # (antes bastaba con que `predio_real` trajera lat/lon: un hint geocodificado o
-    #  un punto referencial entraban al gate etiquetados como oficiales).
+    # 1) geometría OFICIAL del predio resuelto — SOLO si supera los criterios H-1 y
+    # el binding con la identidad canónica del caso (03I.2B-A). Antes bastaba con que
+    # `predio_real` trajera lat/lon: un hint geocodificado, un punto referencial o la
+    # geometría de OTRO predio entraban al gate etiquetados como oficiales.
     _eleg = evaluar_geometria_oficial_predio(
-        predio_real=predio_real, ciudad=ciudad, es_bogota=es_bogota,
-        es_medellin=es_medellin, es_pasto=es_pasto)
+        predio_real=predio_real, canonical_identity=canonical_identity, ciudad=ciudad,
+        es_bogota=es_bogota, es_medellin=es_medellin, es_pasto=es_pasto)
     _predio_elegible = bool(_eleg.get("eligible"))
+    _binding = _eleg.get("canonical_binding") or {}
+    canonical_binding_status = _binding.get("status")
+    canonical_binding_fields = list(_binding.get("fields") or [])
     if _predio_elegible:
         lat, lon = predio_real["lat"], predio_real["lon"]
         coordinate_source = COORD_OFFICIAL_PREDIO
@@ -688,6 +971,18 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
             "nota": "coordenada de referencia: NO acredita el predio",
         }
 
+    # Degradación declarada: si había geometría del predio pero NO se promovió, el
+    # motivo y el estado del binding viajan con la fuente que SÍ se usó, para que el
+    # recibo pueda auditar por qué la coordenada no es oficial.
+    if predio_real and not _predio_elegible and coordinate_provenance:
+        coordinate_provenance.setdefault("official_predio_rejected_reason",
+                                        _eleg.get("reason"))
+        if canonical_binding_status:
+            coordinate_provenance.setdefault("canonical_binding_status",
+                                             canonical_binding_status)
+            coordinate_provenance.setdefault("canonical_binding_fields",
+                                             canonical_binding_fields)
+
     return {
         "authoritative_address": authoritative_address,
         "address_source": address_source,
@@ -705,6 +1000,12 @@ def resolve_market_location(*, canonical_identity: Optional[Dict[str, Any]],
         "resolution_method": coordinate_provenance.get("resolution_method"),
         "matched_nupre": matched_nupre,
         "matched_predial": matched_predial,
+        # 03I.2B-A §7/§9: binding con la identidad CANÓNICA (declarado siempre, no
+        # solo cuando se promueve: un NOT_COMPARABLE o un MISMATCH también se audita).
+        "canonical_binding_status": canonical_binding_status,
+        "canonical_binding_fields": canonical_binding_fields,
+        "canonical_binding_scope": _binding.get("scope"),
+        "canonical_binding_reason": _binding.get("reason"),
         # H-1: qué acredita y qué NO acredita esta geometría.
         "coordinate_scope": (COORD_SCOPE_OFICIAL_PREDIO
                              if coordinate_source == COORD_OFFICIAL_PREDIO else None),

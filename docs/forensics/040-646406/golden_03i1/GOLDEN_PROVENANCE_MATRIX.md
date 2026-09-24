@@ -4,8 +4,8 @@ Ningún FACT se escribe a mano: cada valor sale del estado observado en la corri
 
 | Fact | Valor | Fuente | Status | Regla/Versión | Capítulos |
 |---|---|---|---|---|---|
-| `version_plataforma` | ARHIAX RE v1.4.0 · commit afbf645d · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0 | versioning.VERSION_MATRIX + git rev-parse HEAD | VERIFIED_CODE | afbf645d | pie de página, 16.b |
-| `commit_sha` | afbf645deb2db95cd0c34030e0ddc043a5bd4a68 | git rev-parse HEAD | VERIFIED_CODE | 03I.1 §A | pie de página, 16.b |
+| `version_plataforma` | ARHIAX RE v1.4.0 · commit e3acbfa9 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0 | versioning.VERSION_MATRIX + git rev-parse HEAD | VERIFIED_CODE | e3acbfa9 | pie de página, 16.b |
+| `commit_sha` | e3acbfa9a8d3f77bc389a3a91eeebffa09c1200a | git rev-parse HEAD | VERIFIED_CODE | 03I.1 §A | pie de página, 16.b |
 | `input_ctl` | CTL_040-646406_ORIGINAL.pdf (124345 bytes) | CTL BINARIO entregado por --ctl | ORIGINAL_BINARY | 4493da88f4231a6b | (insumo) |
 | `folio` | 040-646406 | CTL (legal_analyzer) + modelo canónico | VERIFIED_REGISTRAL | legal_analyzer | 01, 05, 16 |
 | `codigo_catastral` | 080010103000010040001908040002 | CTL (código catastral) | VERIFIED_REGISTRAL | canonical | 01, 06.1, 16 |

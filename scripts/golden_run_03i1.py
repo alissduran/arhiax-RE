@@ -340,6 +340,10 @@ def main(argv=None) -> int:
             # 03I.2B §N/§H: procedencia de la coordenada (H-1), observable de solo
             # lectura: de qué servicio, capa y feature salió el punto del gate.
             "provenance": mc.get("coordinate_provenance") or {},
+            # 03I.2B-A §9: binding con la identidad canónica del caso.
+            "canonical_binding_status": mc.get("canonical_binding_status"),
+            "canonical_binding_fields": mc.get("canonical_binding_fields"),
+            "canonical_binding_scope": mc.get("canonical_binding_scope"),
             "scope": mc.get("coordinate_scope"),
             "official_predio_rejected_reason": mc.get("official_predio_rejected_reason"),
         },

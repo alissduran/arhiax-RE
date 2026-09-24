@@ -151,6 +151,14 @@ def build_execution_receipts(
             "source_feature_id": (_mc.get("coordinate_provenance") or {}).get("feature_id"),
             "resolution_method": (_mc.get("coordinate_provenance") or {}).get("resolution_method"),
             "coordinate_scope": _mc.get("coordinate_scope"),
+            # 03I.2B-A: binding con la identidad canónica (declarado siempre: un
+            # MISMATCH o un NOT_COMPARABLE también deben poder auditarse).
+            "canonical_binding_status": (_mc.get("coordinate_provenance") or {}).get(
+                "canonical_binding_status") or _mc.get("canonical_binding_status"),
+            "canonical_binding_fields": (_mc.get("coordinate_provenance") or {}).get(
+                "canonical_binding_fields") or _mc.get("canonical_binding_fields"),
+            "canonical_binding_scope": (_mc.get("coordinate_provenance") or {}).get(
+                "canonical_binding_scope") or _mc.get("canonical_binding_scope"),
             "official_predio_rejected_reason": _mc.get("official_predio_rejected_reason"),
         },
     }
@@ -338,6 +346,15 @@ def receipt_rows(receipts: Optional[Dict[str, Any]]) -> List[Tuple[str, str]]:
             _det_geo.append(f"feature {_prov['feature_id']}")
         if _prov.get("resolution_method"):
             _det_geo.append(f"método {_prov['resolution_method']}")
+        # 03I.2B-A: el binding con la identidad canónica se imprime SIEMPRE (un
+        # MISMATCH o un NOT_COMPARABLE no puede quedar oculto en el dictamen).
+        if geo.get("canonical_binding_status"):
+            _det_geo.append("binding canónico "
+                            + str(geo["canonical_binding_status"])
+                            + (f" ({', '.join(geo['canonical_binding_fields'])})"
+                               if geo.get("canonical_binding_fields") else ""))
+        elif geo.get("coordinate_source") == "OFFICIAL_PREDIO":
+            _det_geo.append("binding canónico NO DECLARADO")
         if geo.get("coordinate_scope"):
             _det_geo.append(str(geo["coordinate_scope"]))
         if geo.get("official_predio_rejected_reason"):

@@ -1,14 +1,14 @@
 {
- "commit_sha": "afbf645deb2db95cd0c34030e0ddc043a5bd4a68",
- "pdf_sha256": "0aea190b0c6d9330dfe3f352e5a883e5671954bb06e8723e35aef1888c377dfa",
+ "commit_sha": "e3acbfa9a8d3f77bc389a3a91eeebffa09c1200a",
+ "pdf_sha256": "de57fe14e4fa28b3dbadef3e422de8cc0e97457d0e4ac8b674ac0949a017cfe8",
  "facts": [
   {
    "fact": "version_plataforma",
-   "value": "ARHIAX RE v1.4.0 · commit afbf645d · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
+   "value": "ARHIAX RE v1.4.0 · commit e3acbfa9 · dictus v1.4.0 · GIS v1.2.0 · Titulux v1.1.0 · reglas v1.3.0",
    "source": "versioning.VERSION_MATRIX + git rev-parse HEAD",
    "status": "VERIFIED_CODE",
    "method": "resolución de versión en runtime",
-   "version": "afbf645d",
+   "version": "e3acbfa9",
    "chapters": [
     "pie de página",
     "16.b"
@@ -17,7 +17,7 @@
   },
   {
    "fact": "commit_sha",
-   "value": "afbf645deb2db95cd0c34030e0ddc043a5bd4a68",
+   "value": "e3acbfa9a8d3f77bc389a3a91eeebffa09c1200a",
    "source": "git rev-parse HEAD",
    "status": "VERIFIED_CODE",
    "method": "versioning.git_commit_sha()",
@@ -404,7 +404,7 @@
     "09.3",
     "16.b"
    ],
-   "evidence_id": "b43e6f55143c445d352c8a2e"
+   "evidence_id": "975b1d30f1760c2cda4ff377"
   }
  ],
  "hardcoded_facts": []

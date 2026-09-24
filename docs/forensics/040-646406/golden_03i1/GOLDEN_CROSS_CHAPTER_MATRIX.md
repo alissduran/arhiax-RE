@@ -1,6 +1,6 @@
 # GOLDEN_CROSS_CHAPTER_MATRIX — 03I.1 (040-646406)
 
-Commit: `afbf645deb2db95cd0c34030e0ddc043a5bd4a68` · PDF: sha256 `0aea190b0c6d9330…`
+Commit: `e3acbfa9a8d3f77bc389a3a91eeebffa09c1200a` · PDF: sha256 `de57fe14e4fa28b3…`
 
 | Check | Capítulos | Resultado | Detalle |
 |---|---|---|---|

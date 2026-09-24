@@ -95,6 +95,24 @@ def _predio_real(*, lat=GOLDEN_LAT, lon=GOLDEN_LON, origen="DIRECCION_OFICIAL_LI
     }
 
 
+def _canonical_golden(**over) -> dict:
+    """CanonicalPropertyIdentity del caso Golden (identificadores reales del caso)."""
+    cid = {
+        "folio_snr": "040-646406",
+        "nupre": GOLDEN_NUPRE,
+        "codigo_catastral": GOLDEN_CODIGO,
+        "resolution_confidence": "VERIFIED_UNIT_IDENTITY",
+        "identity_verified": True,
+        "identificadores": {
+            "nupre": {"value": GOLDEN_NUPRE, "source": "CTL (NUPRE)"},
+            "codigo_catastral": {"value": GOLDEN_CODIGO,
+                                 "source": "CTL (CODIGO CATASTRAL)"},
+        },
+    }
+    cid.update(over)
+    return cid
+
+
 def _ubicacion(**kw):
     """resolve_market_location con valores por defecto NEUTROS (sin red)."""
     from market_context import resolve_market_location
@@ -340,13 +358,16 @@ class TestFRenderClasificacion(unittest.TestCase):
 class TestMElegibilidadGeometriaOficial(unittest.TestCase):
 
     @staticmethod
-    def _eval(predio_real, *, es_bogota=False, es_medellin=False, es_pasto=False,
-              ciudad="barranquilla"):
+    def _eval(predio_real, *, canonical=None, es_bogota=False, es_medellin=False,
+              es_pasto=False, ciudad="barranquilla"):
+        """Evalúa la geometría. Por defecto el canónico del caso Golden (H-1 exige
+        ahora, además, binding con la identidad canónica: 03I.2B-A)."""
         from market_context import evaluar_geometria_oficial_predio
-        return evaluar_geometria_oficial_predio(predio_real=predio_real,
-                                                ciudad=ciudad, es_bogota=es_bogota,
-                                                es_medellin=es_medellin,
-                                                es_pasto=es_pasto)
+        return evaluar_geometria_oficial_predio(
+            predio_real=predio_real,
+            canonical_identity=_canonical_golden() if canonical is None else canonical,
+            ciudad=ciudad, es_bogota=es_bogota, es_medellin=es_medellin,
+            es_pasto=es_pasto)
 
     def test_m1_geometria_oficial_valida_es_elegible(self):
         """M1: los 7 criterios cumplidos ⇒ elegible, con procedencia declarada."""
@@ -448,8 +469,17 @@ class TestMElegibilidadGeometriaOficial(unittest.TestCase):
                            return_value={}):
             r = enriquecer_desde_ctl(codigo_catastral=base_oficial["numero_predial_nacional"])
         self.assertEqual(r["coordenada_origen"], ORIGEN_GEOMETRIA_OFICIAL)
-        v = self._eval(r, es_medellin=True, ciudad="medellin")
+        # 03I.2B-A: el canónico de ESTE caso declara los identificadores de Medellín.
+        can_med = {"nupre": "AFT0001MDEL",
+                   "codigo_catastral": "050010103000000010012300001"}
+        v = self._eval(r, canonical=can_med, es_medellin=True, ciudad="medellin")
         self.assertTrue(v["eligible"], v.get("reason"))
+        self.assertEqual(v["canonical_binding"]["status"], "VERIFIED")
+        # Con la identidad canónica de OTRO predio, la misma geometría no promueve.
+        v_otro = self._eval(r, canonical=_canonical_golden(), es_medellin=True,
+                            ciudad="medellin")
+        self.assertFalse(v_otro["eligible"])
+        self.assertIn("CANONICAL_IDENTITY_MISMATCH", v_otro["reason"])
         # Sin punto oficial, el hint se declara y NO se promueve.
         base_sin = dict(base_oficial, lat=None, lon=None)
         with mock.patch("catastro_predio_medellin.consultar_predio_por_codigo",
@@ -465,12 +495,19 @@ class TestMElegibilidadGeometriaOficial(unittest.TestCase):
         self.assertEqual(r2["coordenada_origen"], ORIGEN_HINT)
         self.assertFalse(self._eval(r2, es_medellin=True, ciudad="medellin")["eligible"])
 
-    def test_m11_bogota_solo_promueve_la_geometria_del_lote_oficial(self):
-        """M11: en Bogotá el centroide del lote por LOTCODIGO es geometría oficial;
-        el punto de placa es un hint."""
+    def test_m11_bogota_lote_oficial_sin_clave_canonica_no_promueve(self):
+        """M11: en Bogotá el centroide del lote por LOTCODIGO es geometría oficial,
+        pero la fuente abierta NO publica el número predial nacional: el binding con
+        la identidad canónica queda `NOT_COMPARABLE` (que no es VERIFIED) y la
+        geometría NO se promueve. El punto de placa es un hint y tampoco promueve.
+
+        Cuando el canónico SÍ declare la clave municipal (p. ej. matrícula
+        municipal), el binding se apoya en ella y lo declara con alcance
+        `MUNICIPAL_KEY` (03I.2B-A §5).
+        """
         import catastro_predio_bogota as cb
         with mock.patch.object(cb, "_centroide_lote_por_codigo",
-                              return_value=(4.6000, -74.1000)), \
+                               return_value=(4.6000, -74.1000)), \
                 mock.patch.object(cb, "consultar_entorno_urbano",
                                   return_value={"disponible": False}), \
                 mock.patch.object(cb, "consultar_construccion", return_value={}), \
@@ -478,9 +515,23 @@ class TestMElegibilidadGeometriaOficial(unittest.TestCase):
             r = cb.enriquecer_por_punto(lat=4.5990, lon=-74.1010,
                                         codigo_lote="LOTE-12345")
         self.assertEqual(r["coordenada_origen"], cb.ORIGEN_GEOMETRIA_OFICIAL)
-        v = self._eval(r, es_bogota=True, ciudad="bogota")
-        self.assertTrue(v["eligible"], v.get("reason"))
-        self.assertEqual(v["provenance"]["feature_id_kind"], "LOTCODIGO")
+        # (a) canónico con número predial nacional (CTL) pero sin clave municipal:
+        #     la geometría del lote no puede ligarse → NO_COMPARABLE → no promueve.
+        v = self._eval(r, canonical={"codigo_catastral": "110010103000000010012300001"},
+                       es_bogota=True, ciudad="bogota")
+        self.assertFalse(v["eligible"])
+        self.assertEqual(v["canonical_binding"]["status"], "NOT_COMPARABLE")
+        self.assertEqual(v["canonical_binding"]["scope"], "MUNICIPAL_KEY")
+        self.assertIn("CANONICAL_IDENTITY_NOT_COMPARABLE", v["reason"])
+        # (b) canónico que SÍ declara la clave municipal: binding VERIFIED con
+        #     alcance municipal declarado (no se finge un predial de 30 dígitos).
+        v_mun = self._eval(r, canonical={"matricula_municipal": "LOTE-12345"},
+                           es_bogota=True, ciudad="bogota")
+        self.assertTrue(v_mun["eligible"], v_mun.get("reason"))
+        self.assertEqual(v_mun["canonical_binding"]["status"], "VERIFIED")
+        self.assertEqual(v_mun["canonical_binding"]["scope"], "MUNICIPAL_KEY")
+        self.assertEqual(v_mun["provenance"]["feature_id_kind"], "LOTCODIGO")
+        # (c) el punto de placa (sin lote oficial) es un hint.
         with mock.patch.object(cb, "_centroide_lote_por_codigo", return_value=None), \
                 mock.patch.object(cb, "consultar_entorno_urbano",
                                   return_value={"disponible": False}), \
@@ -489,14 +540,15 @@ class TestMElegibilidadGeometriaOficial(unittest.TestCase):
             r2 = cb.enriquecer_por_punto(lat=4.5990, lon=-74.1010,
                                          codigo_lote="LOTE-12345")
         self.assertEqual(r2["coordenada_origen"], cb.ORIGEN_HINT)
-        self.assertFalse(self._eval(r2, es_bogota=True, ciudad="bogota")["eligible"])
+        self.assertFalse(self._eval(r2, canonical={"matricula_municipal": "LOTE-12345"},
+                                    es_bogota=True, ciudad="bogota")["eligible"])
 
     def test_m8_golden_usa_la_geometria_oficial_y_la_declara(self):
         """M8: en el caso Golden la fuente es la geometría oficial del predio, con
         alcance explícito (no acredita la posición del apartamento) y sin depender
         del geocoder."""
         pr = _predio_real()
-        loc = _ubicacion(predio_real=pr,
+        loc = _ubicacion(predio_real=pr, canonical_identity=_canonical_golden(),
                          lat_geo=10.1111, lon_geo=-74.2222,
                          geocoder=lambda d, ciudad=None: self.fail(
                              "el geocoder NO debe usarse si hay geometría oficial"))
@@ -510,6 +562,9 @@ class TestMElegibilidadGeometriaOficial(unittest.TestCase):
         self.assertEqual(loc["matched_predial"], GOLDEN_CODIGO)
         self.assertIn("NO acredita", loc["coordinate_scope"])
         self.assertIsNone(loc["official_predio_rejected_reason"])
+        # 03I.2B-A: la promoción exige y declara el binding con la identidad canónica.
+        self.assertEqual(loc["canonical_binding_status"], "VERIFIED")
+        self.assertIn("nupre", loc["canonical_binding_fields"])
 
     def test_m9_determinismo_y_fail_closed_sin_fuentes(self):
         """M9: con geometría oficial el resultado no depende de la red; sin ninguna

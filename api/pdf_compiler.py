@@ -1298,12 +1298,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         market_context["coordinate_scope"] = _ubicacion.get("coordinate_scope")
         market_context["official_predio_rejected_reason"] = _ubicacion.get(
             "official_predio_rejected_reason")
+        # 03I.2B-A §9: binding con la identidad canónica del caso (se declara siempre,
+        # incluso cuando la geometría del predio no se promovió).
+        market_context["canonical_binding_status"] = _ubicacion.get("canonical_binding_status")
+        market_context["canonical_binding_fields"] = _ubicacion.get("canonical_binding_fields")
+        market_context["canonical_binding_scope"] = _ubicacion.get("canonical_binding_scope")
         print(f"[PDF][COORD-PROVENANCE] source={_ubicacion.get('coordinate_source')!r} "
               f"system={_ubicacion.get('source_system')!r} "
               f"layer={_ubicacion.get('source_layer')!r} "
               f"feature_id={_ubicacion.get('source_feature_id')!r} "
               f"method={_ubicacion.get('resolution_method')!r} "
-              f"verificado={_ubicacion.get('coordinate_source_verified')}")
+              f"verificado={_ubicacion.get('coordinate_source_verified')} "
+              f"binding={_ubicacion.get('canonical_binding_status')!r} "
+              f"campos={_ubicacion.get('canonical_binding_fields')!r}")
         market_context["official_urban_context"] = _oficial_urbano
         # 03I.1 · F2: resumen de procedencia urbana POR CAMPO (LIVE_OFFICIAL /
         # PACKAGED_REFERENCE / MIXED). 6.2 y 6.3 y el capítulo 8 consumen este
