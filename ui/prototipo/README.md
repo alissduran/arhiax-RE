@@ -4,6 +4,11 @@ Prototipo navegable del rediseño del portal, construido sobre el sistema
 «ARHIAX RE Cadastral Standard» (`docs/ui/01_DESIGN_SYSTEM.md`) y sobre los contratos
 **que ya existen** (`docs/ui/03_MAPA_CONTRATOS_API.md`).
 
+> Este directorio es la **consola de emisión** (operación). La cara del producto para
+> compradores, vendedores e inmobiliarias —la experiencia del portal, con el mástil de
+> marca blanca, las cinco tarjetas ejecutivas y la tríada de transacción— vive en
+> **`ui/portal/`**, y comparte estos mismos tokens.
+
 - `index.html` — estructura de las cuatro superficies.
 - `tokens.css` — tokens de diseño (fuente única de color y medida). Radio 0px.
 - `app.js` — lógica de lectura contra la API real. **Sin escrituras** (D7).

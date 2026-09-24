@@ -1,0 +1,242 @@
+/* DICTUS · Portal de confianza inmobiliaria — componentes del portal.
+ *
+ * Los TOKENS son los del sistema «ARHIAX RE Cadastral Standard» y viven en un solo
+ * archivo (`../prototipo/tokens.css`): aquí no se redefine ningún color ni medida,
+ * para que la consola y el portal no puedan divergir. Radio 0px, sin sombras
+ * ambientales: la jerarquía es tonal y estructural.
+ */
+@import url("../prototipo/tokens.css");
+
+:root {
+  --h-masthead: 48px;
+  --w-rail: 236px;
+  --mh-bg: #161c20;          /* grafito profundo del mástil institucional */
+  --mh-fg: #f1f1ef;
+  --mh-dim: #969ca1;
+}
+
+body { padding-top: var(--h-masthead); }
+
+/* ── Mástil institucional ─────────────────────────────────────────────────── */
+.masthead {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+  background: var(--mh-bg); color: var(--mh-fg);
+  border-bottom: 1px solid var(--c-ink);
+}
+.mh-inner {
+  max-width: var(--max-w); margin: 0 auto; height: var(--h-masthead);
+  padding: 0 var(--sp-xl); display: flex; align-items: center;
+  justify-content: space-between; gap: var(--sp-lg);
+}
+.mh-brand { display: flex; align-items: center; gap: var(--sp-md); min-width: 0; }
+.mh-logo {
+  font-family: var(--f-brand); font-weight: 600; font-size: 21px; line-height: 1;
+  letter-spacing: 0.06em; text-transform: uppercase; color: #fff;
+}
+.mh-tag {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--mh-fg);
+  border: 1px solid #3b4247; background: #2e3438; padding: 2px var(--sp-sm);
+}
+.mh-by { font-size: 12px; color: var(--mh-dim); white-space: nowrap; }
+.mh-by b { color: #fff; font-weight: 600; }
+.mh-sep { width: 1px; height: 16px; background: #3b4247; }
+.mh-alianza { font-size: 12px; color: #fff; white-space: nowrap; }
+.mh-wl {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--mh-fg);
+  border: 1px solid #3b4247; background: rgba(241, 241, 239, 0.06);
+  padding: 2px var(--sp-sm); white-space: nowrap;
+}
+.mh-seal {
+  display: flex; align-items: center; gap: var(--sp-xs); font-size: 11.5px;
+  color: var(--mh-dim); white-space: nowrap;
+}
+.mh-seal b { color: var(--mh-fg); font-weight: 500; }
+.mh-seal-dot { width: 6px; height: 6px; background: var(--ok-bd); display: inline-block; }
+
+.mh-right { display: flex; align-items: center; gap: var(--sp-lg); }
+.persp { display: flex; border: 1px solid #3b4247; background: #22282c; }
+.persp-btn {
+  height: 26px; padding: 0 var(--sp-md); border: 0; border-right: 1px solid #3b4247;
+  background: transparent; color: var(--mh-dim); font: inherit; font-size: 11.5px;
+  cursor: pointer; display: inline-flex; align-items: center; gap: var(--sp-xs);
+  white-space: nowrap;
+}
+.persp-btn:last-child { border-right: 0; }
+.persp-btn:hover { color: #fff; background: #2e3438; }
+.persp-btn[aria-selected="true"] { background: #fff; color: var(--c-ink); font-weight: 600; }
+.persp-btn .glyph { font-family: var(--f-mono); font-size: 11px; }
+.mh-session { display: flex; align-items: center; gap: var(--sp-sm); }
+.masthead input {
+  height: 26px; border-color: #3b4247; background: #22282c; color: #fff;
+  font-size: 12px;
+}
+.masthead input::placeholder { color: var(--mh-dim); }
+.masthead .btn.primary { background: #fff; color: var(--c-ink); border-color: #fff; height: 26px; }
+.masthead .btn.primary:hover { background: var(--c-surface-subtle); border-color: var(--c-surface-subtle); }
+.masthead .btn.flat { color: var(--mh-fg); border-color: #3b4247; height: 26px; }
+.masthead .btn.flat:hover { background: #2e3438; }
+.mh-user { font-size: 12px; color: #fff; }
+.mh-meta {
+  max-width: var(--max-w); margin: 0 auto; padding: 0 var(--sp-xl) var(--sp-sm);
+  display: flex; gap: var(--sp-md); align-items: center;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.04em; color: var(--mh-dim);
+  height: 18px;
+}
+.mh-meta .chip { height: 16px; font-size: 9px; }
+
+/* ── Estructura de trabajo ────────────────────────────────────────────────── */
+.shell {
+  display: grid; grid-template-columns: var(--w-rail) minmax(0, 1fr);
+  gap: var(--sp-lg); max-width: var(--max-w); margin: 0 auto; padding: var(--sp-lg) var(--sp-xl);
+  align-items: start;
+}
+.rail {
+  position: sticky; top: calc(var(--h-masthead) + var(--sp-lg));
+  border: 1px solid var(--c-border); background: var(--c-surface);
+  display: flex; flex-direction: column;
+}
+.rail-group { display: flex; flex-direction: column; padding: var(--sp-sm) 0; }
+.rail-group + .rail-group { border-top: 1px solid var(--c-border); }
+.rail-group > .lbl { padding: var(--sp-xs) var(--sp-lg); }
+.rail-item {
+  height: 30px; padding: 0 var(--sp-lg); border: 0; background: transparent;
+  text-align: left; font: inherit; font-size: 13px; color: var(--c-ink-2);
+  cursor: pointer; border-left: 2px solid transparent;
+}
+.rail-item:hover { background: var(--c-surface-subtle); color: var(--c-ink); }
+.rail-item[aria-current="true"] {
+  background: var(--c-surface-subtle); color: var(--c-ink); font-weight: 600;
+  border-left-color: var(--c-ink);
+}
+.rail-foot {
+  border-top: 1px solid var(--c-border); background: var(--c-surface-subtle);
+  padding: var(--sp-md) var(--sp-lg);
+}
+.rail-foot .t-xs { margin-top: var(--sp-xs); line-height: 15px; }
+
+.work { display: flex; flex-direction: column; gap: var(--sp-lg); min-width: 0; }
+
+/* ── Cinta institucional ──────────────────────────────────────────────────── */
+.ribbon {
+  display: flex; align-items: center; gap: var(--sp-md);
+  border: 1px solid var(--c-border); background: var(--c-surface-subtle);
+  padding: var(--sp-sm) var(--sp-lg); font-size: 12.5px; color: var(--c-ink-2);
+}
+.ribbon-k {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; background: var(--info-bg); color: var(--info-fg);
+  border: 1px solid var(--info-bd); padding: 2px var(--sp-sm); white-space: nowrap;
+}
+.ribbon-t { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ribbon-c {
+  font-family: var(--f-mono); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--c-ink);
+}
+
+/* ── Búsqueda ─────────────────────────────────────────────────────────────── */
+.hero h1 { margin: 0; }
+.search { display: flex; flex-wrap: wrap; gap: var(--sp-md); align-items: flex-end; }
+.search .field { flex: 0 0 160px; }
+
+/* ── Inmueble activo ──────────────────────────────────────────────────────── */
+.banner {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-lg);
+  border: 1px solid var(--c-ink); background: var(--c-surface);
+  border-left-width: 3px; padding: var(--sp-md) var(--sp-lg);
+}
+.banner-l { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.banner-k {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--c-ink-2);
+}
+.banner-dir { font-size: 16px; font-weight: 600; }
+.banner-sub { font-size: 12.5px; color: var(--c-ink-2); }
+.banner-r { display: flex; gap: var(--sp-xs); flex-wrap: wrap; justify-content: flex-end; }
+
+/* ── Tarjetas ejecutivas ──────────────────────────────────────────────────── */
+.kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--sp-md); }
+.kpi {
+  border: 1px solid var(--c-border); background: var(--c-surface);
+  display: flex; flex-direction: column; min-height: 156px;
+}
+.kpi > header {
+  display: flex; align-items: center; gap: var(--sp-sm);
+  border-bottom: 1px solid var(--c-border); background: var(--c-surface-subtle);
+  padding: var(--sp-sm) var(--sp-md); min-height: 30px;
+}
+.kpi-n {
+  width: 18px; height: 18px; display: grid; place-items: center;
+  background: var(--c-ink); color: #fff; font-family: var(--f-mono); font-size: 10px;
+}
+.kpi-t { font-size: 12.5px; font-weight: 600; }
+.kpi-v {
+  font-family: var(--f-mono); font-size: 19px; font-weight: 600;
+  padding: var(--sp-md) var(--sp-md) var(--sp-xs);
+  overflow-wrap: anywhere;
+}
+.kpi-v.is-text { font-family: var(--f-ui); font-size: 14px; font-weight: 600; }
+.kpi-s { font-size: 12px; color: var(--c-ink-2); padding: 0 var(--sp-md); flex: 1 1 auto; }
+.kpi-f {
+  border-top: 1px solid var(--c-border); margin-top: var(--sp-sm);
+  padding: var(--sp-xs) var(--sp-md); font-family: var(--f-mono); font-size: 10px;
+  color: var(--c-ink-3); text-transform: uppercase; letter-spacing: 0.03em;
+}
+
+/* ── Expediente verificado ────────────────────────────────────────────────── */
+.exp-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-lg); }
+.hash {
+  font-family: var(--f-mono); font-size: 12px; color: var(--c-ink);
+  background: var(--c-inset); border: 1px solid var(--c-border);
+  padding: var(--sp-sm) var(--sp-md); overflow-wrap: anywhere;
+}
+.exp-note { border-left: 3px solid var(--c-border-strong); padding-left: var(--sp-lg); }
+
+/* ── Tríada estratégica ───────────────────────────────────────────────────── */
+.triad { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-md); }
+.tri > .body { gap: var(--sp-sm); }
+.tri .linea { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-sm); font-size: 12.5px; }
+.tri .linea b { font-family: var(--f-mono); font-size: 11px; font-weight: 500; }
+
+/* ── Geometría ────────────────────────────────────────────────────────────── */
+.geom { border: 1px solid var(--c-border); background: var(--c-surface); }
+.geom svg { display: block; width: 100%; height: auto; }
+.tag {
+  display: inline-flex; align-items: center; gap: var(--sp-xs);
+  font-family: var(--f-mono); font-size: 11px; background: var(--c-inset);
+  border: 1px solid var(--c-border); padding: 2px var(--sp-sm); color: var(--c-ink);
+}
+.tag .k { color: var(--c-ink-3); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.pre { margin: 0; white-space: pre-wrap; max-height: 260px; overflow: auto; }
+
+/* ── Perspectivas: la lente cambia qué se destaca, no qué es verdad ───────── */
+/* La perspectiva por defecto muestra el expediente completo: no oculta nada. */
+body[data-persp="inmobiliaria"] .kpis { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+body[data-persp="titulux"] .kpi[data-ambito="valor"],
+body[data-persp="titulux"] .kpi[data-ambito="territorio"],
+body[data-persp="lonja"] .kpi[data-ambito="legal"],
+body[data-persp="lonja"] .kpi[data-ambito="contrapartes"] {
+  display: none;
+}
+body[data-persp="titulux"] .tri[data-uso="compraventa"] { border-color: var(--c-ink); border-left-width: 3px; }
+body[data-persp="lonja"] .tri[data-uso="compraventa"] { border-color: var(--c-ink); border-left-width: 3px; }
+body[data-persp="tecnico"] .kpis { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 1279px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; }
+  .kpis, .triad { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .exp-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 767px) {
+  .shell { padding: var(--sp-md); }
+  .mh-inner { padding: 0 var(--sp-md); gap: var(--sp-sm); }
+  .mh-alianza, .mh-seal, .mh-by, .mh-sep { display: none; }
+  .kpis, .triad { grid-template-columns: minmax(0, 1fr); }
+  .persp { flex-wrap: wrap; }
+  .banner { flex-direction: column; align-items: flex-start; }
+  .grid12 > [class^="col-"] { grid-column: span 12; }
+}

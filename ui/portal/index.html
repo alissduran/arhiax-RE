@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es" data-persp="inmobiliaria">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DICTUS · Portal de confianza inmobiliaria — ARHIAX RE</title>
+<!-- Los tokens del sistema «ARHIAX RE Cadastral Standard» son la única fuente de
+     color y medida (mismo archivo que usa la consola). No se duplican. -->
+<link rel="stylesheet" href="portal.css" />
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<!-- ══ Mástil institucional (marca blanca y ecosistema) ═════════════════════ -->
+<header class="masthead">
+  <div class="mh-inner">
+    <div class="mh-brand">
+      <span class="mh-logo">DICTUS</span>
+      <span class="mh-tag">Confianza inmobiliaria</span>
+      <span class="mh-by">· powered by <b>ARHIAX RE</b></span>
+      <span class="mh-sep" aria-hidden="true"></span>
+      <span class="mh-alianza">Alianza Inmobiliaria</span>
+      <span class="mh-wl">Marca blanca</span>
+      <span class="mh-seal" title="El expdiente se respalda en las capas oficiales y en la validación del profesional">
+        <span class="mh-seal-dot" aria-hidden="true"></span>
+        Respaldado por la <b>Lonja de Propiedad Raíz</b>
+      </span>
+    </div>
+
+    <div class="mh-right">
+      <div class="persp" role="tablist" aria-label="Perspectiva de trabajo">
+        <button type="button" class="persp-btn" role="tab" data-persp="inmobiliaria" aria-selected="true">
+          <span class="glyph" aria-hidden="true">▦</span> Vista inmobiliaria</button>
+        <button type="button" class="persp-btn" role="tab" data-persp="titulux" aria-selected="false">
+          <span class="glyph" aria-hidden="true">§</span> Titulux</button>
+        <button type="button" class="persp-btn" role="tab" data-persp="lonja" aria-selected="false">
+          <span class="glyph" aria-hidden="true">⌂</span> Portal Lonja</button>
+        <button type="button" class="persp-btn" role="tab" data-persp="tecnico" aria-selected="false">
+          <span class="glyph" aria-hidden="true">{ }</span> Técnico</button>
+      </div>
+
+      <div class="mh-session">
+        <div class="row" id="caja-sesion">
+          <input id="usuario" type="text" class="mono" placeholder="USUARIO" style="width:118px" autocomplete="username" />
+          <input id="clave" type="password" placeholder="CONTRASEÑA" style="width:128px" autocomplete="current-password" />
+          <button class="btn primary sm" id="btn-entrar" type="button">Entrar</button>
+        </div>
+        <div class="row hidden" id="sesion-info">
+          <span class="mh-user" id="sesion-usuario">—</span>
+          <span class="chip info" id="sesion-rol">sin rol</span>
+          <button class="btn flat sm" id="btn-salir" type="button">Salir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mh-meta" id="meta-plataforma" aria-live="polite"><span>sin sesión</span></div>
+</header>
+
+<div class="shell">
+  <!-- ══ Navegación lateral ════════════════════════════════════════════════ -->
+  <aside class="rail" aria-label="Secciones del expediente">
+    <div class="rail-group">
+      <div class="lbl">Expediente</div>
+      <button class="rail-item" type="button" data-go="resumen" aria-current="true">Resumen y auditoría</button>
+      <button class="rail-item" type="button" data-go="propiedad">Propiedad y catastro</button>
+      <button class="rail-item" type="button" data-go="legal">Legal y títulos</button>
+      <button class="rail-item" type="button" data-go="valor">Valor y mercado</button>
+      <button class="rail-item" type="button" data-go="territorio">Territorio y riesgos</button>
+      <button class="rail-item" type="button" data-go="contrapartes">Contrapartes</button>
+      <button class="rail-item" type="button" data-go="documentos">Documentos y evidencias</button>
+    </div>
+    <div class="rail-group">
+      <div class="lbl">Operación</div>
+      <button class="rail-item" type="button" data-go="cartera">Cartera de casos</button>
+      <button class="rail-item" type="button" data-go="diagnostico">Fuentes y diagnóstico</button>
+    </div>
+    <div class="rail-foot">
+      <div class="lbl">Perspectiva</div>
+      <div class="t-xs dim" id="persp-nota">Vista inmobiliaria: el expediente completo para el equipo comercial.</div>
+    </div>
+  </aside>
+
+  <!-- ══ Área de trabajo ═══════════════════════════════════════════════════ -->
+  <main class="work" id="main">
+
+    <!-- Cinta institucional de marca blanca -->
+    <div class="ribbon">
+      <span class="ribbon-k">Marca blanca</span>
+      <span class="ribbon-t" id="ribbon-texto">Expediente verificado emitido por DICTUS · ARHIAX RE para la inmobiliaria aliada</span>
+      <span class="ribbon-c" id="ribbon-ciudad">Barranquilla</span>
+    </div>
+
+    <!-- ── Búsqueda principal ────────────────────────────────────────────── -->
+    <section class="panel hero" aria-labelledby="hero-t">
+      <div class="body">
+        <h1 class="t-lg" id="hero-t">¿Qué inmueble quieres verificar?</h1>
+        <p class="t-sm dim" style="margin:0">
+          Estimación económica, revisión jurídica y de títulos, contexto geodésico y
+          evidencia reutilizable, en un solo expediente.
+        </p>
+        <div class="search">
+          <div class="field">
+            <label class="lbl" for="ciudad">Ciudad</label>
+            <select id="ciudad" class="mono">
+              <option value="barranquilla">Barranquilla</option>
+              <option value="medellin">Medellín</option>
+              <option value="bogota">Bogotá D.C.</option>
+              <option value="pasto">Pasto</option>
+            </select>
+          </div>
+          <div class="field" style="flex:2 1 280px">
+            <label class="lbl" for="direccion">Dirección o matrícula</label>
+            <input id="direccion" type="text" class="mono" placeholder="EJ: CL 79B 42 45 · o folio 040-XXXXXX" />
+          </div>
+          <div class="field" style="flex:1 1 180px">
+            <label class="lbl" for="nupre">NUPRE <span class="muted">(opcional)</span></label>
+            <input id="nupre" type="text" class="mono" placeholder="AFT…" />
+          </div>
+          <div class="field" style="flex:0 0 auto">
+            <label class="lbl" for="btn-buscar">&nbsp;</label>
+            <button class="btn primary" id="btn-buscar" type="button">Verificar inmueble</button>
+          </div>
+        </div>
+        <div class="state info" id="buscar-estado" role="status" aria-live="polite">
+          <div class="t-sm">Sin consulta en esta sesión</div>
+          <div class="why">La verificación se resuelve contra las capas oficiales del municipio: <code class="mono-sm">GET /api/resolver-matricula</code>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Inmueble activo ──────────────────────────────────────────────── -->
+    <section class="banner hidden" id="banner" aria-label="Inmueble activo">
+      <div class="banner-l">
+        <span class="banner-k">Inmueble activo</span>
+        <span class="banner-dir" id="banner-direccion">—</span>
+        <span class="banner-sub" id="banner-sub">—</span>
+      </div>
+      <div class="banner-r" id="banner-chips"></div>
+    </section>
+
+    <!-- ── Cinco tarjetas ejecutivas ────────────────────────────────────── -->
+    <section class="kpis" aria-label="Resumen de confianza">
+      <article class="kpi" data-ambito="identidad">
+        <header><span class="kpi-n">1</span><span class="kpi-t">Identidad</span></header>
+        <div class="kpi-v" id="k-identidad-v">PENDIENTE</div>
+        <div class="kpi-s" id="k-identidad-s">Matrícula, número predial y NUPRE resueltos contra las fuentes oficiales.</div>
+        <div class="kpi-f" id="k-identidad-f">—</div>
+      </article>
+      <article class="kpi" data-ambito="valor">
+        <header><span class="kpi-n">2</span><span class="kpi-t">Estimación económica</span></header>
+        <div class="kpi-v" id="k-valor-v">PENDIENTE</div>
+        <div class="kpi-s" id="k-valor-s">Valor del predio, lote, apartamento o casa por método declarado, con banda de valor.</div>
+        <div class="kpi-f" id="k-valor-f">—</div>
+      </article>
+      <article class="kpi" data-ambito="legal">
+        <header><span class="kpi-n">3</span><span class="kpi-t">Legal y títulos</span></header>
+        <div class="kpi-v" id="k-legal-v">PENDIENTE</div>
+        <div class="kpi-s" id="k-legal-s">Tradición, titularidad, gravámenes, medidas cautelares y afectaciones del folio.</div>
+        <div class="kpi-f" id="k-legal-f">—</div>
+      </article>
+      <article class="kpi" data-ambito="territorio">
+        <header><span class="kpi-n">4</span><span class="kpi-t">Territorio y riesgos</span></header>
+        <div class="kpi-v" id="k-territorio-v">PENDIENTE</div>
+        <div class="kpi-s" id="k-territorio-s">Barrio, estrato, POT, amenazas y coordenada con su fuente.</div>
+        <div class="kpi-f" id="k-territorio-f">—</div>
+      </article>
+      <article class="kpi" data-ambito="contrapartes">
+        <header><span class="kpi-n">5</span><span class="kpi-t">Contrapartes</span></header>
+        <div class="kpi-v" id="k-contrapartes-v">PENDIENTE</div>
+        <div class="kpi-s" id="k-contrapartes-s">Consulta frente a las listas restrictivas y sancionatorias aplicables, conforme al SAGRILAFT.</div>
+        <div class="kpi-f" id="k-contrapartes-f">—</div>
+      </article>
+    </section>
+
+    <!-- ── Expediente verificado ────────────────────────────────────────── -->
+    <section class="panel exp" aria-labelledby="exp-t">
+      <header>
+        <span class="t-md" id="exp-t">Expediente verificado DICTUS</span>
+        <span class="chip info" id="exp-chip">SIN EXPEDIENTE</span>
+      </header>
+      <div class="body">
+        <div class="exp-grid">
+          <div class="stack">
+            <div class="lbl">Sello de la ejecución</div>
+            <div class="hash" id="exp-sello">—</div>
+            <div class="lbl">Documento emitido</div>
+            <div class="row" id="exp-doc">
+              <span class="chip warn">NO EMITIDO</span>
+            </div>
+            <div class="lbl">Trazabilidad</div>
+            <dl class="kv" id="exp-kv">
+              <dt>Casos en cartera</dt><dd id="exp-casos">—</dd>
+              <dt>Documentos adjuntos</dt><dd id="exp-docs">—</dd>
+              <dt>Última consulta</dt><dd id="exp-hora">—</dd>
+            </dl>
+          </div>
+          <div class="exp-note">
+            <div class="lbl">Qué demuestra el sello</div>
+            <p class="t-sm" style="margin:var(--sp-sm) 0 0">
+              Cada consulta queda sellada con el <b>hash de la consulta</b>, la
+              <b>versión de la fuente</b> y la <b>fecha de ejecución</b>. El sello viaja
+              con el expediente: permite demostrar qué se consultó, contra qué versión y
+              con qué resultado, y habilitar el reuso de la verificación en una segunda
+              operación.
+            </p>
+            <p class="t-xs muted" style="margin:var(--sp-sm) 0 0">
+              El sello del capítulo 17 del dictamen es un SHA-256 sobre folio, referencia
+              y timestamp de emisión: identifica la ejecución y no es el hash del archivo
+              (un archivo no puede contener su propio hash). El hash del archivo emitido
+              se publica en el recibo de ejecución y en el manifest de la corrida.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Tríada estratégica ───────────────────────────────────────────── -->
+    <section class="triad" aria-label="Preparación para la transacción">
+      <article class="panel tri" data-uso="compraventa">
+        <header><span class="t-md">Compra y venta</span><span class="chip info" id="tri-cv-chip">—</span></header>
+        <div class="body" id="tri-cv-body"></div>
+      </article>
+      <article class="panel tri" data-uso="hipoteca">
+        <header><span class="t-md">Crédito hipotecario</span><span class="chip info" id="tri-ht-chip">—</span></header>
+        <div class="body" id="tri-ht-body"></div>
+      </article>
+      <article class="panel tri" data-uso="seguro">
+        <header><span class="t-md">Seguro de títulos</span><span class="chip info" id="tri-st-chip">—</span></header>
+        <div class="body" id="tri-st-body"></div>
+      </article>
+    </section>
+
+    <!-- ── Pestañas del expediente ──────────────────────────────────────── -->
+    <nav class="tabs" role="tablist" aria-label="Contenido del expediente">
+      <button class="tab" type="button" role="tab" id="tab-resumen" data-go="resumen" aria-selected="true" aria-controls="p-resumen">Resumen</button>
+      <button class="tab" type="button" role="tab" id="tab-propiedad" data-go="propiedad" aria-selected="false" aria-controls="p-propiedad">Propiedad y catastro</button>
+      <button class="tab" type="button" role="tab" id="tab-legal" data-go="legal" aria-selected="false" aria-controls="p-legal">Legal y títulos</button>
+      <button class="tab" type="button" role="tab" id="tab-valor" data-go="valor" aria-selected="false" aria-controls="p-valor">Valor y mercado</button>
+      <button class="tab" type="button" role="tab" id="tab-territorio" data-go="territorio" aria-selected="false" aria-controls="p-territorio">Territorio</button>
+      <button class="tab" type="button" role="tab" id="tab-contrapartes" data-go="contrapartes" aria-selected="false" aria-controls="p-contrapartes">Contrapartes</button>
+      <button class="tab" type="button" role="tab" id="tab-documentos" data-go="documentos" aria-selected="false" aria-controls="p-documentos">Documentos</button>
+      <button class="tab" type="button" role="tab" id="tab-cartera" data-go="cartera" aria-selected="false" aria-controls="p-cartera">Cartera</button>
+      <button class="tab" type="button" role="tab" id="tab-diagnostico" data-go="diagnostico" aria-selected="false" aria-controls="p-diagnostico">Fuentes</button>
+    </nav>
+
+    <!-- P · Resumen y auditoría -->
+    <section class="grid12 tabpanel" id="p-resumen" role="tabpanel" aria-labelledby="tab-resumen">
+      <div class="col-6">
+        <section class="panel">
+          <header><span class="t-md">Geometría y coordenada</span><span class="lbl" id="geom-chip">SIN COORDENADA</span></header>
+          <div class="body">
+            <div class="geom" id="geom-frame">
+              <svg viewBox="0 0 320 200" role="img" aria-label="Marco de referencia catastral">
+                <defs>
+                  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M20 0 L0 0 0 20" fill="none" stroke="#e3e3df" stroke-width="1"/>
+                  </pattern>
+                </defs>
+                <rect x="0" y="0" width="320" height="200" fill="url(#grid)"/>
+                <polygon id="geom-parcela" points="" fill="#eef1f4" stroke="#3f4a5a" stroke-width="1.5"/>
+                <line id="geom-cruz-x" x1="0" y1="100" x2="320" y2="100" stroke="#cfcfc9" stroke-width="1"/>
+                <line id="geom-cruz-y" x1="160" y1="0" x2="160" y2="200" stroke="#cfcfc9" stroke-width="1"/>
+                <rect x="150" y="90" width="10" height="10" fill="#2e3438"/>
+              </svg>
+            </div>
+            <div class="row wrap" id="geom-tags"></div>
+            <div class="state info" id="geom-nota">
+              <div class="t-sm">Marco de referencia, no levantamiento topográfico</div>
+              <div class="why">Se grafican las coordenadas informadas por la fuente oficial, con su etiqueta y su estado. El deslinde se valida en campo.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="col-6">
+        <section class="panel">
+          <header><span class="t-md">Ledger de procedencia</span><span class="lbl" id="ledger-caption">sin consulta</span></header>
+          <div class="body flush">
+            <div class="tbl-wrap">
+              <table class="dense">
+                <thead><tr><th scope="col">Fuente consultada</th><th scope="col">Estado</th><th scope="col">Detalle</th></tr></thead>
+                <tbody id="ledger-body">
+                  <tr><td colspan="3" class="muted t-sm" style="padding:var(--sp-md)">La verificación de una dirección llena este ledger con cada servicio consultado y su resultado.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- P · Propiedad y catastro -->
+    <section class="grid12 tabpanel hidden" id="p-propiedad" role="tabpanel">
+      <div class="col-7">
+        <section class="panel">
+          <header><span class="t-md">Datos del predio</span><span class="chip info" id="prop-chip">SIN CONSULTA</span></header>
+          <div class="body flush">
+            <div class="tbl-wrap">
+              <table>
+                <caption>Valor, estado y fuente por campo. Sin dato se imprime el estado y el motivo.</caption>
+                <thead><tr><th scope="col">Campo</th><th scope="col">Valor y estado</th><th scope="col">Fuente</th></tr></thead>
+                <tbody id="prop-body">
+                  <tr><td colspan="3" class="muted t-sm" style="padding:var(--sp-md)">Sin consulta.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="col-5">
+        <section class="panel">
+          <header><span class="t-md">Candidatos del predio</span><span class="lbl" id="cand-caption">—</span></header>
+          <div class="body" id="cand-body">
+            <div class="state info">
+              <div class="t-sm">Sin candidatos</div>
+              <div class="why">Cuando la capa oficial devuelve más de un predio posible, se listan aquí para revisión: la interfaz no elige por su cuenta.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- P · Legal y títulos -->
+    <section class="grid12 tabpanel hidden" id="p-legal" role="tabpanel">
+      <div class="col-7">
+        <section class="panel">
+          <header><span class="t-md">Cadena de tradición</span><span class="lbl">folio registral</span></header>
+          <div class="body">
+            <div id="legal-timeline" class="timeline"></div>
+            <div class="state info" id="legal-nota">
+              <div class="t-sm">La cadena registral se lee del certificado de tradición y libertad</div>
+              <div class="why">Los actos inscritos, gravámenes y medidas cautelares viajan en el dictamen emitido; el portal no los reconstruye por su cuenta.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="col-5">
+        <section class="panel">
+          <header><span class="t-md">Certificado y adjuntos</span><span class="lbl" id="legal-docs-count">—</span></header>
+          <div class="body flush">
+            <div class="tbl-wrap">
+              <table class="dense">
+                <thead><tr><th scope="col">Documento</th><th scope="col">Tipo</th><th scope="col">Cargado</th></tr></thead>
+                <tbody id="legal-docs-body">
+                  <tr><td colspan="3" class="muted t-sm" style="padding:var(--sp-md)">Sin caso abierto.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- P · Valor y mercado -->
+    <section class="grid12 tabpanel hidden" id="p-valor" role="tabpanel">
+      <div class="col-12">
+        <section class="panel">
+          <header><span class="t-md">Estimación económica</span><span class="chip warn" id="valor-chip">CONTRATO C-02 FALTANTE</span></header>
+          <div class="body">
+            <div class="grid12">
+              <div class="col-4"><div class="metric"><div class="lbl">Área privada</div><div class="v" id="v-area">—</div><div class="t-xs muted">del caso abierto</div></div></div>
+              <div class="col-4"><div class="metric"><div class="lbl">Valor central estimado</div><div class="v" id="v-central">—</div><div class="t-xs muted">viaja en el dictamen emitido</div></div></div>
+              <div class="col-4"><div class="metric"><div class="lbl">Banda de valor</div><div class="v" id="v-banda">—</div><div class="t-xs muted">p10 · p90 del método declarado</div></div></div>
+            </div>
+            <div class="state warn" id="valor-nota">
+              <div class="t-sm">El valor y su banda se leen del dictamen emitido, no de la pantalla</div>
+              <div class="why">La interfaz de usuario no recibe todavía el bloque estructurado de valoración (contrato C-02, ficha de verificación). Mientras no exista, aquí se declara el estado y se enlaza el documento emitido: nunca se muestra un monto sin fuente.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- P · Territorio -->
+    <section class="grid12 tabpanel hidden" id="p-territorio" role="tabpanel">
+      <div class="col-7">
+        <section class="panel">
+          <header><span class="t-md">Contexto territorial por campo</span><span class="lbl" id="terr-caption">—</span></header>
+          <div class="body flush">
+            <div class="tbl-wrap">
+              <table class="dense">
+                <thead><tr><th scope="col">Campo</th><th scope="col">Valor y estado</th><th scope="col">Fuente</th></tr></thead>
+                <tbody id="terr-body">
+                  <tr><td colspan="3" class="muted t-sm" style="padding:var(--sp-md)">Sin consulta.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="col-5">
+        <section class="panel">
+          <header><span class="t-md">Capas del municipio</span><span class="chip info" id="capas-chip">sin consultar</span></header>
+          <div class="body flush">
+            <div class="tbl-wrap">
+              <table class="dense">
+                <thead><tr><th scope="col">Ciudad</th><th scope="col">Estado</th><th scope="col">Capas</th></tr></thead>
+                <tbody id="capas-body">
+                  <tr><td colspan="3" class="muted t-sm" style="padding:var(--sp-md)">Abra la perspectiva técnica o pulse «Consultar» en Fuentes.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- P · Contrapartes -->
+    <section class="grid12 tabpanel hidden" id="p-contrapartes" role="tabpanel">
+      <div class="col-12">
+        <section class="panel">
+          <header><span class="t-md">Screening de contrapartes</span><span class="chip warn" id="contra-chip">CONTRATO FALTANTE</span></header>
+          <div class="body">
+            <div class="state warn">
+              <div class="t-sm">La consulta de contrapartes se ejecuta al generar el dictamen</div>
+              <div class="why">Compradores, vendedores y constructoras se consultan contra las listas restrictivas y sancionatorias aplicables, conforme al SAGRILAFT, y la evidencia queda versionada dentro del expediente. La interfaz de usuario no recibe todavía ese bloque estructurado (contrato C-03): se declara el estado en lugar de mostrar un resultado sin fuente.</div>
+            </div>
+            <dl class="kv" id="contra-kv">
+              <dt>Estado del screening</dt><dd><span class="chip warn">PENDIENTE</span></dd>
+              <dt>Evidencia</dt><dd>en el dictamen emitido</dd>
+            </dl>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- P · Documentos -->
+    <section class="grid12 tabpanel hidden" id="p-documentos" role="tabpanel">
+      <div class="col-12">
+        <section class="panel">
+          <header><span class="t-md">Documentos y evidencias del caso</span><span class="lbl" id="docs-caption">sin caso</span></header>
+          <div class="body flush">
+            <div class="tbl-wrap">
+              <table>
+                <thead><tr><th scope="col">Documento</th><th scope="col">Tipo</th><th scope="col">Cargado</th><th scope="col">Acciones</th></tr></thead>
+                <tbody id="docs-body">
+                  <tr><td colspan="4" class="muted t-sm" style="padding:var(--sp-md)">Abra un caso de la cartera para ver sus documentos.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- P · Cartera -->
+    <section class="grid12 tabpanel hidden" id="p-cartera" role="tabpanel">
+      <div class="col-12">
+        <div class="metrics">
+          <div class="metric"><div class="lbl">Casos</div><div class="v" id="m-total">—</div><div class="t-xs muted">GET /api/dictamenes</div></div>
+          <div class="metric"><div class="lbl">Con certificado</div><div class="v" id="m-ctl">—</div><div class="t-xs muted">certificado_cargado</div></div>
+          <div class="metric"><div class="lbl">Con dictamen emitido</div><div class="v" id="m-pdf">—</div><div class="t-xs muted">pdf_path</div></div>
+          <div class="metric"><div class="lbl">Ciudades</div><div class="v" id="m-ciudades">—</div><div class="t-xs muted">del portafolio</div></div>
+        </div>
+        <section class="panel">
+          <header><span class="t-md">Cartera de expedientes</span><span class="lbl" id="cartera-estado">sin cargar</span></header>
+          <div class="body">
+            <div class="row wrap">
+              <input type="search" id="q" placeholder="Buscar folio, dirección o barrio" style="max-width:320px" />
+              <select id="f-ciudad" class="mono" style="max-width:180px"><option value="">Toda ciudad</option></select>
+              <button class="btn" id="btn-refrescar" type="button">Refrescar</button>
+            </div>
+          </div>
+          <div class="body flush">
+            <div class="tbl-wrap">
+              <table>
+                <caption id="cartera-caption">Inicie sesión para leer la cartera.</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Folio</th><th scope="col">Dirección</th><th scope="col">Ciudad</th>
+                    <th scope="col" class="num">Área m²</th><th scope="col" class="num">Estrato</th>
+                    <th scope="col">Estado</th><th scope="col">Documento</th><th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="cartera-body">
+                  <tr><td colspan="8" class="muted t-sm" style="padding:var(--sp-md)">Inicie sesión y pulse Refrescar.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- P · Fuentes y diagnóstico -->
+    <section class="grid12 tabpanel hidden" id="p-diagnostico" role="tabpanel">
+      <div class="col-6">
+        <section class="panel">
+          <header><span class="t-md">Plataforma</span><span class="chip info">GET /api/config</span></header>
+          <div class="body"><dl class="kv" id="kv-config"><dt>estado</dt><dd>sin cargar</dd></dl></div>
+        </section>
+      </div>
+      <div class="col-6">
+        <section class="panel">
+          <header><span class="t-md">Estado del motor</span><span class="chip info">GET /api/v1/status</span></header>
+          <div class="body"><pre class="mono-sm pre" id="pre-status">sin cargar</pre></div>
+        </section>
+      </div>
+      <div class="col-12">
+        <section class="panel">
+          <header><span class="t-md">Contratos consultados</span><span class="chip info" id="chip-fuentes">—</span></header>
+          <div class="body flush">
+            <div class="tbl-wrap">
+              <table class="dense">
+                <caption>Resultado real de cada contrato de lectura. Sin dato se declara el motivo, nunca se asume.</caption>
+                <thead><tr><th scope="col">Contrato</th><th scope="col">Estado</th><th scope="col">Detalle</th></tr></thead>
+                <tbody id="fuentes-body">
+                  <tr><td colspan="3" class="muted t-sm" style="padding:var(--sp-md)">Pulse «Consultar».</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="body"><button class="btn" id="btn-fuentes" type="button">Consultar</button></div>
+        </section>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-text"></span></div>
+<script src="portal.js"></script>
+</body>
+</html>
