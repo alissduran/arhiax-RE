@@ -1478,6 +1478,41 @@
       }
     }
 
+    // ── Insumos del trabajo asíncrono ─────────────────────────────────────────
+    // El worker de la cola recibe el CTL y la licencia en base64 dentro del payload
+    // (QStash no transporta multipart). Si la COLA no entrega el trabajo, el
+    // navegador puede empujar el MISMO trabajo directamente al worker con la sesión
+    // del usuario: para eso hay que reconstruir el payload desde los archivos en
+    // memoria (los mismos que viajan en la generación síncrona).
+    function _archivoABase64(file) {
+      return new Promise((resolve) => {
+        if (!file) return resolve(null);
+        try {
+          const fr = new FileReader();
+          fr.onload = () => {
+            const s = String(fr.result || '');
+            resolve(s.indexOf(',') >= 0 ? s.split(',')[1] : null);
+          };
+          fr.onerror = () => resolve(null);
+          fr.readAsDataURL(file);
+        } catch (e) { resolve(null); }
+      });
+    }
+
+    async function construirPayloadTrabajo(jobId, c) {
+      const payload = {
+        job_id: jobId,
+        folio_matricula: (c && c.folio_matricula) || null,
+        direccion: (c && c.direccion) || null,
+        area: (c && c.area) || 0,
+        barrio: (c && c.barrio) || '',
+        ciudad: (c && c.ciudad) || 'barranquilla'
+      };
+      payload.certificado_b64 = await _archivoABase64(selectedFiles['certificado']);
+      payload.licencia_b64 = await _archivoABase64(selectedFiles['licencia']);
+      return payload;
+    }
+
     async function descargarPDFDictamen() {
       const c = dictamenes.find(item => item.id === selectedCaseId);
       if (!c) return;
@@ -1569,16 +1604,24 @@
         const data = await res.json().catch(() => null);
 
         if (data && data.encolado === true && data.job_id) {
-          // 2) Polling del trabajo: el worker compila en segundo plano (QStash + Neon)
-          setEstado('⏳ Generando dictamen en segundo plano (cola QStash)…');
+          // 2) Polling del trabajo: el worker compila en segundo plano (QStash + Neon).
+          //    Si la cola no entrega (firma de QStash sin configurar, worker
+          //    inalcanzable) o el worker muere por límite de tiempo, el navegador
+          //    antes giraba sin explicación. Ahora: progreso visible, auto-empuje del
+          //    worker y caída a generación SÍNCRONA si nada de eso funciona.
           const jobId = data.job_id;
-          let intentos = 0;
-          // El worker puede tardar varios minutos (consultas en vivo + screening
-          // SAGRILAFT con descarga de listas). Se espera hasta ~6.5 min para no
-          // rendirse antes que el servidor (maxDuration 300 s en vercel.json).
-          while (intentos < 78) {
-            await new Promise(r => setTimeout(r, 5000));
+          const t0 = Date.now();
+          const reloj = () => `${Math.floor((Date.now() - t0) / 1000)} s`;
+          setEstado(`⏳ Generando el dictamen (trabajo ${jobId.slice(0, 8)} · 0 s)…`);
+          let intentos = 0, empujado = false, ultimoEstado = 'pendiente';
+          const CORRIDA_EMPUJE_S = 20;   // a los 20 s se empuja el worker desde el navegador
+          const ESPERA_MAX_S = 130;      // a los 130 s se pasa a generación síncrona
+          const payloadJob = await construirPayloadTrabajo(jobId, c);
+
+          while (intentos < 60) {
+            await new Promise(r => setTimeout(r, 3000));
             intentos++;
+            const seg = Math.floor((Date.now() - t0) / 1000);
             try {
               const rJob = await apiFetch(`/api/v1/pdf/trabajos/${jobId}`);
               if (!rJob.ok) throw new Error(`HTTP ${rJob.status}`);
@@ -1589,7 +1632,6 @@
               }
               const j = await rJob.json().catch(() => null);
               if (j && j.estado === 'listo') {
-                // listo sin pdf en la respuesta (edge case): reintentar descarga
                 const r2 = await apiFetch(`/api/v1/pdf/trabajos/${jobId}`);
                 if (r2.headers.get('content-type')?.includes('application/pdf')) {
                   guardarBlob(await r2.blob());
@@ -1597,14 +1639,50 @@
                 }
                 throw new Error('El dictamen se generó pero no se pudo descargar.');
               }
-              if (j && j.estado === 'error') throw new Error('Error en el worker: ' + (j.error || 'desconocido'));
-              setEstado(`⏳ Generando en segundo plano… (intento ${intentos})`);
+              if (j && j.estado === 'error') {
+                throw new Error('El servidor no pudo compilar el dictamen: ' + (j.error || 'motivo desconocido'));
+              }
+              if (j && j.estado === 'interrumpido') {
+                // Estado terminal: el trabajo no llegó a completarse.
+                throw new Error((j.error || 'El trabajo se interrumpió.') +
+                  ' Se genera de nuevo: ' + (j.sugerencia || ''));
+              }
+              ultimoEstado = (j && j.estado) || ultimoEstado;
+              setEstado(`⏳ Generando el dictamen · ${ultimoEstado} · ${seg} s` +
+                (empujado ? ' · reintento directo en curso' : ''));
             } catch (e) {
               if (e.message.includes('Sesión expirada')) throw e;
+              // Un estado terminal del servidor NO se reintenta: se informa.
+              if (/^(El servidor no pudo compilar|El trabajo se interrumpió|El dictamen se generó)/.test(e.message)) {
+                throw e;
+              }
               // error de red puntual: seguir reintentando
+              setEstado(`⏳ Generando el dictamen · sin respuesta del trabajo · ${seg} s`);
+            }
+
+            // Auto-recuperación 1: empujar el worker directamente (con el token de la
+            // sesión). Sorteo la entrega de la cola si ésta está mal configurada.
+            if (!empujado && seg >= CORRIDA_EMPUJE_S) {
+              empujado = true;
+              try {
+                const rk = await apiFetch('/api/v1/pdf/worker', {
+                  method: 'POST', headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payloadJob)
+                });
+                setEstado(rk.ok
+                  ? `⏳ El servidor está compilando el dictamen · ${seg} s`
+                  : `⏳ Generando el dictamen · ${seg} s`);
+              } catch (e) { /* si falla, el polling y el fallback siguen */ }
+            }
+
+            // Auto-recuperación 2: pasado el límite, generación SÍNCRONA (una sola
+            // petición que devuelve el PDF). Nunca deja al usuario girando.
+            if (Math.floor((Date.now() - t0) / 1000) >= ESPERA_MAX_S) {
+              setEstado(`⏳ El trabajo en cola no completó en ${ESPERA_MAX_S} s: generando de forma directa…`);
+              break;
             }
           }
-          // Última consulta: el trabajo pudo quedar "listo" justo al agotarse la espera
+          // Última consulta antes de caer al camino síncrono
           try {
             const rFinal = await apiFetch(`/api/v1/pdf/trabajos/${jobId}`);
             if ((rFinal.headers.get('content-type') || '').includes('application/pdf')) {
@@ -1612,9 +1690,7 @@
               return;
             }
           } catch (e) { /* se ignora: abajo se informa al usuario */ }
-          throw new Error('El dictamen sigue generándose en el servidor (tardó más de lo esperado). ' +
-            'Espera ~1 minuto y vuelve a generar: la segunda vez es mucho más rápida porque las ' +
-            'listas de screening ya quedaron en caché.');
+          setEstado('⏳ La cola no respondió: el dictamen se está generando de forma directa (puede tardar ~1 min)…');
         }
 
         // 3) Cola no disponible: fallback a generación SÍNCRONA (sin async_)

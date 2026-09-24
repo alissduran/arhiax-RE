@@ -50,3 +50,4 @@ tmp_*/
 # se regeneran con `python scripts/golden_page_review_03i1.py`).
 docs/forensics/**/paginas/
 
+tmp_arhiax/

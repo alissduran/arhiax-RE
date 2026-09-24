@@ -176,6 +176,12 @@ def _check_login_rate_limit(request: Request, max_intentos: int = 5, ventana_seg
 FOLIO_RE = re.compile(r"^[0-9]{2,3}[A-Z]?-\d{1,12}$")
 MAX_UPLOAD_BYTES = 8 * 1024 * 1024  # 8 MB
 
+# 03I.3: un trabajo de PDF que supera esta edad sin quedar en `listo`/`error` se
+# declara INTERRUMPIDO. Es el síntoma real reportado («se queda pensando y no
+# descarga»): la entrega de la cola no llegó al worker o el worker fue matado por
+# el límite de tiempo de la plataforma. Declararlo evita el giro infinito.
+TRABAJO_PDF_VENCIDO_S = 150
+
 
 def _sanitizar_folio(folio) -> str:
     """Normaliza una matrícula inmobiliaria (040-XXXXXX) o devuelve 'Pendiente'."""
@@ -903,8 +909,11 @@ async def generar_dictamen_stateless(
 
     import uuid
     run_id = str(uuid.uuid4())
-    temp_run_dir = Path("/tmp") / f"run_{run_id}"
-    temp_run_dir.mkdir(parents=True, exist_ok=True)
+    # 03I.3: mismo directorio de trabajo que el worker (`_dir_trabajo`), que respeta
+    # ARHIAX_TMP_DIR. Antes este camino fijaba `/tmp`, que en Windows resuelve a
+    # `C:\tmp` y hace fallar la generación con PermissionError: el mismo producto
+    # debía compilar en Linux (Vercel) pero no podía reproducirse en local.
+    temp_run_dir = _dir_trabajo(run_id)
 
     # 1. Guardar archivos cargados (solo si no están vacíos) con validación de contenido
     _ctl_adjuntado = bool(certificado and certificado.filename)
@@ -1109,8 +1118,15 @@ async def generar_gpv_f77_endpoint(
 # ── Cola asíncrona de PDF (QStash) ─────────────────────────────────────
 
 def _dir_trabajo(run_id: str) -> Path:
-    """Directorio temporal de trabajo: ARHIAX_TMP_DIR (tests/dev) o /tmp (Vercel)."""
-    base = os.environ.get("ARHIAX_TMP_DIR") or "/tmp"
+    """Directorio temporal de trabajo, portable.
+
+    Orden: `ARHIAX_TMP_DIR` (tests/despliegues propios) → `/tmp` si existe (Vercel y
+    cualquier Linux) → `tmp_arhiax/` dentro del proyecto (Windows local, donde `/tmp`
+    no existe y `Path('/tmp')` resuelve a `C:\\tmp`, que no es escribible).
+    """
+    base = os.environ.get("ARHIAX_TMP_DIR")
+    if not base:
+        base = "/tmp" if os.path.isdir("/tmp") else str(PROJECT_ROOT / "tmp_arhiax")
     d = Path(base) / f"run_{run_id}"
     d.mkdir(parents=True, exist_ok=True)
     return d
@@ -1374,6 +1390,22 @@ async def worker_generar_pdf(request: Request):
     job_id = str(payload.get("job_id") or "")
     if not job_id:
         raise HTTPException(status_code=400, detail="Falta job_id.")
+
+    # Idempotencia (03I.3): el mismo trabajo puede llegar dos veces (reintento de
+    # QStash y/o empuje directo del navegador cuando la cola no entrega). Si ya
+    # está LISTO no se recompila: se responde con el resultado existente.
+    try:
+        _conn = get_db_connection()
+        _cur = _conn.cursor()
+        _cur.execute("SELECT estado, pdf FROM trabajos_pdf WHERE id = ?", (job_id,))
+        _fila = _cur.fetchone()
+        _conn.close()
+        if _fila and _fila["estado"] == "listo" and _fila["pdf"]:
+            return {"job_id": job_id, "estado": "listo",
+                    "bytes": len(bytes(_fila["pdf"])), "idempotente": True}
+    except Exception as _e_idem:  # noqa: BLE001 — la idempotencia no debe impedir compilar
+        print(f"[WORKER][WARN] no se pudo comprobar el estado previo: {_e_idem}")
+
     _actualizar_trabajo(job_id, "procesando", error=None)
 
     certificado_bytes = None
@@ -1493,10 +1525,18 @@ async def worker_generar_pdf(request: Request):
 
 @app.get("/api/v1/pdf/trabajos/{job_id}")
 def obtener_trabajo_pdf(job_id: str, auth: dict = Depends(require_auth)):
-    """Consulta el estado de un trabajo asíncrono; si está listo, devuelve el PDF."""
+    """Consulta el estado de un trabajo asíncrono; si está listo, devuelve el PDF.
+
+    03I.3: además del estado, informa la EDAD del trabajo y si quedó VENCIDO. Un
+    trabajo en `pendiente`/`procesando` que supera `TRABAJO_PDF_VENCIDO_S` significa
+    que la entrega de la cola no llegó al worker (firma de QStash no configurada,
+    URL del worker inalcanzable) o que el worker fue interrumpido por el límite de
+    tiempo de la plataforma. Antes eso dejaba al navegador girando sin explicación;
+    ahora el cliente recibe un estado TERMINAL con el motivo y cómo recuperarse.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, estado, pdf, error FROM trabajos_pdf WHERE id = ?", (job_id,))
+    cursor.execute("SELECT id, estado, pdf, error, creado FROM trabajos_pdf WHERE id = ?", (job_id,))
     row = cursor.fetchone()
     conn.close()
     if not row:
@@ -1505,7 +1545,29 @@ def obtener_trabajo_pdf(job_id: str, auth: dict = Depends(require_auth)):
     if estado == "listo" and row["pdf"]:
         return Response(content=bytes(row["pdf"]), media_type="application/pdf",
                         headers={"Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{job_id}.pdf"'})
-    return {"job_id": job_id, "estado": estado, "error": row["error"]}
+
+    edad_s = None
+    try:
+        _creado = row["creado"]
+        if _creado:
+            edad_s = int((datetime.now()
+                          - datetime.fromisoformat(str(_creado))).total_seconds())
+    except Exception:
+        edad_s = None
+    vencido = bool(edad_s is not None and edad_s > TRABAJO_PDF_VENCIDO_S
+                   and str(estado) in ("pendiente", "procesando"))
+    respuesta = {"job_id": job_id, "estado": estado, "error": row["error"],
+                 "edad_s": edad_s, "vencido": vencido}
+    if vencido:
+        respuesta["estado"] = "interrumpido"
+        respuesta["error"] = (
+            f"El trabajo lleva {edad_s} s sin completarse (límite {TRABAJO_PDF_VENCIDO_S} s). "
+            "La cola no llegó al worker o el worker fue interrumpido por el límite de "
+            "tiempo de la plataforma.")
+        respuesta["sugerencia"] = ("Generar de nuevo: la segunda corrida es más rápida y, "
+                                  "si la cola no está operativa, la generación se hace de "
+                                  "forma síncrona.")
+    return respuesta
 
 
 @app.get("/api/dictamenes/{case_id}/pdf")
