@@ -296,6 +296,36 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
     titu = ctx.get("titulux") or {}
     res = ctx.get("res_avaluo") or {}
     receipts = captura.get("receipts") or {}
+    # Clasificación YA calculada por el producto (régimen jurídico, uso económico y
+    # tipología con su estado de verdad). No se recalcula nada: se lee.
+    clasif = ctx.get("clasificacion") or {}
+    _regimen = (clasif.get("juridical_regime") or {})
+    _uso = (clasif.get("economic_use") or {})
+    _tipos = (clasif.get("physical_typology") or {})
+    geo = ctx.get("geo_eval") or {}
+
+    def _nivel_riesgo(bloque):
+        """Nivel de un riesgo, con su relación geométrica cuando la fuente la declara.
+
+        `geo_eval` entrega los riesgos como objetos (`nivel` + `intersecta`). Imprimir
+        solo el nivel cuando el polígono NO intersecta el predio sería alarmante;
+        omitir el nivel cuando sí intersecta sería lo contrario. Se declaran los dos.
+        """
+        if isinstance(bloque, dict):
+            nivel = bloque.get("nivel")
+            inter = bloque.get("intersecta")
+            if not nivel:
+                return None
+            if isinstance(inter, bool):
+                return f"{nivel} · polígono: {'intersecta el predio' if inter else 'sin intersección'}"
+            return str(nivel)
+        return None if bloque in (None, "") else str(bloque)
+
+    def _texto_clasificacion(bloque):
+        valor = bloque.get("value")
+        if not valor:
+            return None
+        return str(valor).replace("_", " ").title()
 
     anotaciones = analysis.get("anotaciones") or []
     gravamenes = [{"anotacion": a[0], "fecha": a[1], "tipo": a[2], "partes": a[3],
@@ -341,7 +371,7 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
         "screening_summary": titu.get("screening_summary") or {},
         "urban_context": {
             "area": _num(area),
-            "tipo_unidad": tipo_unidad,
+            "tipo_unidad": tipo_unidad or analysis.get("tipo_predio_snr"),
             "barrio": adm.get("barrio") or ent.get("barrio"),
             "localidad": adm.get("comuna") or ent.get("localidad"),
             "estrato": adm.get("estrato") or ent.get("estrato"),
@@ -350,18 +380,26 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
             "altura_maxima": ent.get("altura_maxima"),
             "clase_suelo": ent.get("clase_suelo"),
             "area_actividad": adm.get("area_actividad"),
-            "destino_economico": predio.get("destino_economico"),
-            "condicion_juridica": (pre.get("condicion") or {}).get("condicion_juridica")
-            or adm.get("condicion_juridica"),
+            "destino_economico": predio.get("destino_economico") or _texto_clasificacion(_uso),
+            "condicion_juridica": ((pre.get("condicion") or {}).get("condicion_juridica")
+                                   or adm.get("condicion_juridica")
+                                   or _texto_clasificacion(_regimen)),
+            "condicion_juridica_status": _regimen.get("status"),
+            "tipologia": _texto_clasificacion(_tipos),
+            "tipologia_status": _tipos.get("status"),
             "predio_disponible": pre.get("disponible"),
             "entorno_disponible": ent.get("disponible"),
         },
         "risk_context": {
             "volcan": captura.get("volcan"),
-            "amenaza_remocion_masa": ent.get("amenaza_remocion_masa"),
-            "areas_en_riesgo": ent.get("areas_en_riesgo"),
-            "inundacion": ent.get("inundacion"),
-            "riesgo_no_mitigable": ent.get("riesgo_no_mitigable"),
+            "amenaza_remocion_masa": (_nivel_riesgo(ent.get("amenaza_remocion_masa"))
+                                      or _nivel_riesgo(geo.get("amenaza_remocion_masa"))),
+            "areas_en_riesgo": (_nivel_riesgo(ent.get("areas_en_riesgo"))
+                                or _nivel_riesgo(geo.get("areas_en_riesgo"))),
+            "inundacion": (_nivel_riesgo(ent.get("inundacion"))
+                           or _nivel_riesgo(geo.get("inundacion"))),
+            "riesgo_no_mitigable": (_nivel_riesgo(ent.get("riesgo_no_mitigable"))
+                                    or _nivel_riesgo(geo.get("riesgo_no_mitigable"))),
         },
         "poi_state": normalizar_poi_items(captura.get("poi")),
         "solar_state": {"momentos": (captura.get("solar") or {}).get("momentos") or [],

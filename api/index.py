@@ -42,14 +42,20 @@ try:
     # Importaciones locales de base de datos y compilador
     from database import get_db_connection
     from pdf_compiler import compile_pdf
+    # DICTUS 2.0B-R1: la ENTREGA del producto. El documento principal que recibe
+    # el usuario es el EJECUTIVO de 6 páginas; el técnico viaja como anexo. Este
+    # módulo instrumenta la corrida (solo lectura) y aplica las aserciones duras
+    # sobre el PDF físico antes de entregarlo.
+    import dictus_entrega as dictus_entrega
     from address_normalizer import normalize_address_colombia
     from geocoder import geocodificar_desde_ctl, geocodificar_direccion
-    
+
     import_error = None
 except Exception as e:
     import_error = traceback.format_exc()
     get_db_connection = None
     compile_pdf = None
+    dictus_entrega = None
     normalize_address_colombia = None
 
 app = FastAPI(title="ARHIAX Workflow API", description="Portal privado y flujo de trabajo para dictámenes catastrales")
@@ -622,15 +628,23 @@ async def upload_image(case_id: int, img_type: str, file: UploadFile = File(...)
         if (dictamen["sombra_9am_cargada"] and dictamen["sombra_3pm_cargada"] and 
             dictamen["mapa_cargado"] and dictamen["area"] is not None and dictamen["area"] > 0):
             
-            pdf_filename = f"ARHIAX_Dictamen_{_sanitizar_folio(dictamen['folio_matricula'])}_final.pdf"
-            pdf_output_path = case_dir / pdf_filename
-            
+            _folio_caso = _sanitizar_folio(dictamen['folio_matricula'])
+            pdf_output_path = case_dir / _nombre_tecnico(_folio_caso)
+
             try:
+                # 2.0B-R1: el Ejecutivo es el documento PRINCIPAL; el técnico, el anexo.
+                _captura = _iniciar_entrega()
                 compile_pdf(dictamen, str(pdf_output_path))
-                cursor.execute("UPDATE dictamenes SET estado = 'COMPLETADO', pdf_path = ? WHERE id = ?", 
-                               (str(pdf_output_path), case_id))
+                _entrega = _generar_entrega(_captura, record=dict(dictamen),
+                                            tecnico=pdf_output_path, salida_dir=case_dir)
+                dictamen["ejecutivo_path"] = str(_entrega["ejecutivo"])
+                cursor.execute("UPDATE dictamenes SET estado = 'COMPLETADO', pdf_path = ? WHERE id = ?",
+                               (str(_entrega["ejecutivo"]), case_id))
                 conn.commit()
                 status = "COMPLETADO"
+            except HTTPException:
+                conn.close()
+                raise
             except Exception as e:
                 conn.close()
                 print(f"[ERROR] compilar PDF del dictamen {case_id}: {e}")
@@ -793,19 +807,25 @@ def update_dictamen(case_id: int, payload: dict = Body(...), background_tasks: B
             dictamen_full.get("mapa_cargado") and dictamen_full.get("area") is not None and
             dictamen_full.get("area") > 0):
         case_dir = ASSETS_DIR / f"case_{case_id}"
-        pdf_filename = f"ARHIAX_Dictamen_{_sanitizar_folio(dictamen_full['folio_matricula'])}_final.pdf"
-        pdf_output_path = case_dir / pdf_filename
+        pdf_output_path = case_dir / _nombre_tecnico(dictamen_full['folio_matricula'])
         try:
+            # 2.0B-R1: el Ejecutivo es el documento PRINCIPAL; el técnico, el anexo.
+            _captura = _iniciar_entrega()
             compile_pdf(dictamen_full, str(pdf_output_path))
+            _entrega = _generar_entrega(_captura, record=dict(dictamen_full),
+                                        tecnico=pdf_output_path, salida_dir=case_dir)
             update_case(case_id, {"estado": "COMPLETADO"}, updated_by=username)
             _conn = get_db_connection()
             try:
                 _cur = _conn.cursor()
-                _cur.execute("UPDATE dictamenes SET pdf_path = ? WHERE id = ?", (str(pdf_output_path), case_id))
+                _cur.execute("UPDATE dictamenes SET pdf_path = ? WHERE id = ?",
+                             (str(_entrega["ejecutivo"]), case_id))
                 _conn.commit()
             finally:
                 _conn.close()
             dictamen = get_case(case_id) or dictamen
+        except HTTPException:
+            raise
         except Exception as e:
             print(f"[ERROR] compilar PDF del dictamen {case_id}: {e}")
             raise HTTPException(status_code=500, detail="Error al compilar el PDF del dictamen. Verifique los insumos e intente nuevamente.")
@@ -997,24 +1017,37 @@ async def generar_dictamen_stateless(
         "lon": extraidos.get("lon") if _ctl_adjuntado else None,
     }
 
-    # 4. Compilar PDF (dictamen único con sus anexos al final)
-    output_pdf = temp_run_dir / f"ARHIAX_Dictamen_{db_record['folio_matricula']}_final.pdf"
+    # 4. Compilar el ANEXO técnico y, de ESA misma corrida, el EJECUTIVO principal
+    output_pdf = temp_run_dir / _nombre_tecnico(db_record['folio_matricula'])
     try:
+        _captura = _iniciar_entrega()
         compile_pdf(db_record, str(output_pdf), assets_dir=temp_run_dir)
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"[ERROR] compilar PDF stateless: {e}")
         raise HTTPException(status_code=500, detail="Error al compilar el PDF pericial. Verifique los insumos e intente nuevamente.")
 
-    with open(output_pdf, "rb") as f:
+    try:
+        _entrega = _generar_entrega(_captura, record=db_record, tecnico=output_pdf,
+                                    salida_dir=temp_run_dir,
+                                    tipo_unidad=(extraidos.get("tipo_predio_snr")
+                                                 if _ctl_adjuntado else None),
+                                    run_id=run_id)
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] entrega ejecutiva stateless: {e}")
+        raise HTTPException(status_code=500,
+                            detail="No se pudo construir el documento ejecutivo del expediente.")
+
+    with open(_entrega["ejecutivo"], "rb") as f:
         pdf_bytes = f.read()
 
-    folio_limpio = _sanitizar_folio(db_record["folio_matricula"])
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
-        headers={
-            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{folio_limpio}.pdf"'
-        }
+        headers=_cabeceras_entrega(_entrega)
     )
 
 # ── GPV-F-77: Formato Estudio de Títulos Art. 276 Ley 1955 de 2019 ──────
@@ -1132,6 +1165,77 @@ def _dir_trabajo(run_id: str) -> Path:
     return d
 
 
+# ── DICTUS 2.0B-R1 · ENTREGA DEL PRODUCTO ────────────────────────────────────
+# El documento PRINCIPAL que recibe el usuario es el EJECUTIVO de 6 páginas
+# (`DICTUS_EJECUTIVO_<folio>.pdf`); el dictamen técnico viaja como ANEXO
+# (`DICTUS_TECNICO_<folio>.pdf`). Nunca se invierten (§2 de 2.0B-R1).
+def _folio_entrega(folio) -> str:
+    """Folio para NOMBRAR el archivo entregado.
+
+    `_sanitizar_folio` devuelve «Pendiente» cuando la matrícula no encaja en el
+    patrón inmobiliario: un expediente entregado nunca se llama «Pendiente», así que
+    se conserva una forma legible del folio declarado.
+    """
+    limpio = _sanitizar_folio(folio)
+    if limpio and limpio != "Pendiente":
+        return limpio
+    crudo = re.sub(r"[^0-9A-Za-z\-_.]", "", str(folio or "").strip())[:40]
+    return crudo or "SIN-FOLIO"
+
+
+def _nombre_tecnico(folio) -> str:
+    return dictus_entrega.ARCHIVO_TECNICO.format(folio=_folio_entrega(folio))
+
+
+def _iniciar_entrega() -> dict:
+    """Instala los observadores de la corrida ANTES de compilar el técnico."""
+    if dictus_entrega is None:
+        raise HTTPException(status_code=500,
+                            detail="La entrega documental no está disponible en este despliegue.")
+    return dictus_entrega.iniciar_captura()
+
+
+def _generar_entrega(captura: dict, *, record: dict, tecnico, salida_dir, tipo_unidad=None,
+                     run_id=None) -> dict:
+    """Construye el EJECUTIVO desde la MISMA corrida y valida el PDF FÍSICO.
+
+    Si el documento no cumple la arquitectura aprobada (número de páginas, orden de
+    las seis páginas, encabezados legacy o fugas técnicas) NO se entrega: se falla de
+    forma explícita en lugar de devolver un documento que no es el aprobado.
+    """
+    try:
+        return dictus_entrega.construir_entregables(
+            captura, folio=record.get("folio_matricula"), ciudad=record.get("ciudad"),
+            tecnico=tecnico, salida_dir=salida_dir, area=record.get("area"),
+            tipo_unidad=tipo_unidad, run_id=run_id)
+    except dictus_entrega.EntregaEjecutivaInvalida as e:
+        print(f"[ENTREGA][FAIL] {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=("El documento ejecutivo no cumple la arquitectura aprobada y no se "
+                    f"entrega: {e}"))
+
+
+def _cabeceras_entrega(resultado: dict) -> dict:
+    """Cabeceras que acreditan QUÉ documento principal se está entregando."""
+    man = resultado.get("manifest") or {}
+    aud = resultado.get("auditoria") or {}
+    anexo = resultado.get("tecnico")
+    cabeceras = {
+        "Content-Disposition": ("attachment; filename="
+                                f"\"{Path(resultado['ejecutivo']).name}\""),
+        "X-ARHIAX-Documento": "DICTUS_EJECUTIVO",
+        "X-ARHIAX-Dictus-Id": str(man.get("dictus_id") or ""),
+        "X-ARHIAX-Master-Hash": str(man.get("master_hash") or ""),
+        "X-ARHIAX-Paginas-Ejecutivo": str(aud.get("page_count") or ""),
+    }
+    if anexo and Path(anexo).exists():
+        datos = Path(anexo).read_bytes()
+        cabeceras["X-ARHIAX-Anexo-Tecnico"] = Path(anexo).name
+        cabeceras["X-ARHIAX-Anexo-Sha256"] = hashlib.sha256(datos).hexdigest()
+    return cabeceras
+
+
 def _guardar_adjuntos_job(job_id: str, sombra_9am=None, sombra_3pm=None, mapa_satelital=None):
     """Persiste los insumos gráficos del job en la BD (BYTEA/BLOB).
 
@@ -1212,20 +1316,32 @@ def _crear_trabajo(job_id: str, estado: str = "pendiente"):
     conn.close()
 
 
-def _actualizar_trabajo(job_id: str, estado: str, pdf_bytes=None, error=None):
+def _actualizar_trabajo(job_id: str, estado: str, pdf_bytes=None, error=None,
+                        tecnico_bytes=None, manifest_json=None, folio=None):
     """Crea o actualiza un trabajo (UPSERT: funciona también si el worker se invoca
-    sin pasar por /generar async, que es quien crea el job)."""
+    sin pasar por /generar async, que es quien crea el job).
+
+    `pdf` guarda el EJECUTIVO (documento principal que se entrega) y `pdf_tecnico` el
+    ANEXO técnico de la MISMA corrida. Un `COALESCE` impide que una actualización de
+    estado borre los documentos ya generados.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute(
         """
-        INSERT INTO trabajos_pdf (id, estado, pdf, error, creado) VALUES (?, ?, ?, ?, ?)
+        INSERT INTO trabajos_pdf (id, estado, pdf, error, pdf_tecnico, manifest_json,
+                                  folio, creado)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
             estado = excluded.estado,
-            pdf = excluded.pdf,
-            error = excluded.error
+            pdf = COALESCE(excluded.pdf, trabajos_pdf.pdf),
+            error = excluded.error,
+            pdf_tecnico = COALESCE(excluded.pdf_tecnico, trabajos_pdf.pdf_tecnico),
+            manifest_json = COALESCE(excluded.manifest_json, trabajos_pdf.manifest_json),
+            folio = COALESCE(excluded.folio, trabajos_pdf.folio)
         """,
-        (job_id, estado, pdf_bytes, error, datetime.now().isoformat()),
+        (job_id, estado, pdf_bytes, error, tecnico_bytes, manifest_json, folio,
+         datetime.now().isoformat()),
     )
     conn.commit()
     conn.close()
@@ -1510,13 +1626,34 @@ async def worker_generar_pdf(request: Request):
         "lat": _extra_lat,
         "lon": _extra_lon,
     }
-    output_pdf = temp_run_dir / f"ARHIAX_Dictamen_{db_record['folio_matricula']}_final.pdf"
+    output_pdf = temp_run_dir / _nombre_tecnico(db_record['folio_matricula'])
     try:
+        # 2.0B-R1: una sola corrida → EJECUTIVO (principal) + TÉCNICO (anexo).
+        _captura = _iniciar_entrega()
         compile_pdf(db_record, str(output_pdf), assets_dir=temp_run_dir)
-        pdf_bytes = output_pdf.read_bytes()
-        _actualizar_trabajo(job_id, "listo", pdf_bytes=pdf_bytes)
+        _entrega = _generar_entrega(_captura, record=db_record, tecnico=output_pdf,
+                                    salida_dir=temp_run_dir,
+                                    tipo_unidad=payload.get("tipo_unidad"), run_id=run_id)
+        pdf_bytes = Path(_entrega["ejecutivo"]).read_bytes()
+        _tec_bytes = (Path(_entrega["tecnico"]).read_bytes()
+                      if _entrega.get("tecnico") else None)
+        import json as _json
+        _actualizar_trabajo(job_id, "listo", pdf_bytes=pdf_bytes,
+                            tecnico_bytes=_tec_bytes,
+                            manifest_json=_json.dumps(_entrega["manifest"],
+                                                      ensure_ascii=False),
+                            folio=_sanitizar_folio(db_record["folio_matricula"]))
         return {"job_id": job_id, "estado": "listo", "bytes": len(pdf_bytes),
-                "folio": db_record["folio_matricula"]}
+                "folio": db_record["folio_matricula"],
+                "documento_principal": Path(_entrega["ejecutivo"]).name,
+                "paginas_ejecutivo": _entrega["auditoria"]["page_count"],
+                "anexo_tecnico": Path(_entrega["tecnico"]).name if _entrega.get("tecnico") else None,
+                "dictus_id": _entrega["manifest"]["dictus_id"],
+                "master_hash": _entrega["manifest"]["master_hash"]}
+    except HTTPException as e:
+        print(f"[ENTREGA][FAIL] worker {job_id}: {e.detail}")
+        _actualizar_trabajo(job_id, "error", error=str(e.detail)[:300])
+        raise
     except Exception as e:
         print(f"[ERROR] worker PDF {job_id}: {e}")
         _actualizar_trabajo(job_id, "error", error=str(e)[:300])
@@ -1536,15 +1673,23 @@ def obtener_trabajo_pdf(job_id: str, auth: dict = Depends(require_auth)):
     """
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, estado, pdf, error, creado FROM trabajos_pdf WHERE id = ?", (job_id,))
+    cursor.execute("SELECT id, estado, pdf, error, creado, folio, pdf_tecnico, "
+                   "manifest_json FROM trabajos_pdf WHERE id = ?", (job_id,))
     row = cursor.fetchone()
     conn.close()
     if not row:
         raise HTTPException(status_code=404, detail="Trabajo no encontrado.")
     estado = row["estado"]
     if estado == "listo" and row["pdf"]:
+        # 2.0B-R1: se entrega el EJECUTIVO (documento principal del expediente).
+        folio = _folio_entrega(row["folio"]) if "folio" in row.keys() else None
+        nombre = (dictus_entrega.ARCHIVO_EJECUTIVO.format(folio=folio) if folio
+                  else f"DICTUS_EJECUTIVO_{job_id}.pdf")
         return Response(content=bytes(row["pdf"]), media_type="application/pdf",
-                        headers={"Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{job_id}.pdf"'})
+                        headers={"Content-Disposition": f'attachment; filename="{nombre}"',
+                                 "X-ARHIAX-Documento": "DICTUS_EJECUTIVO",
+                                 "X-ARHIAX-Anexo-Tecnico": (
+                                     f"/api/v1/pdf/trabajos/{job_id}/anexo-tecnico")})
 
     edad_s = None
     try:
@@ -1570,35 +1715,106 @@ def obtener_trabajo_pdf(job_id: str, auth: dict = Depends(require_auth)):
     return respuesta
 
 
+@app.get("/api/v1/pdf/trabajos/{job_id}/anexo-tecnico")
+def obtener_anexo_tecnico(job_id: str, auth: dict = Depends(require_auth)):
+    """ANEXO TÉCNICO del expediente (evidencia auditable de la misma corrida).
+
+    Es el documento SECUNDARIO: el principal (`/api/v1/pdf/trabajos/{job_id}`) es el
+    Ejecutivo. Se descarga con nombre de anexo para que nunca se confundan.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT estado, pdf_tecnico, folio FROM trabajos_pdf WHERE id = ?",
+                   (job_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if not row:
+        raise HTTPException(status_code=404, detail="Trabajo no encontrado.")
+    if not row["pdf_tecnico"]:
+        raise HTTPException(
+            status_code=409,
+            detail=("El anexo técnico no está disponible para este trabajo. El documento "
+                    "principal del expediente es el Ejecutivo y se descarga en "
+                    f"/api/v1/pdf/trabajos/{job_id}."))
+    folio = _folio_entrega(row["folio"]) or job_id
+    return Response(
+        content=bytes(row["pdf_tecnico"]), media_type="application/pdf",
+        headers={"Content-Disposition":
+                 f'attachment; filename="ANEXO_TECNICO_{folio}.pdf"',
+                 "X-ARHIAX-Documento": "ANEXO_TECNICO"})
+
+
+@app.get("/api/v1/pdf/trabajos/{job_id}/manifest")
+def obtener_manifest_dictus(job_id: str, auth: dict = Depends(require_auth)):
+    """Manifest de la corrida (DICTUS ID, hash maestro, evidencias) del trabajo.
+
+    Es la MISMA verdad sellada que imprime el documento: el portal lo usa para
+    mostrar el sello sin volver a calcular nada.
+    """
+    import json as _json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT manifest_json FROM trabajos_pdf WHERE id = ?", (job_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if not row or not row["manifest_json"]:
+        raise HTTPException(status_code=404, detail="El manifest del trabajo no está disponible.")
+    try:
+        manifest = _json.loads(row["manifest_json"])
+    except Exception:
+        raise HTTPException(status_code=500, detail="El manifest del trabajo está corrupto.")
+    return Response(content=_json.dumps(manifest, ensure_ascii=False),
+                    media_type="application/json")
+
+
 @app.get("/api/dictamenes/{case_id}/pdf")
 def download_pdf(case_id: int, auth: bool = Depends(require_auth)):
+    """Documento PRINCIPAL del caso: el Ejecutivo de 6 páginas (2.0B-R1).
+
+    Un caso almacenado antes de 2.0B-R1 no tiene Ejecutivo. En ese caso NO se
+    entrega el técnico como si fuera el documento principal: se pide regenerar el
+    expediente (el técnico se descarga como anexo, con nombre de anexo).
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM dictamenes WHERE id = ?", (case_id,))
     row = cursor.fetchone()
     conn.close()
-    
+
     if not row:
         raise HTTPException(status_code=404, detail="Caso no encontrado.")
-        
+
     dictamen = dict(row)
     if dictamen["estado"] != "COMPLETADO" or not dictamen["pdf_path"]:
         raise HTTPException(status_code=400, detail="El PDF aún no ha sido generado (faltan imágenes de ArcGIS Pro o metraje).")
-        
-    if not os.path.exists(dictamen["pdf_path"]):
-        raise HTTPException(status_code=404, detail="El archivo PDF físico no se encuentra en el servidor.")
-        
-    with open(dictamen["pdf_path"], "rb") as f:
-        pdf_bytes = f.read()
 
+    ruta = Path(dictamen["pdf_path"])
     folio_limpio = _sanitizar_folio(dictamen["folio_matricula"])
-    return Response(
-        content=pdf_bytes,
-        media_type="application/pdf",
-        headers={
-            "Content-Disposition": f'attachment; filename="ARHIAX_Dictamen_{folio_limpio}.pdf"'
-        }
-    )
+    if ruta.name.startswith("DICTUS_EJECUTIVO") and ruta.exists():
+        with open(ruta, "rb") as f:
+            return Response(content=f.read(), media_type="application/pdf",
+                            headers={"Content-Disposition":
+                                     f'attachment; filename="{ruta.name}"',
+                                     "X-ARHIAX-Documento": "DICTUS_EJECUTIVO"})
+
+    # Caso anterior a 2.0B-R1: el técnico existe, pero NO es el documento principal.
+    anexo = ruta.parent / _nombre_tecnico(folio_limpio)
+    if anexo.exists():
+        with open(anexo, "rb") as f:
+            return Response(
+                content=f.read(), media_type="application/pdf",
+                headers={"Content-Disposition":
+                         f'attachment; filename="ANEXO_TECNICO_{folio_limpio}.pdf"',
+                         "X-ARHIAX-Documento": "ANEXO_TECNICO",
+                         "X-ARHIAX-Aviso": ("expediente anterior a DICTUS 2.0B-R1: el "
+                                            "documento principal es el Ejecutivo, "
+                                            "regenerar el expediente")})
+    raise HTTPException(
+        status_code=409,
+        detail=("Este expediente no tiene documento EJECUTIVO (fue generado antes de "
+                "DICTUS 2.0B-R1). Regenerar el expediente para obtener el documento "
+                "principal de decisión."))
+
 
 @app.get("/api/health")
 def health():

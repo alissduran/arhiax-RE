@@ -53,10 +53,23 @@ def _apply_case_canonical_state(conn) -> None:
     _add_column(conn, "dictamenes", "updated_by", "TEXT")
 
 
+def _apply_documento_principal(conn) -> None:
+    """003_documento_principal: la ENTREGA del trabajo (DICTUS 2.0B-R1).
+
+    El trabajo guarda el documento PRINCIPAL (el ejecutivo, en `pdf`), su ANEXO
+    técnico, el manifest sellado de la misma corrida y el folio con el que se
+    nombran los archivos entregados.
+    """
+    _add_column(conn, "trabajos_pdf", "pdf_tecnico", "BLOB")
+    _add_column(conn, "trabajos_pdf", "manifest_json", "TEXT")
+    _add_column(conn, "trabajos_pdf", "folio", "TEXT")
+
+
 # Secuencia ordenada de migraciones: (id, up(conn)).
 MIGRATIONS: List[Tuple[str, Callable]] = [
     ("001_initial", _apply_initial),
     ("002_case_canonical_state", _apply_case_canonical_state),
+    ("003_documento_principal", _apply_documento_principal),
 ]
 
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""DICTUS 2.0B — UNA corrida del producto → DOS documentos + manifest + hash maestro.
+"""DICTUS 2.0B-R1 — UNA corrida del producto → EJECUTIVO (principal) + TÉCNICO (anexo).
 
     python scripts/dictus_run.py --ctl <ruta\\al\\CTL.pdf> [--folio 040-646406]
 
@@ -12,11 +12,12 @@ Flujo (una sola verdad de corrida, sin duplicar consultas externas):
                  ▼
         ExecutiveDocumentModel ──► EVIDENCE MANIFEST ──► DICTUS_MASTER_HASH
                  │                                          │
-                 ├── DICTUS_EJECUTIVO_<folio>.pdf           ├── /portal/ (sello)
-                 ├── DICTUS_TECNICO_<folio>.pdf             └── manifest publicado
-                 └── DICTUS_MANIFEST_<folio>.json
+                 ├── DICTUS_EJECUTIVO_<folio>.pdf  ← PRINCIPAL
+                 ├── DICTUS_TECNICO_<folio>.pdf    ← anexo técnico
+                 └── DICTUS_MANIFEST_<folio>.json ──► /portal/ (sello)
 
-El ejecutivo NO lee el PDF técnico: se construye desde el estado canónico.
+El ejecutivo NO lee el PDF técnico: se construye desde el estado canónico, y su
+entrega pasa por las aserciones duras de `dictus_entrega` (§3/§4/§5/§8).
 """
 from __future__ import annotations
 
@@ -33,17 +34,15 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "api"))
 
-import dictus_secciones as _secciones  # noqa: E402
-import dictus_ejecutivo as de                 # noqa: E402
-import dictus_estado as dse                   # noqa: E402
-import dictus_manifiesto as dm                # noqa: E402
+import dictus_entrega as entrega            # noqa: E402
+import dictus_estado as dse                 # noqa: E402
 
 CTL_DEFECTO = (ROOT / "docs" / "forensics" / "040-646406" / "golden_03i1"
                / "inputs" / "CTL_040-646406_ORIGINAL.pdf")
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description="DICTUS 2.0B — corrida integrada")
+    ap = argparse.ArgumentParser(description="DICTUS 2.0B-R1 — corrida integrada")
     ap.add_argument("--ctl", default=str(CTL_DEFECTO))
     ap.add_argument("--folio", default="040-646406")
     ap.add_argument("--ciudad", default="barranquilla")
@@ -81,100 +80,64 @@ def main(argv=None) -> int:
         "sombra_9am_cargada": 0, "sombra_3pm_cargada": 0, "mapa_cargado": 0,
         "acreedor_real": None, "certificado_path": str(ctl), "estrato": None,
     }
-    tecnico = salida / f"DICTUS_TECNICO_{args.folio}.pdf"
-    captura: dict = {}
-    dse.instalar_observadores(captura)          # solo lectura: no altera cálculos
+    tecnico = salida / entrega.ARCHIVO_TECNICO.format(folio=args.folio)
+    captura = entrega.iniciar_captura()          # solo lectura: no altera cálculos
     pdf_compiler.compile_pdf(record, str(tecnico), assets_dir=salida)
 
-    # ── 2 · Estado canónico de la corrida ─────────────────────────────────────
+    # ── 2 · Estado canónico, modelo, ejecutivo y manifest de ESA corrida ──────
     from versioning import VERSION_MATRIX
-    captura["solar"] = {"momentos": (dse._SOLAR.get("momentos") or [])}
-    rs = dse.construir_run_state(captura, run_id=run_id, folio=args.folio,
-                                 ciudad=args.ciudad, versionado=dict(VERSION_MATRIX or {}),
-                                 generated_at=(captura.get("receipts") or {}).get("generated_at"),
-                                 # Entrada del caso YA analizada por el producto (no una
-                                 # segunda extracción): área y tipo de unidad.
-                                 area=record.get("area"),
-                                 tipo_unidad=analysis.get("tipo_predio_snr"))
+    resultado = entrega.construir_entregables(
+        captura, folio=args.folio, ciudad=args.ciudad, tecnico=tecnico,
+        salida_dir=salida, area=record.get("area"),
+        # Entrada del caso YA analizada por el producto (no una segunda extracción).
+        tipo_unidad=analysis.get("tipo_predio_snr"),
+        run_id=run_id, versionado=dict(VERSION_MATRIX or {}),
+        publicar_manifest=ROOT / "public" / "dictus")
 
-    # ── 3 · Modelo, manifest y hash maestro ───────────────────────────────────
-    hist_path = ROOT / "docs" / "forensics" / args.folio / "dictus_2" / "HISTORICAL_CONSISTENCY_REPORT.json"
-    hist = json.loads(hist_path.read_text(encoding="utf-8")) if hist_path.exists() else {}
-    # La coherencia histórica es un INSUMO del estado canónico (evidencia de primer
-    # orden), no algo que el ejecutivo averigüe por su cuenta.
-    rs["historical_consistency"] = hist
-    # Los conflictos históricos abiertos son HECHOS de la corrida: entran al estado
-    # (y por tanto al modelo, al manifest y al hash), no solo al render.
-    dse.agregar_findings_de_coherencia(rs, hist)
-    modelo = dm.construir_documento_maestro(rs, historial=hist, folio=args.folio)
+    ejecutivo = resultado["ejecutivo"]
+    manifest = resultado["manifest"]
+    auditoria = resultado["auditoria"]
+    verif = entrega.verificar_entrega(manifest)
+    pp_te = _paginas(tecnico)
 
-    # ── 4 · Documento ejecutivo (desde el estado, nunca desde el PDF) ─────────
-    secciones = _secciones.desde_estado(rs, modelo, hist)
-    ejecutivo = salida / f"DICTUS_EJECUTIVO_{args.folio}.pdf"
-    de.render(modelo, secciones, ejecutivo)
-
-    # ── 5 · Manifest publicado + acceptance report ────────────────────────────
-    manifest = {
-        "master_manifest_version": dm.MASTER_MANIFEST_VERSION,
-        "run_state_version": dse.RUN_STATE_VERSION,
-        "run_id": run_id,
-        "dictus_id": modelo["document_identity"]["dictus_id"],
-        "generated_at": modelo["document_identity"]["generated_at"],
-        "master_hash": modelo["master_hash"],
-        "master_hash_abreviado": modelo["master_hash_abreviado"],
-        "evidence_manifest": modelo["evidence_manifest"],
-        "modelo": modelo,
-    }
-    mpath = salida / f"DICTUS_MANIFEST_{args.folio}.json"
-    mpath.write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")
-    (salida / f"DICTUS_RUN_STATE_{args.folio}.json").write_text(
-        json.dumps(rs, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
-
-    # El sello se publica con la app para que /portal/ muestre el MISMO hash.
-    publico = ROOT / "public" / "dictus"
-    publico.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(mpath, publico / f"DICTUS_MANIFEST_{args.folio}.json")
-
-    import pymupdf
-    with pymupdf.open(str(ejecutivo)) as d_ej:
-        pp_ej = d_ej.page_count
-    with pymupdf.open(str(tecnico)) as d_te:
-        pp_te = d_te.page_count
-    verif = dse.verify_dictus_master_hash(manifest, manifest["master_hash"])
     reporte = {
         "run_id": run_id, "dictus_id": manifest["dictus_id"],
         "generated_at": manifest["generated_at"], "master_hash": manifest["master_hash"],
-        "master_manifest_version": dm.MASTER_MANIFEST_VERSION,
+        "master_manifest_version": manifest["master_manifest_version"],
+        "documento_principal": str(ejecutivo.relative_to(ROOT)),
         "executive_pdf": str(ejecutivo.relative_to(ROOT)),
         "executive_pdf_sha256": hashlib.sha256(ejecutivo.read_bytes()).hexdigest(),
-        "executive_page_count": pp_ej,
+        "executive_page_count": auditoria["page_count"],
+        "executive_titulos": auditoria["titulos"],
+        "executive_auditoria_ok": auditoria["ok"],
         "technical_pdf": str(tecnico.relative_to(ROOT)),
         "technical_pdf_sha256": hashlib.sha256(tecnico.read_bytes()).hexdigest(),
         "technical_page_count": pp_te,
         "evidence_count": manifest["evidence_manifest"]["evidence_count"],
         "evidence_seal": manifest["evidence_manifest"]["estado"],
-        "poi_items_in_state": rs["poi_state"]["item_count"],
-        "poi_distance_available": rs["poi_state"]["distance_available"],
-        "findings_in_page_1": len(secciones["hallazgos"]),
+        "poi_items_in_state": resultado["run_state"]["poi_state"]["item_count"],
+        "poi_distance_available": resultado["run_state"]["poi_state"]["distance_available"],
+        "findings_in_page_1": len(resultado["secciones"]["hallazgos"]),
         "verify_master_hash": verif["result"],
-        "layout_violations": list(de.VIOLACIONES),
+        "layout_violations": list(entrega.de.VIOLACIONES),
         "nota_hash": ("DICTUS_MASTER_HASH sella hechos y evidencias; los SHA-256 de los PDFs "
                       "sellan el archivo entregado y NO son el hash visible."),
     }
     (salida / f"ACEPTACION_{args.folio}.json").write_text(
         json.dumps(reporte, ensure_ascii=False, indent=1), encoding="utf-8")
 
-    # ── 6 · Artefactos versionables (§21): texto del Golden + acceptance report ──
-    with pymupdf.open(str(ejecutivo)) as d_ej:
-        texto = "\n\n".join(f"===== PAGINA {i + 1} =====\n" + " ".join(p.get_text().split())
-                            for i, p in enumerate(list(d_ej)[:6]))
+    # ── 3 · Artefactos versionables: texto del Golden + acceptance report ────
+    texto = "\n\n".join(
+        f"===== PAGINA {i + 1} =====\n" + " ".join(p.extract_text().split())
+        for i, p in enumerate(_lector(ejecutivo).pages))
     (salida / f"DICTUS_2.0B_TEXTO_EJECUTIVO_{args.folio}.txt").write_text(texto + "\n",
                                                                          encoding="utf-8")
     md = [
-        f"# DICTUS 2.0B — ACEPTACIÓN DE LA CORRIDA INTEGRADA ({args.folio})",
+        f"# DICTUS 2.0B-R1 — ACEPTACIÓN DE LA CORRIDA INTEGRADA ({args.folio})",
         "",
-        "Una sola corrida del producto produjo el documento ejecutivo y el técnico desde el "
-        "mismo estado canónico, con un único hash maestro.",
+        "Una sola corrida del producto produjo el documento **ejecutivo** (el que ve el "
+        "usuario) y el **técnico** (anexo), desde el mismo estado canónico y con un único "
+        "hash maestro. La entrega se valida sobre el PDF FÍSICO antes de declararse apta.",
         "",
         "| Dato | Valor |",
         "|---|---|",
@@ -184,12 +147,14 @@ def main(argv=None) -> int:
         f"| **DICTUS_MASTER_HASH** | `{reporte['master_hash']}` |",
         f"| master manifest | `{reporte['master_manifest_version']}` |",
         f"| run state | `{dse.RUN_STATE_VERSION}` |",
-        f"| Ejecutivo | `{Path(reporte['executive_pdf']).name}` · "
+        f"| **DOCUMENTO PRINCIPAL** | `{Path(reporte['documento_principal']).name}` · "
         f"**{reporte['executive_page_count']} páginas** · sha256 "
         f"`{reporte['executive_pdf_sha256']}` |",
-        f"| Técnico | `{Path(reporte['technical_pdf']).name}` · "
+        f"| Anexo técnico | `{Path(reporte['technical_pdf']).name}` · "
         f"{reporte['technical_page_count']} páginas · sha256 "
         f"`{reporte['technical_pdf_sha256']}` |",
+        f"| Arquitectura del ejecutivo | {'APROBADA' if reporte['executive_auditoria_ok'] else 'NO APTA'} · "
+        + " → ".join(f"P{i + 1} {t}" for i, t in enumerate(auditoria["titulos"] or [])) + " |",
         f"| Evidencias | {reporte['evidence_count']} ({reporte['evidence_seal']}) |",
         f"| Ítems de equipamiento en el estado | {reporte['poi_items_in_state']} "
         f"(distancias: {'sí' if reporte['poi_distance_available'] else 'no'}) |",
@@ -207,16 +172,27 @@ def main(argv=None) -> int:
 
     print(f"[run] {run_id[:8]} · {reporte['dictus_id']} · master hash "
           f"{manifest['master_hash'][:16]}…")
-    print(f"[run] ejecutivo {ejecutivo.name} · {pp_ej} páginas · "
+    print(f"[run] PRINCIPAL {ejecutivo.name} · {auditoria['page_count']} páginas · "
           f"sha256 {reporte['executive_pdf_sha256'][:12]}…")
-    print(f"[run] técnico   {tecnico.name} · {pp_te} páginas · "
+    print(f"[run]           arquitectura: "
+          + " → ".join(f"P{i + 1} {t}" for i, t in enumerate(auditoria["titulos"] or [])))
+    print(f"[run] ANEXO     {tecnico.name} · {pp_te} páginas · "
           f"sha256 {reporte['technical_pdf_sha256'][:12]}…")
     print(f"[run] evidencias {reporte['evidence_count']} ({reporte['evidence_seal']}) · "
           f"verificación {verif['result']} · retícula "
-          f"{'OK' if not de.VIOLACIONES else de.VIOLACIONES}")
+          f"{'OK' if not entrega.de.VIOLACIONES else entrega.de.VIOLACIONES}")
     print(f"[run] POI en el estado: {reporte['poi_items_in_state']} ítems · "
           f"distancias {'sí' if reporte['poi_distance_available'] else 'no'}")
     return 0
+
+
+def _lector(ruta: Path):
+    from pypdf import PdfReader
+    return PdfReader(str(ruta))
+
+
+def _paginas(ruta: Path) -> int:
+    return len(_lector(ruta).pages)
 
 
 if __name__ == "__main__":

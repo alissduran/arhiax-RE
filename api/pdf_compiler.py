@@ -4047,6 +4047,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "titulux": _titulux,
             "valuation_authorization": _valuation_authorization,
             "res_avaluo": res_avaluo,
+            # 03I.4 (DICTUS 2.0B-R1): la clasificación YA calculada (régimen jurídico,
+            # uso económico y tipología, con su estado de verdad) se expone al estado
+            # canónico de la corrida. Es SOLO LECTURA: el gate no la consume y ningún
+            # cálculo cambia. Sin ella, el ejecutivo no podía declarar el régimen
+            # jurídico sin volver a inferirlo por su cuenta (dos metodologías).
+            "clasificacion": _clasif,
         }
         _informe_gate = ejecutar_gate(_contexto_gate)
         print(f"[PDF][GATE] ok={_informe_gate['ok']} "

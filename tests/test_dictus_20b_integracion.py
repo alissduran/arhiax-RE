@@ -204,21 +204,26 @@ class TestPortalYCriterios(unittest.TestCase):
         self.assertEqual(_j(ACEPTACION)["executive_page_count"], 6)
 
     def test_l_todos_los_hallazgos_estan_en_la_pagina_1(self):
+        """2.0B-R1 §6: el bloque de hallazgos de la página 1 se titula «HALLAZGOS» y
+        sus columnas son SEVERIDAD · HALLAZGO · AFECTA A · ACCIÓN. Se comprueba por
+        CÓDIGO de hallazgo (el título se ajusta a una línea y el enunciado completo
+        vive en el anexo técnico)."""
         import pymupdf
-        rs = _j(RUN_STATE)
         man = _j(MANIFEST)
         with pymupdf.open(str(EJECUTIVO)) as d:
             p1 = " ".join(list(d)[0].get_text().split())
-        self.assertIn("Hallazgos que condicionan la decisión", p1)
+        self.assertIn("HALLAZGOS", p1)
         total = len(man["modelo"]["findings"])
         self.assertGreaterEqual(total, 1)
-        self.assertIn(f"{total} hallazgo(S) MATERIAL(ES)".lower(), p1.lower(),
+        self.assertIn(f"{total} hallazgos materiales".lower(), p1.lower(),
                       "la página 1 debe declarar cuántos hallazgos contiene")
-        # Cada hallazgo del estado aparece por su título en la página 1.
-        faltan = [f["titulo"][:26] for f in man["modelo"]["findings"]
-                  if f["titulo"][:26] not in p1]
+        for columna in ("SEVERIDAD", "HALLAZGO", "AFECTA A", "ACCIÓN"):
+            self.assertIn(columna, p1)
+        # Cada hallazgo del estado aparece en la página 1 (se identifica por su código).
+        faltan = [f"{f.get('codigo')} {f.get('titulo', '')[:26]}"[:12]
+                  for f in man["modelo"]["findings"]
+                  if f.get("codigo") and f["codigo"] not in p1]
         self.assertEqual(faltan, [], f"hallazgos fuera de la página 1: {faltan}")
-        self.assertIn("Afecta:", p1)
 
     def test_m_sin_tecnicismos_ni_secretos_en_el_ejecutivo(self):
         import pymupdf

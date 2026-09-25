@@ -89,6 +89,22 @@ def init_db_on(conn):
         except sqlite3.OperationalError:
             pass
 
+    # DICTUS 2.0B-R1: el trabajo guarda el DOCUMENTO PRINCIPAL (ejecutivo, en `pdf`)
+    # y su ANEXO técnico, más el manifest sellado de la MISMA corrida. Así la entrega
+    # sobrevive al worker (en Vercel el directorio temporal es efímero).
+    try:
+        cursor.execute("ALTER TABLE trabajos_pdf ADD COLUMN pdf_tecnico BLOB")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        cursor.execute("ALTER TABLE trabajos_pdf ADD COLUMN manifest_json TEXT")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        cursor.execute("ALTER TABLE trabajos_pdf ADD COLUMN folio TEXT")
+    except sqlite3.OperationalError:
+        pass
+
     # Documentos SARLAFT / debida diligencia adjuntos al caso (subidos por el
     # usuario: UIAF, UE, PEP, extracto hipotecario, etc.).
     cursor.execute("""

@@ -149,6 +149,11 @@ def init_postgres(conn) -> None:
     # QStash las recupere por job_id (no viajan en el payload de la cola).
     for col in ("sombra_9am", "sombra_3pm", "mapa_satelital"):
         cur.execute(f"ALTER TABLE trabajos_pdf ADD COLUMN IF NOT EXISTS {col} BYTEA")
+    # DICTUS 2.0B-R1: documento PRINCIPAL (ejecutivo, en `pdf`) + ANEXO técnico +
+    # manifest sellado de la misma corrida.
+    cur.execute("ALTER TABLE trabajos_pdf ADD COLUMN IF NOT EXISTS pdf_tecnico BYTEA")
+    cur.execute("ALTER TABLE trabajos_pdf ADD COLUMN IF NOT EXISTS manifest_json TEXT")
+    cur.execute("ALTER TABLE trabajos_pdf ADD COLUMN IF NOT EXISTS folio TEXT")
 
     # Documentos SARLAFT / debida diligencia adjuntos al caso (subidos por el
     # usuario: UIAF, UE, PEP, extracto hipotecario, etc.).
