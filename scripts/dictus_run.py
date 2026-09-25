@@ -91,7 +91,11 @@ def main(argv=None) -> int:
     captura["solar"] = {"momentos": (dse._SOLAR.get("momentos") or [])}
     rs = dse.construir_run_state(captura, run_id=run_id, folio=args.folio,
                                  ciudad=args.ciudad, versionado=dict(VERSION_MATRIX or {}),
-                                 generated_at=(captura.get("receipts") or {}).get("generated_at"))
+                                 generated_at=(captura.get("receipts") or {}).get("generated_at"),
+                                 # Entrada del caso YA analizada por el producto (no una
+                                 # segunda extracción): área y tipo de unidad.
+                                 area=record.get("area"),
+                                 tipo_unidad=analysis.get("tipo_predio_snr"))
 
     # ── 3 · Modelo, manifest y hash maestro ───────────────────────────────────
     hist_path = ROOT / "docs" / "forensics" / args.folio / "dictus_2" / "HISTORICAL_CONSISTENCY_REPORT.json"

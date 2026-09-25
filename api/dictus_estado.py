@@ -276,11 +276,14 @@ _SOLAR: Dict[str, Any] = {}
 def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
                         ciudad: str = "barranquilla",
                         versionado: Optional[Dict[str, Any]] = None,
-                        generated_at: Optional[str] = None) -> Dict[str, Any]:
+                        generated_at: Optional[str] = None,
+                        area: Any = None,
+                        tipo_unidad: Optional[str] = None) -> Dict[str, Any]:
     """`DictusRunState`: la verdad única de la corrida, sin recalcular nada.
 
     `captura` es lo que dejaron los observadores: `{"ctx", "poi", "receipts",
-    "volcan", "release"}`.
+    "volcan", "release"}`. `area` y `tipo_unidad` vienen de la entrada del caso (el
+    CTL ya analizado por el producto), no de ninguna extracción posterior.
     """
     captura = captura or {}
     ctx = captura.get("ctx") or {}
@@ -337,6 +340,8 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
         "findings": normalizar_findings(ctx.get("hallazgos")),
         "screening_summary": titu.get("screening_summary") or {},
         "urban_context": {
+            "area": _num(area),
+            "tipo_unidad": tipo_unidad,
             "barrio": adm.get("barrio") or ent.get("barrio"),
             "localidad": adm.get("comuna") or ent.get("localidad"),
             "estrato": adm.get("estrato") or ent.get("estrato"),
