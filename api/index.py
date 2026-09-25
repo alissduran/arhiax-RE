@@ -19,6 +19,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import traceback
 
+# Logger del backend: los fallos de persistencia se registran SERVER-SIDE (con su
+# traza) y al usuario solo le llega un mensaje sin detalles internos (§8).
+import logging
+
+log = logging.getLogger("arhiax.api")
+
 try:
     # 1. Configurar rutas de importación locales
     API_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -523,6 +529,16 @@ def create_dictamen(payload: dict = Body(...), background_tasks: BackgroundTasks
                            acreedor_real=acreedor_real, created_by=username)
     except ValidationError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except HTTPException:
+        raise
+    except Exception:
+        # Fallo de persistencia (p. ej. una migración pendiente que no puede correr
+        # contra el dialecto de la base): se registra con traza en el servidor y el
+        # usuario recibe un mensaje genérico. Nunca se devuelve DSN, credenciales,
+        # SQL ni stack trace en la respuesta (§8).
+        log.exception("create_dictamen failed")
+        raise HTTPException(status_code=500,
+                            detail="No fue posible crear el caso.")
 
     new_id = caso["id"]
     # Crear carpeta física para guardar imágenes de este caso
