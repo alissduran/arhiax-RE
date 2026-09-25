@@ -51,3 +51,5 @@ tmp_*/
 docs/forensics/**/paginas/
 
 tmp_arhiax/
+# Imágenes intermedias de la simulación de sombras del Golden
+docs/forensics/**/sombra_*.png

@@ -1,0 +1,4195 @@
+{
+ "run_state_version": "dictus-run-state/1.0.0",
+ "run_id": "5a917476-a32b-40de-9df7-014426094986",
+ "generated_at": "2026-09-25T01:44:09.265748+00:00",
+ "ciudad": "barranquilla",
+ "property_identity": {
+  "folio": "040-646406",
+  "nupre": "AFT0005BOHA",
+  "codigo_catastral": "080010103000010040001908040002",
+  "direccion_raw": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3",
+  "direccion_normalizada": null,
+  "torre": "8",
+  "apartamento": "430",
+  "unidad": "APARTAMENTO 430 TORRE 8",
+  "estado": "MATCH_BY_NUPRE",
+  "resolution_status": "EXACT",
+  "resolution_method": "nupre",
+  "resolution_confidence": "VERIFIED_UNIT_IDENTITY",
+  "identity_verified": true,
+  "identity_source": null,
+  "administrativo": {
+   "ciudad": "barranquilla",
+   "comuna": null,
+   "barrio": "Miramar",
+   "estrato": "4",
+   "clase_suelo": null,
+   "area_actividad": null,
+   "uso_economico": null,
+   "tratamiento": "Consolidacion",
+   "edificabilidad_texto": null,
+   "trazas": {
+    "comuna": {
+     "fuente": "no disponible",
+     "estado": "NULL_VALUE"
+    },
+    "barrio": {
+     "fuente": "geoportal (DPA sector)",
+     "estado": "RESUELTO"
+    },
+    "estrato": {
+     "fuente": "geoportal (tabla estratificacion)",
+     "estado": "RESUELTO"
+    }
+   }
+  }
+ },
+ "title_state": {
+  "folio": "040-646406",
+  "titulares": "DURAN BACCA ALISSON CC# 1045718995X 50%",
+  "modalidad_adquisicion": "N/D",
+  "circulo_registral": "040 - BARRANQUILLA",
+  "anotaciones_total": 8,
+  "gravamenes_vigentes": [
+   {
+    "anotacion": "007",
+    "fecha": "22-01-2024",
+    "tipo": "GRAVAMEN: Hipoteca",
+    "partes": "DURAN BACCA ALISSON  CC# 1045718995X -> BANCO DE BOGOTA S.A.NIT# 8600029644",
+    "estado": "VIGENTE"
+   },
+   {
+    "anotacion": "008",
+    "fecha": "22-01-2024",
+    "tipo": "LIMITACION: Afectacion Vivienda",
+    "partes": "DURAN BACCA ALISSON  CC# 1045718995X",
+    "estado": "VIGENTE"
+   }
+  ],
+  "acreedor_snr": "BANCO DE BOGOTA S.A.NIT# 8600029644",
+  "hipoteca_vigente": {
+   "anotacion": "007",
+   "fecha": "22-01-2024",
+   "acreedor": "BANCO DE BOGOTA S.A.NIT# 8600029644",
+   "cuantia_cop": null
+  },
+  "certificado_adjuntado": true
+ },
+ "findings": [
+  {
+   "severidad": "ALTO",
+   "codigo": "H-01",
+   "titulo": "Hipoteca vigente a favor de BANCO DE BOGOTA S.A (Anot. 007)",
+   "fuente": "SNR Registral",
+   "por_que": "El folio registra una HIPOTECA VIGENTE inscrita el 22-01-2024 (anot. 007) a favor de BANCO DE BOGOTA S.A. En lenguaje claro: este inmueble esta comprometido como garantia de un credito que aun no ha sido cancelado. La hipoteca es una carga que pesa sobre la propiedad (no sobre la persona): sigue al inmueble aunque cambie de dueno hasta que se pague el credito y se cancele en el registro.",
+   "accion": "Para vender, refinanciar o dar este inmueble en garantia, primero hay que gestionar el credito con BANCO DE BOGOTA S.A y tramitar la CANCELACION de la hipoteca ante la ORIP. No impide ser dueno, pero condiciona cualquier operacion sobre el apartamento hasta que el gravamen se levante.",
+   "afectados": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impacto": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación."
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: altura maxima",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [],
+   "impacto": ""
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: amenaza",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [
+    "COMPRADOR",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA"
+   ],
+   "impacto": "Puede exigir verificación técnica específica y condicionar la financiación o la póliza."
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: coordenada",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [],
+   "impacto": ""
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: titulares",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [],
+   "impacto": ""
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: tratamiento",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [],
+   "impacto": ""
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: uso pot",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [],
+   "impacto": ""
+  },
+  {
+   "severidad": "MEDIO",
+   "codigo": "H-02",
+   "titulo": "Afectacion/Limitacion Vigente (Anot. 008)",
+   "fuente": "SNR Registral",
+   "por_que": "El folio registra una limitacion al dominio (anot. 008): 008 Fecha: 22-01-2024 Radicación: 2024-040-6-1412 Doc: ESCRITURA 2875 DEL 11-10-2023 NOTARIA PRIMERA DE BARRANQUILLAVALOR ACTO: $0 ESPECIFICACION: LIMITACION AL. En lenguaje claro: el inmueble tiene una restriccion legal (p. ej. afectacion a vivienda familiar) que exige el consentimiento de las personas protegidas para venderlo o traspasarlo.",
+   "accion": "Vender o aportar el inmueble requiere el levantamiento de la limitacion con la participacion de los titulares/beneficiarios ante notaria.",
+   "afectados": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impacto": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación."
+  },
+  {
+   "severidad": "MEDIO",
+   "codigo": "H-GEO",
+   "titulo": "Afectación por Amenaza/Riesgo Detectada (Medio)",
+   "fuente": "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)",
+   "por_que": "El motor geoespacial detectó intersección del predio con zonas de riesgo del POT de Barranquilla. Amenaza remoción en masa: Media | Áreas en riesgo: Medio | Clase de suelo: Urbano (01). El predio ubicado en (11.00606, -74.83757) presenta evaluación de Amenaza Media por remoción en masa y zonificación de Riesgo Medio según el Plan de Ordenamiento Territorial (POT) de Barranquilla.",
+   "accion": "Afectacion presente declarada por la fuente oficial: se recomienda verificacion puntual por profesional competente en caso de intervencion fisica del predio; impacto esperado menor en originacion. Amenaza de nivel MEDIA declarada por la fuente oficial. Amenaza de nivel MEDIO declarada por la fuente oficial. [RSK-SEV-1 v1.0.0]",
+   "afectados": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impacto": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación."
+  }
+ ],
+ "screening_summary": {
+  "status": "SCREENING_COMPLETE",
+  "executed": true,
+  "decision_status": "SCREENING_COMPLETE",
+  "coverage_status": "COVERAGE_COMPLETE",
+  "coverage_complete": true,
+  "subjects_declared": 3,
+  "subjects_screened": 3,
+  "subjects_not_screened": 0,
+  "subjects": [
+   {
+    "subject_id": "titular_actual-1045718995",
+    "raw_name": "DURAN BACCA ALISSON CC# 1045718995",
+    "canonical_name": "DURAN BACCA ALISSON",
+    "person_type": "NATURAL_PERSON",
+    "document_type": "cc",
+    "document_number": "1045718995X",
+    "document_normalized": "1045718995X",
+    "roles": [
+     "TITULAR_ACTUAL"
+    ],
+    "participation": "50%",
+    "source": "MODELO_CANONICO",
+    "source_reference": "modelo canónico (CTL)",
+    "identity_confidence": "VERIFIED_REGISTRAL",
+    "identity_warnings": [
+     "DOCUMENT_NON_STANDARD_FORMAT"
+    ],
+    "screened": true,
+    "reason_for_screening": "titular actual del inmueble (parte de la operación)",
+    "not_screened_reason": null,
+    "declared_name_variants": [],
+    "identifiers": []
+   },
+   {
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "raw_name": "BANCO DE BOGOTA S.A.NIT# 8600029644",
+    "canonical_name": "BANCO DE BOGOTA S.A.",
+    "person_type": "LEGAL_ENTITY",
+    "document_type": "nit",
+    "document_number": "8600029644",
+    "document_normalized": "8600029644",
+    "roles": [
+     "ACREEDOR_HIPOTECARIO"
+    ],
+    "participation": null,
+    "source": "CTL",
+    "source_reference": "CTL — anotación con hipoteca vigente 001",
+    "identity_confidence": "VERIFIED_REGISTRAL",
+    "identity_warnings": [],
+    "screened": true,
+    "reason_for_screening": "acreedor hipotecario inscrito (contraparte financiera)",
+    "not_screened_reason": null,
+    "declared_name_variants": [],
+    "identifiers": []
+   },
+   {
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "raw_name": "URBANIZADORA MARVAL S.A.S.",
+    "canonical_name": "URBANIZADORA MARVAL S.A.S.",
+    "person_type": "LEGAL_ENTITY",
+    "document_type": null,
+    "document_number": null,
+    "document_normalized": null,
+    "roles": [
+     "CONSTRUCTOR_ENAJENANTE"
+    ],
+    "participation": null,
+    "source": "CTL",
+    "source_reference": "CTL — descripción del inmueble / enajenante original",
+    "identity_confidence": "VERIFIED_REGISTRAL",
+    "identity_warnings": [
+     "DOCUMENT_MISSING",
+     "PERSON_TYPE_INFERRED_FROM_LEGAL_FORM"
+    ],
+    "screened": true,
+    "reason_for_screening": "constructor/enajenante original (material a la operación)",
+    "not_screened_reason": null,
+    "declared_name_variants": [],
+    "identifiers": []
+   }
+  ],
+  "outcomes": [
+   {
+    "subject_id": "titular_actual-1045718995",
+    "source_id": "UN_CONSOLIDATED",
+    "result": "NO_MATCH",
+    "score": 0.5641025641025641,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.564 (bajo umbral)"
+    ],
+    "snapshot_id": "UN_CONSOLIDATED:ffef26e73ef326e7",
+    "snapshot_sha256": "ffef26e73ef326e761e8090ac6461d913e1c73b25bafb9c639240a3147034192",
+    "snapshot_effective_date": "2026-09-23T23:00:06.747Z",
+    "parser_version": "onu_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.564 (bajo umbral)"
+   },
+   {
+    "subject_id": "titular_actual-1045718995",
+    "source_id": "OFAC_SDN",
+    "result": "NO_MATCH",
+    "score": 0.5806451612903226,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.581 (bajo umbral)"
+    ],
+    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.581 (bajo umbral)"
+   },
+   {
+    "subject_id": "titular_actual-1045718995",
+    "source_id": "UK_SANCTIONS_LIST",
+    "result": "NO_MATCH",
+    "score": 0.5882352941176471,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.588 (bajo umbral)"
+    ],
+    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.588 (bajo umbral)"
+   },
+   {
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "source_id": "UN_CONSOLIDATED",
+    "result": "NO_MATCH",
+    "score": 0.5,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.500 (bajo umbral)"
+    ],
+    "snapshot_id": "UN_CONSOLIDATED:ffef26e73ef326e7",
+    "snapshot_sha256": "ffef26e73ef326e761e8090ac6461d913e1c73b25bafb9c639240a3147034192",
+    "snapshot_effective_date": "2026-09-23T23:00:06.747Z",
+    "parser_version": "onu_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.500 (bajo umbral)"
+   },
+   {
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "source_id": "OFAC_SDN",
+    "result": "NO_MATCH",
+    "score": 0.6829268292682927,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.683 (bajo umbral)"
+    ],
+    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.683 (bajo umbral)"
+   },
+   {
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "source_id": "UK_SANCTIONS_LIST",
+    "result": "NO_MATCH",
+    "score": 0.5641025641025641,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.564 (bajo umbral)"
+    ],
+    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.564 (bajo umbral)"
+   },
+   {
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "source_id": "UN_CONSOLIDATED",
+    "result": "NO_MATCH",
+    "score": 0.5263157894736842,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.526 (bajo umbral)"
+    ],
+    "snapshot_id": "UN_CONSOLIDATED:ffef26e73ef326e7",
+    "snapshot_sha256": "ffef26e73ef326e761e8090ac6461d913e1c73b25bafb9c639240a3147034192",
+    "snapshot_effective_date": "2026-09-23T23:00:06.747Z",
+    "parser_version": "onu_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.526 (bajo umbral)"
+   },
+   {
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "source_id": "OFAC_SDN",
+    "result": "NO_MATCH",
+    "score": 0.6666666666666666,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.667 (bajo umbral)"
+    ],
+    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.667 (bajo umbral)"
+   },
+   {
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "source_id": "UK_SANCTIONS_LIST",
+    "result": "NO_MATCH",
+    "score": 0.6046511627906976,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.605 (bajo umbral)"
+    ],
+    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "freshness": "CACHED_FRESH",
+    "review_status": "NO_REQUIERE",
+    "note": "mejor similitud 0.605 (bajo umbral)"
+   }
+  ],
+  "sources": [
+   "UN_CONSOLIDATED",
+   "OFAC_SDN",
+   "UK_SANCTIONS_LIST"
+  ],
+  "sources_available": [
+   "OFAC_SDN",
+   "UK_SANCTIONS_LIST",
+   "UN_CONSOLIDATED"
+  ],
+  "sources_unavailable": [],
+  "snapshots": [
+   {
+    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
+    "source_id": "OFAC_SDN",
+    "authority": "US Department of the Treasury — OFAC (Sanctions List Service)",
+    "retrieved_at": "2026-09-24T16:43:34.079930Z",
+    "effective_date": "09/23/2026",
+    "source_url": "https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.XML",
+    "sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "record_count": 19391,
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "acquisition_status": "OPERATIVA",
+    "freshness": "CACHED_FRESH",
+    "error": null,
+    "refresh_error": null
+   },
+   {
+    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
+    "source_id": "UK_SANCTIONS_LIST",
+    "authority": "UK FCDO / OFSI (UK Sanctions List)",
+    "retrieved_at": "2026-09-24T16:43:43.536426Z",
+    "effective_date": "21/09/2026",
+    "source_url": "https://sanctionslist.fcdo.gov.uk/docs/UK-Sanctions-List.xml",
+    "sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "record_count": 6339,
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "acquisition_status": "OPERATIVA",
+    "freshness": "CACHED_FRESH",
+    "error": null,
+    "refresh_error": null
+   },
+   {
+    "snapshot_id": "UN_CONSOLIDATED:ffef26e73ef326e7",
+    "source_id": "UN_CONSOLIDATED",
+    "authority": "United Nations Security Council",
+    "retrieved_at": "2026-09-24T16:08:59.345242Z",
+    "effective_date": "2026-09-23T23:00:06.747Z",
+    "source_url": "https://scsanctions.un.org/resources/xml/en/consolidated.xml",
+    "sha256": "ffef26e73ef326e761e8090ac6461d913e1c73b25bafb9c639240a3147034192",
+    "record_count": 1011,
+    "parser_version": "onu_xml/1.1.0",
+    "acquisition_status": "OPERATIVA",
+    "freshness": "CACHED_FRESH",
+    "error": null,
+    "refresh_error": null
+   }
+  ],
+  "review_required_subjects": [],
+  "matched_subjects": [],
+  "reason": "Sin coincidencias en las fuentes efectivamente consultadas. Cobertura completa: ONU (lista consolidada del Consejo de Seguridad); OFAC — SDN (solo SDN); UK Sanctions List (FCDO/OFSI).",
+  "executed_at": "2026-09-25T01:43:14.965552+00:00",
+  "algorithm_version": "sanctions-matcher/1.1.0",
+  "scope_note": "Este screening es apoyo automatizado a la debida diligencia LA/FT: identifica y consulta contrapartes contra fuentes oficiales y deja evidencia versionada. NO declara cumplimiento normativo, no determina si una parte es sujeto obligado y no sustituye la verificación del oficial de cumplimiento.",
+  "evidence_records": [
+   {
+    "evidence_id": "5ae7f8a61df1bbf8ef88e1bb",
+    "subject_id": "titular_actual-1045718995",
+    "canonical_name": "DURAN BACCA ALISSON",
+    "document_type": "cc",
+    "document_number_masked": "1045******X",
+    "source_id": "UN_CONSOLIDATED",
+    "snapshot_sha256": "ffef26e73ef326e761e8090ac6461d913e1c73b25bafb9c639240a3147034192",
+    "snapshot_effective_date": "2026-09-23T23:00:06.747Z",
+    "query_hash": "184104134d6d3e78ecb176df2b3135c56d8b5bb3dee22be8d1ffd33b14663bc7",
+    "screened_at": "2026-09-25T01:44:04.566806Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5641,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.564 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
+    "evidence_hash": "5ae7f8a61df1bbf8ef88e1bbe62067bdf01c99053cdd5ec0ccfbd95923bee6ef",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "onu_xml/1.1.0",
+    "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
+    "evidence_content_hash": "42b9e5c62de17c0627c1e7aa8efe2b782a14a8a70af55689c25b02ea5f0a1a07"
+   },
+   {
+    "evidence_id": "3ecd6c50585c17bb7f71d1cf",
+    "subject_id": "titular_actual-1045718995",
+    "canonical_name": "DURAN BACCA ALISSON",
+    "document_type": "cc",
+    "document_number_masked": "1045******X",
+    "source_id": "OFAC_SDN",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
+    "query_hash": "a47883a6b4ccc730fb6121766a89efe0a5bfc10b170dbbe5f83a0004ac276d9f",
+    "screened_at": "2026-09-25T01:44:04.567533Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5806,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.581 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
+    "evidence_hash": "3ecd6c50585c17bb7f71d1cf90814228576f5bdfd9c1698fcbdc319c191fa257",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
+    "evidence_content_hash": "89a218c902974de5573737089b6a4244f4706f67a4362957099f3936d23972e7"
+   },
+   {
+    "evidence_id": "68cbea83690d3ee381613904",
+    "subject_id": "titular_actual-1045718995",
+    "canonical_name": "DURAN BACCA ALISSON",
+    "document_type": "cc",
+    "document_number_masked": "1045******X",
+    "source_id": "UK_SANCTIONS_LIST",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "query_hash": "87ff6c8f353af3b24752160f12c611285117272ae8776e64aec95673fbf4be39",
+    "screened_at": "2026-09-25T01:44:04.567995Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5882,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.588 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
+    "evidence_hash": "68cbea83690d3ee381613904a4d5875515070f6ab058dd957ecae8e20fcf9d38",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
+    "evidence_content_hash": "2bfcf126ead8b0d88239f769a5d6e65490061cd8a4605331fb704a71e867dd45"
+   },
+   {
+    "evidence_id": "8fa9d5a66972bdce9f2f7efd",
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "canonical_name": "BANCO DE BOGOTA S.A.",
+    "document_type": "nit",
+    "document_number_masked": "8600*****4",
+    "source_id": "UN_CONSOLIDATED",
+    "snapshot_sha256": "ffef26e73ef326e761e8090ac6461d913e1c73b25bafb9c639240a3147034192",
+    "snapshot_effective_date": "2026-09-23T23:00:06.747Z",
+    "query_hash": "ed2901aa939b21c8895051790a15993256047e60c2f1f154129c9f59cc655a40",
+    "screened_at": "2026-09-25T01:44:04.568412Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.500 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
+    "evidence_hash": "8fa9d5a66972bdce9f2f7efdb64107a5845a8b7afcb894e6041fb46498029284",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "onu_xml/1.1.0",
+    "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
+    "evidence_content_hash": "2ad85c17091b39b4196ef8661f7e7caad8d8747738b7e9464e01757ab6de62cd"
+   },
+   {
+    "evidence_id": "1b6a0e4b24af37b3d7630409",
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "canonical_name": "BANCO DE BOGOTA S.A.",
+    "document_type": "nit",
+    "document_number_masked": "8600*****4",
+    "source_id": "OFAC_SDN",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
+    "query_hash": "8ab4110c5989ab290accac739a3ffe77b9e8ff279819ab586307a629a89654c9",
+    "screened_at": "2026-09-25T01:44:04.568818Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.6829,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.683 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
+    "evidence_hash": "1b6a0e4b24af37b3d763040961a40dabb85e6ee0e834c84bccf06dd298d304b6",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
+    "evidence_content_hash": "1f3b2cb3b6ee3cece8f53f6bb7c9cb42fd2405abcb7e5dc859e13ae8c8cc171a"
+   },
+   {
+    "evidence_id": "4d89a7975deee61dee27e300",
+    "subject_id": "acreedor_hipotecario-8600029644",
+    "canonical_name": "BANCO DE BOGOTA S.A.",
+    "document_type": "nit",
+    "document_number_masked": "8600*****4",
+    "source_id": "UK_SANCTIONS_LIST",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "query_hash": "7a092e6b93ec384851dad82c123c0e9ac79573c1acc3bce396025b57366da817",
+    "screened_at": "2026-09-25T01:44:04.569721Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5641,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.564 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
+    "evidence_hash": "4d89a7975deee61dee27e300a3b03081b4ae27b929cac47aa0f4502088a398cd",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
+    "evidence_content_hash": "31be91334a6cf8eaa7338dccb2332989bb3748088bd671cdc31465d0b3a642b1"
+   },
+   {
+    "evidence_id": "c88d5243ed1c2c2932c595b3",
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "canonical_name": "URBANIZADORA MARVAL S.A.S.",
+    "document_type": null,
+    "document_number_masked": "N/D",
+    "source_id": "UN_CONSOLIDATED",
+    "snapshot_sha256": "ffef26e73ef326e761e8090ac6461d913e1c73b25bafb9c639240a3147034192",
+    "snapshot_effective_date": "2026-09-23T23:00:06.747Z",
+    "query_hash": "8e4cb9f4adc0ab331f09197209671194fe3dc9e48310198cd223ad9d6afdda9b",
+    "screened_at": "2026-09-25T01:44:04.570204Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.5263,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.526 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
+    "evidence_hash": "c88d5243ed1c2c2932c595b38fcc88d3e94c3019d1bbe8aa1d2828f0b82f7479",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "onu_xml/1.1.0",
+    "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
+    "evidence_content_hash": "086e51cba25cc900f4acfd94f28b6d497ed0d9baf56834094b10ca4487e87dc0"
+   },
+   {
+    "evidence_id": "a6cd0d1cd7d20e558e254cd7",
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "canonical_name": "URBANIZADORA MARVAL S.A.S.",
+    "document_type": null,
+    "document_number_masked": "N/D",
+    "source_id": "OFAC_SDN",
+    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+    "snapshot_effective_date": "09/23/2026",
+    "query_hash": "80050a97643f4a6700e0393be601746a3416d98406f76374e56a8bccf5927bc9",
+    "screened_at": "2026-09-25T01:44:04.570591Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.6667,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.667 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
+    "evidence_hash": "a6cd0d1cd7d20e558e254cd74a15e7f8b9e3b53a2450687795e4c1f894c36d5a",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "ofac_sdn_xml/1.1.0",
+    "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
+    "evidence_content_hash": "0c75cda26b8d63215844622a7d03ef7e33ee1b458cdd3fc303b48d822cb81bc4"
+   },
+   {
+    "evidence_id": "8ad164be3f1d97dc47441341",
+    "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+    "canonical_name": "URBANIZADORA MARVAL S.A.S.",
+    "document_type": null,
+    "document_number_masked": "N/D",
+    "source_id": "UK_SANCTIONS_LIST",
+    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "snapshot_effective_date": "21/09/2026",
+    "query_hash": "18404c2adcf3685bb7f2ac7592009cb72864d451809fdd139b17890374a1e90f",
+    "screened_at": "2026-09-25T01:44:04.570965Z",
+    "algorithm_version": "sanctions-matcher/1.1.0",
+    "result": "NO_MATCH",
+    "score": 0.6047,
+    "matched_record_ids": [],
+    "matching_reasons": [
+     "mejor similitud 0.605 (bajo umbral)"
+    ],
+    "review_status": "NO_REQUIERE",
+    "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
+    "evidence_hash": "8ad164be3f1d97dc474413414f9d79a1551c8292d31bc78e14618408320080ad",
+    "matcher_version": "sanctions-matcher/1.1.0",
+    "parser_version": "uk_sanctions_list_xml/1.1.0",
+    "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
+    "evidence_content_hash": "99d05cc09a17fefa955b90225336a07edf94614ea9788c524378e78b9dc5ada9"
+   }
+  ],
+  "evidence_expected_count": 9,
+  "evidence_created_count": 9,
+  "evidence_chain_status": "SEALED",
+  "evidence_errors": [],
+  "evidence_complete": true,
+  "evidence_sealed": true,
+  "evidence_reproducible": true,
+  "extra": {
+   "cobertura": "ONU (lista consolidada del Consejo de Seguridad); OFAC — SDN (solo SDN); UK Sanctions List (FCDO/OFSI)",
+   "cobertura_completa": true,
+   "coverage_status": "COVERAGE_COMPLETE",
+   "gate_pares_sin_consultar": [],
+   "evidence_error": null,
+   "evidence_chain_error": null,
+   "refresh_errors": {},
+   "en_vivo": [],
+   "desde_snapshot": [
+    "OFAC_SDN",
+    "UK_SANCTIONS_LIST",
+    "UN_CONSOLIDATED"
+   ]
+  }
+ },
+ "urban_context": {
+  "barrio": "Miramar",
+  "localidad": "02",
+  "estrato": "4",
+  "tratamiento": "Consolidacion",
+  "tipo_tratamiento": "Nivel 2",
+  "altura_maxima": "11",
+  "clase_suelo": null,
+  "area_actividad": null,
+  "destino_economico": "Habitacional",
+  "condicion_juridica": null,
+  "predio_disponible": true,
+  "entorno_disponible": true
+ },
+ "risk_context": {
+  "volcan": null,
+  "amenaza_remocion_masa": null,
+  "areas_en_riesgo": null,
+  "inundacion": null,
+  "riesgo_no_mitigable": null
+ },
+ "poi_state": {
+  "version": "dictus-run-state/1.0.0",
+  "queried_at": "2026-09-25T01:44:11.854672+00:00",
+  "items": [
+   {
+    "category": "Educacion",
+    "name": "American School",
+    "type": "Educacion (Colegio)",
+    "lat": null,
+    "lon": null,
+    "distance_m": 1402.4,
+    "walking_time_estimate": "~18 min a pie",
+    "travel_time_estimate": "~18 min a pie",
+    "source": "PHOTON_OSM",
+    "queried_at": "2026-09-25T01:44:11.854672+00:00",
+    "status": "OBTENIDO"
+   },
+   {
+    "category": "Educacion",
+    "name": "Colegio Real / Royal School",
+    "type": "Educacion (Colegio)",
+    "lat": null,
+    "lon": null,
+    "distance_m": 1751.3,
+    "walking_time_estimate": "~22 min a pie",
+    "travel_time_estimate": "~22 min a pie",
+    "source": "PHOTON_OSM",
+    "queried_at": "2026-09-25T01:44:11.854672+00:00",
+    "status": "OBTENIDO"
+   },
+   {
+    "category": "Salud",
+    "name": "Clínica de Fracturas",
+    "type": "Salud (Clinica)",
+    "lat": null,
+    "lon": null,
+    "distance_m": 1887.1,
+    "walking_time_estimate": "~24 min a pie",
+    "travel_time_estimate": "~24 min a pie",
+    "source": "PHOTON_OSM",
+    "queried_at": "2026-09-25T01:44:11.854672+00:00",
+    "status": "OBTENIDO"
+   },
+   {
+    "category": "Salud",
+    "name": "Clínica Oftalmológica del Caribe",
+    "type": "Salud (Clinica)",
+    "lat": null,
+    "lon": null,
+    "distance_m": 1928.2,
+    "walking_time_estimate": "~24 min a pie",
+    "travel_time_estimate": "~24 min a pie",
+    "source": "PHOTON_OSM",
+    "queried_at": "2026-09-25T01:44:11.854672+00:00",
+    "status": "OBTENIDO"
+   },
+   {
+    "category": "Salud",
+    "name": "Clínica Mediesp",
+    "type": "Salud (Clinica)",
+    "lat": null,
+    "lon": null,
+    "distance_m": 1961.7,
+    "walking_time_estimate": "~25 min a pie",
+    "travel_time_estimate": "~25 min a pie",
+    "source": "PHOTON_OSM",
+    "queried_at": "2026-09-25T01:44:11.854672+00:00",
+    "status": "OBTENIDO"
+   }
+  ],
+  "por_categoria": {
+   "Comercio": {
+    "status": "NO_MATCH",
+    "count": 0,
+    "items": [],
+    "mas_cercano_m": null,
+    "mas_cercano": null,
+    "distance_available": false
+   },
+   "Educacion": {
+    "status": "AVAILABLE",
+    "count": 2,
+    "items": [
+     {
+      "category": "Educacion",
+      "name": "American School",
+      "type": "Educacion (Colegio)",
+      "lat": null,
+      "lon": null,
+      "distance_m": 1402.4,
+      "walking_time_estimate": "~18 min a pie",
+      "travel_time_estimate": "~18 min a pie",
+      "source": "PHOTON_OSM",
+      "queried_at": "2026-09-25T01:44:11.854672+00:00",
+      "status": "OBTENIDO"
+     },
+     {
+      "category": "Educacion",
+      "name": "Colegio Real / Royal School",
+      "type": "Educacion (Colegio)",
+      "lat": null,
+      "lon": null,
+      "distance_m": 1751.3,
+      "walking_time_estimate": "~22 min a pie",
+      "travel_time_estimate": "~22 min a pie",
+      "source": "PHOTON_OSM",
+      "queried_at": "2026-09-25T01:44:11.854672+00:00",
+      "status": "OBTENIDO"
+     }
+    ],
+    "mas_cercano_m": 1402.4,
+    "mas_cercano": "American School",
+    "distance_available": true
+   },
+   "Recreacion": {
+    "status": "NO_MATCH",
+    "count": 0,
+    "items": [],
+    "mas_cercano_m": null,
+    "mas_cercano": null,
+    "distance_available": false
+   },
+   "Salud": {
+    "status": "AVAILABLE",
+    "count": 3,
+    "items": [
+     {
+      "category": "Salud",
+      "name": "Clínica de Fracturas",
+      "type": "Salud (Clinica)",
+      "lat": null,
+      "lon": null,
+      "distance_m": 1887.1,
+      "walking_time_estimate": "~24 min a pie",
+      "travel_time_estimate": "~24 min a pie",
+      "source": "PHOTON_OSM",
+      "queried_at": "2026-09-25T01:44:11.854672+00:00",
+      "status": "OBTENIDO"
+     },
+     {
+      "category": "Salud",
+      "name": "Clínica Oftalmológica del Caribe",
+      "type": "Salud (Clinica)",
+      "lat": null,
+      "lon": null,
+      "distance_m": 1928.2,
+      "walking_time_estimate": "~24 min a pie",
+      "travel_time_estimate": "~24 min a pie",
+      "source": "PHOTON_OSM",
+      "queried_at": "2026-09-25T01:44:11.854672+00:00",
+      "status": "OBTENIDO"
+     },
+     {
+      "category": "Salud",
+      "name": "Clínica Mediesp",
+      "type": "Salud (Clinica)",
+      "lat": null,
+      "lon": null,
+      "distance_m": 1961.7,
+      "walking_time_estimate": "~25 min a pie",
+      "travel_time_estimate": "~25 min a pie",
+      "source": "PHOTON_OSM",
+      "queried_at": "2026-09-25T01:44:11.854672+00:00",
+      "status": "OBTENIDO"
+     }
+    ],
+    "mas_cercano_m": 1887.1,
+    "mas_cercano": "Clínica de Fracturas",
+    "distance_available": true
+   }
+  },
+  "sources_attempted": [
+   "OSM_OVERPASS",
+   "PHOTON_OSM"
+  ],
+  "sources_succeeded": [
+   "PHOTON_OSM"
+  ],
+  "item_count": 5,
+  "distance_available": true
+ },
+ "solar_state": {
+  "momentos": [
+   {
+    "hora": "09:00 COT",
+    "azimut": "102.33°",
+    "elevacion": "45.98°",
+    "estado": "Sol Directo",
+    "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 7.7°."
+   },
+   {
+    "hora": "12:00 COT",
+    "azimut": "191.14°",
+    "elevacion": "78.25°",
+    "estado": "Sol Directo",
+    "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 81.1°."
+   },
+   {
+    "hora": "15:00 COT",
+    "azimut": "259.25°",
+    "elevacion": "41.62°",
+    "estado": "Sombra (Orientación)",
+    "descripcion": "El sol está detrás del inmueble (fachada opuesta)."
+   }
+  ],
+  "altura_dependiente": true,
+  "tipo": "SIMULACION_GEOMETRICA",
+  "advertencia": "La proyección corresponde a una simulación geométrica y no sustituye una inspección física.",
+  "habitacion_ambigua": {}
+ },
+ "valuation_state": {
+  "value_m2": 6800000,
+  "consolidado": 399500000,
+  "banda_baja": 373532500,
+  "banda_alta": 435455000,
+  "sector": null,
+  "match_type": null,
+  "metodologia_aplica": true,
+  "motivo_no_aplica": null,
+  "m1": 407490000,
+  "m2": 295690000,
+  "m3": 446700000,
+  "authorization": {
+   "allowed": true,
+   "identity_authorized": true,
+   "market_context_authorized": true,
+   "identity_level": "VERIFIED_UNIT_IDENTITY"
+  }
+ },
+ "release_state": {
+  "evaluation_status": "EVALUATED",
+  "release_status": "VALID_FOR_RELEASE",
+  "policy": "MARK",
+  "environment": "test",
+  "environment_declared": true,
+  "environment_raw": "test",
+  "assumed_conservative": false,
+  "blocking": false,
+  "mark": false,
+  "marca": null,
+  "override_used": false,
+  "override_variable": null,
+  "override_deprecated": false,
+  "reasons": [],
+  "core_versions": {
+   "matcher": "sanctions-matcher/1.1.0",
+   "subject_model": "canonical-subjects/1.0.0",
+   "parsers": {
+    "onu_xml": "onu_xml/1.1.0",
+    "ofac_sdn_xml": "ofac_sdn_xml/1.1.0",
+    "uk_sanctions_list_xml": "uk_sanctions_list_xml/1.1.0",
+    "uk_ofsi_legacy_xml": "uk_ofsi_legacy_xml/1.0.0"
+   },
+   "sources": [
+    "OFAC_SDN",
+    "UK_SANCTIONS_LIST",
+    "UN_CONSOLIDATED"
+   ],
+   "commit": "b9eb2ffb2d0d393de02ef4209248e2f1033c4aa9"
+  },
+  "ancestry": {
+   "estado": "VERIFIED",
+   "detalle": "b9eb2ffb desciende de acc8a949"
+  },
+  "contract_valid": true,
+  "contract_problems": []
+ },
+ "evidence_manifest_input": {
+  "articulos": [
+   {
+    "tipo": "IDENTIDAD_CANONICA",
+    "fuente": "SNR/geoportal"
+   },
+   {
+    "tipo": "TITULOS",
+    "fuente": "Certificado de tradición y libertad (SNR)"
+   },
+   {
+    "tipo": "SCREENING_CONTRAPARTES",
+    "fuente": "listas restrictivas y sancionatorias aplicables"
+   },
+   {
+    "tipo": "URBANO",
+    "fuente": "capas oficiales del municipio"
+   },
+   {
+    "tipo": "EQUIPAMIENTO",
+    "fuente": "proveedor de mapas abierto"
+   },
+   {
+    "tipo": "AMENAZAS",
+    "fuente": "servicios municipales y SGC"
+   },
+   {
+    "tipo": "VALORACION",
+    "fuente": "metodología de mercado (Lonja)"
+   }
+  ],
+  "versionado": {
+   "ARHIAX_RE_VERSION": "1.4.0",
+   "DICTUS_ENGINE_VERSION": "1.4.0",
+   "GIS_ADAPTER_VERSION": "1.2.0",
+   "TITULUX_VERSION": "1.1.0",
+   "RULESET_VERSION": "1.3.0"
+  }
+ },
+ "receipts": {
+  "generated_at": "2026-09-25T01:44:09.265748+00:00",
+  "ciudad": "barranquilla",
+  "versionado": {
+   "ARHIAX_RE_VERSION": "1.4.0",
+   "DICTUS_ENGINE_VERSION": "1.4.0",
+   "GIS_ADAPTER_VERSION": "1.2.0",
+   "TITULUX_VERSION": "1.1.0",
+   "RULESET_VERSION": "1.3.0",
+   "GIT_COMMIT_SHA": "b9eb2ffb2d0d393de02ef4209248e2f1033c4aa9"
+  },
+  "ctl_adjuntado": true,
+  "catastro": {
+   "consultado": true,
+   "exacto": true,
+   "espacial": false
+  },
+  "identidad": {
+   "estado": "MATCH_BY_NUPRE",
+   "nupre": "AFT0005BOHA",
+   "codigo_catastral": "080010103000010040001908040002",
+   "folio_snr": "040-646406"
+  },
+  "gis": {
+   "estado_fuente": null,
+   "capas": {}
+  },
+  "riesgo_volcanico": {
+   "disponible": true,
+   "nivel": "NO EVALUADO",
+   "estado": "NO_COVERAGE",
+   "cobertura_confirmada": false
+  },
+  "mercado": {
+   "ready": true,
+   "metodologia_id": "lonja_baq_metodologia",
+   "metodologia_version": "0.1-codiseno",
+   "metodologia_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+   "sector": "Miramar",
+   "match_type": "EXACT",
+   "blockers": []
+  },
+  "contexto_urbano": {
+   "estrato": "4",
+   "estrato_status": "VERIFIED_OFFICIAL",
+   "estrato_origen": null,
+   "urban_source_mode": "MIXED"
+  },
+  "geo_evaluado": false,
+  "poi": {
+   "disponible": true,
+   "categorias": {
+    "Comercio": {
+     "status": "NO_MATCH",
+     "count": 0
+    },
+    "Educacion": {
+     "status": "AVAILABLE",
+     "count": 2
+    },
+    "Recreacion": {
+     "status": "NO_MATCH",
+     "count": 0
+    },
+    "Salud": {
+     "status": "AVAILABLE",
+     "count": 3
+    }
+   }
+  },
+  "sarlaft": {
+   "status": "SCREENING_COMPLETE",
+   "sujetos_detalle": [
+    {
+     "subject_id": "titular_actual-1045718995",
+     "canonical_name": "DURAN BACCA ALISSON",
+     "person_type": "NATURAL_PERSON",
+     "person_type_label": null,
+     "document": null
+    },
+    {
+     "subject_id": "acreedor_hipotecario-8600029644",
+     "canonical_name": "BANCO DE BOGOTA S.A.",
+     "person_type": "LEGAL_ENTITY",
+     "person_type_label": null,
+     "document": null
+    },
+    {
+     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
+     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
+     "person_type": "LEGAL_ENTITY",
+     "person_type_label": null,
+     "document": null
+    }
+   ],
+   "etiqueta": "COMPLETO",
+   "completo": true,
+   "agregado": "sinCoincidencia",
+   "fuentes_pendientes": [],
+   "sujetos_declarados": 3,
+   "sujetos_screeningados": 3,
+   "sujetos_no_screeningados": 0,
+   "revision_requerida": [],
+   "coincidencias": [],
+   "reason": "Sin coincidencias en las fuentes efectivamente consultadas. Cobertura completa: ONU (lista consolidada del Consejo de Seguridad); OFAC — SDN (solo SDN); UK Sanctions List (FCDO/OFSI).",
+   "ejecutado": true,
+   "algorithm_version": "sanctions-matcher/1.1.0",
+   "decision_status": "SCREENING_COMPLETE",
+   "coverage_status": "COVERAGE_COMPLETE",
+   "coverage_complete": true,
+   "evidence_expected": 9,
+   "evidence_created": 9,
+   "evidence_chain_status": "SEALED",
+   "evidence_errors": [],
+   "evidence_sealed": true,
+   "evidence_reproducible": true,
+   "matcher_version": "sanctions-matcher/1.1.0",
+   "parser_versions": {
+    "OFAC_SDN": "ofac_sdn_xml/1.1.0",
+    "UK_SANCTIONS_LIST": "uk_sanctions_list_xml/1.1.0",
+    "UN_CONSOLIDATED": "onu_xml/1.1.0"
+   },
+   "fuentes": [
+    {
+     "source_id": "UN_CONSOLIDATED",
+     "sigla": "UN_CONSOLIDATED",
+     "freshness": "CACHED_FRESH",
+     "effective_date": "2026-09-23T23:00:06.747Z",
+     "sha256": "ffef26e73ef326e761e8090ac6461d913e1c73b25bafb9c639240a3147034192",
+     "record_count": 1011,
+     "parser_version": "onu_xml/1.1.0"
+    },
+    {
+     "source_id": "OFAC_SDN",
+     "sigla": "OFAC_SDN",
+     "freshness": "CACHED_FRESH",
+     "effective_date": "09/23/2026",
+     "sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
+     "record_count": 19391,
+     "parser_version": "ofac_sdn_xml/1.1.0"
+    },
+    {
+     "source_id": "UK_SANCTIONS_LIST",
+     "sigla": "UK_SANCTIONS_LIST",
+     "freshness": "CACHED_FRESH",
+     "effective_date": "21/09/2026",
+     "sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+     "record_count": 6339,
+     "parser_version": "uk_sanctions_list_xml/1.1.0"
+    }
+   ]
+  },
+  "geocodificacion": {
+   "lat": 11.006055954316363,
+   "lon": -74.8375696549899,
+   "coordinate_source": "OFFICIAL_PREDIO",
+   "coordinate_source_verified": true,
+   "provenance": {
+    "source_system": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+    "layer": "105 · direccion",
+    "feature_id": "6c663607-5509-401f-b57d-384d2beeeac1",
+    "feature_id_kind": "cr_predio_guid",
+    "geometry_type": "Point",
+    "resolution_method": "DIRECCION_OFICIAL_LIGADA_POR_GUID",
+    "predio_globalid": "6c663607-5509-401f-b57d-384d2beeeac1",
+    "numero_predial": "080010103000010040001908040002",
+    "nupre": "AFT0005BOHA",
+    "direccion_origen": "Transversal 43 # 100-50 TO 8 AP 430",
+    "link_verificado": true,
+    "canonical_binding_status": "VERIFIED",
+    "canonical_binding_fields": [
+     "nupre",
+     "numero_predial"
+    ],
+    "canonical_binding_scope": "NATIONAL_IDENTIFIERS",
+    "canonical_binding_detail": {
+     "nupre": {
+      "canonical": "AFT0005BOHA",
+      "predio": [
+       "AFT0005BOHA",
+       "AFT0005BOHA"
+      ],
+      "comparable": true
+     },
+     "numero_predial": {
+      "canonical": "080010103000010040001908040002",
+      "predio": [
+       "080010103000010040001908040002",
+       "080010103000010040001908040002"
+      ],
+      "comparable": true
+     }
+    }
+   },
+   "source_system": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+   "source_layer": "105 · direccion",
+   "source_feature_id": "6c663607-5509-401f-b57d-384d2beeeac1",
+   "resolution_method": "DIRECCION_OFICIAL_LIGADA_POR_GUID",
+   "coordinate_scope": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación",
+   "canonical_binding_status": "VERIFIED",
+   "canonical_binding_fields": [
+    "nupre",
+    "numero_predial"
+   ],
+   "canonical_binding_scope": "NATIONAL_IDENTIFIERS",
+   "official_predio_rejected_reason": null
+  }
+ },
+ "historical_consistency": {
+  "generado_en": "2026-09-24T21:40:49.033019+00:00",
+  "version": "dictus-historical-consistency/1.0.0",
+  "versiones_comparadas": 14,
+  "conflictos_abiertos": [
+   {
+    "atributo": "altura_maxima",
+    "estado": "HISTORICAL_CONFLICT",
+    "valores": [
+     "8",
+     "11"
+    ],
+    "veces": 2,
+    "detalle": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+    "cambios": [
+     {
+      "atributo": "altura_maxima",
+      "anterior": "8",
+      "actual": "11",
+      "clave_anterior": [
+       "8"
+      ],
+      "clave_actual": [
+       "11"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": true
+     },
+     {
+      "atributo": "altura_maxima",
+      "anterior": "11",
+      "actual": "8",
+      "clave_anterior": [
+       "11"
+      ],
+      "clave_actual": [
+       "8"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I1",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "amenaza",
+    "estado": "HISTORICAL_CONFLICT",
+    "valores": [
+     "Sin afectacion",
+     "AMENAZA BAJA",
+     "AMENAZA MEDIA"
+    ],
+    "veces": 4,
+    "detalle": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+    "cambios": [
+     {
+      "atributo": "amenaza",
+      "anterior": "Sin afectacion",
+      "actual": "AMENAZA BAJA",
+      "clave_anterior": [
+       "SIN AFECTACION"
+      ],
+      "clave_actual": [
+       "AMENAZA BAJA"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     },
+     {
+      "atributo": "amenaza",
+      "anterior": "AMENAZA BAJA",
+      "actual": "AMENAZA MEDIA",
+      "clave_anterior": [
+       "AMENAZA BAJA"
+      ],
+      "clave_actual": [
+       "AMENAZA MEDIA"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": true
+     },
+     {
+      "atributo": "amenaza",
+      "anterior": "AMENAZA MEDIA",
+      "actual": "AMENAZA BAJA",
+      "clave_anterior": [
+       "AMENAZA MEDIA"
+      ],
+      "clave_actual": [
+       "AMENAZA BAJA"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I1",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2",
+      "material": true
+     },
+     {
+      "atributo": "amenaza",
+      "anterior": "AMENAZA BAJA",
+      "actual": "AMENAZA MEDIA",
+      "clave_anterior": [
+       "AMENAZA BAJA"
+      ],
+      "clave_actual": [
+       "AMENAZA MEDIA"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2A",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2B",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "coordenada",
+    "estado": "HISTORICAL_CONFLICT",
+    "valores": [
+     "10.9870 -74.8115",
+     "11.00538 -74.83862",
+     "11.00612 -74.83753"
+    ],
+    "veces": 3,
+    "detalle": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+    "cambios": [
+     {
+      "atributo": "coordenada",
+      "anterior": "10.9870 -74.8115",
+      "actual": "11.00538 -74.83862",
+      "clave_anterior": [
+       "-74.8115",
+       "10.9870"
+      ],
+      "clave_actual": [
+       "-74.83862",
+       "11.00538"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     },
+     {
+      "atributo": "coordenada",
+      "anterior": "11.00538 -74.83862",
+      "actual": "11.00612 -74.83753",
+      "clave_anterior": [
+       "-74.83862",
+       "11.00538"
+      ],
+      "clave_actual": [
+       "-74.83753",
+       "11.00612"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": true
+     },
+     {
+      "atributo": "coordenada",
+      "anterior": "11.00612 -74.83753",
+      "actual": "11.00538 -74.83862",
+      "clave_anterior": [
+       "-74.83753",
+       "11.00612"
+      ],
+      "clave_actual": [
+       "-74.83862",
+       "11.00538"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I1",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "titulares",
+    "estado": "HISTORICAL_CONFLICT",
+    "valores": [
+     "Duran Bacca Alisson (CC 1.045.718.995) 50% + Triana Abello Brayan Dario",
+     "DURAN BACCA ALISSON CC# 1045718995X 50%"
+    ],
+    "veces": 1,
+    "detalle": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+    "cambios": [
+     {
+      "atributo": "titulares",
+      "anterior": "Duran Bacca Alisson (CC 1.045.718.995) 50% + Triana Abello Brayan Dario",
+      "actual": "DURAN BACCA ALISSON CC# 1045718995X 50%",
+      "clave_anterior": [
+       "DURAN BACCA ALISSON CC 1 045 718 995 50 TRIANA ABELLO BRAYAN DARIO"
+      ],
+      "clave_actual": [
+       "DURAN BACCA ALISSON CC 1045718995X 50"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": false
+     }
+    ]
+   },
+   {
+    "atributo": "tratamiento",
+    "estado": "HISTORICAL_CONFLICT",
+    "valores": [
+     "CONSOLIDACION URBANISTICA",
+     "CONSOLIDACION -- Niveles 1B, 2 y Especial (Capa 4 - 5 poligonos)",
+     "CONSOLIDACIÓN / DESARROLLO (Según polígono POT)",
+     "Consolidación (Nivel 2) -- polígono POT consultado en vivo",
+     "Desarrollo (Bajo) -- polígono POT consultado en vivo"
+    ],
+    "veces": 4,
+    "detalle": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+    "cambios": [
+     {
+      "atributo": "tratamiento",
+      "anterior": "CONSOLIDACION URBANISTICA",
+      "actual": "CONSOLIDACION -- Niveles 1B, 2 y Especial (Capa 4 - 5 poligonos)",
+      "clave_anterior": [
+       "CONSOLIDACION URBANISTICA"
+      ],
+      "clave_actual": [
+       "CONSOLIDACION"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": true
+     },
+     {
+      "atributo": "tratamiento",
+      "anterior": "CONSOLIDACION -- Niveles 1B, 2 y Especial (Capa 4 - 5 poligonos)",
+      "actual": "CONSOLIDACIÓN / DESARROLLO (Según polígono POT)",
+      "clave_anterior": [
+       "CONSOLIDACION"
+      ],
+      "clave_actual": [
+       "CONSOLIDACION DESARROLLO"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     },
+     {
+      "atributo": "tratamiento",
+      "anterior": "CONSOLIDACIÓN / DESARROLLO (Según polígono POT)",
+      "actual": "Consolidación (Nivel 2) -- polígono POT consultado en vivo",
+      "clave_anterior": [
+       "CONSOLIDACION DESARROLLO"
+      ],
+      "clave_actual": [
+       "CONSOLIDACION"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": true
+     },
+     {
+      "atributo": "tratamiento",
+      "anterior": "Consolidación (Nivel 2) -- polígono POT consultado en vivo",
+      "actual": "Desarrollo (Bajo) -- polígono POT consultado en vivo",
+      "clave_anterior": [
+       "CONSOLIDACION"
+      ],
+      "clave_actual": [
+       "DESARROLLO"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I1",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "uso_pot",
+    "estado": "HISTORICAL_CONFLICT",
+    "valores": [
+     "ACTIVIDAD CENTRAL (Capa 2 - confirmado)",
+     "ACTIVIDAD URBANA RESIDENCIAL / COMERCIAL"
+    ],
+    "veces": 1,
+    "detalle": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+    "cambios": [
+     {
+      "atributo": "uso_pot",
+      "anterior": "ACTIVIDAD CENTRAL (Capa 2 - confirmado)",
+      "actual": "ACTIVIDAD URBANA RESIDENCIAL / COMERCIAL",
+      "clave_anterior": [
+       "ACTIVIDAD CENTRAL"
+      ],
+      "clave_actual": [
+       "ACTIVIDAD URBANA RESIDENCIAL COMERCIAL"
+      ],
+      "cambio": true,
+      "clase": "UNEXPLAINED_CONFLICT",
+      "explicado": false,
+      "motivo": "sin fuente ni método declarado que explique el cambio",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     }
+    ]
+   }
+  ],
+  "cambios_explicados": [
+   {
+    "atributo": "planes_parciales",
+    "estado": "CAMBIO_CON_FUENTE",
+    "valores": [
+     "SIN AFECTACIÓN DIRECTA REGISTRADA"
+    ],
+    "detalle": "la fuente/método declarado cambió (POTECARIO (SNR) → GEOJSON POT BARRANQUILLA EMPAQUETADOS EN LA APLICA)",
+    "cambios": [
+     {
+      "atributo": "planes_parciales",
+      "anterior": "SIN AFECTACION (Capa 3 - 0 features)",
+      "actual": "SIN AFECTACIÓN DIRECTA REGISTRADA",
+      "clave_anterior": [
+       "SIN AFECTACION CAPA 3 0 FEATURES"
+      ],
+      "clave_actual": [
+       "SIN AFECTACION DIRECTA REGISTRADA"
+      ],
+      "cambio": true,
+      "clase": "SOURCE_UPDATE",
+      "explicado": true,
+      "motivo": "la fuente/método declarado cambió (POTECARIO (SNR) → GEOJSON POT BARRANQUILLA EMPAQUETADOS EN LA APLICA)",
+      "solapan": false,
+      "hallazgo": null,
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": false
+     }
+    ]
+   }
+  ],
+  "requieren_revision": [
+   {
+    "atributo": "area",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "detalle": "el valor no está en la versión más reciente",
+    "cambios": [
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I1",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2A",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2A",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2B",
+      "material": true
+     },
+     {
+      "atributo": "area",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2B",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2BA",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "barrio",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "Miramar",
+     null,
+     "Miramar"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "barrio",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": true
+     },
+     {
+      "atributo": "barrio",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": true
+     },
+     {
+      "atributo": "barrio",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": true
+     },
+     {
+      "atributo": "barrio",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": true
+     },
+     {
+      "atributo": "barrio",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": true
+     },
+     {
+      "atributo": "barrio",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": true
+     },
+     {
+      "atributo": "barrio",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": true
+     },
+     {
+      "atributo": "barrio",
+      "anterior": null,
+      "actual": "Miramar",
+      "clave_anterior": null,
+      "clave_actual": [
+       "MIRAMAR"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     },
+     {
+      "atributo": "barrio",
+      "anterior": "Miramar",
+      "actual": null,
+      "clave_anterior": [
+       "MIRAMAR"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2A",
+      "material": true
+     },
+     {
+      "atributo": "barrio",
+      "anterior": null,
+      "actual": "Miramar",
+      "clave_anterior": null,
+      "clave_actual": [
+       "MIRAMAR"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2A",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2B",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "clase_suelo",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "detalle": "el valor no está en la versión más reciente",
+    "cambios": [
+     {
+      "atributo": "clase_suelo",
+      "anterior": "SUELO URBANO (POT Barranquilla - Confirmado)",
+      "actual": null,
+      "clave_anterior": [
+       "SUELO URBANO"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": false
+     },
+     {
+      "atributo": "clase_suelo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I1",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2",
+      "material": false
+     },
+     {
+      "atributo": "clase_suelo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2A",
+      "material": false
+     },
+     {
+      "atributo": "clase_suelo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2A",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2B",
+      "material": false
+     },
+     {
+      "atributo": "clase_suelo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2B",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2BA",
+      "material": false
+     }
+    ]
+   },
+   {
+    "atributo": "destino_economico",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     "Habitacional (Capa Predio GC-BAQ, en vivo)"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "destino_economico",
+      "anterior": "HABITACIONAL (GIS REST Layer 5)",
+      "actual": null,
+      "clave_anterior": [
+       "HABITACIONAL"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     },
+     {
+      "atributo": "destino_economico",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": true
+     },
+     {
+      "atributo": "destino_economico",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I1",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2",
+      "material": true
+     },
+     {
+      "atributo": "destino_economico",
+      "anterior": null,
+      "actual": "Habitacional (Capa Predio GC-BAQ, en vivo)",
+      "clave_anterior": null,
+      "clave_actual": [
+       "HABITACIONAL"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2A",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "direccion",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     "suficiente para interseccion de poligonos",
+     null,
+     "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS",
+     null,
+     "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "direccion",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": false
+     },
+     {
+      "atributo": "direccion",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": false
+     },
+     {
+      "atributo": "direccion",
+      "anterior": null,
+      "actual": "suficiente para interseccion de poligonos",
+      "clave_anterior": null,
+      "clave_actual": [
+       "SUFICIENTE PARA INTERSECCION DE POLIGONOS"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": false
+     },
+     {
+      "atributo": "direccion",
+      "anterior": "suficiente para interseccion de poligonos",
+      "actual": null,
+      "clave_anterior": [
+       "SUFICIENTE PARA INTERSECCION DE POLIGONOS"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": false
+     },
+     {
+      "atributo": "direccion",
+      "anterior": null,
+      "actual": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS",
+      "clave_anterior": null,
+      "clave_actual": [
+       "TV 43 100 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": false
+     },
+     {
+      "atributo": "direccion",
+      "anterior": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS",
+      "actual": null,
+      "clave_anterior": [
+       "TV 43 100 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2A",
+      "material": false
+     },
+     {
+      "atributo": "direccion",
+      "anterior": null,
+      "actual": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS",
+      "clave_anterior": null,
+      "clave_actual": [
+       "TV 43 100 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2A",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2B",
+      "material": false
+     }
+    ]
+   },
+   {
+    "atributo": "estrato",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "4",
+     null,
+     "4"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "estrato",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": true
+     },
+     {
+      "atributo": "estrato",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": true
+     },
+     {
+      "atributo": "estrato",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": true
+     },
+     {
+      "atributo": "estrato",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": true
+     },
+     {
+      "atributo": "estrato",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": true
+     },
+     {
+      "atributo": "estrato",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": true
+     },
+     {
+      "atributo": "estrato",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": true
+     },
+     {
+      "atributo": "estrato",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     },
+     {
+      "atributo": "estrato",
+      "anterior": null,
+      "actual": "4",
+      "clave_anterior": null,
+      "clave_actual": [
+       "4"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": true
+     },
+     {
+      "atributo": "estrato",
+      "anterior": "4",
+      "actual": null,
+      "clave_anterior": [
+       "4"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2A",
+      "material": true
+     },
+     {
+      "atributo": "estrato",
+      "anterior": null,
+      "actual": "4",
+      "clave_anterior": null,
+      "clave_actual": [
+       "4"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2A",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2B",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "evidencias",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "9/9"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "evidencias",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": false
+     },
+     {
+      "atributo": "evidencias",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": false
+     },
+     {
+      "atributo": "evidencias",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": false
+     },
+     {
+      "atributo": "evidencias",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": false
+     },
+     {
+      "atributo": "evidencias",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": false
+     },
+     {
+      "atributo": "evidencias",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": false
+     },
+     {
+      "atributo": "evidencias",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": false
+     },
+     {
+      "atributo": "evidencias",
+      "anterior": null,
+      "actual": "9/9",
+      "clave_anterior": null,
+      "clave_actual": [
+       "9 9"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": false
+     }
+    ]
+   },
+   {
+    "atributo": "gravamenes",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "hipoteca vigente"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "gravamenes",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": false
+     },
+     {
+      "atributo": "gravamenes",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": false
+     },
+     {
+      "atributo": "gravamenes",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": false
+     },
+     {
+      "atributo": "gravamenes",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": false
+     },
+     {
+      "atributo": "gravamenes",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": false
+     },
+     {
+      "atributo": "gravamenes",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": false
+     },
+     {
+      "atributo": "gravamenes",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": false
+     },
+     {
+      "atributo": "gravamenes",
+      "anterior": null,
+      "actual": "hipoteca vigente",
+      "clave_anterior": null,
+      "clave_actual": [
+       "HIPOTECA VIGENTE"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": false
+     }
+    ]
+   },
+   {
+    "atributo": "localidad",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "detalle": "el valor no está en la versión más reciente",
+    "cambios": [
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I1",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2A",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2A",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2B",
+      "material": false
+     },
+     {
+      "atributo": "localidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2B",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2BA",
+      "material": false
+     }
+    ]
+   },
+   {
+    "atributo": "numero_predial",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "080010103000010040001908040002"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "numero_predial",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": true
+     },
+     {
+      "atributo": "numero_predial",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": true
+     },
+     {
+      "atributo": "numero_predial",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": true
+     },
+     {
+      "atributo": "numero_predial",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": true
+     },
+     {
+      "atributo": "numero_predial",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": true
+     },
+     {
+      "atributo": "numero_predial",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": true
+     },
+     {
+      "atributo": "numero_predial",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": true
+     },
+     {
+      "atributo": "numero_predial",
+      "anterior": null,
+      "actual": "080010103000010040001908040002",
+      "clave_anterior": null,
+      "clave_actual": [
+       "080010103000010040001908040002"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "nupre",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "AFT0005BOHA"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "nupre",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": true
+     },
+     {
+      "atributo": "nupre",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": true
+     },
+     {
+      "atributo": "nupre",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": true
+     },
+     {
+      "atributo": "nupre",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": true
+     },
+     {
+      "atributo": "nupre",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": true
+     },
+     {
+      "atributo": "nupre",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": true
+     },
+     {
+      "atributo": "nupre",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": true
+     },
+     {
+      "atributo": "nupre",
+      "anterior": null,
+      "actual": "AFT0005BOHA",
+      "clave_anterior": null,
+      "clave_actual": [
+       "AFT0005BOHA"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "regimen_juridico",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "Propiedad Horizontal (inferido del CTL adjunto)"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "regimen_juridico",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": true
+     },
+     {
+      "atributo": "regimen_juridico",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": true
+     },
+     {
+      "atributo": "regimen_juridico",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": true
+     },
+     {
+      "atributo": "regimen_juridico",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": true
+     },
+     {
+      "atributo": "regimen_juridico",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": true
+     },
+     {
+      "atributo": "regimen_juridico",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": true
+     },
+     {
+      "atributo": "regimen_juridico",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": true
+     },
+     {
+      "atributo": "regimen_juridico",
+      "anterior": null,
+      "actual": "Propiedad Horizontal (inferido del CTL adjunto)",
+      "clave_anterior": null,
+      "clave_actual": [
+       "PROPIEDAD HORIZONTAL"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "riesgo",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "SIN_COBERTURA_SGC"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "riesgo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": true
+     },
+     {
+      "atributo": "riesgo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": true
+     },
+     {
+      "atributo": "riesgo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": true
+     },
+     {
+      "atributo": "riesgo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": true
+     },
+     {
+      "atributo": "riesgo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": true
+     },
+     {
+      "atributo": "riesgo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": true
+     },
+     {
+      "atributo": "riesgo",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": true
+     },
+     {
+      "atributo": "riesgo",
+      "anterior": null,
+      "actual": "SIN_COBERTURA_SGC",
+      "clave_anterior": null,
+      "clave_actual": [
+       "SIN COBERTURA SGC"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "screening",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "COMPLETO — 3 sujeto(s) identificado(s) · 3 screeningado(s) · 0 no"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "screening",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": false
+     },
+     {
+      "atributo": "screening",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": false
+     },
+     {
+      "atributo": "screening",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": false
+     },
+     {
+      "atributo": "screening",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": false
+     },
+     {
+      "atributo": "screening",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": false
+     },
+     {
+      "atributo": "screening",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": false
+     },
+     {
+      "atributo": "screening",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": false
+     },
+     {
+      "atributo": "screening",
+      "anterior": null,
+      "actual": "COMPLETO — 3 sujeto(s) identificado(s) · 3 screeningado(s) · 0 no",
+      "clave_anterior": null,
+      "clave_actual": [
+       "COMPLETO 3 SUJETOS IDENTIFICADOS 3 SCREENINGADOS 0 NO"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": false
+     }
+    ]
+   },
+   {
+    "atributo": "unidad",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "TO 8 AP 430",
+     null,
+     "TO 8 AP 430"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "unidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": true
+     },
+     {
+      "atributo": "unidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": true
+     },
+     {
+      "atributo": "unidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": true
+     },
+     {
+      "atributo": "unidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": true
+     },
+     {
+      "atributo": "unidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": true
+     },
+     {
+      "atributo": "unidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": true
+     },
+     {
+      "atributo": "unidad",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": true
+     },
+     {
+      "atributo": "unidad",
+      "anterior": null,
+      "actual": "TO 8 AP 430",
+      "clave_anterior": null,
+      "clave_actual": [
+       "TO 8 AP 430"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     },
+     {
+      "atributo": "unidad",
+      "anterior": "TO 8 AP 430",
+      "actual": null,
+      "clave_anterior": [
+       "TO 8 AP 430"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2A",
+      "material": true
+     },
+     {
+      "atributo": "unidad",
+      "anterior": null,
+      "actual": "TO 8 AP 430",
+      "clave_anterior": null,
+      "clave_actual": [
+       "TO 8 AP 430"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2A",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2B",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "valor_central",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "$ 407.800.000 COP (Equivalente a $ 6.941.277 / m2)",
+     null,
+     "$ 399.500.000 COP (Equivalente a $ 6.800.000 / m2)",
+     null,
+     "$ 399.500.000 COP (Equivalente a $ 6.800.000 / m2)"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "valor_central",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": true
+     },
+     {
+      "atributo": "valor_central",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": true
+     },
+     {
+      "atributo": "valor_central",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": true
+     },
+     {
+      "atributo": "valor_central",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": true
+     },
+     {
+      "atributo": "valor_central",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": true
+     },
+     {
+      "atributo": "valor_central",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": true
+     },
+     {
+      "atributo": "valor_central",
+      "anterior": null,
+      "actual": "$ 407.800.000 COP (Equivalente a $ 6.941.277 / m2)",
+      "clave_anterior": null,
+      "clave_actual": [
+       "407 800 000 COP EQUIVALENTE A 6 941 277 M2"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": true
+     },
+     {
+      "atributo": "valor_central",
+      "anterior": "$ 407.800.000 COP (Equivalente a $ 6.941.277 / m2)",
+      "actual": null,
+      "clave_anterior": [
+       "407 800 000 COP EQUIVALENTE A 6 941 277 M2"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": true
+     },
+     {
+      "atributo": "valor_central",
+      "anterior": null,
+      "actual": "$ 399.500.000 COP (Equivalente a $ 6.800.000 / m2)",
+      "clave_anterior": null,
+      "clave_actual": [
+       "399 500 000 COP EQUIVALENTE A 6 800 000 M2"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": true
+     },
+     {
+      "atributo": "valor_central",
+      "anterior": "$ 399.500.000 COP (Equivalente a $ 6.800.000 / m2)",
+      "actual": null,
+      "clave_anterior": [
+       "399 500 000 COP EQUIVALENTE A 6 800 000 M2"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2A",
+      "material": true
+     },
+     {
+      "atributo": "valor_central",
+      "anterior": null,
+      "actual": "$ 399.500.000 COP (Equivalente a $ 6.800.000 / m2)",
+      "clave_anterior": null,
+      "clave_actual": [
+       "399 500 000 COP EQUIVALENTE A 6 800 000 M2"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2A",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2B",
+      "material": true
+     }
+    ]
+   },
+   {
+    "atributo": "valor_m2",
+    "estado": "REQUIERE_VALIDACION",
+    "valores": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "$ 6.941.277 / m2",
+     null,
+     "$ 6.800.000 / m2",
+     null,
+     "$ 6.800.000 / m2"
+    ],
+    "detalle": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+    "cambios": [
+     {
+      "atributo": "valor_m2",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "material": false
+     },
+     {
+      "atributo": "valor_m2",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v2",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "material": false
+     },
+     {
+      "atributo": "valor_m2",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v3",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "material": false
+     },
+     {
+      "atributo": "valor_m2",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v4",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "material": false
+     },
+     {
+      "atributo": "valor_m2",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "material": false
+     },
+     {
+      "atributo": "valor_m2",
+      "anterior": null,
+      "actual": null,
+      "clave_anterior": null,
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v5_shadows",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "material": false
+     },
+     {
+      "atributo": "valor_m2",
+      "anterior": null,
+      "actual": "$ 6.941.277 / m2",
+      "clave_anterior": null,
+      "clave_actual": [
+       "6 941 277 M2"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6",
+      "version_actual": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "material": false
+     },
+     {
+      "atributo": "valor_m2",
+      "anterior": "$ 6.941.277 / m2",
+      "actual": null,
+      "clave_anterior": [
+       "6 941 277 M2"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040_646406_NAPOLI_v6_final",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I",
+      "material": false
+     },
+     {
+      "atributo": "valor_m2",
+      "anterior": null,
+      "actual": "$ 6.800.000 / m2",
+      "clave_anterior": null,
+      "clave_actual": [
+       "6 800 000 M2"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I1",
+      "material": false
+     },
+     {
+      "atributo": "valor_m2",
+      "anterior": "$ 6.800.000 / m2",
+      "actual": null,
+      "clave_anterior": [
+       "6 800 000 M2"
+      ],
+      "clave_actual": null,
+      "cambio": true,
+      "clase": "SOURCE_UNAVAILABLE",
+      "explicado": false,
+      "motivo": "el valor no está en la versión más reciente",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2A",
+      "material": false
+     },
+     {
+      "atributo": "valor_m2",
+      "anterior": null,
+      "actual": "$ 6.800.000 / m2",
+      "clave_anterior": null,
+      "clave_actual": [
+       "6 800 000 M2"
+      ],
+      "cambio": true,
+      "clase": "PARSER_CHANGE",
+      "explicado": false,
+      "motivo": "el atributo aparece recién en la versión nueva: puede ser fuente nueva o extracción nueva (revisar)",
+      "version_anterior": "ARHIAX_Dictamen_040-646406_03I2A",
+      "version_actual": "ARHIAX_Dictamen_040-646406_03I2B",
+      "material": false
+     }
+    ]
+   }
+  ],
+  "veredicto": "CONFLICTOS_ABIERTOS"
+ }
+}

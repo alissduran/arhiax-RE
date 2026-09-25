@@ -2109,6 +2109,13 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         az, el = get_solar_position(lat, lon, dt_local)
         status, desc = analyze_facade_exposure(az, el, FACADE_AZIMUTH, OBSTRUCTIONS)
         solar_results.append((f"{hour:02d}:00 COT", f"{az}°", f"{el}°", status, desc))
+    # 03I.4 (DICTUS 2.0B): el asoleamiento YA calculado se expone al estado canónico
+    # de la corrida, para que el documento ejecutivo no tenga que extraerlo del PDF.
+    try:
+        import dictus_estado as _de_estado
+        _de_estado.registrar_solar(solar_results)
+    except Exception:  # noqa: BLE001 — la instrumentación nunca rompe el dictamen
+        pass
     
     solar_table_data = [
         [Paragraph("<font color='white'><b>Hora (Local)</b></font>", s["label"]),

@@ -214,6 +214,41 @@
       </div>
     </section>
 
+    <!-- ── Sello maestro publicado (DICTUS 2.0B §12) ────────────────────── -->
+    <section class="panel" id="panel-sello" aria-labelledby="sello-t">
+      <header>
+        <span class="t-md" id="sello-t">Sello maestro del expediente</span>
+        <span class="chip info" id="sello-chip">SIN MANIFEST PUBLICADO</span>
+      </header>
+      <div class="body">
+        <div class="exp-grid">
+          <dl class="kv" id="sello-kv">
+            <dt>DICTUS ID</dt><dd id="sello-id">—</dd>
+            <dt>Generado</dt><dd id="sello-fecha">—</dd>
+            <dt>Estado de la evidencia</dt><dd id="sello-estado">—</dd>
+            <dt>DICTUS_MASTER_HASH</dt><dd id="sello-hash">—</dd>
+          </dl>
+          <div class="exp-note">
+            <div class="lbl">Qué acredita este sello</div>
+            <p class="t-sm" style="margin:var(--sp-sm) 0 0">
+              El hash maestro sella el conjunto canónico de hechos y evidencias con el que se
+              emitió el expediente. Es distinto del hash del archivo PDF: reimprimir el
+              documento no cambia el hash maestro; cambiar un hecho, sí.
+            </p>
+            <div class="row" style="margin-top:var(--sp-sm)">
+              <button class="btn sm" id="btn-trazabilidad" type="button">Ver trazabilidad</button>
+              <span class="t-xs muted" id="sello-nota">El manifest se publica con la aplicación
+                al emitir el expediente.</span>
+            </div>
+          </div>
+        </div>
+        <div class="state info hidden" id="sello-detalle">
+          <div class="t-sm" id="sello-detalle-titulo">Trazabilidad del expediente</div>
+          <pre class="mono-sm pre" id="sello-detalle-cuerpo">—</pre>
+        </div>
+      </div>
+    </section>
+
     <!-- ── Tríada estratégica ───────────────────────────────────────────── -->
     <section class="triad" aria-label="Preparación para la transacción">
       <article class="panel tri" data-uso="compraventa">

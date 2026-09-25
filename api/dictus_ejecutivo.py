@@ -248,41 +248,31 @@ def pagina1(c, modelo, hallazgos, indicadores, ctx):
         wrap(c, x + 6, y - 48, motivo, F, 6.4, TEXT_2, cw - 12, leading=8)
     y -= 80
 
-    # Hallazgos (§H) con actores afectados (§I)
+    # Hallazgos (§H/§I/§15): MATRIZ COMPACTA con TODOS los hallazgos materiales.
+    # El detalle narrativo vive en el Técnico; aquí van los cuatro campos que un
+    # decisor necesita: severidad, título, actores afectados y acción.
     y = titulo_seccion(c, y, "Hallazgos que condicionan la decisión",
-                       f"{len(hallazgos)} hallazgo(s) material(es)")
-    for h in hallazgos[:4]:
-        alto = 74 if h.get("impacto") else 62
-        panel(c, M, y - alto, ANCHO, alto)
+                       f"{len(hallazgos)} hallazgo(s) material(es) · todos en esta página")
+    cw = (ANCHO - 6) / 2
+    alto_fila = 36
+    for i, h in enumerate(hallazgos):
+        col, fila = i % 2, i // 2
+        x = M + col * (cw + 6)
+        yt = y - fila * (alto_fila + 4)
+        panel(c, x, yt - alto_fila, cw, alto_fila)
         color = {"ALTO": ERR_FG, "MEDIO": WARN_FG, "INFORMATIVO": OK_FG}.get(
             str(h.get("severidad", "")).upper(), TEXT)
-        banda(c, M, y - alto, 3, alto, color)
-        chip(c, M + 8, y - 16, str(h.get("severidad", "—")).upper(),
+        banda(c, x, yt - alto_fila, 3, alto_fila, color)
+        chip(c, x + 7, yt - 14, str(h.get("severidad", "—")).upper()[:5],
              {"ALTO": "err", "MEDIO": "warn", "INFORMATIVO": "ok"}.get(
-                 str(h.get("severidad", "")).upper(), "info"), 7, 14, 6)
-        txt(c, M + 60, y - 13, f"{_v(h.get('codigo'), '')} {_v(h.get('titulo'), '')}",
-            FB, 9.5, INK)
-        yt = wrap(c, M + 8, y - 30, _v(h.get("por_que"), "Sin descripción declarada."),
-                  F, 8, TEXT_2, ANCHO - 150, leading=10)
-        # Actores afectados
-        txt(c, W - M - 8, y - 26, "AFECTA A", FB, 6.4, TEXT_3, "right", esp=0.6)
-        _x = W - M - 8
-        for actor in reversed(list(h.get("afectados") or [])):
-            ancho = c.stringWidth(actor, FB, 6.6) + 10
-            chip(c, _x - ancho, y - 42, actor, "ink", 6.6, 13, 5)
-            _x -= ancho + 4
-        if h.get("impacto"):
-            wrap(c, W - M - 150, y - 54, h["impacto"], FO, 7, TEXT_2, 142, leading=8.6)
-        rule(c, M + 8, y - 56, W - M - 8, y - 56, HAIR_2)
-        wrap(c, M + 8, y - 68, "Acción: " + _v(h.get("accion"), "por definir"), FB, 7.6,
-             INK, ANCHO - 20, leading=9.4)
-        fit(f"P1 hallazgo {h.get('codigo')}", yt, y - alto)
-        y -= alto + 6
-
-    if len(hallazgos) > 4:
-        txt(c, M, y + 2, f"+ {len(hallazgos) - 4} hallazgo(s) adicional(es) en el Anexo H.",
-            FO, 7.6, TEXT_3)
-        y -= 10
+                 str(h.get("severidad", "")).upper(), "info"), 6.2, 12, 5)
+        wrap(c, x + 46, yt - 11, f"{_v(h.get('codigo'), '')} {_v(h.get('titulo'), '')}"[:74],
+             FB, 7.4, INK, cw - 54, leading=8.6)
+        afectados = ", ".join((h.get("afectados") or [])[:3]) or "sin actores declarados"
+        txt(c, x + 7, yt - 22, f"Afecta: {afectados}"[:110], F, 6.2, TEXT_3)
+        wrap(c, x + 7, yt - 30, ("Acción: " + _v(h.get("accion"), "por definir"))[:120],
+             F, 6.2, TEXT_2, cw - 14, leading=7.2)
+    y -= ((len(hallazgos) + 1) // 2) * (alto_fila + 4) + 6
 
     # Sello global de trazabilidad (§L)
     y = max(y, 150)
@@ -516,16 +506,44 @@ def pagina5(c, modelo, entorno, solar, ctx):
     cw = (ANCHO - 3 * 6) / 4
     for i, cat in enumerate(categorias[:4]):
         x = M + i * (cw + 6)
-        panel(c, x, y - 62, cw, 62, CARD)
-        banda(c, x, y - 3, cw, 3, OK_FG if cat.get("estado") == "DISPONIBLE" else WARN_FG)
-        txt(c, x + 6, y - 16, _v(cat.get("nombre")).upper(), FB, 7, TEXT_3, esp=0.5)
-        txt(c, x + 6, y - 32, _v(cat.get("conteo"), "—"), FB, 15, INK)
-        txt(c, x + 6, y - 42, "establecimientos", F, 6.4, TEXT_3)
-        wrap(c, x + 6, y - 52, _v(cat.get("mas_cercano"), "distancia no disponible en esta "
-                                                            "ejecución"), F, 6.4, TEXT_2,
-             cw - 12, leading=7.6)
-    y -= 70
-    txt(c, M, y, "Lista completa de equipamientos — Anexo E.", FO, 7, TEXT_3)
+        panel(c, x, y - 76, cw, 76, CARD)
+        _estado = str(cat.get("estado") or "")
+        # Vocabulario REAL del motor: AVAILABLE / NO_MATCH / SOURCE_UNAVAILABLE /
+        # NOT_EVALUATED. Un mapeo estrecho dejaba sin imprimir la distancia existente.
+        _disp = _estado in ("DISPONIBLE", "AVAILABLE")
+        _desconocido = _estado in ("SOURCE_UNAVAILABLE", "NOT_EVALUATED", "")
+        banda(c, x, y - 3, cw, 3, OK_FG if _disp else WARN_FG)
+        txt(c, x + 6, y - 15, _v(cat.get("nombre")).upper(), FB, 7, TEXT_3, esp=0.5)
+        _conteo = cat.get("conteo")
+        txt(c, x + 6, y - 31, "—" if (_desconocido and not _conteo)
+            else _v(_conteo, "0"), FB, 15, INK)
+        txt(c, x + 6, y - 41, "detectados" if not _desconocido else "sin dato de fuente",
+            F, 6.4, TEXT_3)
+        # §10/§11: distancia REAL del ítem más cercano; si la fuente no la dio, se declara.
+        _mas = cat.get("mas_cercano_m")
+        if _mas is not None:
+            txt(c, x + 6, y - 53, f"más cercano: {int(round(float(_mas)))} m", FB, 7.4, INK)
+        elif _disp:
+            txt(c, x + 6, y - 53, "DISTANCIA NO DISPONIBLE", FB, 6.6, WARN_FG)
+        else:
+            txt(c, x + 6, y - 53, {"NO_MATCH": "SIN COINCIDENCIA",
+                                   "SOURCE_UNAVAILABLE": "FUENTE NO DISPONIBLE",
+                                   "NOT_EVALUATED": "NO EVALUADO"}.get(_estado, "SIN DATO"),
+                FB, 6.6, WARN_FG)
+        # Hasta 3 ejemplos con su distancia (§10).
+        _ejemplos = (cat.get("ejemplos") or [])[:3]
+        yy = y - 63
+        for it in _ejemplos:
+            _d = it.get("distance_m")
+            txt(c, x + 6, yy, f"· {str(it.get('name') or '—')[:22]}"
+                              + (f" — {int(round(float(_d)))} m" if _d is not None else ""),
+                F, 6.0, TEXT_2)
+            yy -= 8
+        if not _ejemplos and _estado == "DISPONIBLE":
+            txt(c, x + 6, yy, "· sin ítems en el estado", F, 6.0, TEXT_3)
+    y -= 84
+    txt(c, M, y, "Lista completa de equipamientos (nombre, coordenada, distancia, fuente "
+                 "y fecha de consulta) — Anexo E.", FO, 7, TEXT_3)
     y -= 14
 
     y = wrap(c, M, y, "ACCESIBILIDAD Y CONTEXTO", FB, 8, GOLD, ANCHO, esp=0.8) - 14

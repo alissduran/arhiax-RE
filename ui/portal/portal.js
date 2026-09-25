@@ -193,6 +193,7 @@ async function buscar() {
 
     pintarResolucion(d);
     await emparejarCaso(campos, direccion);
+    await cargarSelloDictus((campos.folio_matricula || {}).value || null);
   } catch (e) {
     caja.className = 'state err';
     caja.innerHTML = '<div class="t-sm">Error de consulta</div>' +
@@ -330,6 +331,92 @@ function pintarGeometria(coord, campos) {
     parcela.setAttribute('points', esVacio(coord.value)
       ? '' : '120,60 200,60 200,140 120,140');
   }
+}
+
+/* ── Sello maestro publicado (DICTUS 2.0B §12) ───────────────────────────────
+ * El manifest se publica con la aplicación al emitir el expediente
+ * (`public/dictus/DICTUS_MANIFEST_<folio>.json`). Si no existe, se declara: el portal
+ * NUNCA inventa un hash ni muestra el hash del PDF como si fuera el maestro. */
+const MANIFEST_BASE = (API || '') + '/dictus/DICTUS_MANIFEST_';
+let _manifestActual = null;
+
+function folioActivo() {
+  const c = state.caso || {};
+  const campos = (state.resolucion || {}).campos || {};
+  return c.folio_matricula || (campos.folio_matricula || {}).value || null;
+}
+
+function chipMini(estado) {
+  const ok = /SELLADO/.test(String(estado));
+  return '<span class="chip ' + (ok ? 'ok' : 'warn') + '">' + esc(estado || 'sin estado') + '</span>';
+}
+
+async function cargarSelloDictus(folio) {
+  const chip = $('sello-chip');
+  const nota = $('sello-nota');
+  if (!folio) {
+    chip.className = 'chip info';
+    chip.textContent = 'SIN FOLIO';
+    nota.textContent = 'Verifique un inmueble o abra un caso para leer su sello.';
+    return;
+  }
+  try {
+    const r = await fetch(MANIFEST_BASE + encodeURIComponent(folio) + '.json',
+                          { headers: { 'Accept': 'application/json' } });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const m = await r.json();
+    _manifestActual = m;
+    const ev = m.evidence_manifest || {};
+    $('sello-id').textContent = m.dictus_id || '—';
+    $('sello-fecha').textContent = m.generated_at || '—';
+    $('sello-estado').innerHTML = chipMini(ev.estado) + ' · ' +
+      (ev.evidence_count != null ? ev.evidence_count + ' evidencia(s)' : 'sin conteo');
+    $('sello-hash').innerHTML = '<span class="mono">' + esc(m.master_hash || '—') + '</span>';
+    chip.className = 'chip ' + (/SELLADO/.test(String(ev.estado)) ? 'ok' : 'warn');
+    chip.textContent = 'MANIFEST PUBLICADO · ' + (m.master_manifest_version || '');
+    nota.textContent = 'Hash maestro visible: ' + (m.master_hash_abreviado || '—') +
+      ' · el hash del PDF no se usa como sello del expediente.';
+  } catch (e) {
+    _manifestActual = null;
+    $('sello-id').textContent = '—';
+    $('sello-fecha').textContent = '—';
+    $('sello-estado').textContent = '—';
+    $('sello-hash').textContent = '—';
+    chip.className = 'chip warn';
+    chip.textContent = 'SIN MANIFEST PUBLICADO';
+    nota.textContent = 'Este expediente no tiene manifest publicado con hash maestro (' +
+      e.message + ').';
+  }
+}
+
+function verTrazabilidad() {
+  const caja = $('sello-detalle');
+  const cuerpo = $('sello-detalle-cuerpo');
+  if (!caja || !cuerpo) return;
+  if (!_manifestActual) {
+    caja.classList.remove('hidden');
+    cuerpo.textContent = 'Sin manifest publicado para este expediente: no hay trazabilidad ' +
+      'maestra que mostrar.';
+    return;
+  }
+  const m = _manifestActual;
+  const lineas = [
+    'DICTUS ID          : ' + (m.dictus_id || '—'),
+    'Run ID             : ' + (m.run_id || '—'),
+    'Generado (UTC)     : ' + (m.generated_at || '—'),
+    'Master manifest    : ' + (m.master_manifest_version || '—'),
+    'DICTUS_MASTER_HASH : ' + (m.master_hash || '—'),
+    'Evidencias         : ' + ((m.evidence_manifest || {}).evidence_count || 0) +
+      ' (' + ((m.evidence_manifest || {}).estado || '—') + ')',
+    '',
+    'Evidencias:'
+  ];
+  for (const e of ((m.evidence_manifest || {}).evidencias || [])) {
+    lineas.push('  · ' + String(e.evidence_id || '').padEnd(16) + ' ' +
+      (e.evidence_type || '') + ' | ' + (e.source || '—') + ' | ' + (e.status || '—'));
+  }
+  caja.classList.remove('hidden');
+  cuerpo.textContent = lineas.join('\n');
 }
 
 /* ── Tríada estratégica (lo que habilita, con el estado real) ───────────────── */
@@ -504,6 +591,7 @@ async function abrirCaso(id, silencioso) {
   }
   pintarDocumentos();
   pintarLegalDocumentos();
+  await cargarSelloDictus(caso.folio_matricula || null);
   actualizarExpediente();
   pintarTriada();
   if (!silencioso) { setPestana('propiedad'); toast('Caso abierto: ' + (caso.folio_matricula || caso.id)); }
@@ -673,6 +761,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $('btn-salir').addEventListener('click', salir);
   $('btn-buscar').addEventListener('click', buscar);
   $('btn-refrescar').addEventListener('click', cargarCartera);
+  $('btn-trazabilidad').addEventListener('click', verTrazabilidad);
   $('btn-fuentes').addEventListener('click', consultarFuentes);
   $('q').addEventListener('input', pintarCartera);
   $('f-ciudad').addEventListener('change', pintarCartera);

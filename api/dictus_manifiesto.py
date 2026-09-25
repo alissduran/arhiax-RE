@@ -25,12 +25,15 @@ import hashlib
 import json
 from typing import Any, Dict, Iterable, List, Optional
 
-MASTER_MANIFEST_VERSION = "dictus-master-manifest/1.0.0"
+MASTER_MANIFEST_VERSION = "dictus-master-manifest/1.1.0"
 
-# Bloques canónicos que entran al hash maestro (§J). El orden de esta tupla es parte
-# del contrato: NO se reordena sin cambiar la versión del manifest.
+# Bloques canónicos que entran al hash maestro (§J + §6 de 2.0B). El orden de esta
+# tupla es parte del contrato: NO se reordena sin cambiar la versión del manifest.
+# 1.1.0 incorpora el ESTADO CANÓNICO DE CORRIDA: run_id, title_state, risk_context,
+# poi_state (con ítems y distancias reales) y solar_state.
 BLOQUES_CANONICOS = (
     "document_identity",
+    "run_id",
     "canonical_property_identity",
     "title_summary",
     "findings",
@@ -43,6 +46,7 @@ BLOQUES_CANONICOS = (
     "evidence_manifest",
     "source_versions",
     "methodology_versions",
+    "release_state",
     "historical_consistency",
 )
 
@@ -217,6 +221,15 @@ def construir_evidence_manifest(estado: Dict[str, Any], *,
                          "CONFLICTO_ABIERTO" if hist.get("conflictos_abiertos") else "SELLADA"))
 
     fuentes = sorted({str(i["source"]) for i in items if i.get("source")})
+    # §17: si la cadena de evidencia NO se pudo sellar, el ejecutivo dice exactamente
+    # «EVIDENCIA NO SELLADA»: sin variables de entorno, sin trazas ni excepciones.
+    _cadena = str((scr or {}).get("evidence_chain_status") or "")
+    if _cadena.upper() in ("FAILED", "ERROR", "BROKEN"):
+        estado_global = "EVIDENCIA NO SELLADA"
+    elif all(i["status"] == "SELLADA" for i in items):
+        estado_global = "SELLADO"
+    else:
+        estado_global = "PARCIAL_CON_DECLARACIONES"
     return {
         "master_manifest_version": MASTER_MANIFEST_VERSION,
         "dictus_id": dictus_id(folio, str(ts or "")),
@@ -226,12 +239,48 @@ def construir_evidence_manifest(estado: Dict[str, Any], *,
         "evidence_count": len(items),
         "fuentes": fuentes,
         "selladas": sum(1 for i in items if i["status"] == "SELLADA"),
-        "estado": ("SELLADO" if all(i["status"] == "SELLADA" for i in items)
-                   else "PARCIAL_CON_DECLARACIONES"),
+        "estado": estado_global,
     }
 
 
 # ── Documento maestro (§J) y verificación futura (§AO) ────────────────────────
+def estado_legacy_desde_run_state(rs: Dict[str, Any]) -> Dict[str, Any]:
+    """Adapta el `DictusRunState` (2.0B) a la forma que consumen los constructores.
+
+    Una sola corrida produce una sola verdad: el estado canónico. Este adaptador evita
+    dos caminos de lectura (no hay segunda extracción ni segunda consulta).
+    """
+    rs = rs or {}
+    pi = dict(rs.get("property_identity") or {})
+    adm = pi.pop("administrativo", None) or {}
+    mc = adm.get("market_context") if isinstance(adm, dict) else None
+    if not isinstance(mc, dict):
+        mc = {}
+    return {
+        "versionado": (rs.get("evidence_manifest_input") or {}).get("versionado"),
+        "run_id": rs.get("run_id"),
+        "input": {"ciudad": rs.get("ciudad")},
+        "identity": {**pi, **{k: adm.get(k) for k in
+                              ("barrio", "comuna", "estrato", "tratamiento",
+                               "edificabilidad_texto") if adm.get(k)}},
+        "coordinates": mc.get("coordinates") or {},
+        "urban": rs.get("urban_context") or {},
+        "urban_source_summary": mc.get("urban_source_summary") or {},
+        "market": mc,
+        "poi": rs.get("poi_state") or {},
+        "volcan": (rs.get("risk_context") or {}).get("volcan") or {},
+        "screening": rs.get("screening_summary") or {},
+        "valuation": rs.get("valuation_state") or {},
+        "gate": rs.get("release_state") or {},
+        "receipts": rs.get("receipts") or {},
+        "title_summary": rs.get("title_state") or {},
+        "findings": rs.get("findings") or [],
+        "solar": rs.get("solar_state") or {},
+        "risk_context": rs.get("risk_context") or {},
+        "historical_consistency": rs.get("historical_consistency") or {},
+    }
+
+
 def construir_documento_maestro(estado: Dict[str, Any], *,
                                 hallazgos: Optional[Iterable[Dict[str, Any]]] = None,
                                 historial: Optional[Dict[str, Any]] = None,
@@ -239,8 +288,11 @@ def construir_documento_maestro(estado: Dict[str, Any], *,
                                 solar: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Modelo canónico del expediente: es la entrada del hash maestro y del render.
 
+    Acepta el `DictusRunState` de 2.0B (recomendado) o el estado plano anterior.
     No recalcula nada: organiza lo que la ejecución ya produjo y declara lo que falta.
     """
+    if (estado or {}).get("run_state_version"):
+        estado = estado_legacy_desde_run_state(estado)
     e = estado or {}
     ident = e.get("identity") or {}
     urb = e.get("urban") or {}
@@ -257,6 +309,7 @@ def construir_documento_maestro(estado: Dict[str, Any], *,
 
     manifiesto = construir_evidence_manifest(e, folio=folio, timestamp=ts)
     modelo: Dict[str, Any] = {
+        "run_id": e.get("run_id"),
         "document_identity": {
             "producto": "DICTUS · Expediente verificado de inmueble",
             "dictus_id": dictus_id(folio, str(ts or "")),
@@ -291,6 +344,7 @@ def construir_documento_maestro(estado: Dict[str, Any], *,
         "poi_summary": e.get("poi"),
         "solar_summary": solar or e.get("solar") or {},
         "valuation": val,
+        "poi_summary": e.get("poi"),
         "evidence_manifest": manifiesto,
         "source_versions": {
             "urban_source_mode": usm.get("source_mode"),

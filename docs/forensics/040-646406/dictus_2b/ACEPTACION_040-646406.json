@@ -1,0 +1,21 @@
+{
+ "run_id": "5a917476-a32b-40de-9df7-014426094986",
+ "dictus_id": "DX-040-646406-20260925",
+ "generated_at": "2026-09-25T01:44:09.265748+00:00",
+ "master_hash": "dfbd14a8d24334c469f312a68b02b466af1ee5e8be8ea46e6ae6236b5bfc7cf5",
+ "master_manifest_version": "dictus-master-manifest/1.1.0",
+ "executive_pdf": "docs\\forensics\\040-646406\\dictus_2b\\DICTUS_EJECUTIVO_040-646406.pdf",
+ "executive_pdf_sha256": "1c034f82b454220b8fa727ff66c0da58e52654393404e2d40039e93fefc9458a",
+ "executive_page_count": 6,
+ "technical_pdf": "docs\\forensics\\040-646406\\dictus_2b\\DICTUS_TECNICO_040-646406.pdf",
+ "technical_pdf_sha256": "41936dd5db6e33f604c1f6d7f8292892b9518c750c77b9e880b1a6288947e157",
+ "technical_page_count": 17,
+ "evidence_count": 10,
+ "evidence_seal": "PARCIAL_CON_DECLARACIONES",
+ "poi_items_in_state": 5,
+ "poi_distance_available": true,
+ "findings_in_page_1": 9,
+ "verify_master_hash": "MATCH",
+ "layout_violations": [],
+ "nota_hash": "DICTUS_MASTER_HASH sella hechos y evidencias; los SHA-256 de los PDFs sellan el archivo entregado y NO son el hash visible."
+}
