@@ -53,3 +53,6 @@ docs/forensics/**/paginas/
 tmp_arhiax/
 # Imágenes intermedias de la simulación de sombras del Golden
 docs/forensics/**/sombra_*.png
+
+# Secretos locales de operaci�n (NUNCA se versionan)
+.secrets/
