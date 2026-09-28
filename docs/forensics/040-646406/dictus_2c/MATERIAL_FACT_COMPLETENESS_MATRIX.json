@@ -1,12 +1,12 @@
 {
  "resumen": {
-  "generado": "2026-09-28T17:08:12.770964+00:00",
+  "generado": "2026-09-28T17:24:59.383758+00:00",
   "folio": "040-646406",
-  "run_id": "881ebf3d-4958-4892-978c-b7f62151a1e0",
+  "run_id": "1a330f64-6532-4992-bff4-cea5b5d9b412",
   "dictus_id": "DX-040-646406-20260928",
-  "master_hash": "b106972414db397b320a71213453ccadd59b31884251ee774ffb3d3e83819fdf",
+  "master_hash": "925d8cadd40362485ed94d771a887c6ff3699d547d362b0aae60f7d123add0d5",
   "ejecutivo": "docs\\forensics\\040-646406\\dictus_2c\\DICTUS_EJECUTIVO_040-646406.pdf",
-  "ejecutivo_sha256": "b75c08c6083b3c362174276db9564aa2324fa90579ec1a20948d4ecb2a2dc10e",
+  "ejecutivo_sha256": "eb60b5a6ee4bc5224111d2be1088261f261b7dc1cb7dfbedc219ebe0a1d2c0d8",
   "paginas": 6,
   "violaciones_retícula": [],
   "cajas_registradas": 84,

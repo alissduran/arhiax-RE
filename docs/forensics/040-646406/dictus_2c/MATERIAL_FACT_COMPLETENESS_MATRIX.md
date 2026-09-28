@@ -1,6 +1,6 @@
 # MATERIAL_FACT_COMPLETENESS_MATRIX — 040-646406
 
-Corrida `881ebf3d-4958-4892-978c-b7f62151a1e0` · DICTUS ID `DX-040-646406-20260928` · ejecutivo `DICTUS_EJECUTIVO_040-646406.pdf` (6 páginas) · sha256 `b75c08c6083b3c362174276db9564aa2324fa90579ec1a20948d4ecb2a2dc10e`.
+Corrida `1a330f64-6532-4992-bff4-cea5b5d9b412` · DICTUS ID `DX-040-646406-20260928` · ejecutivo `DICTUS_EJECUTIVO_040-646406.pdf` (6 páginas) · sha256 `eb60b5a6ee4bc5224111d2be1088261f261b7dc1cb7dfbedc219ebe0a1d2c0d8`.
 
 **Hechos auditados:** 41 · **impresos:** 40 · **pérdidas:** 0 · **sin fuente en el motor:** 1 · **retícula:** sin violaciones.
 

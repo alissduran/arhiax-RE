@@ -378,7 +378,9 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
         ("Títulos", "CON_CONDICIONES" if con_carga else dse.VERIFICADO,
          ("Cargas vigentes declaradas en el folio." if con_carga
           else "Sin cargas vigentes declaradas.")),
-        ("Contrapartes", "SIN_COINCIDENCIAS" if sellado else "INCOMPLETA",
+        # El indicador habla del SCREENING (¿se revisaron los sujetos contra las
+        # listas?), no del sellado de la evidencia: son dos hechos distintos (§14).
+        ("Contrapartes", "SIN_COINCIDENCIAS" if cadena_cerrada else "INCOMPLETA",
          f"{len(scr.get('subjects') or [])} sujeto(s) · evidencia "
          f"{_v(scr.get('evidence_created_count') or scr.get('evidence_created'), '0')}/"
          f"{_v(scr.get('evidence_expected_count') or scr.get('evidence_expected'), '—')}."),

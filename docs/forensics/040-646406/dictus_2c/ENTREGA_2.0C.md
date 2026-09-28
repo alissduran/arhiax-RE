@@ -81,10 +81,10 @@ python -m pytest tests/test_dictus_20c_fidelidad.py -q
 | Dato | Valor |
 |---|---|
 | Documento | `DICTUS_EJECUTIVO_040-646406.pdf` · **6 páginas** |
-| sha256 | `b75c08c6083b3c362174276db9564aa2324fa90579ec1a20948d4ecb2a2dc10e` |
+| sha256 | `eb60b5a6ee4bc5224111d2be1088261f261b7dc1cb7dfbedc219ebe0a1d2c0d8` |
 | DICTUS ID | `DX-040-646406-20260928` |
-| DICTUS_MASTER_HASH | `b106972414db397b320a71213453ccadd59b31884251ee774ffb3d3e83819fdf` |
-| run_id | `881ebf3d-4958-4892-978c-b7f62151a1e0` |
+| DICTUS_MASTER_HASH | `925d8cadd40362485ed94d771a887c6ff3699d547d362b0aae60f7d123add0d5` |
+| run_id | `1a330f64-6532-4992-bff4-cea5b5d9b412` |
 | Evidencias | 10 (`PARCIAL_CON_DECLARACIONES`) |
 | Retícula | sin violaciones · 84 cajas registradas · 0 cajas de texto solapadas |
 | Hechos auditados | 41 (impresos 40 · pérdidas 0 · sin fuente 1) |

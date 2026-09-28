@@ -8,7 +8,7 @@
 | Métrica | Antes (2.0B-R1) | Después (2.0C) |
 |---|---|---|
 | Páginas | 6 | 6 |
-| Caracteres de texto | 14398 | 15458 |
+| Caracteres de texto | 14398 | 15465 |
 | «no declarado» | 7 | 2 |
 | «NO DISPONIBLE» | 0 | 0 |
 | «NO EVALUADO» | 2 | 5 |
