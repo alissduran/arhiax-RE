@@ -1,0 +1,82 @@
+[
+ {
+  "asset_id": "AST-SATELLITE_MAP",
+  "type": "SATELLITE_MAP",
+  "status": "NOT_PRODUCED",
+  "source": "Escena satelital aportada como insumo de la corrida",
+  "generated_at": null,
+  "content_hash": null,
+  "bytes": null,
+  "path": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SATELLITE_MAP",
+    "type": "VISUAL_ASSET",
+    "source": "Escena satelital aportada como insumo de la corrida",
+    "timestamp": null,
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "asset_id": "AST-POI_MAP",
+  "type": "POI_MAP",
+  "status": "AVAILABLE",
+  "source": "Motor cartográfico del producto (mismo run, sin lectura del PDF)",
+  "generated_at": "2026-09-28T19:46:00.748581+00:00",
+  "content_hash": "d57a693675d336d8e88f17348de6eddd2e07c22efb9e17b1d84cac6a7cfb8439",
+  "bytes": 140827,
+  "path": "C:\\Users\\aliss\\.gemini\\antigravity-ide\\scratch\\20260825_DeepSeek_Harness_Web\\arhiax-RE\\docs\\forensics\\040-646406\\dictus_2c\\poi_map.png",
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-POI_MAP",
+    "type": "VISUAL_ASSET",
+    "source": "Motor cartográfico del producto (mismo run, sin lectura del PDF)",
+    "timestamp": "2026-09-28T19:46:00.748581+00:00",
+    "sha256": "d57a693675d336d8e88f17348de6eddd2e07c22efb9e17b1d84cac6a7cfb8439",
+    "detail": null
+   }
+  ]
+ },
+ {
+  "asset_id": "AST-SHADOW_09",
+  "type": "SHADOW_09",
+  "status": "AVAILABLE",
+  "source": "Simulación de sombras de la corrida (09:00)",
+  "generated_at": "2026-09-28T16:04:02.857142+00:00",
+  "content_hash": "cff198b10aa01cdba1a08a093e3f8c5bf9a8346292001a9c35dc3cbb32a86350",
+  "bytes": 30191,
+  "path": "C:\\Users\\aliss\\.gemini\\antigravity-ide\\scratch\\20260825_DeepSeek_Harness_Web\\arhiax-RE\\docs\\forensics\\040-646406\\dictus_2c\\sombra_9am.png",
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SHADOW_09",
+    "type": "VISUAL_ASSET",
+    "source": "Simulación de sombras de la corrida (09:00)",
+    "timestamp": "2026-09-28T16:04:02.857142+00:00",
+    "sha256": "cff198b10aa01cdba1a08a093e3f8c5bf9a8346292001a9c35dc3cbb32a86350",
+    "detail": null
+   }
+  ]
+ },
+ {
+  "asset_id": "AST-SHADOW_15",
+  "type": "SHADOW_15",
+  "status": "AVAILABLE",
+  "source": "Simulación de sombras de la corrida (15:00)",
+  "generated_at": "2026-09-28T16:04:02.957144+00:00",
+  "content_hash": "47730c04980322d88f385f26717f44951441cb92341a7e2fb986d286c96a862d",
+  "bytes": 29578,
+  "path": "C:\\Users\\aliss\\.gemini\\antigravity-ide\\scratch\\20260825_DeepSeek_Harness_Web\\arhiax-RE\\docs\\forensics\\040-646406\\dictus_2c\\sombra_3pm.png",
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SHADOW_15",
+    "type": "VISUAL_ASSET",
+    "source": "Simulación de sombras de la corrida (15:00)",
+    "timestamp": "2026-09-28T16:04:02.957144+00:00",
+    "sha256": "47730c04980322d88f385f26717f44951441cb92341a7e2fb986d286c96a862d",
+    "detail": null
+   }
+  ]
+ }
+]

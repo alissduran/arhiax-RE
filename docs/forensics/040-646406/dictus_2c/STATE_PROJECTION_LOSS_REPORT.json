@@ -1,19 +1,38 @@
 {
  "resumen": {
-  "generado": "2026-09-28T17:24:59.383758+00:00",
+  "generado": "2026-09-28T19:46:53.403258+00:00",
   "folio": "040-646406",
-  "run_id": "1a330f64-6532-4992-bff4-cea5b5d9b412",
+  "run_id": "9db4de42-0dff-478c-af4e-ac7cb135c251",
   "dictus_id": "DX-040-646406-20260928",
-  "master_hash": "925d8cadd40362485ed94d771a887c6ff3699d547d362b0aae60f7d123add0d5",
+  "master_hash": "f473b1f90edebde34571f94e901a3318a36d49c5dfa022f8302cc7e4e789b6b4",
   "ejecutivo": "docs\\forensics\\040-646406\\dictus_2c\\DICTUS_EJECUTIVO_040-646406.pdf",
-  "ejecutivo_sha256": "eb60b5a6ee4bc5224111d2be1088261f261b7dc1cb7dfbedc219ebe0a1d2c0d8",
+  "ejecutivo_sha256": "d9d0fa01d12e4f9f08ae75d208a4c36d8f2ceb9d58198e380635e5534fda9f88",
   "paginas": 6,
   "violaciones_retícula": [],
-  "cajas_registradas": 84,
+  "cajas_registradas": 80,
   "hechos_auditados": 41,
   "hechos_impresos": 40,
   "perdidas": 0,
-  "sin_fuente": 1
+  "sin_fuente": 1,
+  "decision_grammar": {
+   "grammar_version": "dictus-decision-grammar/1.0.0",
+   "observaciones": 36,
+   "hallazgos": 9,
+   "recomendaciones": 9,
+   "compuertas": 7,
+   "disposicion": "PROCEDER CON CONDICIONES IDENTIFICADAS",
+   "compuerta_material": "PASS",
+   "sombras": "PARTIAL / ORIENTATIVE",
+   "activos_visuales": 4,
+   "invariantes_incumplidas": [],
+   "estados_observacion": [
+    "CONFLICT",
+    "NOT_EVALUATED",
+    "NO_MATCH",
+    "OBSERVED"
+   ]
+  },
+  "perdidas_materiales": 0
  },
  "perdidas": []
 }

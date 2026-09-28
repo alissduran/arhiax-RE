@@ -1,0 +1,660 @@
+{
+ "decision_findings": [
+  {
+   "finding_id": "H-01",
+   "domain": "TITLE",
+   "observation_id": "OBS-TITLE-82969",
+   "observation": {
+    "observation_id": "OBS-TITLE-82969",
+    "domain": "TITLE",
+    "subject": "Carga vigente GRAVAMEN: Hipoteca",
+    "source": "Certificado de tradición y libertad (SNR)",
+    "status": "OBSERVED",
+    "value": {
+     "tipo": "GRAVAMEN: Hipoteca",
+     "anotacion": "007",
+     "partes": "DURAN BACCA ALISSON  CC# 1045718995X -> BANCO DE BOGOTA S.A.NIT# 8600029644",
+     "estado": "VIGENTE"
+    },
+    "detail": null,
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-CARGA-007",
+      "type": "TITLE",
+      "source": "SNR/CTL",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El folio registra una HIPOTECA VIGENTE inscrita el 22-01-2024 (anot. 007) a favor de BANCO DE BOGOTA S.A. En lenguaje claro: este inmueble esta comprometido como garantia de un credito que aun no ha sido cancelado. La hipoteca es una carga que pesa sobre la propiedad (no sobre la persona): sigue al inmueble aunque cambie de dueno hasta que se pague el credito y se cancele en el registro.",
+   "severity": "ALTO",
+   "confidence": "VERIFICADO",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación.",
+   "recommended_action": "Para vender, refinanciar o dar este inmueble en garantia, primero hay que gestionar el credito con BANCO DE BOGOTA S.A y tramitar la CANCELACION de la hipoteca ante la ORIP. No impide ser dueno, pero condiciona cualquier operacion sobre el apartamento hasta que el gravamen se levante.",
+   "decision": "PROCEDER CON CONDICIONES",
+   "risk_class": "PROPERTY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-CARGA-007",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "IDENTITY",
+   "observation_id": "OBS-IDENTITY-88798",
+   "observation": {
+    "observation_id": "OBS-IDENTITY-88798",
+    "domain": "IDENTITY",
+    "subject": "Matrícula inmobiliaria",
+    "source": "SNR / Certificado de tradición y libertad",
+    "status": "OBSERVED",
+    "value": "040-646406",
+    "detail": "Resolución: nupre",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-IDENTIDAD",
+      "type": "IDENTITY",
+      "source": "SNR/CTL + catastro",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     },
+     {
+      "evidence_id": "EV-COORD",
+      "type": "GEOMETRY",
+      "source": "OFFICIAL_PREDIO",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para altura maxima: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "IDENTITY",
+   "observation_id": "OBS-IDENTITY-88798",
+   "observation": {
+    "observation_id": "OBS-IDENTITY-88798",
+    "domain": "IDENTITY",
+    "subject": "Matrícula inmobiliaria",
+    "source": "SNR / Certificado de tradición y libertad",
+    "status": "OBSERVED",
+    "value": "040-646406",
+    "detail": "Resolución: nupre",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-IDENTIDAD",
+      "type": "IDENTITY",
+      "source": "SNR/CTL + catastro",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     },
+     {
+      "evidence_id": "EV-COORD",
+      "type": "GEOMETRY",
+      "source": "OFFICIAL_PREDIO",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para amenaza: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA DE TÍTULO"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "IDENTITY",
+   "observation_id": "OBS-IDENTITY-88798",
+   "observation": {
+    "observation_id": "OBS-IDENTITY-88798",
+    "domain": "IDENTITY",
+    "subject": "Matrícula inmobiliaria",
+    "source": "SNR / Certificado de tradición y libertad",
+    "status": "OBSERVED",
+    "value": "040-646406",
+    "detail": "Resolución: nupre",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-IDENTIDAD",
+      "type": "IDENTITY",
+      "source": "SNR/CTL + catastro",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     },
+     {
+      "evidence_id": "EV-COORD",
+      "type": "GEOMETRY",
+      "source": "OFFICIAL_PREDIO",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para coordenada: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "IDENTITY",
+   "observation_id": "OBS-IDENTITY-88798",
+   "observation": {
+    "observation_id": "OBS-IDENTITY-88798",
+    "domain": "IDENTITY",
+    "subject": "Matrícula inmobiliaria",
+    "source": "SNR / Certificado de tradición y libertad",
+    "status": "OBSERVED",
+    "value": "040-646406",
+    "detail": "Resolución: nupre",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-IDENTIDAD",
+      "type": "IDENTITY",
+      "source": "SNR/CTL + catastro",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     },
+     {
+      "evidence_id": "EV-COORD",
+      "type": "GEOMETRY",
+      "source": "OFFICIAL_PREDIO",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para titulares: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA DE TÍTULO"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "URBAN",
+   "observation_id": "OBS-URBAN-05697",
+   "observation": {
+    "observation_id": "OBS-URBAN-05697",
+    "domain": "URBAN",
+    "subject": "Tratamiento urbanístico",
+    "source": "capa oficial del municipio consultada en vivo",
+    "status": "CONFLICT",
+    "value": "Consolidacion",
+    "detail": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-URB-TRATAMIENTO",
+      "type": "URBAN",
+      "source": "capa oficial del municipio consultada en vivo",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para tratamiento: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-TRATAMIENTO",
+     "type": "URBAN",
+     "source": "capa oficial del municipio consultada en vivo",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "IDENTITY",
+   "observation_id": "OBS-IDENTITY-88798",
+   "observation": {
+    "observation_id": "OBS-IDENTITY-88798",
+    "domain": "IDENTITY",
+    "subject": "Matrícula inmobiliaria",
+    "source": "SNR / Certificado de tradición y libertad",
+    "status": "OBSERVED",
+    "value": "040-646406",
+    "detail": "Resolución: nupre",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-IDENTIDAD",
+      "type": "IDENTITY",
+      "source": "SNR/CTL + catastro",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     },
+     {
+      "evidence_id": "EV-COORD",
+      "type": "GEOMETRY",
+      "source": "OFFICIAL_PREDIO",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para uso pot: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-02",
+   "domain": "TITLE",
+   "observation_id": "OBS-TITLE-82969",
+   "observation": {
+    "observation_id": "OBS-TITLE-82969",
+    "domain": "TITLE",
+    "subject": "Carga vigente GRAVAMEN: Hipoteca",
+    "source": "Certificado de tradición y libertad (SNR)",
+    "status": "OBSERVED",
+    "value": {
+     "tipo": "GRAVAMEN: Hipoteca",
+     "anotacion": "007",
+     "partes": "DURAN BACCA ALISSON  CC# 1045718995X -> BANCO DE BOGOTA S.A.NIT# 8600029644",
+     "estado": "VIGENTE"
+    },
+    "detail": null,
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-CARGA-007",
+      "type": "TITLE",
+      "source": "SNR/CTL",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El folio registra una limitacion al dominio (anot. 008): 008 Fecha: 22-01-2024 Radicación: 2024-040-6-1412 Doc: ESCRITURA 2875 DEL 11-10-2023 NOTARIA PRIMERA DE BARRANQUILLAVALOR ACTO: $0 ESPECIFICACION: LIMITACION AL. En lenguaje claro: el inmueble tiene una restriccion legal (p. ej. afectacion a vivienda familiar) que exige el consentimiento de las personas protegidas para venderlo o traspasarlo.",
+   "severity": "MEDIO",
+   "confidence": "VERIFICADO",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación.",
+   "recommended_action": "Vender o aportar el inmueble requiere el levantamiento de la limitacion con la participacion de los titulares/beneficiarios ante notaria.",
+   "decision": "PROCEDER CON CONDICIONES",
+   "risk_class": "PROPERTY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-CARGA-007",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-GEO",
+   "domain": "ENVIRONMENT",
+   "observation_id": "OBS-ENVIRONMENT-00849",
+   "observation": {
+    "observation_id": "OBS-ENVIRONMENT-00849",
+    "domain": "ENVIRONMENT",
+    "subject": "Remoción en masa / amenaza del POT",
+    "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+    "status": "OBSERVED",
+    "value": "Media · polígono: intersecta el predio",
+    "detail": null,
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-RIESGO-AMENAZA_REMOCION_MASA",
+      "type": "RISK",
+      "source": "capa POT del municipio",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El motor geoespacial detectó intersección del predio con zonas de riesgo del POT de Barranquilla. Amenaza remoción en masa: Media | Áreas en riesgo: Medio | Clase de suelo: Urbano (01). El predio ubicado en (11.00606, -74.83757) presenta evaluación de Amenaza Media por remoción en masa y zonificación de Riesgo Medio según el Plan de Ordenamiento Territorial (POT) de Barranquilla.",
+   "severity": "MEDIO",
+   "confidence": "VERIFICADO",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación.",
+   "recommended_action": "Afectacion presente declarada por la fuente oficial: se recomienda verificacion puntual por profesional competente en caso de intervencion fisica del predio; impacto esperado menor en originacion. Amenaza de nivel MEDIA declarada por la fuente oficial. Amenaza de nivel MEDIO declarada por la fuente oficial. [RSK-SEV-1 v1.0.0]",
+   "decision": "PROCEDER CON CONDICIONES",
+   "risk_class": "PROPERTY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-RIESGO-AMENAZA_REMOCION_MASA",
+     "type": "RISK",
+     "source": "capa POT del municipio",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  }
+ ],
+ "hallazgos_legacy": [
+  {
+   "severidad": "ALTO",
+   "codigo": "H-01",
+   "titulo": "Hipoteca vigente a favor de BANCO DE BOGOTA S.A (Anot. 007)",
+   "fuente": "SNR Registral",
+   "por_que": "El folio registra una HIPOTECA VIGENTE inscrita el 22-01-2024 (anot. 007) a favor de BANCO DE BOGOTA S.A. En lenguaje claro: este inmueble esta comprometido como garantia de un credito que aun no ha sido cancelado. La hipoteca es una carga que pesa sobre la propiedad (no sobre la persona): sigue al inmueble aunque cambie de dueno hasta que se pague el credito y se cancele en el registro.",
+   "accion": "Para vender, refinanciar o dar este inmueble en garantia, primero hay que gestionar el credito con BANCO DE BOGOTA S.A y tramitar la CANCELACION de la hipoteca ante la ORIP. No impide ser dueno, pero condiciona cualquier operacion sobre el apartamento hasta que el gravamen se levante.",
+   "afectados": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impacto": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación."
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: altura maxima",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impacto": "La cifra no es definitiva hasta reconciliar el expediente: quien decide con ella (comprador, inmobiliaria, financiador) asume el riesgo de una versión no confirmada."
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: amenaza",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [
+    "COMPRADOR",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA DE TÍTULO"
+   ],
+   "impacto": "La cifra no es definitiva hasta reconciliar el expediente: quien decide con ella (comprador, inmobiliaria, financiador) asume el riesgo de una versión no confirmada."
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: coordenada",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [
+    "COMPRADOR",
+    "INMOBILIARIA"
+   ],
+   "impacto": "La cifra no es definitiva hasta reconciliar el expediente: quien decide con ella (comprador, inmobiliaria, financiador) asume el riesgo de una versión no confirmada."
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: titulares",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA DE TÍTULO"
+   ],
+   "impacto": "La cifra no es definitiva hasta reconciliar el expediente: quien decide con ella (comprador, inmobiliaria, financiador) asume el riesgo de una versión no confirmada."
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: tratamiento",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impacto": "La cifra no es definitiva hasta reconciliar el expediente: quien decide con ella (comprador, inmobiliaria, financiador) asume el riesgo de una versión no confirmada."
+  },
+  {
+   "severidad": "ALTO",
+   "codigo": "H-COH",
+   "titulo": "Coherencia histórica: uso pot",
+   "fuente": "Expediente histórico del mismo inmueble",
+   "por_que": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "accion": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "afectados": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impacto": "La cifra no es definitiva hasta reconciliar el expediente: quien decide con ella (comprador, inmobiliaria, financiador) asume el riesgo de una versión no confirmada."
+  },
+  {
+   "severidad": "MEDIO",
+   "codigo": "H-02",
+   "titulo": "Afectacion/Limitacion Vigente (Anot. 008)",
+   "fuente": "SNR Registral",
+   "por_que": "El folio registra una limitacion al dominio (anot. 008): 008 Fecha: 22-01-2024 Radicación: 2024-040-6-1412 Doc: ESCRITURA 2875 DEL 11-10-2023 NOTARIA PRIMERA DE BARRANQUILLAVALOR ACTO: $0 ESPECIFICACION: LIMITACION AL. En lenguaje claro: el inmueble tiene una restriccion legal (p. ej. afectacion a vivienda familiar) que exige el consentimiento de las personas protegidas para venderlo o traspasarlo.",
+   "accion": "Vender o aportar el inmueble requiere el levantamiento de la limitacion con la participacion de los titulares/beneficiarios ante notaria.",
+   "afectados": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impacto": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación."
+  },
+  {
+   "severidad": "MEDIO",
+   "codigo": "H-GEO",
+   "titulo": "Afectación por Amenaza/Riesgo Detectada (Medio)",
+   "fuente": "POT BAQ -- Capas GeoJSON (STRtree ARHIAX RE)",
+   "por_que": "El motor geoespacial detectó intersección del predio con zonas de riesgo del POT de Barranquilla. Amenaza remoción en masa: Media | Áreas en riesgo: Medio | Clase de suelo: Urbano (01). El predio ubicado en (11.00606, -74.83757) presenta evaluación de Amenaza Media por remoción en masa y zonificación de Riesgo Medio según el Plan de Ordenamiento Territorial (POT) de Barranquilla.",
+   "accion": "Afectacion presente declarada por la fuente oficial: se recomienda verificacion puntual por profesional competente en caso de intervencion fisica del predio; impacto esperado menor en originacion. Amenaza de nivel MEDIA declarada por la fuente oficial. Amenaza de nivel MEDIO declarada por la fuente oficial. [RSK-SEV-1 v1.0.0]",
+   "afectados": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impacto": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación."
+  }
+ ]
+}

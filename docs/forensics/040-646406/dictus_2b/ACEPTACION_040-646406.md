@@ -4,15 +4,15 @@ Una sola corrida del producto produjo el documento **ejecutivo** (el que ve el u
 
 | Dato | Valor |
 |---|---|
-| run_id | `dbd8eb3a-1469-4fc1-b4f9-4b143497f397` |
+| run_id | `cb127755-b129-4452-a5b7-cc73cd88b227` |
 | DICTUS ID | **DX-040-646406-20260928** |
-| generado | 2026-09-28T17:26:17.231955+00:00 |
-| **DICTUS_MASTER_HASH** | `feab83a4a059a800ef83bda94376904635076f7596d28ceb29117b409d521aa9` |
-| master manifest | `dictus-master-manifest/1.1.0` |
+| generado | 2026-09-28T19:45:23.633126+00:00 |
+| **DICTUS_MASTER_HASH** | `d1b03c7b3f788be648a6bda3eb0fe84c475faf3ba69eae012b05d0decea93eaf` |
+| master manifest | `dictus-master-manifest/1.2.0` |
 | run state | `dictus-run-state/1.0.0` |
-| **DOCUMENTO PRINCIPAL** | `DICTUS_EJECUTIVO_040-646406.pdf` · **6 páginas** · sha256 `840946341c21d2a3b2e74e67699d153ca666955eaf23477a04321d4be4e9fb83` |
-| Anexo técnico | `DICTUS_TECNICO_040-646406.pdf` · 17 páginas · sha256 `e013f7bc47c7986bc9e563515461bfcc9b603a0ee5c235c7f90636494dfde6bb` |
-| Arquitectura del ejecutivo | APROBADA · P1 RESUMEN DE DECISIÓN DEL INMUEBLE → P2 TÍTULOS Y CONDICIONES JURÍDICAS → P3 CONTRAPARTES Y PREPARACIÓN DE OPERACIÓN → P4 POT, USO, EDIFICABILIDAD Y RIESGOS → P5 ENTORNO, EQUIPAMIENTO Y ASOLEAMIENTO → P6 IDENTIDAD Y VALOR |
+| **DOCUMENTO PRINCIPAL** | `DICTUS_EJECUTIVO_040-646406.pdf` · **6 páginas** · sha256 `b0ad1665b6f397fefe3cf58878ab8ffbfc8078bd623eff9648b6712d9be33550` |
+| Anexo técnico | `DICTUS_TECNICO_040-646406.pdf` · 17 páginas · sha256 `cb8ef15db1fa30445efabc4dbb4e5d8a068ba35b0f8c837c55707166d04a7bca` |
+| Arquitectura del ejecutivo | APROBADA · P1 DECISIÓN DEL INMUEBLE → P2 DECISIÓN JURÍDICA → P3 DECISIÓN DE CONTRAPARTES → P4 DECISIÓN TERRITORIAL Y URBANÍSTICA → P5 ENTORNO, EQUIPAMIENTO, ASOLEAMIENTO Y SOMBRAS → P6 IDENTIDAD, MERCADO Y VALOR |
 | Evidencias | 10 (PARCIAL_CON_DECLARACIONES) |
 | Ítems de equipamiento en el estado | 12 (distancias: sí) |
 | Hallazgos en la página 1 | 3 |

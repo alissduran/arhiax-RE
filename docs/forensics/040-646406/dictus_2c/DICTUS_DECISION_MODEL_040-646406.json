@@ -1,0 +1,3182 @@
+{
+ "grammar_version": "dictus-decision-grammar/1.0.0",
+ "master_hash": "f473b1f90edebde34571f94e901a3318a36d49c5dfa022f8302cc7e4e789b6b4",
+ "dictus_id": "DX-040-646406-20260928",
+ "observations": [
+  {
+   "observation_id": "OBS-IDENTITY-88798",
+   "domain": "IDENTITY",
+   "subject": "Matrícula inmobiliaria",
+   "source": "SNR / Certificado de tradición y libertad",
+   "status": "OBSERVED",
+   "value": "040-646406",
+   "detail": "Resolución: nupre",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-IDENTITY-59379",
+   "domain": "IDENTITY",
+   "subject": "NUPRE y número predial",
+   "source": "Catastro municipal",
+   "status": "OBSERVED",
+   "value": {
+    "nupre": "AFT0005BOHA",
+    "predial": "080010103000010040001908040002"
+   },
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-IDENTITY-56614",
+   "domain": "IDENTITY",
+   "subject": "Geometría oficial vs identidad canónica",
+   "source": "OFFICIAL_PREDIO",
+   "status": "OBSERVED",
+   "value": {
+    "binding": "VERIFIED",
+    "fields": [
+     "nupre",
+     "numero_predial"
+    ],
+    "scope": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación"
+   },
+   "detail": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-TITLE-67216",
+   "domain": "TITLE",
+   "subject": "Titularidad y participaciones",
+   "source": "Certificado de tradición y libertad (SNR)",
+   "status": "OBSERVED",
+   "value": "DURAN BACCA ALISSON CC# 1045718995X 50%",
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-TITULOS",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-TITLE-90764",
+   "domain": "TITLE",
+   "subject": "Forma de adquisición",
+   "source": "Acto inscrito en el folio",
+   "status": "OBSERVED",
+   "value": "Compraventa",
+   "detail": "Anot. 006 · 22-01-2024 · ESCRITURA 2875 DEL 11-10-2023 NOTARIA SEXTA DE BARRANQUILLAVALOR ACTO:",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-TITULOS",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-TITLE-82969",
+   "domain": "TITLE",
+   "subject": "Carga vigente GRAVAMEN: Hipoteca",
+   "source": "Certificado de tradición y libertad (SNR)",
+   "status": "OBSERVED",
+   "value": {
+    "tipo": "GRAVAMEN: Hipoteca",
+    "anotacion": "007",
+    "partes": "DURAN BACCA ALISSON  CC# 1045718995X -> BANCO DE BOGOTA S.A.NIT# 8600029644",
+    "estado": "VIGENTE"
+   },
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-CARGA-007",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-TITLE-86431",
+   "domain": "TITLE",
+   "subject": "Carga vigente LIMITACION: Afectacion Vivienda",
+   "source": "Certificado de tradición y libertad (SNR)",
+   "status": "OBSERVED",
+   "value": {
+    "tipo": "LIMITACION: Afectacion Vivienda",
+    "anotacion": "008",
+    "partes": "DURAN BACCA ALISSON  CC# 1045718995X",
+    "estado": "VIGENTE"
+   },
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-CARGA-008",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-COUNTERPARTY-58410",
+   "domain": "COUNTERPARTY",
+   "subject": "DURAN BACCA ALISSON · UN_CONSOLIDATED",
+   "source": "Listas restrictivas aplicables",
+   "status": "NO_MATCH",
+   "value": [
+    "TITULAR_ACTUAL"
+   ],
+   "detail": "Consulta de listas ejecutada por el motor de screening",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SCR-titular_actual-1045718995",
+     "type": "SCREENING",
+     "source": "screening",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-COUNTERPARTY-06814",
+   "domain": "COUNTERPARTY",
+   "subject": "DURAN BACCA ALISSON · OFAC_SDN",
+   "source": "Listas restrictivas aplicables",
+   "status": "NO_MATCH",
+   "value": [
+    "TITULAR_ACTUAL"
+   ],
+   "detail": "Consulta de listas ejecutada por el motor de screening",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SCR-titular_actual-1045718995",
+     "type": "SCREENING",
+     "source": "screening",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-COUNTERPARTY-47037",
+   "domain": "COUNTERPARTY",
+   "subject": "DURAN BACCA ALISSON · UK_SANCTIONS_LIST",
+   "source": "Listas restrictivas aplicables",
+   "status": "NO_MATCH",
+   "value": [
+    "TITULAR_ACTUAL"
+   ],
+   "detail": "Consulta de listas ejecutada por el motor de screening",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SCR-titular_actual-1045718995",
+     "type": "SCREENING",
+     "source": "screening",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-COUNTERPARTY-92283",
+   "domain": "COUNTERPARTY",
+   "subject": "BANCO DE BOGOTA S.A. · UN_CONSOLIDATED",
+   "source": "Listas restrictivas aplicables",
+   "status": "NO_MATCH",
+   "value": [
+    "ACREEDOR_HIPOTECARIO"
+   ],
+   "detail": "Consulta de listas ejecutada por el motor de screening",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SCR-acreedor_hipotecario-8600029644",
+     "type": "SCREENING",
+     "source": "screening",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-COUNTERPARTY-29355",
+   "domain": "COUNTERPARTY",
+   "subject": "BANCO DE BOGOTA S.A. · OFAC_SDN",
+   "source": "Listas restrictivas aplicables",
+   "status": "NO_MATCH",
+   "value": [
+    "ACREEDOR_HIPOTECARIO"
+   ],
+   "detail": "Consulta de listas ejecutada por el motor de screening",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SCR-acreedor_hipotecario-8600029644",
+     "type": "SCREENING",
+     "source": "screening",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-COUNTERPARTY-92320",
+   "domain": "COUNTERPARTY",
+   "subject": "BANCO DE BOGOTA S.A. · UK_SANCTIONS_LIST",
+   "source": "Listas restrictivas aplicables",
+   "status": "NO_MATCH",
+   "value": [
+    "ACREEDOR_HIPOTECARIO"
+   ],
+   "detail": "Consulta de listas ejecutada por el motor de screening",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SCR-acreedor_hipotecario-8600029644",
+     "type": "SCREENING",
+     "source": "screening",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-COUNTERPARTY-01377",
+   "domain": "COUNTERPARTY",
+   "subject": "URBANIZADORA MARVAL S.A.S. · UN_CONSOLIDATED",
+   "source": "Listas restrictivas aplicables",
+   "status": "NO_MATCH",
+   "value": [
+    "CONSTRUCTOR_ENAJENANTE"
+   ],
+   "detail": "Consulta de listas ejecutada por el motor de screening",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SCR-constructor_enajenante-urbanizadora-marval-s-a-s",
+     "type": "SCREENING",
+     "source": "screening",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-COUNTERPARTY-67290",
+   "domain": "COUNTERPARTY",
+   "subject": "URBANIZADORA MARVAL S.A.S. · OFAC_SDN",
+   "source": "Listas restrictivas aplicables",
+   "status": "NO_MATCH",
+   "value": [
+    "CONSTRUCTOR_ENAJENANTE"
+   ],
+   "detail": "Consulta de listas ejecutada por el motor de screening",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SCR-constructor_enajenante-urbanizadora-marval-s-a-s",
+     "type": "SCREENING",
+     "source": "screening",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-COUNTERPARTY-85272",
+   "domain": "COUNTERPARTY",
+   "subject": "URBANIZADORA MARVAL S.A.S. · UK_SANCTIONS_LIST",
+   "source": "Listas restrictivas aplicables",
+   "status": "NO_MATCH",
+   "value": [
+    "CONSTRUCTOR_ENAJENANTE"
+   ],
+   "detail": "Consulta de listas ejecutada por el motor de screening",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SCR-constructor_enajenante-urbanizadora-marval-s-a-s",
+     "type": "SCREENING",
+     "source": "screening",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-URBAN-37718",
+   "domain": "URBAN",
+   "subject": "Destino económico (catastro)",
+   "source": "catastro en vivo",
+   "status": "OBSERVED",
+   "value": "Habitacional",
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-DESTINO_ECONOMICO",
+     "type": "URBAN",
+     "source": "catastro en vivo",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-URBAN-18339",
+   "domain": "URBAN",
+   "subject": "Uso del suelo (POT)",
+   "source": "fuente no declarada",
+   "status": "OBSERVED",
+   "value": "Habitacional",
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-USO",
+     "type": "URBAN",
+     "source": "fuente no declarada",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-URBAN-59867",
+   "domain": "URBAN",
+   "subject": "Clase de suelo",
+   "source": "fuente no declarada",
+   "status": "NOT_EVALUATED",
+   "value": null,
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-CLASE_SUELO",
+     "type": "URBAN",
+     "source": "fuente no declarada",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-URBAN-05697",
+   "domain": "URBAN",
+   "subject": "Tratamiento urbanístico",
+   "source": "capa oficial del municipio consultada en vivo",
+   "status": "CONFLICT",
+   "value": "Consolidacion",
+   "detail": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-TRATAMIENTO",
+     "type": "URBAN",
+     "source": "capa oficial del municipio consultada en vivo",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-URBAN-50883",
+   "domain": "URBAN",
+   "subject": "Altura / edificabilidad normativa",
+   "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+   "status": "CONFLICT",
+   "value": "11",
+   "detail": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-ALTURA_MAXIMA",
+     "type": "URBAN",
+     "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-URBAN-49589",
+   "domain": "URBAN",
+   "subject": "Estrato",
+   "source": "capa oficial del municipio consultada en vivo",
+   "status": "OBSERVED",
+   "value": "4",
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-ESTRATO",
+     "type": "URBAN",
+     "source": "capa oficial del municipio consultada en vivo",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-URBAN-91469",
+   "domain": "URBAN",
+   "subject": "Barrio",
+   "source": "capa oficial del municipio consultada en vivo",
+   "status": "OBSERVED",
+   "value": "Miramar",
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-BARRIO",
+     "type": "URBAN",
+     "source": "capa oficial del municipio consultada en vivo",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-URBAN-82205",
+   "domain": "URBAN",
+   "subject": "Localidad / comuna",
+   "source": "capa oficial del municipio consultada en vivo",
+   "status": "OBSERVED",
+   "value": "02",
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-LOCALIDAD",
+     "type": "URBAN",
+     "source": "capa oficial del municipio consultada en vivo",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-00849",
+   "domain": "ENVIRONMENT",
+   "subject": "Remoción en masa / amenaza del POT",
+   "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+   "status": "OBSERVED",
+   "value": "Media · polígono: intersecta el predio",
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-RIESGO-AMENAZA_REMOCION_MASA",
+     "type": "RISK",
+     "source": "capa POT del municipio",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-53767",
+   "domain": "ENVIRONMENT",
+   "subject": "Inundación",
+   "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+   "status": "NOT_EVALUATED",
+   "value": null,
+   "detail": "La capa no se evaluó en esta corrida: se declara NO EVALUADO, no «sin riesgo».",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-RIESGO-INUNDACION",
+     "type": "RISK",
+     "source": "capa POT del municipio",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-44945",
+   "domain": "ENVIRONMENT",
+   "subject": "Riesgo no mitigable",
+   "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+   "status": "NOT_EVALUATED",
+   "value": null,
+   "detail": "La capa no se evaluó en esta corrida: se declara NO EVALUADO, no «sin riesgo».",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-RIESGO-RIESGO_NO_MITIGABLE",
+     "type": "RISK",
+     "source": "capa POT del municipio",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-38759",
+   "domain": "ENVIRONMENT",
+   "subject": "Otras amenazas declaradas",
+   "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+   "status": "OBSERVED",
+   "value": "Medio · polígono: intersecta el predio",
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-RIESGO-AREAS_EN_RIESGO",
+     "type": "RISK",
+     "source": "capa POT del municipio",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-35517",
+   "domain": "ENVIRONMENT",
+   "subject": "Equipamiento · Comercio",
+   "source": "OpenStreetMap (Overpass/Photon)",
+   "status": "OBSERVED",
+   "value": {
+    "count": 3,
+    "nearest_m": 384.5,
+    "items": [
+     "C.C. Miramar",
+     "Olímpica - Villa Santos",
+     "Ara"
+    ]
+   },
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.196292+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-POI-COMERCIO",
+     "type": "POI",
+     "source": "OpenStreetMap",
+     "timestamp": "2026-09-28T19:46:50.196292+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-71508",
+   "domain": "ENVIRONMENT",
+   "subject": "Equipamiento · Educacion",
+   "source": "OpenStreetMap (Overpass/Photon)",
+   "status": "OBSERVED",
+   "value": {
+    "count": 3,
+    "nearest_m": 645.4,
+    "items": [
+     "Living Explorer Sede Miramar",
+     "Neane Kinder Garden",
+     "Ludoteca Magic Kingdom"
+    ]
+   },
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.196292+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-POI-EDUCACION",
+     "type": "POI",
+     "source": "OpenStreetMap",
+     "timestamp": "2026-09-28T19:46:50.196292+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-01663",
+   "domain": "ENVIRONMENT",
+   "subject": "Equipamiento · Recreacion",
+   "source": "OpenStreetMap (Overpass/Photon)",
+   "status": "OBSERVED",
+   "value": {
+    "count": 3,
+    "nearest_m": 310.5,
+    "items": [
+     "Parque Miramar",
+     "Mirador de Miramar",
+     "Pista Ciclomontañismo y Senderismo de Miramar"
+    ]
+   },
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.196292+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-POI-RECREACION",
+     "type": "POI",
+     "source": "OpenStreetMap",
+     "timestamp": "2026-09-28T19:46:50.196292+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-66422",
+   "domain": "ENVIRONMENT",
+   "subject": "Equipamiento · Salud",
+   "source": "OpenStreetMap (Overpass/Photon)",
+   "status": "OBSERVED",
+   "value": {
+    "count": 3,
+    "nearest_m": 771.9,
+    "items": [
+     "Instituto de rehabilitación cardiopulmonar del Caribe",
+     "Dr, Scholl's Barranquilla",
+     "Clinialergias"
+    ]
+   },
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.196292+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-POI-SALUD",
+     "type": "POI",
+     "source": "OpenStreetMap",
+     "timestamp": "2026-09-28T19:46:50.196292+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-15866",
+   "domain": "ENVIRONMENT",
+   "subject": "Asoleamiento 09:00 COT",
+   "source": "cálculo solar de la corrida",
+   "status": "OBSERVED",
+   "value": {
+    "azimut": "104.05°",
+    "elevacion": "45.89°"
+   },
+   "detail": "Sol Directo",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SOLAR",
+     "type": "SOLAR",
+     "source": "solar_engine",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-29891",
+   "domain": "ENVIRONMENT",
+   "subject": "Asoleamiento 12:00 COT",
+   "source": "cálculo solar de la corrida",
+   "status": "OBSERVED",
+   "value": {
+    "azimut": "191.32°",
+    "elevacion": "77.05°"
+   },
+   "detail": "Sol Directo",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SOLAR",
+     "type": "SOLAR",
+     "source": "solar_engine",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-ENVIRONMENT-63510",
+   "domain": "ENVIRONMENT",
+   "subject": "Asoleamiento 15:00 COT",
+   "source": "cálculo solar de la corrida",
+   "status": "OBSERVED",
+   "value": {
+    "azimut": "257.85°",
+    "elevacion": "41.04°"
+   },
+   "detail": "Sombra (Orientación)",
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SOLAR",
+     "type": "SOLAR",
+     "source": "solar_engine",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "observation_id": "OBS-VALUATION-71974",
+   "domain": "VALUATION",
+   "subject": "Valor estimado y su banda",
+   "source": "lonja_baq_metodologia",
+   "status": "OBSERVED",
+   "value": {
+    "consolidado": 399500000,
+    "banda_baja": 373532500,
+    "banda_alta": 435455000,
+    "value_m2": 6800000
+   },
+   "detail": null,
+   "observed_at": "2026-09-28T19:46:50.194222+00:00",
+   "query": null,
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-VALOR",
+     "type": "VALUATION",
+     "source": "metodología de mercado",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  }
+ ],
+ "findings": [
+  {
+   "finding_id": "H-01",
+   "domain": "TITLE",
+   "observation_id": "OBS-TITLE-82969",
+   "observation": {
+    "observation_id": "OBS-TITLE-82969",
+    "domain": "TITLE",
+    "subject": "Carga vigente GRAVAMEN: Hipoteca",
+    "source": "Certificado de tradición y libertad (SNR)",
+    "status": "OBSERVED",
+    "value": {
+     "tipo": "GRAVAMEN: Hipoteca",
+     "anotacion": "007",
+     "partes": "DURAN BACCA ALISSON  CC# 1045718995X -> BANCO DE BOGOTA S.A.NIT# 8600029644",
+     "estado": "VIGENTE"
+    },
+    "detail": null,
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-CARGA-007",
+      "type": "TITLE",
+      "source": "SNR/CTL",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El folio registra una HIPOTECA VIGENTE inscrita el 22-01-2024 (anot. 007) a favor de BANCO DE BOGOTA S.A. En lenguaje claro: este inmueble esta comprometido como garantia de un credito que aun no ha sido cancelado. La hipoteca es una carga que pesa sobre la propiedad (no sobre la persona): sigue al inmueble aunque cambie de dueno hasta que se pague el credito y se cancele en el registro.",
+   "severity": "ALTO",
+   "confidence": "VERIFICADO",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación.",
+   "recommended_action": "Para vender, refinanciar o dar este inmueble en garantia, primero hay que gestionar el credito con BANCO DE BOGOTA S.A y tramitar la CANCELACION de la hipoteca ante la ORIP. No impide ser dueno, pero condiciona cualquier operacion sobre el apartamento hasta que el gravamen se levante.",
+   "decision": "PROCEDER CON CONDICIONES",
+   "risk_class": "PROPERTY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-CARGA-007",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "IDENTITY",
+   "observation_id": "OBS-IDENTITY-88798",
+   "observation": {
+    "observation_id": "OBS-IDENTITY-88798",
+    "domain": "IDENTITY",
+    "subject": "Matrícula inmobiliaria",
+    "source": "SNR / Certificado de tradición y libertad",
+    "status": "OBSERVED",
+    "value": "040-646406",
+    "detail": "Resolución: nupre",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-IDENTIDAD",
+      "type": "IDENTITY",
+      "source": "SNR/CTL + catastro",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     },
+     {
+      "evidence_id": "EV-COORD",
+      "type": "GEOMETRY",
+      "source": "OFFICIAL_PREDIO",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para altura maxima: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "IDENTITY",
+   "observation_id": "OBS-IDENTITY-88798",
+   "observation": {
+    "observation_id": "OBS-IDENTITY-88798",
+    "domain": "IDENTITY",
+    "subject": "Matrícula inmobiliaria",
+    "source": "SNR / Certificado de tradición y libertad",
+    "status": "OBSERVED",
+    "value": "040-646406",
+    "detail": "Resolución: nupre",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-IDENTIDAD",
+      "type": "IDENTITY",
+      "source": "SNR/CTL + catastro",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     },
+     {
+      "evidence_id": "EV-COORD",
+      "type": "GEOMETRY",
+      "source": "OFFICIAL_PREDIO",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para amenaza: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA DE TÍTULO"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "IDENTITY",
+   "observation_id": "OBS-IDENTITY-88798",
+   "observation": {
+    "observation_id": "OBS-IDENTITY-88798",
+    "domain": "IDENTITY",
+    "subject": "Matrícula inmobiliaria",
+    "source": "SNR / Certificado de tradición y libertad",
+    "status": "OBSERVED",
+    "value": "040-646406",
+    "detail": "Resolución: nupre",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-IDENTIDAD",
+      "type": "IDENTITY",
+      "source": "SNR/CTL + catastro",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     },
+     {
+      "evidence_id": "EV-COORD",
+      "type": "GEOMETRY",
+      "source": "OFFICIAL_PREDIO",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para coordenada: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "IDENTITY",
+   "observation_id": "OBS-IDENTITY-88798",
+   "observation": {
+    "observation_id": "OBS-IDENTITY-88798",
+    "domain": "IDENTITY",
+    "subject": "Matrícula inmobiliaria",
+    "source": "SNR / Certificado de tradición y libertad",
+    "status": "OBSERVED",
+    "value": "040-646406",
+    "detail": "Resolución: nupre",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-IDENTIDAD",
+      "type": "IDENTITY",
+      "source": "SNR/CTL + catastro",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     },
+     {
+      "evidence_id": "EV-COORD",
+      "type": "GEOMETRY",
+      "source": "OFFICIAL_PREDIO",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para titulares: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA DE TÍTULO"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "URBAN",
+   "observation_id": "OBS-URBAN-05697",
+   "observation": {
+    "observation_id": "OBS-URBAN-05697",
+    "domain": "URBAN",
+    "subject": "Tratamiento urbanístico",
+    "source": "capa oficial del municipio consultada en vivo",
+    "status": "CONFLICT",
+    "value": "Consolidacion",
+    "detail": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-URB-TRATAMIENTO",
+      "type": "URBAN",
+      "source": "capa oficial del municipio consultada en vivo",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para tratamiento: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-TRATAMIENTO",
+     "type": "URBAN",
+     "source": "capa oficial del municipio consultada en vivo",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-COH",
+   "domain": "IDENTITY",
+   "observation_id": "OBS-IDENTITY-88798",
+   "observation": {
+    "observation_id": "OBS-IDENTITY-88798",
+    "domain": "IDENTITY",
+    "subject": "Matrícula inmobiliaria",
+    "source": "SNR / Certificado de tradición y libertad",
+    "status": "OBSERVED",
+    "value": "040-646406",
+    "detail": "Resolución: nupre",
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-IDENTIDAD",
+      "type": "IDENTITY",
+      "source": "SNR/CTL + catastro",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     },
+     {
+      "evidence_id": "EV-COORD",
+      "type": "GEOMETRY",
+      "source": "OFFICIAL_PREDIO",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El expediente del mismo inmueble produjo valores distintos entre versiones para uso pot: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Calidad de la información con la que se decide",
+   "recommended_action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-02",
+   "domain": "TITLE",
+   "observation_id": "OBS-TITLE-82969",
+   "observation": {
+    "observation_id": "OBS-TITLE-82969",
+    "domain": "TITLE",
+    "subject": "Carga vigente GRAVAMEN: Hipoteca",
+    "source": "Certificado de tradición y libertad (SNR)",
+    "status": "OBSERVED",
+    "value": {
+     "tipo": "GRAVAMEN: Hipoteca",
+     "anotacion": "007",
+     "partes": "DURAN BACCA ALISSON  CC# 1045718995X -> BANCO DE BOGOTA S.A.NIT# 8600029644",
+     "estado": "VIGENTE"
+    },
+    "detail": null,
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-CARGA-007",
+      "type": "TITLE",
+      "source": "SNR/CTL",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El folio registra una limitacion al dominio (anot. 008): 008 Fecha: 22-01-2024 Radicación: 2024-040-6-1412 Doc: ESCRITURA 2875 DEL 11-10-2023 NOTARIA PRIMERA DE BARRANQUILLAVALOR ACTO: $0 ESPECIFICACION: LIMITACION AL. En lenguaje claro: el inmueble tiene una restriccion legal (p. ej. afectacion a vivienda familiar) que exige el consentimiento de las personas protegidas para venderlo o traspasarlo.",
+   "severity": "MEDIO",
+   "confidence": "VERIFICADO",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación.",
+   "recommended_action": "Vender o aportar el inmueble requiere el levantamiento de la limitacion con la participacion de los titulares/beneficiarios ante notaria.",
+   "decision": "PROCEDER CON CONDICIONES",
+   "risk_class": "PROPERTY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-CARGA-007",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "finding_id": "H-GEO",
+   "domain": "ENVIRONMENT",
+   "observation_id": "OBS-ENVIRONMENT-00849",
+   "observation": {
+    "observation_id": "OBS-ENVIRONMENT-00849",
+    "domain": "ENVIRONMENT",
+    "subject": "Remoción en masa / amenaza del POT",
+    "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+    "status": "OBSERVED",
+    "value": "Media · polígono: intersecta el predio",
+    "detail": null,
+    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "query": null,
+    "evidence_refs": [
+     {
+      "evidence_id": "EV-RIESGO-AMENAZA_REMOCION_MASA",
+      "type": "RISK",
+      "source": "capa POT del municipio",
+      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "sha256": null,
+      "detail": null
+     }
+    ]
+   },
+   "meaning": "El motor geoespacial detectó intersección del predio con zonas de riesgo del POT de Barranquilla. Amenaza remoción en masa: Media | Áreas en riesgo: Medio | Clase de suelo: Urbano (01). El predio ubicado en (11.00606, -74.83757) presenta evaluación de Amenaza Media por remoción en masa y zonificación de Riesgo Medio según el Plan de Ordenamiento Territorial (POT) de Barranquilla.",
+   "severity": "MEDIO",
+   "confidence": "VERIFICADO",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "impact": "Comprador: la carga se hereda con el inmueble. Vendedor: condición para transferir. Inmobiliaria: riesgo de retraso o caída. Banco: afecta la garantía y la prelación.",
+   "recommended_action": "Afectacion presente declarada por la fuente oficial: se recomienda verificacion puntual por profesional competente en caso de intervencion fisica del predio; impacto esperado menor en originacion. Amenaza de nivel MEDIA declarada por la fuente oficial. Amenaza de nivel MEDIO declarada por la fuente oficial. [RSK-SEV-1 v1.0.0]",
+   "decision": "PROCEDER CON CONDICIONES",
+   "risk_class": "PROPERTY_RISK",
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-RIESGO-AMENAZA_REMOCION_MASA",
+     "type": "RISK",
+     "source": "capa POT del municipio",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  }
+ ],
+ "recommendations": [
+  {
+   "recommendation_id": "REC-TITLE-58758",
+   "domain": "TITLE",
+   "action": "Para vender, refinanciar o dar este inmueble en garantia, primero hay que gestionar el credito con BANCO DE BOGOTA S.A y tramitar la CANCELACION de la hipoteca ante la ORIP. No impide ser dueno, pero condiciona cualquier operacion sobre el apartamento hasta que el gravamen se levante.",
+   "priority": "ALTA",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-CARGA-007",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ],
+   "does_not_replace": "DICTUS no aprueba crédito, no asegura el título ni ordena la compra: la decisión es del profesional competente."
+  },
+  {
+   "recommendation_id": "REC-IDENTITY-99836",
+   "domain": "IDENTITY",
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "priority": "ALTA",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ],
+   "does_not_replace": "DICTUS no aprueba crédito, no asegura el título ni ordena la compra: la decisión es del profesional competente."
+  },
+  {
+   "recommendation_id": "REC-IDENTITY-99836",
+   "domain": "IDENTITY",
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "priority": "ALTA",
+   "affected_parties": [
+    "COMPRADOR",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA DE TÍTULO"
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ],
+   "does_not_replace": "DICTUS no aprueba crédito, no asegura el título ni ordena la compra: la decisión es del profesional competente."
+  },
+  {
+   "recommendation_id": "REC-IDENTITY-99836",
+   "domain": "IDENTITY",
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "priority": "ALTA",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA"
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ],
+   "does_not_replace": "DICTUS no aprueba crédito, no asegura el título ni ordena la compra: la decisión es del profesional competente."
+  },
+  {
+   "recommendation_id": "REC-IDENTITY-99836",
+   "domain": "IDENTITY",
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "priority": "ALTA",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA DE TÍTULO"
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ],
+   "does_not_replace": "DICTUS no aprueba crédito, no asegura el título ni ordena la compra: la decisión es del profesional competente."
+  },
+  {
+   "recommendation_id": "REC-URBAN-99836",
+   "domain": "URBAN",
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "priority": "ALTA",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URB-TRATAMIENTO",
+     "type": "URBAN",
+     "source": "capa oficial del municipio consultada en vivo",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ],
+   "does_not_replace": "DICTUS no aprueba crédito, no asegura el título ni ordena la compra: la decisión es del profesional competente."
+  },
+  {
+   "recommendation_id": "REC-IDENTITY-99836",
+   "domain": "IDENTITY",
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "priority": "ALTA",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ],
+   "does_not_replace": "DICTUS no aprueba crédito, no asegura el título ni ordena la compra: la decisión es del profesional competente."
+  },
+  {
+   "recommendation_id": "REC-TITLE-10203",
+   "domain": "TITLE",
+   "action": "Vender o aportar el inmueble requiere el levantamiento de la limitacion con la participacion de los titulares/beneficiarios ante notaria.",
+   "priority": "MEDIA",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-CARGA-007",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ],
+   "does_not_replace": "DICTUS no aprueba crédito, no asegura el título ni ordena la compra: la decisión es del profesional competente."
+  },
+  {
+   "recommendation_id": "REC-ENVIRONMENT-27439",
+   "domain": "ENVIRONMENT",
+   "action": "Afectacion presente declarada por la fuente oficial: se recomienda verificacion puntual por profesional competente en caso de intervencion fisica del predio; impacto esperado menor en originacion. Amenaza de nivel MEDIA declarada por la fuente oficial. Amenaza de nivel MEDIO declarada por la fuente oficial. [RSK-SEV-1 v1.0.0]",
+   "priority": "MEDIA",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-RIESGO-AMENAZA_REMOCION_MASA",
+     "type": "RISK",
+     "source": "capa POT del municipio",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ],
+   "does_not_replace": "DICTUS no aprueba crédito, no asegura el título ni ordena la compra: la decisión es del profesional competente."
+  }
+ ],
+ "decision_gates": [
+  {
+   "gate": "IDENTITY_GATE",
+   "inputs": [
+    "matrícula",
+    "NUPRE",
+    "número predial",
+    "geometría oficial"
+   ],
+   "observation_ids": [
+    "OBS-IDENTITY-88798",
+    "OBS-IDENTITY-59379",
+    "OBS-IDENTITY-56614"
+   ],
+   "observations": [
+    {
+     "observation_id": "OBS-IDENTITY-88798",
+     "domain": "IDENTITY",
+     "subject": "Matrícula inmobiliaria",
+     "source": "SNR / Certificado de tradición y libertad",
+     "status": "OBSERVED",
+     "value": "040-646406",
+     "detail": "Resolución: nupre",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-IDENTIDAD",
+       "type": "IDENTITY",
+       "source": "SNR/CTL + catastro",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      },
+      {
+       "evidence_id": "EV-COORD",
+       "type": "GEOMETRY",
+       "source": "OFFICIAL_PREDIO",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-IDENTITY-59379",
+     "domain": "IDENTITY",
+     "subject": "NUPRE y número predial",
+     "source": "Catastro municipal",
+     "status": "OBSERVED",
+     "value": {
+      "nupre": "AFT0005BOHA",
+      "predial": "080010103000010040001908040002"
+     },
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-IDENTIDAD",
+       "type": "IDENTITY",
+       "source": "SNR/CTL + catastro",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      },
+      {
+       "evidence_id": "EV-COORD",
+       "type": "GEOMETRY",
+       "source": "OFFICIAL_PREDIO",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-IDENTITY-56614",
+     "domain": "IDENTITY",
+     "subject": "Geometría oficial vs identidad canónica",
+     "source": "OFFICIAL_PREDIO",
+     "status": "OBSERVED",
+     "value": {
+      "binding": "VERIFIED",
+      "fields": [
+       "nupre",
+       "numero_predial"
+      ],
+      "scope": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación"
+     },
+     "detail": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-IDENTIDAD",
+       "type": "IDENTITY",
+       "source": "SNR/CTL + catastro",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      },
+      {
+       "evidence_id": "EV-COORD",
+       "type": "GEOMETRY",
+       "source": "OFFICIAL_PREDIO",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    }
+   ],
+   "blocking_conditions": [],
+   "decision": "INFORMACIÓN VERIFICADA",
+   "reasons": [
+    "Resolución de identidad: nupre",
+    "Binding de la geometría: VERIFIED"
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-IDENTIDAD",
+     "type": "IDENTITY",
+     "source": "SNR/CTL + catastro",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    },
+    {
+     "evidence_id": "EV-COORD",
+     "type": "GEOMETRY",
+     "source": "OFFICIAL_PREDIO",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "gate": "TITLE_GATE",
+   "inputs": [
+    "titulares",
+    "actos de adquisición",
+    "gravámenes y limitaciones"
+   ],
+   "observation_ids": [
+    "OBS-TITLE-67216",
+    "OBS-TITLE-90764",
+    "OBS-TITLE-82969",
+    "OBS-TITLE-86431"
+   ],
+   "observations": [
+    {
+     "observation_id": "OBS-TITLE-67216",
+     "domain": "TITLE",
+     "subject": "Titularidad y participaciones",
+     "source": "Certificado de tradición y libertad (SNR)",
+     "status": "OBSERVED",
+     "value": "DURAN BACCA ALISSON CC# 1045718995X 50%",
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-TITULOS",
+       "type": "TITLE",
+       "source": "SNR/CTL",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-TITLE-90764",
+     "domain": "TITLE",
+     "subject": "Forma de adquisición",
+     "source": "Acto inscrito en el folio",
+     "status": "OBSERVED",
+     "value": "Compraventa",
+     "detail": "Anot. 006 · 22-01-2024 · ESCRITURA 2875 DEL 11-10-2023 NOTARIA SEXTA DE BARRANQUILLAVALOR ACTO:",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-TITULOS",
+       "type": "TITLE",
+       "source": "SNR/CTL",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-TITLE-82969",
+     "domain": "TITLE",
+     "subject": "Carga vigente GRAVAMEN: Hipoteca",
+     "source": "Certificado de tradición y libertad (SNR)",
+     "status": "OBSERVED",
+     "value": {
+      "tipo": "GRAVAMEN: Hipoteca",
+      "anotacion": "007",
+      "partes": "DURAN BACCA ALISSON  CC# 1045718995X -> BANCO DE BOGOTA S.A.NIT# 8600029644",
+      "estado": "VIGENTE"
+     },
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-CARGA-007",
+       "type": "TITLE",
+       "source": "SNR/CTL",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-TITLE-86431",
+     "domain": "TITLE",
+     "subject": "Carga vigente LIMITACION: Afectacion Vivienda",
+     "source": "Certificado de tradición y libertad (SNR)",
+     "status": "OBSERVED",
+     "value": {
+      "tipo": "LIMITACION: Afectacion Vivienda",
+      "anotacion": "008",
+      "partes": "DURAN BACCA ALISSON  CC# 1045718995X",
+      "estado": "VIGENTE"
+     },
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-CARGA-008",
+       "type": "TITLE",
+       "source": "SNR/CTL",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    }
+   ],
+   "blocking_conditions": [
+    "GRAVAMEN: Hipoteca (Anot. 007)",
+    "LIMITACION: Afectacion Vivienda (Anot. 008)"
+   ],
+   "decision": "PROCEDER CON CONDICIONES",
+   "reasons": [
+    "El folio declara cargas vigentes: la operación es posible con condiciones registradas."
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-TITULOS",
+     "type": "TITLE",
+     "source": "SNR/CTL",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "gate": "COUNTERPARTY_GATE",
+   "inputs": [
+    "sujetos",
+    "listas consultadas",
+    "resultados por lista"
+   ],
+   "observation_ids": [
+    "OBS-COUNTERPARTY-58410",
+    "OBS-COUNTERPARTY-06814",
+    "OBS-COUNTERPARTY-47037",
+    "OBS-COUNTERPARTY-92283",
+    "OBS-COUNTERPARTY-29355",
+    "OBS-COUNTERPARTY-92320",
+    "OBS-COUNTERPARTY-01377",
+    "OBS-COUNTERPARTY-67290",
+    "OBS-COUNTERPARTY-85272"
+   ],
+   "observations": [
+    {
+     "observation_id": "OBS-COUNTERPARTY-58410",
+     "domain": "COUNTERPARTY",
+     "subject": "DURAN BACCA ALISSON · UN_CONSOLIDATED",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "TITULAR_ACTUAL"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-titular_actual-1045718995",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-06814",
+     "domain": "COUNTERPARTY",
+     "subject": "DURAN BACCA ALISSON · OFAC_SDN",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "TITULAR_ACTUAL"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-titular_actual-1045718995",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-47037",
+     "domain": "COUNTERPARTY",
+     "subject": "DURAN BACCA ALISSON · UK_SANCTIONS_LIST",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "TITULAR_ACTUAL"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-titular_actual-1045718995",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-92283",
+     "domain": "COUNTERPARTY",
+     "subject": "BANCO DE BOGOTA S.A. · UN_CONSOLIDATED",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "ACREEDOR_HIPOTECARIO"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-acreedor_hipotecario-8600029644",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-29355",
+     "domain": "COUNTERPARTY",
+     "subject": "BANCO DE BOGOTA S.A. · OFAC_SDN",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "ACREEDOR_HIPOTECARIO"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-acreedor_hipotecario-8600029644",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-92320",
+     "domain": "COUNTERPARTY",
+     "subject": "BANCO DE BOGOTA S.A. · UK_SANCTIONS_LIST",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "ACREEDOR_HIPOTECARIO"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-acreedor_hipotecario-8600029644",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-01377",
+     "domain": "COUNTERPARTY",
+     "subject": "URBANIZADORA MARVAL S.A.S. · UN_CONSOLIDATED",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "CONSTRUCTOR_ENAJENANTE"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-constructor_enajenante-urbanizadora-marval-s-a-s",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-67290",
+     "domain": "COUNTERPARTY",
+     "subject": "URBANIZADORA MARVAL S.A.S. · OFAC_SDN",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "CONSTRUCTOR_ENAJENANTE"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-constructor_enajenante-urbanizadora-marval-s-a-s",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-85272",
+     "domain": "COUNTERPARTY",
+     "subject": "URBANIZADORA MARVAL S.A.S. · UK_SANCTIONS_LIST",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "CONSTRUCTOR_ENAJENANTE"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-constructor_enajenante-urbanizadora-marval-s-a-s",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    }
+   ],
+   "blocking_conditions": [],
+   "decision": "SIN HALLAZGO MATERIAL EN ESTA FUENTE",
+   "reasons": [
+    "Consultas ejecutadas contra las listas declaradas: sin coincidencias relevantes."
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-SCREENING",
+     "type": "SCREENING",
+     "source": "listas restrictivas aplicables",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "gate": "URBAN_GATE",
+   "inputs": [
+    "destino económico",
+    "uso POT",
+    "clase de suelo",
+    "tratamiento",
+    "altura",
+    "estrato"
+   ],
+   "observation_ids": [
+    "OBS-URBAN-37718",
+    "OBS-URBAN-18339",
+    "OBS-URBAN-59867",
+    "OBS-URBAN-05697",
+    "OBS-URBAN-50883",
+    "OBS-URBAN-49589",
+    "OBS-URBAN-91469",
+    "OBS-URBAN-82205"
+   ],
+   "observations": [
+    {
+     "observation_id": "OBS-URBAN-37718",
+     "domain": "URBAN",
+     "subject": "Destino económico (catastro)",
+     "source": "catastro en vivo",
+     "status": "OBSERVED",
+     "value": "Habitacional",
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-URB-DESTINO_ECONOMICO",
+       "type": "URBAN",
+       "source": "catastro en vivo",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-URBAN-18339",
+     "domain": "URBAN",
+     "subject": "Uso del suelo (POT)",
+     "source": "fuente no declarada",
+     "status": "OBSERVED",
+     "value": "Habitacional",
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-URB-USO",
+       "type": "URBAN",
+       "source": "fuente no declarada",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-URBAN-59867",
+     "domain": "URBAN",
+     "subject": "Clase de suelo",
+     "source": "fuente no declarada",
+     "status": "NOT_EVALUATED",
+     "value": null,
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-URB-CLASE_SUELO",
+       "type": "URBAN",
+       "source": "fuente no declarada",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-URBAN-05697",
+     "domain": "URBAN",
+     "subject": "Tratamiento urbanístico",
+     "source": "capa oficial del municipio consultada en vivo",
+     "status": "CONFLICT",
+     "value": "Consolidacion",
+     "detail": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-URB-TRATAMIENTO",
+       "type": "URBAN",
+       "source": "capa oficial del municipio consultada en vivo",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-URBAN-50883",
+     "domain": "URBAN",
+     "subject": "Altura / edificabilidad normativa",
+     "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+     "status": "CONFLICT",
+     "value": "11",
+     "detail": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-URB-ALTURA_MAXIMA",
+       "type": "URBAN",
+       "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-URBAN-49589",
+     "domain": "URBAN",
+     "subject": "Estrato",
+     "source": "capa oficial del municipio consultada en vivo",
+     "status": "OBSERVED",
+     "value": "4",
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-URB-ESTRATO",
+       "type": "URBAN",
+       "source": "capa oficial del municipio consultada en vivo",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-URBAN-91469",
+     "domain": "URBAN",
+     "subject": "Barrio",
+     "source": "capa oficial del municipio consultada en vivo",
+     "status": "OBSERVED",
+     "value": "Miramar",
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-URB-BARRIO",
+       "type": "URBAN",
+       "source": "capa oficial del municipio consultada en vivo",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-URBAN-82205",
+     "domain": "URBAN",
+     "subject": "Localidad / comuna",
+     "source": "capa oficial del municipio consultada en vivo",
+     "status": "OBSERVED",
+     "value": "02",
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-URB-LOCALIDAD",
+       "type": "URBAN",
+       "source": "capa oficial del municipio consultada en vivo",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    }
+   ],
+   "blocking_conditions": [
+    "altura_maxima (CONFLICTO HISTÓRICO)",
+    "tratamiento (CONFLICTO HISTÓRICO)",
+    "uso_pot (CONFLICTO HISTÓRICO)"
+   ],
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "reasons": [
+    "El expediente produjo valores distintos entre versiones para estos atributos: no se usa ninguna cifra como definitiva hasta reconciliar."
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-URBAN",
+     "type": "URBAN",
+     "source": "capas POT del municipio",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "gate": "ENVIRONMENT_GATE",
+   "inputs": [
+    "equipamiento por categoría",
+    "distancias",
+    "asoleamiento",
+    "sombras"
+   ],
+   "observation_ids": [
+    "OBS-ENVIRONMENT-00849",
+    "OBS-ENVIRONMENT-53767",
+    "OBS-ENVIRONMENT-44945",
+    "OBS-ENVIRONMENT-38759",
+    "OBS-ENVIRONMENT-35517",
+    "OBS-ENVIRONMENT-71508",
+    "OBS-ENVIRONMENT-01663",
+    "OBS-ENVIRONMENT-66422",
+    "OBS-ENVIRONMENT-15866",
+    "OBS-ENVIRONMENT-29891",
+    "OBS-ENVIRONMENT-63510"
+   ],
+   "observations": [
+    {
+     "observation_id": "OBS-ENVIRONMENT-00849",
+     "domain": "ENVIRONMENT",
+     "subject": "Remoción en masa / amenaza del POT",
+     "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+     "status": "OBSERVED",
+     "value": "Media · polígono: intersecta el predio",
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-RIESGO-AMENAZA_REMOCION_MASA",
+       "type": "RISK",
+       "source": "capa POT del municipio",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-ENVIRONMENT-53767",
+     "domain": "ENVIRONMENT",
+     "subject": "Inundación",
+     "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+     "status": "NOT_EVALUATED",
+     "value": null,
+     "detail": "La capa no se evaluó en esta corrida: se declara NO EVALUADO, no «sin riesgo».",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-RIESGO-INUNDACION",
+       "type": "RISK",
+       "source": "capa POT del municipio",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-ENVIRONMENT-44945",
+     "domain": "ENVIRONMENT",
+     "subject": "Riesgo no mitigable",
+     "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+     "status": "NOT_EVALUATED",
+     "value": null,
+     "detail": "La capa no se evaluó en esta corrida: se declara NO EVALUADO, no «sin riesgo».",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-RIESGO-RIESGO_NO_MITIGABLE",
+       "type": "RISK",
+       "source": "capa POT del municipio",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-ENVIRONMENT-38759",
+     "domain": "ENVIRONMENT",
+     "subject": "Otras amenazas declaradas",
+     "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+     "status": "OBSERVED",
+     "value": "Medio · polígono: intersecta el predio",
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-RIESGO-AREAS_EN_RIESGO",
+       "type": "RISK",
+       "source": "capa POT del municipio",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-ENVIRONMENT-35517",
+     "domain": "ENVIRONMENT",
+     "subject": "Equipamiento · Comercio",
+     "source": "OpenStreetMap (Overpass/Photon)",
+     "status": "OBSERVED",
+     "value": {
+      "count": 3,
+      "nearest_m": 384.5,
+      "items": [
+       "C.C. Miramar",
+       "Olímpica - Villa Santos",
+       "Ara"
+      ]
+     },
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.196292+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-POI-COMERCIO",
+       "type": "POI",
+       "source": "OpenStreetMap",
+       "timestamp": "2026-09-28T19:46:50.196292+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-ENVIRONMENT-71508",
+     "domain": "ENVIRONMENT",
+     "subject": "Equipamiento · Educacion",
+     "source": "OpenStreetMap (Overpass/Photon)",
+     "status": "OBSERVED",
+     "value": {
+      "count": 3,
+      "nearest_m": 645.4,
+      "items": [
+       "Living Explorer Sede Miramar",
+       "Neane Kinder Garden",
+       "Ludoteca Magic Kingdom"
+      ]
+     },
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.196292+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-POI-EDUCACION",
+       "type": "POI",
+       "source": "OpenStreetMap",
+       "timestamp": "2026-09-28T19:46:50.196292+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-ENVIRONMENT-01663",
+     "domain": "ENVIRONMENT",
+     "subject": "Equipamiento · Recreacion",
+     "source": "OpenStreetMap (Overpass/Photon)",
+     "status": "OBSERVED",
+     "value": {
+      "count": 3,
+      "nearest_m": 310.5,
+      "items": [
+       "Parque Miramar",
+       "Mirador de Miramar",
+       "Pista Ciclomontañismo y Senderismo de Miramar"
+      ]
+     },
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.196292+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-POI-RECREACION",
+       "type": "POI",
+       "source": "OpenStreetMap",
+       "timestamp": "2026-09-28T19:46:50.196292+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-ENVIRONMENT-66422",
+     "domain": "ENVIRONMENT",
+     "subject": "Equipamiento · Salud",
+     "source": "OpenStreetMap (Overpass/Photon)",
+     "status": "OBSERVED",
+     "value": {
+      "count": 3,
+      "nearest_m": 771.9,
+      "items": [
+       "Instituto de rehabilitación cardiopulmonar del Caribe",
+       "Dr, Scholl's Barranquilla",
+       "Clinialergias"
+      ]
+     },
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.196292+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-POI-SALUD",
+       "type": "POI",
+       "source": "OpenStreetMap",
+       "timestamp": "2026-09-28T19:46:50.196292+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-ENVIRONMENT-15866",
+     "domain": "ENVIRONMENT",
+     "subject": "Asoleamiento 09:00 COT",
+     "source": "cálculo solar de la corrida",
+     "status": "OBSERVED",
+     "value": {
+      "azimut": "104.05°",
+      "elevacion": "45.89°"
+     },
+     "detail": "Sol Directo",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SOLAR",
+       "type": "SOLAR",
+       "source": "solar_engine",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-ENVIRONMENT-29891",
+     "domain": "ENVIRONMENT",
+     "subject": "Asoleamiento 12:00 COT",
+     "source": "cálculo solar de la corrida",
+     "status": "OBSERVED",
+     "value": {
+      "azimut": "191.32°",
+      "elevacion": "77.05°"
+     },
+     "detail": "Sol Directo",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SOLAR",
+       "type": "SOLAR",
+       "source": "solar_engine",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-ENVIRONMENT-63510",
+     "domain": "ENVIRONMENT",
+     "subject": "Asoleamiento 15:00 COT",
+     "source": "cálculo solar de la corrida",
+     "status": "OBSERVED",
+     "value": {
+      "azimut": "257.85°",
+      "elevacion": "41.04°"
+     },
+     "detail": "Sombra (Orientación)",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SOLAR",
+       "type": "SOLAR",
+       "source": "solar_engine",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    }
+   ],
+   "blocking_conditions": [
+    "Inundación: sin dato de fuente",
+    "Riesgo no mitigable: sin dato de fuente"
+   ],
+   "decision": "INFORMACIÓN INSUFICIENTE",
+   "reasons": [
+    "Hay capas de entorno no evaluadas en esta corrida: se declaran como tales, no como «sin riesgo»."
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-ENTORNO",
+     "type": "ENVIRONMENT",
+     "source": "proveedor de mapas abierto",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "gate": "VALUATION_GATE",
+   "inputs": [
+    "autorización de identidad",
+    "autorización de contexto de mercado",
+    "método y vigencia"
+   ],
+   "observation_ids": [
+    "OBS-VALUATION-71974"
+   ],
+   "observations": [
+    {
+     "observation_id": "OBS-VALUATION-71974",
+     "domain": "VALUATION",
+     "subject": "Valor estimado y su banda",
+     "source": "lonja_baq_metodologia",
+     "status": "OBSERVED",
+     "value": {
+      "consolidado": 399500000,
+      "banda_baja": 373532500,
+      "banda_alta": 435455000,
+      "value_m2": 6800000
+     },
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-VALOR",
+       "type": "VALUATION",
+       "source": "metodología de mercado",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    }
+   ],
+   "blocking_conditions": [],
+   "decision": "INFORMACIÓN VERIFICADA",
+   "reasons": [
+    "La valoración está autorizada y se imprime con su método y vigencia."
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-VALOR",
+     "type": "VALUATION",
+     "source": "metodología de mercado",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  },
+  {
+   "gate": "EVIDENCE_GATE",
+   "inputs": [
+    "cadena de custodia",
+    "conteo de evidencias",
+    "gate de liberación"
+   ],
+   "observation_ids": [
+    "OBS-IDENTITY-88798",
+    "OBS-IDENTITY-59379",
+    "OBS-IDENTITY-56614",
+    "OBS-COUNTERPARTY-58410",
+    "OBS-COUNTERPARTY-06814",
+    "OBS-COUNTERPARTY-47037"
+   ],
+   "observations": [
+    {
+     "observation_id": "OBS-IDENTITY-88798",
+     "domain": "IDENTITY",
+     "subject": "Matrícula inmobiliaria",
+     "source": "SNR / Certificado de tradición y libertad",
+     "status": "OBSERVED",
+     "value": "040-646406",
+     "detail": "Resolución: nupre",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-IDENTIDAD",
+       "type": "IDENTITY",
+       "source": "SNR/CTL + catastro",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      },
+      {
+       "evidence_id": "EV-COORD",
+       "type": "GEOMETRY",
+       "source": "OFFICIAL_PREDIO",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-IDENTITY-59379",
+     "domain": "IDENTITY",
+     "subject": "NUPRE y número predial",
+     "source": "Catastro municipal",
+     "status": "OBSERVED",
+     "value": {
+      "nupre": "AFT0005BOHA",
+      "predial": "080010103000010040001908040002"
+     },
+     "detail": null,
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-IDENTIDAD",
+       "type": "IDENTITY",
+       "source": "SNR/CTL + catastro",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      },
+      {
+       "evidence_id": "EV-COORD",
+       "type": "GEOMETRY",
+       "source": "OFFICIAL_PREDIO",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-IDENTITY-56614",
+     "domain": "IDENTITY",
+     "subject": "Geometría oficial vs identidad canónica",
+     "source": "OFFICIAL_PREDIO",
+     "status": "OBSERVED",
+     "value": {
+      "binding": "VERIFIED",
+      "fields": [
+       "nupre",
+       "numero_predial"
+      ],
+      "scope": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación"
+     },
+     "detail": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-IDENTIDAD",
+       "type": "IDENTITY",
+       "source": "SNR/CTL + catastro",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      },
+      {
+       "evidence_id": "EV-COORD",
+       "type": "GEOMETRY",
+       "source": "OFFICIAL_PREDIO",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-58410",
+     "domain": "COUNTERPARTY",
+     "subject": "DURAN BACCA ALISSON · UN_CONSOLIDATED",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "TITULAR_ACTUAL"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-titular_actual-1045718995",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-06814",
+     "domain": "COUNTERPARTY",
+     "subject": "DURAN BACCA ALISSON · OFAC_SDN",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "TITULAR_ACTUAL"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-titular_actual-1045718995",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    },
+    {
+     "observation_id": "OBS-COUNTERPARTY-47037",
+     "domain": "COUNTERPARTY",
+     "subject": "DURAN BACCA ALISSON · UK_SANCTIONS_LIST",
+     "source": "Listas restrictivas aplicables",
+     "status": "NO_MATCH",
+     "value": [
+      "TITULAR_ACTUAL"
+     ],
+     "detail": "Consulta de listas ejecutada por el motor de screening",
+     "observed_at": "2026-09-28T19:46:50.194222+00:00",
+     "query": null,
+     "evidence_refs": [
+      {
+       "evidence_id": "EV-SCR-titular_actual-1045718995",
+       "type": "SCREENING",
+       "source": "screening",
+       "timestamp": "2026-09-28T19:46:50.194222+00:00",
+       "sha256": null,
+       "detail": null
+      }
+     ]
+    }
+   ],
+   "blocking_conditions": [],
+   "decision": "INFORMACIÓN VERIFICADA",
+   "reasons": [
+    "Cadena de evidencia sellada (9/9 evidencias)."
+   ],
+   "evidence_refs": [
+    {
+     "evidence_id": "EV-CADENA",
+     "type": "EVIDENCE",
+     "source": "cadena de custodia DICTUS",
+     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "sha256": null,
+     "detail": null
+    }
+   ]
+  }
+ ],
+ "disposition": {
+  "disposition": "PROCEDER CON CONDICIONES IDENTIFICADAS",
+  "reasons": [
+   "TITLE_GATE: El folio declara cargas vigentes: la operación es posible con condiciones registradas.",
+   "Cobertura parcial declarada — ENVIRONMENT_GATE: Inundación: sin dato de fuente"
+  ],
+  "by_gate": {
+   "IDENTITY_GATE": "INFORMACIÓN VERIFICADA",
+   "TITLE_GATE": "PROCEDER CON CONDICIONES",
+   "COUNTERPARTY_GATE": "SIN HALLAZGO MATERIAL EN ESTA FUENTE",
+   "URBAN_GATE": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "ENVIRONMENT_GATE": "INFORMACIÓN INSUFICIENTE",
+   "VALUATION_GATE": "INFORMACIÓN VERIFICADA",
+   "EVIDENCE_GATE": "INFORMACIÓN VERIFICADA"
+  },
+  "specific_dispositions": {
+   "IDENTITY_GATE": "INFORMACIÓN VERIFICADA",
+   "TITLE_GATE": "PROCEDER CON CONDICIONES",
+   "COUNTERPARTY_GATE": "SIN HALLAZGO MATERIAL EN ESTA FUENTE",
+   "URBAN_GATE": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "ENVIRONMENT_GATE": "INFORMACIÓN INSUFICIENTE",
+   "VALUATION_GATE": "INFORMACIÓN VERIFICADA",
+   "EVIDENCE_GATE": "INFORMACIÓN VERIFICADA"
+  },
+  "does_not_replace": "La disposición global ordena la lectura; NO sustituye las disposiciones por dominio ni la decisión humana.",
+  "coverage_notes": [
+   "ENVIRONMENT_GATE: Inundación: sin dato de fuente"
+  ],
+  "critical_gates": [
+   "IDENTITY_GATE",
+   "TITLE_GATE",
+   "EVIDENCE_GATE"
+  ]
+ },
+ "human_reviews": [
+  {
+   "review_required": true,
+   "reviewer": null,
+   "professional_role": null,
+   "reviewed_at": null,
+   "decision": null,
+   "comments": null,
+   "scope": "Expediente completo (6 páginas)",
+   "status": "PENDIENTE"
+  }
+ ],
+ "decision_matrix": [
+  {
+   "domain": "TITLE",
+   "source": "Certificado de tradición y libertad (SNR)",
+   "observation": {
+    "tipo": "GRAVAMEN: Hipoteca",
+    "anotacion": "007",
+    "partes": "DURAN BACCA ALISSON  CC# 1045718995X -> BANCO DE BOGOTA S.A.NIT# 8600029644",
+    "estado": "VIGENTE"
+   },
+   "observation_status": "OBSERVED",
+   "finding": "El folio registra una HIPOTECA VIGENTE inscrita el 22-01-2024 (anot. 007) a favor de BANCO DE BOGOTA S.A. En lenguaje claro: este inmueble esta comprometido como garantia de un credito que aun no ha sido cancelado. La hipoteca es una carga que pesa sobre la propiedad (no sobre la persona): sigue al inmueble aunque cambie de dueno hasta que se pague el credito y se cancele en el registro.",
+   "severity": "ALTO",
+   "confidence": "VERIFICADO",
+   "decision": "PROCEDER CON CONDICIONES",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "action": "Para vender, refinanciar o dar este inmueble en garantia, primero hay que gestionar el credito con BANCO DE BOGOTA S.A y tramitar la CANCELACION de la hipoteca ante la ORIP. No impide ser dueno, pero condiciona cualquier operacion sobre el apartamento hasta que el gravamen se levante.",
+   "risk_class": "PROPERTY_RISK",
+   "evidence_refs": [
+    "EV-CARGA-007"
+   ]
+  },
+  {
+   "domain": "IDENTITY",
+   "source": "SNR / Certificado de tradición y libertad",
+   "observation": "040-646406",
+   "observation_status": "OBSERVED",
+   "finding": "El expediente del mismo inmueble produjo valores distintos entre versiones para altura maxima: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    "EV-IDENTIDAD",
+    "EV-COORD"
+   ]
+  },
+  {
+   "domain": "IDENTITY",
+   "source": "SNR / Certificado de tradición y libertad",
+   "observation": "040-646406",
+   "observation_status": "OBSERVED",
+   "finding": "El expediente del mismo inmueble produjo valores distintos entre versiones para amenaza: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "affected_parties": [
+    "COMPRADOR",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA DE TÍTULO"
+   ],
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    "EV-IDENTIDAD",
+    "EV-COORD"
+   ]
+  },
+  {
+   "domain": "IDENTITY",
+   "source": "SNR / Certificado de tradición y libertad",
+   "observation": "040-646406",
+   "observation_status": "OBSERVED",
+   "finding": "El expediente del mismo inmueble produjo valores distintos entre versiones para coordenada: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA"
+   ],
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    "EV-IDENTIDAD",
+    "EV-COORD"
+   ]
+  },
+  {
+   "domain": "IDENTITY",
+   "source": "SNR / Certificado de tradición y libertad",
+   "observation": "040-646406",
+   "observation_status": "OBSERVED",
+   "finding": "El expediente del mismo inmueble produjo valores distintos entre versiones para titulares: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR",
+    "ASEGURADORA DE TÍTULO"
+   ],
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    "EV-IDENTIDAD",
+    "EV-COORD"
+   ]
+  },
+  {
+   "domain": "URBAN",
+   "source": "capa oficial del municipio consultada en vivo",
+   "observation": "Consolidacion",
+   "observation_status": "CONFLICT",
+   "finding": "El expediente del mismo inmueble produjo valores distintos entre versiones para tratamiento: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    "EV-URB-TRATAMIENTO"
+   ]
+  },
+  {
+   "domain": "IDENTITY",
+   "source": "SNR / Certificado de tradición y libertad",
+   "observation": "040-646406",
+   "observation_status": "OBSERVED",
+   "finding": "El expediente del mismo inmueble produjo valores distintos entre versiones para uso pot: es una inconsistencia de CALIDAD DE INFORMACIÓN, no un riesgo del inmueble.",
+   "severity": "ALTO",
+   "confidence": "REQUIERE RECONCILIACIÓN",
+   "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+   "affected_parties": [
+    "COMPRADOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "action": "Resolver con la ficha/polígono aplicable antes de usar la cifra.",
+   "risk_class": "INFORMATION_QUALITY_RISK",
+   "evidence_refs": [
+    "EV-IDENTIDAD",
+    "EV-COORD"
+   ]
+  },
+  {
+   "domain": "TITLE",
+   "source": "Certificado de tradición y libertad (SNR)",
+   "observation": {
+    "tipo": "GRAVAMEN: Hipoteca",
+    "anotacion": "007",
+    "partes": "DURAN BACCA ALISSON  CC# 1045718995X -> BANCO DE BOGOTA S.A.NIT# 8600029644",
+    "estado": "VIGENTE"
+   },
+   "observation_status": "OBSERVED",
+   "finding": "El folio registra una limitacion al dominio (anot. 008): 008 Fecha: 22-01-2024 Radicación: 2024-040-6-1412 Doc: ESCRITURA 2875 DEL 11-10-2023 NOTARIA PRIMERA DE BARRANQUILLAVALOR ACTO: $0 ESPECIFICACION: LIMITACION AL. En lenguaje claro: el inmueble tiene una restriccion legal (p. ej. afectacion a vivienda familiar) que exige el consentimiento de las personas protegidas para venderlo o traspasarlo.",
+   "severity": "MEDIO",
+   "confidence": "VERIFICADO",
+   "decision": "PROCEDER CON CONDICIONES",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "action": "Vender o aportar el inmueble requiere el levantamiento de la limitacion con la participacion de los titulares/beneficiarios ante notaria.",
+   "risk_class": "PROPERTY_RISK",
+   "evidence_refs": [
+    "EV-CARGA-007"
+   ]
+  },
+  {
+   "domain": "ENVIRONMENT",
+   "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+   "observation": "Media · polígono: intersecta el predio",
+   "observation_status": "OBSERVED",
+   "finding": "El motor geoespacial detectó intersección del predio con zonas de riesgo del POT de Barranquilla. Amenaza remoción en masa: Media | Áreas en riesgo: Medio | Clase de suelo: Urbano (01). El predio ubicado en (11.00606, -74.83757) presenta evaluación de Amenaza Media por remoción en masa y zonificación de Riesgo Medio según el Plan de Ordenamiento Territorial (POT) de Barranquilla.",
+   "severity": "MEDIO",
+   "confidence": "VERIFICADO",
+   "decision": "PROCEDER CON CONDICIONES",
+   "affected_parties": [
+    "COMPRADOR",
+    "VENDEDOR",
+    "INMOBILIARIA",
+    "BANCO / FINANCIADOR"
+   ],
+   "action": "Afectacion presente declarada por la fuente oficial: se recomienda verificacion puntual por profesional competente en caso de intervencion fisica del predio; impacto esperado menor en originacion. Amenaza de nivel MEDIA declarada por la fuente oficial. Amenaza de nivel MEDIO declarada por la fuente oficial. [RSK-SEV-1 v1.0.0]",
+   "risk_class": "PROPERTY_RISK",
+   "evidence_refs": [
+    "EV-RIESGO-AMENAZA_REMOCION_MASA"
+   ]
+  }
+ ],
+ "material_fact_gate": {
+  "gate": "MATERIAL_FACT_COMPLETENESS_GATE",
+  "result": "PASS",
+  "losses": [],
+  "checked_facts": 20,
+  "rule": "Si el estado conoce un hecho material y el ExecutiveDocumentModel lo pierde, la corrida FALLA."
+ },
+ "invariantes": []
+}

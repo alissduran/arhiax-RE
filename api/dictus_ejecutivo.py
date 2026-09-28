@@ -73,12 +73,12 @@ VIOLACIONES: List[str] = []
 
 # Arquitectura APROBADA del entregable: la página N dice, y solo, el título N.
 TITULOS_PAGINA = (
-    "RESUMEN DE DECISIÓN DEL INMUEBLE",
-    "TÍTULOS Y CONDICIONES JURÍDICAS",
-    "CONTRAPARTES Y PREPARACIÓN DE OPERACIÓN",
-    "POT, USO, EDIFICABILIDAD Y RIESGOS",
-    "ENTORNO, EQUIPAMIENTO Y ASOLEAMIENTO",
-    "IDENTIDAD Y VALOR",
+    "DECISIÓN DEL INMUEBLE",
+    "DECISIÓN JURÍDICA",
+    "DECISIÓN DE CONTRAPARTES",
+    "DECISIÓN TERRITORIAL Y URBANÍSTICA",
+    "ENTORNO, EQUIPAMIENTO, ASOLEAMIENTO Y SOMBRAS",
+    "IDENTIDAD, MERCADO Y VALOR",
 )
 
 ROTULO_CATEGORIA = {"SALUD": "Salud", "EDUCACION": "Educación", "COMERCIO": "Comercio",
@@ -975,28 +975,94 @@ def pagina1(c, modelo, secciones):
                       PanelLibre("bloque_general", 58.0, _dibujar_general, 1)])
 
     indicadores = secciones.get("indicadores") or []
-    y = emitir(c, y, [Titulo("ESTADO GENERAL", "cinco indicadores de decisión", 1, size=11.0),
-                      Tarjetas([{"titulo": n, "estado": e, "motivo": m,
-                                 "color": GOLD if e in (VERIFICADO, "DISPONIBLE") else INK_3}
-                                for n, e, m in indicadores],
-                               pagina=1, columnas=5, alto_tarjeta=74.0)])
+    decision = secciones.get("decision") or {}
+    _gates = decision.get("gate_decisions") or {}
 
-    y = emitir(c, y, [Titulo("HALLAZGOS DE LA OPERACIÓN",
-                             f"{len(hallazgos)} hallazgos de la operación condicionan "
-                             f"la transacción", 1, size=11.0),
-                      MatrizHallazgos(hallazgos, pagina=1, alto_fila=58.0)])
+    def _dib_dominios(cc, x, yy, a):
+        cw = (a - 5 * 5) / 6
+        for i, (nombre, estado, motivo) in enumerate(indicadores[:6]):
+            xx = x + i * (cw + 5)
+            panel(cc, xx, yy - 34, cw, 34, PAPER, HAIR)
+            txt(cc, xx + 5, yy - 12, str(nombre).upper(), FB, 6.6, TEXT_3)
+            # La banda usa la forma COMPACTA curada del estado: el término completo
+            # (p. ej. «SIN COINCIDENCIAS RELEVANTES») se imprime en su página.
+            _lbl = _ESTADOS_COMPACTOS.get(estado, _estado_legible(estado)[1])
+            _et, _sz = ajustar(cc, _lbl, FB, 6.6, cw - 10)
+            txt(cc, xx + 5, yy - 26, _et, FB, _sz,
+                _PAREJAS[_estado_legible(estado)[0]][2])
+
+    y = emitir(c, y, [Titulo("ESTADO POR DOMINIO",
+                             "identidad · títulos · contrapartes · territorio · entorno · "
+                             "valoración", 1, size=11.0),
+                      PanelLibre("dominios", 34.0, _dib_dominios, 1)], dy=5.0)
 
     y = emitir(c, y, [Titulo("COHERENCIA DE LA INFORMACIÓN",
                              "conflictos entre versiones del expediente", 1, size=11.0),
                       TarjetaCoherencia(coh, pagina=1)])
 
+    # El tablero es la matriz de decisión POR TEMA que ya deduplica el expediente.
+    # Antes se le sumaban además los hallazgos sueltos: el mismo hecho salía dos veces.
+    filas_tablero = list(decision.get("board") or [])
+    ALTURA_FILA = 46.0
+    if filas_tablero:
+        def _dib_tablero(cc, x, yy, a):
+            alto = 16.0 + 14.0 + len(filas_tablero) * ALTURA_FILA
+            panel(cc, x, yy - alto, a, alto, CARD, HAIR)
+            cols = (104.0, 232.0)
+            txt(cc, x + 6, yy - 11, "TEMA", FB, 7.0, TEXT_3)
+            txt(cc, x + 6 + cols[0] + 6, yy - 11, "HALLAZGO · QUÉ ENCONTRÓ DICTUS", FB,
+                7.0, TEXT_3)
+            txt(cc, x + 6 + cols[0] + cols[1] + 6, yy - 11, "DECISIÓN DICTUS", FB, 7.0,
+                TEXT_3)
+            rule(cc, x + 6, yy - 15, x + a - 6, yy - 15, HAIR)
+            for i, fila in enumerate(filas_tablero):
+                yt = yy - 30 - i * ALTURA_FILA
+                _tema, _ts = ajustar(cc, fila.get("tema"), FB, 8.2, cols[0] - 2)
+                txt(cc, x + 6, yt, _tema, FB, _ts, INK)
+                _sev = fila.get("severity")
+                _texto_enc = (f"{_sev} · {fila.get('encontro')}" if _sev else
+                              str(fila.get("encontro")))
+                _enc, _es = ajustar(cc, _texto_enc, F, 7.6, cols[1] - 4)
+                txt(cc, x + 6 + cols[0] + 6, yt, _enc, F, _es, TEXT_2)
+                # El chip lleva el término COMPLETO del vocabulario: nunca abreviado.
+                _dec = str(fila.get("decision") or "")
+                chip(cc, x + 6 + cols[0] + cols[1] + 6, yt - 3.5, _dec,
+                     {"NO UTILIZAR ESTE DATO COMO DEFINITIVO": "warn",
+                      "PROCEDER CON CONDICIONES": "warn",
+                      "REVISIÓN PROFESIONAL REQUERIDA": "err",
+                      "SIN HALLAZGO MATERIAL EN ESTA FUENTE": "ok",
+                      "INFORMACIÓN VERIFICADA": "ok",
+                      "EVIDENCIA EN CONFLICTO": "err",
+                      "NO EMITIR VALORACIÓN": "grey"}.get(_dec, "info"), 6.2, 13, 4)
+                # A quién afecta y qué hacer van en sus propias líneas a todo el ancho:
+                # antes se truncaban a «COMPRADOR, VE…» y se perdía el dato.
+                _afe, _af = ajustar(cc, "AFECTA A: " + str(
+                    fila.get("afecta") or "Impacto pendiente de clasificación"), F, 7.0,
+                    a - 12)
+                txt(cc, x + 6, yt - 14, _afe, F, _af, TEXT_3)
+                _acc_txt = str(fila.get("accion") or "Sin acción declarada")
+                _n_agr = int(fila.get("agregados") or 0)
+                _acc, _acs = ajustar(cc, "ACCIÓN: " + _acc_txt, F, 7.0, a - 12)
+                txt(cc, x + 6, yt - 26, _acc, F, _acs, TEXT_2)
+                if _n_agr:
+                    # La fila AGRUPA varios hallazgos del mismo tema: se declara en su
+                    # propia línea (al final de la acción se perdía al ajustar el texto).
+                    txt(cc, x + 6, yt - 37,
+                        f"+{_n_agr} hallazgo(s) del mismo tema con su propia acción: "
+                        f"página 2.", F, 6.8, TEXT_3)
+
+        y = emitir(c, y, [
+            Titulo("DECISION BOARD", "qué encontró DICTUS · qué decisión produce · a quién "
+                                     "afecta · qué hacer", 1, size=11.0),
+            PanelLibre("decision_board", 16.0 + 14.0 + len(filas_tablero) * ALTURA_FILA,
+                       _dib_tablero, 1)], dy=5.0)
+
+    disp = (decision.get("disposition") or {})
+    if disp.get("disposition"):
+        y = emitir(c, y, [Nota("DISPOSICIÓN GLOBAL: " + str(disp.get("disposition")) +
+                               " · " + " · ".join(str(m) for m in (disp.get("reasons") or [])[:2]),
+                               1)], dy=4.0)
     y = emitir(c, y, [SelloGlobal(modelo, pagina=1)], dy=0)
-    y = emitir(c, y, [Traza((modelo.get("evidence_manifest") or {}).get("fuentes") or [],
-                            str((modelo.get("document_identity") or {}).get("generated_at")
-                                or "")[:10],
-                            (modelo.get("evidence_manifest") or {}).get("estado"),
-                            int((modelo.get("evidence_manifest") or {}).get("evidence_count")
-                                or 0), pagina=1)], dy=0)
     if y < PIE_Y:
         VIOLACIONES.append(f"P1 desborda: quedan {y:.0f} pt (límite {PIE_Y:.0f})")
     pie(c, modelo, 1)
@@ -1054,6 +1120,25 @@ def pagina2(c, modelo, secciones):
         bloques.append(PanelLibre(f"carga_{g.get('anotacion')}", _fila_carga(g),
                                   _dib_carga, 2))
 
+    dec_titular, motivo_titular = _decision_de(secciones, "TITLE_GATE")
+    if dec_titular:
+        tipos = ", ".join(sorted({str(g.get("tipo")).split(":")[-1].strip()
+                                  for g in gravamenes if g.get("tipo")})) \
+            or "cargas vigentes declaradas"
+        bloques.append(_bloque_decision("DECISIÓN DICTUS · JURÍDICO", [
+            ("QUÉ REVISAMOS", f"Folio {legal.get('circulo') or '—'} · "
+                              f"{legal.get('anotaciones_total') or '—'} anotaciones · "
+                              f"titularidad y actos de adquisición"),
+            ("QUÉ ENCONTRAMOS", f"{len(gravamenes)} carga(s) vigente(s): {tipos}"),
+            ("QUÉ SIGNIFICA", "Existen condiciones registrales que deben resolverse antes "
+                              "de transferir o garantizar el inmueble."),
+            ("DECISIÓN DICTUS", f"{dec_titular} — {motivo_titular}"),
+            ("A QUIÉN AFECTA", ", ".join(_actores(
+                _actores_de_atributos([]) or ["COMPRADOR", "VENDEDOR", "INMOBILIARIA",
+                                              "BANCO / FINANCIADOR"]))),
+            ("QUÉ HACER", "Gestionar cada condición con su propio responsable —el acreedor "
+                          "en la hipoteca, los titulares o la autoridad en la afectación— y "
+                          "registrar el acto en el folio.")], 90.0))
     bloques.append(Nota("El detalle registral completo (todas las anotaciones, "
                         "cancelaciones y tracto) consta en el Anexo A.", 2))
 
@@ -1084,6 +1169,34 @@ def pagina2(c, modelo, secciones):
 
 
 # ── Página 3 · CONTRAPARTES Y PREPARACIÓN DE OPERACIÓN ───────────────────────
+def _actores_de_atributos(_):
+    """Compatibilidad de firma: la página 2 no recibe atributos en conflicto."""
+    return []
+
+
+def _decision_de(secciones, compuerta):
+    """(decisión, motivo) de una compuerta, listos para imprimir."""
+    dec = secciones.get("decision") or {}
+    return (dec.get("gate_decisions", {}).get(compuerta),
+            (dec.get("gate_reasons", {}).get(compuerta) or ""))
+
+
+def _bloque_decision(titulo, lineas, alto=None) -> "PanelLibre":
+    """Panel compacto «qué revisamos / qué encontramos / qué significa / decisión»."""
+    alto = alto or (14.0 + 11.0 * len(lineas))
+
+    def _dib(cc, x, yy, a):
+        panel(cc, x, yy - alto, a, alto, PAPER, HAIR)
+        banda(cc, x, yy - alto, 3, alto, GOLD)
+        txt(cc, x + 9, yy - 13, titulo, FB, 8.0, GOLD, esp=0.4)
+        for i, (etiqueta, texto) in enumerate(lineas):
+            yt = yy - 24 - i * 11.0
+            txt(cc, x + 9, yt, etiqueta, FB, 7.6, TEXT_3)
+            _t, _s = ajustar(cc, texto, F, 8.0, a - 150)
+            txt(cc, x + 140, yt, _t, F, _s, TEXT_2)
+    return PanelLibre("bloque_decision", alto, _dib, 2)
+
+
 def _encabezado_columnas(c, x, y, texto, ancho, size=7.0):
     partes = str(texto).split(" ")
     if len(partes) > 1 and c.stringWidth(texto, FB, size) > ancho - 4:
@@ -1184,8 +1297,23 @@ def pagina3(c, modelo, secciones):
              "sellar NO convierte en incompleto un screening que sí consultó las listas.",
              F, 8.0, TEXT_2, a - 18, leading=9.0)
 
-    y = emitir(c, y, [PanelLibre("resultado_match", 54.0, _dib_resultado, 3),
-                      PanelLibre("integridad_evidencia", 62.0, _dib_integridad, 3)])
+    dec_cp, motivo_cp = _decision_de(secciones, "COUNTERPARTY_GATE")
+    consultadas = sum(1 for o in ((secciones.get("decision") or {}).get("observations") or [])
+                      if o.get("domain") == "COUNTERPARTY" and o.get("status") == "NO_MATCH")
+    ejecutadas = sum(1 for o in ((secciones.get("decision") or {}).get("observations") or [])
+                     if o.get("domain") == "COUNTERPARTY")
+    y = emitir(c, y, [PanelLibre("resultado_match", 54.0, _dib_resultado, 3)])
+    if dec_cp:
+        y = emitir(c, y, [_bloque_decision("DECISIÓN DICTUS · CONTRAPARTES", [
+            ("QUÉ REVISAMOS", f"{ejecutadas} verificación(es) sobre "
+                              f"{ev.get('sujetos_revisados') or '—'} sujeto(s) contra "
+                              f"{ev.get('listas_consultadas') or '—'} lista(s)"),
+            ("QUÉ ENCONTRAMOS", f"{consultadas} consulta(s) ejecutada(s) sin coincidencia · "
+                               f"{ejecutadas - consultadas} sin resultado concluyente"),
+            ("QUÉ SIGNIFICA", "Una consulta NO ejecutada no es «sin coincidencias»: "
+                              "NOT_RUN ≠ NO_MATCH."),
+            ("DECISIÓN DICTUS", f"{dec_cp} — {motivo_cp}")], 70.0)], dy=5.0)
+    y = emitir(c, y, [PanelLibre("integridad_evidencia", 62.0, _dib_integridad, 3)])
 
     y = emitir(c, y, [Titulo("PREPARACIÓN PARA",
                              "no sustituye la decisión de terceros", 3, size=11.0)])
@@ -1243,24 +1371,31 @@ def pagina4(c, modelo, secciones):
             yt = yy - fila * (alto_fila + 3)
             panel(cc, xx, yt - alto_fila, cw, alto_fila, ERR_BG, ERR_BD)
             _titulo_celda, _tsz = ajustar(cc, str(at.get("titulo")).upper(), FB, 7.6,
-                                          cw - 104)
+                                          cw - 162)
             txt(cc, xx + 8, yt - 11, _titulo_celda, FB, _tsz, TEXT_3)
             actual = _v(at.get("actual"), "NO DISPONIBLE EN ESTA CORRIDA")
-            _t, _s = ajustar(cc, "ACTUAL: " + str(actual), FB, 8.2, cw - 104)
+            _t, _s = ajustar(cc, "ACTUAL: " + str(actual), FB, 8.2, cw - 162)
             txt(cc, xx + 8, yt - 21, _t, FB, _s, INK)
             historico = " / ".join(str(v)[:16] for v in (at.get("historico") or [])[:2]) \
                 or "sin valores históricos"
-            # Una sola línea con histórico y fuente: los cuatro datos del §16 caben en
-            # la celda sin invadir la fila siguiente.
+            # El chip ocupa la primera línea: la del HISTÓRICO dispone de TODO el ancho
+            # (antes se recortaba la fuente, que es dato del §16).
             _th, _sh = ajustar(cc, f"HISTÓRICO: {historico} · fuente: "
                                    f"{_v(at.get('fuente_actual'), 'no declarada')}",
-                               F, 7.2, cw - 104)
+                               F, 7.2, cw - 16)
             txt(cc, xx + 8, yt - 29, _th, F, _sh, TEXT_2)
-            chip(cc, xx + cw - 8 - 84, yt - 11, "CONFLICTO HISTÓRICO", "err", 6.2, 12, 5)
+            _dec_urb = (secciones.get("decision") or {}).get("gate_decisions", {}).get(
+                "URBAN_GATE")
+            chip(cc, xx + cw - 6 - 150, yt - 11,
+                 _dec_urb if _dec_urb in ("NO UTILIZAR ESTE DATO COMO DEFINITIVO",
+                                          "INFORMACIÓN VERIFICADA") else "CONFLICTO HISTÓRICO",
+                 "warn" if (_dec_urb or "").startswith("NO UTILIZAR") else "err", 6.2, 12, 5)
 
     if attrs:
+        _dec_u, _mot_u = _decision_de(secciones, "URBAN_GATE")
         y = emitir(c, y, [Titulo("COHERENCIA DE DATOS POR ATRIBUTO",
-                                 "actual · histórico · estado · fuente", 4, size=11.0),
+                                 f"actual · histórico · decisión: {_dec_u or 'no declarada'}",
+                                 4, size=11.0),
                           PanelLibre("coherencia_detallada",
                                      ((len(attrs) + 1) // 2) * 32.0, _dib_coherencia, 4)])
 
@@ -1333,7 +1468,7 @@ def pagina5(c, modelo, secciones):
         y = emitir(c, y, [Imagen(principal.get("path"),
                                  "Vista satelital del inmueble" if principal is sat
                                  else "Entorno urbano del inmueble",
-                                 pagina=5, alto=100.0, pie=pie_mapa)], dy=4.0)
+                                 pagina=5, alto=86.0, pie=pie_mapa)], dy=4.0)
     else:
         y = emitir(c, y, [Imagen(None, "Vista del inmueble", pagina=5, alto=60.0,
                                  pie="Ningún activo gráfico de esta corrida está "
@@ -1350,19 +1485,19 @@ def pagina5(c, modelo, secciones):
                f"{', '.join(entorno.get('fuentes_consultadas') or ['la fuente'])}",
                5, size=11.0),
         ListaPOI(entorno.get("categorias") or [], pagina=5, columnas=2,
-                 por_categoria=3, alto_categoria=94.0)], dy=5.0)
+                 por_categoria=3, alto_categoria=92.0)], dy=5.0)
 
-    ALTO_ACCESO = 48.0
+    ALTO_ACCESO = 42.0
 
     def _dib_acceso(cc, x, yy, a):
         panel(cc, x, yy - ALTO_ACCESO, a, ALTO_ACCESO, PAPER, HAIR)
-        txt(cc, x + 9, yy - 13, "ACCESIBILIDAD Y CONTEXTO", FB, 7.8, GOLD, esp=0.6)
+        txt(cc, x + 9, yy - 12, "ACCESIBILIDAD Y CONTEXTO", FB, 7.8, GOLD, esp=0.6)
         cw = (a - 3 * 8) / 4
         for i, (k, v) in enumerate((entorno.get("accesibilidad") or [])[:4]):
             xx = x + i * (cw + 8)
-            txt(cc, xx, yy - 27, str(k), F, 7.4, TEXT_3)
+            txt(cc, xx, yy - 24, str(k), F, 7.2, TEXT_3)
             _t, _s = ajustar(cc, _v(v), FB, 8.2, cw)
-            txt(cc, xx, yy - 39, _t, FB, _s, INK)
+            txt(cc, xx, yy - 35, _t, FB, _s, INK)
 
     y = emitir(c, y, [PanelLibre("accesibilidad", ALTO_ACCESO, _dib_acceso, 5)], dy=5.0)
 
@@ -1374,14 +1509,14 @@ def pagina5(c, modelo, secciones):
             cw = (a - 2 * 6) / 3
             for i, m in enumerate(momentos[:3]):
                 xx = x + i * (cw + 6)
-                panel(cc, xx, yy - 44, cw, 44, CARD)
-                txt(cc, xx + 8, yy - 17, _v(m.get("hora")), FB, 11.5, INK)
-                txt(cc, xx + 8, yy - 29, _corto(_v(m.get("estado")), 34), F, 8.0, TEXT_2)
-                txt(cc, xx + 8, yy - 39, f"azimut {_v(m.get('azimut'), '—')} · "
+                panel(cc, xx, yy - 40, cw, 40, CARD)
+                txt(cc, xx + 8, yy - 16, _v(m.get("hora")), FB, 11.0, INK)
+                txt(cc, xx + 8, yy - 27, _corto(_v(m.get("estado")), 34), F, 7.8, TEXT_2)
+                txt(cc, xx + 8, yy - 36, f"azimut {_v(m.get('azimut'), '—')} · "
                                          f"elevación {_v(m.get('elevacion'), '—')}",
-                    F, 7.4, TEXT_3)
+                    F, 7.2, TEXT_3)
 
-        y = emitir(c, y, [PanelLibre("momentos_solares", 44.0, _dib_momentos, 5)], dy=5.0)
+        y = emitir(c, y, [PanelLibre("momentos_solares", 40.0, _dib_momentos, 5)], dy=4.0)
 
         s09 = visual.get("shadow_09") or {}
         s15 = visual.get("shadow_15") or {}
@@ -1391,7 +1526,7 @@ def pagina5(c, modelo, secciones):
                                             ("shadow_15", s15, "Sombra de la corrida · 15:00")):
                 pidio = activo.get("status") == "AVAILABLE"
                 par.append(Imagen(activo.get("path") if pidio else None, etiqueta,
-                                  pagina=5, alto=108.0,
+                                  pagina=5, alto=86.0,
                                   pie=(f"{activo.get('source')} · generado "
                                        f"{str(activo.get('generated_at') or '')[:10]}"
                                        if pidio else str(activo.get("source") or ""))))
@@ -1403,11 +1538,42 @@ def pagina5(c, modelo, secciones):
                                    EsquemaSolar(dos[1], pagina=5, alto=112.0) if len(dos) > 1
                                    else None, pagina=5)], dy=5.0)
 
-    y = emitir(c, y, [Nota("Las sombras de 09:00 y 15:00 provienen de la simulación "
-                           "geométrica de ESTA corrida (huella y altura disponibles) y no "
-                           "sustituyen una inspección física. Si la altura requiere "
-                           "validación de coherencia (página 4), la sombra es referencial.",
-                           5)])
+    sombra = (secciones.get("decision") or {}).get("shadow_manifest") or {}
+
+    def _dib_sombra(cc, x, yy, a):
+        alto = 90.0
+        panel(cc, x, yy - alto, a, alto, CARD, HAIR)
+        banda(cc, x, yy - alto, 3, alto, WARN_FG if "PARTIAL" in str(sombra.get("status"))
+              else GOLD)
+        txt(cc, x + 9, yy - 13, "PROYECCIÓN DE SOMBRAS", FB, 8.4, INK)
+        chip(cc, x + 190, yy - 10, str(sombra.get("status") or "no declarada"),
+             "warn" if "PARTIAL" in str(sombra.get("status")) else "info", 7.0, 13, 5)
+        dep = sombra.get("dependencies") or {}
+        _dep_txt = (" · ".join(f"{k.replace('_status', '')}: {v}"
+                               for k, v in dep.items() if k != "shadow_model_status"))
+        _t, _s = ajustar(cc, "DEPENDENCIAS — " + _dep_txt, F, 7.6, a - 18)
+        txt(cc, x + 9, yy - 27, _t, F, _s, TEXT_2)
+        supuestos = (sombra.get("assumptions") or [])[:2]
+        for i, sup in enumerate(supuestos):
+            _t, _s = ajustar(cc, "SUPUESTO — " + str(sup), FO, 7.4, a - 18)
+            txt(cc, x + 9, yy - 39 - i * 10.0, _t, FO, _s, TEXT_3)
+        _t, _s = ajustar(cc, _v(sombra.get("nature"), ""), FO, 7.4, a - 18)
+        txt(cc, x + 9, yy - 61, _t, FO, _s, TEXT_3)
+        txt(cc, x + 9, yy - 74, f"Simulación {sombra.get('simulation_id') or '—'} · "
+                                f"fecha {sombra.get('date') or 'no declarada'} · "
+                                f"modelo solar: {_corto(str(sombra.get('solar_model') or '—'), 46)}",
+            F, 7.2, TEXT_3)
+        _h = (sombra.get("height_concepts") or {})
+        txt(cc, x + 9, yy - 86,
+            f"Altura normativa (POT): {_v(_h.get('REGULATORY_HEIGHT'), 'no declarada')} · "
+            f"altura física del edificio: {_v(_h.get('BUILDING_PHYSICAL_HEIGHT'), 'no declarada')} · "
+            f"altura usada por el modelo: {_v(_h.get('MODEL_ASSUMED_HEIGHT'), 'no declarada')}",
+            F, 7.2, TEXT_3)
+
+    y = emitir(c, y, [PanelLibre("proyeccion_sombras", 90.0, _dib_sombra, 5)], dy=4.0)
+    if not sombra.get("assumptions"):
+        y = emitir(c, y, [Nota("Las sombras provienen de una SIMULACIÓN GEOMÉTRICA de esta "
+                               "corrida y no sustituyen una inspección física.", 5)])
     ev = modelo.get("evidence_manifest") or {}
     y = emitir(c, y, [Traza(["Proveedor de mapas abierto", "Fotografía satelital",
                              "Cálculo solar"],
@@ -1435,11 +1601,14 @@ def pagina6(c, modelo, secciones):
                             alto_min=24.0)])
 
     def _dib_ident(cc, x, yy, a):
-        panel(cc, x, yy - 40, a, 40, OK_BG if identidad.get("identidad_estado") == "VERIFICADA"
+        panel(cc, x, yy - 50, a, 50, OK_BG if identidad.get("identidad_estado") == "VERIFICADA"
               else WARN_BG, HAIR)
         txt(cc, x + 9, yy - 15, f"Identidad registral y catastral: "
                                 f"{_v(identidad.get('identidad_estado'))}", FB, 9.4, INK)
         txt(cc, x + 9, yy - 28, _v(identidad.get("identidad_detalle")), F, 8.4, TEXT_2)
+        _di, _mi = _decision_de(secciones, "IDENTITY_GATE")
+        _t, _s = ajustar(cc, "DECISIÓN DICTUS: " + _v(_di, "no declarada"), FB, 8.2, a - 18)
+        txt(cc, x + 9, yy - 41, _t, FB, _s, INK)
 
     def _dib_geom(cc, x, yy, a):
         panel(cc, x, yy - 56, a, 56, PAPER, HAIR)
@@ -1449,7 +1618,7 @@ def pagina6(c, modelo, secciones):
         for i, ln in enumerate(ls):
             txt(cc, x + 9, yy - 29 - i * 9.4, ln, F, 8.4, TEXT_2)
 
-    y = emitir(c, y, [PanelLibre("identidad_estado", 40.0, _dib_ident, 6),
+    y = emitir(c, y, [PanelLibre("identidad_estado", 50.0, _dib_ident, 6),
                       PanelLibre("geometria", 56.0, _dib_geom, 6)])
 
     aut = bool(valor.get("autorizado"))
@@ -1467,7 +1636,8 @@ def pagina6(c, modelo, secciones):
                     f"Valor/m² {_v(valor.get('valor_m2'), '—')} · "
                     f"Área {_v(valor.get('area'), '—')}", F, 8.4, 248)
             txt(cc, x + 11, yy - 58, _res, F, _rsz, TEXT_2)
-            txt(cc, x + 11, yy - 70, f"Vigencia: {_v(valor.get('vigencia'), 'no declarada')}",
+            txt(cc, x + 11, yy - 70, f"Vigencia: {_v(valor.get('vigencia'), 'no declarada')} · "
+                                     f"DECISIÓN DICTUS: {_v(valor.get('decision'), 'no declarada')}",
                 F, 8.0, TEXT_3)
             for i, (k, v) in enumerate([("Sector de mercado", valor.get("sector")),
                                         ("Método principal", valor.get("metodologia"))]):
@@ -1480,27 +1650,37 @@ def pagina6(c, modelo, secciones):
             y = emitir(c, y, [Nota("Tasa y parámetros: " + str(valor["tasa_fuente"]), 6)])
     else:
         blockers = valor.get("blockers") or []
+        _dec = (secciones.get("decision") or {})
+        _gd = (_dec.get("gate_decisions") or {})
+        _gr = (_dec.get("gate_reasons") or {})
+        _decision_val = str(_gd.get("VALUATION_GATE") or "NO EMITIR VALORACIÓN")
+        _motivo_val = str(_gr.get("VALUATION_GATE") or "")
+        _alto_blockers = max(80.0, 62.0 + len(blockers) * 12.0)
+        _texto_dec_val = "DECISIÓN DICTUS: " + _decision_val
+
+        def _dib_blockers(cc, x, yy, a):
+            panel(cc, x, yy - _alto_blockers, a, _alto_blockers, PAPER, HAIR)
+            caja_estado(cc, x + 11, yy - 14, 190, "NO_DISPONIBLE", 7.4, 14)
+            txt(cc, x + 210, yy - 13, "VALORACIÓN NO DISPONIBLE", FB, 9.0, WARN_FG)
+            # §28/§43 · la DECISIÓN de la compuerta, con su motivo: una valoración
+            # bloqueada no se convierte después en «el valor fue calculado».
+            _dch, _dsc = ajustar(cc, _texto_dec_val, FB, 7.6, a - 26)
+            chip(cc, x + 11, yy - 32, _dch, "grey", _dsc, 13, 5)
+            txt(cc, x + 11, yy - 48,
+                _v(valor.get("motivo"),
+                   "La corrida no declara por qué no se autorizó la valoración: "
+                   "requiere revisión."), FB, 9.0, WARN_FG)
+            if _motivo_val:
+                txt(cc, x + 11, yy - 60,
+                    _v(_corto(_motivo_val, 150)), F, 7.4, TEXT_3)
+            for i, b in enumerate(blockers):
+                txt(cc, x + 11, yy - 74 - i * 12.0, "· " + str(b), F, 8.4, TEXT_2)
+
         y = emitir(c, y, [Titulo("VALOR ESTIMADO",
                                  "qué falta para habilitar la valoración · no se "
                                  "imprime ningún monto, ni $0", 6, size=11.0)])
-        y = emitir(c, y, [PanelLibre("blockers", max(52.0, 34.0 + len(blockers) * 12.0),
-                                     lambda cc, x, yy, a: (
-                                         panel(cc, x, yy - max(52.0, 34.0 + len(blockers) * 12.0),
-                                               a, max(52.0, 34.0 + len(blockers) * 12.0),
-                                               PAPER, HAIR),
-                                         caja_estado(cc, x + 11, yy - 14, 190,
-                                                     "NO_DISPONIBLE", 7.4, 14),
-                                         txt(cc, x + 210, yy - 13,
-                                             "VALORACIÓN NO DISPONIBLE", FB, 9.0, WARN_FG),
-                                         txt(cc, x + 11, yy - 30,
-                                             _v(valor.get("motivo"),
-                                                "La corrida no declara por qué no se "
-                                                "autorizó la valoración: requiere revisión."),
-                                             FB, 9.0, WARN_FG),
-                                         [txt(cc, x + 11, yy - 44 - i * 12.0, "· " + b,
-                                              F, 8.4, TEXT_2)
-                                          for i, b in enumerate(blockers)]
-                                     ), 6)])
+        y = emitir(c, y, [PanelLibre("blockers", _alto_blockers + 12.0,
+                                     _dib_blockers, 6)])
 
     y = emitir(c, y, [Nota("NORMA · CONCEPTO TÉCNICO · VALIDACIÓN EXPERTA: DICTUS prepara y "
                            "señala; el valor y su interpretación los firma el profesional "

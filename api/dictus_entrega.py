@@ -44,12 +44,12 @@ ARCHIVO_RUN_STATE = "DICTUS_RUN_STATE_{folio}.json"
 # Arquitectura APROBADA del documento ejecutivo (§4). El orden es el contrato:
 # la página N del PDF debe contener, y solo, el título N.
 TITULOS_APROBADOS = (
-    "RESUMEN DE DECISIÓN DEL INMUEBLE",
-    "TÍTULOS Y CONDICIONES JURÍDICAS",
-    "CONTRAPARTES Y PREPARACIÓN DE OPERACIÓN",
-    "POT, USO, EDIFICABILIDAD Y RIESGOS",
-    "ENTORNO, EQUIPAMIENTO Y ASOLEAMIENTO",
-    "IDENTIDAD Y VALOR",
+    "DECISIÓN DEL INMUEBLE",
+    "DECISIÓN JURÍDICA",
+    "DECISIÓN DE CONTRAPARTES",
+    "DECISIÓN TERRITORIAL Y URBANÍSTICA",
+    "ENTORNO, EQUIPAMIENTO, ASOLEAMIENTO Y SOMBRAS",
+    "IDENTIDAD, MERCADO Y VALOR",
 )
 
 # Encabezados del dictamen técnico legacy (§5): si alguno aparece como capítulo en
@@ -88,10 +88,12 @@ PATRONES_PROHIBIDOS = (
 
 # Contenido mínimo exigido por página (§14). Se comprueba sobre el texto extraído.
 CONTENIDO_MINIMO = {
-    1: ("RESUMEN DE DECISIÓN", "hallazgos"),
+    # §14 · 2.0D: la página 1 es un TABLERO DE DECISIÓN, no un resumen de datos.
+    1: ("DECISIÓN DEL INMUEBLE", "hallazgo", "DECISIÓN DICTUS", "AFECTA A",
+        "DISPOSICIÓN GLOBAL"),
     3: ("ONU", "OFAC SDN", "UK Sanctions List"),
     5: ("Salud", "Educación"),
-    6: ("Valor estimado",),
+    6: ("Valor estimado", "Mercado"),
 }
 
 

@@ -1,0 +1,58 @@
+{
+ "grammar_version": "dictus-decision-grammar/1.0.0",
+ "simulation_id": "SHW-473b9bebf24a",
+ "generated_at": "2026-09-28T19:46:50.194222+00:00",
+ "date": null,
+ "location": {
+  "lat": 11.006055954316363,
+  "lon": -74.8375696549899
+ },
+ "solar_model": "solar_engine.get_solar_position (posición solar geocéntrica)",
+ "height_concepts": {
+  "REGULATORY_HEIGHT": "11",
+  "BUILDING_PHYSICAL_HEIGHT": null,
+  "MODEL_ASSUMED_HEIGHT": "11",
+  "model_assumed_source": "altura normativa del POT usada como referencia"
+ },
+ "orientation_source": "azimut de fachada por defecto del producto (SUPUESTO)",
+ "physical_height_source": null,
+ "geometry_source": null,
+ "times": [
+  {
+   "time": "09:00 COT",
+   "azimuth": "104.05°",
+   "elevation": "45.89°",
+   "incidence": "Sol Directo"
+  },
+  {
+   "time": "12:00 COT",
+   "azimuth": "191.32°",
+   "elevation": "77.05°",
+   "incidence": "Sol Directo"
+  },
+  {
+   "time": "15:00 COT",
+   "azimuth": "257.85°",
+   "elevation": "41.04°",
+   "incidence": "Sombra (Orientación)"
+  }
+ ],
+ "assumptions": [
+  "La corrida no declaró la fuente de la altura física del edificio.",
+  "La altura normativa del POT está en CONFLICTO HISTÓRICO entre versiones del mismo expediente.",
+  "La altura usada por el modelo NO es la altura física construida: es la referencia disponible en la corrida.",
+  "La orientación de fachada es un SUPUESTO del producto (azimut por defecto), no una medición de la unidad.",
+  "La huella modelada corresponde al predio/edificio oficial; no a la posición del apartamento dentro de la edificación."
+ ],
+ "dependencies": {
+  "solar_position_status": "VERIFIED",
+  "building_height_status": "CONFLICT",
+  "geometry_status": "NOT_EVALUATED",
+  "orientation_status": "ASSUMED",
+  "shadow_model_status": "PARTIAL / ORIENTATIVE"
+ },
+ "status": "PARTIAL / ORIENTATIVE",
+ "nature": "SIMULACIÓN GEOMÉTRICA basada en posición solar, orientación y geometría disponibles. No sustituye una inspección física ni un estudio especializado de asoleamiento.",
+ "assets": [],
+ "result_hash": "5be70fae0128ff41fcdd0a5a3283efbb98e77a2f7ba34523e9d9cbb6c1b32e2d"
+}

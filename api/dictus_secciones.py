@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
+import dictus_decision as dd
 import dictus_estado as dse
 
 LISTAS_FALLBACK = ("Lista Consolidada ONU", "OFAC SDN", "UK Sanctions List")
@@ -63,7 +64,7 @@ AFECTADOS_POR_ATRIBUTO = {
     "coordenada": ["COMPRADOR", "INMOBILIARIA"],
     "titulares": ["COMPRADOR", "INMOBILIARIA", "BANCO / FINANCIADOR",
                   "ASEGURADORA DE TÍTULO"],
-    "amenaza": ["COMPRADOR", "BANCO / FINANCIADOR", "ASEGURADORA"],
+    "amenaza": ["COMPRADOR", "BANCO / FINANCIADOR", "ASEGURADORA DE TÍTULO"],
 }
 
 # Acción jurídica POR TIPO de carga (§12). No se reutiliza la del acreedor en una
@@ -109,6 +110,16 @@ def _dato(x, hueco=None):
 
 def _pesos(v):
     return f"$ {int(v):,}".replace(",", ".") if v else None
+
+
+def _actores_de_atributos(atributos) -> List[str]:
+    """Actores afectados por los atributos en conflicto, sin duplicados ni anidamiento."""
+    salida: List[str] = []
+    for a in (atributos or []):
+        for actor in AFECTADOS_POR_ATRIBUTO.get(a.get("atributo"), []):
+            if actor not in salida:
+                salida.append(actor)
+    return salida
 
 
 def _coherencia_de(atributo: str, filas: List[Dict[str, Any]]) -> Optional[str]:
@@ -392,6 +403,59 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
          f"No autorizada: {_v(val.get('motivo_no_aplica'), 'se declara el blocker, sin cifras')}"),
     ]
 
+    # ── 2.0D · cadena de decisión (ya construida en el modelo) ───────────────
+    disposicion_ = (modelo.get("disposition") or {})
+    compuertas = {g.get("gate"): g for g in (modelo.get("decision_gates") or [])}
+    matriz = list(modelo.get("decision_matrix") or [])
+    TEMA = {"IDENTITY": "IDENTIDAD", "TITLE": "TÍTULO", "COUNTERPARTY": "CONTRAPARTES",
+            "URBAN": "POT / URBANISMO", "ENVIRONMENT": "ENTORNO Y RIESGOS",
+            "VALUATION": "VALORACIÓN"}
+
+    def _tema(fila):
+        return TEMA.get(str(fila.get("domain") or "").upper(), str(fila.get("domain") or "—"))
+
+    tablero = []
+    for fila in matriz:
+        if fila.get("risk_class") == "INFORMATION_QUALITY_RISK":
+            continue
+        tablero.append({"tema": _tema(fila),
+                        "severity": fila.get("severity"),
+                        "encontro": fila.get("observation") if isinstance(
+                            fila.get("observation"), str) else fila.get("finding"),
+                        "decision": fila.get("decision"),
+                        "afecta": ", ".join(fila.get("affected_parties") or []) or
+                        "Impacto pendiente de clasificación",
+                        "accion": fila.get("action")})
+    if coherencia_attrs:
+        _coh = [f for f in findings if str(f.get("codigo") or "").upper() == "H-COH"]
+        tablero.append({
+            "tema": "POT / CALIDAD DE DATOS",
+            "severity": next((f.get("severity") for f in _coh if f.get("severity")), None),
+            "encontro": (f"{len(coherencia_attrs)} atributo(s) con resultados incompatibles "
+                         f"entre versiones del expediente"),
+            "decision": dd.NO_USAR_COMO_DEFINITIVO,
+            "afecta": ", ".join(_actores_de_atributos(coherencia_attrs)) or
+            "COMPRADOR, INMOBILIARIA, BANCO / FINANCIADOR",
+            "accion": "Reconciliar con la ficha/polígono POT aplicable antes de usar la cifra."})
+    # los temas no se repiten: el tablero resume la decisión por tema. Si un tema tiene
+    # varios hallazgos, la fila declara CUÁNTOS agrupa (nunca los oculta sin decirlo).
+    _vistos = {}
+    tablero_unico = []
+    for fila in tablero:
+        clave = (fila["tema"], fila["decision"])
+        if clave in _vistos:
+            _vistos[clave]["agregados"] = _vistos[clave].get("agregados", 0) + 1
+            continue
+        fila["agregados"] = 0
+        _vistos[clave] = fila
+        tablero_unico.append(fila)
+
+    indicadores_6 = list(indicadores) + [
+        ("Entorno", (dse.VERIFICADO if (compuertas.get(dd.ENVIRONMENT_GATE) or {}).get("decision")
+                     == dd.INFORMACION_VERIFICADA else dse.REQUIERE_VALIDACION),
+         f"{_v((poi.get('item_count')), '0')} equipamiento(s) en el radio analizado · "
+         f"asoleamiento {'declarado' if (solar.get('momentos')) else 'no declarado'}.")]
+
     listas = _listas_de_screening(scr)
     area_txt = (f"{urb.get('area'):.2f}".rstrip("0").rstrip(".") + " m²"
                 if urb.get("area") else None)
@@ -463,6 +527,23 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
         metodo_txt = _dato(val.get("motivo_no_aplica"), "Metodología no aplicada")
 
     return {
+        "decision": {
+            "observations": list(modelo.get("observations") or []),
+            "findings": list(modelo.get("findings") or []),
+            "decision_gates": list(modelo.get("decision_gates") or []),
+            "disposition": disposicion_,
+            "recommendations": list(modelo.get("recommendations") or []),
+            "human_review": (modelo.get("human_reviews") or [{}])[0],
+            "shadow_manifest": (modelo.get("shadow_manifest") or {}),
+            "visual_assets": list(modelo.get("visual_assets") or []),
+            "matrix": matriz,
+            "board": tablero_unico[:5],
+            "gate_decisions": {g: (c.get("decision")) for g, c in compuertas.items()},
+            "gate_reasons": {g: (c.get("reasons") or [None])[0] for g, c in compuertas.items()},
+            "gate_blocking": {g: list(c.get("blocking_conditions") or [])
+                              for g, c in compuertas.items()},
+        },
+        "indicadores": indicadores_6,
         "hallazgos": operacion,
         "coherencia": [f for f in findings if str(f.get("codigo") or "").upper() == "H-COH"],
         "coherencia_attrs": coherencia_attrs,
@@ -657,5 +738,7 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
             "metodologia_version": mc.get("market_methodology_version"),
             "blockers": blockers,
             "motivo": val.get("motivo_no_aplica"),
+            "decision": ((compuertas.get(dd.VALUATION_GATE) or {}).get("decision")),
+            "identidad_decision": ((compuertas.get(dd.IDENTITY_GATE) or {}).get("decision")),
         },
     }

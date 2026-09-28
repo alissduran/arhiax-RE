@@ -325,8 +325,10 @@ class TestSinPerdidaMaterial(unittest.TestCase):
 
     def test_pagina1_separa_operacion_de_coherencia(self):
         p1 = self.paginas[0]
-        self.assertIn("HALLAZGOS DE LA OPERACIÓN", p1)
-        self.assertIn("hallazgos de la operación", p1)
+        # 2.0D: la separación se hace en el tablero de decisión por TEMA.
+        self.assertIn("DECISION BOARD", p1)
+        self.assertIn("TEMA", p1)
+        self.assertIn("DECISIÓN DICTUS", p1)
         self.assertEqual(p1.count("H-COH"), 0,
                          "los conflictos de datos no se imprimen como hallazgos ALTO")
         self.assertIn("6 atributo(s) requieren reconciliación histórica", p1)
@@ -340,9 +342,12 @@ class TestSinPerdidaMaterial(unittest.TestCase):
         self.assertIn("Anot. 006", p2)
         # Hipoteca: gestión con el acreedor y cancelación.
         self.assertRegex(p2, r"ACCIÓN ESPECÍFICA:.*acreedor")
-        # Limitación: su acción NO se resuelve con el acreedor hipotecario.
+        # Limitación: su acción NO se resuelve con el acreedor hipotecario. El bloque de
+        # decisión (2.0D) va después del detalle registral: la acción se corta ahí.
         bloque = p2.split("LIMITACION: Afectacion Vivienda")[-1]
-        accion = bloque.split("ACCIÓN ESPECÍFICA:")[1].split("El detalle registral")[0]
+        accion = (bloque.split("ACCIÓN ESPECÍFICA:")[1]
+                  .split("DECISIÓN DICTUS · JURÍDICO")[0]
+                  .split("El detalle registral")[0])
         self.assertTrue(accion.strip())
         self.assertNotIn("acreedor", accion.lower(),
                          f"la afectación no depende del acreedor: {accion[:120]}")

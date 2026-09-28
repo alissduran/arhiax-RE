@@ -183,16 +183,18 @@ class TestPdfEntregado(unittest.TestCase):
 
     def test_pagina1_resumen_hallazgos_y_sello(self):
         p1 = " ".join(self.paginas[0].split())
-        self.assertIn("RESUMEN DE DECISIÓN", p1)
-        self.assertIn("hallazgos", p1)
+        self.assertIn("DECISIÓN DEL INMUEBLE", p1)
         self.assertIn("INFORMACIÓN GENERAL", p1)
-        self.assertIn("ESTADO GENERAL", p1)
+        self.assertIn("ESTADO POR DOMINIO", p1)
         self.assertIn("SELLO GLOBAL", p1)
         for campo in ("Dirección", "Matrícula", "Ciudad", "Barrio", "Área", "Uso",
                       "Régimen", "Valor estimado"):
             self.assertIn(campo.upper(), p1.upper(), f"falta el campo «{campo}» en el bloque A")
-        for columna in ("SEVERIDAD", "HALLAZGO", "AFECTA A", "ACCIÓN"):
-            self.assertIn(columna, p1, f"falta la columna «{columna}» de hallazgos")
+        # 2.0D: la página 1 es un TABLERO DE DECISIÓN, no un resumen de datos.
+        self.assertIn("DECISION BOARD", p1)
+        for columna in ("TEMA", "HALLAZGO", "DECISIÓN DICTUS", "AFECTA A", "ACCIÓN"):
+            self.assertIn(columna, p1, f"falta la columna «{columna}» del tablero")
+        self.assertIn("DISPOSICIÓN GLOBAL", p1)
         self.assertIn("DICTUS_MASTER_HASH", p1)
 
     def test_pagina3_listas_consultadas_por_su_nombre(self):
@@ -289,7 +291,8 @@ class TestAsercionesDuras(unittest.TestCase):
             entrega.auditar_ejecutivo(ruta)
         mensaje = str(ctx.exception)
         self.assertIn("Naturaleza", mensaje)
-        self.assertIn("RESUMEN DE DECISIÓN", mensaje)
+        # El rechazo nombra el título vigente (2.0D) que falta en la página 1.
+        self.assertIn("DECISIÓN DEL INMUEBLE", mensaje)
 
     def test_un_ejecutivo_con_mas_de_seis_paginas_es_rechazado(self):
         from pypdf import PdfReader, PdfWriter

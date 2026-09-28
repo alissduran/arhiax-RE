@@ -59,6 +59,22 @@ def _es_ausencia(valor) -> bool:
 
 
 # ── catálogo de hechos materiales (§2) ───────────────────────────────────────
+def _activo_en_modelo(modelo, nombre):
+    """Estado de un activo visual en el modelo (2.0D: el modelo lleva una LISTA)."""
+    activos = modelo.get("visual_assets") or []
+    if isinstance(activos, dict):
+        activos = list(((activos.get("assets") or {}) or {}).values())
+    clave = str(nombre).replace("_", "").upper()
+    for a in activos:
+        if not isinstance(a, dict):
+            continue
+        etiquetas = [a.get("asset_id"), a.get("type"), a.get("name"), a.get("id")]
+        if any(str(e).replace("_", "").replace("-", "").upper().find(clave) >= 0
+               for e in etiquetas if e):
+            return a.get("status")
+    return None
+
+
 def _f(campo, motor, rs, modelo, aguja, fuente):
     return {"campo": campo, "motor": motor, "rs": rs, "modelo": modelo,
             "aguja": aguja, "fuente": fuente}
@@ -173,12 +189,12 @@ def catalogo(ctx, rs, modelo):
         _f("Mapa de POI",
            ((rs.get("visual_assets") or {}).get("assets") or {}).get("poi_map", {}).get("status"),
            ((rs.get("visual_assets") or {}).get("assets") or {}).get("poi_map", {}).get("status"),
-           ((modelo.get("visual_assets") or {}).get("assets") or {}).get("poi_map", {}).get("status"),
+           _activo_en_modelo(modelo, "poi_map"),
            "ENTORNO URBANO DEL INMUEBLE", "generate_maps (misma corrida)"),
         _f("Mapa satelital",
            (rs.get("visual_assets") or {}).get("assets", {}).get("satellite_map", {}).get("status"),
            ((rs.get("visual_assets") or {}).get("assets") or {}).get("satellite_map", {}).get("status"),
-           ((modelo.get("visual_assets") or {}).get("assets") or {}).get("satellite_map", {}).get("status"),
+           _activo_en_modelo(modelo, "satellite_map"),
            "VISTA SATELITAL DEL INMUEBLE",
            "insumo del caso (esta corrida no lo aportó)"),
         _f("Asoleamiento", None,
@@ -188,7 +204,7 @@ def catalogo(ctx, rs, modelo):
         _f("Sombras 09/15",
            ((rs.get("visual_assets") or {}).get("assets") or {}).get("shadow_09", {}).get("status"),
            ((rs.get("visual_assets") or {}).get("assets") or {}).get("shadow_09", {}).get("status"),
-           ((modelo.get("visual_assets") or {}).get("assets") or {}).get("shadow_09", {}).get("status"),
+           _activo_en_modelo(modelo, "shadow_09"),
            "SOMBRA DE LA CORRIDA", "shadow_render (misma corrida)"),
         _f("Valor / valor central", res.get("consolidado"),
            (rs.get("valuation_state") or {}).get("consolidado"),
@@ -381,6 +397,90 @@ def main(argv=None) -> int:
         json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")
     (salida / entrega.ARCHIVO_RUN_STATE.format(folio=args.folio)).write_text(
         json.dumps(rs, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+
+    # ── DICTUS 2.0D · artefactos de la cadena de decisión (§44) ───────────────
+    import dictus_decision as dd
+
+    gates = list(modelo.get("decision_gates") or [])
+    obs = list(modelo.get("observations") or [])
+    fnd = list(modelo.get("decision_findings") or [])
+    rec = list(modelo.get("recommendations") or [])
+    sombras = modelo.get("shadow_manifest") or {}
+    activos = list(modelo.get("visual_assets") or [])
+    gate_material = dd.material_fact_gate(rs, modelo)
+
+    # Invariantes de la gramática: se comprueban, no se afirman.
+    invariantes = []
+    _fuentes_caidas = {o.get("subject") for o in obs
+                       if o.get("status") == dd.FUENTE_NO_DISPONIBLE_OBS}
+    for g in gates:
+        if g.get("decision") == dd.SIN_HALLAZGO_EN_FUENTE and _fuentes_caidas:
+            invariantes.append(
+                f"{g.get('gate')} declara SIN HALLAZGO con fuentes no disponibles: "
+                f"{sorted(_fuentes_caidas)}")
+        if not g.get("reasons"):
+            invariantes.append(f"compuerta {g.get('gate')} decide sin motivos")
+    for f in fnd:
+        if not f.get("decision"):
+            invariantes.append(f"hallazgo {f.get('finding_id')} sin decisión")
+        if not (f.get("meaning") and f.get("impact")):
+            invariantes.append(f"hallazgo {f.get('finding_id')} sin significado/impacto")
+        if not f.get("affected_parties"):
+            invariantes.append(f"hallazgo {f.get('finding_id')} sin afectados")
+    for r in rec:
+        if not r.get("evidence_refs"):
+            invariantes.append(f"recomendación sin evidencia: {str(r.get('action'))[:40]}")
+    _sello = str((modelo.get("evidence_manifest") or {}).get("estado") or "")
+    _texto_pdf = " ".join((p.extract_text() or "") for p in PdfReader(str(ejecutivo)).pages)
+    if _sello != "SELLADO" and re.search(r"evidencia sellada(?! )", _texto_pdf, re.I):
+        invariantes.append("el documento afirma «evidencia sellada» con sello "
+                           f"{_sello or 'no declarado'}")
+
+    decision_doc = {
+        "grammar_version": dd.GRAMMAR_VERSION,
+        "master_hash": modelo["master_hash"],
+        "dictus_id": modelo["document_identity"]["dictus_id"],
+        "observations": obs,
+        "findings": fnd,
+        "recommendations": rec,
+        "decision_gates": gates,
+        "disposition": modelo.get("disposition") or {},
+        "human_reviews": modelo.get("human_reviews") or [],
+        "decision_matrix": modelo.get("decision_matrix") or [],
+        "material_fact_gate": gate_material,
+        "invariantes": invariantes,
+    }
+    (salida / f"DICTUS_DECISION_MODEL_{args.folio}.json").write_text(
+        json.dumps(decision_doc, ensure_ascii=False, indent=1), encoding="utf-8")
+    (salida / f"DICTUS_OBSERVATIONS_{args.folio}.json").write_text(
+        json.dumps(obs, ensure_ascii=False, indent=1), encoding="utf-8")
+    (salida / f"DICTUS_FINDINGS_{args.folio}.json").write_text(
+        json.dumps({"decision_findings": fnd,
+                    "hallazgos_legacy": list(modelo.get("findings") or [])},
+                   ensure_ascii=False, indent=1), encoding="utf-8")
+    (salida / f"DICTUS_GATE_REPORT_{args.folio}.json").write_text(
+        json.dumps({"disposition": modelo.get("disposition") or {}, "gates": gates,
+                    "invariantes": invariantes}, ensure_ascii=False, indent=1),
+        encoding="utf-8")
+    (salida / f"DICTUS_SHADOW_MANIFEST_{args.folio}.json").write_text(
+        json.dumps(sombras, ensure_ascii=False, indent=1), encoding="utf-8")
+    (salida / f"DICTUS_VISUAL_ASSETS_{args.folio}.json").write_text(
+        json.dumps(activos, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    resumen["decision_grammar"] = {
+        "grammar_version": dd.GRAMMAR_VERSION,
+        "observaciones": len(obs),
+        "hallazgos": len(fnd),
+        "recomendaciones": len(rec),
+        "compuertas": len(gates),
+        "disposicion": (modelo.get("disposition") or {}).get("disposition"),
+        "compuerta_material": gate_material["result"],
+        "sombras": sombras.get("status"),
+        "activos_visuales": len(activos),
+        "invariantes_incumplidas": invariantes,
+        "estados_observacion": sorted({o.get("status") for o in obs}),
+    }
+    resumen["perdidas_materiales"] = len(gate_material.get("losses") or [])
 
     (salida / "MATERIAL_FACT_COMPLETENESS_MATRIX.json").write_text(
         json.dumps({"resumen": resumen, "matriz": matriz}, ensure_ascii=False, indent=1),

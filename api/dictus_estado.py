@@ -243,6 +243,28 @@ def normalizar_poi_items(poi_result: Optional[Dict[str, Any]], *,
 def afectados_de_finding(titulo: str, codigo: str = "") -> Tuple[List[str], str]:
     """Actores afectados e impacto por actor, derivados del TIPO de hallazgo."""
     t = _norm(f"{titulo} {codigo}")
+    # COHERENCIA HISTÓRICA (§8/§14): un atributo con versiones incompatibles afecta a
+    # quien va a decidir con esa cifra. Es el MISMO conjunto de actores que declara la
+    # tarjeta de coherencia del ejecutivo: si el hallazgo no los declara, el documento
+    # dice «AFECTA A» por un lado y el modelo por otro.
+    if "COHERENCIA" in t:
+        for clave, actores in (
+                ("ALTURA", ["COMPRADOR", "INMOBILIARIA", "BANCO / FINANCIADOR"]),
+                ("TRATAMIENTO", ["COMPRADOR", "INMOBILIARIA", "BANCO / FINANCIADOR"]),
+                ("USO", ["COMPRADOR", "INMOBILIARIA", "BANCO / FINANCIADOR"]),
+                ("COORDENADA", ["COMPRADOR", "INMOBILIARIA"]),
+                ("TITULAR", ["COMPRADOR", "INMOBILIARIA", "BANCO / FINANCIADOR",
+                             "ASEGURADORA DE TÍTULO"]),
+                ("AMENAZA", ["COMPRADOR", "BANCO / FINANCIADOR",
+                             "ASEGURADORA DE TÍTULO"])):
+            if clave in t:
+                return (actores,
+                        "La cifra no es definitiva hasta reconciliar el expediente: quien "
+                        "decide con ella (comprador, inmobiliaria, financiador) asume el "
+                        "riesgo de una versión no confirmada.")
+        return (["COMPRADOR", "INMOBILIARIA", "BANCO / FINANCIADOR"],
+                "Hay versiones incompatibles del mismo dato en el expediente: hasta "
+                "reconciliarlas la cifra no sostiene una decisión.")
     if any(k in t for k in ("HIPOTECA", "EMBARGO", "CAUTELAR", "GRAVAMEN", "LIMITACION",
                             "AFECTACION")):
         return (["COMPRADOR", "VENDEDOR", "INMOBILIARIA", "BANCO / FINANCIADOR"],
@@ -255,7 +277,7 @@ def afectados_de_finding(titulo: str, codigo: str = "") -> Tuple[List[str], str]
                 "asegurador de títulos no pueden suscribir y el comprador asume riesgo no "
                 "medido.")
     if any(k in t for k in ("RIESGO", "AMENAZA", "GEO", "HIDROLOG", "REMOCION")):
-        return (["COMPRADOR", "BANCO / FINANCIADOR", "ASEGURADORA"],
+        return (["COMPRADOR", "BANCO / FINANCIADOR", "ASEGURADORA DE TÍTULO"],
                 "Puede exigir verificación técnica específica y condicionar la financiación "
                 "o la póliza.")
     if "TITULARIDAD" in t or "CONTRAPARTE" in t or "SCREENING" in t:
@@ -339,6 +361,25 @@ def instalar_observadores(destino: Dict[str, Any]) -> Dict[str, Any]:
 
     poi_engine.get_poi_result = _poi_observado
     pdf_compiler.get_poi_result = _poi_observado
+
+    # 2.0D: la SIMULACIÓN de sombras devuelve su procedencia (huella, altura y sus
+    # fuentes, fecha). Se captura para poder declarar los supuestos del modelo (§23/§24).
+    try:
+        import shadow_render as _shadow_mod
+    except Exception:  # noqa: BLE001
+        _shadow_mod = None
+    if _shadow_mod is not None and hasattr(_shadow_mod, "generar_sombras_automaticas"):
+        _sh_real = _shadow_mod.generar_sombras_automaticas
+
+        def _sh_observado(*a, **k):
+            r = _sh_real(*a, **k)
+            if isinstance(r, dict):
+                import datetime as _dt
+                r.setdefault("generado_en", _dt.datetime.now(_dt.timezone.utc).isoformat())
+            destino["sombras"] = r
+            return r
+
+        _shadow_mod.generar_sombras_automaticas = _sh_observado
 
     _rec_real = receipts_mod.build_execution_receipts
 
@@ -543,6 +584,9 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
         "market_context": ctx.get("market_context") or {},
         # Activos gráficos REALES de esta corrida (mapa, sombras): estado + huella.
         "visual_assets": inventariar_activos_visuales(ctx.get("assets_dir")),
+        # 2.0D: procedencia de la simulación de sombras (huella, altura y sus fuentes,
+        # fecha, supuestos) — la sombra es una simulación geométrica, no una medición.
+        "shadow_simulation": captura.get("sombras") or {},
         "evidence_manifest_input": {
             "articulos": [
                 {"tipo": "IDENTIDAD_CANONICA", "fuente": cid.get("identity_source") or "SNR/geoportal"},
@@ -558,6 +602,15 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
         },
         "receipts": receipts,
     }
+
+
+def agregar_manifiesto_de_sombras(run_state: Dict[str, Any]) -> Dict[str, Any]:
+    """Añade el `ShadowManifest` formal (dependencias, supuestos y hash) al estado."""
+    import dictus_decision as dd
+    rs = run_state or {}
+    manifiesto = dd.manifiesto_sombras(rs, rs.get("shadow_simulation") or {})
+    rs["shadow_manifest"] = manifiesto
+    return rs
 
 
 def agregar_findings_de_coherencia(run_state: Dict[str, Any],

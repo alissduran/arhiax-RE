@@ -1,0 +1,866 @@
+[
+ {
+  "observation_id": "OBS-IDENTITY-88798",
+  "domain": "IDENTITY",
+  "subject": "Matrícula inmobiliaria",
+  "source": "SNR / Certificado de tradición y libertad",
+  "status": "OBSERVED",
+  "value": "040-646406",
+  "detail": "Resolución: nupre",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-IDENTIDAD",
+    "type": "IDENTITY",
+    "source": "SNR/CTL + catastro",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   },
+   {
+    "evidence_id": "EV-COORD",
+    "type": "GEOMETRY",
+    "source": "OFFICIAL_PREDIO",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-IDENTITY-59379",
+  "domain": "IDENTITY",
+  "subject": "NUPRE y número predial",
+  "source": "Catastro municipal",
+  "status": "OBSERVED",
+  "value": {
+   "nupre": "AFT0005BOHA",
+   "predial": "080010103000010040001908040002"
+  },
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-IDENTIDAD",
+    "type": "IDENTITY",
+    "source": "SNR/CTL + catastro",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   },
+   {
+    "evidence_id": "EV-COORD",
+    "type": "GEOMETRY",
+    "source": "OFFICIAL_PREDIO",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-IDENTITY-56614",
+  "domain": "IDENTITY",
+  "subject": "Geometría oficial vs identidad canónica",
+  "source": "OFFICIAL_PREDIO",
+  "status": "OBSERVED",
+  "value": {
+   "binding": "VERIFIED",
+   "fields": [
+    "nupre",
+    "numero_predial"
+   ],
+   "scope": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación"
+  },
+  "detail": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-IDENTIDAD",
+    "type": "IDENTITY",
+    "source": "SNR/CTL + catastro",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   },
+   {
+    "evidence_id": "EV-COORD",
+    "type": "GEOMETRY",
+    "source": "OFFICIAL_PREDIO",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-TITLE-67216",
+  "domain": "TITLE",
+  "subject": "Titularidad y participaciones",
+  "source": "Certificado de tradición y libertad (SNR)",
+  "status": "OBSERVED",
+  "value": "DURAN BACCA ALISSON CC# 1045718995X 50%",
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-TITULOS",
+    "type": "TITLE",
+    "source": "SNR/CTL",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-TITLE-90764",
+  "domain": "TITLE",
+  "subject": "Forma de adquisición",
+  "source": "Acto inscrito en el folio",
+  "status": "OBSERVED",
+  "value": "Compraventa",
+  "detail": "Anot. 006 · 22-01-2024 · ESCRITURA 2875 DEL 11-10-2023 NOTARIA SEXTA DE BARRANQUILLAVALOR ACTO:",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-TITULOS",
+    "type": "TITLE",
+    "source": "SNR/CTL",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-TITLE-82969",
+  "domain": "TITLE",
+  "subject": "Carga vigente GRAVAMEN: Hipoteca",
+  "source": "Certificado de tradición y libertad (SNR)",
+  "status": "OBSERVED",
+  "value": {
+   "tipo": "GRAVAMEN: Hipoteca",
+   "anotacion": "007",
+   "partes": "DURAN BACCA ALISSON  CC# 1045718995X -> BANCO DE BOGOTA S.A.NIT# 8600029644",
+   "estado": "VIGENTE"
+  },
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-CARGA-007",
+    "type": "TITLE",
+    "source": "SNR/CTL",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-TITLE-86431",
+  "domain": "TITLE",
+  "subject": "Carga vigente LIMITACION: Afectacion Vivienda",
+  "source": "Certificado de tradición y libertad (SNR)",
+  "status": "OBSERVED",
+  "value": {
+   "tipo": "LIMITACION: Afectacion Vivienda",
+   "anotacion": "008",
+   "partes": "DURAN BACCA ALISSON  CC# 1045718995X",
+   "estado": "VIGENTE"
+  },
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-CARGA-008",
+    "type": "TITLE",
+    "source": "SNR/CTL",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-COUNTERPARTY-58410",
+  "domain": "COUNTERPARTY",
+  "subject": "DURAN BACCA ALISSON · UN_CONSOLIDATED",
+  "source": "Listas restrictivas aplicables",
+  "status": "NO_MATCH",
+  "value": [
+   "TITULAR_ACTUAL"
+  ],
+  "detail": "Consulta de listas ejecutada por el motor de screening",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SCR-titular_actual-1045718995",
+    "type": "SCREENING",
+    "source": "screening",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-COUNTERPARTY-06814",
+  "domain": "COUNTERPARTY",
+  "subject": "DURAN BACCA ALISSON · OFAC_SDN",
+  "source": "Listas restrictivas aplicables",
+  "status": "NO_MATCH",
+  "value": [
+   "TITULAR_ACTUAL"
+  ],
+  "detail": "Consulta de listas ejecutada por el motor de screening",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SCR-titular_actual-1045718995",
+    "type": "SCREENING",
+    "source": "screening",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-COUNTERPARTY-47037",
+  "domain": "COUNTERPARTY",
+  "subject": "DURAN BACCA ALISSON · UK_SANCTIONS_LIST",
+  "source": "Listas restrictivas aplicables",
+  "status": "NO_MATCH",
+  "value": [
+   "TITULAR_ACTUAL"
+  ],
+  "detail": "Consulta de listas ejecutada por el motor de screening",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SCR-titular_actual-1045718995",
+    "type": "SCREENING",
+    "source": "screening",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-COUNTERPARTY-92283",
+  "domain": "COUNTERPARTY",
+  "subject": "BANCO DE BOGOTA S.A. · UN_CONSOLIDATED",
+  "source": "Listas restrictivas aplicables",
+  "status": "NO_MATCH",
+  "value": [
+   "ACREEDOR_HIPOTECARIO"
+  ],
+  "detail": "Consulta de listas ejecutada por el motor de screening",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SCR-acreedor_hipotecario-8600029644",
+    "type": "SCREENING",
+    "source": "screening",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-COUNTERPARTY-29355",
+  "domain": "COUNTERPARTY",
+  "subject": "BANCO DE BOGOTA S.A. · OFAC_SDN",
+  "source": "Listas restrictivas aplicables",
+  "status": "NO_MATCH",
+  "value": [
+   "ACREEDOR_HIPOTECARIO"
+  ],
+  "detail": "Consulta de listas ejecutada por el motor de screening",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SCR-acreedor_hipotecario-8600029644",
+    "type": "SCREENING",
+    "source": "screening",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-COUNTERPARTY-92320",
+  "domain": "COUNTERPARTY",
+  "subject": "BANCO DE BOGOTA S.A. · UK_SANCTIONS_LIST",
+  "source": "Listas restrictivas aplicables",
+  "status": "NO_MATCH",
+  "value": [
+   "ACREEDOR_HIPOTECARIO"
+  ],
+  "detail": "Consulta de listas ejecutada por el motor de screening",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SCR-acreedor_hipotecario-8600029644",
+    "type": "SCREENING",
+    "source": "screening",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-COUNTERPARTY-01377",
+  "domain": "COUNTERPARTY",
+  "subject": "URBANIZADORA MARVAL S.A.S. · UN_CONSOLIDATED",
+  "source": "Listas restrictivas aplicables",
+  "status": "NO_MATCH",
+  "value": [
+   "CONSTRUCTOR_ENAJENANTE"
+  ],
+  "detail": "Consulta de listas ejecutada por el motor de screening",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SCR-constructor_enajenante-urbanizadora-marval-s-a-s",
+    "type": "SCREENING",
+    "source": "screening",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-COUNTERPARTY-67290",
+  "domain": "COUNTERPARTY",
+  "subject": "URBANIZADORA MARVAL S.A.S. · OFAC_SDN",
+  "source": "Listas restrictivas aplicables",
+  "status": "NO_MATCH",
+  "value": [
+   "CONSTRUCTOR_ENAJENANTE"
+  ],
+  "detail": "Consulta de listas ejecutada por el motor de screening",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SCR-constructor_enajenante-urbanizadora-marval-s-a-s",
+    "type": "SCREENING",
+    "source": "screening",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-COUNTERPARTY-85272",
+  "domain": "COUNTERPARTY",
+  "subject": "URBANIZADORA MARVAL S.A.S. · UK_SANCTIONS_LIST",
+  "source": "Listas restrictivas aplicables",
+  "status": "NO_MATCH",
+  "value": [
+   "CONSTRUCTOR_ENAJENANTE"
+  ],
+  "detail": "Consulta de listas ejecutada por el motor de screening",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SCR-constructor_enajenante-urbanizadora-marval-s-a-s",
+    "type": "SCREENING",
+    "source": "screening",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-URBAN-37718",
+  "domain": "URBAN",
+  "subject": "Destino económico (catastro)",
+  "source": "catastro en vivo",
+  "status": "OBSERVED",
+  "value": "Habitacional",
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-URB-DESTINO_ECONOMICO",
+    "type": "URBAN",
+    "source": "catastro en vivo",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-URBAN-18339",
+  "domain": "URBAN",
+  "subject": "Uso del suelo (POT)",
+  "source": "fuente no declarada",
+  "status": "OBSERVED",
+  "value": "Habitacional",
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-URB-USO",
+    "type": "URBAN",
+    "source": "fuente no declarada",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-URBAN-59867",
+  "domain": "URBAN",
+  "subject": "Clase de suelo",
+  "source": "fuente no declarada",
+  "status": "NOT_EVALUATED",
+  "value": null,
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-URB-CLASE_SUELO",
+    "type": "URBAN",
+    "source": "fuente no declarada",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-URBAN-05697",
+  "domain": "URBAN",
+  "subject": "Tratamiento urbanístico",
+  "source": "capa oficial del municipio consultada en vivo",
+  "status": "CONFLICT",
+  "value": "Consolidacion",
+  "detail": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-URB-TRATAMIENTO",
+    "type": "URBAN",
+    "source": "capa oficial del municipio consultada en vivo",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-URBAN-50883",
+  "domain": "URBAN",
+  "subject": "Altura / edificabilidad normativa",
+  "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+  "status": "CONFLICT",
+  "value": "11",
+  "detail": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-URB-ALTURA_MAXIMA",
+    "type": "URBAN",
+    "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-URBAN-49589",
+  "domain": "URBAN",
+  "subject": "Estrato",
+  "source": "capa oficial del municipio consultada en vivo",
+  "status": "OBSERVED",
+  "value": "4",
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-URB-ESTRATO",
+    "type": "URBAN",
+    "source": "capa oficial del municipio consultada en vivo",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-URBAN-91469",
+  "domain": "URBAN",
+  "subject": "Barrio",
+  "source": "capa oficial del municipio consultada en vivo",
+  "status": "OBSERVED",
+  "value": "Miramar",
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-URB-BARRIO",
+    "type": "URBAN",
+    "source": "capa oficial del municipio consultada en vivo",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-URBAN-82205",
+  "domain": "URBAN",
+  "subject": "Localidad / comuna",
+  "source": "capa oficial del municipio consultada en vivo",
+  "status": "OBSERVED",
+  "value": "02",
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-URB-LOCALIDAD",
+    "type": "URBAN",
+    "source": "capa oficial del municipio consultada en vivo",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-00849",
+  "domain": "ENVIRONMENT",
+  "subject": "Remoción en masa / amenaza del POT",
+  "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+  "status": "OBSERVED",
+  "value": "Media · polígono: intersecta el predio",
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-RIESGO-AMENAZA_REMOCION_MASA",
+    "type": "RISK",
+    "source": "capa POT del municipio",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-53767",
+  "domain": "ENVIRONMENT",
+  "subject": "Inundación",
+  "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+  "status": "NOT_EVALUATED",
+  "value": null,
+  "detail": "La capa no se evaluó en esta corrida: se declara NO EVALUADO, no «sin riesgo».",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-RIESGO-INUNDACION",
+    "type": "RISK",
+    "source": "capa POT del municipio",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-44945",
+  "domain": "ENVIRONMENT",
+  "subject": "Riesgo no mitigable",
+  "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+  "status": "NOT_EVALUATED",
+  "value": null,
+  "detail": "La capa no se evaluó en esta corrida: se declara NO EVALUADO, no «sin riesgo».",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-RIESGO-RIESGO_NO_MITIGABLE",
+    "type": "RISK",
+    "source": "capa POT del municipio",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-38759",
+  "domain": "ENVIRONMENT",
+  "subject": "Otras amenazas declaradas",
+  "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
+  "status": "OBSERVED",
+  "value": "Medio · polígono: intersecta el predio",
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-RIESGO-AREAS_EN_RIESGO",
+    "type": "RISK",
+    "source": "capa POT del municipio",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-35517",
+  "domain": "ENVIRONMENT",
+  "subject": "Equipamiento · Comercio",
+  "source": "OpenStreetMap (Overpass/Photon)",
+  "status": "OBSERVED",
+  "value": {
+   "count": 3,
+   "nearest_m": 384.5,
+   "items": [
+    "C.C. Miramar",
+    "Olímpica - Villa Santos",
+    "Ara"
+   ]
+  },
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.196292+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-POI-COMERCIO",
+    "type": "POI",
+    "source": "OpenStreetMap",
+    "timestamp": "2026-09-28T19:46:50.196292+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-71508",
+  "domain": "ENVIRONMENT",
+  "subject": "Equipamiento · Educacion",
+  "source": "OpenStreetMap (Overpass/Photon)",
+  "status": "OBSERVED",
+  "value": {
+   "count": 3,
+   "nearest_m": 645.4,
+   "items": [
+    "Living Explorer Sede Miramar",
+    "Neane Kinder Garden",
+    "Ludoteca Magic Kingdom"
+   ]
+  },
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.196292+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-POI-EDUCACION",
+    "type": "POI",
+    "source": "OpenStreetMap",
+    "timestamp": "2026-09-28T19:46:50.196292+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-01663",
+  "domain": "ENVIRONMENT",
+  "subject": "Equipamiento · Recreacion",
+  "source": "OpenStreetMap (Overpass/Photon)",
+  "status": "OBSERVED",
+  "value": {
+   "count": 3,
+   "nearest_m": 310.5,
+   "items": [
+    "Parque Miramar",
+    "Mirador de Miramar",
+    "Pista Ciclomontañismo y Senderismo de Miramar"
+   ]
+  },
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.196292+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-POI-RECREACION",
+    "type": "POI",
+    "source": "OpenStreetMap",
+    "timestamp": "2026-09-28T19:46:50.196292+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-66422",
+  "domain": "ENVIRONMENT",
+  "subject": "Equipamiento · Salud",
+  "source": "OpenStreetMap (Overpass/Photon)",
+  "status": "OBSERVED",
+  "value": {
+   "count": 3,
+   "nearest_m": 771.9,
+   "items": [
+    "Instituto de rehabilitación cardiopulmonar del Caribe",
+    "Dr, Scholl's Barranquilla",
+    "Clinialergias"
+   ]
+  },
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.196292+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-POI-SALUD",
+    "type": "POI",
+    "source": "OpenStreetMap",
+    "timestamp": "2026-09-28T19:46:50.196292+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-15866",
+  "domain": "ENVIRONMENT",
+  "subject": "Asoleamiento 09:00 COT",
+  "source": "cálculo solar de la corrida",
+  "status": "OBSERVED",
+  "value": {
+   "azimut": "104.05°",
+   "elevacion": "45.89°"
+  },
+  "detail": "Sol Directo",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SOLAR",
+    "type": "SOLAR",
+    "source": "solar_engine",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-29891",
+  "domain": "ENVIRONMENT",
+  "subject": "Asoleamiento 12:00 COT",
+  "source": "cálculo solar de la corrida",
+  "status": "OBSERVED",
+  "value": {
+   "azimut": "191.32°",
+   "elevacion": "77.05°"
+  },
+  "detail": "Sol Directo",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SOLAR",
+    "type": "SOLAR",
+    "source": "solar_engine",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-ENVIRONMENT-63510",
+  "domain": "ENVIRONMENT",
+  "subject": "Asoleamiento 15:00 COT",
+  "source": "cálculo solar de la corrida",
+  "status": "OBSERVED",
+  "value": {
+   "azimut": "257.85°",
+   "elevacion": "41.04°"
+  },
+  "detail": "Sombra (Orientación)",
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-SOLAR",
+    "type": "SOLAR",
+    "source": "solar_engine",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ },
+ {
+  "observation_id": "OBS-VALUATION-71974",
+  "domain": "VALUATION",
+  "subject": "Valor estimado y su banda",
+  "source": "lonja_baq_metodologia",
+  "status": "OBSERVED",
+  "value": {
+   "consolidado": 399500000,
+   "banda_baja": 373532500,
+   "banda_alta": 435455000,
+   "value_m2": 6800000
+  },
+  "detail": null,
+  "observed_at": "2026-09-28T19:46:50.194222+00:00",
+  "query": null,
+  "evidence_refs": [
+   {
+    "evidence_id": "EV-VALOR",
+    "type": "VALUATION",
+    "source": "metodología de mercado",
+    "timestamp": "2026-09-28T19:46:50.194222+00:00",
+    "sha256": null,
+    "detail": null
+   }
+  ]
+ }
+]

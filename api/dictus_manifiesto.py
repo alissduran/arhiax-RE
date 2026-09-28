@@ -25,7 +25,7 @@ import hashlib
 import json
 from typing import Any, Dict, Iterable, List, Optional
 
-MASTER_MANIFEST_VERSION = "dictus-master-manifest/1.1.0"
+MASTER_MANIFEST_VERSION = "dictus-master-manifest/1.2.0"
 
 # Bloques canónicos que entran al hash maestro (§J + §6 de 2.0B). El orden de esta
 # tupla es parte del contrato: NO se reordena sin cambiar la versión del manifest.
@@ -48,6 +48,21 @@ BLOQUES_CANONICOS = (
     "methodology_versions",
     "release_state",
     "historical_consistency",
+    # 1.2.0 (DICTUS 2.0D): la GRAMÁTICA DE DECISIÓN entra al hash maestro: qué se
+    # observó, qué significa, qué se recomienda, qué compuertas se evaluaron, cuál es la
+    # disposición, el manifiesto de sombras (con sus supuestos) y los activos visuales.
+    "observations",
+    "recommendations",
+    "decision_gates",
+    "disposition",
+    "human_reviews",
+    "decision_matrix",
+    "shadow_manifest",
+    "visual_assets",
+    # Los HALLAZGOS con significado, decisión, afectados, motivos y evidencia son un
+    # bloque PROPIO: `findings` es la lista legacy del expediente y mezclarlas hacía
+    # que los motivos del hallazgo no entraran al hash maestro.
+    "decision_findings",
 )
 
 
@@ -285,6 +300,40 @@ def estado_legacy_desde_run_state(rs: Dict[str, Any]) -> Dict[str, Any]:
         # DICTUS 2.0C: activos gráficos de la corrida (mapa/sombras) con su huella.
         "visual_assets": rs.get("visual_assets") or {},
         "market_context": mc,
+        "shadow_simulation": rs.get("shadow_simulation") or {},
+        "shadow_manifest": rs.get("shadow_manifest") or {},
+    }
+
+
+def _estado_para_decision(origen: Dict[str, Any], plano: Dict[str, Any]) -> Dict[str, Any]:
+    """Estado que consume el motor de decisión.
+
+    Si la corrida trae `DictusRunState`, se usa TAL CUAL (una sola verdad). Si el
+    llamador entregó un estado plano (compatibilidad), se reconstruye la forma de corrida
+    a partir de los bloques del modelo, sin recalcular nada.
+    """
+    origen = origen or {}
+    if origen.get("run_state_version"):
+        return origen
+    plano = plano or {}
+    ident = dict(plano.get("canonical_property_identity") or {})
+    return {
+        "generated_at": (origen.get("receipts") or {}).get("generated_at"),
+        "ciudad": (origen.get("input") or {}).get("ciudad"),
+        "property_identity": ident,
+        "title_state": plano.get("title_summary") or {},
+        "urban_context": plano.get("urban_context") or {},
+        "screening_summary": plano.get("screening_summary") or {},
+        "poi_state": plano.get("poi_summary") or {},
+        "solar_state": plano.get("solar_summary") or {},
+        "valuation_state": plano.get("valuation") or {},
+        "risk_context": plano.get("risk_context") or {},
+        "market_context": plano.get("market_context") or {},
+        "visual_assets": plano.get("visual_assets") or {},
+        "shadow_simulation": origen.get("shadow_simulation") or {},
+        "findings": plano.get("findings") or [],
+        "historical_consistency": plano.get("historical_consistency") or {},
+        "release_state": plano.get("release_state") or {},
     }
 
 
@@ -298,6 +347,7 @@ def construir_documento_maestro(estado: Dict[str, Any], *,
     Acepta el `DictusRunState` de 2.0B (recomendado) o el estado plano anterior.
     No recalcula nada: organiza lo que la ejecución ya produjo y declara lo que falta.
     """
+    _origen = estado or {}          # estado de corrida (o plano) tal como llegó
     if (estado or {}).get("run_state_version"):
         estado = estado_legacy_desde_run_state(estado)
     e = estado or {}
@@ -371,6 +421,7 @@ def construir_documento_maestro(estado: Dict[str, Any], *,
         # volver a calcularlos (y que antes se perdían en la proyección del estado).
         "visual_assets": e.get("visual_assets") or {},
         "market_context": market,
+        "shadow_manifest": e.get("shadow_manifest") or {},
         "historical_consistency": {
             "veredicto": hist.get("veredicto"),
             "versiones_comparadas": hist.get("versiones_comparadas"),
@@ -381,6 +432,25 @@ def construir_documento_maestro(estado: Dict[str, Any], *,
                                    for c in (hist.get("cambios_explicados") or [])],
         },
     }
+    # 2.0D: la cadena de decisión se deriva del estado canónico y entra al modelo (y por
+    # tanto al hash maestro). No recalcula motores: organiza lo ya producido.
+    try:
+        import dictus_decision as _dd
+        _fuente = _estado_para_decision(_origen, modelo)
+        _decision = _dd.construir(_fuente,
+                                  captura_sombras=(_fuente.get("shadow_simulation") or {}))
+        modelo["observations"] = _decision["observations"]
+        modelo["decision_findings"] = _decision["findings"]
+        modelo["recommendations"] = _decision["recommendations"]
+        modelo["decision_gates"] = _decision["decision_gates"]
+        modelo["disposition"] = _decision["disposition"]
+        modelo["human_reviews"] = [_decision["human_review"]]
+        modelo["decision_matrix"] = _decision["decision_matrix"]
+        modelo["shadow_manifest"] = _decision["shadow_manifest"]
+        modelo["visual_assets"] = _decision["visual_assets"] or modelo.get("visual_assets")
+        modelo["decision_grammar_version"] = _decision["grammar_version"]
+    except Exception as _e_dec:  # noqa: BLE001 — la gramática no puede tumbar el documento
+        print(f"[DICTUS][DECISION] no evaluable: {_e_dec}")
     h = master_hash(modelo)
     modelo["master_hash"] = h
     modelo["master_hash_abreviado"] = master_hash_abreviado(h)

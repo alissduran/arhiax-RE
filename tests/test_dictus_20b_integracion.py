@@ -209,39 +209,43 @@ class TestPortalYCriterios(unittest.TestCase):
         self.assertEqual(_j(ACEPTACION)["executive_page_count"], 6)
 
     def test_l_todos_los_hallazgos_estan_en_la_pagina_1(self):
-        """2.0B-R1 §6: el bloque de hallazgos de la página 1 se titula «HALLAZGOS» y
-        sus columnas son SEVERIDAD · HALLAZGO · AFECTA A · ACCIÓN. Se comprueba por
-        CÓDIGO de hallazgo (el título se ajusta a una línea y el enunciado completo
-        vive en el anexo técnico)."""
+        """2.0D §5: el tablero de decisión de la página 1 agrupa por TEMA.
+
+        Columnas: TEMA · HALLAZGO · DECISIÓN DICTUS, y cada fila declara a quién afecta
+        y qué hacer. Un tema con varios hallazgos NO los pierde en silencio: la fila
+        declara cuántos agrupa y dónde está su acción. Se comprueba el recuento, no el
+        texto (los enunciados completos viven en el anexo técnico)."""
         import pymupdf
         man = _j(MANIFEST)
         with pymupdf.open(str(EJECUTIVO)) as d:
-            p1 = " ".join(list(d)[0].get_text().split())
-        self.assertIn("HALLAZGOS", p1)
-        total = len(man["modelo"]["findings"])
-        self.assertGreaterEqual(total, 1)
-        _op = [f for f in man["modelo"]["findings"]
-               if str(f.get("codigo") or "").upper() != "H-COH"]
-        _coh = [f for f in man["modelo"]["findings"]
-                if str(f.get("codigo") or "").upper() == "H-COH"]
-        self.assertIn(f"{len(_op)} hallazgos de la operación".lower(), p1.lower(),
-                      "la página 1 debe declarar cuántos hallazgos condicionan la operación")
-        self.assertEqual(len(_op) + len(_coh), total,
-                         "todo hallazgo del estado se declara en la página 1: como "
-                         "hallazgo de operación o dentro de la tarjeta de coherencia")
-        for columna in ("SEVERIDAD", "HALLAZGO", "AFECTA A", "ACCIÓN"):
+            paginas = [" ".join(p.get_text().split()) for p in d]
+        p1 = paginas[0]
+        self.assertIn("DECISION BOARD", p1)
+        for columna in ("TEMA", "HALLAZGO", "DECISIÓN DICTUS", "AFECTA A", "ACCIÓN"):
             self.assertIn(columna, p1)
-        # Cada hallazgo DE LA OPERACIÓN aparece en la página 1 por su código; los
-        # conflictos entre versiones (H-COH) se agrupan en UNA tarjeta de coherencia con
-        # su recuento (2.0C §8): no son riesgos del inmueble y no se imprimen como seis
-        # hallazgos ALTO.
-        operativos = [f for f in man["modelo"]["findings"]
-                      if str(f.get("codigo") or "").upper() != "H-COH"]
-        faltan = [f.get("codigo") for f in operativos
-                  if f.get("codigo") and f["codigo"] not in p1]
-        self.assertEqual(faltan, [], f"hallazgos de operación fuera de la página 1: {faltan}")
-        coh = [f for f in man["modelo"]["findings"]
-               if str(f.get("codigo") or "").upper() == "H-COH"]
+        tablero = (man["modelo"].get("decision_matrix") or [])
+        operativos = [f for f in tablero
+                      if f.get("risk_class") != "INFORMATION_QUALITY_RISK"]
+        self.assertGreaterEqual(len(operativos), 1)
+        # Toda acción y todo afectado de la operación se imprimen (página 1 o detalle).
+        documento = " ".join(paginas)
+        for f in operativos:
+            self.assertTrue(str(f.get("action") or "").strip())
+            self.assertTrue(f.get("affected_parties"))
+            self.assertIn(str(f.get("affected_parties")[0]).upper(),
+                          documento.upper(),
+                          "los actores del hallazgo deben aparecer en el expediente")
+        # El tablero no repite temas: como máximo una fila por tema (+ la de coherencia).
+        dominios = {f.get("domain") for f in operativos}
+        filas = p1.count("ACCIÓN:")
+        self.assertGreaterEqual(filas, 1)
+        self.assertLessEqual(filas, len(dominios) + 1,
+                             "el tablero imprime más filas que temas distintos")
+        # Si un tema agrupa varios hallazgos, la fila lo declara (no los pierde callados).
+        if len(operativos) > len(dominios):
+            self.assertIn("hallazgo(s) del mismo tema", p1)
+        coh = [f for f in (man["modelo"].get("decision_findings") or [])
+               if str(f.get("finding_id") or "").upper() == "H-COH"]
         if coh:
             self.assertIn(f"{len(coh)} atributo(s) requieren reconciliación histórica".lower(),
                           p1.lower(), "la coherencia debe declarar cuántos atributos agrupa")
