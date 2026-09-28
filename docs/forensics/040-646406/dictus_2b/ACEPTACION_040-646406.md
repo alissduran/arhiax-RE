@@ -4,17 +4,17 @@ Una sola corrida del producto produjo el documento **ejecutivo** (el que ve el u
 
 | Dato | Valor |
 |---|---|
-| run_id | `cb127755-b129-4452-a5b7-cc73cd88b227` |
+| run_id | `a02a3c05-4887-4309-aa8f-51f8cc796a17` |
 | DICTUS ID | **DX-040-646406-20260928** |
-| generado | 2026-09-28T19:45:23.633126+00:00 |
-| **DICTUS_MASTER_HASH** | `d1b03c7b3f788be648a6bda3eb0fe84c475faf3ba69eae012b05d0decea93eaf` |
+| generado | 2026-09-28T20:47:36.354726+00:00 |
+| **DICTUS_MASTER_HASH** | `1843ec22d0d3a1cb2e63881dcbabc5f0ec1d977a0de5f2b3da3e503005aea865` |
 | master manifest | `dictus-master-manifest/1.2.0` |
 | run state | `dictus-run-state/1.0.0` |
-| **DOCUMENTO PRINCIPAL** | `DICTUS_EJECUTIVO_040-646406.pdf` · **6 páginas** · sha256 `b0ad1665b6f397fefe3cf58878ab8ffbfc8078bd623eff9648b6712d9be33550` |
-| Anexo técnico | `DICTUS_TECNICO_040-646406.pdf` · 17 páginas · sha256 `cb8ef15db1fa30445efabc4dbb4e5d8a068ba35b0f8c837c55707166d04a7bca` |
+| **DOCUMENTO PRINCIPAL** | `DICTUS_EJECUTIVO_040-646406.pdf` · **6 páginas** · sha256 `b1e3e177d8f03dde54930b58eb057374f7cee5777f70d64a8fa0c0862e0a4185` |
+| Anexo técnico | `DICTUS_TECNICO_040-646406.pdf` · 17 páginas · sha256 `dffce61f65c7c30772f722e23a29b16b9a7767e0c9c4ce36ee827e15c077e53e` |
 | Arquitectura del ejecutivo | APROBADA · P1 DECISIÓN DEL INMUEBLE → P2 DECISIÓN JURÍDICA → P3 DECISIÓN DE CONTRAPARTES → P4 DECISIÓN TERRITORIAL Y URBANÍSTICA → P5 ENTORNO, EQUIPAMIENTO, ASOLEAMIENTO Y SOMBRAS → P6 IDENTIDAD, MERCADO Y VALOR |
 | Evidencias | 10 (PARCIAL_CON_DECLARACIONES) |
-| Ítems de equipamiento en el estado | 12 (distancias: sí) |
+| Ítems de equipamiento en el estado | 5 (distancias: sí) |
 | Hallazgos en la página 1 | 3 |
 | Verificación del hash maestro | **MATCH** |
 | Retícula | OK |

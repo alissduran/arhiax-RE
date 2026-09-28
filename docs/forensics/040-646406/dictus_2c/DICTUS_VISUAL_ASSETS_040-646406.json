@@ -24,7 +24,7 @@
   "type": "POI_MAP",
   "status": "AVAILABLE",
   "source": "Motor cartográfico del producto (mismo run, sin lectura del PDF)",
-  "generated_at": "2026-09-28T19:46:00.748581+00:00",
+  "generated_at": "2026-09-28T20:41:07.296779+00:00",
   "content_hash": "d57a693675d336d8e88f17348de6eddd2e07c22efb9e17b1d84cac6a7cfb8439",
   "bytes": 140827,
   "path": "C:\\Users\\aliss\\.gemini\\antigravity-ide\\scratch\\20260825_DeepSeek_Harness_Web\\arhiax-RE\\docs\\forensics\\040-646406\\dictus_2c\\poi_map.png",
@@ -33,7 +33,7 @@
     "evidence_id": "EV-POI_MAP",
     "type": "VISUAL_ASSET",
     "source": "Motor cartográfico del producto (mismo run, sin lectura del PDF)",
-    "timestamp": "2026-09-28T19:46:00.748581+00:00",
+    "timestamp": "2026-09-28T20:41:07.296779+00:00",
     "sha256": "d57a693675d336d8e88f17348de6eddd2e07c22efb9e17b1d84cac6a7cfb8439",
     "detail": null
    }

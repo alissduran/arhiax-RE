@@ -41,6 +41,15 @@ ANCHO = W - 2 * M
 TOPE = H - 62.0                # inicio del contenido (debajo de la banda de cabecera)
 PIE_Y = 56.0                   # límite inferior del contenido
 
+# §4 del hotfix 2.0D-R1: cuántas condiciones materiales se imprimen en el ejecutivo.
+# El resto NO se pierde: se declara el recuento y se remite al informe técnico y al
+# expediente de decisión, que las conservan completas.
+TOPE_BLOCKERS_PDF = 3
+# §8 · tamaño mínimo del cuerpo: la compactación NUNCA baja de aquí (no 6–7 pt).
+CUERPO_MINIMO_PT = 8.2
+METODOLOGIA_VALORACION = ("Metodología: norma + concepto técnico + validación "
+                          "profesional · detalle completo en el informe técnico.")
+
 # ── paleta mineral (tinta + marfil + oro) ────────────────────────────────────
 INK = HexColor("#0B1C2B")
 INK_2 = HexColor("#16303F")
@@ -89,6 +98,43 @@ _FUGAS = ("ARHIAX_EVIDENCE_HMAC_KEY", "RuntimeError", "Traceback", "hmac", "stac
 # ── registro de bounding boxes (§25) ─────────────────────────────────────────
 REGISTRO_BBOX: List[Dict[str, Any]] = []
 PAGINA_ACTUAL = [1]
+
+
+# ── §7 del hotfix 2.0D-R1 · PRESUPUESTO VERTICAL POR PÁGINA ───────────────────
+# Cuánto cabe en la página, cuánto se consumió y cuánto queda por encima de la
+# reserva del pie. NO cambia el límite (PIE_Y sigue siendo 56 pt): lo hace
+# EXPLÍCITO y medible, para poder exigir un margen mínimo en las pruebas.
+PRESUPUESTO = {}
+
+
+def page_budget(pagina: int) -> dict:
+    """Disponible / consumido / restante de una página ya compuesta.
+
+    `remaining_height` es el espacio libre por encima de la reserva del pie
+    (`footer_limit` = PIE_Y = 56 pt); es el mismo valor que declara el mensaje de
+    desborde («quedan N pt»).
+    """
+    datos = dict(PRESUPUESTO.get(pagina) or {})
+    datos.setdefault("page_number", int(pagina))
+    datos.setdefault("available_height", float(TOPE - PIE_Y))
+    datos.setdefault("footer_limit", float(PIE_Y))
+    return datos
+
+
+def _cerrar_pagina(pagina: int, y: float, **extra) -> float:
+    """Cierra la página: registra su presupuesto y declara el desborde si lo hay."""
+    PRESUPUESTO[int(pagina)] = {
+        "page_number": int(pagina),
+        "available_height": float(TOPE - PIE_Y),
+        "consumed_height": float(TOPE - y),
+        "remaining_height": float(y),
+        "footer_limit": float(PIE_Y),
+        "overflow": bool(y < PIE_Y),
+        **extra,
+    }
+    if y < PIE_Y:
+        VIOLACIONES.append(f"P{pagina} desborda: quedan {y:.0f} pt (límite {PIE_Y:.0f})")
+    return y
 
 
 def _bbox(nombre: str, x0: float, y0: float, x1: float, y1: float) -> None:
@@ -1063,8 +1109,7 @@ def pagina1(c, modelo, secciones):
                                " · " + " · ".join(str(m) for m in (disp.get("reasons") or [])[:2]),
                                1)], dy=4.0)
     y = emitir(c, y, [SelloGlobal(modelo, pagina=1)], dy=0)
-    if y < PIE_Y:
-        VIOLACIONES.append(f"P1 desborda: quedan {y:.0f} pt (límite {PIE_Y:.0f})")
+    _cerrar_pagina(1, y)
     pie(c, modelo, 1)
 
 
@@ -1163,8 +1208,7 @@ def pagina2(c, modelo, secciones):
                             str((modelo.get("document_identity") or {}).get("generated_at")
                                 or "")[:10], ev.get("estado"),
                             int(ev.get("evidence_count") or 0), pagina=2)], dy=0)
-    if y < PIE_Y:
-        VIOLACIONES.append(f"P2 desborda: quedan {y:.0f} pt (límite {PIE_Y:.0f})")
+    _cerrar_pagina(2, y)
     pie(c, modelo, 2)
 
 
@@ -1338,8 +1382,7 @@ def pagina3(c, modelo, secciones):
                             str((modelo.get("document_identity") or {}).get("generated_at")
                                 or "")[:10], ev_man.get("estado"),
                             int(ev_man.get("evidence_count") or 0), pagina=3)], dy=0)
-    if y < PIE_Y:
-        VIOLACIONES.append(f"P3 desborda: quedan {y:.0f} pt (límite {PIE_Y:.0f})")
+    _cerrar_pagina(3, y)
     pie(c, modelo, 3)
 
 
@@ -1437,8 +1480,7 @@ def pagina4(c, modelo, secciones):
                             str((modelo.get("document_identity") or {}).get("generated_at")
                                 or "")[:10], ev.get("estado"),
                             int(ev.get("evidence_count") or 0), pagina=4)], dy=0)
-    if y < PIE_Y:
-        VIOLACIONES.append(f"P4 desborda: quedan {y:.0f} pt (límite {PIE_Y:.0f})")
+    _cerrar_pagina(4, y)
     pie(c, modelo, 4)
 
 
@@ -1580,8 +1622,7 @@ def pagina5(c, modelo, secciones):
                             str((modelo.get("document_identity") or {}).get("generated_at")
                                 or "")[:10], ev.get("estado"),
                             int(ev.get("evidence_count") or 0), pagina=5)], dy=0)
-    if y < PIE_Y:
-        VIOLACIONES.append(f"P5 desborda: quedan {y:.0f} pt (límite {PIE_Y:.0f})")
+    _cerrar_pagina(5, y)
     pie(c, modelo, 5)
 
 
@@ -1627,7 +1668,7 @@ def pagina6(c, modelo, secciones):
                                  6, size=11.0)])
 
         def _dib_valor(cc, x, yy, a):
-            panel(cc, x, yy - 78, a, 78, CARD)
+            panel(cc, x, yy - 92, a, 92, CARD)
             txt(cc, x + 11, yy - 17, "Valor estimado (valor central)", FB, 8.0, TEXT_3)
             txt(cc, x + 11, yy - 42, _v(valor.get("consolidado")), FB, 20, INK)
             _res, _rsz = ajustar(
@@ -1644,8 +1685,11 @@ def pagina6(c, modelo, secciones):
                 xx = x + 300 + i * 110
                 txt(cc, xx, yy - 24, k, FB, 7.4, TEXT_3)
                 wrap(cc, xx, yy - 36, _v(v, "no declarado"), FB, 8.4, INK, 104, leading=9.4)
+            # §6 · la nota metodológica vive DENTRO del panel (no en un bloque aparte).
+            _met, _ms = ajustar(cc, METODOLOGIA_VALORACION, FO, 8.2, a - 22)
+            txt(cc, x + 11, yy - 82, _met, FO, _ms, TEXT_3)
 
-        y = emitir(c, y, [PanelLibre("valor", 78.0, _dib_valor, 6)])
+        y = emitir(c, y, [PanelLibre("valor", 92.0, _dib_valor, 6)])
         if valor.get("tasa_fuente"):
             y = emitir(c, y, [Nota("Tasa y parámetros: " + str(valor["tasa_fuente"]), 6)])
     else:
@@ -1655,7 +1699,13 @@ def pagina6(c, modelo, secciones):
         _gr = (_dec.get("gate_reasons") or {})
         _decision_val = str(_gd.get("VALUATION_GATE") or "NO EMITIR VALORACIÓN")
         _motivo_val = str(_gr.get("VALUATION_GATE") or "")
-        _alto_blockers = max(80.0, 62.0 + len(blockers) * 12.0)
+        # §4 · el PDF imprime hasta TOPE_BLOCKERS condiciones materiales; si hay más, lo
+        # declara y remite al informe técnico y al expediente de decisión. El MODELO y el
+        # MANIFEST conservan la lista completa: no se pierde ni se recorta el dato.
+        _impresos = list(blockers[:TOPE_BLOCKERS_PDF])
+        _extra_blockers = max(0, len(blockers) - len(_impresos))
+        _lineas_blockers = len(_impresos) + (1 if _extra_blockers else 0)
+        _alto_blockers = max(86.0, 74.0 + _lineas_blockers * 12.0 + 12.0)
         _texto_dec_val = "DECISIÓN DICTUS: " + _decision_val
 
         def _dib_blockers(cc, x, yy, a):
@@ -1673,8 +1723,18 @@ def pagina6(c, modelo, secciones):
             if _motivo_val:
                 txt(cc, x + 11, yy - 60,
                     _v(_corto(_motivo_val, 150)), F, 7.4, TEXT_3)
-            for i, b in enumerate(blockers):
-                txt(cc, x + 11, yy - 74 - i * 12.0, "· " + str(b), F, 8.4, TEXT_2)
+            _yy = yy - 74
+            for b in _impresos:
+                txt(cc, x + 11, _yy, "· " + str(b), F, 8.4, TEXT_2)
+                _yy -= 12.0
+            if _extra_blockers:
+                txt(cc, x + 11, _yy,
+                    f"+ {_extra_blockers} condición(es) adicional(es) · lista completa en "
+                    f"el informe técnico (contexto de mercado) y en el expediente de "
+                    f"decisión.", F, 8.2, TEXT_3)
+                _yy -= 12.0
+            _met, _ms = ajustar(cc, METODOLOGIA_VALORACION, FO, 8.2, a - 22)
+            txt(cc, x + 11, _yy, _met, FO, _ms, TEXT_3)
 
         y = emitir(c, y, [Titulo("VALOR ESTIMADO",
                                  "qué falta para habilitar la valoración · no se "
@@ -1682,18 +1742,19 @@ def pagina6(c, modelo, secciones):
         y = emitir(c, y, [PanelLibre("blockers", _alto_blockers + 12.0,
                                      _dib_blockers, 6)])
 
-    y = emitir(c, y, [Nota("NORMA · CONCEPTO TÉCNICO · VALIDACIÓN EXPERTA: DICTUS prepara y "
-                           "señala; el valor y su interpretación los firma el profesional "
-                           "competente (avaluador inscrito en el RAA, abogado, geodesta).",
-                           6)])
-    ev = modelo.get("evidence_manifest") or {}
-    y = emitir(c, y, [Traza(["Metodología de mercado (Lonja)", "Catastro",
-                             "Identidad canónica"],
-                            str((modelo.get("document_identity") or {}).get("generated_at")
-                                or "")[:10], ev.get("estado"),
-                            int(ev.get("evidence_count") or 0), pagina=6)], dy=0)
-    if y < PIE_Y:
-        VIOLACIONES.append(f"P6 desborda: quedan {y:.0f} pt (límite {PIE_Y:.0f})")
+    # §2/§3 · UN solo bloque inferior de trazabilidad: el pie global ya demuestra
+    # evidencia, sello y hash maestro en esta y en todas las páginas; aquí se añade lo
+    # que el pie NO lleva —fuente y fecha— en una única línea de 8.2 pt. El bloque
+    # «Traza» de 46 pt se elimina SOLO en la página 6 (en las demás sigue igual).
+    _fecha_consulta = str((modelo.get("document_identity") or {}).get("generated_at")
+                          or "")[:10]
+    y = emitir(c, y, [Nota("TRAZABILIDAD · Fuentes: Metodología de mercado (Lonja) · "
+                           "Catastro · Identidad canónica · Consulta: "
+                           f"{_fecha_consulta or 'no declarada'}", 6, size=8.2)], dy=0)
+    _cerrar_pagina(6, y, identity_row_count=len(identidad.get("filas") or []),
+                   blocker_count=len(valor.get("blockers") or []),
+                   blockers_printed=min(len(valor.get("blockers") or []),
+                                        TOPE_BLOCKERS_PDF))
     pie(c, modelo, 6)
 
 

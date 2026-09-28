@@ -195,6 +195,11 @@ def construir_entregables(
     # ── ASERCIÓN DURA sobre el PDF FÍSICO (§3, §4, §5, §8) ────────────────────
     auditoria = auditar_ejecutivo(ejecutivo)
 
+    # §7/§10 del hotfix 2.0D-R1 · el presupuesto vertical REAL de la corrida queda en el
+    # manifest del producto (no es bloque canónico: no altera el hash maestro).
+    presupuesto = {str(p): de.page_budget(p) for p in range(1, MAX_PAGINAS_EJECUTIVO + 1)}
+    modelo["render_budget"] = presupuesto
+
     manifest = {
         "master_manifest_version": dm.MASTER_MANIFEST_VERSION,
         "run_state_version": dse.RUN_STATE_VERSION,
@@ -207,6 +212,7 @@ def construir_entregables(
         "evidence_manifest": modelo["evidence_manifest"],
         "ejecutivo_paginas": auditoria["page_count"],
         "ejecutivo_titulos": auditoria["titulos"],
+        "render_budget": presupuesto,
         "modelo": modelo,
     }
     mpath = salida_dir / ARCHIVO_MANIFEST.format(folio=folio_txt)

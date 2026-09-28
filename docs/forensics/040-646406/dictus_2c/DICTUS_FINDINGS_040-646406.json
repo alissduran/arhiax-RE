@@ -3,9 +3,9 @@
   {
    "finding_id": "H-01",
    "domain": "TITLE",
-   "observation_id": "OBS-TITLE-82969",
+   "observation_id": "OBS-TITLE-62669",
    "observation": {
-    "observation_id": "OBS-TITLE-82969",
+    "observation_id": "OBS-TITLE-62669",
     "domain": "TITLE",
     "subject": "Carga vigente GRAVAMEN: Hipoteca",
     "source": "Certificado de tradición y libertad (SNR)",
@@ -17,14 +17,14 @@
      "estado": "VIGENTE"
     },
     "detail": null,
-    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "observed_at": "2026-09-28T20:41:41.363116+00:00",
     "query": null,
     "evidence_refs": [
      {
       "evidence_id": "EV-CARGA-007",
       "type": "TITLE",
       "source": "SNR/CTL",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      }
@@ -48,7 +48,7 @@
      "evidence_id": "EV-CARGA-007",
      "type": "TITLE",
      "source": "SNR/CTL",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     }
@@ -57,23 +57,23 @@
   {
    "finding_id": "H-COH",
    "domain": "IDENTITY",
-   "observation_id": "OBS-IDENTITY-88798",
+   "observation_id": "OBS-IDENTITY-99958",
    "observation": {
-    "observation_id": "OBS-IDENTITY-88798",
+    "observation_id": "OBS-IDENTITY-99958",
     "domain": "IDENTITY",
     "subject": "Matrícula inmobiliaria",
     "source": "SNR / Certificado de tradición y libertad",
     "status": "OBSERVED",
     "value": "040-646406",
     "detail": "Resolución: nupre",
-    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "observed_at": "2026-09-28T20:41:41.363116+00:00",
     "query": null,
     "evidence_refs": [
      {
       "evidence_id": "EV-IDENTIDAD",
       "type": "IDENTITY",
       "source": "SNR/CTL + catastro",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      },
@@ -81,7 +81,7 @@
       "evidence_id": "EV-COORD",
       "type": "GEOMETRY",
       "source": "OFFICIAL_PREDIO",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      }
@@ -104,7 +104,7 @@
      "evidence_id": "EV-IDENTIDAD",
      "type": "IDENTITY",
      "source": "SNR/CTL + catastro",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     },
@@ -112,7 +112,7 @@
      "evidence_id": "EV-COORD",
      "type": "GEOMETRY",
      "source": "OFFICIAL_PREDIO",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     }
@@ -121,23 +121,23 @@
   {
    "finding_id": "H-COH",
    "domain": "IDENTITY",
-   "observation_id": "OBS-IDENTITY-88798",
+   "observation_id": "OBS-IDENTITY-99958",
    "observation": {
-    "observation_id": "OBS-IDENTITY-88798",
+    "observation_id": "OBS-IDENTITY-99958",
     "domain": "IDENTITY",
     "subject": "Matrícula inmobiliaria",
     "source": "SNR / Certificado de tradición y libertad",
     "status": "OBSERVED",
     "value": "040-646406",
     "detail": "Resolución: nupre",
-    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "observed_at": "2026-09-28T20:41:41.363116+00:00",
     "query": null,
     "evidence_refs": [
      {
       "evidence_id": "EV-IDENTIDAD",
       "type": "IDENTITY",
       "source": "SNR/CTL + catastro",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      },
@@ -145,7 +145,7 @@
       "evidence_id": "EV-COORD",
       "type": "GEOMETRY",
       "source": "OFFICIAL_PREDIO",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      }
@@ -168,7 +168,7 @@
      "evidence_id": "EV-IDENTIDAD",
      "type": "IDENTITY",
      "source": "SNR/CTL + catastro",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     },
@@ -176,7 +176,7 @@
      "evidence_id": "EV-COORD",
      "type": "GEOMETRY",
      "source": "OFFICIAL_PREDIO",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     }
@@ -185,23 +185,23 @@
   {
    "finding_id": "H-COH",
    "domain": "IDENTITY",
-   "observation_id": "OBS-IDENTITY-88798",
+   "observation_id": "OBS-IDENTITY-99958",
    "observation": {
-    "observation_id": "OBS-IDENTITY-88798",
+    "observation_id": "OBS-IDENTITY-99958",
     "domain": "IDENTITY",
     "subject": "Matrícula inmobiliaria",
     "source": "SNR / Certificado de tradición y libertad",
     "status": "OBSERVED",
     "value": "040-646406",
     "detail": "Resolución: nupre",
-    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "observed_at": "2026-09-28T20:41:41.363116+00:00",
     "query": null,
     "evidence_refs": [
      {
       "evidence_id": "EV-IDENTIDAD",
       "type": "IDENTITY",
       "source": "SNR/CTL + catastro",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      },
@@ -209,7 +209,7 @@
       "evidence_id": "EV-COORD",
       "type": "GEOMETRY",
       "source": "OFFICIAL_PREDIO",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      }
@@ -231,7 +231,7 @@
      "evidence_id": "EV-IDENTIDAD",
      "type": "IDENTITY",
      "source": "SNR/CTL + catastro",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     },
@@ -239,7 +239,7 @@
      "evidence_id": "EV-COORD",
      "type": "GEOMETRY",
      "source": "OFFICIAL_PREDIO",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     }
@@ -248,23 +248,23 @@
   {
    "finding_id": "H-COH",
    "domain": "IDENTITY",
-   "observation_id": "OBS-IDENTITY-88798",
+   "observation_id": "OBS-IDENTITY-99958",
    "observation": {
-    "observation_id": "OBS-IDENTITY-88798",
+    "observation_id": "OBS-IDENTITY-99958",
     "domain": "IDENTITY",
     "subject": "Matrícula inmobiliaria",
     "source": "SNR / Certificado de tradición y libertad",
     "status": "OBSERVED",
     "value": "040-646406",
     "detail": "Resolución: nupre",
-    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "observed_at": "2026-09-28T20:41:41.363116+00:00",
     "query": null,
     "evidence_refs": [
      {
       "evidence_id": "EV-IDENTIDAD",
       "type": "IDENTITY",
       "source": "SNR/CTL + catastro",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      },
@@ -272,7 +272,7 @@
       "evidence_id": "EV-COORD",
       "type": "GEOMETRY",
       "source": "OFFICIAL_PREDIO",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      }
@@ -296,7 +296,7 @@
      "evidence_id": "EV-IDENTIDAD",
      "type": "IDENTITY",
      "source": "SNR/CTL + catastro",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     },
@@ -304,7 +304,7 @@
      "evidence_id": "EV-COORD",
      "type": "GEOMETRY",
      "source": "OFFICIAL_PREDIO",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     }
@@ -313,23 +313,23 @@
   {
    "finding_id": "H-COH",
    "domain": "URBAN",
-   "observation_id": "OBS-URBAN-05697",
+   "observation_id": "OBS-URBAN-76533",
    "observation": {
-    "observation_id": "OBS-URBAN-05697",
+    "observation_id": "OBS-URBAN-76533",
     "domain": "URBAN",
     "subject": "Tratamiento urbanístico",
     "source": "capa oficial del municipio consultada en vivo",
     "status": "CONFLICT",
     "value": "Consolidacion",
     "detail": "El expediente ha producido resultados distintos para el mismo predio en ejecuciones previas, sin fuente ni método que lo explique. La cifra definitiva no se presenta hasta resolver qué polígono/ficha normativa es aplicable.",
-    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "observed_at": "2026-09-28T20:41:41.363116+00:00",
     "query": null,
     "evidence_refs": [
      {
       "evidence_id": "EV-URB-TRATAMIENTO",
       "type": "URBAN",
       "source": "capa oficial del municipio consultada en vivo",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      }
@@ -352,7 +352,7 @@
      "evidence_id": "EV-URB-TRATAMIENTO",
      "type": "URBAN",
      "source": "capa oficial del municipio consultada en vivo",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     }
@@ -361,23 +361,23 @@
   {
    "finding_id": "H-COH",
    "domain": "IDENTITY",
-   "observation_id": "OBS-IDENTITY-88798",
+   "observation_id": "OBS-IDENTITY-99958",
    "observation": {
-    "observation_id": "OBS-IDENTITY-88798",
+    "observation_id": "OBS-IDENTITY-99958",
     "domain": "IDENTITY",
     "subject": "Matrícula inmobiliaria",
     "source": "SNR / Certificado de tradición y libertad",
     "status": "OBSERVED",
     "value": "040-646406",
     "detail": "Resolución: nupre",
-    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "observed_at": "2026-09-28T20:41:41.363116+00:00",
     "query": null,
     "evidence_refs": [
      {
       "evidence_id": "EV-IDENTIDAD",
       "type": "IDENTITY",
       "source": "SNR/CTL + catastro",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      },
@@ -385,7 +385,7 @@
       "evidence_id": "EV-COORD",
       "type": "GEOMETRY",
       "source": "OFFICIAL_PREDIO",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      }
@@ -408,7 +408,7 @@
      "evidence_id": "EV-IDENTIDAD",
      "type": "IDENTITY",
      "source": "SNR/CTL + catastro",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     },
@@ -416,7 +416,7 @@
      "evidence_id": "EV-COORD",
      "type": "GEOMETRY",
      "source": "OFFICIAL_PREDIO",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     }
@@ -425,9 +425,9 @@
   {
    "finding_id": "H-02",
    "domain": "TITLE",
-   "observation_id": "OBS-TITLE-82969",
+   "observation_id": "OBS-TITLE-62669",
    "observation": {
-    "observation_id": "OBS-TITLE-82969",
+    "observation_id": "OBS-TITLE-62669",
     "domain": "TITLE",
     "subject": "Carga vigente GRAVAMEN: Hipoteca",
     "source": "Certificado de tradición y libertad (SNR)",
@@ -439,14 +439,14 @@
      "estado": "VIGENTE"
     },
     "detail": null,
-    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "observed_at": "2026-09-28T20:41:41.363116+00:00",
     "query": null,
     "evidence_refs": [
      {
       "evidence_id": "EV-CARGA-007",
       "type": "TITLE",
       "source": "SNR/CTL",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      }
@@ -470,7 +470,7 @@
      "evidence_id": "EV-CARGA-007",
      "type": "TITLE",
      "source": "SNR/CTL",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     }
@@ -479,23 +479,23 @@
   {
    "finding_id": "H-GEO",
    "domain": "ENVIRONMENT",
-   "observation_id": "OBS-ENVIRONMENT-00849",
+   "observation_id": "OBS-ENVIRONMENT-85382",
    "observation": {
-    "observation_id": "OBS-ENVIRONMENT-00849",
+    "observation_id": "OBS-ENVIRONMENT-85382",
     "domain": "ENVIRONMENT",
     "subject": "Remoción en masa / amenaza del POT",
     "source": "capa POT empaquetada (cruce local, sin consulta en vivo)",
     "status": "OBSERVED",
     "value": "Media · polígono: intersecta el predio",
     "detail": null,
-    "observed_at": "2026-09-28T19:46:50.194222+00:00",
+    "observed_at": "2026-09-28T20:41:41.363116+00:00",
     "query": null,
     "evidence_refs": [
      {
       "evidence_id": "EV-RIESGO-AMENAZA_REMOCION_MASA",
       "type": "RISK",
       "source": "capa POT del municipio",
-      "timestamp": "2026-09-28T19:46:50.194222+00:00",
+      "timestamp": "2026-09-28T20:41:41.363116+00:00",
       "sha256": null,
       "detail": null
      }
@@ -519,7 +519,7 @@
      "evidence_id": "EV-RIESGO-AMENAZA_REMOCION_MASA",
      "type": "RISK",
      "source": "capa POT del municipio",
-     "timestamp": "2026-09-28T19:46:50.194222+00:00",
+     "timestamp": "2026-09-28T20:41:41.363116+00:00",
      "sha256": null,
      "detail": null
     }

@@ -297,6 +297,10 @@ def main(argv=None) -> int:
     ejecutivo = salida / entrega.ARCHIVO_EJECUTIVO.format(folio=args.folio)
     de = __import__("dictus_ejecutivo")
     de.render(modelo, secciones, ejecutivo)
+    # §7/§10 del hotfix 2.0D-R1: el presupuesto vertical REAL de cada página queda
+    # registrado en el manifest (no es bloque canónico: no altera el hash maestro).
+    presupuesto = {str(p): de.page_budget(p) for p in range(1, 7)}
+    modelo["render_budget"] = presupuesto
 
     texto_tecnico = "\n".join((p.extract_text() or "") for p in PdfReader(str(tecnico)).pages)
     texto_ejecutivo = "\n".join((p.extract_text() or "") for p in PdfReader(str(ejecutivo)).pages)
@@ -481,6 +485,25 @@ def main(argv=None) -> int:
         "estados_observacion": sorted({o.get("status") for o in obs}),
     }
     resumen["perdidas_materiales"] = len(gate_material.get("losses") or [])
+
+    # ── §7/§10 del hotfix 2.0D-R1 · presupuesto vertical medido y publicado ──────
+    _p6 = presupuesto.get("6") or {}
+    resumen["p6_presupuesto"] = {
+        "available_height": _p6.get("available_height"),
+        "consumed_height": _p6.get("consumed_height"),
+        "remaining_height": _p6.get("remaining_height"),
+        "footer_limit": _p6.get("footer_limit"),
+        "overflow": _p6.get("overflow"),
+        "blocker_count": _p6.get("blocker_count"),
+        "blockers_printed": _p6.get("blockers_printed"),
+        "identity_row_count": _p6.get("identity_row_count"),
+    }
+    resumen["presupuesto_vertical"] = {
+        f"P{p}": round(float((presupuesto.get(str(p)) or {}).get("remaining_height") or 0.0), 1)
+        for p in range(1, 7)
+    }
+    resumen["paginas_en_desborde"] = [f"P{p}" for p in range(1, 7)
+                                      if (presupuesto.get(str(p)) or {}).get("overflow")]
 
     (salida / "MATERIAL_FACT_COMPLETENESS_MATRIX.json").write_text(
         json.dumps({"resumen": resumen, "matriz": matriz}, ensure_ascii=False, indent=1),

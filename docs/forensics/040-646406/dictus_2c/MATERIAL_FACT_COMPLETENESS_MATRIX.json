@@ -1,15 +1,15 @@
 {
  "resumen": {
-  "generado": "2026-09-28T19:46:53.403258+00:00",
+  "generado": "2026-09-28T20:41:43.887814+00:00",
   "folio": "040-646406",
-  "run_id": "9db4de42-0dff-478c-af4e-ac7cb135c251",
+  "run_id": "a25e01e7-5c98-4968-be55-962359b4283f",
   "dictus_id": "DX-040-646406-20260928",
-  "master_hash": "f473b1f90edebde34571f94e901a3318a36d49c5dfa022f8302cc7e4e789b6b4",
+  "master_hash": "5331297dacd42bce8a8908ce3e74071b0cf649b300348a3e7d2a2ddd198c08ef",
   "ejecutivo": "docs\\forensics\\040-646406\\dictus_2c\\DICTUS_EJECUTIVO_040-646406.pdf",
-  "ejecutivo_sha256": "d9d0fa01d12e4f9f08ae75d208a4c36d8f2ceb9d58198e380635e5534fda9f88",
+  "ejecutivo_sha256": "b53a9fcfd5af20449aef90287f9b0da68cec3e4c76d74b011922998688a6976e",
   "paginas": 6,
   "violaciones_retícula": [],
-  "cajas_registradas": 80,
+  "cajas_registradas": 79,
   "hechos_auditados": 41,
   "hechos_impresos": 40,
   "perdidas": 0,
@@ -32,7 +32,26 @@
     "OBSERVED"
    ]
   },
-  "perdidas_materiales": 0
+  "perdidas_materiales": 0,
+  "p6_presupuesto": {
+   "available_height": 723.89,
+   "consumed_height": 651.14,
+   "remaining_height": 128.75,
+   "footer_limit": 56.0,
+   "overflow": false,
+   "blocker_count": 0,
+   "blockers_printed": 0,
+   "identity_row_count": 9
+  },
+  "presupuesto_vertical": {
+   "P1": 112.8,
+   "P2": 161.6,
+   "P3": 82.6,
+   "P4": 92.8,
+   "P5": 56.9,
+   "P6": 128.8
+  },
+  "paginas_en_desborde": []
  },
  "matriz": [
   {
