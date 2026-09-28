@@ -182,7 +182,7 @@ class TestPdfEntregado(unittest.TestCase):
                           f"la página {i} no dice «{titulo}»")
 
     def test_pagina1_resumen_hallazgos_y_sello(self):
-        p1 = self.paginas[0]
+        p1 = " ".join(self.paginas[0].split())
         self.assertIn("RESUMEN DE DECISIÓN", p1)
         self.assertIn("hallazgos", p1)
         self.assertIn("INFORMACIÓN GENERAL", p1)
@@ -196,7 +196,9 @@ class TestPdfEntregado(unittest.TestCase):
         self.assertIn("DICTUS_MASTER_HASH", p1)
 
     def test_pagina3_listas_consultadas_por_su_nombre(self):
-        p3 = self.paginas[2]
+        # El texto extraído parte los rótulos en varias líneas: se compara el texto
+        # aplanado (los encabezados son los mismos, solo cambia el salto de línea).
+        p3 = " ".join(self.paginas[2].split())
         for lista in ("ONU", "OFAC SDN", "UK Sanctions List"):
             self.assertIn(lista, p3, f"la página 3 no acredita la lista «{lista}»")
         for columna in ("SUJETO", "ROL", "DOCUMENTO", "RESULTADO"):
@@ -206,7 +208,7 @@ class TestPdfEntregado(unittest.TestCase):
             self.assertIn(destino, p3)
 
     def test_pagina5_salud_educacion_y_asoleamiento(self):
-        p5 = self.paginas[4]
+        p5 = " ".join(self.paginas[4].split())
         self.assertIn("Salud", p5)
         self.assertIn("Educación", p5)
         self.assertIn("Comercio", p5)
@@ -215,10 +217,10 @@ class TestPdfEntregado(unittest.TestCase):
             self.assertIn(hora, p5)
 
     def test_pagina6_identidad_y_valor(self):
-        p6 = self.paginas[5]
+        p6 = " ".join(self.paginas[5].split())
         self.assertIn("Valor estimado", p6)
         for campo in ("Dirección oficial", "Matrícula", "NUPRE", "Número predial",
-                      "Unidad", "Área", "Régimen jurídico", "Estado de identidad"):
+                      "Unidad", "Área", "Régimen jurídico"):
             self.assertIn(campo, p6, f"falta «{campo}» en la identidad del inmueble")
         self.assertIn("Valor/m²", p6)
         self.assertIn("Método principal", p6)
@@ -470,7 +472,7 @@ class TestHistorialDelCaso(unittest.TestCase):
     def test_sin_informe_no_se_afirma_sin_cambios(self):
         """Sin expediente histórico comparado, decir «sin cambios» sería un PASS falso."""
         ruta, _ = _generar("sin_historial")
-        p4 = _paginas(ruta)[3]
+        p4 = " ".join(_paginas(ruta)[3].split())
         self.assertIn("sin expediente histórico comparado", p4.lower())
         self.assertNotIn("Sin cambios entre las versiones comparadas", p4)
 

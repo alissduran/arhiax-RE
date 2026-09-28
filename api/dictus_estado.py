@@ -20,7 +20,9 @@ from __future__ import annotations
 import datetime
 import hashlib
 import json
+import re
 import unicodedata
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 # Estados de coherencia compartidos con la capa de historia (un solo vocabulario).
@@ -36,6 +38,27 @@ POI_ITEM_FIELDS = ("category", "name", "type", "lat", "lon", "distance_m",
 
 # Velocidad peatonal de referencia para la estimación de tiempo a pie (m/min).
 VELOCIDAD_PEATONAL_M_MIN = 80.0
+
+# ── activos visuales de la corrida (DICTUS 2.0C §7/§20) ──────────────────────
+# Cada activo declara estado, fuente, fecha, ruta y huella: el ejecutivo reutiliza
+# los activos REALES de la MISMA corrida (nunca el PDF técnico) o dice que no existen.
+VISUAL_ASSET_FIELDS = ("satellite_map", "poi_map", "shadow_09", "shadow_15")
+
+_ARCHIVOS_ACTIVO = {
+    "satellite_map": ("mapa_satelital.png",
+                      "Escena satelital aportada como insumo de la corrida"),
+    "poi_map": ("poi_map.png",
+                "Motor cartográfico del producto (mismo run, sin lectura del PDF)"),
+    "shadow_09": ("sombra_9am.png",
+                  "Simulación de sombras de la corrida (09:00)"),
+    "shadow_15": ("sombra_3pm.png",
+                  "Simulación de sombras de la corrida (15:00)"),
+}
+
+# Actos de adquisición del tracto registral (mismo vocabulario que el analizador del
+# CTL): la modalidad se DERIVA del acto inscrito, nunca de un supuesto.
+ACTOS_ADQUISICION = ("COMPRAVENTA", "ADJUDICACION", "SUCESION", "APORTE", "DACION",
+                     "REMATE", "DONACION", "PERMUTA", "USUCAPION")
 
 
 # ── utilidades ────────────────────────────────────────────────────────────────
@@ -55,6 +78,94 @@ def _num(v, tipos=(int, float)):
     except (TypeError, ValueError):
         return None
     return f
+
+
+# ── activos visuales de la corrida (§7/§20: transporte, no invención) ────────
+def inventariar_activos_visuales(assets_dir: Any) -> Dict[str, Any]:
+    """Inventario de los activos gráficos que ESTA corrida produjo.
+
+    El ejecutivo puede reutilizar un mapa o una sombra porque el activo existe en el
+    directorio de trabajo de la misma corrida — con su ruta y su huella. Un activo
+    ausente se declara `NOT_PRODUCED`: nunca se sustituye por un esquema que parezca
+    evidencia.
+    """
+    base = Path(str(assets_dir)) if assets_dir else None
+    salida: Dict[str, Any] = {"assets_dir": str(base) if base else None, "assets": {}}
+    for clave in VISUAL_ASSET_FIELDS:
+        nombre, fuente = _ARCHIVOS_ACTIVO[clave]
+        registro = {"status": "NOT_PRODUCED", "source": fuente, "file": nombre,
+                    "path": None, "bytes": None, "sha256": None, "generated_at": None,
+                    "provenance": "SAME_RUN"}
+        if base:
+            ruta = base / nombre
+            try:
+                if ruta.exists() and ruta.stat().st_size > 0:
+                    datos = ruta.read_bytes()
+                    registro.update({
+                        "status": "AVAILABLE", "path": str(ruta),
+                        "bytes": len(datos),
+                        "sha256": hashlib.sha256(datos).hexdigest(),
+                        "generated_at": datetime.datetime.fromtimestamp(
+                            ruta.stat().st_mtime, datetime.timezone.utc).isoformat(),
+                    })
+            except OSError:
+                registro["status"] = "UNREADABLE"
+        salida["assets"][clave] = registro
+    salida["disponibles"] = [k for k, v in salida["assets"].items()
+                             if v["status"] == "AVAILABLE"]
+    return salida
+
+
+# ── tracto registral: actos de adquisición y modalidad (§13) ─────────────────
+_DOC_RE = re.compile(r"(ESCRITURA[^,;\n]{0,80}|NOTARIA[^,;\n]{0,60})", re.IGNORECASE)
+
+
+def actos_adquisicion(analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Actos de adquisición inscritos en el folio, con su evidencia registral.
+
+    `legal_analyzer` ya tipifica cada anotación (`COMPRAVENTA`, `ADJUDICACION`, …): la
+    modalidad de adquisición es un HECHO del tracto, no un supuesto del renderer.
+    """
+    detalle = (analysis or {}).get("anotaciones_detalle") or []
+    actos: List[Dict[str, Any]] = []
+    for a in detalle:
+        if not isinstance(a, dict):
+            continue
+        tipo = str(a.get("tipo") or "").strip().upper()
+        if tipo not in ACTOS_ADQUISICION:
+            continue
+        texto = str(a.get("texto") or "")
+        m = _DOC_RE.search(texto)
+        actos.append({
+            "anotacion": a.get("num"), "fecha": a.get("fecha"), "tipo": tipo,
+            "partes": a.get("partes"), "estado": a.get("estado"),
+            "documento": (" ".join(m.group(1).split())[:70] if m else None),
+            "vigente": "CANCELADA" not in str(a.get("estado") or "").upper(),
+        })
+    return actos
+
+
+def modalidad_adquisicion(actos: List[Dict[str, Any]]) -> Tuple[Optional[str], Optional[str]]:
+    """(modalidad legible, evidencia) del acto de adquisición más reciente.
+
+    Sin acto en el tracto devuelve `(None, None)`: el ejecutivo dirá que el folio no
+    declara acto de adquisición, en lugar de afirmar una modalidad sin fuente.
+    """
+    vigentes = [a for a in (actos or []) if a.get("vigente")] or list(actos or [])
+    if not vigentes:
+        return None, None
+    ultimo = sorted(vigentes, key=lambda x: (str(x.get("fecha") or ""),
+                                             x.get("anotacion") or 0))[-1]
+    legible = {"COMPRAVENTA": "Compraventa", "ADJUDICACION": "Adjudicación",
+               "SUCESION": "Sucesión", "APORTE": "Aporte", "DACION": "Dación en pago",
+               "REMATE": "Remate", "DONACION": "Donación", "PERMUTA": "Permuta",
+               "USUCAPION": "Usucapión"}.get(ultimo["tipo"], ultimo["tipo"].title())
+    partes = [f"Anot. {ultimo.get('anotacion')}"]
+    if ultimo.get("fecha"):
+        partes.append(str(ultimo["fecha"]))
+    if ultimo.get("documento"):
+        partes.append(str(ultimo["documento"]))
+    return legible, " · ".join(partes)
 
 
 # ── POI: normalización al contrato del estado (§9) ────────────────────────────
@@ -335,6 +446,8 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
                   and ("GRAVAMEN" in str(a[2]).upper() or "MEDIDA CAUTELAR" in str(a[2]).upper()
                        or "LIMITACION" in str(a[2]).upper())
                   and "CANCELADA" not in str(a[4]).upper()]
+    _actos = actos_adquisicion(analysis)
+    _modalidad, _modalidad_ev = modalidad_adquisicion(_actos)
 
     return {
         "run_state_version": RUN_STATE_VERSION,
@@ -359,7 +472,16 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
         "title_state": {
             "folio": analysis.get("folio"),
             "titulares": analysis.get("titulares"),
-            "modalidad_adquisicion": analysis.get("modalidad_adquisicion"),
+            "modalidad_adquisicion": (analysis.get("modalidad_adquisicion")
+                                      if str(analysis.get("modalidad_adquisicion") or "")
+                                      .strip().upper() not in ("", "N/D", "N/A")
+                                      else _modalidad),
+            "modalidad_evidencia": _modalidad_ev,
+            "modalidad_fuente": ("acto de adquisición inscrito en el folio" if _modalidad
+                                 else None),
+            # El tracto COMPLETO en forma de hechos: los actos de adquisición son los
+            # que sostienen la modalidad (no una etiqueta fija del renderer).
+            "actos_adquisicion": _actos,
             "circulo_registral": analysis.get("circulo_registral"),
             "anotaciones_total": len(anotaciones),
             "gravamenes_vigentes": gravamenes,
@@ -415,6 +537,12 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
             "authorization": ctx.get("valuation_authorization") or {},
         },
         "release_state": captura.get("release") or {},
+        # ── DICTUS 2.0C: hechos que el producto YA calculaba y el estado no recibía ──
+        # Contexto de mercado (sector, tasa, banda, procedencia y binding de la
+        # coordenada, procedencia de capas urbanas, bloqueos de autorización).
+        "market_context": ctx.get("market_context") or {},
+        # Activos gráficos REALES de esta corrida (mapa, sombras): estado + huella.
+        "visual_assets": inventariar_activos_visuales(ctx.get("assets_dir")),
         "evidence_manifest_input": {
             "articulos": [
                 {"tipo": "IDENTIDAD_CANONICA", "fuente": cid.get("identity_source") or "SNR/geoportal"},

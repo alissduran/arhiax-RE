@@ -1,0 +1,19 @@
+{
+ "resumen": {
+  "generado": "2026-09-28T17:08:12.770964+00:00",
+  "folio": "040-646406",
+  "run_id": "881ebf3d-4958-4892-978c-b7f62151a1e0",
+  "dictus_id": "DX-040-646406-20260928",
+  "master_hash": "b106972414db397b320a71213453ccadd59b31884251ee774ffb3d3e83819fdf",
+  "ejecutivo": "docs\\forensics\\040-646406\\dictus_2c\\DICTUS_EJECUTIVO_040-646406.pdf",
+  "ejecutivo_sha256": "b75c08c6083b3c362174276db9564aa2324fa90579ec1a20948d4ecb2a2dc10e",
+  "paginas": 6,
+  "violaciones_retícula": [],
+  "cajas_registradas": 84,
+  "hechos_auditados": 41,
+  "hechos_impresos": 40,
+  "perdidas": 0,
+  "sin_fuente": 1
+ },
+ "perdidas": []
+}

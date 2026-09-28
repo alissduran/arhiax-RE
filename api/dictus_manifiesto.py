@@ -253,7 +253,11 @@ def estado_legacy_desde_run_state(rs: Dict[str, Any]) -> Dict[str, Any]:
     rs = rs or {}
     pi = dict(rs.get("property_identity") or {})
     adm = pi.pop("administrativo", None) or {}
-    mc = adm.get("market_context") if isinstance(adm, dict) else None
+    # DICTUS 2.0C: el contexto de mercado (sector, tasa, procedencia/binding de la
+    # coordenada, procedencia urbana, bloqueos) es un hecho de la corrida y viaja en
+    # el estado. Antes se buscaba solo dentro del contexto administrativo, donde no
+    # está: el ejecutivo perdía el sector, el método, la geometría y el binding.
+    mc = rs.get("market_context") or adm.get("market_context") or {}
     if not isinstance(mc, dict):
         mc = {}
     return {
@@ -278,6 +282,9 @@ def estado_legacy_desde_run_state(rs: Dict[str, Any]) -> Dict[str, Any]:
         "solar": rs.get("solar_state") or {},
         "risk_context": rs.get("risk_context") or {},
         "historical_consistency": rs.get("historical_consistency") or {},
+        # DICTUS 2.0C: activos gráficos de la corrida (mapa/sombras) con su huella.
+        "visual_assets": rs.get("visual_assets") or {},
+        "market_context": mc,
     }
 
 
@@ -360,6 +367,10 @@ def construir_documento_maestro(estado: Dict[str, Any], *,
             "market_methodology_sha256": market.get("market_methodology_sha256"),
             "matcher_version": scr.get("matcher_version"),
         },
+        # DICTUS 2.0C: hechos materiales que el ejecutivo debe poder imprimir sin
+        # volver a calcularlos (y que antes se perdían en la proyección del estado).
+        "visual_assets": e.get("visual_assets") or {},
+        "market_context": market,
         "historical_consistency": {
             "veredicto": hist.get("veredicto"),
             "versiones_comparadas": hist.get("versiones_comparadas"),

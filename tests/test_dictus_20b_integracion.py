@@ -169,6 +169,11 @@ class TestPoiEnElEstado(unittest.TestCase):
             it["walking_time_estimate"] = None
         for cat in rs["poi_state"]["por_categoria"].values():
             cat["mas_cercano_m"] = None
+            # El render imprime los ítems de `por_categoria` (misma verdad que el
+            # estado): la supresión de distancias debe aplicarse a ESA lista.
+            for it in (cat.get("items") or []):
+                it["distance_m"] = None
+                it["walking_time_estimate"] = None
         rs["poi_state"]["distance_available"] = False
         modelo = dm.construir_documento_maestro(rs, historial={}, folio=FOLIO)
         secciones = sec.desde_estado(rs, modelo, {})
@@ -215,15 +220,31 @@ class TestPortalYCriterios(unittest.TestCase):
         self.assertIn("HALLAZGOS", p1)
         total = len(man["modelo"]["findings"])
         self.assertGreaterEqual(total, 1)
-        self.assertIn(f"{total} hallazgos materiales".lower(), p1.lower(),
-                      "la página 1 debe declarar cuántos hallazgos contiene")
+        _op = [f for f in man["modelo"]["findings"]
+               if str(f.get("codigo") or "").upper() != "H-COH"]
+        _coh = [f for f in man["modelo"]["findings"]
+                if str(f.get("codigo") or "").upper() == "H-COH"]
+        self.assertIn(f"{len(_op)} hallazgos de la operación".lower(), p1.lower(),
+                      "la página 1 debe declarar cuántos hallazgos condicionan la operación")
+        self.assertEqual(len(_op) + len(_coh), total,
+                         "todo hallazgo del estado se declara en la página 1: como "
+                         "hallazgo de operación o dentro de la tarjeta de coherencia")
         for columna in ("SEVERIDAD", "HALLAZGO", "AFECTA A", "ACCIÓN"):
             self.assertIn(columna, p1)
-        # Cada hallazgo del estado aparece en la página 1 (se identifica por su código).
-        faltan = [f"{f.get('codigo')} {f.get('titulo', '')[:26]}"[:12]
-                  for f in man["modelo"]["findings"]
+        # Cada hallazgo DE LA OPERACIÓN aparece en la página 1 por su código; los
+        # conflictos entre versiones (H-COH) se agrupan en UNA tarjeta de coherencia con
+        # su recuento (2.0C §8): no son riesgos del inmueble y no se imprimen como seis
+        # hallazgos ALTO.
+        operativos = [f for f in man["modelo"]["findings"]
+                      if str(f.get("codigo") or "").upper() != "H-COH"]
+        faltan = [f.get("codigo") for f in operativos
                   if f.get("codigo") and f["codigo"] not in p1]
-        self.assertEqual(faltan, [], f"hallazgos fuera de la página 1: {faltan}")
+        self.assertEqual(faltan, [], f"hallazgos de operación fuera de la página 1: {faltan}")
+        coh = [f for f in man["modelo"]["findings"]
+               if str(f.get("codigo") or "").upper() == "H-COH"]
+        if coh:
+            self.assertIn(f"{len(coh)} atributo(s) requieren reconciliación histórica".lower(),
+                          p1.lower(), "la coherencia debe declarar cuántos atributos agrupa")
 
     def test_m_sin_tecnicismos_ni_secretos_en_el_ejecutivo(self):
         import pymupdf

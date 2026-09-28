@@ -4053,6 +4053,19 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             # cálculo cambia. Sin ella, el ejecutivo no podía declarar el régimen
             # jurídico sin volver a inferirlo por su cuenta (dos metodologías).
             "clasificacion": _clasif,
+            # DICTUS 2.0C: el CONTEXTO DE MERCADO ya construido (sector metodológico,
+            # tasa, banda, procedencia y binding de la coordenada oficial, procedencia
+            # de las capas urbanas y sus blockers) se expone al estado canónico.
+            # Igual que la clasificación: SOLO LECTURA. Sin él, el ejecutivo declaraba
+            # «no declarado» el sector de mercado, el método, la procedencia de la
+            # geometría y el estado del binding — hechos que el producto YA conocía
+            # (STATE_PROJECTION_LOSS).
+            "market_context": market_context,
+            # Los activos visuales de ESTA corrida (mapa de POI, mapa satelital,
+            # sombras) viven en el directorio de trabajo del run: el estado registra
+            # su existencia y su huella para que el ejecutivo los reutilice sin leer
+            # el PDF técnico.
+            "assets_dir": str(assets_dir) if assets_dir else None,
         }
         _informe_gate = ejecutar_gate(_contexto_gate)
         print(f"[PDF][GATE] ok={_informe_gate['ok']} "

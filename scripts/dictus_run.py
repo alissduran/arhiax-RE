@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""DICTUS 2.0B-R1 — UNA corrida del producto → EJECUTIVO (principal) + TÉCNICO (anexo).
+"""DICTUS 2.0C — UNA corrida del producto → EJECUTIVO (principal) + TÉCNICO (anexo).
 
     python scripts/dictus_run.py --ctl <ruta\\al\\CTL.pdf> [--folio 040-646406]
 
@@ -42,7 +42,7 @@ CTL_DEFECTO = (ROOT / "docs" / "forensics" / "040-646406" / "golden_03i1"
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description="DICTUS 2.0B-R1 — corrida integrada")
+    ap = argparse.ArgumentParser(description="DICTUS 2.0C — corrida integrada")
     ap.add_argument("--ctl", default=str(CTL_DEFECTO))
     ap.add_argument("--folio", default="040-646406")
     ap.add_argument("--ciudad", default="barranquilla")
@@ -130,10 +130,10 @@ def main(argv=None) -> int:
     texto = "\n\n".join(
         f"===== PAGINA {i + 1} =====\n" + " ".join(p.extract_text().split())
         for i, p in enumerate(_lector(ejecutivo).pages))
-    (salida / f"DICTUS_2.0B_TEXTO_EJECUTIVO_{args.folio}.txt").write_text(texto + "\n",
+    (salida / f"DICTUS_2.0C_TEXTO_EJECUTIVO_{args.folio}.txt").write_text(texto + "\n",
                                                                          encoding="utf-8")
     md = [
-        f"# DICTUS 2.0B-R1 — ACEPTACIÓN DE LA CORRIDA INTEGRADA ({args.folio})",
+        f"# DICTUS 2.0C — ACEPTACIÓN DE LA CORRIDA INTEGRADA ({args.folio})",
         "",
         "Una sola corrida del producto produjo el documento **ejecutivo** (el que ve el "
         "usuario) y el **técnico** (anexo), desde el mismo estado canónico y con un único "

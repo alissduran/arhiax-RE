@@ -38,6 +38,8 @@ def main(argv=None) -> int:
 
     salida = Path(args.salida) if args.salida else (
         ROOT / "docs" / "forensics" / args.folio / "dictus_2b")
+    if not salida.is_absolute():
+        salida = (ROOT / salida).resolve()
     pdf = salida / entrega.ARCHIVO_EJECUTIVO.format(folio=args.folio)
     if not pdf.exists():
         print(f"[FAIL] no existe el Ejecutivo: {pdf}")
@@ -60,12 +62,15 @@ def main(argv=None) -> int:
             for i, pag in enumerate(doc, start=1):
                 ruta = destino / f"ejecutivo_p{i}.png"
                 pag.get_pixmap(dpi=args.dpi).save(str(ruta))
-                imagenes.append(str(ruta.relative_to(ROOT)))
+                try:
+                    imagenes.append(str(ruta.relative_to(ROOT)))
+                except ValueError:
+                    imagenes.append(str(ruta))
 
     print("=" * 72)
     print("ENTREGABLE PRINCIPAL (DICTUS 2.0B-R1)")
     print("=" * 72)
-    print(f"archivo      : {pdf.relative_to(ROOT)}")
+    print(f"archivo      : {pdf}")
     print(f"sha256       : {sha}")
     print(f"páginas      : {auditoria['page_count']} (límite {entrega.MAX_PAGINAS_EJECUTIVO})")
     print(f"arquitectura : {'APROBADA' if auditoria['ok'] else 'NO APTA'}")

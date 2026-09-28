@@ -1,0 +1,45 @@
+{
+ "raw": {
+  "raw_category_counts": {
+   "Salud": 3,
+   "Educacion": 3,
+   "Comercio": 3,
+   "Recreacion": 3
+  },
+  "raw_category_status": {
+   "Salud": "AVAILABLE",
+   "Educacion": "AVAILABLE",
+   "Comercio": "AVAILABLE",
+   "Recreacion": "AVAILABLE"
+  },
+  "raw_sources_attempted": [
+   "OSM_OVERPASS"
+  ],
+  "raw_sources_succeeded": [
+   "OSM_OVERPASS"
+  ],
+  "tope_por_categoria_en_el_motor": 3,
+  "nota": "poi_engine aplica `[:3]` al parsear Overpass (línea 376) y `max_por_categoria=3` en merge_poi_sources (línea 191): el motor solo expone 3 por categoría. No es una pérdida del bridge estado→PDF."
+ },
+ "estado": {
+  "estado_por_categoria": {
+   "Salud": "AVAILABLE",
+   "Educacion": "AVAILABLE",
+   "Comercio": "AVAILABLE",
+   "Recreacion": "AVAILABLE"
+  },
+  "conteo_por_categoria": {
+   "Salud": 3,
+   "Educacion": 3,
+   "Comercio": 3,
+   "Recreacion": 3
+  },
+  "items_en_el_estado": 12,
+  "items_en_el_modelo": 12,
+  "items_impresos_en_el_ejecutivo": 12,
+  "campo_con_tiempo_a_pie": true,
+  "fuentes": [
+   "OSM_OVERPASS"
+  ]
+ }
+}

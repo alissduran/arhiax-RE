@@ -1,11 +1,21 @@
 # -*- coding: utf-8 -*-
-"""DICTUS 2.0B — Secciones del ejecutivo derivadas del ESTADO CANÓNICO.
+"""DICTUS 2.0C — Secciones del ejecutivo derivadas del ESTADO CANÓNICO.
 
-El ejecutivo NO lee el PDF técnico ni extrae texto con expresiones regulares: todo lo
-que imprime sale del `DictusRunState` (y, para la coherencia histórica heredada de
-2.0A, del informe de consistencia que la propia corrida referencia).
+El ejecutivo NO lee el PDF técnico ni extrae texto: todo lo que imprime sale del
+`DictusRunState` (y del informe de coherencia histórica que la corrida referencia).
 
-Este módulo existe para mantener esa frontera explícita y comprobable.
+2.0C recupera los hechos materiales que el producto YA calculaba y el estado no
+transportaba (§1 STATE_PROJECTION_LOSS):
+
+  · `market_context` — sector metodológico, tasa y su fuente, procedencia y binding
+    de la coordenada oficial, alcance de esa geometría, procedencia por atributo
+    urbano (LIVE_OFFICIAL / PACKAGED_REFERENCE) y blockers de la valoración.
+  · modalidad de adquisición DERIVADA del acto inscrito en el tracto (no de un
+    supuesto) con su evidencia registral.
+  · activos gráficos REALES de la corrida (mapa de POI, sombras, mapa satelital si
+    existe) con su huella.
+  · acciones jurídicas POR TIPO de carga (la hipoteca y la afectación no comparten
+    acción) y actores por atributo.
 """
 from __future__ import annotations
 
@@ -22,30 +32,58 @@ ETIQUETA_LISTA = {
     "UK_SANCTIONS": "UKSL",
 }
 
-# Nombre completo de cada lista evaluada: la sigla de la columna no acredita QUÉ
-# lista se consultó (§8 de 2.0B-R1).
 NOMBRE_LISTA = {
     "ONU": "Lista Consolidada ONU (Consejo de Seguridad)",
     "OFAC SDN": "OFAC SDN (EE. UU.)",
     "UKSL": "UK Sanctions List (Reino Unido)",
 }
 
-# Rótulo de la COLUMNA de la matriz (§8): el nombre de la lista, no su sigla.
-COLUMNA_LISTA = {
-    "ONU": "ONU",
-    "OFAC SDN": "OFAC SDN",
-    "UKSL": "UK SANCTIONS LIST",
-}
+COLUMNA_LISTA = {"ONU": "ONU", "OFAC SDN": "OFAC SDN", "UKSL": "UK SANCTIONS LIST"}
 
 NOMBRE_CIUDAD = {
-    "barranquilla": "Barranquilla",
-    "bogota": "Bogotá",
-    "medellin": "Medellín",
-    "pasto": "Pasto",
-    "cali": "Cali",
+    "barranquilla": "Barranquilla", "bogota": "Bogotá", "medellin": "Medellín",
+    "pasto": "Pasto", "cali": "Cali",
 }
 
-# Resultado por lista, con el vocabulario REAL del motor de screening.
+TITULO_ATRIBUTO = {
+    "altura_maxima": "Altura / edificabilidad",
+    "tratamiento": "Tratamiento urbanístico",
+    "uso_pot": "Uso del suelo (POT)",
+    "coordenada": "Coordenada del predio",
+    "titulares": "Titularidad",
+    "amenaza": "Amenaza por remoción en masa",
+}
+
+# Actores que la DECISIÓN de cada atributo afecta realmente (§9). Un conflicto de
+# datos no es «un riesgo alto del inmueble»: afecta a quien decide con ese dato.
+AFECTADOS_POR_ATRIBUTO = {
+    "altura_maxima": ["COMPRADOR", "INMOBILIARIA", "BANCO / FINANCIADOR"],
+    "tratamiento": ["COMPRADOR", "INMOBILIARIA", "BANCO / FINANCIADOR"],
+    "uso_pot": ["COMPRADOR", "INMOBILIARIA", "BANCO / FINANCIADOR"],
+    "coordenada": ["COMPRADOR", "INMOBILIARIA"],
+    "titulares": ["COMPRADOR", "INMOBILIARIA", "BANCO / FINANCIADOR",
+                  "ASEGURADORA DE TÍTULO"],
+    "amenaza": ["COMPRADOR", "BANCO / FINANCIADOR", "ASEGURADORA"],
+}
+
+# Acción jurídica POR TIPO de carga (§12). No se reutiliza la del acreedor en una
+# afectación que no depende de él.
+ACCION_POR_TIPO = {
+    "HIPOTECA": ("Gestionar la obligación con el acreedor (saldo, prelación y cláusulas) "
+                 "y tramitar la cancelación o el levantamiento con su registro en el folio."),
+    "LIMITACION": ("Tramitar la desafectación o el levantamiento de la limitación ante la "
+                   "autoridad o los titulares que la impusieron —no ante el acreedor "
+                   "hipotecario— y registrar el acto en el folio."),
+    "AFECTACION": ("Tramitar la desafectación o el levantamiento de la afectación ante la "
+                   "entidad que la impuso y registrar el acto en el folio."),
+    "EMBARGO": ("Verificar el estado del proceso ante la autoridad judicial y tramitar el "
+                "desembargo con su registro en el folio."),
+    "MEDIDA CAUTELAR": ("Verificar el proceso que la origina ante la autoridad competente y "
+                        "tramitar su cancelación con registro en el folio."),
+    "PATRIMONIO": ("Verificar el acto de afectación patrimonial y su vigencia con la entidad "
+                   "competente antes de transferir."),
+}
+
 _ESTADO_POR_RESULTADO = {
     "NO_MATCH": "SIN_COINCIDENCIAS",
     "POTENTIAL_MATCH": "COINCIDENCIA",
@@ -56,25 +94,32 @@ _ESTADO_POR_RESULTADO = {
     "SOURCE_UNAVAILABLE": "INCOMPLETA",
 }
 
+_AUSENCIAS = ("n/d", "n/a", "na", "no aplica", "no_aplica", "none", "null", "-", "—")
+
 
 def _v(x, hueco="no declarado"):
     return hueco if x in (None, "", []) else x
 
 
-# Marcadores de ausencia del producto: NO son un valor declarado. Un «N/D» impreso
-# como dato sería un hueco mudo disfrazado de hecho.
-_AUSENCIAS = ("n/d", "n/a", "na", "no aplica", "no_aplica", "none", "null", "-", "—")
-
-
 def _dato(x, hueco=None):
-    """Valor declarado o `hueco` si el producto no declaró nada (incluye «N/D»)."""
     if x is None or (isinstance(x, str) and (not x.strip() or x.strip().lower() in _AUSENCIAS)):
         return hueco
     return x
 
 
+def _pesos(v):
+    return f"$ {int(v):,}".replace(",", ".") if v else None
+
+
+def _coherencia_de(atributo: str, filas: List[Dict[str, Any]]) -> Optional[str]:
+    for f in filas or []:
+        if f.get("atributo") == atributo:
+            return f.get("estado")
+    return None
+
+
+# ── screening ─────────────────────────────────────────────────────────────────
 def _listas_de_screening(screening: Dict[str, Any]) -> List[str]:
-    """Columnas de la matriz = listas REALMENTE consultadas por el screening."""
     nombres: List[str] = []
     for f in (screening.get("sources") or screening.get("fuentes") or []):
         sid = f if isinstance(f, str) else (f.get("source_id") or f.get("id") or "")
@@ -88,8 +133,8 @@ def _por_lista(screening: Dict[str, Any], sujeto: Dict[str, Any],
                listas: List[str]) -> Dict[str, str]:
     """Resultado del sujeto en CADA lista, tomado de los `outcomes` del motor.
 
-    Si el motor no declaró un outcome para ese par (sujeto, lista), el estado es
-    «NO CONSULTADA»: nunca se afirma «sin coincidencia» de algo que no se consultó.
+    Sin outcome declarado para ese par (sujeto, lista) el estado es «NO CONSULTADA»:
+    nunca se afirma «sin coincidencia» de algo que no se consultó.
     """
     salida = {li: "INCOMPLETA" for li in listas}
     sujeto_id = sujeto.get("subject_id")
@@ -101,20 +146,12 @@ def _por_lista(screening: Dict[str, Any], sujeto: Dict[str, Any],
         if etiqueta not in salida:
             continue
         estado = _ESTADO_POR_RESULTADO.get(str(o.get("result") or "").upper(), "SIN_DATO")
-        # La coincidencia manda: si dos fuentes devolvieran estados distintos para la
-        # misma lista, se conserva el más conservador.
         if estado == "COINCIDENCIA" or salida[etiqueta] == "INCOMPLETA":
             salida[etiqueta] = estado
     return salida
 
 
 def _documento_de_sujeto(s: Dict[str, Any]) -> Optional[str]:
-    """Documento del sujeto, enmascarado como en la evidencia del screening (§20).
-
-    El resumen del motor declara `document_type` + `document_number`: el ejecutivo
-    imprime el documento ENMASCARADO (los últimos dígitos identifican, el resto no se
-    expone). Sin dato declarado se dice que no está declarado.
-    """
     numero = s.get("document") or s.get("documento") or s.get("document_number")
     if not numero:
         return None
@@ -122,7 +159,7 @@ def _documento_de_sujeto(s: Dict[str, Any]) -> Optional[str]:
     try:
         from sanctions.contracts import mask_document
         return f"{tipo} {mask_document(s.get('document_type'), str(numero))}".strip()
-    except Exception:  # noqa: BLE001 — la máscara local es idéntica en forma
+    except Exception:  # noqa: BLE001 — máscara local idéntica en forma
         n = str(numero)
         return f"{tipo} {n[:4]}{'*' * (len(n) - 5)}{n[-1]}".strip() if len(n) > 4 else "****"
 
@@ -152,6 +189,134 @@ def _sujetos_de_screening(screening: Dict[str, Any], listas: List[str]) -> List[
     return salida
 
 
+# ── acciones jurídicas y coherencia ───────────────────────────────────────────
+def _accion_para_carga(carga: Dict[str, Any], findings: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Acción ESPECÍFICA de la carga: la del hallazgo que la identifica o la del tipo.
+
+    Antes todas las cargas recibían la misma frase («cancelación con el acreedor»),
+    que además es incorrecta para una afectación a vivienda familiar (§12).
+    """
+    anot = str(carga.get("anotacion") or "").strip()
+    for f in findings:
+        texto = f"{f.get('codigo') or ''} {f.get('titulo') or ''}".upper()
+        if anot and (f"ANOT. {anot}" in texto or f"ANOTACIÓN {anot}" in texto
+                     or f"ANOTACION {anot}" in texto):
+            return {"accion": f.get("accion") or None, "origen": "HALLAZGO",
+                    "codigo": f.get("codigo")}
+    tipo_norm = str(carga.get("tipo") or "").upper()
+    for clave, accion in ACCION_POR_TIPO.items():
+        if clave in tipo_norm:
+            return {"accion": accion, "origen": "TIPO_DE_CARGA", "codigo": None}
+    return {"accion": ("Verificar el acto inscrito y su vigencia con la entidad que lo "
+                       "origina; registrar su cancelación cuando proceda."),
+            "origen": "TIPO_NO_DECLARADO", "codigo": None}
+
+
+def _actual_de_atributo(atributo: str, rs: Dict[str, Any], mc: Dict[str, Any]) -> Dict[str, Any]:
+    """Valor OBSERVADO EN ESTA CORRIDA del atributo, con su fuente y su modo.
+
+    §16: no se esconde el valor actual porque exista un conflicto histórico; se
+    declaran las tres cosas —actual, histórico y coherencia— y de dónde sale.
+    """
+    urb = rs.get("urban_context") or {}
+    ts = rs.get("title_state") or {}
+    risk = rs.get("risk_context") or {}
+    campos = ((mc.get("urban_source_summary") or {}).get("campos") or {})
+
+    def _modo(clave):
+        c = campos.get(clave) or {}
+        return c.get("modo"), c.get("fuente")
+
+    if atributo == "altura_maxima":
+        modo, _f = _modo("altura_maxima")
+        valor = _dato(urb.get("altura_maxima"))
+        return {"valor": f"Hasta {valor} pisos" if valor else None,
+                "fuente": ("capa POT empaquetada del municipio (cruce local, sin consulta "
+                           "en vivo)" if modo == "PACKAGED_REFERENCE"
+                           else "capa POT oficial en vivo"),
+                "modo": modo or "NO_DECLARADO"}
+    if atributo == "tratamiento":
+        modo, _f = _modo("tratamiento")
+        base = _dato(urb.get("tratamiento"))
+        tipo = _dato(urb.get("tipo_tratamiento"))
+        return {"valor": f"{base} ({tipo})" if base and tipo else base,
+                "fuente": ("capa POT oficial en vivo" if modo == "LIVE_OFFICIAL"
+                           else "capa POT empaquetada (sin consulta en vivo)"),
+                "modo": modo or "NO_DECLARADO"}
+    if atributo == "uso_pot":
+        uso = mc.get("uso") or {}
+        return {"valor": _dato(uso.get("value")) or _dato(urb.get("area_actividad")),
+                "fuente": "capa oficial de uso del suelo (POT)",
+                "modo": str(uso.get("status") or "NO_DECLARADO")}
+    if atributo == "coordenada":
+        coords = mc.get("coordinates") or {}
+        lat, lon = coords.get("lat"), coords.get("lon")
+        return {"valor": (f"{lat:.5f}, {lon:.5f}" if lat and lon else None),
+                "fuente": f"geometría oficial ({mc.get('coordinate_source') or 'sin fuente'})",
+                "modo": ("VERIFIED_OFFICIAL" if mc.get("coordinate_source_verified")
+                         else "NO_VERIFICADA")}
+    if atributo == "titulares":
+        return {"valor": _dato(ts.get("titulares")),
+                "fuente": "certificado de tradición y libertad (SNR/CTL)",
+                "modo": "VERIFIED_REGISTRAL"}
+    if atributo == "amenaza":
+        return {"valor": _dato(risk.get("amenaza_remocion_masa")),
+                "fuente": "capa de amenaza del POT (cruce local, sin consulta en vivo)",
+                "modo": "PACKAGED_REFERENCE"}
+    return {"valor": None, "fuente": None, "modo": "NO_DECLARADO"}
+
+
+def _coherencia_detallada(hist: Dict[str, Any], rs: Dict[str, Any],
+                          mc: Dict[str, Any]) -> List[Dict[str, Any]]:
+    filas: List[Dict[str, Any]] = []
+    for c in (hist.get("conflictos_abiertos") or []):
+        atributo = str(c.get("atributo") or "")
+        actual = _actual_de_atributo(atributo, rs, mc)
+        filas.append({
+            "atributo": atributo,
+            "titulo": TITULO_ATRIBUTO.get(atributo, atributo.replace("_", " ").title()),
+            "actual": actual.get("valor"),
+            "fuente_actual": actual.get("fuente"),
+            "modo_actual": actual.get("modo"),
+            "historico": list(c.get("valores") or []),
+            "detalle": c.get("detalle"),
+            "estado": dse.HISTORICAL_CONFLICT,
+            "afectados": AFECTADOS_POR_ATRIBUTO.get(atributo, []),
+        })
+    return filas
+
+
+def _geometria_estado(mc: Dict[str, Any]) -> str:
+    binding = str(mc.get("canonical_binding_status") or "NO_COMPARABLE").upper()
+    return {"VERIFIED": "VERIFICADA", "MISMATCH": "DISCREPANCIA",
+            "NOT_COMPARABLE": "NO COMPARABLE"}.get(binding, binding)
+
+
+def _geometria_detalle(mc: Dict[str, Any]) -> str:
+    """Explica en lenguaje llano qué acredita (y qué no) la geometría de la corrida."""
+    binding = str(mc.get("canonical_binding_status") or "").upper()
+    campos = mc.get("canonical_binding_fields") or []
+    alcance = _dato(mc.get("coordinate_scope"))
+    fuente = _dato(mc.get("coordinate_source"))
+    partes = []
+    if binding == "VERIFIED":
+        partes.append("La geometría oficial del predio coincide con la identidad canónica"
+                      + (f" ({', '.join(str(c) for c in campos)})" if campos else "") + ".")
+    elif binding == "MISMATCH":
+        partes.append("La geometría oficial NO coincide con la identidad canónica: revise el "
+                      "polígono antes de usarla.")
+    elif binding == "NOT_COMPARABLE":
+        partes.append("La identidad registral está verificada, pero la geometría no se pudo "
+                      "comparar con ella en esta corrida.")
+    else:
+        partes.append("La corrida no declaró el binding de la geometría.")
+    if alcance:
+        partes.append(str(alcance)[:1].upper() + str(alcance)[1:] + ".")
+    if fuente:
+        partes.append(f"Fuente: {fuente}.")
+    return " ".join(partes)
+
+
 def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
                  historial: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Construye las secciones de las 6 páginas desde el estado canónico."""
@@ -164,24 +329,48 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
     poi = rs.get("poi_state") or {}
     risk = rs.get("risk_context") or {}
     solar = rs.get("solar_state") or {}
+    mc = rs.get("market_context") or {}
+    vis = rs.get("visual_assets") or {}
     findings = list(rs.get("findings") or [])
     hist = historial or {}
-    # NOTA: los hallazgos de coherencia histórica NO se inyectan aquí: viven en el
-    # ESTADO canónico (`dictus_estado.agregar_findings_de_coherencia`). Este módulo solo
-    # lee el estado; si los añadiera, el documento impreso y el manifest dirían cosas
-    # distintas (dos verdades sobre la misma corrida).
+
     orden = {"ALTO": 0, "MEDIO": 1, "INFORMATIVO": 2}
     findings.sort(key=lambda x: orden.get(str(x.get("severidad")).upper(), 3))
+    # HALLAZGOS DE LA OPERACIÓN vs COHERENCIA DE INFORMACIÓN (§8): un conflicto entre
+    # versiones del mismo dato no es un riesgo alto del inmueble.
+    operacion = [f for f in findings if str(f.get("codigo") or "").upper() != "H-COH"]
 
     con_carga = bool(ts.get("gravamenes_vigentes"))
     hay_conf_urb = any(c.get("atributo") in ("altura_maxima", "tratamiento", "uso_pot")
                        for c in hist.get("conflictos_abiertos", []))
-    # ¿Hubo comparación histórica REAL? `versiones_comparadas` lo declara el informe
-    # de consistencia. Sin informe no se puede afirmar «sin cambios»: se declara que
-    # no hay expediente histórico comparado (afirmar lo contrario sería un PASS falso).
-    hist_comparado = bool(hist) and int(hist.get("versiones_comparadas") or 0) > 0
     aut = bool((val.get("authorization") or {}).get("allowed"))
-    sellado = str(scr.get("evidence_chain_status") or "") == "SEALED"
+    # Sin comparación histórica NO se puede afirmar que el atributo haya permanecido
+    # igual: se declara que no hay expediente comparado (PASS falso prohibido).
+    # ¿Hubo comparación histórica REAL? Sin informe, decir «verificado»
+    # sería un PASS falso.
+    hist_comparado = bool(hist) and int(hist.get("versiones_comparadas") or 0) > 0
+    _conf_urb = {c.get("atributo"): c for c in (hist.get("conflictos_abiertos") or [])}
+
+    def _estado_urb(atributo: str) -> str:
+        if atributo in _conf_urb:
+            return dse.HISTORICAL_CONFLICT
+        return dse.VERIFICADO if hist_comparado else dse.REQUIERE_VALIDACION
+
+    def _nota_urb(atributo: str) -> Optional[str]:
+        # Nota de UNA línea: el detalle completo vive en el bloque «Coherencia de datos
+        # por atributo» de esta misma página.
+        if atributo in _conf_urb:
+            return "Distintos entre versiones · ver coherencia abajo."
+        if not hist_comparado:
+            return "Sin expediente histórico comparado."
+        return None
+    # §15: «sellado» significa que el SELLO DEL EXPEDIENTE está completo — el estado
+    # del manifest—, no que la cadena técnica interna esté cerrada. El sello es el que
+    # se imprime en el pie y en la página 1: el texto no puede decir otra cosa.
+    sello_manifiesto = str((modelo.get("evidence_manifest") or {}).get("estado") or "")
+    sellado = sello_manifiesto.upper() == "SELLADO"
+    cadena_cerrada = str(scr.get("evidence_chain_status") or "") == "SEALED"
+    coherencia_attrs = _coherencia_detallada(hist, rs, mc)
 
     indicadores = [
         ("Identidad", dse.VERIFICADO if pi.get("identity_verified") else dse.REQUIERE_VALIDACION,
@@ -201,83 +390,110 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
          f"No autorizada: {_v(val.get('motivo_no_aplica'), 'se declara el blocker, sin cifras')}"),
     ]
 
-    coherencia = {}
-    for atributo in ("altura_maxima", "tratamiento", "uso_pot"):
-        abierto = next((c for c in hist.get("conflictos_abiertos", [])
-                        if c.get("atributo") == atributo), None)
-        if abierto:
-            coherencia[atributo] = {"estado": dse.HISTORICAL_CONFLICT,
-                                    "mensaje": abierto.get("detalle"), "valores": abierto.get("valores")}
-        elif hist_comparado:
-            coherencia[atributo] = {"estado": dse.VERIFICADO,
-                                    "mensaje": "Sin cambios entre las versiones comparadas.",
-                                    "valores": []}
-        else:
-            coherencia[atributo] = {
-                "estado": dse.REQUIERE_VALIDACION,
-                "mensaje": ("Sin expediente histórico comparado para este inmueble en esta "
-                            "ejecución: no se afirma que el dato haya permanecido igual."),
-                "valores": []}
-    altura_ok = coherencia["altura_maxima"]["estado"] != dse.HISTORICAL_CONFLICT
-    trat_ok = coherencia["tratamiento"]["estado"] != dse.HISTORICAL_CONFLICT
-
     listas = _listas_de_screening(scr)
-    area_txt = f"{urb.get('area'):.2f}".rstrip("0").rstrip(".") + " m²" if urb.get("area") else None
+    area_txt = (f"{urb.get('area'):.2f}".rstrip("0").rstrip(".") + " m²"
+                if urb.get("area") else None)
 
-    def _pesos(v):
-        return f"$ {int(v):,}".replace(",", ".") if v else None
+    # ── dirección ejecutiva: identidad canónica completa (§10) ────────────────
+    base_dir = _dato(pi.get("direccion_normalizada")) or _dato(pi.get("direccion_raw"))
+    torre = _dato(pi.get("torre"))
+    apto = _dato(pi.get("apartamento"))
+    unidad = _dato(pi.get("unidad"))
+    sufijo = None
+    if torre or apto:
+        sufijo = " · ".join(x for x in (f"Torre {torre}" if torre else None,
+                                        f"Apartamento {apto}" if apto else None) if x)
+    elif unidad:
+        sufijo = str(unidad)
+    # La dirección que viene del folio puede incluir ya la torre y el apartamento:
+    # repetirlas («… APARTAMENTO 430 TORRE 8 … · Torre 8 · Apartamento 430») ensucia la
+    # cabecera sin añadir información.
+    _base_norm = " ".join(str(base_dir or "").upper().split())
+    _ya_incluye = bool(sufijo) and all(
+        tok in _base_norm for tok in
+        [t for t in str(sufijo).upper().replace("·", " ").split() if t.isdigit()])
+    direccion_ejecutiva = " · ".join(
+        x for x in (base_dir, None if _ya_incluye else sufijo) if x)
 
     valor_estimado_txt = (_pesos(val.get("consolidado")) if aut else
                           "no disponible (valoración no autorizada)")
     fecha_consulta = str(rs.get("generated_at") or "")[:10] or None
-    # Método principal: se declara el estado REAL de la metodología (aplicada o no) en
-    # lugar de un hueco mudo. La versión y el detalle viven en el anexo técnico.
-    metodo_txt = ("Metodología de mercado aplicada a la corrida (versión y parámetros "
-                  "en el Anexo F)" if val.get("metodologia_aplica") else
-                  _dato(val.get("motivo_no_aplica"),
-                        "Metodología no aplicada: la corrida no declara el motivo."))
-    _ESTADO_IDENTIDAD = {
-        "MATCH_BY_NUPRE": "Matrícula resuelta por NUPRE",
-        "MATCH_BY_PREDIAL": "Matrícula resuelta por número predial",
-        "EXACT": "Coincidencia exacta con la fuente oficial",
-    }
 
-    # ── Bloque A · INFORMACIÓN GENERAL (§6): ocho campos, ningún hueco mudo ───
     general = [
-        ("Dirección", _v(pi.get("direccion_normalizada") or pi.get("direccion_raw"),
-                         "no declarada")),
+        ("Dirección", direccion_ejecutiva or "no declarada"),
         ("Matrícula", _v(pi.get("folio"), "no declarada")),
         ("Ciudad", NOMBRE_CIUDAD.get(str(rs.get("ciudad") or "").lower(),
                                      _v(rs.get("ciudad"), "no declarada"))),
         ("Barrio", _v(urb.get("barrio"), "no declarado")),
         ("Área", _v(area_txt, "no declarada")),
-        ("Uso", _v(urb.get("destino_economico"), "no declarado")),
+        ("Uso", _v(urb.get("destino_economico") or (mc.get("uso") or {}).get("value"),
+                   "no declarado")),
         ("Régimen", _v(urb.get("condicion_juridica"), "no declarado")),
         ("Valor estimado", valor_estimado_txt),
     ]
 
+    # ── condiciones para cerrar la operación (§7/§12) ─────────────────────────
+    condiciones: List[str] = []
+    for f in operacion:
+        accion = _dato(f.get("accion"))
+        if accion and accion not in condiciones:
+            condiciones.append(str(accion))
+    condiciones = condiciones[:5]
+
+    # ── valoración: valor o blockers reales (§22/§23) ─────────────────────────
+    blockers = [b for b in (mc.get("blockers") or []) if isinstance(b, str)]
+    auth = val.get("authorization") or {}
+    if not aut:
+        for clave, etiqueta in (("identity_authorized", "Identidad del inmueble no autorizada"),
+                                ("market_context_authorized",
+                                 "Contexto de mercado no autorizado")):
+            if auth.get(clave) is False and etiqueta not in blockers:
+                blockers.append(etiqueta)
+        if val.get("motivo_no_aplica") and str(val["motivo_no_aplica"]) not in blockers:
+            blockers.append(str(val["motivo_no_aplica"]))
+    sector_met = (mc.get("sector_metodologico") or {})
+    if aut and mc.get("market_methodology_id"):
+        metodo_txt = (f"Comparación de mercado · {mc.get('market_methodology_id')} "
+                      f"v{mc.get('market_methodology_version')}")
+    elif aut:
+        metodo_txt = "Comparación de mercado (metodología declarada por la corrida)"
+    else:
+        metodo_txt = _dato(val.get("motivo_no_aplica"), "Metodología no aplicada")
+
     return {
-        "hallazgos": findings,
+        "hallazgos": operacion,
+        "coherencia": [f for f in findings if str(f.get("codigo") or "").upper() == "H-COH"],
+        "coherencia_attrs": coherencia_attrs,
         "indicadores": indicadores,
-        "ctx": {"area": urb.get("area"),
-                "ciudad": rs.get("ciudad"),
+        "ctx": {"area": urb.get("area"), "ciudad": rs.get("ciudad"),
                 "regimen": urb.get("condicion_juridica"),
                 "uso": urb.get("destino_economico"),
                 "valor_estimado": valor_estimado_txt,
+                "direccion": direccion_ejecutiva,
+                "torre": torre, "apartamento": apto, "unidad": unidad,
                 "general": general},
         "legal": {
-            "titulares": ([{"nombre": ts.get("titulares"), "tipo": "declarado en el folio",
-                            "documento": "en el certificado",
-                            "participacion": "según el folio",
-                            "adquisicion": _dato(ts.get("modalidad_adquisicion")),
-                            "verificacion": dse.VERIFICADO}] if ts.get("titulares") else []),
-            "gravamenes": [{"severidad": "ALTO",
-                            "titulo": f"{_v(g.get('tipo'))} (Anot. {_v(g.get('anotacion'))})",
-                            "detalle": _v(g.get("partes")),
-                            "accion": "Tramitar el levantamiento o la cancelación con el "
-                                      "acreedor y registrarla en el folio."}
-                           for g in (ts.get("gravamenes_vigentes") or [])],
-            "condiciones": [f["accion"] for f in findings if f.get("accion")][:5],
+            "titulares": ([{
+                "nombre": ts.get("titulares"),
+                "tipo": "declarado en el folio",
+                "documento": "en el certificado",
+                "participacion": "según el folio",
+                "adquisicion": _dato(ts.get("modalidad_adquisicion")),
+                "adquisicion_evidencia": _dato(ts.get("modalidad_evidencia")),
+                "verificacion": dse.VERIFICADO,
+            }] if ts.get("titulares") else []),
+            "gravamenes": [
+                {"severidad": "ALTO",
+                 "titulo": f"{_v(g.get('tipo'))} (Anot. {_v(g.get('anotacion'))})",
+                 "detalle": _v(g.get("partes")),
+                 "estado": _v(g.get("estado"), "vigente"),
+                 "accion": _accion_para_carga(g, findings)["accion"],
+                 "accion_origen": _accion_para_carga(g, findings)["origen"]}
+                for g in (ts.get("gravamenes_vigentes") or [])],
+            "condiciones": condiciones,
+            "anotaciones_total": ts.get("anotaciones_total"),
+            "circulo": _dato(ts.get("circulo_registral")),
+            "actos_adquisicion": ts.get("actos_adquisicion") or [],
         },
         "contrapartes": {
             "listas": listas,
@@ -286,129 +502,158 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
                                for li in listas],
             "sujetos": _sujetos_de_screening(scr, listas) or [{
                 "nombre": "Sin contrapartes declaradas en esta corrida", "tipo": "—",
-                "documento": None, "rol": "—", "por_lista": {}, "resultado": "INCOMPLETA"}]},
+                "documento": None, "rol": "—", "por_lista": {}, "resultado": "INCOMPLETA"}],
+            # §14: el RESULTADO del match depende de la consulta (¿se revisaron los
+            # sujetos contra las listas?) y NO del sellado de la evidencia. Mezclarlos
+            # convertía una cadena sin sellar en «resultado incompleto».
+            "match_global": ("COINCIDENCIA REQUIERE REVISIÓN"
+                             if scr.get("matched_subjects")
+                             else "SIN COINCIDENCIAS RELEVANTES"
+                             if cadena_cerrada
+                             else "VERIFICACIÓN INCOMPLETA"),
+            # §14: el RESULTADO del match y la INTEGRIDAD de la evidencia son dos
+            # conceptos distintos: la cadena sin sellar no vuelve «incompleto» un
+            # screening que sí consultó las tres listas.
+            "evidencia": {
+                "sello": sello_manifiesto,
+                "cadena": str(scr.get("evidence_chain_status") or "no declarada"),
+                "sellado": sellado,
+                "cadena_cerrada": str(scr.get("evidence_chain_status") or "") == "SEALED",
+                "creadas": scr.get("evidence_created_count") or scr.get("evidence_created"),
+                "esperadas": scr.get("evidence_expected_count") or scr.get("evidence_expected"),
+                "cobertura": scr.get("coverage_status"),
+                "sujetos_revisados": scr.get("subjects_screened"),
+                "sujetos_declarados": scr.get("subjects_declared"),
+                "listas_consultadas": len(listas),
+            },
+        },
         "preparacion": [
-            ("COMPRA / VENTA", "PREPARADA" if not findings else "REQUIERE_REVISION",
+            ("COMPRA / VENTA", "PREPARADA" if not operacion else "REQUIERE_REVISION",
              "El expediente reúne identidad, títulos, contrapartes y valor; las condiciones "
              "anteriores son del comprador y del vendedor."),
             ("CRÉDITO HIPOTECARIO", "PREPARADA" if aut else "INCOMPLETO",
              "DICTUS no aprueba crédito: entrega el expediente verificable para que el banco "
              "evalúe garantía, prelación y riesgo."),
             ("SEGURO DE TÍTULO", "PREPARADA" if sellado else "REQUIERE_REVISION",
-             "DICTUS no asegura ni declara asegurable: entrega hechos comprobados y su "
-             "evidencia sellada para el suscriptor."),
+             # §15: el texto dice lo MISMO que el sello impreso tres bloques más arriba.
+             ("DICTUS no asegura ni declara asegurable: entrega hechos comprobados y su "
+              "evidencia sellada para el suscriptor." if sellado else
+              "DICTUS no asegura ni declara asegurable: entrega hechos comprobados con "
+              "evidencia trazable, pendiente de sellado.")),
         ],
         "urbano": {"filas": [
             {"etiqueta": "Destino económico (catastro)",
              "valor": urb.get("destino_economico"),
-             "estado": dse.VERIFICADO if urb.get("destino_economico") else dse.SIN_DATO,
-             "nota": "Dimensión catastral: no es el uso normativo del POT."},
-            {"etiqueta": "Uso / actividad POT", "valor": urb.get("area_actividad"),
-             "estado": coherencia["uso_pot"]["estado"],
-             "nota": "Dimensión normativa: no es el destino catastral."},
+             "estado": dse.VERIFICADO if urb.get("destino_economico") else dse.SIN_DATO},
+            {"etiqueta": "Uso / actividad POT",
+             "valor": _dato((mc.get("uso") or {}).get("value")) or urb.get("area_actividad"),
+             "estado": _estado_urb("uso_pot"), "nota": _nota_urb("uso_pot")},
             {"etiqueta": "Tratamiento urbanístico",
-             "valor": urb.get("tratamiento") if trat_ok else None,
-             "estado": coherencia["tratamiento"]["estado"],
-             "nota": None if trat_ok else "El expediente produjo tratamientos distintos: no se "
-                                          "imprime una cifra."},
+             "valor": _dato(urb.get("tratamiento")),
+             "estado": _estado_urb("tratamiento"), "nota": _nota_urb("tratamiento")},
             {"etiqueta": "Altura / edificabilidad",
-             "valor": urb.get("altura_maxima") if altura_ok else None,
-             "estado": coherencia["altura_maxima"]["estado"],
-             "nota": None if altura_ok else "Resultados normativos distintos en ejecuciones "
-                                            "previas: requiere validación de coherencia."},
-            {"etiqueta": "Clase de suelo", "valor": urb.get("clase_suelo"),
-             "estado": dse.VERIFICADO if urb.get("clase_suelo") else dse.SIN_DATO},
-            {"etiqueta": "Estrato", "valor": urb.get("estrato"),
-             "estado": dse.VERIFICADO if urb.get("estrato") else dse.SIN_DATO},
-            {"etiqueta": "Barrio", "valor": urb.get("barrio"),
+             "valor": (f"Hasta {urb.get('altura_maxima')} pisos"
+                       if _dato(urb.get("altura_maxima")) else None),
+             "estado": _estado_urb("altura_maxima"), "nota": _nota_urb("altura_maxima")},
+            {"etiqueta": "Clase de suelo", "valor": _dato(urb.get("clase_suelo")),
+             "estado": dse.VERIFICADO if urb.get("clase_suelo") else dse.SIN_DATO,
+             "nota": (None if urb.get("clase_suelo") else
+                      "La capa de clase de suelo no viene en las capas POT de esta corrida: "
+                      "sin dato de fuente.")},
+            {"etiqueta": "Estrato", "valor": _dato(urb.get("estrato")),
+             "estado": dse.VERIFICADO if _dato(urb.get("estrato")) else dse.SIN_DATO},
+            {"etiqueta": "Barrio", "valor": _dato(urb.get("barrio")),
              "estado": dse.VERIFICADO if urb.get("barrio") else dse.SIN_DATO},
-            {"etiqueta": "Localidad / comuna", "valor": urb.get("localidad"),
+            {"etiqueta": "Localidad / comuna", "valor": _dato(urb.get("localidad")),
              "estado": dse.VERIFICADO if urb.get("localidad") else dse.SIN_DATO},
         ]},
         "riesgos": [
-            {"tipo": "Inundación", "nivel": risk.get("inundacion"),
-             "implicacion": "Puede afectar al comprador, al banco y a la aseguradora: exige "
-                            "verificación técnica específica (Anexo C)."},
+            {"tipo": "Inundación", "nivel": _dato(risk.get("inundacion")),
+             "implicacion": "La capa de inundación del POT no se evaluó en esta corrida: se "
+                            "declara NO EVALUADO, no «sin riesgo»."},
             {"tipo": "Remoción en masa / amenaza del POT",
-             "nivel": risk.get("amenaza_remocion_masa"),
-             "implicacion": "Se declara el nivel de la capa oficial aplicable al polígono; su "
-                            "efecto sobre la operación lo evalúa el técnico competente."},
-            {"tipo": "Riesgo no mitigable", "nivel": risk.get("riesgo_no_mitigable"),
+             "nivel": _dato(risk.get("amenaza_remocion_masa")),
+             "implicacion": "Nivel de la capa oficial aplicable al polígono del predio."},
+            {"tipo": "Riesgo no mitigable", "nivel": _dato(risk.get("riesgo_no_mitigable")),
              "implicacion": "Un riesgo no mitigable condiciona el uso, la financiación y la "
-                            "póliza: se declara con la fuente que lo establece (Anexo C)."},
-            {"tipo": "Otras amenazas declaradas", "nivel": risk.get("areas_en_riesgo")
-             or (risk.get("volcan") or {}).get("estado"),
-             "implicacion": "Se declara el estado real de la fuente: no se afirma ausencia de "
-                            "amenaza si el punto no está cartografiado."},
+                            "póliza: se declara con la fuente que lo establece."},
+            {"tipo": "Otras amenazas declaradas", "nivel": _dato(risk.get("areas_en_riesgo")),
+             "implicacion": "Zonificación de riesgo del POT aplicable al predio."},
         ],
-        "coherencia": coherencia,
         "entorno": {
             "categorias": [
-                {"nombre": c, "conteo": (poi.get("por_categoria", {}).get(c) or {}).get("count", 0),
-                 "estado": (poi.get("por_categoria", {}).get(c) or {}).get("status") or "NOT_EVALUATED",
+                {"nombre": c,
+                 "conteo": (poi.get("por_categoria", {}).get(c) or {}).get("count", 0),
+                 "estado": ((poi.get("por_categoria", {}).get(c) or {}).get("status")
+                            or "NOT_EVALUATED"),
                  "mas_cercano_m": (poi.get("por_categoria", {}).get(c) or {}).get("mas_cercano_m"),
                  "mas_cercano": (poi.get("por_categoria", {}).get(c) or {}).get("mas_cercano"),
-                 "ejemplos": (poi.get("por_categoria", {}).get(c) or {}).get("items") or []}
+                 "items": (poi.get("por_categoria", {}).get(c) or {}).get("items") or []}
                 for c in ("Salud", "Educacion", "Comercio", "Recreacion")],
+            "radio_m": 2000,
+            "fuentes_consultadas": poi.get("sources_succeeded") or [],
+            "fuentes_intentadas": poi.get("sources_attempted") or [],
+            "consulta": poi.get("queried_at"),
+            "total_items": poi.get("item_count"),
             "accesibilidad": [
-                ("Barrio / sector oficial", urb.get("barrio")),
-                ("Localidad", urb.get("localidad")),
-                ("Vías de acceso inmediato", "geocodificadas en el Anexo E"),
+                ("Barrio / sector oficial", _dato(urb.get("barrio"))),
+                ("Localidad", _dato(urb.get("localidad"))),
+                ("Coordenada oficial",
+                 (lambda c: f"{c['lat']:.5f}, {c['lon']:.5f}" if c.get("lat") else None)(
+                     mc.get("coordinates") or {})),
+                ("Procedencia de la coordenada", _dato(mc.get("coordinate_source"))),
             ],
         },
         "solar": solar,
-        "identidad": {"filas": [
-            {"etiqueta": "Dirección oficial",
-             "valor": pi.get("direccion_normalizada") or pi.get("direccion_raw"),
-             "estado": dse.VERIFICADO},
-            {"etiqueta": "Matrícula", "valor": pi.get("folio"), "estado": dse.VERIFICADO},
-            {"etiqueta": "NUPRE", "valor": pi.get("nupre"),
-             "estado": dse.VERIFICADO if pi.get("nupre") else dse.SIN_DATO},
-            {"etiqueta": "Número predial", "valor": pi.get("codigo_catastral"),
-             "estado": dse.VERIFICADO if pi.get("codigo_catastral") else dse.SIN_DATO},
-            {"etiqueta": "Unidad (torre / apartamento)", "valor": pi.get("unidad"),
-             "estado": dse.VERIFICADO if pi.get("unidad") else dse.SIN_DATO},
-            {"etiqueta": "Área", "valor": area_txt,
-             "estado": dse.VERIFICADO if urb.get("area") else dse.SIN_DATO},
-            {"etiqueta": "Régimen jurídico", "valor": urb.get("condicion_juridica"),
-             "estado": dse.VERIFICADO if urb.get("condicion_juridica") else dse.SIN_DATO},
-            {"etiqueta": "Uso (destino catastral)", "valor": urb.get("destino_economico"),
-             "estado": dse.VERIFICADO if urb.get("destino_economico") else dse.SIN_DATO},
-            {"etiqueta": "Estado de identidad",
-             "valor": _ESTADO_IDENTIDAD.get(str(pi.get("estado") or "").upper())
-             or _v(_dato(pi.get("estado")) or _dato(pi.get("resolution_status")),
-                   "no declarado"),
-             "estado": dse.VERIFICADO if pi.get("identity_verified") else dse.REQUIERE_VALIDACION},
-        ],
-            # Lo geodésico (fuente de la geometría, binding canónico, CRS/EPSG) es
-            # materia del anexo técnico (§12): aquí solo se declara su resultado.
-            "nota_tecnica": ("Geometría oficial del predio y binding predio ↔ identidad "
-                             "canónica: "
-                             + str(((modelo.get("source_versions") or {}).get(
-                                 "coordinate_provenance") or {}).get("canonical_binding_status")
-                                   or "NO_COMPARABLE")
-                             + ". Detalle geodésico y CRS en el Anexo F.")},
+        "visual": vis,
+        "identidad": {
+            "filas": [
+                {"etiqueta": "Dirección oficial",
+                 "valor": (base_dir + (f" · {sufijo}" if sufijo else "")) if base_dir else None,
+                 "estado": dse.VERIFICADO},
+                {"etiqueta": "Matrícula", "valor": pi.get("folio"), "estado": dse.VERIFICADO},
+                {"etiqueta": "NUPRE", "valor": pi.get("nupre"),
+                 "estado": dse.VERIFICADO if pi.get("nupre") else dse.SIN_DATO},
+                {"etiqueta": "Número predial", "valor": pi.get("codigo_catastral"),
+                 "estado": dse.VERIFICADO if pi.get("codigo_catastral") else dse.SIN_DATO},
+                {"etiqueta": "Unidad (torre / apartamento)", "valor": pi.get("unidad"),
+                 "estado": dse.VERIFICADO if pi.get("unidad") else dse.SIN_DATO},
+                {"etiqueta": "Área", "valor": area_txt,
+                 "estado": dse.VERIFICADO if urb.get("area") else dse.SIN_DATO},
+                {"etiqueta": "Régimen jurídico", "valor": urb.get("condicion_juridica"),
+                 "estado": dse.VERIFICADO if urb.get("condicion_juridica") else dse.SIN_DATO},
+                {"etiqueta": "Uso (destino catastral)", "valor": urb.get("destino_economico"),
+                 "estado": dse.VERIFICADO if urb.get("destino_economico") else dse.SIN_DATO},
+                {"etiqueta": "Tipología",
+                 "valor": _dato(urb.get("tipologia"))
+                 or _dato((mc.get("tipologia") or {}).get("value")),
+                 "estado": dse.VERIFICADO},
+            ],
+            # §21: identidad y geometría son DOS conceptos; el binding se explica en
+            # lenguaje llano en vez de imprimirse como contradicción.
+            "identidad_estado": ("VERIFICADA" if pi.get("identity_verified")
+                                 else "REQUIERE VALIDACIÓN"),
+            "identidad_detalle": ("Matrícula, NUPRE y número predial resueltos y ligados "
+                                  f"entre sí ({_v(pi.get('resolution_method'))})."),
+            "geometria_estado": _geometria_estado(mc),
+            "geometria_detalle": _geometria_detalle(mc),
+        },
         "valor": {
             "autorizado": aut,
             "consolidado": _pesos(val.get("consolidado")),
             "rango": _pesos(val.get("banda_baja")),
             "rango_alto": _pesos(val.get("banda_alta")),
             "area": area_txt,
-            "valor_m2": (_pesos(val.get("value_m2")) + " / m²"
-                         if val.get("value_m2") else None),
+            "valor_m2": (_pesos(val.get("value_m2")) + " / m²" if val.get("value_m2") else None),
+            "sector": _dato(sector_met.get("matched_sector")) or _dato(val.get("sector")),
+            "sector_match": sector_met.get("match_type"),
+            "tasa_fuente": _dato(mc.get("market_rate_source")),
             "fecha": fecha_consulta,
-            "vigencia": (f"{fecha_consulta} · vigencia de la metodología aplicada (Anexo F)"
+            "vigencia": (f"{fecha_consulta} · vigencia de la metodología aplicada"
                          if fecha_consulta else None),
-            "sector": _dato(val.get("sector")),
             "metodologia": metodo_txt,
+            "metodologia_version": mc.get("market_methodology_version"),
+            "blockers": blockers,
             "motivo": val.get("motivo_no_aplica"),
-            "pasos": [
-                "Se verificó la identidad del inmueble (matrícula, NUPRE y número predial).",
-                "Se verificó el contexto territorial (barrio, estrato y norma con fuentes oficiales).",
-                "Se identificó el sector metodológico de mercado y su tasa.",
-                "Se aplicó la metodología declarada (comparación de mercado para propiedad horizontal).",
-                "Se construyó el valor y su banda con parámetros trazables.",
-                "La interpretación profesional corresponde al experto competente.",
-            ],
         },
     }
