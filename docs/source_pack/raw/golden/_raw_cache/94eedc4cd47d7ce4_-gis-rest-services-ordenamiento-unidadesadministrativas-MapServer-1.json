@@ -1,0 +1,413 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 1,
+    "name": "Barrios",
+    "type": "Feature Layer",
+    "description": "Reúne y muestra los barrios que constituyen el perímetro urbano de Barranquilla, describe la localidad y pieza urbana a la que pertenece y algunas observaciones como si es un barrio que fue establecido en el Plan de Ordenamiento Territorial vigente (Decreto 0212 de 2014) o si se trata de un barrio resultado de un plan parcial. ",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 102100,
+      "latestWkid": 3857,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -20037700,
+      "falseY": -30241100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Planeación.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "simple",
+        "symbol": {
+          "type": "esriSFS",
+          "style": "esriSFSSolid",
+          "color": [
+            130,
+            130,
+            130,
+            0
+          ],
+          "outline": {
+            "type": "esriSLS",
+            "style": "esriSLSDash",
+            "color": [
+              0,
+              0,
+              0,
+              255
+            ],
+            "width": 1
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": [
+        {
+          "labelExpressionInfo": {
+            "expression": "$feature.nombre_barrio",
+            "title": "Custom"
+          },
+          "labelPlacement": "esriServerPolygonPlacementAlwaysHorizontal",
+          "multiPart": "labelLargest",
+          "allowOverrun": true,
+          "deconflictionStrategy": "dynamic",
+          "repeatLabel": false,
+          "useClippedGeometry": true,
+          "stackLabel": true,
+          "stackAlignment": "dynamic",
+          "removeDuplicates": "none",
+          "stackRowLength": 24,
+          "useCodedValues": true,
+          "maxScale": 0,
+          "minScale": 25000,
+          "name": "Class 1",
+          "priority": -1,
+          "symbol": {
+            "type": "esriTS",
+            "color": [
+              0,
+              0,
+              0,
+              255
+            ],
+            "backgroundColor": null,
+            "borderLineColor": null,
+            "borderLineSize": null,
+            "verticalAlignment": "bottom",
+            "horizontalAlignment": "left",
+            "rightToLeft": false,
+            "angle": 0,
+            "xoffset": 0,
+            "yoffset": 0,
+            "kerning": true,
+            "haloColor": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "haloSize": 0.7,
+            "font": {
+              "family": "Volkswagen Serial",
+              "size": 10,
+              "style": "normal",
+              "weight": "bold",
+              "decoration": "none"
+            }
+          }
+        }
+      ]
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": -8338538.2896084,
+      "ymin": 1223026.5093931514,
+      "xmax": -8322052.609872336,
+      "ymax": 1244286.1096537793,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "identificador",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "FID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "identificador",
+        "type": "esriFieldTypeString",
+        "alias": "Identificador",
+        "length": 512,
+        "domain": null
+      },
+      {
+        "name": "nombre_barrio",
+        "type": "esriFieldTypeString",
+        "alias": "Barrio",
+        "length": 75,
+        "domain": null
+      },
+      {
+        "name": "nombre_pieza",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Pieza urbana",
+        "domain": {
+          "type": "codedValue",
+          "name": "ot_piezasurbanas",
+          "description": "Describe las piezas urbanas",
+          "codedValues": [
+            {
+              "name": "Ribera occidental",
+              "code": 1
+            },
+            {
+              "name": "Suroriental",
+              "code": 2
+            },
+            {
+              "name": "Centro metropolitano",
+              "code": 3
+            },
+            {
+              "name": "Prado norte",
+              "code": 5
+            },
+            {
+              "name": "Riomar",
+              "code": 6
+            },
+            {
+              "name": "Suroccidental 2",
+              "code": 7
+            },
+            {
+              "name": "Suroccidental 1",
+              "code": 8
+            },
+            {
+              "name": "Centro - carrera 38",
+              "code": 4
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "localidad",
+        "type": "esriFieldTypeString",
+        "alias": "Localidad",
+        "length": 50,
+        "domain": {
+          "type": "codedValue",
+          "name": "ot_localidades1",
+          "description": "Categoriza las localidades de los barrios",
+          "codedValues": [
+            {
+              "name": "Riomar",
+              "code": "01"
+            },
+            {
+              "name": "Norte - centro histórico",
+              "code": "02"
+            },
+            {
+              "name": "Suroccidente",
+              "code": "03"
+            },
+            {
+              "name": "Suroriente",
+              "code": "04"
+            },
+            {
+              "name": "Metropolitana",
+              "code": "05"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "observaciones",
+        "type": "esriFieldTypeString",
+        "alias": "Observaciones",
+        "length": 512,
+        "domain": {
+          "type": "codedValue",
+          "name": "ot_observaciones_barrios",
+          "description": "Observaciones barrios",
+          "codedValues": [
+            {
+              "name": "POT",
+              "code": "POT"
+            },
+            {
+              "name": "Plan parcial",
+              "code": "PP"
+            },
+            {
+              "name": "Corregimiento",
+              "code": "C"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "st_area(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_area(shape)",
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "a134_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": true,
+    "capabilities": "Query,Map,Data,TileMap",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "be7fe19e847d481ca552bbedbe3ae12e"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/1?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Funidadesadministrativas%2FMapServer%2F1%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:12:05.513138+00:00",
+    "elapsed_s": 1.2,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 6883,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:12:05.513127+00:00"
+      }
+    ]
+  }
+}

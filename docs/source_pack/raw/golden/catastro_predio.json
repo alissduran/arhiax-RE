@@ -1,0 +1,2984 @@
+{
+  "source_id": "catastro_predio",
+  "business_concept": "Predio (tabla)",
+  "requested_layer_id": 100,
+  "alternate_requested_ids": [],
+  "_status": "ID_EXISTS_DIFFERENT_LAYER",
+  "resolved": [
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+      "layer_id": 100,
+      "name": "Nomenclatura",
+      "kind": "layer",
+      "is_group": true
+    }
+  ],
+  "reason": "Id 100 exists but is a group layer named 'Nomenclatura', not the layer this business concept needs; group layers carry no fields of their own.",
+  "evidence": {
+    "ids_present_in_captured_index": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      20,
+      21,
+      22,
+      30,
+      31,
+      32,
+      40,
+      41,
+      42,
+      100,
+      105,
+      110,
+      200,
+      205,
+      300,
+      305,
+      310,
+      315,
+      320,
+      500,
+      505,
+      510,
+      515,
+      520,
+      525,
+      530,
+      535,
+      540,
+      545,
+      601,
+      602,
+      603
+    ],
+    "requested_id_present": true,
+    "requested_id_present_meaning": {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+      "layer_id": 100,
+      "name": "Nomenclatura",
+      "kind": "layer",
+      "is_group": true
+    },
+    "readable_services_count": 77,
+    "readable_services": [
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/mecanismosfianaciacion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimonio/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/infraestructuraservicios/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/areaconstruida/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimoniohistoricoycultural/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/antiguedadpredios/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/informalidad/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/direcciones/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelorural/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/cobertura/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/barriosalaobra/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/amenazas/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/infraestructuracultural/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/manzanas/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/dinamicaurbana/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/justiciayseguridad/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/propiedadhorizontal/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/eventosculturales/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/economico/hoteles/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/lotes/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/social/demografia/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/topografia/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/transito/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/coberturaterrestre/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/mejoramientovivienda/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/incidenciasciudadanas/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/alcaldiadistrital/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/hidrografia/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/bienestaranimal/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/comedorescomunitarios/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/riesgos/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/participacionciudadana/puestosvotacion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/equidad/mujerespropietarias/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/infraestructuraeducativa/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/influenciavial/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/estacionservicio/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/infraestructuradetransporte/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/infraestructurasalud/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/infraestructuradeporte/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/semanasanta/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/aotronivel/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/sitiosdeinteres/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto/ipu/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/nodosdetransporte/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/economico/tejidoempresarial/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/redes/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/usoconstruccion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/atencionemergencias/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/primerainfancia/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/maritimoyportuario/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/huellaurbana/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/avaluocatastral/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/serviciostransporte/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/gestionpatrimoniocultural/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/influencia/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/limpiaylinda/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/sectores/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer"
+    ],
+    "note": "catastro/datosabiertos/MapServer answers code 500 'Service ... not started' for every layer/table, so its layer metadata is served by the FeatureServer of the same service instead."
+  },
+  "real_equivalents": [
+    {
+      "label": "Predio (tabla)",
+      "resolved": {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 500,
+        "name": "Predio",
+        "kind": "table",
+        "is_group": false
+      },
+      "captured": {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 500,
+        "layer_metadata_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/500?f=json",
+        "layer_metadata_provenance": {
+          "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/500?f=json",
+          "transport": "allorigins",
+          "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F500%3Ff%3Djson",
+          "http_status": 200,
+          "fetched_at_utc": "2026-09-29T16:58:23.888607+00:00",
+          "elapsed_s": 31.1,
+          "attempt_count": 5,
+          "served_from_cache": true,
+          "attempts": [
+            {
+              "transport": "allorigins",
+              "attempt": 1,
+              "http_status": 200,
+              "bytes": 5492,
+              "reject_reason": "html_block_marker",
+              "error": null,
+              "at": "2026-09-29T16:57:58.535727+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 2,
+              "http_status": 500,
+              "bytes": 579,
+              "reject_reason": "not_json",
+              "error": "HTTPError 500",
+              "at": "2026-09-29T16:58:11.908232+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 3,
+              "http_status": 200,
+              "bytes": 6012,
+              "reject_reason": "html_block_marker",
+              "error": null,
+              "at": "2026-09-29T16:58:16.986014+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 4,
+              "http_status": 200,
+              "bytes": 5492,
+              "reject_reason": "html_block_marker",
+              "error": null,
+              "at": "2026-09-29T16:58:21.407061+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 5,
+              "http_status": 200,
+              "bytes": 17407,
+              "reject_reason": null,
+              "error": null,
+              "at": "2026-09-29T16:58:23.888594+00:00"
+            }
+          ]
+        },
+        "sample_query_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/500/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+        "sample_query_provenance": {
+          "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/500/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+          "transport": "allorigins",
+          "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F500%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+          "http_status": 200,
+          "fetched_at_utc": "2026-09-29T16:49:51.209146+00:00",
+          "elapsed_s": 6.1,
+          "attempt_count": 3,
+          "served_from_cache": true,
+          "attempts": [
+            {
+              "transport": "allorigins",
+              "attempt": 1,
+              "http_status": 200,
+              "bytes": 5492,
+              "reject_reason": "html_block_marker",
+              "error": null,
+              "at": "2026-09-29T16:49:48.540787+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 2,
+              "http_status": 200,
+              "bytes": 5492,
+              "reject_reason": "html_block_marker",
+              "error": null,
+              "at": "2026-09-29T16:49:49.183522+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 3,
+              "http_status": 200,
+              "bytes": 2520,
+              "reject_reason": null,
+              "error": null,
+              "at": "2026-09-29T16:49:51.209098+00:00"
+            }
+          ]
+        },
+        "_status": "OK",
+        "layer_name": "Predio",
+        "layer_type": "Table",
+        "geometry_type": null,
+        "display_field": "numero_predial_nacional",
+        "object_id_field": "objectid",
+        "max_record_count": 2000,
+        "field_count": 19,
+        "fields": [
+          {
+            "name": "objectid",
+            "alias": "OBJECTID",
+            "type": "esriFieldTypeOID",
+            "length": null
+          },
+          {
+            "name": "numero_predial_anterior",
+            "alias": "Numero Predial Anterior",
+            "type": "esriFieldTypeString",
+            "length": 20
+          },
+          {
+            "name": "condicion_predio",
+            "alias": "Condición Predio",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "destinacion_economica",
+            "alias": "Destinación Económica",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "codigo_homologado",
+            "alias": "Código Homologado",
+            "type": "esriFieldTypeString",
+            "length": 11
+          },
+          {
+            "name": "numero_predial_nacional",
+            "alias": "Número Predial Nacional",
+            "type": "esriFieldTypeString",
+            "length": 30
+          },
+          {
+            "name": "tipo_predio",
+            "alias": "Tipo Predio",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "estado",
+            "alias": "Estado",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "estado_fmi",
+            "alias": "Estado FMI",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "fecha_apertura_fmi",
+            "alias": "Fecha Apertura FMI",
+            "type": "esriFieldTypeDate",
+            "length": 8
+          },
+          {
+            "name": "fecha_inscripcion_catastral",
+            "alias": "Fecha Inscripción Catastral",
+            "type": "esriFieldTypeDate",
+            "length": 8
+          },
+          {
+            "name": "area_catastral_terreno",
+            "alias": "Área Catastral Terreno",
+            "type": "esriFieldTypeDouble",
+            "length": null
+          },
+          {
+            "name": "area_registral_m2",
+            "alias": "Área Registral M2",
+            "type": "esriFieldTypeDouble",
+            "length": null
+          },
+          {
+            "name": "vigencia_actualizacion",
+            "alias": "Vigencia Actualización Catastral",
+            "type": "esriFieldTypeDate",
+            "length": 8
+          },
+          {
+            "name": "tipo",
+            "alias": "Tipo",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "aplica_efectos_registrales",
+            "alias": "¿Aplica Efectos Registrales?",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "tipo_vivienda",
+            "alias": "Tipo de Vivienda",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "estrato",
+            "alias": "Estrato",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "globalid",
+            "alias": "GlobalID",
+            "type": "esriFieldTypeGlobalID",
+            "length": 38
+          }
+        ],
+        "raw_layer_metadata": {
+          "currentVersion": 11.5,
+          "cimVersion": "3.5.0",
+          "id": 500,
+          "name": "Predio",
+          "type": "Table",
+          "description": "File Geodatabase Table (Departamento, Municipio, Codigo ORIP, Matricula Inmobiliaria, Estado FMI, Fecha Apertura FMI, Numero Predial Nacional, Codigo Homologado, Nupre, Fecha Inscripcion Catastral, Tipo Predio, Condicion Predio, Destinacion Economica, Area Catastral Terreno, Area Registral M2, Vigencia Actualizacion Catastral, Estado, Nombre, Tipo, Espacio De Nombres, Local Id)",
+          "copyrightText": "IGAC",
+          "editFieldsInfo": null,
+          "ownershipBasedAccessControlForFeatures": null,
+          "syncCanReturnChanges": false,
+          "relationships": [
+            {
+              "id": 0,
+              "name": "Dirección",
+              "relatedTableId": 105,
+              "cardinality": "esriRelCardinalityOneToMany",
+              "role": "esriRelRoleOrigin",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{3B62EE0B-6A3D-4439-BBD1-35CA596B09B5}"
+            },
+            {
+              "id": 6,
+              "name": "alcbquilla.datos_catastrales.LC_DatosAdicionalesLevantamientoCatastral",
+              "relatedTableId": 545,
+              "cardinality": "esriRelCardinalityOneToMany",
+              "role": "esriRelRoleOrigin",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{82F73F0A-A6CC-424E-A627-4C9D4D2E91BA}"
+            },
+            {
+              "id": 7,
+              "name": "alcbquilla.datos_catastrales.CR_EstructuraPredioOrigenNPN",
+              "relatedTableId": 540,
+              "cardinality": "esriRelCardinalityOneToOne",
+              "role": "esriRelRoleOrigin",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{C9808142-ED5C-46F3-824B-D5EAF7F67D0C}"
+            },
+            {
+              "id": 4,
+              "name": "CR_Construccion",
+              "relatedTableId": 310,
+              "cardinality": "esriRelCardinalityManyToMany",
+              "role": "esriRelRoleDestination",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{ACD47D71-88D2-4CF3-8F2C-AB76F999A423}",
+              "relationshipTableId": 603,
+              "keyFieldInRelationshipTable": "CR_Predio_GUID"
+            },
+            {
+              "id": 1,
+              "name": "CR_UnidadConstruccion",
+              "relatedTableId": 305,
+              "cardinality": "esriRelCardinalityManyToMany",
+              "role": "esriRelRoleDestination",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{FA248173-0E6F-4202-ACBA-FB4797F8DDE0}",
+              "relationshipTableId": 602,
+              "keyFieldInRelationshipTable": "CR_Predio_GUID"
+            },
+            {
+              "id": 5,
+              "name": "CR_Terreno",
+              "relatedTableId": 315,
+              "cardinality": "esriRelCardinalityManyToMany",
+              "role": "esriRelRoleDestination",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{9BA44C99-910C-4C3E-8910-FA4D9A44E57E}",
+              "relationshipTableId": 601,
+              "keyFieldInRelationshipTable": "CR_Predio_GUID"
+            }
+          ],
+          "isDataVersioned": false,
+          "isDataArchived": false,
+          "infoInEstimates": [
+            "count"
+          ],
+          "isDataBranchVersioned": false,
+          "isDataReplicaTracked": false,
+          "isCoGoEnabled": false,
+          "supportsRollbackOnFailureParameter": true,
+          "archivingInfo": {
+            "supportsQueryWithHistoricMoment": false,
+            "startArchivingMoment": -1
+          },
+          "supportsStatistics": true,
+          "supportsExceedsLimitStatistics": true,
+          "supportsAdvancedQueries": true,
+          "supportsValidateSQL": true,
+          "supportsCoordinatesQuantization": false,
+          "supportsCalculate": true,
+          "supportsASyncCalculate": true,
+          "supportsDurableUrlForSyncModelNone": false,
+          "advancedQueryCapabilities": {
+            "supportsPagination": true,
+            "supportsQueryWithDistance": true,
+            "supportsReturningQueryExtent": true,
+            "supportsStatistics": true,
+            "supportsPercentileStatistics": true,
+            "supportsHavingClause": true,
+            "supportsOrderBy": true,
+            "supportsDistinct": true,
+            "supportsCountDistinct": true,
+            "supportsAdvancedQueryRelated": true,
+            "supportsQueryRelatedPagination": true,
+            "supportsCurrentUserQueries": true,
+            "supportsFullTextSearch": true,
+            "fullTextSearchCapabilities": {
+              "supportsSearchOperator": true,
+              "supportsOperator": false,
+              "supportsSqlExpressionInFullText": true
+            },
+            "fullTextSearchableFields": [],
+            "supportsQueryWithResultType": true,
+            "supportsReturningGeometryCentroid": false,
+            "supportsReturningGeometryEnvelope": false,
+            "supportsSqlExpression": true,
+            "supportsLod": false,
+            "supportsQueryWithLodSR": false,
+            "supportsQueryAnalytic": true,
+            "supportsQueryWithCacheHint": false
+          },
+          "advancedQueryAnalyticCapabilities": {
+            "supportsLinearRegression": true,
+            "supportsAsync": true,
+            "supportsPercentileAnalytic": false
+          },
+          "advancedEditingCapabilities": {
+            "supportedSqlFormatsInCalculate": [
+              "standard"
+            ],
+            "supportsAsyncApplyEdits": true,
+            "supportsApplyEditsbyUploadID": true,
+            "supportedApplyEditsUploadIDFormats": "JSON,PBF"
+          },
+          "hasMetadata": true,
+          "hasAttachments": false,
+          "supportsApplyEditsWithGlobalIds": true,
+          "htmlPopupType": "esriServerHTMLPopupTypeNone",
+          "objectIdField": "objectid",
+          "globalIdField": "globalid",
+          "displayField": "numero_predial_nacional",
+          "typeIdField": "",
+          "subtypeField": "",
+          "fields": [
+            {
+              "name": "objectid",
+              "type": "esriFieldTypeOID",
+              "alias": "OBJECTID",
+              "domain": null,
+              "editable": false,
+              "nullable": false,
+              "defaultValue": null,
+              "modelName": "objectid"
+            },
+            {
+              "name": "numero_predial_anterior",
+              "type": "esriFieldTypeString",
+              "alias": "Numero Predial Anterior",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 20,
+              "defaultValue": null,
+              "modelName": "numero_predial_anterior"
+            },
+            {
+              "name": "condicion_predio",
+              "type": "esriFieldTypeString",
+              "alias": "Condición Predio",
+              "domain": {
+                "type": "codedValue",
+                "name": "CR_CondicionPredioTipo",
+                "description": "Valores para indicar el tipo de condición de predio",
+                "codedValues": [
+                  {
+                    "name": "NPH",
+                    "code": "NPH"
+                  },
+                  {
+                    "name": "Informal",
+                    "code": "Informal"
+                  },
+                  {
+                    "name": "Bien Uso Publico",
+                    "code": "Bien_Uso_Publico"
+                  },
+                  {
+                    "name": "PH Matriz",
+                    "code": "PH_Matriz"
+                  },
+                  {
+                    "name": "PH Unidad Predial",
+                    "code": "PH_Unidad_Predial"
+                  },
+                  {
+                    "name": "Condominio Matriz",
+                    "code": "Condominio_Matriz"
+                  },
+                  {
+                    "name": "Condominio Unidad Predial",
+                    "code": "Condominio_Unidad_Predial"
+                  },
+                  {
+                    "name": "Parque Cementerio Matriz",
+                    "code": "Parque_Cementerio_Matriz"
+                  },
+                  {
+                    "name": "Parque Cementerio Unidad Predial",
+                    "code": "Parque_Cementerio_Unidad_Predial"
+                  },
+                  {
+                    "name": "Vía",
+                    "code": "Via"
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "NPH",
+              "modelName": "condicion_predio"
+            },
+            {
+              "name": "destinacion_economica",
+              "type": "esriFieldTypeString",
+              "alias": "Destinación Económica",
+              "domain": {
+                "type": "codedValue",
+                "name": "CR_DestinacionEconomicaTipo",
+                "description": "Uso económico de la propiedad inmobiliaria",
+                "codedValues": [
+                  {
+                    "name": "Acuicola",
+                    "code": "Acuicola"
+                  },
+                  {
+                    "name": "Agricola",
+                    "code": "Agricola"
+                  },
+                  {
+                    "name": "Agroindustrial",
+                    "code": "Agroindustrial"
+                  },
+                  {
+                    "name": "Agroforestal",
+                    "code": "Agroforestal"
+                  },
+                  {
+                    "name": "Agropecuario",
+                    "code": "Agropecuario"
+                  },
+                  {
+                    "name": "Comercial",
+                    "code": "Comercial"
+                  },
+                  {
+                    "name": "Conservacion Proteccion Ambiental",
+                    "code": "Conservacion_Proteccion_Ambiental"
+                  },
+                  {
+                    "name": "Cultural",
+                    "code": "Cultural"
+                  },
+                  {
+                    "name": "Educativo",
+                    "code": "Educativo"
+                  },
+                  {
+                    "name": "Forestal Productor",
+                    "code": "Forestal_Productor"
+                  },
+                  {
+                    "name": "Habitacional",
+                    "code": "Habitacional"
+                  },
+                  {
+                    "name": "Industrial",
+                    "code": "Industrial"
+                  },
+                  {
+                    "name": "Infraestructura Asociada Produccion Agropecuaria",
+                    "code": "Infraestructura_Asociada_Produccion_Agropecuaria"
+                  },
+                  {
+                    "name": "Infraestructura Hidraulica",
+                    "code": "Infraestructura_Hidraulica"
+                  },
+                  {
+                    "name": "Infraestructura Saneamiento Basico",
+                    "code": "Infraestructura_Saneamiento_Basico"
+                  },
+                  {
+                    "name": "Infraestructura Seguridad",
+                    "code": "Infraestructura_Seguridad"
+                  },
+                  {
+                    "name": "Infraestructura Transporte",
+                    "code": "Infraestructura_Transporte"
+                  },
+                  {
+                    "name": "Infraestructura Energia Renovable Electrica",
+                    "code": "Infraestructura_Energia_Renovable_Electrica"
+                  },
+                  {
+                    "name": "Institucional",
+                    "code": "Institucional"
+                  },
+                  {
+                    "name": "Mineria Hidrocarburos",
+                    "code": "Mineria_Hidrocarburos"
+                  },
+                  {
+                    "name": "Lote Urbanizable No Urbanizado",
+                    "code": "Lote_Urbanizable_No_Urbanizado"
+                  },
+                  {
+                    "name": "Lote Urbanizado No Construido",
+                    "code": "Lote_Urbanizado_No_Construido"
+                  },
+                  {
+                    "name": "Lote No Urbanizable",
+                    "code": "Lote_No_Urbanizable"
+                  },
+                  {
+                    "name": "Lote Rural",
+                    "code": "Lote_Rural"
+                  },
+                  {
+                    "name": "Pecuario",
+                    "code": "Pecuario"
+                  },
+                  {
+                    "name": "Recreacional",
+                    "code": "Recreacional"
+                  },
+                  {
+                    "name": "Religioso",
+                    "code": "Religioso"
+                  },
+                  {
+                    "name": "Salubridad",
+                    "code": "Salubridad"
+                  },
+                  {
+                    "name": "Servicios Funerarios",
+                    "code": "Servicios_Funerarios"
+                  },
+                  {
+                    "name": "Servicios Sociales",
+                    "code": "Servicios_Sociales"
+                  },
+                  {
+                    "name": "Uso Publico",
+                    "code": "Uso_Publico"
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "Habitacional",
+              "modelName": "destinacion_economica"
+            },
+            {
+              "name": "codigo_homologado",
+              "type": "esriFieldTypeString",
+              "alias": "Código Homologado",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 11,
+              "defaultValue": null,
+              "modelName": "codigo_homologado"
+            },
+            {
+              "name": "numero_predial_nacional",
+              "type": "esriFieldTypeString",
+              "alias": "Número Predial Nacional",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 30,
+              "defaultValue": "080010000000000010001000000000",
+              "modelName": "numero_predial_nacional"
+            },
+            {
+              "name": "tipo_predio",
+              "type": "esriFieldTypeString",
+              "alias": "Tipo Predio",
+              "domain": {
+                "type": "codedValue",
+                "name": "CR_PredioTipo",
+                "description": "Tipo de predio",
+                "codedValues": [
+                  {
+                    "name": "Predio Publico Baldio",
+                    "code": "Predio_Publico_Baldio"
+                  },
+                  {
+                    "name": "Predio Publico Fiscal Patrimonial",
+                    "code": "Predio_Publico_Fiscal_Patrimonial"
+                  },
+                  {
+                    "name": "Predio Publico Uso Publico",
+                    "code": "Predio_Publico_Uso_Publico"
+                  },
+                  {
+                    "name": "Predio Publico Presunto Baldio",
+                    "code": "Predio_Publico_Presunto_Baldio"
+                  },
+                  {
+                    "name": "Predio Privado",
+                    "code": "Predio_Privado"
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "Predio_Privado",
+              "modelName": "tipo_predio"
+            },
+            {
+              "name": "estado",
+              "type": "esriFieldTypeString",
+              "alias": "Estado",
+              "domain": {
+                "type": "codedValue",
+                "name": "CR_EstadoTipo",
+                "description": "Estado del predio en la base de datos catastral.",
+                "codedValues": [
+                  {
+                    "name": "Activo",
+                    "code": "Activo"
+                  },
+                  {
+                    "name": "Cancelado",
+                    "code": "Cancelado"
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "Cancelado",
+              "modelName": "estado"
+            },
+            {
+              "name": "estado_fmi",
+              "type": "esriFieldTypeString",
+              "alias": "Estado FMI",
+              "domain": {
+                "type": "codedValue",
+                "name": "CR_EstadoFMITipo",
+                "description": "Estado del folio de matrícula inmobiliaria",
+                "codedValues": [
+                  {
+                    "name": "Activo",
+                    "code": "Activo"
+                  },
+                  {
+                    "name": "Cerrado",
+                    "code": "Cerrado"
+                  },
+                  {
+                    "name": "Trasladado",
+                    "code": "Trasladado"
+                  },
+                  {
+                    "name": "Custodia",
+                    "code": "Custodia"
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": null,
+              "modelName": "estado_fmi"
+            },
+            {
+              "name": "fecha_apertura_fmi",
+              "type": "esriFieldTypeDate",
+              "alias": "Fecha Apertura FMI",
+              "domain": {
+                "type": "range",
+                "name": "Rango_1512-2500",
+                "description": "Rango año -formato AAAA-",
+                "range": [
+                  -14453164800000,
+                  2524608000000
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 8,
+              "defaultValue": null,
+              "modelName": "fecha_apertura_fmi"
+            },
+            {
+              "name": "fecha_inscripcion_catastral",
+              "type": "esriFieldTypeDate",
+              "alias": "Fecha Inscripción Catastral",
+              "domain": {
+                "type": "range",
+                "name": "Rango_1512-2500",
+                "description": "Rango año -formato AAAA-",
+                "range": [
+                  -14453164800000,
+                  2524608000000
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 8,
+              "defaultValue": null,
+              "modelName": "fecha_inscripcion_catastral"
+            },
+            {
+              "name": "area_catastral_terreno",
+              "type": "esriFieldTypeDouble",
+              "alias": "Área Catastral Terreno",
+              "domain": {
+                "type": "range",
+                "name": "Rango_0-999999999999999",
+                "description": "Rango de valores de avalúo catastral y áreas",
+                "range": [
+                  0,
+                  999999999999999.9
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "defaultValue": null,
+              "modelName": "area_catastral_terreno"
+            },
+            {
+              "name": "area_registral_m2",
+              "type": "esriFieldTypeDouble",
+              "alias": "Área Registral M2",
+              "domain": {
+                "type": "range",
+                "name": "Rango_0-999999999999999",
+                "description": "Rango de valores de avalúo catastral y áreas",
+                "range": [
+                  0,
+                  999999999999999.9
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "defaultValue": null,
+              "modelName": "area_registral_m2"
+            },
+            {
+              "name": "vigencia_actualizacion",
+              "type": "esriFieldTypeDate",
+              "alias": "Vigencia Actualización Catastral",
+              "domain": {
+                "type": "range",
+                "name": "Rango_1512-2500",
+                "description": "Rango año -formato AAAA-",
+                "range": [
+                  -14453164800000,
+                  2524608000000
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 8,
+              "defaultValue": null,
+              "modelName": "vigencia_actualizacion"
+            },
+            {
+              "name": "tipo",
+              "type": "esriFieldTypeString",
+              "alias": "Tipo",
+              "domain": {
+                "type": "codedValue",
+                "name": "COL_UnidadAdministrativaBasicaTipo",
+                "description": "Tipo de relación superficie",
+                "codedValues": [
+                  {
+                    "name": "Sector Administrativo del Deporte",
+                    "code": "Administrativo_Del_Deporte"
+                  },
+                  {
+                    "name": "Sector Agropecuario, Pesquero y de Desarrollo Rural",
+                    "code": "Agropecuario_Pesquero_Desarrollo_Rural"
+                  },
+                  {
+                    "name": "Sector Ambiente y Desarrollo Sostenible",
+                    "code": "Ambiente_Desarrollo_Sostenible"
+                  },
+                  {
+                    "name": "Sector Ciencia y Tecnologia",
+                    "code": "Ciencia_Tecnologia"
+                  },
+                  {
+                    "name": "Sector de Comercio, Industria y Turismo",
+                    "code": "Comercio_Industria_Turismo"
+                  },
+                  {
+                    "name": "Sector Cultura",
+                    "code": "Cultura"
+                  },
+                  {
+                    "name": "Sector de la Defensa Nacional",
+                    "code": "Defensa_Nacional"
+                  },
+                  {
+                    "name": "Sector Educación Nacional",
+                    "code": "Educacion_Nacional"
+                  },
+                  {
+                    "name": "Sector Función Publica",
+                    "code": "Funcion_Publica"
+                  },
+                  {
+                    "name": "Sector Hacienda y Credito Publico",
+                    "code": "Hacienda_Credito_Publico"
+                  },
+                  {
+                    "name": "Sector de Igualdad y Equidad",
+                    "code": "Igualdad_Equidad"
+                  },
+                  {
+                    "name": "Sector Inclusión Social y Reconciliación",
+                    "code": "Inclusion_Social_Reconciliacion"
+                  },
+                  {
+                    "name": "Sector Información Estadística",
+                    "code": "Informacion_Estadistica"
+                  },
+                  {
+                    "name": "Sector Inteligencia Estrategica y Contrainteligencia",
+                    "code": "Inteligencia_Estrategica_Contrainteligencia"
+                  },
+                  {
+                    "name": "Sector del Interior",
+                    "code": "Interior"
+                  },
+                  {
+                    "name": "Sector Justicia y del Derecho",
+                    "code": "Justicia_Del_Derecho"
+                  },
+                  {
+                    "name": "Sector Minas y Energia",
+                    "code": "Minas_Energia"
+                  },
+                  {
+                    "name": "Sector de Planeación",
+                    "code": "Planeacion"
+                  },
+                  {
+                    "name": "Sector Presidencia de la Republica",
+                    "code": "Presidencia_De_La_Republica"
+                  },
+                  {
+                    "name": "Sector Relaciones Exteriores",
+                    "code": "Relaciones_Exteriores"
+                  },
+                  {
+                    "name": "Sector Salud y de la Protección Social",
+                    "code": "Salud_Proteccion_Social"
+                  },
+                  {
+                    "name": "Sector de las Tecnologóas de la Información y las Comunicaciones",
+                    "code": "Tecnologias_Informacion_Comunicaciones"
+                  },
+                  {
+                    "name": "Sector del Trabajo",
+                    "code": "Trabajo"
+                  },
+                  {
+                    "name": "Sector Transporte",
+                    "code": "Transporte"
+                  },
+                  {
+                    "name": "Sector Vivienda, Ciudad y Territorio",
+                    "code": "Vivienda_Ciudad_Territorio"
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "Informacion_Estadistica",
+              "modelName": "tipo"
+            },
+            {
+              "name": "aplica_efectos_registrales",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "¿Aplica Efectos Registrales?",
+              "domain": {
+                "type": "codedValue",
+                "name": "COL_SiNo",
+                "description": "Sí o No",
+                "codedValues": [
+                  {
+                    "name": "No",
+                    "code": 0
+                  },
+                  {
+                    "name": "Si",
+                    "code": 1
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 0,
+              "modelName": "aplica_efectos_registrales"
+            },
+            {
+              "name": "tipo_vivienda",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Tipo de Vivienda",
+              "domain": {
+                "type": "codedValue",
+                "name": "CON_ViviendaTipo",
+                "description": "Tipo de Vivienda",
+                "codedValues": [
+                  {
+                    "name": "Vivienda de Interés Social",
+                    "code": 1
+                  },
+                  {
+                    "name": "Vivienda de Interés Prioritario",
+                    "code": 2
+                  },
+                  {
+                    "name": "Vivienda que no es de interés social",
+                    "code": 3
+                  },
+                  {
+                    "name": "No Aplica",
+                    "code": 4
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 4,
+              "modelName": "tipo_vivienda"
+            },
+            {
+              "name": "estrato",
+              "type": "esriFieldTypeString",
+              "alias": "Estrato",
+              "domain": {
+                "type": "codedValue",
+                "name": "LC_EstratoTipo",
+                "description": "Tipo de Estrato",
+                "codedValues": [
+                  {
+                    "name": "1. Bajo-bajo",
+                    "code": "Bajo_Bajo_1"
+                  },
+                  {
+                    "name": "2. Bajo",
+                    "code": "Bajo_2"
+                  },
+                  {
+                    "name": "3. Medio-bajo",
+                    "code": "Medio_Bajo_3"
+                  },
+                  {
+                    "name": "4. Medio",
+                    "code": "Medio_4"
+                  },
+                  {
+                    "name": "5. Medio-alto",
+                    "code": "Medio_Alto_5"
+                  },
+                  {
+                    "name": "6. Alto",
+                    "code": "Alto_6"
+                  },
+                  {
+                    "name": "Otro",
+                    "code": "Otro"
+                  },
+                  {
+                    "name": "No Aplica",
+                    "code": "No_Aplica"
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "No_Aplica",
+              "modelName": "estrato"
+            },
+            {
+              "name": "globalid",
+              "type": "esriFieldTypeGlobalID",
+              "alias": "GlobalID",
+              "domain": null,
+              "editable": false,
+              "nullable": false,
+              "length": 38,
+              "defaultValue": null,
+              "modelName": "globalid"
+            }
+          ],
+          "indexes": [
+            {
+              "name": "idx_npn",
+              "isAscending": true,
+              "isUnique": false,
+              "description": "",
+              "fields": "numero_predial_nacional"
+            },
+            {
+              "name": "r708_sde_rowid_uk",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "objectid"
+            },
+            {
+              "name": "uuid_708",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "globalid"
+            }
+          ],
+          "datesInUnknownTimezone": false,
+          "dateFieldsTimeReference": {
+            "timeZone": "UTC",
+            "timeZoneIANA": "Etc/UTC",
+            "respectsDaylightSaving": false
+          },
+          "preferredTimeReference": null,
+          "types": [],
+          "templates": [
+            {
+              "name": "Predio",
+              "description": "",
+              "prototype": {
+                "attributes": {
+                  "estrato": "No_Aplica",
+                  "tipo_vivienda": 4,
+                  "numero_predial_anterior": null,
+                  "condicion_predio": "NPH",
+                  "destinacion_economica": "Habitacional",
+                  "codigo_homologado": null,
+                  "numero_predial_nacional": "080010000000000010001000000000",
+                  "tipo_predio": "Predio_Privado",
+                  "estado": "Cancelado",
+                  "estado_fmi": null,
+                  "fecha_apertura_fmi": null,
+                  "fecha_inscripcion_catastral": null,
+                  "area_catastral_terreno": null,
+                  "area_registral_m2": null,
+                  "vigencia_actualizacion": null,
+                  "tipo": "Informacion_Estadistica",
+                  "aplica_efectos_registrales": 0
+                }
+              },
+              "drawingTool": "esriFeatureEditToolNone"
+            }
+          ],
+          "maxRecordCount": 2000,
+          "supportedQueryFormats": "JSON, geoJSON, PBF",
+          "supportedExportFormats": "sqlite,filegdb,shapefile,csv,geojson",
+          "capabilities": "Query,Extract",
+          "useStandardizedQueries": true,
+          "bigIntegerRestrictedTo53Bits": true,
+          "supportsAppend": true,
+          "supportedAppendFormats": "FILEGDB,PBF",
+          "standardMaxRecordCount": 32000,
+          "tileMaxRecordCount": 2000,
+          "maxRecordCountFactor": 1,
+          "serviceItemId": "c5d96cfd4e3e4a398f9a93d444acf3b3"
+        },
+        "sample_query": {
+          "objectIdFieldName": "objectid",
+          "globalIdFieldName": "globalid",
+          "fields": [
+            {
+              "name": "objectid",
+              "alias": "OBJECTID",
+              "type": "esriFieldTypeOID"
+            },
+            {
+              "name": "numero_predial_anterior",
+              "alias": "Numero Predial Anterior",
+              "type": "esriFieldTypeString",
+              "length": 20
+            },
+            {
+              "name": "condicion_predio",
+              "alias": "Condición Predio",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "destinacion_economica",
+              "alias": "Destinación Económica",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "codigo_homologado",
+              "alias": "Código Homologado",
+              "type": "esriFieldTypeString",
+              "length": 11
+            },
+            {
+              "name": "numero_predial_nacional",
+              "alias": "Número Predial Nacional",
+              "type": "esriFieldTypeString",
+              "length": 30
+            },
+            {
+              "name": "tipo_predio",
+              "alias": "Tipo Predio",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "estado",
+              "alias": "Estado",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "estado_fmi",
+              "alias": "Estado FMI",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "fecha_apertura_fmi",
+              "alias": "Fecha Apertura FMI",
+              "type": "esriFieldTypeDate",
+              "length": 8
+            },
+            {
+              "name": "fecha_inscripcion_catastral",
+              "alias": "Fecha Inscripción Catastral",
+              "type": "esriFieldTypeDate",
+              "length": 8
+            },
+            {
+              "name": "area_catastral_terreno",
+              "alias": "Área Catastral Terreno",
+              "type": "esriFieldTypeDouble"
+            },
+            {
+              "name": "area_registral_m2",
+              "alias": "Área Registral M2",
+              "type": "esriFieldTypeDouble"
+            },
+            {
+              "name": "vigencia_actualizacion",
+              "alias": "Vigencia Actualización Catastral",
+              "type": "esriFieldTypeDate",
+              "length": 8
+            },
+            {
+              "name": "tipo",
+              "alias": "Tipo",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "aplica_efectos_registrales",
+              "alias": "¿Aplica Efectos Registrales?",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "tipo_vivienda",
+              "alias": "Tipo de Vivienda",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "estrato",
+              "alias": "Estrato",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "globalid",
+              "alias": "GlobalID",
+              "type": "esriFieldTypeGlobalID",
+              "length": 38
+            }
+          ],
+          "features": [
+            {
+              "attributes": {
+                "objectid": 1,
+                "numero_predial_anterior": "08001000100000048000",
+                "condicion_predio": "NPH",
+                "destinacion_economica": "Comercial",
+                "codigo_homologado": "AFT0024ERWB",
+                "numero_predial_nacional": "080010001000000000048000000000",
+                "tipo_predio": "Predio_Privado",
+                "estado": "Activo",
+                "estado_fmi": "Activo",
+                "fecha_apertura_fmi": 190512000000,
+                "fecha_inscripcion_catastral": null,
+                "area_catastral_terreno": 39605.0,
+                "area_registral_m2": null,
+                "vigencia_actualizacion": 1767225600000,
+                "tipo": "Informacion_Estadistica",
+                "aplica_efectos_registrales": 0,
+                "tipo_vivienda": 4,
+                "estrato": "No_Aplica",
+                "globalid": "{DB83DC14-6BA1-468F-A6BC-835E66FE5E9A}"
+              }
+            }
+          ],
+          "exceededTransferLimit": true
+        }
+      },
+      "key_fields": {
+        "present": {
+          "numero_predial": "numero_predial_anterior",
+          "numero_predial_anterior": "numero_predial_anterior",
+          "condicion_predio": "condicion_predio",
+          "tipo_predio": "tipo_predio",
+          "destinacion_economica": "destinacion_economica",
+          "codigo_homologado": "codigo_homologado",
+          "vigencia": "vigencia_actualizacion",
+          "fecha_inscripcion": "fecha_inscripcion_catastral",
+          "area_catastral_terreno": "area_catastral_terreno",
+          "aplica_efectos_registrales": "aplica_efectos_registrales"
+        },
+        "absent": [
+          "estado_predio",
+          "clase_suelo",
+          "categoria_suelo",
+          "simb_activ",
+          "actividad",
+          "poligono",
+          "nombre_uso",
+          "etiqueta",
+          "tratamient",
+          "tipo_trata",
+          "altura_max",
+          "nivel",
+          "zona",
+          "riesedif",
+          "riespers",
+          "riesmit",
+          "nombre",
+          "localidad"
+        ]
+      }
+    },
+    {
+      "label": "Caracteristicas Unidad de Construccion",
+      "resolved": {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 505,
+        "name": "Caracteristicas Unidad de Construcción",
+        "kind": "table",
+        "is_group": false
+      },
+      "captured": {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 505,
+        "layer_metadata_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/505?f=json",
+        "layer_metadata_provenance": {
+          "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/505?f=json",
+          "transport": "allorigins",
+          "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F505%3Ff%3Djson",
+          "http_status": 200,
+          "fetched_at_utc": "2026-09-29T17:17:41.800208+00:00",
+          "elapsed_s": 7.3,
+          "attempt_count": 2,
+          "served_from_cache": false,
+          "attempts": [
+            {
+              "transport": "allorigins",
+              "attempt": 1,
+              "http_status": 200,
+              "bytes": 5492,
+              "reject_reason": "html_block_marker",
+              "error": null,
+              "at": "2026-09-29T17:17:40.078224+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 2,
+              "http_status": 200,
+              "bytes": 16184,
+              "reject_reason": null,
+              "error": null,
+              "at": "2026-09-29T17:17:41.800181+00:00"
+            }
+          ]
+        },
+        "sample_query_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/505/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+        "sample_query_provenance": {
+          "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/505/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+          "transport": "allorigins",
+          "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F505%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+          "http_status": 200,
+          "fetched_at_utc": "2026-09-29T17:04:54.502529+00:00",
+          "elapsed_s": 44.7,
+          "attempt_count": 6,
+          "served_from_cache": true,
+          "attempts": [
+            {
+              "transport": "allorigins",
+              "attempt": 1,
+              "http_status": 200,
+              "bytes": 5492,
+              "reject_reason": "html_block_marker",
+              "error": null,
+              "at": "2026-09-29T17:04:10.912844+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 2,
+              "http_status": 500,
+              "bytes": 579,
+              "reject_reason": "not_json",
+              "error": "HTTPError 500",
+              "at": "2026-09-29T17:04:27.766292+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 3,
+              "http_status": 500,
+              "bytes": 579,
+              "reject_reason": "not_json",
+              "error": "HTTPError 500",
+              "at": "2026-09-29T17:04:28.008654+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 4,
+              "http_status": 200,
+              "bytes": 6265,
+              "reject_reason": "html_block_marker",
+              "error": null,
+              "at": "2026-09-29T17:04:31.010488+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 5,
+              "http_status": 522,
+              "bytes": 979,
+              "reject_reason": "proxy_error_envelope",
+              "error": "HTTPError 522",
+              "at": "2026-09-29T17:04:50.627792+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 6,
+              "http_status": 200,
+              "bytes": 1484,
+              "reject_reason": null,
+              "error": null,
+              "at": "2026-09-29T17:04:54.502515+00:00"
+            }
+          ]
+        },
+        "_status": "OK",
+        "layer_name": "Caracteristicas Unidad de Construcción",
+        "layer_type": "Table",
+        "geometry_type": null,
+        "display_field": "identificador",
+        "object_id_field": "objectid",
+        "max_record_count": 2000,
+        "field_count": 12,
+        "fields": [
+          {
+            "name": "objectid",
+            "alias": "OBJECTID",
+            "type": "esriFieldTypeOID",
+            "length": null
+          },
+          {
+            "name": "anio_construccion",
+            "alias": "Año Construcción",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "area_construida",
+            "alias": "Área Construida",
+            "type": "esriFieldTypeDouble",
+            "length": null
+          },
+          {
+            "name": "identificador",
+            "alias": "Identificador",
+            "type": "esriFieldTypeString",
+            "length": 20
+          },
+          {
+            "name": "tipo_unidad_construccion",
+            "alias": "Tipo Unidad Construcción",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "total_banios",
+            "alias": "Total Baños",
+            "type": "esriFieldTypeInteger",
+            "length": null
+          },
+          {
+            "name": "total_habitaciones",
+            "alias": "Total Habitaciones",
+            "type": "esriFieldTypeInteger",
+            "length": null
+          },
+          {
+            "name": "total_locales",
+            "alias": "Total Locales",
+            "type": "esriFieldTypeInteger",
+            "length": null
+          },
+          {
+            "name": "total_plantas",
+            "alias": "Total Pisos",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "uso",
+            "alias": "Uso",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "estado_conservacion",
+            "alias": "Estado Conservación",
+            "type": "esriFieldTypeString",
+            "length": 30
+          },
+          {
+            "name": "globalid",
+            "alias": "GlobalID",
+            "type": "esriFieldTypeGlobalID",
+            "length": 38
+          }
+        ],
+        "raw_layer_metadata": {
+          "currentVersion": 11.5,
+          "cimVersion": "3.5.0",
+          "id": 505,
+          "name": "Caracteristicas Unidad de Construcción",
+          "type": "Table",
+          "description": "File Geodatabase Table (Área construida, Uso, Identificador, Tipo unidad construcción, Total habitaciones, Total baños, Total locales,  Total Plantas, Año construcción, Observaciones, Estado Conservación, Avalúo Unidad Construcción)",
+          "copyrightText": "IGAC",
+          "editFieldsInfo": null,
+          "ownershipBasedAccessControlForFeatures": null,
+          "syncCanReturnChanges": false,
+          "relationships": [
+            {
+              "id": 8,
+              "name": "LC_CalificacionConvencional",
+              "relatedTableId": 535,
+              "cardinality": "esriRelCardinalityOneToMany",
+              "role": "esriRelRoleOrigin",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{076386D3-65FD-4EF0-BD0F-22B08056013B}"
+            },
+            {
+              "id": 9,
+              "name": "LC_TipologiaConstruccion",
+              "relatedTableId": 530,
+              "cardinality": "esriRelCardinalityOneToMany",
+              "role": "esriRelRoleOrigin",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{B88266E0-8622-4A4D-8AE9-9CE75B279F2E}"
+            },
+            {
+              "id": 2,
+              "name": "CR_UnidadConstruccion",
+              "relatedTableId": 305,
+              "cardinality": "esriRelCardinalityOneToMany",
+              "role": "esriRelRoleOrigin",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{0F6040BB-8E9B-4EB4-A1BE-CF1C9927EC3D}"
+            }
+          ],
+          "isDataVersioned": false,
+          "isDataArchived": false,
+          "infoInEstimates": [
+            "count"
+          ],
+          "isDataBranchVersioned": false,
+          "isDataReplicaTracked": false,
+          "isCoGoEnabled": false,
+          "supportsRollbackOnFailureParameter": true,
+          "archivingInfo": {
+            "supportsQueryWithHistoricMoment": false,
+            "startArchivingMoment": -1
+          },
+          "supportsStatistics": true,
+          "supportsExceedsLimitStatistics": true,
+          "supportsAdvancedQueries": true,
+          "supportsValidateSQL": true,
+          "supportsCoordinatesQuantization": false,
+          "supportsCalculate": true,
+          "supportsASyncCalculate": true,
+          "supportsDurableUrlForSyncModelNone": false,
+          "advancedQueryCapabilities": {
+            "supportsPagination": true,
+            "supportsQueryWithDistance": true,
+            "supportsReturningQueryExtent": true,
+            "supportsStatistics": true,
+            "supportsPercentileStatistics": true,
+            "supportsHavingClause": true,
+            "supportsOrderBy": true,
+            "supportsDistinct": true,
+            "supportsCountDistinct": true,
+            "supportsAdvancedQueryRelated": true,
+            "supportsQueryRelatedPagination": true,
+            "supportsCurrentUserQueries": true,
+            "supportsFullTextSearch": true,
+            "fullTextSearchCapabilities": {
+              "supportsSearchOperator": true,
+              "supportsOperator": false,
+              "supportsSqlExpressionInFullText": true
+            },
+            "fullTextSearchableFields": [],
+            "supportsQueryWithResultType": true,
+            "supportsReturningGeometryCentroid": false,
+            "supportsReturningGeometryEnvelope": false,
+            "supportsSqlExpression": true,
+            "supportsLod": false,
+            "supportsQueryWithLodSR": false,
+            "supportsQueryAnalytic": true,
+            "supportsQueryWithCacheHint": false
+          },
+          "advancedQueryAnalyticCapabilities": {
+            "supportsLinearRegression": true,
+            "supportsAsync": true,
+            "supportsPercentileAnalytic": false
+          },
+          "advancedEditingCapabilities": {
+            "supportedSqlFormatsInCalculate": [
+              "standard"
+            ],
+            "supportsAsyncApplyEdits": true,
+            "supportsApplyEditsbyUploadID": true,
+            "supportedApplyEditsUploadIDFormats": "JSON,PBF"
+          },
+          "hasMetadata": true,
+          "hasAttachments": false,
+          "supportsApplyEditsWithGlobalIds": true,
+          "htmlPopupType": "esriServerHTMLPopupTypeNone",
+          "objectIdField": "objectid",
+          "globalIdField": "globalid",
+          "displayField": "identificador",
+          "typeIdField": "",
+          "subtypeField": "",
+          "fields": [
+            {
+              "name": "objectid",
+              "type": "esriFieldTypeOID",
+              "alias": "OBJECTID",
+              "domain": null,
+              "editable": false,
+              "nullable": false,
+              "defaultValue": null,
+              "modelName": "objectid"
+            },
+            {
+              "name": "anio_construccion",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Año Construcción",
+              "domain": {
+                "type": "range",
+                "name": "Rango_1513-2500_CUC",
+                "description": "Rango año",
+                "range": [
+                  1512,
+                  2500
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 2500,
+              "modelName": "anio_construccion"
+            },
+            {
+              "name": "area_construida",
+              "type": "esriFieldTypeDouble",
+              "alias": "Área Construida",
+              "domain": {
+                "type": "range",
+                "name": "Rango_0-999999999999999",
+                "description": "Rango de valores de avalúo catastral y áreas",
+                "range": [
+                  0,
+                  999999999999999.9
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 0,
+              "modelName": "area_construida"
+            },
+            {
+              "name": "identificador",
+              "type": "esriFieldTypeString",
+              "alias": "Identificador",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 20,
+              "defaultValue": "A",
+              "modelName": "identificador"
+            },
+            {
+              "name": "tipo_unidad_construccion",
+              "type": "esriFieldTypeString",
+              "alias": "Tipo Unidad Construcción",
+              "domain": {
+                "type": "codedValue",
+                "name": "CR_UnidadConstruccionTipo",
+                "description": "Valores válidos para indicar el tipo de construcción empleada para levantar una unidad de construcción, con incidencia en su avalúo.",
+                "codedValues": [
+                  {
+                    "name": "Residencial",
+                    "code": "Residencial"
+                  },
+                  {
+                    "name": "Comercial",
+                    "code": "Comercial"
+                  },
+                  {
+                    "name": "Industrial",
+                    "code": "Industrial"
+                  },
+                  {
+                    "name": "Institucional",
+                    "code": "Institucional"
+                  },
+                  {
+                    "name": "Anexo",
+                    "code": "Anexo"
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "Residencial",
+              "modelName": "tipo_unidad_construccion"
+            },
+            {
+              "name": "total_banios",
+              "type": "esriFieldTypeInteger",
+              "alias": "Total Baños",
+              "domain": {
+                "type": "range",
+                "name": "Rango_0-999999",
+                "description": "Rango total habitaciones/baños/locales",
+                "range": [
+                  0,
+                  999999
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 1,
+              "modelName": "total_banios"
+            },
+            {
+              "name": "total_habitaciones",
+              "type": "esriFieldTypeInteger",
+              "alias": "Total Habitaciones",
+              "domain": {
+                "type": "range",
+                "name": "Rango_0-999999",
+                "description": "Rango total habitaciones/baños/locales",
+                "range": [
+                  0,
+                  999999
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 2,
+              "modelName": "total_habitaciones"
+            },
+            {
+              "name": "total_locales",
+              "type": "esriFieldTypeInteger",
+              "alias": "Total Locales",
+              "domain": {
+                "type": "range",
+                "name": "Rango_0-999999",
+                "description": "Rango total habitaciones/baños/locales",
+                "range": [
+                  0,
+                  999999
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 0,
+              "modelName": "total_locales"
+            },
+            {
+              "name": "total_plantas",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Total Pisos",
+              "domain": {
+                "type": "range",
+                "name": "Rango_1-150",
+                "description": "Rango total de plantas",
+                "range": [
+                  1,
+                  150
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 1,
+              "modelName": "total_plantas"
+            },
+            {
+              "name": "uso",
+              "type": "esriFieldTypeString",
+              "alias": "Uso",
+              "domain": {
+                "type": "codedValue",
+                "name": "CR_UsoUConsTipo",
+                "description": "Tipo de uso de unidad de construcción",
+                "codedValues": [
+                  {
+                    "name": "Anexo Albercas Banaderas",
+                    "code": "Anexo_Albercas_Banaderas"
+                  },
+                  {
+                    "name": "Anexo Beneficiaderos",
+                    "code": "Anexo_Beneficiaderos"
+                  },
+                  {
+                    "name": "Anexo Camaroneras",
+                    "code": "Anexo_Camaroneras"
+                  },
+                  {
+                    "name": "Anexo Canchas",
+                    "code": "Anexo_Canchas"
+                  },
+                  {
+                    "name": "Anexo Canchas de Tenis",
+                    "code": "Anexo_Canchas_de_Tenis"
+                  },
+                  {
+                    "name": "Anexo Carretera",
+                    "code": "Anexo_Carretera"
+                  },
+                  {
+                    "name": "Anexo Cerramiento",
+                    "code": "Anexo_Cerramiento"
+                  },
+                  {
+                    "name": "Anexo Cimientos Estructura Muros y Placa Base",
+                    "code": "Anexo_Cimientos_Estructura_Muros_y_Placa_Base"
+                  },
+                  {
+                    "name": "Anexo Cocheras Marraneras Porquerizas",
+                    "code": "Anexo_Cocheras_Marraneras_Porquerizas"
+                  },
+                  {
+                    "name": "Anexo Construccion en Membrana Arquitectonica",
+                    "code": "Anexo_Construccion_en_Membrana_Arquitectonica"
+                  },
+                  {
+                    "name": "Anexo Contenedor",
+                    "code": "Anexo_Contenedor"
+                  },
+                  {
+                    "name": "Anexo Corrales",
+                    "code": "Anexo_Corrales"
+                  },
+                  {
+                    "name": "Anexo Establos Pesebreras Caballerizas",
+                    "code": "Anexo_Establos_Pesebreras_Caballerizas"
+                  },
+                  {
+                    "name": "Anexo Estacion Bombeo",
+                    "code": "Anexo_Estacion_Bombeo"
+                  },
+                  {
+                    "name": "Anexo Estacion Sistema Transporte",
+                    "code": "Anexo_Estacion_Sistema_Transporte"
+                  },
+                  {
+                    "name": "Anexo Galpones Gallineros",
+                    "code": "Anexo_Galpones_Gallineros"
+                  },
+                  {
+                    "name": "Anexo Glamping",
+                    "code": "Anexo_Glamping"
+                  },
+                  {
+                    "name": "Anexo Hangar",
+                    "code": "Anexo_Hangar"
+                  },
+                  {
+                    "name": "Anexo Kioscos",
+                    "code": "Anexo_Kioscos"
+                  },
+                  {
+                    "name": "Anexo Lagunas de Oxidacion",
+                    "code": "Anexo_Lagunas_de_Oxidacion"
+                  },
+                  {
+                    "name": "Anexo Marquesinas Patios Cubiertos",
+                    "code": "Anexo_Marquesinas_Patios_Cubiertos"
+                  },
+                  {
+                    "name": "Anexo Muelles",
+                    "code": "Anexo_Muelles"
+                  },
+                  {
+                    "name": "Anexo Murallas",
+                    "code": "Anexo_Murallas"
+                  },
+                  {
+                    "name": "Anexo Pergolas",
+                    "code": "Anexo_Pergolas"
+                  },
+                  {
+                    "name": "Anexo Piscinas",
+                    "code": "Anexo_Piscinas"
+                  },
+                  {
+                    "name": "Anexo Pista Aeropuerto",
+                    "code": "Anexo_Pista_Aeropuerto"
+                  },
+                  {
+                    "name": "Anexo Pozos",
+                    "code": "Anexo_Pozos"
+                  },
+                  {
+                    "name": "Anexo Ramadas Cobertizos Caneyes",
+                    "code": "Anexo_Ramadas_Cobertizos_Caneyes"
+                  },
+                  {
+                    "name": "Anexo Secaderos",
+                    "code": "Anexo_Secaderos"
+                  },
+                  {
+                    "name": "Anexo Silos",
+                    "code": "Anexo_Silos"
+                  },
+                  {
+                    "name": "Anexo Tanques",
+                    "code": "Anexo_Tanques"
+                  },
+                  {
+                    "name": "Anexo Toboganes",
+                    "code": "Anexo_Toboganes"
+                  },
+                  {
+                    "name": "Anexo Torre de Control",
+                    "code": "Anexo_Torre_de_Control"
+                  },
+                  {
+                    "name": "Anexo Torres de Enfriamiento",
+                    "code": "Anexo_Torres_de_Enfriamiento"
+                  },
+                  {
+                    "name": "Anexo Via Ferrea",
+                    "code": "Anexo_Via_Ferrea"
+                  },
+                  {
+                    "name": "Comercial Bodegas Comerciales",
+                    "code": "Comercial_Bodegas_Comerciales"
+                  },
+                  {
+                    "name": "Comercial Bodegas Comerciales en PH",
+                    "code": "Comercial_Bodegas_Comerciales_en_PH"
+                  },
+                  {
+                    "name": "Comercial Bodegas Comerciales Grandes Almacenes",
+                    "code": "Comercial_Bodegas_Comerciales_Grandes_Almacenes"
+                  },
+                  {
+                    "name": "Comercial Centros Comerciales",
+                    "code": "Comercial_Centros_Comerciales"
+                  },
+                  {
+                    "name": "Comercial Centros Comerciales en PH",
+                    "code": "Comercial_Centros_Comerciales_en_PH"
+                  },
+                  {
+                    "name": "Comercial Clubes Casinos",
+                    "code": "Comercial_Clubes_Casinos"
+                  },
+                  {
+                    "name": "Comercial Comercio",
+                    "code": "Comercial_Comercio"
+                  },
+                  {
+                    "name": "Comercial Comercio Colonial",
+                    "code": "Comercial_Comercio_Colonial"
+                  },
+                  {
+                    "name": "Comercial Comercio Deposito Almacenamiento",
+                    "code": "Comercial_Comercio_Deposito_Almacenamiento"
+                  },
+                  {
+                    "name": "Comercial Comercio en PH",
+                    "code": "Comercial_Comercio_en_PH"
+                  },
+                  {
+                    "name": "Comercial Hotel Colonial",
+                    "code": "Comercial_Hotel_Colonial"
+                  },
+                  {
+                    "name": "Comercial Hoteles",
+                    "code": "Comercial_Hoteles"
+                  },
+                  {
+                    "name": "Comercial Hoteles en PH",
+                    "code": "Comercial_Hoteles_en_PH"
+                  },
+                  {
+                    "name": "Comercial Oficinas Consultorios",
+                    "code": "Comercial_Oficinas_Consultorios"
+                  },
+                  {
+                    "name": "Comercial Oficinas Consultorios Coloniales",
+                    "code": "Comercial_Oficinas_Consultorios_Coloniales"
+                  },
+                  {
+                    "name": "Comercial Oficinas Consultorios en PH",
+                    "code": "Comercial_Oficinas_Consultorios_en_PH"
+                  },
+                  {
+                    "name": "Comercial Parque Diversiones",
+                    "code": "Comercial_Parque_Diversiones"
+                  },
+                  {
+                    "name": "Comercial Parqueaderos",
+                    "code": "Comercial_Parqueaderos"
+                  },
+                  {
+                    "name": "Comercial Parqueaderos en PH",
+                    "code": "Comercial_Parqueaderos_en_PH"
+                  },
+                  {
+                    "name": "Comercial Pensiones y Residencias",
+                    "code": "Comercial_Pensiones_y_Residencias"
+                  },
+                  {
+                    "name": "Comercial Plaza Mercado",
+                    "code": "Comercial_Plaza_Mercado"
+                  },
+                  {
+                    "name": "Comercial Restaurante Colonial",
+                    "code": "Comercial_Restaurante_Colonial"
+                  },
+                  {
+                    "name": "Comercial Restaurantes",
+                    "code": "Comercial_Restaurantes"
+                  },
+                  {
+                    "name": "Comercial Restaurantes en PH",
+                    "code": "Comercial_Restaurantes_en_PH"
+                  },
+                  {
+                    "name": "Comercial Teatro Cinemas",
+                    "code": "Comercial_Teatro_Cinemas"
+                  },
+                  {
+                    "name": "Comercial Teatro Cinemas en PH",
+                    "code": "Comercial_Teatro_Cinemas_en_PH"
+                  },
+                  {
+                    "name": "Industrial Bodega Casa Bomba",
+                    "code": "Industrial_Bodega_Casa_Bomba"
+                  },
+                  {
+                    "name": "Industrial Bodegas Casa Bomba en PH",
+                    "code": "Industrial_Bodegas_Casa_Bomba_en_PH"
+                  },
+                  {
+                    "name": "Industrial Industrias",
+                    "code": "Industrial_Industrias"
+                  },
+                  {
+                    "name": "Industrial Industrias en PH",
+                    "code": "Industrial_Industrias_en_PH"
+                  },
+                  {
+                    "name": "Industrial Talleres",
+                    "code": "Industrial_Talleres"
+                  },
+                  {
+                    "name": "Institucional Aulas de Clases",
+                    "code": "Institucional_Aulas_de_Clases"
+                  },
+                  {
+                    "name": "Institucional Biblioteca",
+                    "code": "Institucional_Biblioteca"
+                  },
+                  {
+                    "name": "Institucional Carceles",
+                    "code": "Institucional_Carceles"
+                  },
+                  {
+                    "name": "Institucional Casas de Culto",
+                    "code": "Institucional_Casas_de_Culto"
+                  },
+                  {
+                    "name": "Institucional Clinicas Hospitales Centros Medicos",
+                    "code": "Institucional_Clinicas_Hospitales_Centros_Medicos"
+                  },
+                  {
+                    "name": "Institucional Colegio y Universidades",
+                    "code": "Institucional_Colegio_y_Universidades"
+                  },
+                  {
+                    "name": "Institucional Coliseos",
+                    "code": "Institucional_Coliseos"
+                  },
+                  {
+                    "name": "Institucional Entidad Educativa Colonial Colegio Colonial",
+                    "code": "Institucional_Entidad_Educativa_Colonial_Colegio_Colonial"
+                  },
+                  {
+                    "name": "Institucional Estadios",
+                    "code": "Institucional_Estadios"
+                  },
+                  {
+                    "name": "Institucional Fuertes y Castillos",
+                    "code": "Institucional_Fuertes_y_Castillos"
+                  },
+                  {
+                    "name": "Institucional Iglesia",
+                    "code": "Institucional_Iglesia"
+                  },
+                  {
+                    "name": "Institucional Iglesia en PH",
+                    "code": "Institucional_Iglesia_en_PH"
+                  },
+                  {
+                    "name": "Institucional Instalaciones Militares",
+                    "code": "Institucional_Instalaciones_Militares"
+                  },
+                  {
+                    "name": "Institucional Jardin Infantil en Casa",
+                    "code": "Institucional_Jardin_Infantil_en_Casa"
+                  },
+                  {
+                    "name": "Institucional Museos",
+                    "code": "Institucional_Museos"
+                  },
+                  {
+                    "name": "Institucional Parque Cementerio",
+                    "code": "Institucional_Parque_Cementerio"
+                  },
+                  {
+                    "name": "Institucional Planetario",
+                    "code": "Institucional_Planetario"
+                  },
+                  {
+                    "name": "Institucional Plaza de Toros",
+                    "code": "Institucional_Plaza_de_Toros"
+                  },
+                  {
+                    "name": "Institucional Puestos de Salud",
+                    "code": "Institucional_Puestos_de_Salud"
+                  },
+                  {
+                    "name": "Institucional Seminarios Conventos",
+                    "code": "Institucional_Seminarios_Conventos"
+                  },
+                  {
+                    "name": "Institucional Teatro",
+                    "code": "Institucional_Teatro"
+                  },
+                  {
+                    "name": "Institucional Unidad Deportiva",
+                    "code": "Institucional_Unidad_Deportiva"
+                  },
+                  {
+                    "name": "Institucional Velodromo Patinodromo",
+                    "code": "Institucional_Velodromo_Patinodromo"
+                  },
+                  {
+                    "name": "Residencial Apartamentos 4 y mas pisos",
+                    "code": "Residencial_Apartamentos_4_y_mas_pisos"
+                  },
+                  {
+                    "name": "Residencial Apartamentos 4 y mas pisos en PH",
+                    "code": "Residencial_Apartamentos_4_y_mas_pisos_en_PH"
+                  },
+                  {
+                    "name": "Residencial Barracas",
+                    "code": "Residencial_Barracas"
+                  },
+                  {
+                    "name": "Residencial Casa Elbas",
+                    "code": "Residencial_Casa_Elbas"
+                  },
+                  {
+                    "name": "Residencial Depositos Lockers",
+                    "code": "Residencial_Depositos_Lockers"
+                  },
+                  {
+                    "name": "Residencial Garajes Cubiertos",
+                    "code": "Residencial_Garajes_Cubiertos"
+                  },
+                  {
+                    "name": "Residencial Garajes En PH",
+                    "code": "Residencial_Garajes_En_PH"
+                  },
+                  {
+                    "name": "Residencial Salon Comunal",
+                    "code": "Residencial_Salon_Comunal"
+                  },
+                  {
+                    "name": "Residencial Secadero Ropa",
+                    "code": "Residencial_Secadero_Ropa"
+                  },
+                  {
+                    "name": "Residencial Vivienda Colonial",
+                    "code": "Residencial_Vivienda_Colonial"
+                  },
+                  {
+                    "name": "Residencial Vivienda Colonial en PH",
+                    "code": "Residencial_Vivienda_Colonial_en_PH"
+                  },
+                  {
+                    "name": "Residencial Vivienda Hasta 3 Pisos",
+                    "code": "Residencial_Vivienda_Hasta_3_Pisos"
+                  },
+                  {
+                    "name": "Residencial Vivienda Hasta 3 Pisos En PH",
+                    "code": "Residencial_Vivienda_Hasta_3_Pisos_En_PH"
+                  },
+                  {
+                    "name": "Residencial Vivienda Recreacional",
+                    "code": "Residencial_Vivienda_Recreacional"
+                  },
+                  {
+                    "name": "Residencial Vivienda Recreacional En PH",
+                    "code": "Residencial_Vivienda_Recreacional_En_PH"
+                  }
+                ],
+                "mergePolicy": "esriMPTDefaultValue",
+                "splitPolicy": "esriSPTDefaultValue"
+              },
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "Residencial_Vivienda_Hasta_3_Pisos",
+              "modelName": "uso"
+            },
+            {
+              "name": "estado_conservacion",
+              "type": "esriFieldTypeString",
+              "alias": "Estado Conservación",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 30,
+              "defaultValue": "Sin información",
+              "modelName": "estado_conservacion"
+            },
+            {
+              "name": "globalid",
+              "type": "esriFieldTypeGlobalID",
+              "alias": "GlobalID",
+              "domain": null,
+              "editable": false,
+              "nullable": false,
+              "length": 38,
+              "defaultValue": null,
+              "modelName": "globalid"
+            }
+          ],
+          "indexes": [
+            {
+              "name": "r709_sde_rowid_uk",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "objectid"
+            },
+            {
+              "name": "uuid_709",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "globalid"
+            }
+          ],
+          "datesInUnknownTimezone": false,
+          "dateFieldsTimeReference": {
+            "timeZone": "UTC",
+            "timeZoneIANA": "Etc/UTC",
+            "respectsDaylightSaving": false
+          },
+          "preferredTimeReference": null,
+          "types": [],
+          "templates": [
+            {
+              "name": "Caracteristicas Unidad de Construcción",
+              "description": "",
+              "prototype": {
+                "attributes": {
+                  "estado_conservacion": "Sin información",
+                  "uso": "Residencial_Vivienda_Hasta_3_Pisos",
+                  "anio_construccion": 2500,
+                  "area_construida": 0,
+                  "identificador": "A",
+                  "tipo_unidad_construccion": "Residencial",
+                  "total_banios": 1,
+                  "total_habitaciones": 2,
+                  "total_locales": 0,
+                  "total_plantas": 1
+                }
+              },
+              "drawingTool": "esriFeatureEditToolNone"
+            }
+          ],
+          "maxRecordCount": 2000,
+          "supportedQueryFormats": "JSON, geoJSON, PBF",
+          "supportedExportFormats": "sqlite,filegdb,shapefile,csv,geojson",
+          "capabilities": "Query,Extract",
+          "useStandardizedQueries": true,
+          "bigIntegerRestrictedTo53Bits": true,
+          "supportsAppend": true,
+          "supportedAppendFormats": "FILEGDB,PBF",
+          "standardMaxRecordCount": 32000,
+          "tileMaxRecordCount": 2000,
+          "maxRecordCountFactor": 1,
+          "serviceItemId": "c5d96cfd4e3e4a398f9a93d444acf3b3"
+        },
+        "sample_query": {
+          "objectIdFieldName": "objectid",
+          "globalIdFieldName": "globalid",
+          "fields": [
+            {
+              "name": "objectid",
+              "alias": "OBJECTID",
+              "type": "esriFieldTypeOID"
+            },
+            {
+              "name": "anio_construccion",
+              "alias": "Año Construcción",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "area_construida",
+              "alias": "Área Construida",
+              "type": "esriFieldTypeDouble"
+            },
+            {
+              "name": "identificador",
+              "alias": "Identificador",
+              "type": "esriFieldTypeString",
+              "length": 20
+            },
+            {
+              "name": "tipo_unidad_construccion",
+              "alias": "Tipo Unidad Construcción",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "total_banios",
+              "alias": "Total Baños",
+              "type": "esriFieldTypeInteger"
+            },
+            {
+              "name": "total_habitaciones",
+              "alias": "Total Habitaciones",
+              "type": "esriFieldTypeInteger"
+            },
+            {
+              "name": "total_locales",
+              "alias": "Total Locales",
+              "type": "esriFieldTypeInteger"
+            },
+            {
+              "name": "total_plantas",
+              "alias": "Total Pisos",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "uso",
+              "alias": "Uso",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "estado_conservacion",
+              "alias": "Estado Conservación",
+              "type": "esriFieldTypeString",
+              "length": 30
+            },
+            {
+              "name": "globalid",
+              "alias": "GlobalID",
+              "type": "esriFieldTypeGlobalID",
+              "length": 38
+            }
+          ],
+          "features": [
+            {
+              "attributes": {
+                "objectid": 1,
+                "anio_construccion": 2014,
+                "area_construida": 27.07,
+                "identificador": "C",
+                "tipo_unidad_construccion": "Comercial",
+                "total_banios": 1,
+                "total_habitaciones": 1,
+                "total_locales": 0,
+                "total_plantas": 1,
+                "uso": "Comercial_Oficinas_Consultorios",
+                "estado_conservacion": "Sin información",
+                "globalid": "{0E3CED55-B4DA-45AD-A27C-051E52603CC4}"
+              }
+            }
+          ],
+          "exceededTransferLimit": true
+        }
+      },
+      "key_fields": {
+        "present": {},
+        "absent": [
+          "numero_predial",
+          "numero_predial_anterior",
+          "condicion_predio",
+          "tipo_predio",
+          "estado_predio",
+          "destinacion_economica",
+          "clase_suelo",
+          "categoria_suelo",
+          "codigo_homologado",
+          "vigencia",
+          "fecha_inscripcion",
+          "area_catastral_terreno",
+          "aplica_efectos_registrales",
+          "simb_activ",
+          "actividad",
+          "poligono",
+          "nombre_uso",
+          "etiqueta",
+          "tratamient",
+          "tipo_trata",
+          "altura_max",
+          "nivel",
+          "zona",
+          "riesedif",
+          "riespers",
+          "riesmit",
+          "nombre",
+          "localidad"
+        ]
+      }
+    },
+    {
+      "label": "Datos Adicionales de Levantamiento Catastral",
+      "resolved": {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 545,
+        "name": "Datos Adicionales de Levantamiento Catastral",
+        "kind": "table",
+        "is_group": false
+      },
+      "captured": {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 545,
+        "layer_metadata_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/545?f=json",
+        "layer_metadata_provenance": {
+          "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/545?f=json",
+          "transport": "allorigins",
+          "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F545%3Ff%3Djson",
+          "http_status": 200,
+          "fetched_at_utc": "2026-09-29T17:04:55.403846+00:00",
+          "elapsed_s": 0.9,
+          "attempt_count": 1,
+          "served_from_cache": true,
+          "attempts": [
+            {
+              "transport": "allorigins",
+              "attempt": 1,
+              "http_status": 200,
+              "bytes": 4809,
+              "reject_reason": null,
+              "error": null,
+              "at": "2026-09-29T17:04:55.403826+00:00"
+            }
+          ]
+        },
+        "sample_query_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/545/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+        "sample_query_provenance": {
+          "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/545/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+          "transport": "allorigins",
+          "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F545%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+          "http_status": 200,
+          "fetched_at_utc": "2026-09-29T17:04:56.820977+00:00",
+          "elapsed_s": 1.4,
+          "attempt_count": 1,
+          "served_from_cache": true,
+          "attempts": [
+            {
+              "transport": "allorigins",
+              "attempt": 1,
+              "http_status": 200,
+              "bytes": 623,
+              "reject_reason": null,
+              "error": null,
+              "at": "2026-09-29T17:04:56.820966+00:00"
+            }
+          ]
+        },
+        "_status": "OK",
+        "layer_name": "Datos Adicionales de Levantamiento Catastral",
+        "layer_type": "Table",
+        "geometry_type": null,
+        "display_field": "tipo_documento_reconocedor",
+        "object_id_field": "objectid",
+        "max_record_count": 2000,
+        "field_count": 4,
+        "fields": [
+          {
+            "name": "objectid",
+            "alias": "OBJECTID",
+            "type": "esriFieldTypeOID",
+            "length": null
+          },
+          {
+            "name": "fecha_visita_predial",
+            "alias": "Fecha Visita Predial",
+            "type": "esriFieldTypeDate",
+            "length": 8
+          },
+          {
+            "name": "cr_predio_guid",
+            "alias": "CR_Predio_GUID",
+            "type": "esriFieldTypeString",
+            "length": 38
+          },
+          {
+            "name": "globalid",
+            "alias": "GlobalID",
+            "type": "esriFieldTypeString",
+            "length": 38
+          }
+        ],
+        "raw_layer_metadata": {
+          "currentVersion": 11.5,
+          "cimVersion": "3.5.0",
+          "id": 545,
+          "name": "Datos Adicionales de Levantamiento Catastral",
+          "type": "Table",
+          "description": "File Geodatabase Table (Fecha Visita Predial, Observaciones, Área Registral M2, Nombres Apellidos Reconocedor, Tipo Documento Reconocedor, Numero Documento Reconocedor, Resultado Visita)",
+          "copyrightText": "IGAC",
+          "editFieldsInfo": null,
+          "ownershipBasedAccessControlForFeatures": null,
+          "syncCanReturnChanges": false,
+          "relationships": [
+            {
+              "id": 10,
+              "name": "alcbquilla.datos_catastrales.LC_EstructuraNovedadNumeroPredial",
+              "relatedTableId": 510,
+              "cardinality": "esriRelCardinalityOneToMany",
+              "role": "esriRelRoleOrigin",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{6229AE84-DF0A-4417-886D-D5562466F9BF}"
+            },
+            {
+              "id": 6,
+              "name": "alcbquilla.datos_catastrales.CR_Predio",
+              "relatedTableId": 500,
+              "cardinality": "esriRelCardinalityOneToMany",
+              "role": "esriRelRoleDestination",
+              "keyField": "cr_predio_guid",
+              "composite": false,
+              "catalogID": "{82F73F0A-A6CC-424E-A627-4C9D4D2E91BA}"
+            }
+          ],
+          "isDataVersioned": false,
+          "isDataArchived": false,
+          "infoInEstimates": [
+            "count"
+          ],
+          "isDataBranchVersioned": false,
+          "isDataReplicaTracked": false,
+          "isCoGoEnabled": false,
+          "supportsRollbackOnFailureParameter": true,
+          "archivingInfo": {
+            "supportsQueryWithHistoricMoment": false,
+            "startArchivingMoment": -1
+          },
+          "supportsStatistics": true,
+          "supportsExceedsLimitStatistics": true,
+          "supportsAdvancedQueries": true,
+          "supportsValidateSQL": true,
+          "supportsCoordinatesQuantization": false,
+          "supportsCalculate": true,
+          "supportsASyncCalculate": true,
+          "supportsDurableUrlForSyncModelNone": false,
+          "advancedQueryCapabilities": {
+            "supportsPagination": true,
+            "supportsQueryWithDistance": true,
+            "supportsReturningQueryExtent": true,
+            "supportsStatistics": true,
+            "supportsPercentileStatistics": true,
+            "supportsHavingClause": true,
+            "supportsOrderBy": true,
+            "supportsDistinct": true,
+            "supportsCountDistinct": true,
+            "supportsAdvancedQueryRelated": true,
+            "supportsQueryRelatedPagination": true,
+            "supportsCurrentUserQueries": true,
+            "supportsFullTextSearch": true,
+            "fullTextSearchCapabilities": {
+              "supportsSearchOperator": true,
+              "supportsOperator": false,
+              "supportsSqlExpressionInFullText": true
+            },
+            "fullTextSearchableFields": [],
+            "supportsQueryWithResultType": true,
+            "supportsReturningGeometryCentroid": false,
+            "supportsReturningGeometryEnvelope": false,
+            "supportsSqlExpression": true,
+            "supportsLod": false,
+            "supportsQueryWithLodSR": false,
+            "supportsQueryAnalytic": true,
+            "supportsQueryWithCacheHint": false
+          },
+          "advancedQueryAnalyticCapabilities": {
+            "supportsLinearRegression": true,
+            "supportsAsync": true,
+            "supportsPercentileAnalytic": false
+          },
+          "advancedEditingCapabilities": {
+            "supportedSqlFormatsInCalculate": [
+              "standard"
+            ],
+            "supportsAsyncApplyEdits": true,
+            "supportsApplyEditsbyUploadID": true,
+            "supportedApplyEditsUploadIDFormats": "JSON,PBF"
+          },
+          "hasMetadata": true,
+          "hasAttachments": false,
+          "supportsApplyEditsWithGlobalIds": false,
+          "htmlPopupType": "esriServerHTMLPopupTypeNone",
+          "objectIdField": "objectid",
+          "globalIdField": "",
+          "displayField": "tipo_documento_reconocedor",
+          "typeIdField": "",
+          "subtypeField": "",
+          "fields": [
+            {
+              "name": "objectid",
+              "type": "esriFieldTypeOID",
+              "alias": "OBJECTID",
+              "domain": null,
+              "editable": false,
+              "nullable": false,
+              "defaultValue": null,
+              "modelName": "objectid"
+            },
+            {
+              "name": "fecha_visita_predial",
+              "type": "esriFieldTypeDate",
+              "alias": "Fecha Visita Predial",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 8,
+              "defaultValue": null,
+              "modelName": "fecha_visita_predial"
+            },
+            {
+              "name": "cr_predio_guid",
+              "type": "esriFieldTypeString",
+              "alias": "CR_Predio_GUID",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 38,
+              "defaultValue": null,
+              "modelName": "cr_predio_guid"
+            },
+            {
+              "name": "globalid",
+              "type": "esriFieldTypeString",
+              "alias": "GlobalID",
+              "domain": null,
+              "editable": false,
+              "nullable": false,
+              "length": 38,
+              "defaultValue": null,
+              "modelName": "globalid",
+              "required": true
+            }
+          ],
+          "indexes": [
+            {
+              "name": "gdb_15906_cr_pre",
+              "isAscending": true,
+              "isUnique": false,
+              "description": "",
+              "fields": "cr_predio_guid"
+            },
+            {
+              "name": "gdb_15906_global",
+              "isAscending": true,
+              "isUnique": false,
+              "description": "",
+              "fields": "globalid"
+            },
+            {
+              "name": "r758_sde_rowid_uk",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "objectid"
+            }
+          ],
+          "datesInUnknownTimezone": false,
+          "dateFieldsTimeReference": {
+            "timeZone": "UTC",
+            "timeZoneIANA": "Etc/UTC",
+            "respectsDaylightSaving": false
+          },
+          "preferredTimeReference": null,
+          "types": [],
+          "templates": [
+            {
+              "name": "Datos Adicionales de Levantamiento Catastral",
+              "description": "",
+              "prototype": {
+                "attributes": {
+                  "cr_predio_guid": null,
+                  "fecha_visita_predial": null
+                }
+              },
+              "drawingTool": "esriFeatureEditToolNone"
+            }
+          ],
+          "maxRecordCount": 2000,
+          "supportedQueryFormats": "JSON, geoJSON, PBF",
+          "supportedExportFormats": "sqlite,filegdb,shapefile,csv,geojson",
+          "capabilities": "Query,Extract",
+          "useStandardizedQueries": true,
+          "bigIntegerRestrictedTo53Bits": true,
+          "supportsAppend": true,
+          "supportedAppendFormats": "FILEGDB,PBF",
+          "standardMaxRecordCount": 32000,
+          "tileMaxRecordCount": 2000,
+          "maxRecordCountFactor": 1,
+          "serviceItemId": "c5d96cfd4e3e4a398f9a93d444acf3b3"
+        },
+        "sample_query": {
+          "objectIdFieldName": "objectid",
+          "globalIdFieldName": "",
+          "fields": [
+            {
+              "name": "objectid",
+              "alias": "OBJECTID",
+              "type": "esriFieldTypeOID"
+            },
+            {
+              "name": "fecha_visita_predial",
+              "alias": "Fecha Visita Predial",
+              "type": "esriFieldTypeDate",
+              "length": 8
+            },
+            {
+              "name": "cr_predio_guid",
+              "alias": "CR_Predio_GUID",
+              "type": "esriFieldTypeString",
+              "length": 38
+            },
+            {
+              "name": "globalid",
+              "alias": "GlobalID",
+              "type": "esriFieldTypeString",
+              "length": 38
+            }
+          ],
+          "features": [
+            {
+              "attributes": {
+                "objectid": 1,
+                "fecha_visita_predial": 1717545600000,
+                "cr_predio_guid": "{DE5CB7EC-401B-4828-B428-FFA18139350E}",
+                "globalid": "{38A20E89-72FB-44A8-9964-F72FD9A0BCB2}"
+              }
+            }
+          ],
+          "exceededTransferLimit": true
+        }
+      },
+      "key_fields": {
+        "present": {},
+        "absent": [
+          "numero_predial",
+          "numero_predial_anterior",
+          "condicion_predio",
+          "tipo_predio",
+          "estado_predio",
+          "destinacion_economica",
+          "clase_suelo",
+          "categoria_suelo",
+          "codigo_homologado",
+          "vigencia",
+          "fecha_inscripcion",
+          "area_catastral_terreno",
+          "aplica_efectos_registrales",
+          "simb_activ",
+          "actividad",
+          "poligono",
+          "nombre_uso",
+          "etiqueta",
+          "tratamient",
+          "tipo_trata",
+          "altura_max",
+          "nivel",
+          "zona",
+          "riesedif",
+          "riespers",
+          "riesmit",
+          "nombre",
+          "localidad"
+        ]
+      }
+    }
+  ]
+}

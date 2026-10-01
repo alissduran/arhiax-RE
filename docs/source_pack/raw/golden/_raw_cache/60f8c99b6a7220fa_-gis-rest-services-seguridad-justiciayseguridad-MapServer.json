@@ -1,0 +1,189 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p style='text-align:Justify;margin:1 1 1 0;'><span>Representa la localización de la infraestructura de seguridad, justicia y defensa, incluyendo instalaciones militares, puntos operativos de Policía, centros penitenciarios, fiscalías y juzgados. Además, representa información adicional del barrio y localidad en la que cada infraestructura se encuentra.</span></p></div></div></div>",
+    "mapName": "Infraestructura de Justicia y Seguridad",
+    "description": "Representa la localización de la infraestructura de seguridad, justicia y defensa, incluyendo instalaciones militares, puntos operativos de Policía, centros penitenciarios, fiscalías y juzgados. Además, representa información adicional del barrio y localidad en la que cada infraestructura se encuentra.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Juzgados",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Fiscalias",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 3,
+        "name": "Carceles",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 4,
+        "name": "CAI, Estaciones y Subestaciones",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 5,
+        "name": "Batallón, Escuelas y Brigadas",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkt2": "PROJCRS[\"PCS_ATL_BARRANQUILLA\",BASEGEOGCRS[\"CGS_ATL_BARRANQUILLA\",DATUM[\"D_MAGNA_ATL_BARRANQUILLA\",ELLIPSOID[\"GRS_1980_ATL_BARRANQUILLA\",6378237.0,298.257222101,LENGTHUNIT[\"Meter\",1.0]]],PRIMEM[\"Greenwich\",0.0,ANGLEUNIT[\"Degree\",0.0174532925199433]],CS[ellipsoidal,2],ANGLEUNIT[\"Degree\",0.0174532925199433]],CONVERSION[\"Transverse_Mercator\",METHOD[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",917264.406,LENGTHUNIT[\"Meter\",1.0]],PARAMETER[\"False_Northing\",1699839.935,LENGTHUNIT[\"Meter\",1.0]],PARAMETER[\"Central_Meridian\",-74.8343313333333,ANGLEUNIT[\"Degree\",0.0174532925199433]],PARAMETER[\"Scale_Factor\",1.0,SCALEUNIT[\"Unity\",1.0]],PARAMETER[\"Latitude_Of_Origin\",10.9231830833333,ANGLEUNIT[\"Degree\",0.0174532925199433]]],CS[Cartesian,2],AXIS[\"Easting (X)\",east,ORDER[1]],AXIS[\"Northing (Y)\",north,ORDER[2]],LENGTHUNIT[\"Meter\",1.0]]",
+      "wkt": "PROJCS[\"PCS_ATL_BARRANQUILLA\",GEOGCS[\"CGS_ATL_BARRANQUILLA\",DATUM[\"D_MAGNA_ATL_BARRANQUILLA\",SPHEROID[\"GRS_1980_ATL_BARRANQUILLA\",6378237.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",917264.406],PARAMETER[\"False_Northing\",1699839.935],PARAMETER[\"Central_Meridian\",-74.8343313333333],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",10.9231830833333],UNIT[\"Meter\",1.0]]",
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -4706000,
+      "falseY": -9510400,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 909678.4627319012,
+      "ymin": 1698111.9240790743,
+      "xmax": 930715.8799152883,
+      "ymax": 1715137.159781472,
+      "spatialReference": {
+        "wkt2": "PROJCRS[\"PCS_ATL_BARRANQUILLA\",BASEGEOGCRS[\"CGS_ATL_BARRANQUILLA\",DATUM[\"D_MAGNA_ATL_BARRANQUILLA\",ELLIPSOID[\"GRS_1980_ATL_BARRANQUILLA\",6378237.0,298.257222101,LENGTHUNIT[\"Meter\",1.0]]],PRIMEM[\"Greenwich\",0.0,ANGLEUNIT[\"Degree\",0.0174532925199433]],CS[ellipsoidal,2],ANGLEUNIT[\"Degree\",0.0174532925199433]],CONVERSION[\"Transverse_Mercator\",METHOD[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",917264.406,LENGTHUNIT[\"Meter\",1.0]],PARAMETER[\"False_Northing\",1699839.935,LENGTHUNIT[\"Meter\",1.0]],PARAMETER[\"Central_Meridian\",-74.8343313333333,ANGLEUNIT[\"Degree\",0.0174532925199433]],PARAMETER[\"Scale_Factor\",1.0,SCALEUNIT[\"Unity\",1.0]],PARAMETER[\"Latitude_Of_Origin\",10.9231830833333,ANGLEUNIT[\"Degree\",0.0174532925199433]]],CS[Cartesian,2],AXIS[\"Easting (X)\",east,ORDER[1]],AXIS[\"Northing (Y)\",north,ORDER[2]],LENGTHUNIT[\"Meter\",1.0]]",
+        "wkt": "PROJCS[\"PCS_ATL_BARRANQUILLA\",GEOGCS[\"CGS_ATL_BARRANQUILLA\",DATUM[\"D_MAGNA_ATL_BARRANQUILLA\",SPHEROID[\"GRS_1980_ATL_BARRANQUILLA\",6378237.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",917264.406],PARAMETER[\"False_Northing\",1699839.935],PARAMETER[\"Central_Meridian\",-74.8343313333333],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",10.9231830833333],UNIT[\"Meter\",1.0]]",
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -4706000,
+        "falseY": -9510400,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 910315.0250963382,
+      "ymin": 1699396.7830488519,
+      "xmax": 924933.4428665071,
+      "ymax": 1713338.8041686835,
+      "spatialReference": {
+        "wkt2": "PROJCRS[\"PCS_ATL_BARRANQUILLA\",BASEGEOGCRS[\"CGS_ATL_BARRANQUILLA\",DATUM[\"D_MAGNA_ATL_BARRANQUILLA\",ELLIPSOID[\"GRS_1980_ATL_BARRANQUILLA\",6378237.0,298.257222101,LENGTHUNIT[\"Meter\",1.0]]],PRIMEM[\"Greenwich\",0.0,ANGLEUNIT[\"Degree\",0.0174532925199433]],CS[ellipsoidal,2],ANGLEUNIT[\"Degree\",0.0174532925199433]],CONVERSION[\"Transverse_Mercator\",METHOD[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",917264.406,LENGTHUNIT[\"Meter\",1.0]],PARAMETER[\"False_Northing\",1699839.935,LENGTHUNIT[\"Meter\",1.0]],PARAMETER[\"Central_Meridian\",-74.8343313333333,ANGLEUNIT[\"Degree\",0.0174532925199433]],PARAMETER[\"Scale_Factor\",1.0,SCALEUNIT[\"Unity\",1.0]],PARAMETER[\"Latitude_Of_Origin\",10.9231830833333,ANGLEUNIT[\"Degree\",0.0174532925199433]]],CS[Cartesian,2],AXIS[\"Easting (X)\",east,ORDER[1]],AXIS[\"Northing (Y)\",north,ORDER[2]],LENGTHUNIT[\"Meter\",1.0]]",
+        "wkt": "PROJCS[\"PCS_ATL_BARRANQUILLA\",GEOGCS[\"CGS_ATL_BARRANQUILLA\",DATUM[\"D_MAGNA_ATL_BARRANQUILLA\",SPHEROID[\"GRS_1980_ATL_BARRANQUILLA\",6378237.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",917264.406],PARAMETER[\"False_Northing\",1699839.935],PARAMETER[\"Central_Meridian\",-74.8343313333333],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",10.9231830833333],UNIT[\"Meter\",1.0]]",
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -4706000,
+        "falseY": -9510400,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Infraestructura de justicia y seguridad",
+      "Author": "",
+      "Comments": "Representa la localización de la infraestructura de seguridad, justicia y defensa, incluyendo instalaciones militares, puntos operativos de Policía, centros penitenciarios, fiscalías y juzgados. Además, representa información adicional del barrio y localidad en la que cada infraestructura se encuentra.",
+      "Subject": "Agrupa información relacionada con la infraestructura de justicia, seguridad y defensa para apoyar la consulta territorial y análisis territorial.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Justicia,Seguridad,Defensa,Infraestructura,Institucional,Policía,Cárceles,Fiscalías,Juzgados,Batallones,Equipamiento urbano,Barranquilla"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "serviceItemId": "dc24257564c74d358e1765d71a4273d8"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/justiciayseguridad/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fseguridad%2Fjusticiayseguridad%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:36:39.624548+00:00",
+    "elapsed_s": 2.9,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 8593,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:36:39.624534+00:00"
+      }
+    ]
+  }
+}

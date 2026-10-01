@@ -1,0 +1,535 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 3,
+    "name": "Rutas de Transmetro",
+    "type": "Feature Layer",
+    "description": "Representa la estructura geográfica de las rutas que conforman el sistema de transporte masivo Transmetro, incluyendo trazados troncales y alimentadores que conectan los principales corredores urbanos de Barranquilla y Soledad. Esta información permite visualizar con precisión el recorrido de cada ruta, su relación con la red vial, su vinculación con estaciones, portales y puntos estratégicos del sistema, así como su integración con otros modos de transporte. Mediante su uso en entornos SIG, la capa facilita análisis orientados a la evaluación de cobertura del servicio, la identificación de áreas con déficit o redundancia de rutas, el estudio de patrones de movilidad, la optimización operativa, la planificación de expansiones y la gestión integral del transporte público.",
+    "geometryType": "esriGeometryPolyline",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Transmetro",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "tipoderuta",
+        "uniqueValueGroups": [
+          {
+            "heading": "Tipo de ruta",
+            "classes": [
+              {
+                "label": "Alimentador",
+                "description": "Alimentador",
+                "symbol": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    164,
+                    214,
+                    139,
+                    255
+                  ],
+                  "width": 2
+                },
+                "values": [
+                  [
+                    "Alimentador"
+                  ]
+                ]
+              },
+              {
+                "label": "Troncal",
+                "description": "Troncal",
+                "symbol": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    245,
+                    198,
+                    88,
+                    255
+                  ],
+                  "width": 2
+                },
+                "values": [
+                  [
+                    "Troncal"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSLS",
+              "style": "esriSLSSolid",
+              "color": [
+                164,
+                214,
+                139,
+                255
+              ],
+              "width": 2
+            },
+            "value": "Alimentador",
+            "label": "Alimentador"
+          },
+          {
+            "symbol": {
+              "type": "esriSLS",
+              "style": "esriSLSSolid",
+              "color": [
+                245,
+                198,
+                88,
+                255
+              ],
+              "width": 2
+            },
+            "value": "Troncal",
+            "label": "Troncal"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  232,
+                  199,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  232,
+                  199,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  197,
+                  252,
+                  184,
+                  255
+                ],
+                "toColor": [
+                  197,
+                  252,
+                  184,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  207,
+                  182,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  207,
+                  182,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  245,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  245,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  248,
+                  187,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  248,
+                  187,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  179,
+                  191,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  179,
+                  191,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  182,
+                  211,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  182,
+                  211,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  184,
+                  252,
+                  223,
+                  255
+                ],
+                "toColor": [
+                  184,
+                  252,
+                  223,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  210,
+                  234,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  210,
+                  234,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  183,
+                  179,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  183,
+                  179,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  233,
+                  252,
+                  212,
+                  255
+                ],
+                "toColor": [
+                  233,
+                  252,
+                  212,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  212,
+                  236,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  212,
+                  236,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  182,
+                  239,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  182,
+                  239,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": 4795597.7492,
+      "ymin": 2757115.7565,
+      "xmax": 4807340.6231,
+      "ymax": 2779241.0298999995,
+      "zmin": 0,
+      "zmax": 0,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "ruta",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "ruta",
+        "type": "esriFieldTypeString",
+        "alias": "Ruta",
+        "length": 255,
+        "domain": null
+      },
+      {
+        "name": "tipoderuta",
+        "type": "esriFieldTypeString",
+        "alias": "Tipo de ruta",
+        "length": 255,
+        "domain": null
+      },
+      {
+        "name": "estado",
+        "type": "esriFieldTypeString",
+        "alias": "Estado",
+        "length": 255,
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "r734_sde_rowid_uk",
+        "fields": "objectid",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      },
+      {
+        "name": "a583_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Query,Map,Data",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "hasZ": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "518384b4859f4e4fbaba63ed21dc6034"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/serviciostransporte/MapServer/3?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fmovilidad%2Fserviciostransporte%2FMapServer%2F3%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:00:45.917048+00:00",
+    "elapsed_s": 7.7,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 7178,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:00:45.917020+00:00"
+      }
+    ]
+  }
+}

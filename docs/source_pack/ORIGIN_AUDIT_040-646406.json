@@ -1,0 +1,415 @@
+{
+  "facts": [
+    {
+      "attribute": "Dirección oficial",
+      "value": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3 · Torre 8 · Apartamento 430",
+      "status": "REQUIERE_VALIDACION",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "origin_declarado": "COMPUTED_FROM_SOURCES",
+      "origin_gate": true,
+      "selected_source": {
+        "fuentes": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "authorized": true,
+      "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+    },
+    {
+      "attribute": "Matrícula",
+      "value": "040-646406",
+      "status": "VERIFICADO",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "origin_declarado": "COMPUTED_FROM_SOURCES",
+      "origin_gate": true,
+      "selected_source": {
+        "fuentes": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "authorized": true,
+      "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+    },
+    {
+      "attribute": "NUPRE",
+      "value": "AFT0005BOHA",
+      "status": "REQUIERE_VALIDACION",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "origin_declarado": "COMPUTED_FROM_SOURCES",
+      "origin_gate": true,
+      "selected_source": {
+        "fuentes": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "authorized": true,
+      "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+    },
+    {
+      "attribute": "Número predial",
+      "value": "080010103000010040001908040002",
+      "status": "REQUIERE_VALIDACION",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "origin_declarado": "COMPUTED_FROM_SOURCES",
+      "origin_gate": true,
+      "selected_source": {
+        "fuentes": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "authorized": true,
+      "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+    },
+    {
+      "attribute": "Unidad (torre / apartamento)",
+      "value": "APARTAMENTO 430 TORRE 8",
+      "status": "REQUIERE_VALIDACION",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "origin_declarado": "COMPUTED_FROM_SOURCES",
+      "origin_gate": true,
+      "selected_source": {
+        "fuentes": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "authorized": true,
+      "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+    },
+    {
+      "attribute": "Área",
+      "value": "58.75 m²",
+      "status": "REQUIERE_VALIDACION",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "origin_declarado": "COMPUTED_FROM_SOURCES",
+      "origin_gate": true,
+      "selected_source": {
+        "fuentes": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "authorized": true,
+      "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+    },
+    {
+      "attribute": "Régimen jurídico",
+      "value": "Propiedad Horizontal",
+      "status": "REQUIERE_VALIDACION",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "origin_declarado": "COMPUTED_FROM_SOURCES",
+      "origin_gate": true,
+      "selected_source": {
+        "fuentes": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "authorized": true,
+      "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+    },
+    {
+      "attribute": "Uso (destino catastral)",
+      "value": "Habitacional",
+      "status": "REQUIERE_VALIDACION",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "origin_declarado": "COMPUTED_FROM_SOURCES",
+      "origin_gate": true,
+      "selected_source": {
+        "fuentes": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "authorized": true,
+      "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+    },
+    {
+      "attribute": "Tipología",
+      "value": "Unidad En Propiedad Horizontal",
+      "status": "REQUIERE_VALIDACION",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "origin_declarado": "COMPUTED_FROM_SOURCES",
+      "origin_gate": true,
+      "selected_source": {
+        "fuentes": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "authorized": true,
+      "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+    }
+  ],
+  "facts_verified": [
+    {
+      "attribute": "Matrícula",
+      "value": "040-646406",
+      "status": "VERIFICADO",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "origin_declarado": "COMPUTED_FROM_SOURCES",
+      "origin_gate": true,
+      "selected_source": {
+        "fuentes": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30T14:47:40.937950+00:00",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "authorized": true,
+      "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+    }
+  ],
+  "violaciones": [],
+  "regla_aplicada": "REGLA APLICADA (ajustada de forma explícita y razonada): un hecho impreso como VERIFICADO exige un ORIGEN DECLARADO y AUTORIZADO —`EXTERNAL_SOURCE` o `COMPUTED_FROM_SOURCES`, con procedencia completa (fuentes citadas + fecha + sha256)—. `COMPUTED_FROM_SOURCES` PURO se admite como válido: el hecho de identidad no es un literal del render, es el resultado DETERMINISTA de la resolución canónica de la corrida (`canonical.identidad_canonica`: `identity_verified` se deriva de `resolution_confidence == VERIFIED_UNIT_IDENTITY`) sostenido por dos evidencias SELLADAS de esa misma corrida. Si la procedencia no está completa, `clasificar_origen` degrada el origen y el estado impreso se degrada con él (nunca se borra el hecho).",
+  "acceptance": {
+    "facts_leidos": 9,
+    "verified_count": 1,
+    "disallowed_origin_count": 0,
+    "ok": true,
+    "nota": "origin/selected_source/provenance/authorized se LEEN de `manifest.hechos_impresos.identidad.filas` (artefacto de la corrida), no de una tabla del script."
+  }
+}

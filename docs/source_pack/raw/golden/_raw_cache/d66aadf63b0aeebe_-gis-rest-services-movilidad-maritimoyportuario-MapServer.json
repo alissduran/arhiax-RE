@@ -1,0 +1,209 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div style='font-size:12pt'><p><span>Reúne información sobre el sector marítimo y portuario de Barranquilla. Muestra cómo se articula la infraestructura y la gestión portuaria que sustentan las actividades de navegación, comercio y logística marítima en la ciudad, fortaleciendo su papel estratégico en la economía regional y nacional.</span></p></div></div></div>",
+    "mapName": "Marítimo y portuario",
+    "description": "Reúne información sobre el sector marítimo y portuario de Barranquilla. Muestra cómo se articula la infraestructura y la gestión portuaria que sustentan las actividades de navegación, comercio y logística marítima en la ciudad, fortaleciendo su papel estratégico en la economía regional y nacional.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Sociedades portuarias",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4800466.056146109,
+      "ymin": 2777169.8198074256,
+      "xmax": 4804298.570541839,
+      "ymax": 2778462.5783946426,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4801296.908,
+      "ymin": 2768899.9821000006,
+      "xmax": 4808461.5457,
+      "ymax": 2778460.561899999,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Sector marítimo y portuario",
+      "Author": "",
+      "Comments": "Reúne información sobre el sector marítimo y portuario de Barranquilla. Muestra cómo se articula la infraestructura y la gestión portuaria que sustentan las actividades de navegación, comercio y logística marítima en la ciudad, fortaleciendo su papel estratégico en la economía regional y nacional.",
+      "Subject": "Recopila información sobre el sector marítimo y portuario de Barranquilla, evidenciando la infraestructura y gestión que sostienen las actividades de navegación, comercio y logística, pilares del desarrollo económico regional y nacional.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Portuario,Fluvial,Marítimo,Economía,Transporte,Movilidad,Navegación"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "fc9263237b1a46ba8b1b963da32ccea6"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/maritimoyportuario/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fmovilidad%2Fmaritimoyportuario%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:42:39.866583+00:00",
+    "elapsed_s": 56.3,
+    "attempt_count": 11,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 6,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T15:42:03.482195+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 7,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:42:23.702809+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 8,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:42:23.977240+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 9,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:42:28.122775+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 10,
+        "http_status": 200,
+        "bytes": 6006,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:42:34.828846+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 11,
+        "http_status": 200,
+        "bytes": 3861,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:42:39.866511+00:00"
+      }
+    ]
+  }
+}

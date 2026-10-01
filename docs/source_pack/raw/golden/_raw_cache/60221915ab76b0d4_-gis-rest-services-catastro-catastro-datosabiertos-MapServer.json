@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "data": {
+    "error": {
+      "code": 400,
+      "message": "Invalid URL",
+      "details": []
+    }
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/datosabiertos/MapServer?f=json",
+    "transport": "microlink",
+    "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fcatastro%2Fdatosabiertos%2FMapServer%3Ff%3Djson&meta=false&data.text.selector=pre",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T14:32:40.258095+00:00",
+    "elapsed_s": 5.1,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "blocked_marker": true,
+        "error": null,
+        "at": "2026-09-29T14:32:39.215366+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 934,
+        "blocked_marker": false,
+        "error": null,
+        "at": "2026-09-29T14:32:40.258057+00:00"
+      }
+    ]
+  }
+}

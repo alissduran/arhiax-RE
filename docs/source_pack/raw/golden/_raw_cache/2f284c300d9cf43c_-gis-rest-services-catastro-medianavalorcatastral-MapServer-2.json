@@ -1,0 +1,105 @@
+{
+  "ok": false,
+  "data": null,
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer/2?f=json",
+    "transport": null,
+    "ok": false,
+    "fetched_at_utc": "2026-09-29T16:07:35.818095+00:00",
+    "elapsed_s": 257.4,
+    "attempt_count": 26,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 17,
+        "http_status": 200,
+        "bytes": 6018,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:05:39.039706+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 18,
+        "http_status": null,
+        "bytes": 0,
+        "reject_reason": "not_json",
+        "error": "TimeoutError: The read operation timed out",
+        "at": "2026-09-29T16:06:04.163936+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 19,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:06:07.325084+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 20,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:06:08.082988+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 21,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T16:06:23.774002+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 22,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:06:31.070835+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 23,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:06:50.687533+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 24,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:06:50.974285+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 25,
+        "http_status": null,
+        "bytes": 0,
+        "reject_reason": "not_json",
+        "error": "TimeoutError: The read operation timed out",
+        "at": "2026-09-29T16:07:16.121098+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 26,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:07:35.818083+00:00"
+      }
+    ],
+    "final_error": "no transport returned a valid ArcGIS JSON body"
+  }
+}

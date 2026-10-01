@@ -1,0 +1,257 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "identificador",
+    "fieldAliases": {
+      "objectid": "OBJECTID",
+      "etiqueta": "Etiqueta",
+      "relacion_superficie": "Relación Superficie",
+      "identificador": "Identificador",
+      "tipo_construccion": "Tipo Construcción",
+      "tipo_dominio": "Tipo Dominio",
+      "total_pisos": "Total Pisos",
+      "total_sotanos": "Total Sotanos",
+      "total_mezanines": "Total Mezanines",
+      "total_semisotanos": "Total Semisotanos",
+      "altura_total_construccion": "Altura Total Construcción",
+      "local_id": "Local Id",
+      "estado_construccion": "Estado Construcción",
+      "st_area(shape)": "st_area(shape)",
+      "st_length(shape)": "st_length(shape)",
+      "globalid": "GlobalID"
+    },
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "etiqueta",
+        "type": "esriFieldTypeString",
+        "alias": "Etiqueta",
+        "length": 255
+      },
+      {
+        "name": "relacion_superficie",
+        "type": "esriFieldTypeString",
+        "alias": "Relación Superficie",
+        "length": 255
+      },
+      {
+        "name": "identificador",
+        "type": "esriFieldTypeString",
+        "alias": "Identificador",
+        "length": 20
+      },
+      {
+        "name": "tipo_construccion",
+        "type": "esriFieldTypeString",
+        "alias": "Tipo Construcción",
+        "length": 255
+      },
+      {
+        "name": "tipo_dominio",
+        "type": "esriFieldTypeString",
+        "alias": "Tipo Dominio",
+        "length": 255
+      },
+      {
+        "name": "total_pisos",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Total Pisos"
+      },
+      {
+        "name": "total_sotanos",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Total Sotanos"
+      },
+      {
+        "name": "total_mezanines",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Total Mezanines"
+      },
+      {
+        "name": "total_semisotanos",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Total Semisotanos"
+      },
+      {
+        "name": "altura_total_construccion",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Altura Total Construcción"
+      },
+      {
+        "name": "local_id",
+        "type": "esriFieldTypeString",
+        "alias": "Local Id",
+        "length": 255
+      },
+      {
+        "name": "estado_construccion",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Estado Construcción"
+      },
+      {
+        "name": "st_area(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_area(shape)"
+      },
+      {
+        "name": "st_length(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_length(shape)"
+      },
+      {
+        "name": "globalid",
+        "type": "esriFieldTypeGlobalID",
+        "alias": "GlobalID",
+        "length": 38
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "etiqueta": null,
+          "relacion_superficie": "En_Rasante",
+          "identificador": "A",
+          "tipo_construccion": "Convencional",
+          "tipo_dominio": "Privado",
+          "total_pisos": 1,
+          "total_sotanos": 0,
+          "total_mezanines": 0,
+          "total_semisotanos": 0,
+          "altura_total_construccion": 3,
+          "local_id": "080010104000004660049000000000",
+          "estado_construccion": 1,
+          "st_area(shape)": 34.109916435,
+          "st_length(shape)": 25.42411398773995,
+          "globalid": "{51EC0E45-BC86-4B7F-A12A-9345BE1CAA86}"
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                4801348.3783,
+                2770736.3910000008
+              ],
+              [
+                4801345.7286,
+                2770733.4838999994
+              ],
+              [
+                4801342.9114,
+                2770736.1032
+              ],
+              [
+                4801344.8176,
+                2770738.1962
+              ],
+              [
+                4801346.2221,
+                2770739.738399999
+              ],
+              [
+                4801348.8744,
+                2770742.650699999
+              ],
+              [
+                4801351.7046,
+                2770740.0404000003
+              ],
+              [
+                4801350.784,
+                2770739.0303000007
+              ],
+              [
+                4801350.1884,
+                2770738.3769000005
+              ],
+              [
+                4801348.9843,
+                2770737.0558
+              ],
+              [
+                4801348.3783,
+                2770736.3910000008
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/310/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%2F310%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:14:35.644733+00:00",
+    "elapsed_s": 46.8,
+    "attempt_count": 10,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 429,
+        "bytes": 980,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:13:50.084984+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 6,
+        "http_status": 429,
+        "bytes": 980,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:13:50.283080+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 7,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:14:09.966276+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 8,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:14:10.171965+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 9,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:14:31.704240+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 10,
+        "http_status": 200,
+        "bytes": 3038,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:14:35.644661+00:00"
+      }
+    ]
+  }
+}

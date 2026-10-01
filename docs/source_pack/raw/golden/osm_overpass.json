@@ -1,0 +1,625 @@
+{
+ "_capture": {
+  "source_id": "OSM_OVERPASS",
+  "endpoint": "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+  "queried_at": "2026-09-29T14:18:28.362604+00:00",
+  "query": "[out:json][timeout:25];\n(\n  nwr(around:1500,11.006055954316363,-74.8375696549899)[\"amenity\"~\"school|hospital|clinic|pharmacy|bank|restaurant|place_of_worship\"];\n  nwr(around:1500,11.006055954316363,-74.8375696549899)[\"shop\"~\"supermarket|mall\"];\n);\nout center 30;",
+  "point": {
+   "lat": 11.006055954316363,
+   "lon": -74.8375696549899,
+   "radio_m": 1500
+  },
+  "note": "Respuesta CRUDA de Overpass tal como llegó; no se modifica. Se usa como fallback DECLARADO cuando la red no está disponible.",
+  "elements": 30
+ },
+ "response": {
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.4 2390de5a",
+  "osm3s": {
+   "timestamp_osm_base": "2026-09-29T14:16:51Z",
+   "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+   {
+    "type": "node",
+    "id": 4816085056,
+    "lat": 11.0132382,
+    "lon": -74.8286729,
+    "tags": {
+     "addr:housename": "C.C. Buenavista 2",
+     "branch": "Buenavista",
+     "brand": "Jumbo (Cencosud)",
+     "brand:wikidata": "Q6310864",
+     "brand:wikipedia": "en:Jumbo (hypermarket)",
+     "level": "1;2",
+     "name": "Jumbo",
+     "operator": "Cencosud",
+     "shop": "supermarket"
+    }
+   },
+   {
+    "type": "node",
+    "id": 5357685548,
+    "lat": 11.0059697,
+    "lon": -74.8290756,
+    "tags": {
+     "amenity": "restaurant",
+     "cuisine": "italian",
+     "name": "La Traviata"
+    }
+   },
+   {
+    "type": "node",
+    "id": 6538575081,
+    "lat": 11.0154469,
+    "lon": -74.82938,
+    "tags": {
+     "amenity": "bank",
+     "brand": "Banco Falabella",
+     "brand:en": "Falabella Bank",
+     "brand:es": "Banco Falabella",
+     "brand:wikidata": "Q4854088",
+     "brand:wikipedia": "en:Banco Falabella",
+     "name": "Banco Falabella",
+     "name:en": "Falabella Bank",
+     "name:es": "Banco Falabella",
+     "operator": "Falabella",
+     "operator:es": "Falabella",
+     "operator:wikidata": "Q1374824",
+     "operator:wikipedia": "en:S.A.C.I. Falabella"
+    }
+   },
+   {
+    "type": "node",
+    "id": 6585687991,
+    "lat": 11.0157043,
+    "lon": -74.8309793,
+    "tags": {
+     "addr:city": "Barranquilla",
+     "addr:country": "CO",
+     "addr:housenumber": "100-50",
+     "addr:street": "Carrera 53",
+     "amenity": "place_of_worship",
+     "denomination": "catholic",
+     "name": "Iglesia Santa Laura Montoya",
+     "religion": "christian"
+    }
+   },
+   {
+    "type": "node",
+    "id": 6630380701,
+    "lat": 11.0122786,
+    "lon": -74.8275021,
+    "tags": {
+     "amenity": "pharmacy",
+     "dispensing": "yes",
+     "healthcare": "pharmacy",
+     "name": "Droguería Cruz Verde"
+    }
+   },
+   {
+    "type": "node",
+    "id": 6855854208,
+    "lat": 11.0121709,
+    "lon": -74.8276018,
+    "tags": {
+     "amenity": "restaurant",
+     "cuisine": "sushi",
+     "delivery": "yes",
+     "name": "Sushi Market",
+     "takeaway": "no"
+    }
+   },
+   {
+    "type": "node",
+    "id": 7610890165,
+    "lat": 11.0151373,
+    "lon": -74.8274651,
+    "tags": {
+     "brand": "Carulla",
+     "brand:wikidata": "Q5047480",
+     "brand:wikipedia": "en:Carulla",
+     "name": "Carulla",
+     "shop": "supermarket"
+    }
+   },
+   {
+    "type": "node",
+    "id": 7610890166,
+    "lat": 11.0130926,
+    "lon": -74.8274068,
+    "tags": {
+     "amenity": "bank",
+     "brand": "Banco de Bogotá",
+     "brand:en": "Bank of Bogota",
+     "brand:es": "Banco de Bogotá",
+     "brand:wikidata": "Q4854122",
+     "brand:wikipedia": "es:Banco de Bogotá",
+     "check_date": "2025-09-03",
+     "name": "Banco de Bogotá",
+     "name:en": "Bank of Bogotá",
+     "name:es": "Banco de Bogotá"
+    }
+   },
+   {
+    "type": "node",
+    "id": 7610890167,
+    "lat": 11.0139491,
+    "lon": -74.8283938,
+    "tags": {
+     "amenity": "bank",
+     "brand": "Banco de Occidente",
+     "brand:wikidata": "Q4854127",
+     "brand:wikipedia": "es:Banco de Occidente (Colombia)",
+     "name": "Banco de Occidente"
+    }
+   },
+   {
+    "type": "node",
+    "id": 7610890169,
+    "lat": 11.0140339,
+    "lon": -74.8283791,
+    "tags": {
+     "amenity": "bank",
+     "brand": "BBVA",
+     "brand:wikidata": "Q806189",
+     "brand:wikipedia": "en:Banco Bilbao Vizcaya Argentaria",
+     "name": "BBVA",
+     "official_name": "Banco Bilbao Vizcaya Argentaria"
+    }
+   },
+   {
+    "type": "node",
+    "id": 7610890172,
+    "lat": 11.013752,
+    "lon": -74.8284336,
+    "tags": {
+     "amenity": "bank",
+     "brand": "Bancolombia",
+     "brand:wikidata": "Q806206",
+     "brand:wikipedia": "es:Bancolombia",
+     "name": "Bancolombia",
+     "name:en": "Bancolombia",
+     "name:es": "Bancolombia",
+     "website": "https://www.bancolombia.com/"
+    }
+   },
+   {
+    "type": "node",
+    "id": 7610890173,
+    "lat": 11.0135058,
+    "lon": -74.8284495,
+    "tags": {
+     "amenity": "bank",
+     "brand": "Scotiabank",
+     "brand:wikidata": "Q451476",
+     "brand:wikipedia": "en:Scotiabank",
+     "name": "Scotiabank"
+    }
+   },
+   {
+    "type": "node",
+    "id": 7610890174,
+    "lat": 11.0138424,
+    "lon": -74.8284082,
+    "tags": {
+     "amenity": "bank",
+     "brand": "Davivienda",
+     "brand:wikidata": "Q5242054",
+     "brand:wikipedia": "es:Davivienda",
+     "name": "Davivienda"
+    }
+   },
+   {
+    "type": "node",
+    "id": 7692834492,
+    "lat": 11.0156681,
+    "lon": -74.8464306,
+    "tags": {
+     "amenity": "bank",
+     "name": "Itaú"
+    }
+   },
+   {
+    "type": "node",
+    "id": 7897281634,
+    "lat": 11.0154281,
+    "lon": -74.8281854,
+    "tags": {
+     "amenity": "bank",
+     "brand": "Banco AV Villas",
+     "brand:en": "Bank of Villas",
+     "brand:es": "Banco AV Villas",
+     "brand:wikidata": "Q4854068",
+     "brand:wikipedia": "en:Banco AV Villas",
+     "name": "Banco AV Villas",
+     "name:en": "Bank of Villas",
+     "name:es": "Banco AV Villas"
+    }
+   },
+   {
+    "type": "node",
+    "id": 7897281635,
+    "lat": 11.0151842,
+    "lon": -74.8277446,
+    "tags": {
+     "amenity": "bank",
+     "brand": "Bancolombia",
+     "brand:wikidata": "Q806206",
+     "brand:wikipedia": "es:Bancolombia",
+     "name": "Bancolombia",
+     "name:en": "Bancolombia",
+     "name:es": "Bancolombia",
+     "website": "https://www.bancolombia.com/"
+    }
+   },
+   {
+    "type": "node",
+    "id": 9155802118,
+    "lat": 11.0024108,
+    "lon": -74.8278887,
+    "tags": {
+     "addr:housenumber": "43-41",
+     "addr:street": "Calle 93",
+     "amenity": "restaurant",
+     "name": "Monica sabbagh"
+    }
+   },
+   {
+    "type": "node",
+    "id": 9164983817,
+    "lat": 11.0007101,
+    "lon": -74.8252299,
+    "tags": {
+     "addr:housenumber": "87-112",
+     "addr:street": "Carrera 43",
+     "amenity": "restaurant",
+     "name": "Buffalos's white"
+    }
+   },
+   {
+    "type": "node",
+    "id": 11569959541,
+    "lat": 11.0142229,
+    "lon": -74.8365669,
+    "tags": {
+     "addr:city": "Barranquilla",
+     "addr:street": "Calle 107",
+     "brand": "D1",
+     "brand:wikidata": "Q43403418",
+     "name": "D1",
+     "shop": "supermarket"
+    }
+   },
+   {
+    "type": "node",
+    "id": 11686369872,
+    "lat": 11.0034205,
+    "lon": -74.8275731,
+    "tags": {
+     "amenity": "restaurant",
+     "name": "Brasas & Fuegos"
+    }
+   },
+   {
+    "type": "node",
+    "id": 11686369970,
+    "lat": 11.000666,
+    "lon": -74.8250932,
+    "tags": {
+     "amenity": "restaurant",
+     "name": "Palenque"
+    }
+   },
+   {
+    "type": "node",
+    "id": 11712017869,
+    "lat": 11.0050424,
+    "lon": -74.826611,
+    "tags": {
+     "amenity": "restaurant",
+     "name": "ZAHLE"
+    }
+   },
+   {
+    "type": "node",
+    "id": 11762261165,
+    "lat": 11.0141732,
+    "lon": -74.8365776,
+    "tags": {
+     "addr:city": "Barranquilla",
+     "addr:housenumber": "67",
+     "addr:street": "Calle 107",
+     "amenity": "clinic",
+     "description": "Professional and comprehensive diagnosis of everything related to the control and prevention of foot conditions.",
+     "healthcare": "clinic",
+     "healthcare:speciality": "podiatry",
+     "name": "Dr, Scholl's Barranquilla",
+     "opening_hours": "Mo-Sa 07:00-17:00",
+     "phone": "+57 305 2999482",
+     "website": "https://drschollsbarranquilla.com/"
+    }
+   },
+   {
+    "type": "node",
+    "id": 12812168260,
+    "lat": 11.0005484,
+    "lon": -74.8258949,
+    "tags": {
+     "addr:city": "Barranquilla",
+     "addr:housenumber": "42H-55",
+     "addr:street": "Calle 90",
+     "amenity": "pharmacy",
+     "healthcare": "pharmacy",
+     "name": "Droguerías Galilea"
+    }
+   },
+   {
+    "type": "node",
+    "id": 13095087199,
+    "lat": 11.0010926,
+    "lon": -74.8248507,
+    "tags": {
+     "amenity": "restaurant",
+     "name": "Micheladas 2go"
+    }
+   },
+   {
+    "type": "way",
+    "id": 48959779,
+    "center": {
+     "lat": 11.0131512,
+     "lon": -74.8276707
+    },
+    "nodes": [
+     621188521,
+     621188522,
+     621188524,
+     4072717404,
+     9976018414,
+     6273357797,
+     9976018413,
+     4072717401,
+     6400438422,
+     6400438421,
+     6400438420,
+     6400438423,
+     6400438419,
+     6400438424,
+     6400438418,
+     6400438417,
+     6400438416,
+     6400438415,
+     4072717400,
+     6400438413,
+     6400438414,
+     6400438412,
+     4072717398,
+     6400438411,
+     6400438410,
+     6400438408,
+     6400438409,
+     6400438405,
+     6400438406,
+     6400438404,
+     6400438407,
+     6400438403,
+     4072716779,
+     9976018397,
+     6400438426,
+     621188521
+    ],
+    "tags": {
+     "addr:city": "Barranquilla",
+     "addr:housenumber": "52-115",
+     "addr:street": "Calle 98",
+     "building": "commercial",
+     "building:levels": "4",
+     "name": "C.C. Buenavista",
+     "opening_hours": "Mo-Sa 10:00-21:00; Su 11:00-19:00",
+     "phone": "+57 605 3091815",
+     "shop": "mall",
+     "source": "Bing",
+     "toilets": "yes",
+     "wheelchair": "yes"
+    }
+   },
+   {
+    "type": "way",
+    "id": 211551494,
+    "center": {
+     "lat": 11.0136944,
+     "lon": -74.8283885
+    },
+    "nodes": [
+     6635627303,
+     9976018438,
+     6635627299,
+     9975934550,
+     7833540542,
+     9975934562,
+     9976018447,
+     6635627300,
+     6635627302,
+     6635627304,
+     2359539489,
+     2359539487,
+     2215400317,
+     9976018416,
+     9976018417,
+     2919557065,
+     9976018418,
+     9976018419,
+     6400429102,
+     6400429105,
+     6400429101,
+     6400429104,
+     6400429103,
+     2919557069,
+     9976018415,
+     6273357796,
+     9976018412,
+     9976018420,
+     6635627303
+    ],
+    "tags": {
+     "addr:street": "Calle 99",
+     "building": "commercial",
+     "building:levels": "4",
+     "name": "Buenavista 2",
+     "shop": "mall"
+    }
+   },
+   {
+    "type": "way",
+    "id": 405245842,
+    "center": {
+     "lat": 11.0150655,
+     "lon": -74.8263646
+    },
+    "nodes": [
+     4074590517,
+     4831116336,
+     4074590518,
+     9977450445,
+     4074590519,
+     4074590520,
+     6396800795,
+     6396800796,
+     8670025968,
+     8670025971,
+     9977446877,
+     6396800797,
+     4074590517
+    ],
+    "tags": {
+     "barrier": "wall",
+     "name": "C. C. Plaza del Parque",
+     "shop": "mall"
+    }
+   },
+   {
+    "type": "way",
+    "id": 405245848,
+    "center": {
+     "lat": 11.0161343,
+     "lon": -74.8312966
+    },
+    "nodes": [
+     4074590542,
+     6338715376,
+     6338715371,
+     6338715372,
+     6338715373,
+     6338715377,
+     6338715374,
+     6338715367,
+     6338715368,
+     4074590544,
+     4074590562,
+     9975940701,
+     4074590563,
+     6338715366,
+     6338715365,
+     6338715364,
+     4074590545,
+     4074590546,
+     4074590547,
+     4074590548,
+     4074590549,
+     4074590550,
+     9975940641,
+     4074590551,
+     4074590552,
+     4074590561,
+     6338715357,
+     9975940640,
+     4074590553,
+     6338715356,
+     6338715355,
+     6338715354,
+     6338715353,
+     9975940721,
+     9975940728,
+     4074590554,
+     6338715363,
+     6338715362,
+     4074590560,
+     4074590559,
+     6338715361,
+     4074590558,
+     4074590556,
+     6338715360,
+     6338715359,
+     4074590557,
+     6338715358,
+     6338717285,
+     6338715383,
+     6338715382,
+     6338715384,
+     6338717287,
+     6338717288,
+     6338717286,
+     6338715381,
+     4074590540,
+     4074590543,
+     6338715380,
+     6338715379,
+     4074590542
+    ],
+    "tags": {
+     "building": "yes",
+     "name": "Blue Gardens",
+     "shop": "mall"
+    }
+   },
+   {
+    "type": "way",
+    "id": 405584558,
+    "center": {
+     "lat": 11.0190762,
+     "lon": -74.8426132
+    },
+    "nodes": [
+     9683587809,
+     9728797381,
+     6553343085,
+     9280363118,
+     9280363117,
+     6553343086,
+     4077571606,
+     6373396572,
+     5198633928,
+     5198633929,
+     5198633926,
+     6373396571,
+     6373396570,
+     6373396569,
+     5198633927,
+     6373396568,
+     5198633930,
+     5198633932,
+     6373396567,
+     6373396566,
+     5198633933,
+     6373396565,
+     6373396564,
+     6373396563,
+     5198633934,
+     4077571607,
+     4077571604,
+     4077571605,
+     9295938607,
+     9728797384,
+     9683587809
+    ],
+    "tags": {
+     "amenity": "school",
+     "barrier": "wall",
+     "denotation": "urban",
+     "name": "Colegio Karl C. Parrish"
+    }
+   }
+  ]
+ }
+}

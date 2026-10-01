@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "folders": [],
+    "services": [
+      {
+        "name": "observatorio/areaconstruida",
+        "type": "MapServer"
+      },
+      {
+        "name": "observatorio/arrendamientos",
+        "type": "MapServer"
+      },
+      {
+        "name": "observatorio/avaluocatastral",
+        "type": "MapServer"
+      },
+      {
+        "name": "observatorio/cantidadtransacciones",
+        "type": "MapServer"
+      },
+      {
+        "name": "observatorio/destinotransacciones",
+        "type": "MapServer"
+      },
+      {
+        "name": "observatorio/dinamicatransacciones",
+        "type": "MapServer"
+      },
+      {
+        "name": "observatorio/mecanismosfianaciacion",
+        "type": "MapServer"
+      },
+      {
+        "name": "observatorio/valorcompraventas",
+        "type": "MapServer"
+      },
+      {
+        "name": "observatorio/valoresm2_area",
+        "type": "MapServer"
+      },
+      {
+        "name": "observatorio/valorsuelorural",
+        "type": "MapServer"
+      },
+      {
+        "name": "observatorio/valorsuelourbano",
+        "type": "MapServer"
+      }
+    ]
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio?f=json",
+    "transport": "microlink",
+    "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fobservatorio%3Ff%3Djson&meta=false&data.text.selector=pre",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T14:28:47.618405+00:00",
+    "elapsed_s": 33.0,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "blocked_marker": true,
+        "error": null,
+        "at": "2026-09-29T14:28:46.507081+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 1848,
+        "blocked_marker": false,
+        "error": null,
+        "at": "2026-09-29T14:28:47.618391+00:00"
+      }
+    ]
+  }
+}

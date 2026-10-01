@@ -1,0 +1,238 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Muestra </span><span>un inventario georreferenciado de predios, rutas y sitios patrimoniales de Barranquilla. Incluye barrios tradicionales, plazas, edificaciones emblemáticas, quintas republicanas, espacios culturales y circuitos turísticos como el Centro Histórico, Barrio Abajo, la Ruta Fluvial y la Ruta Arquitectónica. Su propósito es apoyar la planeación urbana, la gestión cultural y la promoción turística mediante información clara y estandarizada. Esta capa permite comprender cómo la ciudad se ha construido entre el río, la arquitectura, el arte y la memoria popular, ofreciendo una herramienta para investigadores, gestores y visitantes interesados en el patrimonio barranquillero.</span></p></div></div></div>",
+    "mapName": "Patrimonio",
+    "description": "Muestra un inventario georreferenciado de predios, rutas y sitios patrimoniales de Barranquilla. Incluye barrios tradicionales, plazas, edificaciones emblemáticas, quintas republicanas, espacios culturales y circuitos turísticos como el Centro Histórico, Barrio Abajo, la Ruta Fluvial y la Ruta Arquitectónica. Su propósito es apoyar la planeación urbana, la gestión cultural y la promoción turística mediante información clara y estandarizada. Esta capa permite comprender cómo la ciudad se ha construido entre el río, la arquitectura, el arte y la memoria popular, ofreciendo una herramienta para investigadores, gestores y visitantes interesados en el patrimonio barranquillero.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Rutas patrimoniales",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Recorridos patrimoniales",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolyline",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4791416.08014838,
+      "ymin": 2768057.938352219,
+      "xmax": 4816296.297726514,
+      "ymax": 2776855.3633522214,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4802822.1566,
+      "ymin": 2769636.5353999995,
+      "xmax": 4806688.5296,
+      "ymax": 2776724.0384,
+      "mmin": null,
+      "mmax": null,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Patrimonio",
+      "Author": "",
+      "Comments": "Muestra un inventario georreferenciado de predios, rutas y sitios patrimoniales de Barranquilla. Incluye barrios tradicionales, plazas, edificaciones emblemáticas, quintas republicanas, espacios culturales y circuitos turísticos como el Centro Histórico, Barrio Abajo, la Ruta Fluvial y la Ruta Arquitectónica. Su propósito es apoyar la planeación urbana, la gestión cultural y la promoción turística mediante información clara y estandarizada. Esta capa permite comprender cómo la ciudad se ha construido entre el río, la arquitectura, el arte y la memoria popular, ofreciendo una herramienta para investigadores, gestores y visitantes interesados en el patrimonio barranquillero.",
+      "Subject": "Muestra los predios, rutas y sitios patrimoniales de Barranquilla, integrando arquitectura histórica, espacios culturales y circuitos turísticos. Facilita la consulta y visualización del patrimonio material e inmaterial de la ciudad.",
+      "Category": "",
+      "Version": "3.2.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Patrimonio Barranquilla,Predios patrimoniales,Rutas culturales,Sitios de interés histórico,Centro Histórico,Barrio Abajo,Arquitectura republicana,Turismo cultural,Geovisor patrimonial,Planeación urbana,Memoria urbana,Patrimonio arquitectónico"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "floorAwareMapProperties": {
+      "defaultFloorFilterSettings": {
+        "isEnabled": false
+      }
+    },
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "serviceItemId": "413307be7ef54207929a68334b09b6a4"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimonio/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcultura%2Fpatrimonio%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:58:50.904057+00:00",
+    "elapsed_s": 46.2,
+    "attempt_count": 5,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:58:24.391036+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:58:44.295127+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:58:47.572699+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:58:49.185114+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 200,
+        "bytes": 5681,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:58:50.904047+00:00"
+      }
+    ]
+  }
+}

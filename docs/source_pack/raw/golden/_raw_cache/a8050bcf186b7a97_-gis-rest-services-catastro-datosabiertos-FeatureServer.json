@@ -1,0 +1,387 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Datos abiertos de Catastro Barranquilla</span></p></div></div></div>",
+    "hasVersionedData": false,
+    "hasArchivedData": false,
+    "hasBranchVersionedData": false,
+    "supportsDisconnectedEditing": false,
+    "supportsDatumTransformation": true,
+    "supportsReturnServiceEditsOption": true,
+    "returnServiceEditsHaveSR": true,
+    "supportsQueryDataElements": true,
+    "datesInUnknownTimezone": false,
+    "supportsRelationshipsResource": true,
+    "syncEnabled": false,
+    "syncCapabilities": {
+      "supportsRegisterReplicaForServer": true,
+      "supportsSyncDirectionControl": true,
+      "supportsPerLayerSync": true,
+      "supportsPerReplicaSync": true,
+      "supportsAttachmentsSyncDirection": true,
+      "supportsSyncModelNone": true,
+      "supportsDurableUrlForSyncModelNone": false
+    },
+    "supportedExportFormats": "sqlite,filegdb,shapefile,csv,geojson",
+    "extractChangesCapabilities": {
+      "supportsReturnIdsOnly": false,
+      "supportsReturnExtentOnly": false,
+      "supportsReturnAttachments": false,
+      "supportsLayerQueries": false,
+      "supportsGeometry": false,
+      "supportsFeatureReturn": false,
+      "supportsReturnHasGeometryUpdates": false,
+      "supportsFieldsToCompare": false,
+      "supportsServerGens": false
+    },
+    "supportedQueryFormats": "JSON",
+    "maxRecordCount": 2000,
+    "maxRecordCountFactor": 1,
+    "capabilities": "Query,Extract",
+    "description": "Datos abiertos de Catastro Barranquilla",
+    "copyrightText": "Gerencia de Gestión Catastral",
+    "advancedEditingCapabilities": {
+      "supportsSplit": false,
+      "supportsReturnServiceEditsInSourceSR": true,
+      "supportsAsyncApplyEdits": true,
+      "supportsApplyEditsbyUploadID": true,
+      "supportedApplyEditsUploadIDFormats": "JSON,PBF",
+      "supportsMultipatchOptionForServiceEdits": true,
+      "supportedApplyEditsOptions": {
+        "supportedEditingOptions": 0
+      }
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "initialExtent": {
+      "xmin": 4801326.629057731,
+      "ymin": 2773324.140380284,
+      "xmax": 4801393.830186245,
+      "ymax": 2773385.7043280397,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4790211.3538,
+      "ymin": 2764638.7138,
+      "xmax": 4807916.4988,
+      "ymax": 2781153.0310999993,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "allowGeometryUpdates": true,
+    "allowTrueCurvesUpdates": true,
+    "onlyAllowTrueCurveUpdatesByTrueCurveClients": true,
+    "supportsApplyEditsWithGlobalIds": false,
+    "supportsTrueCurve": true,
+    "supportedCurveTypes": [
+      "esriGeometryCircularArc",
+      "esriGeometryEllipticArc",
+      "esriGeometryBezier3Curve"
+    ],
+    "units": "esriMeters",
+    "documentInfo": {
+      "Title": "Catastro Datos Abiertos",
+      "Author": "",
+      "Comments": "Datos abiertos de Catastro Barranquilla",
+      "Subject": "Datos abiertos de Catastro Barranquilla",
+      "Category": "",
+      "Keywords": "Catastro"
+    },
+    "supportsQueryDomains": true,
+    "supportsQueryContingentValues": true,
+    "layers": [
+      {
+        "id": 105,
+        "name": "Dirección",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 500,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint"
+      },
+      {
+        "id": 110,
+        "name": "Nomenclatura vial",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 24000,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolyline"
+      },
+      {
+        "id": 205,
+        "name": "TerrenoL",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 500,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolyline"
+      },
+      {
+        "id": 305,
+        "name": "Unidad de Construcción",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 2500,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon"
+      },
+      {
+        "id": 310,
+        "name": "Construcción",
+        "parentLayerId": -1,
+        "defaultVisibility": false,
+        "subLayerIds": null,
+        "minScale": 2500,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon"
+      },
+      {
+        "id": 315,
+        "name": "Terreno",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 5000,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon"
+      },
+      {
+        "id": 320,
+        "name": "Manzana",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 10000,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon"
+      }
+    ],
+    "tables": [
+      {
+        "id": 500,
+        "name": "Predio"
+      },
+      {
+        "id": 505,
+        "name": "Caracteristicas Unidad de Construcción"
+      },
+      {
+        "id": 510,
+        "name": "Estructura Novedad Numero Predial"
+      },
+      {
+        "id": 515,
+        "name": "Fuente Administrativa"
+      },
+      {
+        "id": 520,
+        "name": "Trámites"
+      },
+      {
+        "id": 525,
+        "name": "Agrupacion de Interesados"
+      },
+      {
+        "id": 530,
+        "name": "Tipología de la Construcción"
+      },
+      {
+        "id": 535,
+        "name": "Calificación Convencional"
+      },
+      {
+        "id": 540,
+        "name": "Estructura Predio Origen NPN"
+      },
+      {
+        "id": 545,
+        "name": "Datos Adicionales de Levantamiento Catastral"
+      },
+      {
+        "id": 601,
+        "name": "CR_Terreno_CR_Predio"
+      },
+      {
+        "id": 602,
+        "name": "CR_UnidadConstruccion_CR_Predio"
+      },
+      {
+        "id": 603,
+        "name": "CR_Construccion_CR_Predio"
+      }
+    ],
+    "relationships": [
+      {
+        "id": 0,
+        "name": "CR_Predio_Dirección"
+      },
+      {
+        "id": 1,
+        "name": "CR_UnidadConstruccion_CR_Predio"
+      },
+      {
+        "id": 2,
+        "name": "CR_CaracteristicasUnidadConstruccion_CR_UnidadConstruccion"
+      },
+      {
+        "id": 3,
+        "name": "CR_Construccion_CR_UnidadConstruccion"
+      },
+      {
+        "id": 4,
+        "name": "CR_Construccion_CR_Predio"
+      },
+      {
+        "id": 5,
+        "name": "CR_Terreno_CR_Predio"
+      },
+      {
+        "id": 6,
+        "name": "CR_Predio_LC_DatosAdicionalesLevantamientoCatastral"
+      },
+      {
+        "id": 7,
+        "name": "CR_Predio_CR_EstructuraPredioOrigenNPN"
+      },
+      {
+        "id": 8,
+        "name": "CR_CaracteristicasUnidadConstruccion_LC_CalificacionConvencional"
+      },
+      {
+        "id": 9,
+        "name": "CR_CaracteristicasUnidadConstruccion_LC_TipologiaConstruccion"
+      },
+      {
+        "id": 10,
+        "name": "LC_DatosLevantamientoCatastral_LC_EstructuraNovedadNPN"
+      }
+    ],
+    "enableZDefaults": false,
+    "allowUpdateWithoutMValues": false,
+    "supportsVCSProjection": true,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "referenceScale": 0,
+    "hasSharedTemplates": true,
+    "supportsSharedTemplates": true,
+    "infoInEstimates": [
+      "extent",
+      "count"
+    ],
+    "supportsAppend": true,
+    "supportedAppendFormats": "FILEGDB,PBF",
+    "serviceItemId": "c5d96cfd4e3e4a398f9a93d444acf3b3"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:15:56.978550+00:00",
+    "elapsed_s": 8.5,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 6590,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:15:56.978475+00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><div style='font-size:12pt'><p><span>Reúne información que permite analizar el comportamiento del mercado inmobiliario en el Distrito de Barranquilla. Muestra, de manera anual y a nivel de manzanas, las zonas donde se concentra la mayor cantidad de transacciones realizadas entre 2019 y 2025, facilitando la comprensión de las dinámicas y tendencias del mercado de la propiedad.</span></p></div></div></div></div>",
+    "mapName": "Cantidad de transacciones",
+    "description": "Reúne información que permite analizar el comportamiento del mercado inmobiliario en el Distrito de Barranquilla. Muestra, de manera anual y a nivel de manzanas, las zonas donde se concentra la mayor cantidad de transacciones realizadas entre 2019 y 2025, facilitando la comprensión de las dinámicas y tendencias del mercado de la propiedad.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Cantidad de transacciones por manzana. Año 2019.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Cantidad de transacciones por manzana. Año 2020.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 3,
+        "name": "Cantidad de transacciones por manzana. Año 2021.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 4,
+        "name": "Cantidad de transacciones por manzana. Año 2022.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 5,
+        "name": "Cantidad de transacciones por manzana. Año 2023.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 6,
+        "name": "Cantidad de transacciones por manzana. Año 2024.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 7,
+        "name": "Cantidad de transacciones por manzana. Año 2025.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 8,
+        "name": "Cantidad de transacciones por manzana. Año 2026.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4791672.393222818,
+      "ymin": 2764597.7875699988,
+      "xmax": 4810174.0258964,
+      "ymax": 2779640.247468072,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4792078.3941,
+      "ymin": 2765373.6522000004,
+      "xmax": 4807916.4988,
+      "ymax": 2779789.3136,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Cantidad de transacciones anuales. Años 2019-2025.",
+      "Author": "",
+      "Comments": "Reúne información que permite analizar el comportamiento del mercado inmobiliario en el Distrito de Barranquilla. Muestra, de manera anual y a nivel de manzanas, las zonas donde se concentra la mayor cantidad de transacciones realizadas entre 2019 y 2025, facilitando la comprensión de las dinámicas y tendencias del mercado de la propiedad.",
+      "Subject": "Reúne información que refleja el comportamiento del mercado inmobiliario en Barranquilla. Muestra anualmente en dónde se realizan mayor cantidad de transacciones entre 2019 y 2025.",
+      "Category": "",
+      "Version": "3.2.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Transacciones,Compraventas,Inmuebles,Observatorio,Inmobiliario,Manzana,Barrio,Catastro"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "floorAwareMapProperties": {
+      "defaultFloorFilterSettings": {
+        "isEnabled": false
+      }
+    },
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "serviceItemId": "562d6c30716c4db19637e851006ea3c0"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fobservatorio%2Fcantidadtransacciones%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:36:44.105594+00:00",
+    "elapsed_s": 4.5,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5794,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:36:44.105560+00:00"
+      }
+    ]
+  }
+}

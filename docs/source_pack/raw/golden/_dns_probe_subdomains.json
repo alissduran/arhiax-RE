@@ -1,0 +1,106 @@
+[
+  {
+    "host": "miciudad.barranquilla.gov.co",
+    "ips": [
+      "104.18.0.44",
+      "104.18.1.44"
+    ],
+    "cloudflare_fronted": true
+  },
+  {
+    "host": "gis.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "sig.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "geoportal.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "arcgis.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "geoserver.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "mapas.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "cartografia.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "catastro.barranquilla.gov.co",
+    "ips": [
+      "104.18.0.44",
+      "104.18.1.44"
+    ],
+    "cloudflare_fronted": true
+  },
+  {
+    "host": "pot.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "datosabiertos.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "servicios.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "aplicaciones.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "webgis.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "portal.barranquilla.gov.co",
+    "ips": [
+      "181.49.136.170",
+      "190.248.57.39"
+    ],
+    "cloudflare_fronted": false
+  },
+  {
+    "host": "www.barranquilla.gov.co",
+    "ips": [
+      "104.18.0.44",
+      "104.18.1.44"
+    ],
+    "cloudflare_fronted": true
+  },
+  {
+    "host": "barranquilla.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "geo.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "ide.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "spatial.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "espacio.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  },
+  {
+    "host": "observatorio.barranquilla.gov.co",
+    "error": "gaierror: [Errno 11001] getaddrinfo failed"
+  }
+]

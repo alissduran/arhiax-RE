@@ -1,0 +1,982 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 5,
+    "name": "Planes de reordenamiento",
+    "type": "Feature Layer",
+    "description": "Muestra las zonas objeto de intervención para los diferentes Planes de Reordenamiento establecidos en el Decreto 0212 de 2014. Estos planes, tienen por objeto prever la adecuada intervención de los predios destinados a usos institucionales que surtan un proceso de relocalización.",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Planeación.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "nombre_plan",
+        "uniqueValueGroups": [
+          {
+            "heading": "Nombre del plan",
+            "classes": [
+              {
+                "label": "Plan de Reordenamiento Base Naval",
+                "description": "Plan de Reordenamiento Base Naval",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    140,
+                    209,
+                    198,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Plan de Reordenamiento Base Naval"
+                  ]
+                ]
+              },
+              {
+                "label": "Plan de Reordenamiento Batallón Paraíso",
+                "description": "Plan de Reordenamiento Batallón Paraíso",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    255,
+                    181,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Plan de Reordenamiento Batallón Paraíso"
+                  ]
+                ]
+              },
+              {
+                "label": "Plan de Reordenamiento Cementerio Calancala",
+                "description": "Plan de Reordenamiento Cementerio Calancala",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    189,
+                    186,
+                    217,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Plan de Reordenamiento Cementerio Calancala"
+                  ]
+                ]
+              },
+              {
+                "label": "Plan de Reordenamiento Cementerio Siape",
+                "description": "Plan de Reordenamiento Cementerio Siape",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    250,
+                    128,
+                    115,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Plan de Reordenamiento Cementerio Siape"
+                  ]
+                ]
+              },
+              {
+                "label": "Plan de Reordenamiento Cementerio Sur",
+                "description": "Plan de Reordenamiento Cementerio Sur",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    128,
+                    176,
+                    209,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Plan de Reordenamiento Cementerio Sur"
+                  ]
+                ]
+              },
+              {
+                "label": "Plan de Reordenamiento Cementerio Universal",
+                "description": "Plan de Reordenamiento Cementerio Universal",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    247,
+                    177,
+                    101,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Plan de Reordenamiento Cementerio Universal"
+                  ]
+                ]
+              },
+              {
+                "label": "Plan de Reordenamiento Cárcel Bosque",
+                "description": "Plan de Reordenamiento Cárcel Bosque",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    181,
+                    222,
+                    104,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Plan de Reordenamiento Cárcel Bosque"
+                  ]
+                ]
+              },
+              {
+                "label": "Plan de Reordenamiento Cárcel Modelo",
+                "description": "Plan de Reordenamiento Cárcel Modelo",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    207,
+                    230,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Plan de Reordenamiento Cárcel Modelo"
+                  ]
+                ]
+              },
+              {
+                "label": "Plan de Reordenamiento Segunda Brigada",
+                "description": "Plan de Reordenamiento Segunda Brigada",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    217,
+                    217,
+                    217,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Plan de Reordenamiento Segunda Brigada"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                140,
+                209,
+                198,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Plan de Reordenamiento Base Naval",
+            "label": "Plan de Reordenamiento Base Naval"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                255,
+                181,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Plan de Reordenamiento Batallón Paraíso",
+            "label": "Plan de Reordenamiento Batallón Paraíso"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                189,
+                186,
+                217,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Plan de Reordenamiento Cementerio Calancala",
+            "label": "Plan de Reordenamiento Cementerio Calancala"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                250,
+                128,
+                115,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Plan de Reordenamiento Cementerio Siape",
+            "label": "Plan de Reordenamiento Cementerio Siape"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                128,
+                176,
+                209,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Plan de Reordenamiento Cementerio Sur",
+            "label": "Plan de Reordenamiento Cementerio Sur"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                247,
+                177,
+                101,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Plan de Reordenamiento Cementerio Universal",
+            "label": "Plan de Reordenamiento Cementerio Universal"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                181,
+                222,
+                104,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Plan de Reordenamiento Cárcel Bosque",
+            "label": "Plan de Reordenamiento Cárcel Bosque"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                207,
+                230,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Plan de Reordenamiento Cárcel Modelo",
+            "label": "Plan de Reordenamiento Cárcel Modelo"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                217,
+                217,
+                217,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Plan de Reordenamiento Segunda Brigada",
+            "label": "Plan de Reordenamiento Segunda Brigada"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  227,
+                  252,
+                  210,
+                  255
+                ],
+                "toColor": [
+                  227,
+                  252,
+                  210,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  218,
+                  179,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  218,
+                  179,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  185,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  185,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  187,
+                  229,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  187,
+                  229,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  179,
+                  222,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  179,
+                  222,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  252,
+                  238,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  252,
+                  238,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  226,
+                  184,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  226,
+                  184,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  220,
+                  212,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  220,
+                  212,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  252,
+                  195,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  252,
+                  195,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  212,
+                  223,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  212,
+                  223,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  245,
+                  252,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  245,
+                  252,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  190,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  190,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  207,
+                  249,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  207,
+                  249,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": 4800783.3562,
+      "ymin": 2766510.1865,
+      "xmax": 4805634.8454,
+      "ymax": 2776572.851,
+      "zmin": 0,
+      "zmax": 0,
+      "mmin": -9.999e+35,
+      "mmax": -9.999e+35,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "nombre_plan",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "FID",
+        "domain": null
+      },
+      {
+        "name": "nombre_plan",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre del plan",
+        "length": 100,
+        "domain": null
+      },
+      {
+        "name": "tratamiento",
+        "type": "esriFieldTypeString",
+        "alias": "Tratamiento",
+        "length": 50,
+        "domain": null
+      },
+      {
+        "name": "tipo_tratamiento",
+        "type": "esriFieldTypeString",
+        "alias": "Tipo de tratamiento",
+        "length": 50,
+        "domain": null
+      },
+      {
+        "name": "altura_maxima",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Altura máxima",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "shape",
+        "domain": null
+      },
+      {
+        "name": "st_area(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_area(shape)",
+        "domain": null
+      },
+      {
+        "name": "st_length(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_length(shape)",
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "shape"
+    },
+    "indexes": [
+      {
+        "name": "r512_sde_rowid_uk",
+        "fields": "objectid",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      },
+      {
+        "name": "a422_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Query,Map,Data",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "hasZ": true,
+    "hasM": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "cf9427507835407fb7d8fd382319eeb3"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/5?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Fplaneacion%2FMapServer%2F5%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:14:35.205773+00:00",
+    "elapsed_s": 2.5,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 11924,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:14:35.205762+00:00"
+      }
+    ]
+  }
+}

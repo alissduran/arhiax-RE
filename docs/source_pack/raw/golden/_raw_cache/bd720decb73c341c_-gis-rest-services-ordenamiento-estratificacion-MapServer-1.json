@@ -1,0 +1,1005 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 1,
+    "name": "Estratificación por manzanas",
+    "type": "Feature Layer",
+    "description": "Representa las unidades geográficas del Distrito de Barranquilla a nivel de manzana, vinculadas con la clasificación de estrato socioeconómico establecida por la Secretaría de Planeación. Este mapa permite visualizar la distribución espacial de los distintos estratos, facilitando el análisis urbano y la toma de decisiones en materia de desarrollo social y ordenamiento del territorio.",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Planeación.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "estratificacion",
+        "defaultSymbol": {
+          "type": "esriSFS",
+          "style": "esriSFSSolid",
+          "color": [
+            204,
+            204,
+            204,
+            255
+          ],
+          "outline": {
+            "type": "esriSLS",
+            "style": "esriSLSNull",
+            "color": [
+              110,
+              110,
+              110,
+              255
+            ],
+            "width": 0
+          }
+        },
+        "defaultLabel": "<all other values>",
+        "uniqueValueGroups": [
+          {
+            "heading": "Estratificación",
+            "classes": [
+              {
+                "label": "Estrato 1",
+                "description": "Estrato 1",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    140,
+                    64,
+                    4,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "1"
+                  ]
+                ]
+              },
+              {
+                "label": "Estrato 2",
+                "description": "Estrato 2",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    182,
+                    102,
+                    39,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "2"
+                  ]
+                ]
+              },
+              {
+                "label": "Estrato 3",
+                "description": "Estrato 3",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    204,
+                    128,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "3"
+                  ]
+                ]
+              },
+              {
+                "label": "Estrato 4",
+                "description": "Estrato 4",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    167,
+                    38,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "4"
+                  ]
+                ]
+              },
+              {
+                "label": "Estrato 5",
+                "description": "Estrato 5",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    237,
+                    112,
+                    20,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "5"
+                  ]
+                ]
+              },
+              {
+                "label": "Estrato 6",
+                "description": "Estrato 6",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    230,
+                    81,
+                    0,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "6"
+                  ]
+                ]
+              },
+              {
+                "label": "No aplica",
+                "description": "No aplica",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    204,
+                    204,
+                    204,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "No aplica"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                140,
+                64,
+                4,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "1",
+            "label": "Estrato 1"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                182,
+                102,
+                39,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "2",
+            "label": "Estrato 2"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                204,
+                128,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "3",
+            "label": "Estrato 3"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                167,
+                38,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "4",
+            "label": "Estrato 4"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                237,
+                112,
+                20,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "5",
+            "label": "Estrato 5"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                230,
+                81,
+                0,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "6",
+            "label": "Estrato 6"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                204,
+                204,
+                204,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "No aplica",
+            "label": "No aplica"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  192,
+                  235,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  192,
+                  235,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  179,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  179,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  182,
+                  252,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  182,
+                  252,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  217,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  217,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  184,
+                  189,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  184,
+                  189,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  192,
+                  208,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  192,
+                  208,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  210,
+                  252,
+                  223,
+                  255
+                ],
+                "toColor": [
+                  210,
+                  252,
+                  223,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  235,
+                  252,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  235,
+                  252,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  237,
+                  215,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  237,
+                  215,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  223,
+                  212,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  223,
+                  212,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  187,
+                  210,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  187,
+                  210,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  210,
+                  179,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  210,
+                  179,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  187,
+                  252,
+                  246,
+                  255
+                ],
+                "toColor": [
+                  187,
+                  252,
+                  246,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": 4792078.3941,
+      "ymin": 2765373.6522000004,
+      "xmax": 4807916.4988,
+      "ymax": 2779789.3136,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "codigo_manzana",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "codigo_manzana",
+        "type": "esriFieldTypeString",
+        "alias": "Código manzana",
+        "length": 17,
+        "domain": null
+      },
+      {
+        "name": "estratificacion",
+        "type": "esriFieldTypeString",
+        "alias": "Estratificación",
+        "length": 10,
+        "domain": {
+          "type": "codedValue",
+          "name": "ot_estratificacion",
+          "description": "Describe el estrato socio económico",
+          "codedValues": [
+            {
+              "name": "Estrato 1",
+              "code": "1"
+            },
+            {
+              "name": "Estrato 2",
+              "code": "2"
+            },
+            {
+              "name": "Estrato 3",
+              "code": "3"
+            },
+            {
+              "name": "Estrato 4",
+              "code": "4"
+            },
+            {
+              "name": "Estrato 5",
+              "code": "5"
+            },
+            {
+              "name": "Estrato 6",
+              "code": "6"
+            },
+            {
+              "name": "No aplica",
+              "code": "No aplica"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "nombre_barrio",
+        "type": "esriFieldTypeString",
+        "alias": "Barrio",
+        "length": 75,
+        "domain": null
+      },
+      {
+        "name": "identificador",
+        "type": "esriFieldTypeString",
+        "alias": "Identificador barrio",
+        "length": 512,
+        "domain": null
+      },
+      {
+        "name": "localidad",
+        "type": "esriFieldTypeString",
+        "alias": "Localidad",
+        "length": 50,
+        "domain": {
+          "type": "codedValue",
+          "name": "ot_localidades1",
+          "description": "Categoriza las localidades de los barrios",
+          "codedValues": [
+            {
+              "name": "Riomar",
+              "code": "01"
+            },
+            {
+              "name": "Norte - centro histórico",
+              "code": "02"
+            },
+            {
+              "name": "Suroccidente",
+              "code": "03"
+            },
+            {
+              "name": "Suroriente",
+              "code": "04"
+            },
+            {
+              "name": "Metropolitana",
+              "code": "05"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "st_length(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "Shape_Length",
+        "domain": null
+      },
+      {
+        "name": "st_area(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "Shape_Area",
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "r168_sde_rowid_uk",
+        "fields": "objectid",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      },
+      {
+        "name": "a148_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Map,Query,Data",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "ed7a29c5138044e3861fcda21111dd90"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/1?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Festratificacion%2FMapServer%2F1%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:17:19.306554+00:00",
+    "elapsed_s": 162.9,
+    "attempt_count": 22,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 17,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:16:28.330561+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 18,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:16:48.104291+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 19,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:16:53.902412+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 20,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T16:17:11.897705+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 21,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T16:17:12.077232+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 22,
+        "http_status": 200,
+        "bytes": 10736,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:17:19.306518+00:00"
+      }
+    ]
+  }
+}

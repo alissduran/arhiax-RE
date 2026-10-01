@@ -1,0 +1,617 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 1,
+    "name": "Mediana del Impuesto Predial Unificado a nivel de manzana. Vigencia 2007.",
+    "type": "Feature Layer",
+    "description": "Representa la mediana del impuesto predial unificado (IPU) a nivel de manzana para la vigencia 2007. Esto significa que, para cada manzana, se estableció el valor central del impuesto predial.  Además, muestra el destino predominante (el que más se repite), ofreciendo una visión general de cómo se distribuyen los valores del IPU en la ciudad.",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Hacienda. Gerencia de Gestión de Ingresos.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "classBreaks",
+        "authoringInfo": {
+          "type": "classedColor",
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  229,
+                  237,
+                  206,
+                  255
+                ],
+                "toColor": [
+                  229,
+                  237,
+                  206,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  155,
+                  196,
+                  194,
+                  255
+                ],
+                "toColor": [
+                  155,
+                  196,
+                  194,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  105,
+                  168,
+                  184,
+                  255
+                ],
+                "toColor": [
+                  105,
+                  168,
+                  184,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  75,
+                  127,
+                  153,
+                  255
+                ],
+                "toColor": [
+                  75,
+                  127,
+                  153,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  48,
+                  86,
+                  122,
+                  255
+                ],
+                "toColor": [
+                  48,
+                  86,
+                  122,
+                  255
+                ]
+              }
+            ]
+          },
+          "classificationMethod": "esriClassifyManual"
+        },
+        "field": "ipu",
+        "classificationMethod": "esriClassifyManual",
+        "minValue": 2700,
+        "classBreakInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                217,
+                237,
+                146,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "classMaxValue": 200000,
+            "label": "< $ 200.000"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                181,
+                228,
+                140,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "classMaxValue": 500000,
+            "label": "$ 200.000 - $ 500.000"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                153,
+                217,
+                140,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "classMaxValue": 1000000,
+            "label": "$ 500.000 - $ 1.000.000"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                118,
+                200,
+                147,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "classMaxValue": 2000000,
+            "label": "$ 1.000.000 - $ 2.000.000"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                82,
+                182,
+                154,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "classMaxValue": 4000000,
+            "label": "$ 2.000.000 - $ 4.000.000"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                52,
+                160,
+                164,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "classMaxValue": 5000000,
+            "label": "$ 4.000.000 - $ 5.000.000"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                22,
+                138,
+                173,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "classMaxValue": 10000000,
+            "label": "$ 5.000.000 - $ 10.000.000"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                26,
+                117,
+                159,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "classMaxValue": 15000000,
+            "label": "$ 10.000.000 - $ 15.000.000"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                30,
+                96,
+                145,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "classMaxValue": 1225563250,
+            "label": "> $ 15.000.000"
+          }
+        ],
+        "legendOptions": {
+          "order": "ascendingValues"
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": 4792078.3941,
+      "ymin": 2765373.6522000004,
+      "xmax": 4807916.4988,
+      "ymax": 2779789.3136,
+      "zmin": 0,
+      "zmax": 0,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "timeInfo": {
+      "startTimeField": "vigencia",
+      "endTimeField": null,
+      "trackIdField": null,
+      "type": "field",
+      "timeExtent": [
+        1167523200000,
+        1167523200000
+      ],
+      "timeReference": null,
+      "timeInterval": 10,
+      "timeIntervalUnits": "esriTimeUnitsUnknown",
+      "exportOptions": {
+        "useTime": true,
+        "timeDataCumulative": false,
+        "timeOffset": null,
+        "timeOffsetUnits": null
+      },
+      "hasLiveData": false,
+      "timeRelation": "esriTimeRelationOverlaps"
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "manzana",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "manzana",
+        "type": "esriFieldTypeString",
+        "alias": "Manzana",
+        "length": 255,
+        "domain": null
+      },
+      {
+        "name": "destino",
+        "type": "esriFieldTypeString",
+        "alias": "Destino",
+        "length": 255,
+        "domain": null
+      },
+      {
+        "name": "ipu",
+        "type": "esriFieldTypeDouble",
+        "alias": "Impuesto predial unificado",
+        "domain": null
+      },
+      {
+        "name": "vigencia",
+        "type": "esriFieldTypeDateOnly",
+        "alias": "Vigencia",
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "a483_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Query,Map,Data",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "hasZ": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "bd479b5e02a64f4e91e5984fb9f79f21"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto/ipu/MapServer/1?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fimpuesto%2Fipu%2FMapServer%2F1%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:06:18.697513+00:00",
+    "elapsed_s": 51.4,
+    "attempt_count": 5,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:05:47.274616+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 5943,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:05:52.014335+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 408,
+        "bytes": 24,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 408",
+        "at": "2026-09-29T16:06:01.261896+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:06:02.583978+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 200,
+        "bytes": 7910,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:06:18.697451+00:00"
+      }
+    ]
+  }
+}

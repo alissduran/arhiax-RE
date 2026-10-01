@@ -1,0 +1,733 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 2,
+    "name": "Rango valores por m². Área (61-175m²).",
+    "type": "Feature Layer",
+    "description": "",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "min_valor_m2",
+        "field2": "max_valor_m2",
+        "uniqueValueGroups": [
+          {
+            "heading": "",
+            "classes": [
+              {
+                "label": "$2.066.307 - $5.596.398",
+                "description": "$2.066.307 - $5.596.398",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    201,
+                    115,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.5
+                  }
+                },
+                "values": [
+                  [
+                    "2066307.69",
+                    "5596398.8"
+                  ]
+                ]
+              },
+              {
+                "label": "$2.387.096 - $4.305.551",
+                "description": "$2.387.096 - $4.305.551",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    180,
+                    41,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.5
+                  }
+                },
+                "values": [
+                  [
+                    "2387096.77",
+                    "4305551.28"
+                  ]
+                ]
+              },
+              {
+                "label": "$2.432.432 - $10.447.761",
+                "description": "$2.432.432 - $10.447.761",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    147,
+                    5,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.5
+                  }
+                },
+                "values": [
+                  [
+                    "2432432.43",
+                    "10447761.19"
+                  ]
+                ]
+              },
+              {
+                "label": "$2.941.176 - $4.507.142",
+                "description": "$2.941.176 - $4.507.142",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    224,
+                    111,
+                    29,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.5
+                  }
+                },
+                "values": [
+                  [
+                    "2941176.47",
+                    "4507142.86"
+                  ]
+                ]
+              },
+              {
+                "label": "$2.993.713 - $8.615.534",
+                "description": "$2.993.713 - $8.615.534",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    204,
+                    87,
+                    4,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.5
+                  }
+                },
+                "values": [
+                  [
+                    "2993713.2",
+                    "8615534.32"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                201,
+                115,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.5
+              }
+            },
+            "value": "2066307.69,5596398.8",
+            "label": "$2.066.307 - $5.596.398"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                180,
+                41,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.5
+              }
+            },
+            "value": "2387096.77,4305551.28",
+            "label": "$2.387.096 - $4.305.551"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                147,
+                5,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.5
+              }
+            },
+            "value": "2432432.43,10447761.19",
+            "label": "$2.432.432 - $10.447.761"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                224,
+                111,
+                29,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.5
+              }
+            },
+            "value": "2941176.47,4507142.86",
+            "label": "$2.941.176 - $4.507.142"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                204,
+                87,
+                4,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.5
+              }
+            },
+            "value": "2993713.2,8615534.32",
+            "label": "$2.993.713 - $8.615.534"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  212,
+                  252,
+                  246,
+                  255
+                ],
+                "toColor": [
+                  212,
+                  252,
+                  246,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  249,
+                  182,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  249,
+                  182,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  193,
+                  187,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  193,
+                  187,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  250,
+                  182,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  250,
+                  182,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  184,
+                  206,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  184,
+                  206,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  252,
+                  185,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  252,
+                  185,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  202,
+                  232,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  202,
+                  232,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  229,
+                  199,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  229,
+                  199,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  194,
+                  179,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  194,
+                  179,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  220,
+                  252,
+                  207,
+                  255
+                ],
+                "toColor": [
+                  220,
+                  252,
+                  207,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  182,
+                  228,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  182,
+                  228,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  252,
+                  227,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  252,
+                  227,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  222,
+                  207,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  222,
+                  207,
+                  252,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": -618514.06253367,
+      "ymin": -8435913.625158427,
+      "xmax": 10618514.062533671,
+      "ymax": 11552012.688130872,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "nombre",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "objectid",
+        "domain": null
+      },
+      {
+        "name": "nombre",
+        "type": "esriFieldTypeString",
+        "alias": "nombre",
+        "length": 50,
+        "domain": null
+      },
+      {
+        "name": "area_construida",
+        "type": "esriFieldTypeString",
+        "alias": "area_construida",
+        "length": 8000,
+        "domain": null
+      },
+      {
+        "name": "min_valor_m2",
+        "type": "esriFieldTypeDouble",
+        "alias": "min_valor_m2",
+        "domain": null
+      },
+      {
+        "name": "max_valor_m2",
+        "type": "esriFieldTypeDouble",
+        "alias": "max_valor_m2",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "shape",
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "shape"
+    },
+    "indexes": null,
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Query,Map,Data",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "uniqueIdInfo": {
+      "type": "simple",
+      "fields": [
+        "objectid"
+      ],
+      "OIDFieldContainsHashValue": false
+    },
+    "maxUniqueIDCount": 100000,
+    "serviceItemId": "74608fe6430340fe9546a9c56eff1b28"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer/2?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fobservatorio%2Fvaloresm2_area%2FMapServer%2F2%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:00:47.261794+00:00",
+    "elapsed_s": 6.3,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 8295,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:00:47.261720+00:00"
+      }
+    ]
+  }
+}

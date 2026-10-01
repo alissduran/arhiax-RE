@@ -1,0 +1,1984 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 4,
+    "name": "Municipios",
+    "type": "Feature Layer",
+    "description": "Muestra los límites municipales del departamento del Atlántico, según la división político–administrativa vigente. Permite identificar la extensión y ubicación de cada municipio, facilitando actividades de análisis espacial, planificación territorial, gestión administrativa y consulta geográfica.",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 102100,
+      "latestWkid": 3857,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -20037700,
+      "falseY": -30241100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Hacienda. Gerencia de Gestión Catastral.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "nombre",
+        "uniqueValueGroups": [
+          {
+            "heading": "",
+            "classes": [
+              {
+                "label": "Baranoa",
+                "description": "Baranoa",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    140,
+                    209,
+                    196,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Baranoa"
+                  ]
+                ]
+              },
+              {
+                "label": "Barranquilla",
+                "description": "Barranquilla",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    193,
+                    94,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Barranquilla"
+                  ]
+                ]
+              },
+              {
+                "label": "Campo De La Cruz",
+                "description": "Campo De La Cruz",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    114,
+                    212,
+                    199,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Campo De La Cruz"
+                  ]
+                ]
+              },
+              {
+                "label": "Candelaria",
+                "description": "Candelaria",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    190,
+                    186,
+                    217,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Candelaria"
+                  ]
+                ]
+              },
+              {
+                "label": "Galapa",
+                "description": "Galapa",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    235,
+                    201,
+                    157,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Galapa"
+                  ]
+                ]
+              },
+              {
+                "label": "Juan De Acosta",
+                "description": "Juan De Acosta",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    128,
+                    176,
+                    209,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Juan De Acosta"
+                  ]
+                ]
+              },
+              {
+                "label": "Luruaco",
+                "description": "Luruaco",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    178,
+                    98,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Luruaco"
+                  ]
+                ]
+              },
+              {
+                "label": "Malambo",
+                "description": "Malambo",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    180,
+                    222,
+                    106,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Malambo"
+                  ]
+                ]
+              },
+              {
+                "label": "Manatí",
+                "description": "Manatí",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    250,
+                    205,
+                    228,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Manatí"
+                  ]
+                ]
+              },
+              {
+                "label": "Palmar De Varela",
+                "description": "Palmar De Varela",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    217,
+                    217,
+                    217,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Palmar De Varela"
+                  ]
+                ]
+              },
+              {
+                "label": "Piojó",
+                "description": "Piojó",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    205,
+                    240,
+                    201,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Piojó"
+                  ]
+                ]
+              },
+              {
+                "label": "Polonuevo",
+                "description": "Polonuevo",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    245,
+                    227,
+                    196,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Polonuevo"
+                  ]
+                ]
+              },
+              {
+                "label": "Ponedera",
+                "description": "Ponedera",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    236,
+                    112,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Ponedera"
+                  ]
+                ]
+              },
+              {
+                "label": "Puerto Colombia",
+                "description": "Puerto Colombia",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    248,
+                    168,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Puerto Colombia"
+                  ]
+                ]
+              },
+              {
+                "label": "Repelón",
+                "description": "Repelón",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    213,
+                    217,
+                    199,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Repelón"
+                  ]
+                ]
+              },
+              {
+                "label": "Sabanagrande",
+                "description": "Sabanagrande",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    97,
+                    124,
+                    143,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Sabanagrande"
+                  ]
+                ]
+              },
+              {
+                "label": "Sabanalarga",
+                "description": "Sabanalarga",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    227,
+                    178,
+                    148,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Sabanalarga"
+                  ]
+                ]
+              },
+              {
+                "label": "Santa Lucía",
+                "description": "Santa Lucía",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    254,
+                    219,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Santa Lucía"
+                  ]
+                ]
+              },
+              {
+                "label": "Santo Tomás",
+                "description": "Santo Tomás",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    250,
+                    207,
+                    180,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Santo Tomás"
+                  ]
+                ]
+              },
+              {
+                "label": "Soledad",
+                "description": "Soledad",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    240,
+                    194,
+                    225,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Soledad"
+                  ]
+                ]
+              },
+              {
+                "label": "Suan",
+                "description": "Suan",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    229,
+                    255,
+                    212,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Suan"
+                  ]
+                ]
+              },
+              {
+                "label": "Tubará",
+                "description": "Tubará",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    231,
+                    217,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Tubará"
+                  ]
+                ]
+              },
+              {
+                "label": "Usiacurí",
+                "description": "Usiacurí",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    231,
+                    150,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Usiacurí"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                140,
+                209,
+                196,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Baranoa",
+            "label": "Baranoa"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                193,
+                94,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Barranquilla",
+            "label": "Barranquilla"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                114,
+                212,
+                199,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Campo De La Cruz",
+            "label": "Campo De La Cruz"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                190,
+                186,
+                217,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Candelaria",
+            "label": "Candelaria"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                235,
+                201,
+                157,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Galapa",
+            "label": "Galapa"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                128,
+                176,
+                209,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Juan De Acosta",
+            "label": "Juan De Acosta"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                178,
+                98,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Luruaco",
+            "label": "Luruaco"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                180,
+                222,
+                106,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Malambo",
+            "label": "Malambo"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                250,
+                205,
+                228,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Manatí",
+            "label": "Manatí"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                217,
+                217,
+                217,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Palmar De Varela",
+            "label": "Palmar De Varela"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                205,
+                240,
+                201,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Piojó",
+            "label": "Piojó"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                245,
+                227,
+                196,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Polonuevo",
+            "label": "Polonuevo"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                236,
+                112,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Ponedera",
+            "label": "Ponedera"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                248,
+                168,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Puerto Colombia",
+            "label": "Puerto Colombia"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                213,
+                217,
+                199,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Repelón",
+            "label": "Repelón"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                97,
+                124,
+                143,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Sabanagrande",
+            "label": "Sabanagrande"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                227,
+                178,
+                148,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Sabanalarga",
+            "label": "Sabanalarga"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                254,
+                219,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Santa Lucía",
+            "label": "Santa Lucía"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                250,
+                207,
+                180,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Santo Tomás",
+            "label": "Santo Tomás"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                240,
+                194,
+                225,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Soledad",
+            "label": "Soledad"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                229,
+                255,
+                212,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Suan",
+            "label": "Suan"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                231,
+                217,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Tubará",
+            "label": "Tubará"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                231,
+                150,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Usiacurí",
+            "label": "Usiacurí"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  227,
+                  252,
+                  210,
+                  255
+                ],
+                "toColor": [
+                  227,
+                  252,
+                  210,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  179,
+                  251,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  179,
+                  251,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  184,
+                  215,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  184,
+                  215,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  189,
+                  184,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  189,
+                  184,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  252,
+                  250,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  252,
+                  250,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  188,
+                  182,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  188,
+                  182,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  249,
+                  215,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  249,
+                  215,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  223,
+                  182,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  223,
+                  182,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  183,
+                  252,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  183,
+                  252,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  182,
+                  252,
+                  214,
+                  255
+                ],
+                "toColor": [
+                  182,
+                  252,
+                  214,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  184,
+                  214,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  184,
+                  214,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  251,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  251,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  212,
+                  236,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  212,
+                  236,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  215,
+                  220,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  215,
+                  220,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  215,
+                  252,
+                  234,
+                  255
+                ],
+                "toColor": [
+                  215,
+                  252,
+                  234,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  225,
+                  192,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  225,
+                  192,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  237,
+                  215,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  237,
+                  215,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  217,
+                  252,
+                  182,
+                  255
+                ],
+                "toColor": [
+                  217,
+                  252,
+                  182,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  207,
+                  199,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  207,
+                  199,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  246,
+                  197,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  246,
+                  197,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  214,
+                  194,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  214,
+                  194,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  182,
+                  231,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  182,
+                  231,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  197,
+                  244,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  197,
+                  244,
+                  252,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 50,
+      "labelingInfo": [
+        {
+          "labelExpressionInfo": {
+            "expression": "$feature.nombre",
+            "title": "Custom"
+          },
+          "labelPlacement": "esriServerPolygonPlacementAlwaysHorizontal",
+          "multiPart": "labelLargest",
+          "allowOverrun": true,
+          "deconflictionStrategy": "dynamic",
+          "repeatLabel": false,
+          "useClippedGeometry": true,
+          "stackLabel": true,
+          "stackAlignment": "dynamic",
+          "removeDuplicates": "none",
+          "stackRowLength": 24,
+          "useCodedValues": true,
+          "maxScale": 0,
+          "minScale": 0,
+          "name": "Class 1",
+          "priority": -1,
+          "symbol": {
+            "type": "esriTS",
+            "color": [
+              0,
+              0,
+              0,
+              255
+            ],
+            "backgroundColor": null,
+            "borderLineColor": null,
+            "borderLineSize": null,
+            "verticalAlignment": "bottom",
+            "horizontalAlignment": "left",
+            "rightToLeft": false,
+            "angle": 0,
+            "xoffset": 0,
+            "yoffset": 0,
+            "kerning": true,
+            "haloColor": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "haloSize": 0.7,
+            "font": {
+              "family": "Volkswagen Serial",
+              "size": 10,
+              "style": "normal",
+              "weight": "bold",
+              "decoration": "none"
+            }
+          }
+        }
+      ]
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": -8377056.618090606,
+      "ymin": 1147287.4112962335,
+      "xmax": -8317208.555328629,
+      "ymax": 1244149.187896893,
+      "zmin": 0,
+      "zmax": 0,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "codigo",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "codigo",
+        "type": "esriFieldTypeString",
+        "alias": "Código",
+        "length": 1073741822,
+        "domain": null
+      },
+      {
+        "name": "nombre",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre",
+        "length": 1073741822,
+        "domain": null
+      },
+      {
+        "name": "depto",
+        "type": "esriFieldTypeString",
+        "alias": "Departamento",
+        "length": 1073741822,
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "a217_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": true,
+    "capabilities": "Query,Map,Data,TileMap",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "hasZ": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "be7fe19e847d481ca552bbedbe3ae12e"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/4?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Funidadesadministrativas%2FMapServer%2F4%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:14:26.189579+00:00",
+    "elapsed_s": 137.3,
+    "attempt_count": 11,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 6,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:13:43.321087+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 7,
+        "http_status": 503,
+        "bytes": 780,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 503",
+        "at": "2026-09-29T16:13:43.640269+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 8,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:13:43.841611+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 9,
+        "http_status": 520,
+        "bytes": 963,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 520",
+        "at": "2026-09-29T16:14:02.994606+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 10,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:14:22.661808+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 11,
+        "http_status": 200,
+        "bytes": 18536,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:14:26.189565+00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;font-size:12pt'><p><span>Muestra la variable estrato socioeconómico en Barranquilla espacializada a nivel de manzanas, relaciona también información de barrio y localidad. Permite comprender cómo se distribuyen los distintos niveles de condiciones de vida en la ciudad. A través de esta información, se pueden orientar políticas públicas, definir tarifas diferenciadas para servicios y promover una planeación urbana más equitativa.</span></p></div>",
+    "mapName": "Estratificación",
+    "description": "Muestra la variable estrato socioeconómico en Barranquilla espacializada a nivel de manzanas, relaciona también información de barrio y localidad. Permite comprender cómo se distribuyen los distintos niveles de condiciones de vida en la ciudad. A través de esta información, se pueden orientar políticas públicas, definir tarifas diferenciadas para servicios y promover una planeación urbana más equitativa.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Estratificación por manzanas",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4789681.946335624,
+      "ymin": 2764445.313795707,
+      "xmax": 4811558.278570126,
+      "ymax": 2780302.5413357066,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4792078.3941,
+      "ymin": 2765373.6522000004,
+      "xmax": 4807916.4988,
+      "ymax": 2779789.3136,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Estratificación",
+      "Author": "",
+      "Comments": "Muestra la variable estrato socioeconómico en Barranquilla espacializada a nivel de manzanas, relaciona también información de barrio y localidad. Permite comprender cómo se distribuyen los distintos niveles de condiciones de vida en la ciudad. A través de esta información, se pueden orientar políticas públicas, definir tarifas diferenciadas para servicios y promover una planeación urbana más equitativa.",
+      "Subject": "Muestra la variable estrato socioeconómico en Barranquilla espacializada a nivel de manzanas.",
+      "Category": "",
+      "Version": "3.3.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Estrato socioeconómico,Estratos,Planeación,Manzanas,Servicios públicos"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "ed7a29c5138044e3861fcda21111dd90"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Festratificacion%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:57:30.959192+00:00",
+    "elapsed_s": 255.6,
+    "attempt_count": 18,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 13,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:56:56.876135+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 14,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T15:57:14.149518+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 15,
+        "http_status": 503,
+        "bytes": 780,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 503",
+        "at": "2026-09-29T15:57:14.441079+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 16,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:57:14.623322+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 17,
+        "http_status": 408,
+        "bytes": 24,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 408",
+        "at": "2026-09-29T15:57:23.440436+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 18,
+        "http_status": 200,
+        "bytes": 4240,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:57:30.959167+00:00"
+      }
+    ]
+  }
+}

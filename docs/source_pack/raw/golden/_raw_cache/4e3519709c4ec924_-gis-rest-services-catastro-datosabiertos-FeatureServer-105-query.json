@@ -1,0 +1,184 @@
+{
+  "ok": true,
+  "data": {
+    "objectIdFieldName": "objectid",
+    "globalIdFieldName": "globalid",
+    "geometryType": "esriGeometryPoint",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "hasZ": false,
+    "fields": [
+      {
+        "name": "objectid",
+        "alias": "OBJECTID",
+        "type": "esriFieldTypeOID"
+      },
+      {
+        "name": "valor_via_principal",
+        "alias": "Valor Vía Principal",
+        "type": "esriFieldTypeString",
+        "length": 100
+      },
+      {
+        "name": "letra_via_principal",
+        "alias": "Letra Vía Principal",
+        "type": "esriFieldTypeString",
+        "length": 20
+      },
+      {
+        "name": "letra_via_generadora",
+        "alias": "Letra Vía Generadora",
+        "type": "esriFieldTypeString",
+        "length": 20
+      },
+      {
+        "name": "numero_predio",
+        "alias": "Numero Predio",
+        "type": "esriFieldTypeString",
+        "length": 20
+      },
+      {
+        "name": "tipo_direccion",
+        "alias": "Tipo Dirección",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "es_direccion_principal",
+        "alias": "Es Dirección Principal",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "complemento",
+        "alias": "Complemento",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "nombre_predio",
+        "alias": "Nombre Predio",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "sector_predio",
+        "alias": "Sector Predio",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "valor_via_generadora",
+        "alias": "Valor Vía Generadora",
+        "type": "esriFieldTypeString",
+        "length": 100
+      },
+      {
+        "name": "sector_ciudad",
+        "alias": "Sector Ciudad",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "codigo_postal",
+        "alias": "Código Postal",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "clase_via_principal",
+        "alias": "Clase Vía Principal",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "cr_predio_guid",
+        "alias": "CR_Predio_GUID",
+        "type": "esriFieldTypeGUID",
+        "length": 38
+      },
+      {
+        "name": "cr_construccion_guid",
+        "alias": "CR_Construccion_GUID",
+        "type": "esriFieldTypeGUID",
+        "length": 38
+      },
+      {
+        "name": "cr_terreno_guid",
+        "alias": "CR_Terreno_GUID",
+        "type": "esriFieldTypeGUID",
+        "length": 38
+      },
+      {
+        "name": "cr_unidadconstruccion_guid",
+        "alias": "CR_UnidadConstruccion_GUID",
+        "type": "esriFieldTypeGUID",
+        "length": 38
+      },
+      {
+        "name": "estado_direccion",
+        "alias": "Estado Dirección",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "globalid",
+        "alias": "GlobalID",
+        "type": "esriFieldTypeGlobalID",
+        "length": 38
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "valor_via_principal": "13",
+          "letra_via_principal": null,
+          "letra_via_generadora": null,
+          "numero_predio": "01",
+          "tipo_direccion": "Estructurada",
+          "es_direccion_principal": 1,
+          "complemento": null,
+          "nombre_predio": "Calle 13 10 01",
+          "sector_predio": null,
+          "valor_via_generadora": "10",
+          "sector_ciudad": null,
+          "codigo_postal": "080010110000000580022000000000",
+          "clase_via_principal": "Calle",
+          "cr_predio_guid": "{7F706D26-AA11-4E40-9452-90F1D55239A7}",
+          "cr_construccion_guid": null,
+          "cr_terreno_guid": "{88CDDECB-6F49-43F5-A99B-F2D55B2AB6B3}",
+          "cr_unidadconstruccion_guid": null,
+          "estado_direccion": 1,
+          "globalid": "{13E3616A-7D26-4BFB-ACF1-26B950BA7FD2}"
+        },
+        "geometry": {
+          "x": 4806542.0001,
+          "y": 2768584.3731999993
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/105/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F105%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:37:27.601956+00:00",
+    "elapsed_s": 2.2,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 2807,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:37:27.601919+00:00"
+      }
+    ]
+  }
+}

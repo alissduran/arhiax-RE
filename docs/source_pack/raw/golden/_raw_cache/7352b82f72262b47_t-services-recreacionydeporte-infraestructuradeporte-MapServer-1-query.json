@@ -1,0 +1,139 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "nombre_parque_cancha",
+    "fieldAliases": {
+      "objectid": "ObjectID",
+      "nombre_parque_cancha": "Nombre del parque o cancha",
+      "tipo_cancha": "Tipo de cancha",
+      "estado_cancha": "Estado de la cancha",
+      "barrio": "Barrio",
+      "localidad": "Localidad",
+      "direccion": "Dirección",
+      "area_m2": "Área en metros cuadrados"
+    },
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "ObjectID"
+      },
+      {
+        "name": "nombre_parque_cancha",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre del parque o cancha",
+        "length": 150
+      },
+      {
+        "name": "tipo_cancha",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Tipo de cancha"
+      },
+      {
+        "name": "estado_cancha",
+        "type": "esriFieldTypeString",
+        "alias": "Estado de la cancha",
+        "length": 20
+      },
+      {
+        "name": "barrio",
+        "type": "esriFieldTypeString",
+        "alias": "Barrio",
+        "length": 100
+      },
+      {
+        "name": "localidad",
+        "type": "esriFieldTypeString",
+        "alias": "Localidad",
+        "length": 50
+      },
+      {
+        "name": "direccion",
+        "type": "esriFieldTypeString",
+        "alias": "Dirección",
+        "length": 100
+      },
+      {
+        "name": "area_m2",
+        "type": "esriFieldTypeDouble",
+        "alias": "Área en metros cuadrados"
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "nombre_parque_cancha": "Parque Suri Salcedo ",
+          "tipo_cancha": 3,
+          "estado_cancha": "B",
+          "barrio": "Colombia",
+          "localidad": "Norte - centro histórico",
+          "direccion": "Carrera 47 70",
+          "area_m2": 371.72559181
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                4803007.2855,
+                2773454.7366000004
+              ],
+              [
+                4803014.8331,
+                2773467.210999999
+              ],
+              [
+                4803036.2999,
+                2773455.1447
+              ],
+              [
+                4803028.6004,
+                2773441.7974999994
+              ],
+              [
+                4803007.2855,
+                2773454.7366000004
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/infraestructuradeporte/MapServer/1/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Frecreacionydeporte%2Finfraestructuradeporte%2FMapServer%2F1%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:06:18.288040+00:00",
+    "elapsed_s": 5.0,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 6326,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:06:14.934035+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 1568,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:06:18.287976+00:00"
+      }
+    ]
+  }
+}

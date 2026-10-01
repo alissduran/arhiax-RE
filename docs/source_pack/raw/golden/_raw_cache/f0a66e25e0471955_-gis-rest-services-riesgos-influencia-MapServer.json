@@ -1,0 +1,184 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><p><span>Representa y muestra el grado de incidencia que diversas variables ejercen sobre el espacio circundante, permitiendo identificar áreas con influencia baja, media o alta según su comportamiento espacial. Su construcción se basa en métodos de análisis espacial que integran distancias, gradientes de afectación, niveles de interacción y geometrías derivadas, con el fin de caracterizar cómo distintos factores pueden modificar, condicionar o estructurar el territorio, independientemente de su naturaleza ecológica, social o urbana. Mediante técnicas SIG orientadas a la proximidad, la modelación geométrica y la evaluación de patrones de distribución, esta capa permite reconocer zonas donde la influencia de una o varias variables se manifiesta de manera diferenciada, facilitando la interpretación del territorio en términos de incidencia, susceptibilidad, presión o conectividad. La información resultante apoya procesos de análisis multiescala, planificación estratégica y toma de decisiones, al ofrecer una representación clara, estandarizada y sintetizada del nivel de influencia que cualquier fenómeno, componente o atributo territorial puede generar sobre su entorno inmediato o ampliado.</span></p></div>",
+    "mapName": "Influencia",
+    "description": "Representa y muestra el grado de incidencia que diversas variables ejercen sobre el espacio circundante, permitiendo identificar áreas con influencia baja, media o alta según su comportamiento espacial. Su construcción se basa en métodos de análisis espacial que integran distancias, gradientes de afectación, niveles de interacción y geometrías derivadas, con el fin de caracterizar cómo distintos factores pueden modificar, condicionar o estructurar el territorio, independientemente de su naturaleza ecológica, social o urbana. Mediante técnicas SIG orientadas a la proximidad, la modelación geométrica y la evaluación de patrones de distribución, esta capa permite reconocer zonas donde la influencia de una o varias variables se manifiesta de manera diferenciada, facilitando la interpretación del territorio en términos de incidencia, susceptibilidad, presión o conectividad. La información resultante apoya procesos de análisis multiescala, planificación estratégica y toma de decisiones, al ofrecer una representación clara, estandarizada y sintetizada del nivel de influencia que cualquier fenómeno, componente o atributo territorial puede generar sobre su entorno inmediato o ampliado.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Zonificación por influencia de arroyos",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4792590.073382792,
+      "ymin": 2769361.353756136,
+      "xmax": 4805048.056173316,
+      "ymax": 2773765.9296621694,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4790211.353800001,
+      "ymin": 2764638.713700004,
+      "xmax": 4807916.498800001,
+      "ymax": 2781149.0424000025,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Influencia",
+      "Author": "",
+      "Comments": "Representa y muestra el grado de incidencia que diversas variables ejercen sobre el espacio circundante, permitiendo identificar áreas con influencia baja, media o alta según su comportamiento espacial. Su construcción se basa en métodos de análisis espacial que integran distancias, gradientes de afectación, niveles de interacción y geometrías derivadas, con el fin de caracterizar cómo distintos factores pueden modificar, condicionar o estructurar el territorio, independientemente de su naturaleza ecológica, social o urbana. Mediante técnicas SIG orientadas a la proximidad, la modelación geométrica y la evaluación de patrones de distribución, esta capa permite reconocer zonas donde la influencia de una o varias variables se manifiesta de manera diferenciada, facilitando la interpretación del territorio en términos de incidencia, susceptibilidad, presión o conectividad. La información resultante apoya procesos de análisis multiescala, planificación estratégica y toma de decisiones, al ofrecer una representación clara, estandarizada y sintetizada del nivel de influencia que cualquier fenómeno, componente o atributo territorial puede generar sobre su entorno inmediato o ampliado.",
+      "Subject": "Muestra las zonas de influencia asociadas a elementos naturales, infraestructurales o funcionales dentro del territorio. Su propósito es identificar la magnitud de afectación, interacción o alcance espacial que dichos elementos ejercen sobre su entorno, facilitando la toma de decisiones en planificación urbana y gestión del riesgo.",
+      "Category": "",
+      "Version": "3.4.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Influencia territorial,Análisis espacial,Zonas de influencia,Áreas de afectación,SIG,ArcGIS,Modelación espacial,Interacción territorial,Panificación urbana,Análisis geográfico"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "9d0d7238b64d4de891bf381836f44122"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/influencia/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Friesgos%2Finfluencia%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:53:20.268417+00:00",
+    "elapsed_s": 4.9,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 6932,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:53:20.268410+00:00"
+      }
+    ]
+  }
+}

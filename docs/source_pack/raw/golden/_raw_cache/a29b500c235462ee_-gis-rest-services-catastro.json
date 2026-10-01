@@ -1,0 +1,99 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "folders": [],
+    "services": [
+      {
+        "name": "catastro/antiguedadpredios",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/concentracionpredio",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/condicion",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/datosabiertos",
+        "type": "FeatureServer"
+      },
+      {
+        "name": "catastro/datosabiertos",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/destinoseconomicos",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/gestionpredial",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/huellaurbana",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/informalidad",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/lotes",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/manzanas",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/medianavalorcatastral",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/propiedadhorizontal",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/sectores",
+        "type": "MapServer"
+      },
+      {
+        "name": "catastro/usoconstruccion",
+        "type": "MapServer"
+      }
+    ]
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro?f=json",
+    "transport": "microlink",
+    "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%3Ff%3Djson&meta=false&data.text.selector=pre",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T14:27:53.923450+00:00",
+    "elapsed_s": 12.1,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "blocked_marker": true,
+        "error": null,
+        "at": "2026-09-29T14:27:52.648550+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 1982,
+        "blocked_marker": false,
+        "error": null,
+        "at": "2026-09-29T14:27:53.923413+00:00"
+      }
+    ]
+  }
+}

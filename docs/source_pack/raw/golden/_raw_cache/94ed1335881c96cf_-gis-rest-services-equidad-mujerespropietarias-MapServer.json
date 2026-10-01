@@ -1,0 +1,195 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Representa </span><span>la cantidad de mujeres propietarias de vivienda en el Distrito de Barranquilla, desagregada a nivel de manzana. Esta información permite reconocer la presencia y participación de las mujeres en la propiedad formal del territorio, destacando su papel como actoras clave en la consolidación de hogares, estabilidad económica y desarrollo urbano.</span></p></div></div></div>",
+    "mapName": "Mujeres propietarias de vivienda",
+    "description": "Representa la cantidad de mujeres propietarias de vivienda en el Distrito de Barranquilla, desagregada a nivel de manzana. Esta información permite reconocer la presencia y participación de las mujeres en la propiedad formal del territorio, destacando su papel como actoras clave en la consolidación de hogares, estabilidad económica y desarrollo urbano.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Mujeres propietarias de vivienda. Año 2026.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4785062.853033313,
+      "ymin": 2765842.0783295617,
+      "xmax": 4817933.976206941,
+      "ymax": 2777365.5077879853,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4792078.3941,
+      "ymin": 2765373.6522000004,
+      "xmax": 4807916.4988,
+      "ymax": 2779789.3136,
+      "zmin": 0,
+      "zmax": 0,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Mujeres propietarias de vivienda.",
+      "Author": "",
+      "Comments": "Representa la cantidad de mujeres propietarias de vivienda en el Distrito de Barranquilla, desagregada a nivel de manzana. Esta información permite reconocer la presencia y participación de las mujeres en la propiedad formal del territorio, destacando su papel como actoras clave en la consolidación de hogares, estabilidad económica y desarrollo urbano.",
+      "Subject": "Representa la cantidad de mujeres propietarias de vivienda a nivel de manzana en Barranquilla.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Mujeres,Vigencia,Viviendas,Indicadores,Género y vivienda,Datos,Mujeres propietarias,Empoderamiento,Barranquilla"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "3ab0930a325e41cb9235c88738dd8890"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/equidad/mujerespropietarias/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fequidad%2Fmujerespropietarias%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:36:36.738749+00:00",
+    "elapsed_s": 22.5,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:36:34.193939+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 4198,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:36:36.738686+00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,319 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "codigo",
+    "fieldAliases": {
+      "objectid": "OBJECTID",
+      "codigo": "Código",
+      "nombre_espacio": "Nombre espacio público",
+      "tipo_espacio": "Tipo de espacio público",
+      "direccion": "Dirección",
+      "barrio": "Barrio",
+      "localidad": "Localidad"
+    },
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "codigo",
+        "type": "esriFieldTypeString",
+        "alias": "Código",
+        "length": 255
+      },
+      {
+        "name": "nombre_espacio",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre espacio público",
+        "length": 512
+      },
+      {
+        "name": "tipo_espacio",
+        "type": "esriFieldTypeString",
+        "alias": "Tipo de espacio público",
+        "length": 100
+      },
+      {
+        "name": "direccion",
+        "type": "esriFieldTypeString",
+        "alias": "Dirección",
+        "length": 512
+      },
+      {
+        "name": "barrio",
+        "type": "esriFieldTypeString",
+        "alias": "Barrio",
+        "length": 100
+      },
+      {
+        "name": "localidad",
+        "type": "esriFieldTypeString",
+        "alias": "Localidad",
+        "length": 2
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "codigo": "SOC-077-PQ",
+          "nombre_espacio": "Parque Villa San Pedro I",
+          "tipo_espacio": "Parque",
+          "direccion": "Transversal 6B #97",
+          "barrio": "San Pedro",
+          "localidad": "03"
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                4800309.2538,
+                2768034.1556
+              ],
+              [
+                4800309.1156,
+                2768033.9231000002
+              ],
+              [
+                4800308.94,
+                2768033.7173999995
+              ],
+              [
+                4800308.7317,
+                2768033.5446000006
+              ],
+              [
+                4800308.4974,
+                2768033.4093999993
+              ],
+              [
+                4800308.2436,
+                2768033.3160999995
+              ],
+              [
+                4800307.9775,
+                2768033.2671000008
+              ],
+              [
+                4800307.7069,
+                2768033.2641000003
+              ],
+              [
+                4800307.4398,
+                2768033.307
+              ],
+              [
+                4800307.1839,
+                2768033.3947
+              ],
+              [
+                4800306.9465,
+                2768033.5243999995
+              ],
+              [
+                4800306.7346,
+                2768033.6927000005
+              ],
+              [
+                4800306.5544,
+                2768033.8943000007
+              ],
+              [
+                4800305.7086,
+                2768035.0100999996
+              ],
+              [
+                4800297.9266,
+                2768045.2773
+              ],
+              [
+                4800297.8695,
+                2768045.4152000006
+              ],
+              [
+                4800297.835,
+                2768045.5605999995
+              ],
+              [
+                4800297.8247,
+                2768045.7095
+              ],
+              [
+                4800297.8385,
+                2768045.858100001
+              ],
+              [
+                4800297.876,
+                2768046.002699999
+              ],
+              [
+                4800297.9362,
+                2768046.1392
+              ],
+              [
+                4800298.0179,
+                2768046.2643
+              ],
+              [
+                4800298.1185,
+                2768046.3746000007
+              ],
+              [
+                4800306.9069,
+                2768052.0154999997
+              ],
+              [
+                4800307.33,
+                2768052.286800001
+              ],
+              [
+                4800312.3749,
+                2768055.8848
+              ],
+              [
+                4800312.5037,
+                2768055.9965000004
+              ],
+              [
+                4800312.6485,
+                2768056.0864000004
+              ],
+              [
+                4800312.8056,
+                2768056.1522000004
+              ],
+              [
+                4800312.9713,
+                2768056.1927000005
+              ],
+              [
+                4800313.1412,
+                2768056.2062999997
+              ],
+              [
+                4800313.3112,
+                2768056.1931
+              ],
+              [
+                4800313.4769,
+                2768056.1531000007
+              ],
+              [
+                4800314.6994,
+                2768055.3839999996
+              ],
+              [
+                4800314.7749,
+                2768055.3244000003
+              ],
+              [
+                4800314.8396,
+                2768055.2530000005
+              ],
+              [
+                4800314.8918,
+                2768055.1722
+              ],
+              [
+                4800314.9298,
+                2768055.083900001
+              ],
+              [
+                4800314.953,
+                2768054.9904999994
+              ],
+              [
+                4800314.9605,
+                2768054.8946
+              ],
+              [
+                4800314.952,
+                2768054.7985999994
+              ],
+              [
+                4800314.9282,
+                2768054.705499999
+              ],
+              [
+                4800313.953,
+                2768050.9448000006
+              ],
+              [
+                4800313.7356,
+                2768049.994000001
+              ],
+              [
+                4800313.148,
+                2768047.3244000003
+              ],
+              [
+                4800312.5203,
+                2768044.9864000008
+              ],
+              [
+                4800309.2538,
+                2768034.1556
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer/3/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fespaciopublico%2Finfraestructuraespaciopublico%2FMapServer%2F3%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:06:11.396811+00:00",
+    "elapsed_s": 8.3,
+    "attempt_count": 4,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:06:05.502664+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 6335,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:06:06.629608+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:06:08.494780+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 200,
+        "bytes": 2999,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:06:11.396716+00:00"
+      }
+    ]
+  }
+}

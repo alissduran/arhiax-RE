@@ -1,0 +1,214 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;font-size:12pt'><p><span>Muestra los riesgos presentes en el Distrito de Barranquilla, permitiendo reconocer las áreas donde existe mayor probabilidad de que una amenaza de origen natural cause daños. Permitiendo orientar la gestión del riesgo y la planificación del territorio.</span></p></div>",
+    "mapName": "Riesgos naturales",
+    "description": "Muestra los riesgos presentes en el Distrito de Barranquilla, permitiendo reconocer las áreas donde existe mayor probabilidad de que una amenaza de origen natural cause daños. Permitiendo orientar la gestión del riesgo y la planificación del territorio.",
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Hacienda. Gerencia de Gestión Catastral.",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Áreas en riesgo",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4787471.876829154,
+      "ymin": 2754510.1538373595,
+      "xmax": 4821738.521675785,
+      "ymax": 2782360.9162446223,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4790285.1303,
+      "ymin": 2764626.1866999995,
+      "xmax": 4802595.5256,
+      "ymax": 2781153.1644,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Riesgos naturales",
+      "Author": "",
+      "Comments": "Muestra las zonas del Distrito de Barranquilla expuestas a riesgos naturales, permitiendo identificar los lugares con mayor probabilidad de que una amenaza de origen natural genere daños. Esta información contribuye a orientar la gestión del riesgo y a planificar el territorio de manera más segura y sostenible.",
+      "Subject": "Muestra las zonas del Distrito de Barranquilla expuestas a riesgos naturales, permitiendo identificar los lugares con mayor probabilidad de que una amenaza de origen natural genere daños. Esta información contribuye a orientar la gestión del riesgo y a planificar el territorio de manera más segura y sostenible.",
+      "Category": "",
+      "Version": "3.3.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Ordenamiento territorial,Planeación,Barranquilla,Suelo urbano,Perímetro urbano,Suelo rural,Riesgos,Gestión de riesgo,General,Amenaza,Vulnerabilidad,Inundación."
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "floorAwareMapProperties": {
+      "defaultFloorFilterSettings": {
+        "isEnabled": false
+      }
+    },
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "834b0c7aa3414ca09d57cc4251668584"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/riesgos/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Friesgos%2Friesgos%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:54:11.683579+00:00",
+    "elapsed_s": 43.0,
+    "attempt_count": 9,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 429,
+        "bytes": 980,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:53:46.211857+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:53:50.223941+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 6,
+        "http_status": 429,
+        "bytes": 980,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:53:50.414408+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 7,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:54:10.386085+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 8,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:54:10.590699+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 9,
+        "http_status": 200,
+        "bytes": 4101,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:54:11.683507+00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "folders": [],
+    "services": [
+      {
+        "name": "movilidad/estacionservicio",
+        "type": "MapServer"
+      },
+      {
+        "name": "movilidad/influenciavial",
+        "type": "MapServer"
+      },
+      {
+        "name": "movilidad/infraestructuradetransporte",
+        "type": "MapServer"
+      },
+      {
+        "name": "movilidad/maritimoyportuario",
+        "type": "MapServer"
+      },
+      {
+        "name": "movilidad/nodosdetransporte",
+        "type": "MapServer"
+      },
+      {
+        "name": "movilidad/serviciostransporte",
+        "type": "MapServer"
+      },
+      {
+        "name": "movilidad/transito",
+        "type": "MapServer"
+      }
+    ]
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad?f=json",
+    "transport": "microlink",
+    "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fmovilidad%3Ff%3Djson&meta=false&data.text.selector=pre",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T14:28:14.579643+00:00",
+    "elapsed_s": 3.3,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "blocked_marker": true,
+        "error": null,
+        "at": "2026-09-29T14:28:13.412541+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 1581,
+        "blocked_marker": false,
+        "error": null,
+        "at": "2026-09-29T14:28:14.579632+00:00"
+      }
+    ]
+  }
+}

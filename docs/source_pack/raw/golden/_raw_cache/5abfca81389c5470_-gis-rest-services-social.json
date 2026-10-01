@@ -1,0 +1,47 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "folders": [],
+    "services": [
+      {
+        "name": "social/condicionesdevida",
+        "type": "MapServer"
+      },
+      {
+        "name": "social/demografia",
+        "type": "MapServer"
+      }
+    ]
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social?f=json",
+    "transport": "microlink",
+    "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fsocial%3Ff%3Djson&meta=false&data.text.selector=pre",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T14:31:33.584195+00:00",
+    "elapsed_s": 7.7,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "blocked_marker": true,
+        "error": null,
+        "at": "2026-09-29T14:31:32.408419+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 1232,
+        "blocked_marker": false,
+        "error": null,
+        "at": "2026-09-29T14:31:33.584145+00:00"
+      }
+    ]
+  }
+}

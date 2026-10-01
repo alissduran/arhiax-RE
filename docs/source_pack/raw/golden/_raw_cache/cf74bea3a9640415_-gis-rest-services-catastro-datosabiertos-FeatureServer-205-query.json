@@ -1,0 +1,151 @@
+{
+  "ok": true,
+  "data": {
+    "objectIdFieldName": "objectid",
+    "globalIdFieldName": "globalid",
+    "geometryType": "esriGeometryPolyline",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "hasZ": false,
+    "fields": [
+      {
+        "name": "objectid",
+        "alias": "OBJECTID",
+        "type": "esriFieldTypeOID"
+      },
+      {
+        "name": "direction",
+        "alias": "Direction",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "distance",
+        "alias": "Distance",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "radius",
+        "alias": "Radius",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "arclength",
+        "alias": "Arc Length",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "radius2",
+        "alias": "Radius2",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "iscogoground",
+        "alias": "Is COGO Ground",
+        "type": "esriFieldTypeInteger"
+      },
+      {
+        "name": "rotation",
+        "alias": "Rotation",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "scale",
+        "alias": "Scale",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "directionaccuracy",
+        "alias": "Direction Accuracy",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "distanceaccuracy",
+        "alias": "Distance Accuracy",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "labelposition",
+        "alias": "Label Position",
+        "type": "esriFieldTypeInteger"
+      },
+      {
+        "name": "Shape__Length",
+        "alias": "st_length(shape)",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "globalid",
+        "alias": "GlobalID",
+        "type": "esriFieldTypeGlobalID",
+        "length": 38
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "direction": 66.25676506,
+          "distance": 242.59868934,
+          "radius": null,
+          "arclength": null,
+          "radius2": null,
+          "iscogoground": 1,
+          "rotation": 0.0,
+          "scale": 1.0,
+          "directionaccuracy": 30.0,
+          "distanceaccuracy": 0.15,
+          "labelposition": 1,
+          "Shape__Length": 242.59868933728808,
+          "globalid": "{566227D6-17E7-4592-A00F-FE7962D2EE78}"
+        },
+        "geometry": {
+          "paths": [
+            [
+              [
+                4790211.3538,
+                2768937.7304999996
+              ],
+              [
+                4790433.4187,
+                2769035.4101
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/205/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F205%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:38:19.422609+00:00",
+    "elapsed_s": 4.8,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T16:38:14.798780+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 1667,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:38:19.422590+00:00"
+      }
+    ]
+  }
+}

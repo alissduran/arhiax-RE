@@ -1,0 +1,67 @@
+{
+  "direct": {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "status": 403,
+    "error": "HTTPError 403",
+    "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"no-"
+  },
+  "r_jina_ai": {
+    "url": "https://r.jina.ai/https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "status": 403,
+    "error": "HTTPError 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta nam"
+  },
+  "allorigins_raw": {
+    "url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%3Ff%3Djson",
+    "status": 522,
+    "error": "HTTPError 522",
+    "head": "{\"type\":\"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\",\"title\":\"Error 522: Connection timed out\",\"status\":522,\"detail\":\"Cloudflare could"
+  },
+  "allorigins_get": {
+    "url": "https://api.allorigins.win/get?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%3Ff%3Djson",
+    "status": 522,
+    "error": "HTTPError 522",
+    "head": "{\"type\":\"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\",\"title\":\"Error 522: Connection timed out\",\"status\":522,\"detail\":\"Cloudflare could"
+  },
+  "codetabs_proxy": {
+    "url": "https://api.codetabs.com/v1/proxy?quest=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%3Ff%3Djson",
+    "status": 522,
+    "error": "HTTPError 522",
+    "head": "{\"type\":\"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\",\"title\":\"Error 522: Connection timed out\",\"status\":522,\"detail\":\"Cloudflare could"
+  },
+  "corsproxy_io": {
+    "url": "https://corsproxy.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%3Ff%3Djson",
+    "status": 401,
+    "error": "HTTPError 401",
+    "head": "{\"error\":\"A valid API key is required. Get one at https://console.corsproxy.io/\"}"
+  },
+  "thingproxy": {
+    "url": "https://thingproxy.freeboard.io/fetch/https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "status": null,
+    "error": "URLError: <urlopen error [Errno 11001] getaddrinfo failed>"
+  },
+  "wayback_available": {
+    "url": "https://archive.org/wayback/available?url=miciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%3Ff%3Djson",
+    "status": 429,
+    "error": "HTTPError 429",
+    "head": "<html><body><h1>429 Too Many Requests</h1>\nYou have sent too many requests in a given amount of time.\n</body></html>\n"
+  },
+  "wayback_cdx": {
+    "url": "http://web.archive.org/cdx/search/cdx?url=miciudad.barranquilla.gov.co/gis/rest/services*&output=json&limit=40&collapse=urlkey",
+    "status": 200,
+    "len": 3,
+    "head": "[]\n"
+  },
+  "agol_search": {
+    "url": "https://www.arcgis.com/sharing/rest/search?q=%22miciudad.barranquilla.gov.co%22&num=25&f=json",
+    "status": 200,
+    "len": 58,
+    "head": "{\"total\":0,\"start\":1,\"num\":25,\"nextStart\":-1,\"results\":[]}"
+  },
+  "agol_search2": {
+    "url": "https://www.arcgis.com/sharing/rest/search?q=barranquilla%20catastro%20datosabiertos&num=25&f=json",
+    "status": 200,
+    "len": 58,
+    "head": "{\"total\":0,\"start\":1,\"num\":25,\"nextStart\":-1,\"results\":[]}"
+  }
+}

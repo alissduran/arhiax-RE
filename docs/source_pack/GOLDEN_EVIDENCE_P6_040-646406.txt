@@ -1,0 +1,60 @@
+
+DICTUS
+IDENTIDAD, MERCADO Y VALOR
+DX-040-646406-20260930
+Página 6 de 6 · ejecutivo
+lo que se verificó y cuánto vale
+IDENTIDAD, MERCADO Y VALOR
+registral y catastral
+IDENTIDAD DEL INMUEBLE
+Dirección oficial
+TV 43 # 100 - 50 CONJUNTO
+RESIDENCIAL NAPOLI APARTAMENTOS
+ETAPA 3 APARTAMENTO 430 TORRE 8
+ETAPA 3 · Torre 8 · Apartamento 430
+REQUIERE VALIDACIÓN
+Matrícula
+040-646406
+VERIFICADO
+NUPRE
+AFT0005BOHA
+REQUIERE VALIDACIÓN
+Número predial
+080010103000010040001908040002
+REQUIERE VALIDACIÓN
+Unidad (torre / apartamento)
+APARTAMENTO 430 TORRE 8
+REQUIERE VALIDACIÓN
+Área
+58.75 m²
+REQUIERE VALIDACIÓN
+Régimen jurídico
+Propiedad Horizontal
+REQUIERE VALIDACIÓN
+Uso (destino catastral)
+Habitacional
+REQUIERE VALIDACIÓN
+Tipología
+Unidad En Propiedad Horizontal
+REQUIERE VALIDACIÓN
+Identidad registral y catastral: VERIFICADA
+Matrícula, NUPRE y número predial resueltos y ligados entre sí (nupre).
+DECISIÓN DICTUS: INFORMACIÓN VERIFICADA
+Binding de la geometría oficial: VERIFICADA
+La geometría oficial del predio coincide con la identidad canónica (nupre, numero_predial). Geometría oficial del PREDIO (lote/edificio):
+NO acredita la posición del apartamento dentro de la edificación. Fuente: OFFICIAL_PREDIO.
+qué falta para habilitar la valoración · no se imprime ningún monto, ni $0
+VALOR ESTIMADO
+NO DISPONIBLE
+VALORACIÓN NO DISPONIBLE
+DECISIÓN DICTUS: NO EMITIR VALORACIÓN · COMPUERTA CLOSED
+no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable
+Origen de la tasa declarada: valor declarado a mano por la corrida (sin fuente externa automática) (MANUAL_CONFIG) · NO HABILITA VALORACIÓN
+La valoración NO está autorizada en esta corrida: el origen de la tasa es MANUAL_CONFIG y su procedencia es INSUFICIENTE para autorizar una cifra (se…
+· origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)
+· no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable
+Metodología: norma + concepto técnico + validación profesional · detalle completo en el informe técnico.
+TRAZABILIDAD · Fuentes: Parámetros de mercado declarados por la corrida · Catastro · Identidad canónica · Consulta: 2026-09-30
+DICTUS_MASTER_HASH C804DC02B223…EE71
+Evidencias 10 · sello PARCIAL_CON_DECLARACIONES · verificación por DICTUS ID (Anexo G)
+El hash del archivo PDF no es el hash maestro: consta en el anexo G.

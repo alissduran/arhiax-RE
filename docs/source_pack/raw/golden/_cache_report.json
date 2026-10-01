@@ -1,0 +1,553 @@
+[
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [
+      "ambiente",
+      "aplicaciones",
+      "catastro",
+      "cultura",
+      "economico",
+      "educacion",
+      "equidad",
+      "espaciopublico",
+      "impuesto",
+      "movilidad",
+      "observatorio",
+      "ordenamiento",
+      "ortofotos",
+      "participacionciudadana",
+      "proyectos",
+      "recreacionydeporte",
+      "riesgos",
+      "salud",
+      "seguridad",
+      "SERVICIOS",
+      "serviciospublicos",
+      "sitios",
+      "social",
+      "Utilities"
+    ],
+    "services": []
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 4,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/condicion/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/areaconstruida/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/antiguedadpredios/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 4,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/nodosdetransporte/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/participacionciudadana?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/influenciavial/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/mecanismosfianaciacion/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "seguridad/incidenciasciudadanas",
+      "seguridad/justiciayseguridad"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/infraestructuradetransporte/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "proyectos/aotronivel",
+      "proyectos/barriosalaobra",
+      "proyectos/comedorescomunitarios",
+      "proyectos/limpiaylinda",
+      "proyectos/mejoramientovivienda"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/manzanas/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "espaciopublico/infraestructuraespaciopublico"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/gestionpredial/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/Utilities?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "arcgis_error",
+    "error": "{'code': 499, 'message': 'Token Required', 'details': []}"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/usoconstruccion/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 4,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/arrendamientos/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "serviciospublicos/cobertura",
+      "serviciospublicos/infraestructuraservicios",
+      "serviciospublicos/redes"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/concentracionpredio/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "movilidad/estacionservicio",
+      "movilidad/influenciavial",
+      "movilidad/infraestructuradetransporte",
+      "movilidad/maritimoyportuario",
+      "movilidad/nodosdetransporte",
+      "movilidad/serviciostransporte",
+      "movilidad/transito"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "social/condicionesdevida",
+      "social/demografia"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/datosabiertos/MapServer?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "arcgis_error",
+    "error": "{'code': 400, 'message': 'Invalid URL', 'details': []}"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/maritimoyportuario/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "observatorio/areaconstruida",
+      "observatorio/arrendamientos",
+      "observatorio/avaluocatastral",
+      "observatorio/cantidadtransacciones",
+      "observatorio/destinotransacciones",
+      "observatorio/dinamicatransacciones",
+      "observatorio/mecanismosfianaciacion",
+      "observatorio/valorcompraventas",
+      "observatorio/valoresm2_area",
+      "observatorio/valorsuelorural",
+      "observatorio/valorsuelourbano"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/huellaurbana/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/serviciostransporte/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "impuesto/ipu"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/destinoseconomicos/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/destinotransacciones/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/cantidadtransacciones/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/propiedadhorizontal/MapServer?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "arcgis_error",
+    "error": "{'code': 400, 'message': 'Invalid URL', 'details': []}"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/avaluocatastral/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/SERVICIOS?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "arcgis_error",
+    "error": "{'code': 499, 'message': 'Token Required', 'details': []}"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/transito/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "catastro/antiguedadpredios",
+      "catastro/concentracionpredio",
+      "catastro/condicion",
+      "catastro/datosabiertos",
+      "catastro/datosabiertos",
+      "catastro/destinoseconomicos",
+      "catastro/gestionpredial",
+      "catastro/huellaurbana",
+      "catastro/informalidad",
+      "catastro/lotes",
+      "catastro/manzanas",
+      "catastro/medianavalorcatastral",
+      "catastro/propiedadhorizontal",
+      "catastro/sectores",
+      "catastro/usoconstruccion"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 7,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/estacionservicio/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ortofotos?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "arcgis_error",
+    "error": "{'code': 499, 'message': 'Token Required', 'details': []}"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/equidad?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "equidad/mujerespropietarias"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/dinamicatransacciones/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/valorsuelourbano/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/sectores/MapServer?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "arcgis_error",
+    "error": "{'code': 400, 'message': 'Invalid URL', 'details': []}"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/aplicaciones?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "aplicaciones/imprimir"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/lotes/MapServer?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "arcgis_error",
+    "error": "{'code': 400, 'message': 'Invalid URL', 'details': []}"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/valorsuelorural/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 4,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "tree_node",
+    "folders": [],
+    "services": [
+      "salud/bienestaranimal",
+      "salud/infraestructurasalud"
+    ]
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/antiguedadpredios/MapServer?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "arcgis_error",
+    "error": "{'code': 400, 'message': 'Invalid URL', 'details': []}"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/informalidad/MapServer?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "arcgis_error",
+    "error": "{'code': 400, 'message': 'Invalid URL', 'details': []}"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/datosabiertos/FeatureServer?f=json",
+    "ok": true,
+    "transport": "microlink",
+    "attempts": 2,
+    "kind": "arcgis_error",
+    "error": "{'code': 400, 'message': 'Invalid URL', 'details': []}"
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/medianavalorcatastral/MapServer?f=json",
+    "ok": true,
+    "transport": "allorigins",
+    "attempts": 1,
+    "kind": "other:type,title,status,detail,instance,error_code,error_name,error_category"
+  }
+]

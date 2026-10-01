@@ -1,0 +1,193 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Muestra </span><span>las manzanas catastrales del distrito de Barranquilla dentro del sector urbano, delimitadas según los registros oficiales. Cada manzana está asociada a un código único de identificación y vinculada al barrio correspondiente, lo que permite su integración con bases de datos catastrales, análisis espaciales y procesos de planeación urbana. Esta información es fundamental para la gestión territorial, el control predial, la organización administrativa y el desarrollo de políticas públicas orientadas al ordenamiento del espacio urbano.</span></p></div></div></div>",
+    "mapName": "Manzanas",
+    "description": "Muestra las manzanas catastrales del distrito de Barranquilla dentro del sector urbano, delimitadas según los registros oficiales. Cada manzana está asociada a un código único de identificación y vinculada al barrio correspondiente, lo que permite su integración con bases de datos catastrales, análisis espaciales y procesos de planeación urbana. Esta información es fundamental para la gestión territorial, el control predial, la organización administrativa y el desarrollo de políticas públicas orientadas al ordenamiento del espacio urbano.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Manzanas",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4790002.647794802,
+      "ymin": 2764652.8691300005,
+      "xmax": 4809992.2451051995,
+      "ymax": 2780510.09667,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4792078.3941,
+      "ymin": 2765373.6522000004,
+      "xmax": 4807916.4988,
+      "ymax": 2779789.3136,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Manzanas catastrales de Barranquilla",
+      "Author": "",
+      "Comments": "Muestra las manzanas catastrales del distrito de Barranquilla dentro del sector urbano, delimitadas según los registros oficiales. Cada manzana está asociada a un código único de identificación y vinculada al barrio correspondiente, lo que permite su integración con bases de datos catastrales, análisis espaciales y procesos de planeación urbana. Esta información es fundamental para la gestión territorial, el control predial, la organización administrativa y el desarrollo de políticas públicas orientadas al ordenamiento del espacio urbano.",
+      "Subject": "Representa las manzanas catastrales del distrito de Barranquilla, para el sector urbano. Además, muestra el código de manzana y barrio al que pertenece.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Catastro,Manzanas,Planeación urbana,Ordenamiento,Planeación urbana,Espacio urbano,Barrio,Gestión catastral"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "5b5ff0ad63934e43ade1237b93c0f894"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/manzanas/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fmanzanas%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:16:32.563281+00:00",
+    "elapsed_s": 4.4,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "microlink",
+        "attempt": 1,
+        "http_status": 429,
+        "bytes": 143,
+        "reject_reason": "not_json",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:16:28.452858+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 4743,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:16:32.563224+00:00"
+      }
+    ]
+  }
+}

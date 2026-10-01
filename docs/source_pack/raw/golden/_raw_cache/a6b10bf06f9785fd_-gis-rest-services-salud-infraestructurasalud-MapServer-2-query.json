@@ -1,0 +1,105 @@
+{
+  "ok": false,
+  "data": null,
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/infraestructurasalud/MapServer/2/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": null,
+    "ok": false,
+    "fetched_at_utc": "2026-09-29T17:16:19.044408+00:00",
+    "elapsed_s": 302.3,
+    "attempt_count": 30,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 21,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T17:16:03.079616+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 22,
+        "http_status": 502,
+        "bytes": 872,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 502",
+        "at": "2026-09-29T17:16:03.257891+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 23,
+        "http_status": 503,
+        "bytes": 780,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 503",
+        "at": "2026-09-29T17:16:03.625987+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 24,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T17:16:03.844665+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 25,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T17:16:04.050395+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 26,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:16:06.445423+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 27,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:16:08.840142+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 28,
+        "http_status": 200,
+        "bytes": 6259,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:16:10.943788+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 29,
+        "http_status": 502,
+        "bytes": 872,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 502",
+        "at": "2026-09-29T17:16:14.111330+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 30,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:16:19.044384+00:00"
+      }
+    ],
+    "final_error": "no transport returned a valid ArcGIS JSON body"
+  }
+}

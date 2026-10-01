@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "folders": [],
+    "services": [
+      {
+        "name": "economico/hoteles",
+        "type": "MapServer"
+      },
+      {
+        "name": "economico/tejidoempresarial",
+        "type": "MapServer"
+      }
+    ]
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Feconomico%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T14:56:42.698350+00:00",
+    "elapsed_s": 64.2,
+    "attempt_count": 8,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "direct",
+        "attempt": 3,
+        "http_status": 403,
+        "bytes": 5493,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 403",
+        "at": "2026-09-29T14:55:59.189441+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 4,
+        "http_status": 429,
+        "bytes": 143,
+        "reject_reason": "not_json",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T14:56:00.160940+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T14:56:20.454646+00:00"
+      },
+      {
+        "transport": "direct",
+        "attempt": 6,
+        "http_status": 403,
+        "bytes": 5493,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 403",
+        "at": "2026-09-29T14:56:20.561833+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 7,
+        "http_status": 429,
+        "bytes": 143,
+        "reject_reason": "not_json",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T14:56:21.495483+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 8,
+        "http_status": 200,
+        "bytes": 155,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T14:56:42.698323+00:00"
+      }
+    ]
+  }
+}

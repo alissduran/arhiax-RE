@@ -1,0 +1,2123 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 1,
+    "name": "Canchas",
+    "type": "Feature Layer",
+    "description": "Reúne información clave sobre los diferentes espacios deportivos o chanchas en el Distrito de Barranquilla, para el período 2025. Muestra información importante como tipo de cancha, estado, si cuenta o no con cerramiento en muros y otra información relevante sobre su ubicación.",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Secretaría de Recreación y Deporte de Barranquilla",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "tipo_cancha",
+        "uniqueValueGroups": [
+          {
+            "heading": "Tipo de cancha",
+            "classes": [
+              {
+                "label": "Cancha de arena",
+                "description": "Cancha de arena",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    234,
+                    252,
+                    212,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "1"
+                  ]
+                ]
+              },
+              {
+                "label": "Cancha síntetica",
+                "description": "Cancha síntetica",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    183,
+                    179,
+                    252,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "2"
+                  ]
+                ]
+              },
+              {
+                "label": "Cancha de baloncesto",
+                "description": "Cancha de baloncesto",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    184,
+                    198,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "3"
+                  ]
+                ]
+              },
+              {
+                "label": "Pista de patinaje",
+                "description": "Pista de patinaje",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    179,
+                    234,
+                    252,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "4"
+                  ]
+                ]
+              },
+              {
+                "label": "Cancha de tenis",
+                "description": "Cancha de tenis",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    179,
+                    251,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "5"
+                  ]
+                ]
+              },
+              {
+                "label": "Cancha de pádel",
+                "description": "Cancha de pádel",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    244,
+                    212,
+                    252,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "6"
+                  ]
+                ]
+              },
+              {
+                "label": "Cancha de microfútbol",
+                "description": "Cancha de microfútbol",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    213,
+                    187,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "7"
+                  ]
+                ]
+              },
+              {
+                "label": "Cancha de béisbol",
+                "description": "Cancha de béisbol",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    182,
+                    252,
+                    186,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "8"
+                  ]
+                ]
+              },
+              {
+                "label": "Pista de BMX",
+                "description": "Pista de BMX",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    184,
+                    252,
+                    227,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "9"
+                  ]
+                ]
+              },
+              {
+                "label": "Pista de atletismo",
+                "description": "Pista de atletismo",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    182,
+                    208,
+                    252,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "10"
+                  ]
+                ]
+              },
+              {
+                "label": "Cancha múltiple",
+                "description": "Cancha múltiple",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    248,
+                    179,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "11"
+                  ]
+                ]
+              },
+              {
+                "label": "Cancha de voleibol",
+                "description": "Cancha de voleibol",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    215,
+                    218,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "12"
+                  ]
+                ]
+              },
+              {
+                "label": "Pista de skate",
+                "description": "Pista de skate",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    221,
+                    252,
+                    179,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "13"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                234,
+                252,
+                212,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "1",
+            "label": "Cancha de arena"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                183,
+                179,
+                252,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "2",
+            "label": "Cancha síntetica"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                184,
+                198,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "3",
+            "label": "Cancha de baloncesto"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                179,
+                234,
+                252,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "4",
+            "label": "Pista de patinaje"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                179,
+                251,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "5",
+            "label": "Cancha de tenis"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                244,
+                212,
+                252,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "6",
+            "label": "Cancha de pádel"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                213,
+                187,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "7",
+            "label": "Cancha de microfútbol"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                182,
+                252,
+                186,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "8",
+            "label": "Cancha de béisbol"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                184,
+                252,
+                227,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "9",
+            "label": "Pista de BMX"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                182,
+                208,
+                252,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "10",
+            "label": "Pista de atletismo"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                248,
+                179,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "11",
+            "label": "Cancha múltiple"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                215,
+                218,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "12",
+            "label": "Cancha de voleibol"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                221,
+                252,
+                179,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "13",
+            "label": "Pista de skate"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  212,
+                  249,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  212,
+                  249,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  184,
+                  251,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  184,
+                  251,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  218,
+                  252,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  218,
+                  252,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  191,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  191,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  187,
+                  196,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  187,
+                  196,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  246,
+                  212,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  246,
+                  212,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  194,
+                  221,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  194,
+                  221,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  182,
+                  252,
+                  203,
+                  255
+                ],
+                "toColor": [
+                  182,
+                  252,
+                  203,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  234,
+                  215,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  234,
+                  215,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  182,
+                  221,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  182,
+                  221,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  220,
+                  252,
+                  215,
+                  255
+                ],
+                "toColor": [
+                  220,
+                  252,
+                  215,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  222,
+                  210,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  222,
+                  210,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  210,
+                  182,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  210,
+                  182,
+                  252,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": 4792996.1579,
+      "ymin": 2765688.1407999992,
+      "xmax": 4806862.216,
+      "ymax": 2778816.9505000003,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "nombre_parque_cancha",
+    "typeIdField": "tipo_cancha",
+    "subtypeFieldName": "tipo_cancha",
+    "subtypeField": "tipo_cancha",
+    "defaultSubtypeCode": 1,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "ObjectID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "nombre_parque_cancha",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre del parque o cancha",
+        "length": 150,
+        "domain": null
+      },
+      {
+        "name": "tipo_cancha",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Tipo de cancha",
+        "domain": null
+      },
+      {
+        "name": "estado_cancha",
+        "type": "esriFieldTypeString",
+        "alias": "Estado de la cancha",
+        "length": 20,
+        "domain": null
+      },
+      {
+        "name": "barrio",
+        "type": "esriFieldTypeString",
+        "alias": "Barrio",
+        "length": 100,
+        "domain": null
+      },
+      {
+        "name": "localidad",
+        "type": "esriFieldTypeString",
+        "alias": "Localidad",
+        "length": 50,
+        "domain": null
+      },
+      {
+        "name": "direccion",
+        "type": "esriFieldTypeString",
+        "alias": "Dirección",
+        "length": 100,
+        "domain": null
+      },
+      {
+        "name": "area_m2",
+        "type": "esriFieldTypeDouble",
+        "alias": "Área en metros cuadrados",
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "a618_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "types": [
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 1,
+        "name": "Cancha de arena"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 2,
+        "name": "Cancha síntetica"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 3,
+        "name": "Cancha de baloncesto"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 4,
+        "name": "Pista de patinaje"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 5,
+        "name": "Cancha de tenis"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 6,
+        "name": "Cancha de pádel"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 7,
+        "name": "Cancha de microfútbol"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 8,
+        "name": "Cancha de béisbol"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 9,
+        "name": "Pista de BMX"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 10,
+        "name": "Pista de atletismo"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 11,
+        "name": "Cancha múltiple"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 12,
+        "name": "Cancha de voleibol"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "id": 13,
+        "name": "Pista de skate"
+      }
+    ],
+    "subtypes": [
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 1,
+        "name": "Cancha de arena"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 2,
+        "name": "Cancha síntetica"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 3,
+        "name": "Cancha de baloncesto"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 4,
+        "name": "Pista de patinaje"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 5,
+        "name": "Cancha de tenis"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 6,
+        "name": "Cancha de pádel"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 7,
+        "name": "Cancha de microfútbol"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 8,
+        "name": "Cancha de béisbol"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 9,
+        "name": "Pista de BMX"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 10,
+        "name": "Pista de atletismo"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 11,
+        "name": "Cancha múltiple"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 12,
+        "name": "Cancha de voleibol"
+      },
+      {
+        "domains": {
+          "estado_cancha": {
+            "type": "codedValue",
+            "name": "canchas_estado",
+            "description": "Categoriza el estado de los diferentes atributos de las canchas",
+            "codedValues": [
+              {
+                "name": "Buen estado",
+                "code": "B"
+              },
+              {
+                "name": "Regular",
+                "code": "R"
+              },
+              {
+                "name": "Mal estado",
+                "code": "M"
+              },
+              {
+                "name": "No aplica",
+                "code": "N"
+              }
+            ],
+            "mergePolicy": "esriMPTDefaultValue",
+            "splitPolicy": "esriSPTDefaultValue"
+          }
+        },
+        "defaultValues": {
+          "nombre_parque_cancha": null,
+          "tipo_cancha": null,
+          "estado_cancha": null,
+          "direccion": null,
+          "area_m2": null,
+          "barrio": null,
+          "localidad": null
+        },
+        "code": 13,
+        "name": "Pista de skate"
+      }
+    ],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Query,Map,Data",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "4e8f9633666246f1af93fda4e353b7b3"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/infraestructuradeporte/MapServer/1?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Frecreacionydeporte%2Finfraestructuradeporte%2FMapServer%2F1%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:06:13.245104+00:00",
+    "elapsed_s": 1.7,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 24934,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:06:13.245063+00:00"
+      }
+    ]
+  }
+}

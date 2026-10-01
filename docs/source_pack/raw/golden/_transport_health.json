@@ -1,0 +1,215 @@
+[
+  {
+    "at": "2026-09-29T14:22:06Z",
+    "rows": [
+      {
+        "transport": "allorigins_raw",
+        "control": {
+          "status": 200,
+          "kind": "JSON",
+          "head": "{\n  \"slideshow\": {\n    \"author\": \"Yours Truly\", \n    \"date\": \"date of publication\", \n    \"slides\": [\n      {\n        \"title\": \"Wake up to WonderWidgets!\", \n        \"type\": \"all\"\n      }, \n      {\n    "
+        },
+        "baq": {
+          "status": 200,
+          "kind": "ARCGIS_JSON",
+          "head": "{\"currentVersion\":11.5,\"folders\":[\"ambiente\",\"aplicaciones\",\"catastro\",\"cultura\",\"economico\",\"educacion\",\"equidad\",\"espaciopublico\",\"impuesto\",\"movilidad\",\"observatorio\",\"ordenamiento\",\"ortofotos\",\"pa"
+        }
+      },
+      {
+        "transport": "allorigins_get",
+        "control": {
+          "status": 522,
+          "kind": "HTML",
+          "head": "error code: 522\n"
+        },
+        "baq": {
+          "status": 522,
+          "kind": "HTML",
+          "head": "error code: 522\n"
+        }
+      },
+      {
+        "transport": "codetabs",
+        "control": {
+          "status": 522,
+          "kind": "HTML",
+          "head": "error code: 522\n"
+        },
+        "baq": {
+          "status": 522,
+          "kind": "HTML",
+          "head": "error code: 522\n"
+        }
+      },
+      {
+        "transport": "codetabs_slash",
+        "control": {
+          "status": 522,
+          "kind": "HTML",
+          "head": "error code: 522\n"
+        },
+        "baq": {
+          "status": 503,
+          "kind": "HTML",
+          "head": "error code: 1200\n"
+        }
+      },
+      {
+        "transport": "isomorphic_git",
+        "control": {
+          "status": 403,
+          "kind": "CF_BLOCK",
+          "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"no-"
+        },
+        "baq": {
+          "status": 403,
+          "kind": "CF_BLOCK",
+          "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"no-"
+        }
+      },
+      {
+        "transport": "cors_workers_dev",
+        "control": {
+          "status": 429,
+          "kind": "HTML",
+          "head": "error code: 1027\n"
+        },
+        "baq": {
+          "status": 429,
+          "kind": "HTML",
+          "head": "error code: 1027\n"
+        }
+      },
+      {
+        "transport": "cors_lol",
+        "control": {
+          "status": 429,
+          "kind": "HTML",
+          "head": "Rate limit exceeded\n"
+        },
+        "baq": {
+          "status": 429,
+          "kind": "HTML",
+          "head": "Rate limit exceeded\n"
+        }
+      },
+      {
+        "transport": "cors_eu_org",
+        "control": {
+          "status": 429,
+          "kind": "HTML",
+          "head": "\n\t<!doctype html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"n"
+        },
+        "baq": {
+          "status": 429,
+          "kind": "HTML",
+          "head": "\n\t<!doctype html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"n"
+        }
+      },
+      {
+        "transport": "corsfix_q",
+        "control": {
+          "status": 400,
+          "kind": "JSON",
+          "head": "{\n  \"corsfix_error\": \"invalid_origin\",\n  \"message\": \"Request is missing a valid Origin header\",\n  \"if_you_are_admin\": \"Ensure requests are made from browser JavaScript (fetch/AJAX), not server-side or"
+        },
+        "baq": {
+          "status": 400,
+          "kind": "JSON",
+          "head": "{\n  \"corsfix_error\": \"invalid_origin\",\n  \"message\": \"Request is missing a valid Origin header\",\n  \"if_you_are_admin\": \"Ensure requests are made from browser JavaScript (fetch/AJAX), not server-side or"
+        }
+      },
+      {
+        "transport": "corsfix_plain",
+        "control": {
+          "status": 400,
+          "kind": "JSON",
+          "head": "{\n  \"corsfix_error\": \"invalid_origin\",\n  \"message\": \"Request is missing a valid Origin header\",\n  \"if_you_are_admin\": \"Ensure requests are made from browser JavaScript (fetch/AJAX), not server-side or"
+        },
+        "baq": {
+          "status": 400,
+          "kind": "JSON",
+          "head": "{\n  \"corsfix_error\": \"invalid_origin\",\n  \"message\": \"Request is missing a valid Origin header\",\n  \"if_you_are_admin\": \"Ensure requests are made from browser JavaScript (fetch/AJAX), not server-side or"
+        }
+      },
+      {
+        "transport": "textise",
+        "control": {
+          "status": 403,
+          "kind": "CF_BLOCK",
+          "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"no-"
+        },
+        "baq": {
+          "status": 403,
+          "kind": "CF_BLOCK",
+          "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"no-"
+        }
+      },
+      {
+        "transport": "jina",
+        "control": {
+          "status": 403,
+          "kind": "CF_CHALLENGE",
+          "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta nam"
+        },
+        "baq": {
+          "status": 403,
+          "kind": "CF_CHALLENGE",
+          "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta nam"
+        }
+      },
+      {
+        "transport": "microlink",
+        "control": {
+          "status": 200,
+          "kind": "JSON",
+          "head": "{\"status\":\"success\",\"data\":{\"text\":{\"slideshow\":{\"author\":\"Yours Truly\",\"date\":\"date of publication\",\"slides\":[{\"title\":\"Wake up to WonderWidgets!\",\"type\":\"all\"},{\"items\":[\"Why &lt;em&gt;WonderWidgets"
+        },
+        "baq": {
+          "status": 200,
+          "kind": "ARCGIS_JSON",
+          "head": "{\"status\":\"success\",\"data\":{\"text\":{\"currentVersion\":11.5,\"folders\":[\"ambiente\",\"aplicaciones\",\"catastro\",\"cultura\",\"economico\",\"educacion\",\"equidad\",\"espaciopublico\",\"impuesto\",\"movilidad\",\"observato"
+        }
+      },
+      {
+        "transport": "thingproxy",
+        "control": {
+          "status": null,
+          "kind": "ERR URLError",
+          "head": "<urlopen error [Errno 11001] getaddrinfo failed>"
+        },
+        "baq": {
+          "status": null,
+          "kind": "ERR URLError",
+          "head": "<urlopen error [Errno 11001] getaddrinfo failed>"
+        }
+      },
+      {
+        "transport": "yacdn",
+        "control": {
+          "status": null,
+          "kind": "ERR URLError",
+          "head": "<urlopen error [Errno 11002] getaddrinfo failed>"
+        },
+        "baq": {
+          "status": null,
+          "kind": "ERR URLError",
+          "head": "<urlopen error [Errno 11002] getaddrinfo failed>"
+        }
+      },
+      {
+        "transport": "1secmail",
+        "control": {
+          "status": 520,
+          "kind": "HTML",
+          "head": "error code: 520\n"
+        },
+        "baq": {
+          "status": 522,
+          "kind": "HTML",
+          "head": "error code: 522\n"
+        }
+      }
+    ]
+  }
+]

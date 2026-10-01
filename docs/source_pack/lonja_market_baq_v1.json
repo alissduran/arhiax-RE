@@ -1,0 +1,161 @@
+{
+ "source_id": "LONJA_MARKET_BAQ",
+ "source_name": "Parámetros de mercado declarados por la corrida — artefacto de metodología local",
+ "institution": "Artefacto local del producto (sin institución proveedora verificada)",
+ "authority_class": "AUTHORITATIVE_CONTRACTUAL",
+ "product_role": "NOT_A_SOURCE",
+ "table_version": "lonja-market-baq-table/1.0.0",
+ "methodology_id": "lonja_baq_metodologia",
+ "methodology_version": "0.1-codiseno",
+ "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+ "methodology_file": "lonja_baq_metodologia.yaml",
+ "methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+ "source_version": "lonja_baq_metodologia.yaml::4ccd5832eacf",
+ "vigencia": {
+  "desde": "2026-05-08",
+  "hasta": "2026-08-31"
+ },
+ "derivation": {
+  "metodo": "api/market_context.py::market_methodology + resolve_market_sector",
+  "artefacto": "motor_tma_lonja_baq_v1.0/motor_tma_lonja_baq_v1.0/lonja_layer/lonja_baq_metodologia.yaml",
+  "ciudad_declarada_en": "docs/source_pack/barranquilla_sources_v1.json::ciudad",
+  "generado_por": "api/market_sources.py::derivar_tabla_desde_producto",
+  "regla": "Todo valor proviene del artefacto metodológico del producto; un atributo que el producto no declara queda AUSENTE."
+ },
+ "generated_at": "2026-09-29T21:44:17.418249+00:00",
+ "rows": [
+  {
+   "city": "barranquilla",
+   "sector": "Miramar",
+   "neighborhood_aliases": [],
+   "property_typology": null,
+   "property_regime": null,
+   "economic_use": null,
+   "area_band": {
+    "min": null,
+    "max": null
+   },
+   "value_per_m2": 6800000,
+   "range_low": 5500000,
+   "range_high": 8000000,
+   "effective_from": "2026-05-08",
+   "effective_to": "2026-08-31",
+   "sample_size": null,
+   "methodology_version": "0.1-codiseno",
+   "source_version": "lonja_baq_metodologia.yaml::4ccd5832eacf",
+   "source_hash": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+   "source_date": "Q3-2026",
+   "fuente_declarada": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+   "valor_declarado_en": "valor_suelo_por_sector.Miramar.valor_central_m2",
+   "rango_declarado_en": "valor_suelo_por_sector.Miramar.rango_min_m2/rango_max_m2",
+   "atributos_ausentes_en_la_fila": [
+    "neighborhood_aliases",
+    "property_typology",
+    "property_regime",
+    "economic_use",
+    "area_band",
+    "sample_size"
+   ]
+  },
+  {
+   "city": "barranquilla",
+   "sector": "Riomar",
+   "neighborhood_aliases": [],
+   "property_typology": null,
+   "property_regime": null,
+   "economic_use": null,
+   "area_band": {
+    "min": null,
+    "max": null
+   },
+   "value_per_m2": 5200000,
+   "range_low": 4500000,
+   "range_high": 6000000,
+   "effective_from": "2026-05-08",
+   "effective_to": "2026-08-31",
+   "sample_size": null,
+   "methodology_version": "0.1-codiseno",
+   "source_version": "lonja_baq_metodologia.yaml::4ccd5832eacf",
+   "source_hash": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+   "source_date": "Q2-2026",
+   "fuente_declarada": null,
+   "valor_declarado_en": "valor_suelo_por_sector.Riomar.valor_central_m2",
+   "rango_declarado_en": "valor_suelo_por_sector.Riomar.rango_min_m2/rango_max_m2",
+   "atributos_ausentes_en_la_fila": [
+    "neighborhood_aliases",
+    "property_typology",
+    "property_regime",
+    "economic_use",
+    "area_band",
+    "sample_size"
+   ]
+  },
+  {
+   "city": "barranquilla",
+   "sector": "Villa_Country",
+   "neighborhood_aliases": [],
+   "property_typology": null,
+   "property_regime": null,
+   "economic_use": null,
+   "area_band": {
+    "min": null,
+    "max": null
+   },
+   "value_per_m2": 4800000,
+   "range_low": 4200000,
+   "range_high": 5500000,
+   "effective_from": "2026-05-08",
+   "effective_to": "2026-08-31",
+   "sample_size": null,
+   "methodology_version": "0.1-codiseno",
+   "source_version": "lonja_baq_metodologia.yaml::4ccd5832eacf",
+   "source_hash": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+   "source_date": "Q2-2026",
+   "fuente_declarada": null,
+   "valor_declarado_en": "valor_suelo_por_sector.Villa_Country.valor_central_m2",
+   "rango_declarado_en": "valor_suelo_por_sector.Villa_Country.rango_min_m2/rango_max_m2",
+   "atributos_ausentes_en_la_fila": [
+    "neighborhood_aliases",
+    "property_typology",
+    "property_regime",
+    "economic_use",
+    "area_band",
+    "sample_size"
+   ]
+  },
+  {
+   "city": "barranquilla",
+   "sector": "Alto_Prado",
+   "neighborhood_aliases": [],
+   "property_typology": null,
+   "property_regime": null,
+   "economic_use": null,
+   "area_band": {
+    "min": null,
+    "max": null
+   },
+   "value_per_m2": 5500000,
+   "range_low": 4800000,
+   "range_high": 6200000,
+   "effective_from": "2026-05-08",
+   "effective_to": "2026-08-31",
+   "sample_size": null,
+   "methodology_version": "0.1-codiseno",
+   "source_version": "lonja_baq_metodologia.yaml::4ccd5832eacf",
+   "source_hash": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+   "source_date": "Q2-2026",
+   "fuente_declarada": null,
+   "valor_declarado_en": "valor_suelo_por_sector.Alto_Prado.valor_central_m2",
+   "rango_declarado_en": "valor_suelo_por_sector.Alto_Prado.rango_min_m2/rango_max_m2",
+   "atributos_ausentes_en_la_fila": [
+    "neighborhood_aliases",
+    "property_typology",
+    "property_regime",
+    "economic_use",
+    "area_band",
+    "sample_size"
+   ]
+  }
+ ],
+ "source_hash": "799c9ec7f51a082dd2cdeec1a5d4bb26730a5b87f4a3c4cf516c4a27bb298a7e"
+}

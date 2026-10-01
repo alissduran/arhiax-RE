@@ -1,0 +1,64 @@
+{
+  "ok": true,
+  "data": {
+    "objectIdFieldName": "objectid",
+    "globalIdFieldName": "",
+    "fields": [
+      {
+        "name": "objectid",
+        "alias": "OBJECTID",
+        "type": "esriFieldTypeOID"
+      },
+      {
+        "name": "fecha_visita_predial",
+        "alias": "Fecha Visita Predial",
+        "type": "esriFieldTypeDate",
+        "length": 8
+      },
+      {
+        "name": "cr_predio_guid",
+        "alias": "CR_Predio_GUID",
+        "type": "esriFieldTypeString",
+        "length": 38
+      },
+      {
+        "name": "globalid",
+        "alias": "GlobalID",
+        "type": "esriFieldTypeString",
+        "length": 38
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "fecha_visita_predial": 1717545600000,
+          "cr_predio_guid": "{DE5CB7EC-401B-4828-B428-FFA18139350E}",
+          "globalid": "{38A20E89-72FB-44A8-9964-F72FD9A0BCB2}"
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/545/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F545%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:04:56.820977+00:00",
+    "elapsed_s": 1.4,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 623,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:04:56.820966+00:00"
+      }
+    ]
+  }
+}

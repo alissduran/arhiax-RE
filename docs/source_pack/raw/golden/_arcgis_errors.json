@@ -1,0 +1,184 @@
+{
+  "by_code": {
+    "500": 18,
+    "499": 10,
+    "400": 7
+  },
+  "rows": [
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/505/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/305?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/100?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/540?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/gestionpredial/MapServer?f=json",
+      "code": 499,
+      "message": "Token Required"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/Utilities?f=json",
+      "code": 499,
+      "message": "Token Required"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/525?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/305/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/545/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/320/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/310?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/usodelsuelo/MapServer?f=json",
+      "code": 499,
+      "message": "Token Required"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/datosabiertos/MapServer?f=json",
+      "code": 400,
+      "message": "Invalid URL"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/propiedadhorizontal/MapServer?f=json",
+      "code": 400,
+      "message": "Invalid URL"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/500?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/105/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/SERVICIOS?f=json",
+      "code": 499,
+      "message": "Token Required"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/tratamientos/MapServer?f=json",
+      "code": 499,
+      "message": "Token Required"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/315/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ortofotos?f=json",
+      "code": 499,
+      "message": "Token Required"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/545?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/riesgo/MapServer?f=json",
+      "code": 499,
+      "message": "Token Required"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/sectores/MapServer?f=json",
+      "code": 400,
+      "message": "Invalid URL"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/505?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/lotes/MapServer?f=json",
+      "code": 400,
+      "message": "Invalid URL"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/pot/MapServer?f=json",
+      "code": 499,
+      "message": "Token Required"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/areasdeactividad/MapServer?f=json",
+      "code": 499,
+      "message": "Token Required"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/antiguedadpredios/MapServer?f=json",
+      "code": 400,
+      "message": "Invalid URL"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/320?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/105?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/315?f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/edificabilidad/MapServer?f=json",
+      "code": 499,
+      "message": "Token Required"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/informalidad/MapServer?f=json",
+      "code": 400,
+      "message": "Invalid URL"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/datosabiertos/FeatureServer?f=json",
+      "code": 400,
+      "message": "Invalid URL"
+    },
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/500/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started "
+    }
+  ]
+}

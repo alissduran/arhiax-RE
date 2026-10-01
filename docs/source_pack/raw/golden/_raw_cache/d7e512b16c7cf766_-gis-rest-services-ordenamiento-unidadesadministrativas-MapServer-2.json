@@ -1,0 +1,970 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 2,
+    "name": "Piezas urbanas",
+    "type": "Feature Layer",
+    "description": "Muestra la delimitación de las piezas urbanas de Barranquilla definidas en el Plan de Ordenamiento Territorial (Decreto 0212 de 2014). Áreas estratégicas que sirven para la planificación y gestión del territorio. ",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 102100,
+      "latestWkid": 3857,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -20037700,
+      "falseY": -30241100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Planeación.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "nombre",
+        "uniqueValueGroups": [
+          {
+            "heading": "",
+            "classes": [
+              {
+                "label": "Centro - carrera 38",
+                "description": "Centro - carrera 38",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    180,
+                    224,
+                    204,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      179,
+                      226,
+                      205,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Centro - carrera 38"
+                  ]
+                ]
+              },
+              {
+                "label": "Centro metropolitano",
+                "description": "Centro metropolitano",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    204,
+                    172,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      253,
+                      205,
+                      172,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Centro metropolitano"
+                  ]
+                ]
+              },
+              {
+                "label": "Prado norte",
+                "description": "Prado norte",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    202,
+                    212,
+                    230,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      203,
+                      213,
+                      232,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Prado norte"
+                  ]
+                ]
+              },
+              {
+                "label": "Ribera occidental",
+                "description": "Ribera occidental",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    242,
+                    201,
+                    227,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      244,
+                      202,
+                      228,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Ribera occidental"
+                  ]
+                ]
+              },
+              {
+                "label": "Riomar",
+                "description": "Riomar",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    231,
+                    245,
+                    203,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      230,
+                      245,
+                      201,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Riomar"
+                  ]
+                ]
+              },
+              {
+                "label": "Suroccidental 1",
+                "description": "Suroccidental 1",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    242,
+                    176,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      255,
+                      242,
+                      174,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Suroccidental 1"
+                  ]
+                ]
+              },
+              {
+                "label": "Suroccidental 2",
+                "description": "Suroccidental 2",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    240,
+                    225,
+                    204,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      241,
+                      226,
+                      204,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Suroccidental 2"
+                  ]
+                ]
+              },
+              {
+                "label": "Suroriental",
+                "description": "Suroriental",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    204,
+                    204,
+                    204,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      204,
+                      204,
+                      204,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Suroriental"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                180,
+                224,
+                204,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  179,
+                  226,
+                  205,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Centro - carrera 38",
+            "label": "Centro - carrera 38"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                204,
+                172,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  253,
+                  205,
+                  172,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Centro metropolitano",
+            "label": "Centro metropolitano"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                202,
+                212,
+                230,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  203,
+                  213,
+                  232,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Prado norte",
+            "label": "Prado norte"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                242,
+                201,
+                227,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  244,
+                  202,
+                  228,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Ribera occidental",
+            "label": "Ribera occidental"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                231,
+                245,
+                203,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  230,
+                  245,
+                  201,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Riomar",
+            "label": "Riomar"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                242,
+                176,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  255,
+                  242,
+                  174,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Suroccidental 1",
+            "label": "Suroccidental 1"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                240,
+                225,
+                204,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  241,
+                  226,
+                  204,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Suroccidental 2",
+            "label": "Suroccidental 2"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                204,
+                204,
+                204,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  204,
+                  204,
+                  204,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Suroriental",
+            "label": "Suroriental"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  227,
+                  252,
+                  210,
+                  255
+                ],
+                "toColor": [
+                  227,
+                  252,
+                  210,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  218,
+                  179,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  218,
+                  179,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  185,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  185,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  187,
+                  229,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  187,
+                  229,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  179,
+                  222,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  179,
+                  222,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  252,
+                  238,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  252,
+                  238,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  226,
+                  184,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  226,
+                  184,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  220,
+                  212,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  220,
+                  212,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  252,
+                  195,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  252,
+                  195,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  212,
+                  223,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  212,
+                  223,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  245,
+                  252,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  245,
+                  252,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  190,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  190,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  207,
+                  249,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  207,
+                  249,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": [
+        {
+          "labelExpressionInfo": {
+            "expression": "$feature.nombre",
+            "title": "Custom"
+          },
+          "labelPlacement": "esriServerPolygonPlacementAlwaysHorizontal",
+          "multiPart": "labelLargest",
+          "allowOverrun": true,
+          "deconflictionStrategy": "dynamic",
+          "repeatLabel": false,
+          "useClippedGeometry": true,
+          "stackLabel": true,
+          "stackAlignment": "dynamic",
+          "removeDuplicates": "none",
+          "stackRowLength": 24,
+          "useCodedValues": true,
+          "maxScale": 25000,
+          "minScale": 0,
+          "name": "Class 1",
+          "priority": -1,
+          "symbol": {
+            "type": "esriTS",
+            "color": [
+              0,
+              0,
+              0,
+              255
+            ],
+            "backgroundColor": null,
+            "borderLineColor": null,
+            "borderLineSize": null,
+            "verticalAlignment": "bottom",
+            "horizontalAlignment": "left",
+            "rightToLeft": false,
+            "angle": 0,
+            "xoffset": 0,
+            "yoffset": 0,
+            "kerning": true,
+            "haloColor": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "haloSize": 0.7,
+            "font": {
+              "family": "Volkswagen Serial",
+              "size": 10,
+              "style": "normal",
+              "weight": "bold",
+              "decoration": "none"
+            }
+          }
+        }
+      ]
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": -8334292.528264654,
+      "ymin": 1223053.151425735,
+      "xmax": -8322052.609872336,
+      "ymax": 1244286.1096537793,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "nombre",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "FID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "identificador",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Identificador",
+        "domain": null
+      },
+      {
+        "name": "nombre",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre",
+        "length": 512,
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "a136_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": true,
+    "capabilities": "Query,Map,Data,TileMap",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "be7fe19e847d481ca552bbedbe3ae12e"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/2?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Funidadesadministrativas%2FMapServer%2F2%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:12:42.505165+00:00",
+    "elapsed_s": 37.0,
+    "attempt_count": 4,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 520,
+        "bytes": 963,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 520",
+        "at": "2026-09-29T16:12:18.156563+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:12:37.764581+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:12:41.307724+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 200,
+        "bytes": 10571,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:12:42.505155+00:00"
+      }
+    ]
+  }
+}

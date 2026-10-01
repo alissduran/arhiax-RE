@@ -1,0 +1,221 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p style='text-align:Justify;'><span>Consolida información sobre los cánones de arrendamiento recopilados de diferentes fuentes para diferentes periodos en el Distrito de Barranquilla. Permite visualizar y analizar la distribución espacial de los valores de renta, facilitando la identificación de zonas con mayores y menores niveles de arriendo, apoyando el análisis del mercado inmobiliario y la toma de decisiones en materia de planificación y gestión territorial.</span></p></div></div></div>",
+    "mapName": "Arrendamientos",
+    "description": "Consolida información sobre los cánones de arrendamiento recopilados de diferentes fuentes para diferentes periodos en el Distrito de Barranquilla. Permite visualizar y analizar la distribución espacial de los valores de renta, facilitando la identificación de zonas con mayores y menores niveles de arriendo, apoyando el análisis del mercado inmobiliario y la toma de decisiones en materia de planificación y gestión territorial.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Valor arrendamientos. Año 2024.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4799985.736698672,
+      "ymin": 2772023.738123516,
+      "xmax": 4803699.222649261,
+      "ymax": 2775252.4799873163,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4792078.3941,
+      "ymin": 2765373.6522000004,
+      "xmax": 4807916.4988,
+      "ymax": 2779789.3136,
+      "zmin": 0,
+      "zmax": 0,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Arrendamientos",
+      "Author": "",
+      "Comments": "Consolida información sobre los cánones de arrendamiento recopilados de diferentes fuentes para diferentes periodos en el Distrito de Barranquilla. Permite visualizar y analizar la distribución espacial de los valores de renta, facilitando la identificación de zonas con mayores y menores niveles de arriendo, apoyando el análisis del mercado inmobiliario y la toma de decisiones en materia de planificación y gestión territorial.",
+      "Subject": "Visualiza la distribución espacial de los cánones de arrendamiento en el Distrito de Barranquilla, facilitando la identificación de zonas con diferentes niveles de renta y el análisis del mercado inmobiliario para diferentes periodos.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Arriendos,Inmobiliario,Mercado,Casas,Apartamento,Cánon"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "serviceItemId": "4861e00a388b4041bbf75fd12aab8895"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fobservatorio%2Farrendamientos%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:46:26.243546+00:00",
+    "elapsed_s": 14.1,
+    "attempt_count": 5,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 502,
+        "bytes": 872,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 502",
+        "at": "2026-09-29T15:46:14.019891+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 502,
+        "bytes": 872,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 502",
+        "at": "2026-09-29T15:46:14.254442+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:46:19.001834+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:46:23.555241+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 200,
+        "bytes": 4472,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:46:26.243535+00:00"
+      }
+    ]
+  }
+}

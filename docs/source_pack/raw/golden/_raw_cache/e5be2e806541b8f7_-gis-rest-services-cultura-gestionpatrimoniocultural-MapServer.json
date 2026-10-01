@@ -1,0 +1,259 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;font-size:12pt'><div><div><p><span>Reúne información relevante sobre e</span><span>l Plan Especial de Manejo y Protección del conjunto urbano BICNAL comprendido por los barrios El Prado, Bellavista y una parte de Alto Prado</span><span>, que mediante normativa formulada </span><span>pretende la </span><span>recuperación, conservación, protección, salvaguarda, mantenimiento y sostenibilidad de los elementos urbanos y arquitectónicos, valores estéticos, históricos y simbólicos del patrimonio material representados en </span><span>los bienes inmuebles y trazado urbano de la zona</span><span>, </span></p></div></div></div>",
+    "mapName": "Gestión del patrimonio cultural",
+    "description": "Reúne información relevante sobre el Plan Especial de Manejo y Protección del conjunto urbano BICNAL comprendido por los barrios El Prado, Bellavista y una parte de Alto Prado, que mediante normativa formulada pretende la recuperación, conservación, protección, salvaguarda, mantenimiento y sostenibilidad de los elementos urbanos y arquitectónicos, valores estéticos, históricos y simbólicos del patrimonio material representados en los bienes inmuebles y trazado urbano de la zona, ",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Predios PEMP",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Sectores normativos",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 3,
+        "name": "Niveles de intervención",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4803256.142768146,
+      "ymin": 2770281.0750607047,
+      "xmax": 4803596.929431855,
+      "ymax": 2777718.2428392954,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4802036.4946,
+      "ymin": 2772932.7793000005,
+      "xmax": 4804816.5776,
+      "ymax": 2775066.5385999996,
+      "zmin": 0,
+      "zmax": 0,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Plan Especial de Manejo y Protección",
+      "Author": "",
+      "Comments": "Reúne información relevante sobre el Plan Especial de Manejo y Protección del conjunto urbano BICNAL comprendido por los barrios El Prado, Bellavista y una parte de Alto Prado, que mediante normativa formulada pretende la recuperación, conservación, protección, salvaguarda, mantenimiento y sostenibilidad de los elementos urbanos y arquitectónicos, valores estéticos, históricos y simbólicos del patrimonio material representados en los bienes inmuebles y trazado urbano de la zona, ",
+      "Subject": "Recopila información relevante sobre el PEMP del año 2020, zona afectada, de influencia, sectores normativos, nivel de intervención permitidos y predios incluidos para su conservación por su valor histórico y arquitectónico.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Protección,Patrimonio,Conservación,Arquitectónico,Mantenimiento,Inmuebles,Patrimoniales"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "floorAwareMapProperties": {
+      "defaultFloorFilterSettings": {
+        "isEnabled": false
+      }
+    },
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "serviceItemId": "4595d9b475904db79f3380ca195ebaa3"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/gestionpatrimoniocultural/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcultura%2Fgestionpatrimoniocultural%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:00:36.718327+00:00",
+    "elapsed_s": 183.5,
+    "attempt_count": 17,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 12,
+        "http_status": 200,
+        "bytes": 6021,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:59:52.011808+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 13,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:59:53.545100+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 14,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:00:13.453755+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 15,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:00:33.211834+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 16,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:00:33.387255+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 17,
+        "http_status": 200,
+        "bytes": 5269,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:00:36.718284+00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "ok": true,
+  "data": {
+    "objectIdFieldName": "objectid",
+    "globalIdFieldName": "globalid",
+    "fields": [
+      {
+        "name": "objectid",
+        "alias": "OBJECTID",
+        "type": "esriFieldTypeOID"
+      },
+      {
+        "name": "numero_predial_anterior",
+        "alias": "Numero Predial Anterior",
+        "type": "esriFieldTypeString",
+        "length": 20
+      },
+      {
+        "name": "condicion_predio",
+        "alias": "Condición Predio",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "destinacion_economica",
+        "alias": "Destinación Económica",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "codigo_homologado",
+        "alias": "Código Homologado",
+        "type": "esriFieldTypeString",
+        "length": 11
+      },
+      {
+        "name": "numero_predial_nacional",
+        "alias": "Número Predial Nacional",
+        "type": "esriFieldTypeString",
+        "length": 30
+      },
+      {
+        "name": "tipo_predio",
+        "alias": "Tipo Predio",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "estado",
+        "alias": "Estado",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "estado_fmi",
+        "alias": "Estado FMI",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "fecha_apertura_fmi",
+        "alias": "Fecha Apertura FMI",
+        "type": "esriFieldTypeDate",
+        "length": 8
+      },
+      {
+        "name": "fecha_inscripcion_catastral",
+        "alias": "Fecha Inscripción Catastral",
+        "type": "esriFieldTypeDate",
+        "length": 8
+      },
+      {
+        "name": "area_catastral_terreno",
+        "alias": "Área Catastral Terreno",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "area_registral_m2",
+        "alias": "Área Registral M2",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "vigencia_actualizacion",
+        "alias": "Vigencia Actualización Catastral",
+        "type": "esriFieldTypeDate",
+        "length": 8
+      },
+      {
+        "name": "tipo",
+        "alias": "Tipo",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "aplica_efectos_registrales",
+        "alias": "¿Aplica Efectos Registrales?",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "tipo_vivienda",
+        "alias": "Tipo de Vivienda",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "estrato",
+        "alias": "Estrato",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "globalid",
+        "alias": "GlobalID",
+        "type": "esriFieldTypeGlobalID",
+        "length": 38
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "numero_predial_anterior": "08001000100000048000",
+          "condicion_predio": "NPH",
+          "destinacion_economica": "Comercial",
+          "codigo_homologado": "AFT0024ERWB",
+          "numero_predial_nacional": "080010001000000000048000000000",
+          "tipo_predio": "Predio_Privado",
+          "estado": "Activo",
+          "estado_fmi": "Activo",
+          "fecha_apertura_fmi": 190512000000,
+          "fecha_inscripcion_catastral": null,
+          "area_catastral_terreno": 39605.0,
+          "area_registral_m2": null,
+          "vigencia_actualizacion": 1767225600000,
+          "tipo": "Informacion_Estadistica",
+          "aplica_efectos_registrales": 0,
+          "tipo_vivienda": 4,
+          "estrato": "No_Aplica",
+          "globalid": "{DB83DC14-6BA1-468F-A6BC-835E66FE5E9A}"
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/500/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F500%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:49:51.209146+00:00",
+    "elapsed_s": 6.1,
+    "attempt_count": 3,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:49:48.540787+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:49:49.183522+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 2520,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:49:51.209098+00:00"
+      }
+    ]
+  }
+}

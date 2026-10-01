@@ -1,0 +1,1460 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 1,
+    "name": "Destinos económicos. Año 2016.",
+    "type": "Feature Layer",
+    "description": "Permite visualizar la clasificación de los predios en Barranquilla de acuerdo con la actividad económica predominante que en él se desarrolla para la vigencia 2016. Esta clasificación se usa con fines estadísticos y es una de las variables principales en la determinación de la tarifa del impuesto predial.",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 102100,
+      "latestWkid": 3857,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -20037700,
+      "falseY": -30241100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Hacienda. Gerencia de Gestión Catastral.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "destino",
+        "uniqueValueGroups": [
+          {
+            "heading": "",
+            "classes": [
+              {
+                "label": "Agricola",
+                "description": "Agricola",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    230,
+                    179,
+                    252,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Agricola"
+                  ]
+                ]
+              },
+              {
+                "label": "Agropercuario",
+                "description": "Agropercuario",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    172,
+                    219,
+                    164,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Agropercuario"
+                  ]
+                ]
+              },
+              {
+                "label": "Comercial",
+                "description": "Comercial",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    193,
+                    94,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Comercial"
+                  ]
+                ]
+              },
+              {
+                "label": "Cultural",
+                "description": "Cultural",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    212,
+                    63,
+                    81,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Cultural"
+                  ]
+                ]
+              },
+              {
+                "label": "Educativo",
+                "description": "Educativo",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    51,
+                    138,
+                    189,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Educativo"
+                  ]
+                ]
+              },
+              {
+                "label": "Habitacional",
+                "description": "Habitacional",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    50,
+                    140,
+                    109,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Habitacional"
+                  ]
+                ]
+              },
+              {
+                "label": "Industrial",
+                "description": "Industrial",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    250,
+                    173,
+                    30,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Industrial"
+                  ]
+                ]
+              },
+              {
+                "label": "Institucional",
+                "description": "Institucional",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    231,
+                    150,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Institucional"
+                  ]
+                ]
+              },
+              {
+                "label": "Lote no urbanizable",
+                "description": "Lote no urbanizable",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    250,
+                    180,
+                    217,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Lote no urbanizable"
+                  ]
+                ]
+              },
+              {
+                "label": "Lote urbanizable no construido",
+                "description": "Lote urbanizable no construido",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    182,
+                    214,
+                    182,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Lote urbanizable no construido"
+                  ]
+                ]
+              },
+              {
+                "label": "Lote urbanizable no urbanizado",
+                "description": "Lote urbanizable no urbanizado",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    9,
+                    189,
+                    72,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Lote urbanizable no urbanizado"
+                  ]
+                ]
+              },
+              {
+                "label": "N/A",
+                "description": "N/A",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    255,
+                    207,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "N/A"
+                  ]
+                ]
+              },
+              {
+                "label": "Pecuario",
+                "description": "Pecuario",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    227,
+                    252,
+                    179,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Pecuario"
+                  ]
+                ]
+              },
+              {
+                "label": "Recreacional",
+                "description": "Recreacional",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    173,
+                    98,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Recreacional"
+                  ]
+                ]
+              },
+              {
+                "label": "Religioso",
+                "description": "Religioso",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    252,
+                    238,
+                    204,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Religioso"
+                  ]
+                ]
+              },
+              {
+                "label": "Salubridad",
+                "description": "Salubridad",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    231,
+                    252,
+                    177,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Salubridad"
+                  ]
+                ]
+              },
+              {
+                "label": "Uso publico",
+                "description": "Uso publico",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    231,
+                    150,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Uso publico"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                230,
+                179,
+                252,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Agricola",
+            "label": "Agricola"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                172,
+                219,
+                164,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Agropercuario",
+            "label": "Agropercuario"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                193,
+                94,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Comercial",
+            "label": "Comercial"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                212,
+                63,
+                81,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Cultural",
+            "label": "Cultural"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                51,
+                138,
+                189,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Educativo",
+            "label": "Educativo"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                50,
+                140,
+                109,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Habitacional",
+            "label": "Habitacional"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                250,
+                173,
+                30,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Industrial",
+            "label": "Industrial"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                231,
+                150,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Institucional",
+            "label": "Institucional"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                250,
+                180,
+                217,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Lote no urbanizable",
+            "label": "Lote no urbanizable"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                182,
+                214,
+                182,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Lote urbanizable no construido",
+            "label": "Lote urbanizable no construido"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                9,
+                189,
+                72,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Lote urbanizable no urbanizado",
+            "label": "Lote urbanizable no urbanizado"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                255,
+                207,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "N/A",
+            "label": "N/A"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                227,
+                252,
+                179,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Pecuario",
+            "label": "Pecuario"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                173,
+                98,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Recreacional",
+            "label": "Recreacional"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                252,
+                238,
+                204,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Religioso",
+            "label": "Religioso"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                231,
+                252,
+                177,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Salubridad",
+            "label": "Salubridad"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                231,
+                150,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Uso publico",
+            "label": "Uso publico"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  189,
+                  252,
+                  226,
+                  255
+                ],
+                "toColor": [
+                  189,
+                  252,
+                  226,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  250,
+                  179,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  250,
+                  179,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  200,
+                  189,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  200,
+                  189,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  199,
+                  214,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  199,
+                  214,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  248,
+                  252,
+                  184,
+                  255
+                ],
+                "toColor": [
+                  248,
+                  252,
+                  184,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  202,
+                  236,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  202,
+                  236,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  185,
+                  179,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  185,
+                  179,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  240,
+                  212,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  240,
+                  212,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  188,
+                  252,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  188,
+                  252,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  194,
+                  243,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  194,
+                  243,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  235,
+                  252,
+                  210,
+                  255
+                ],
+                "toColor": [
+                  235,
+                  252,
+                  210,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  231,
+                  192,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  231,
+                  192,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  182,
+                  195,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  182,
+                  195,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  215,
+                  223,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  215,
+                  223,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  189,
+                  252,
+                  248,
+                  255
+                ],
+                "toColor": [
+                  189,
+                  252,
+                  248,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  216,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  216,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  220,
+                  204,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  220,
+                  204,
+                  252,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": -8340191.051538661,
+      "ymin": 1222289.7152415817,
+      "xmax": -8322049.314825274,
+      "ymax": 1239335.5874494875,
+      "zmin": 0,
+      "zmax": 0,
+      "mmin": -9.999e+35,
+      "mmax": -9.999e+35,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "terreno",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "terreno",
+        "type": "esriFieldTypeString",
+        "alias": "Terreno",
+        "length": 254,
+        "domain": null
+      },
+      {
+        "name": "destino",
+        "type": "esriFieldTypeString",
+        "alias": "Destino económico",
+        "length": 254,
+        "domain": null
+      },
+      {
+        "name": "anio",
+        "type": "esriFieldTypeDateOnly",
+        "alias": "Año",
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "a280_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Map,Query,Data,TileMap",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "hasZ": true,
+    "hasM": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "836f3cc1d3d2451c8b701583a1bcd13c"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer/1?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdestinoseconomicos%2FMapServer%2F1%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:00:40.955623+00:00",
+    "elapsed_s": 4.2,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 14562,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:00:40.955553+00:00"
+      }
+    ]
+  }
+}

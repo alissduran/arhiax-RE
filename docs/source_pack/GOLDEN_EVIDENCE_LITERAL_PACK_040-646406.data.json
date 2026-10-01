@@ -1,0 +1,3077 @@
+{
+  "generated_at": "2026-09-30T14:47:46.430626+00:00",
+  "market_input": {
+    "folio": "040-646406",
+    "A_ruta_del_archivo": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml",
+    "B_lineas_exactas": [
+      "lonja_baq_metodologia.yaml:14: # y se propaga automáticamente a todos los dictámenes posteriores a la fecha",
+      "lonja_baq_metodologia.yaml:15: # de vigencia declarada.",
+      "lonja_baq_metodologia.yaml:16: # ═══════════════════════════════════════════════════════════════════════════════",
+      "lonja_baq_metodologia.yaml:17: ",
+      "lonja_baq_metodologia.yaml:18: declaracion:",
+      "lonja_baq_metodologia.yaml:19:   entidad: \"Lonja de Propiedad Raíz de Barranquilla\"",
+      "lonja_baq_metodologia.yaml:20:   representante_legal: \"[A declarar por la Lonja]\"",
+      "lonja_baq_metodologia.yaml:21:   presidente_comite_tecnico: \"[A declarar por la Lonja]\"",
+      "lonja_baq_metodologia.yaml:22:   vigencia_desde: \"2026-05-08\"",
+      "lonja_baq_metodologia.yaml:23:   vigencia_hasta: \"2026-08-31\"",
+      "lonja_baq_metodologia.yaml:24:   marco_normativo:",
+      "lonja_baq_metodologia.yaml:25:     - \"Ley 1673 de 2013 — Régimen del avaluador\"",
+      "lonja_baq_metodologia.yaml:208:   Miramar:",
+      "lonja_baq_metodologia.yaml:209:     # Actualizado Q3-2026 con precio real de mercado verificado por el",
+      "lonja_baq_metodologia.yaml:210:     # propietario en la constructora del proyecto (unidades ~58 m2 terminadas",
+      "lonja_baq_metodologia.yaml:211:     # en venta ~$420.000.000 ≈ $7.1M/m2). El valor anterior ($4.5M/m2, Q2-2026)",
+      "lonja_baq_metodologia.yaml:212:     # quedaba ~40% por debajo del mercado observado y el dictamen del folio real",
+      "lonja_baq_metodologia.yaml:213:     # 040-646406 (Napoli, Torre 8 apto 430) subestimaba el inmueble.",
+      "lonja_baq_metodologia.yaml:214:     valor_central_m2: 6800000",
+      "lonja_baq_metodologia.yaml:215:     rango_min_m2: 5500000",
+      "lonja_baq_metodologia.yaml:216:     rango_max_m2: 8000000",
+      "lonja_baq_metodologia.yaml:217:     vigencia: \"Q3-2026\"",
+      "lonja_baq_metodologia.yaml:218:     fuente: \"Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial\"",
+      "lonja_baq_metodologia.yaml:219:   Riomar:",
+      "lonja_baq_metodologia.yaml:207: valor_suelo_por_sector:"
+    ],
+    "C_estructura_resultante": {
+      "input_barrio": "Miramar",
+      "matched_sector": "Miramar",
+      "match_type": "EXACT",
+      "value_m2": 6800000,
+      "rango_min_m2": 5500000,
+      "rango_max_m2": 8000000,
+      "methodology_file": "lonja_baq_metodologia.yaml",
+      "methodology_version": "0.1-codiseno",
+      "methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348"
+    },
+    "D_origin": {
+      "origin": "MANUAL_CONFIG",
+      "origin_declarado": null,
+      "origin_gate": false,
+      "origin_blockers": [
+        "origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)"
+      ],
+      "origin_provenance": {},
+      "origin_etiqueta": "valor declarado a mano por la corrida (sin fuente externa automática)"
+    },
+    "E_provenance": {
+      "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+      "methodology_version": "0.1-codiseno",
+      "market_methodology_id": "lonja_baq_metodologia",
+      "market_methodology_version": "0.1-codiseno",
+      "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+      "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+      "origin": "MANUAL_CONFIG",
+      "origin_declarado": null,
+      "origin_gate": false
+    },
+    "F_authorized_for_valuation": {
+      "golden_stored_valoracion_habilitada": false,
+      "golden_stored_status": "UNRESOLVED",
+      "nuevo_codigo_status": false
+    },
+    "market_rate": {
+      "value": 6800000,
+      "origin": "MANUAL_CONFIG",
+      "provenance": {
+        "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+        "methodology_version": "0.1-codiseno",
+        "market_methodology_id": "lonja_baq_metodologia",
+        "market_methodology_version": "0.1-codiseno",
+        "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+        "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+        "origin": "MANUAL_CONFIG",
+        "origin_declarado": null,
+        "origin_gate": false
+      },
+      "authorized_for_valuation": false
+    },
+    "etiqueta_honesta_producto": {
+      "es_fuente_de_datos": false,
+      "aporta_datos_a_dictus": false,
+      "en_source_registry": false,
+      "fuente_externa_verificable": false,
+      "etiqueta": "parámetros declarados por la corrida",
+      "nota": "El valor de mercado es parámetros declarados por la corrida (artefacto local de metodología): sin fuente externa automática verificada. La Lonja no es una fuente de datos y no se sustituye por ninguna fuente inventada."
+    },
+    "market_rate_source_literal": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)"
+  },
+  "market_context": {
+    "status": "UNRESOLVED",
+    "resolution_status": "UNRESOLVED",
+    "selected_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+    "origin": "MANUAL_CONFIG",
+    "provenance": {
+      "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+      "methodology_version": "0.1-codiseno",
+      "market_methodology_id": "lonja_baq_metodologia",
+      "market_methodology_version": "0.1-codiseno",
+      "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+      "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+      "origin": "MANUAL_CONFIG",
+      "origin_declarado": null,
+      "origin_gate": false
+    },
+    "required_inputs": [
+      "identity_verified",
+      "barrio VERIFIED_OFFICIAL/GEOGRAPHIC",
+      "estrato VERIFIED_OFFICIAL",
+      "tipologia VERIFIED_REGISTRAL/CATASTRAL",
+      "sector metodológico resuelto",
+      "market_rate_source",
+      "market_methodology_id/version",
+      "value_m2 > 0"
+    ],
+    "blockers": [],
+    "authorized": false,
+    "reason": "MARKET_CONTEXT_UNRESOLVED: origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)",
+    "golden_stored": {
+      "status": "UNRESOLVED",
+      "origin": "MANUAL_CONFIG",
+      "origin_gate": false,
+      "valoracion_habilitada": false,
+      "ready": true
+    },
+    "nuevo_codigo": {
+      "origin": "MANUAL_CONFIG",
+      "origin_declarado": null,
+      "origin_gate": false,
+      "origin_blockers": [
+        "origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)"
+      ],
+      "origin_provenance": {},
+      "origin_etiqueta": "valor declarado a mano por la corrida (sin fuente externa automática)"
+    }
+  },
+  "valuation_gate": {
+    "gate": "VALUATION_GATE",
+    "inputs": [
+      "autorización de identidad",
+      "autorización de contexto de mercado",
+      "método y vigencia"
+    ],
+    "observation_ids": [
+      "OBS-VALUATION-78067"
+    ],
+    "observations": [
+      {
+        "observation_id": "OBS-VALUATION-78067",
+        "domain": "VALUATION",
+        "subject": "Valor estimado y su banda",
+        "source": "parámetros de mercado declarados por la corrida",
+        "status": "NOT_EVALUATED",
+        "value": {
+          "consolidado": 0,
+          "banda_baja": 0,
+          "banda_alta": 0,
+          "value_m2": null,
+          "origin": "MANUAL_CONFIG",
+          "origin_gate": false
+        },
+        "detail": "no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable",
+        "observed_at": "2026-09-30T14:47:40.937950+00:00",
+        "query": null,
+        "evidence_refs": [
+          {
+            "evidence_id": "EV-VALOR",
+            "type": "VALUATION",
+            "source": "metodología de mercado",
+            "timestamp": "2026-09-30T14:47:40.937950+00:00",
+            "sha256": null,
+            "detail": null
+          }
+        ],
+        "methodology_id": "lonja_baq_metodologia",
+        "origin": "MANUAL_CONFIG",
+        "origin_gate": false
+      }
+    ],
+    "blocking_conditions": [
+      "no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable"
+    ],
+    "decision": "NO EMITIR VALORACIÓN",
+    "gate_state": "CLOSED",
+    "reasons": [
+      "La valoración NO está autorizada en esta corrida: el origen de la tasa es MANUAL_CONFIG y su procedencia es INSUFICIENTE para autorizar una cifra (se exige fuente externa citada o cálculo de fuentes citadas, con fecha y sha256). No se emite cifra y se declaran los bloqueos reales."
+    ],
+    "evidence_refs": [
+      {
+        "evidence_id": "EV-VALOR",
+        "type": "VALUATION",
+        "source": "metodología de mercado",
+        "timestamp": "2026-09-30T14:47:40.937950+00:00",
+        "sha256": null,
+        "detail": null
+      }
+    ]
+  },
+  "valuation_gate_full": {
+    "gate": "VALUATION_GATE",
+    "gate_state": "CLOSED",
+    "gate_state_vocabulario": [
+      "CLOSED",
+      "OPEN"
+    ],
+    "decision": "NO EMITIR VALORACIÓN",
+    "reason": "La valoración NO está autorizada en esta corrida: el origen de la tasa es MANUAL_CONFIG y su procedencia es INSUFICIENTE para autorizar una cifra (se exige fuente externa citada o cálculo de fuentes citadas, con fecha y sha256). No se emite cifra y se declaran los bloqueos reales.",
+    "required_inputs": [
+      "autorización de identidad",
+      "autorización de contexto de mercado",
+      "método y vigencia"
+    ],
+    "blocking_conditions": [
+      "no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable"
+    ],
+    "evidence_refs": [
+      {
+        "evidence_id": "EV-VALOR",
+        "type": "VALUATION",
+        "source": "metodología de mercado",
+        "timestamp": "2026-09-30T14:47:40.937950+00:00",
+        "sha256": null,
+        "detail": null
+      }
+    ],
+    "origin_summary": "MANUAL_CONFIG",
+    "authorized_inputs": null,
+    "rejected_inputs": null,
+    "observations": [
+      {
+        "observation_id": "OBS-VALUATION-78067",
+        "domain": "VALUATION",
+        "subject": "Valor estimado y su banda",
+        "source": "parámetros de mercado declarados por la corrida",
+        "status": "NOT_EVALUATED",
+        "value": {
+          "consolidado": 0,
+          "banda_baja": 0,
+          "banda_alta": 0,
+          "value_m2": null,
+          "origin": "MANUAL_CONFIG",
+          "origin_gate": false
+        },
+        "detail": "no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable",
+        "observed_at": "2026-09-30T14:47:40.937950+00:00",
+        "query": null,
+        "evidence_refs": [
+          {
+            "evidence_id": "EV-VALOR",
+            "type": "VALUATION",
+            "source": "metodología de mercado",
+            "timestamp": "2026-09-30T14:47:40.937950+00:00",
+            "sha256": null,
+            "detail": null
+          }
+        ],
+        "methodology_id": "lonja_baq_metodologia",
+        "origin": "MANUAL_CONFIG",
+        "origin_gate": false
+      }
+    ],
+    "todos_los_gates": [
+      {
+        "gate": "IDENTITY_GATE",
+        "gate_state": "OPEN",
+        "decision": "INFORMACIÓN VERIFICADA"
+      },
+      {
+        "gate": "TITLE_GATE",
+        "gate_state": "OPEN",
+        "decision": "PROCEDER CON CONDICIONES"
+      },
+      {
+        "gate": "COUNTERPARTY_GATE",
+        "gate_state": "OPEN",
+        "decision": "SIN HALLAZGO MATERIAL EN ESTA FUENTE"
+      },
+      {
+        "gate": "URBAN_GATE",
+        "gate_state": "CLOSED",
+        "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO"
+      },
+      {
+        "gate": "ENVIRONMENT_GATE",
+        "gate_state": "CLOSED",
+        "decision": "INFORMACIÓN INSUFICIENTE"
+      },
+      {
+        "gate": "VALUATION_GATE",
+        "gate_state": "CLOSED",
+        "decision": "NO EMITIR VALORACIÓN"
+      },
+      {
+        "gate": "EVIDENCE_GATE",
+        "gate_state": "OPEN",
+        "decision": "INFORMACIÓN VERIFICADA"
+      }
+    ]
+  },
+  "origin_propagation": {
+    "modulo": "api/atribucion_mercado.py",
+    "vocabulario_literal": {
+      "ORIGEN_EXTERNO": "EXTERNAL_SOURCE",
+      "ORIGEN_COMPUTADO": "COMPUTED_FROM_SOURCES",
+      "ORIGEN_MANUAL": "MANUAL_CONFIG",
+      "ORIGEN_ESTATICO": "STATIC_REFERENCE",
+      "ORIGEN_PRIOR": "MODEL_PRIOR",
+      "ORIGENES": [
+        "EXTERNAL_SOURCE",
+        "COMPUTED_FROM_SOURCES",
+        "MANUAL_CONFIG",
+        "STATIC_REFERENCE",
+        "MODEL_PRIOR"
+      ],
+      "ORIGENES_HABILITANTES": [
+        "COMPUTED_FROM_SOURCES",
+        "EXTERNAL_SOURCE"
+      ],
+      "PROCEDENCIA_EXTERNA": [
+        "source_id",
+        "proveedor",
+        "fecha",
+        "referencia",
+        "sha256"
+      ],
+      "PROCEDENCIA_COMPUTADA_CAMPOS": [
+        "proveedor",
+        "fecha",
+        "referencia",
+        "sha256"
+      ],
+      "PROCEDENCIA_COMPUTADA_MIN_FUENTES": 2
+    },
+    "funcion": "api/atribucion_mercado.py:198 clasificar_origen(declaracion, *, por_defecto=ORIGEN_MANUAL)",
+    "tests_del_codigo": [
+      {
+        "caso": "EXTERNAL_SOURCE+EXTERNAL_SOURCE→COMPUTED_FROM_SOURCES",
+        "declaracion": {
+          "origen_tipo": "COMPUTED_FROM_SOURCES",
+          "fuentes": [
+            {
+              "proveedor": "A",
+              "fecha": "2026-01-01",
+              "referencia": "r1",
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "proveedor": "B",
+              "fecha": "2026-01-02",
+              "referencia": "r2",
+              "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          ]
+        },
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "origin_blockers": [],
+        "origin_provenance": {
+          "fuentes": [
+            {
+              "proveedor": "A",
+              "fecha": "2026-01-01",
+              "referencia": "r1",
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            {
+              "proveedor": "B",
+              "fecha": "2026-01-02",
+              "referencia": "r2",
+              "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          ]
+        },
+        "origin_etiqueta": "calculado a partir de fuentes citadas"
+      },
+      {
+        "caso": "EXTERNAL+MANUAL_CONFIG→MANUAL_CONFIG (NOT_AUTHORIZED)",
+        "declaracion": {
+          "origen_tipo": "MANUAL_CONFIG",
+          "proveedor": "constructora",
+          "fecha": "Q3-2026"
+        },
+        "origin": "MANUAL_CONFIG",
+        "origin_declarado": "MANUAL_CONFIG",
+        "origin_gate": false,
+        "origin_blockers": [
+          "origen MANUAL_CONFIG no habilita la valoración (valor declarado a mano por la corrida (sin fuente externa automática))"
+        ],
+        "origin_provenance": {
+          "proveedor": "constructora",
+          "fecha": "Q3-2026"
+        },
+        "origin_etiqueta": "valor declarado a mano por la corrida (sin fuente externa automática)"
+      },
+      {
+        "caso": "EXTERNAL+MODEL_PRIOR→MODEL_PRIOR (NOT_AUTHORIZED)",
+        "declaracion": {
+          "origen_tipo": "MODEL_PRIOR"
+        },
+        "origin": "MODEL_PRIOR",
+        "origin_declarado": "MODEL_PRIOR",
+        "origin_gate": false,
+        "origin_blockers": [
+          "origen MODEL_PRIOR no habilita la valoración (valor por defecto del modelo (sin fuente: no autoriza cifra))"
+        ],
+        "origin_provenance": {},
+        "origin_etiqueta": "valor por defecto del modelo (sin fuente: no autoriza cifra)"
+      },
+      {
+        "caso": "STATIC_REFERENCE→no habilita",
+        "declaracion": {
+          "origen_tipo": "STATIC_REFERENCE"
+        },
+        "origin": "STATIC_REFERENCE",
+        "origin_declarado": "STATIC_REFERENCE",
+        "origin_gate": false,
+        "origin_blockers": [
+          "origen STATIC_REFERENCE no habilita la valoración (referencia estática (no es una medición de la corrida))"
+        ],
+        "origin_provenance": {},
+        "origin_etiqueta": "referencia estática (no es una medición de la corrida)"
+      },
+      {
+        "caso": "sin origen declarado→MANUAL_CONFIG por defecto",
+        "declaracion": {},
+        "origin": "MANUAL_CONFIG",
+        "origin_declarado": null,
+        "origin_gate": false,
+        "origin_blockers": [
+          "origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)"
+        ],
+        "origin_provenance": {},
+        "origin_etiqueta": "valor declarado a mano por la corrida (sin fuente externa automática)"
+      }
+    ],
+    "tests_versionados": []
+  },
+  "hashes": {
+    "DICTUS_MASTER_HASH": "c804dc02b223c9be905f9e3103ffa54f355b7aba2986759af2ca470c7f7eee71",
+    "DICTUS_MASTER_HASH_abreviado": "C804DC02B223…EE71",
+    "sha256_ejecutivo": "4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c",
+    "sha256_tecnico": "f480e4d78947f7908198421f478de6f71cf9928011f066e8973e436b439ed80e",
+    "run_id": "16019df2-a4fd-44db-860f-e50a5cdd3c2f",
+    "generated_at": "2026-09-30T14:47:40.937950+00:00",
+    "commit_sha": "c22b1b9df6ee734101150aae0751203d2ff71ee9",
+    "commit_sha_del_run": "c22b1b9df6ee734101150aae0751203d2ff71ee9",
+    "old_master_hash": "1843ec22d0d3a1cb2e63881dcbabc5f0ec1d977a0de5f2b3da3e503005aea865",
+    "new_master_hash": "c804dc02b223c9be905f9e3103ffa54f355b7aba2986759af2ca470c7f7eee71",
+    "changed": true,
+    "old_sha256_ejecutivo": "7223d0c09f809896d36481ba443037845308b8024eec4233581036009c0d3a32",
+    "new_sha256_ejecutivo": "4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c",
+    "sha256_ejecutivo_changed": true,
+    "old_sha256_tecnico": "33265085a0b154d4f44587f55d890af7baa7696d0cb63b7dfcc4229595ad0bac",
+    "new_sha256_tecnico": "f480e4d78947f7908198421f478de6f71cf9928011f066e8973e436b439ed80e",
+    "sha256_tecnico_changed": true,
+    "origen_de_los_sha256_old": "medido con hashlib.sha256 antes de regenerar el Golden en esta tarea (los PDFs no se versionan y el pack anterior no está en git)",
+    "old_run_id": "a02a3c05-4887-4309-aa8f-51f8cc796a17",
+    "old_generated_at": "2026-09-28T20:47:36.354726+00:00",
+    "cambio_de_decision_material": true,
+    "decision_anterior_HEAD": {
+      "gate_state": null,
+      "decision": "INFORMACIÓN VERIFICADA",
+      "reason": "La valoración está autorizada y se imprime con su método y vigencia.",
+      "blocking_conditions": []
+    },
+    "decision_actual": {
+      "gate_state": "CLOSED",
+      "decision": "NO EMITIR VALORACIÓN",
+      "reason": "La valoración NO está autorizada en esta corrida: el origen de la tasa es MANUAL_CONFIG y su procedencia es INSUFICIENTE para autorizar una cifra (se exige fuente externa citada o cálculo de fuentes citadas, con fecha y sha256). No se emite cifra y se declaran los bloqueos reales.",
+      "blocking_conditions": [
+        "no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable"
+      ]
+    },
+    "nota": "cambio_de_decision_material compara la decisión del VALUATION_GATE (gate_state + decision + reason + blocking_conditions) entre la corrida anterior registrada en HEAD y la corrida actual del folio. Los valores `old` de `master_hash`/`run_id`/`generated_at` salen del manifest versionado en HEAD; los de los SHA-256 de los PDFs son la medición registrada en SHA256_PDF_ANTERIOR (no hay fuente en git: los PDFs no se versionan).",
+    "regla_del_pack": "Si la decisión material cambió y el master hash NO cambió ⇒ FAIL. Aquí: decisión material CAMBIÓ y master hash SÍ cambió."
+  },
+  "lonja_sweep": {
+    "A_mencion_prohibida": [
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:19",
+        "text": "entidad: \"Lonja de Propiedad Raíz de Barranquilla\"",
+        "motivo": "nombra a la Lonja como entidad proveedora"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:205",
+        "text": "# La Lonja declara los valores del suelo por sector. Estos pueden alinearse",
+        "motivo": "atribuye a la Lonja la declaración de los valores"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:218",
+        "text": "fuente: \"Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial\"",
+        "motivo": "atribuye la tasa a «Lonja BAQ referencial»"
+      },
+      {
+        "target": "executive_document_model",
+        "file_line": "EXECUTIVE_DOCUMENT_MODEL.json:939",
+        "text": "\"source_m2\": \"Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial\",",
+        "motivo": "atribuye la tasa a «Lonja BAQ referencial»"
+      },
+      {
+        "target": "executive_document_model",
+        "file_line": "EXECUTIVE_DOCUMENT_MODEL.json:990",
+        "text": "\"source\": \"Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial\",",
+        "motivo": "atribuye la tasa a «Lonja BAQ referencial»"
+      },
+      {
+        "target": "executive_document_model",
+        "file_line": "EXECUTIVE_DOCUMENT_MODEL.json:1000",
+        "text": "\"source\": \"Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial\",",
+        "motivo": "atribuye la tasa a «Lonja BAQ referencial»"
+      },
+      {
+        "target": "executive_document_model",
+        "file_line": "EXECUTIVE_DOCUMENT_MODEL.json:1061",
+        "text": "\"Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial\",",
+        "motivo": "atribuye la tasa a «Lonja BAQ referencial»"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:161",
+        "text": "\"LONJA_MARKET_BAQ\": CORE_MARKET,",
+        "motivo": "declara la Lonja con rol de fuente CORE_MARKET"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:198",
+        "text": "\"LONJA_MARKET_BAQ\": AUTHORIZED_FALLBACK,",
+        "motivo": "declara la Lonja como ruta de adquisición autorizada"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:474",
+        "text": "{\"domain\": \"mercado\", \"fuente\": \"LONJA_MARKET_BAQ\", \"atributo\": \"mercado\",",
+        "motivo": "declara la Lonja como `fuente` del dominio mercado"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:111",
+        "text": "FUENTE_LONJA = \"LONJA_MARKET_BAQ\"",
+        "motivo": "identifica la Lonja como FUENTE"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:631",
+        "text": "if sid == FUENTE_LONJA:",
+        "motivo": "identifica la Lonja como FUENTE"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:643",
+        "text": "attribution_text=ATRIBUCION_LONJA,",
+        "motivo": "construye bloque de licencia/atribución de la Lonja"
+      }
+    ],
+    "B_mencion_legitima": [
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:2",
+        "text": "# DECLARACIÓN METODOLÓGICA — LONJA DE PROPIEDAD RAÍZ DE BARRANQUILLA",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:5",
+        "text": "# Este archivo declara la metodología que la Lonja BAQ aplica a sus avalúos",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:9",
+        "text": "# Quien firma este archivo: Junta Técnica de Avalúos Corporativos de la Lonja BAQ",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:20",
+        "text": "representante_legal: \"[A declarar por la Lonja]\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:21",
+        "text": "presidente_comite_tecnico: \"[A declarar por la Lonja]\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:35",
+        "text": "# La Lonja decide qué métodos aplicar y en qué orden. El motor solo ejecuta",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:54",
+        "text": "activo: false  # La Lonja decide cuándo activarlo (típicamente solo para lotes)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:58",
+        "text": "# 2. REGLA DE CONSOLIDACIÓN DECLARADA POR LA LONJA",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:60",
+        "text": "# La Lonja declara qué peso le da a cada método. El motor NO inventa pesos.",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:62",
+        "text": "autor: \"Junta Técnica de Avalúos Corporativos — Lonja BAQ\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:85",
+        "text": "# La Lonja declara la fuente de costos a usar y el factor de actualización.",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:131",
+        "text": "# La Lonja declara las tasas de capitalización por tipología y zona.",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:135",
+        "text": "# Tasas por tipología — La Lonja edita estos valores trimestralmente",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:175",
+        "text": "# Corrimiento oferta-cierre declarado por la Lonja",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:176",
+        "text": "# La Lonja tiene los datos de cierre que el mercado abierto no tiene",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:181",
+        "text": "nota: \"Estos porcentajes vienen de las series cerradas de la Lonja BAQ. Sinergia no los inventa.\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:242",
+        "text": "- rol: \"representante_legal_lonja\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:243",
+        "text": "nombre_placeholder: \"[Representante Legal Lonja BAQ]\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:253",
+        "text": "incluir_logo_lonja: true",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "market_input_yaml",
+        "file_line": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml:254",
+        "text": "incluir_numero_consecutivo_lonja: true",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "manifest",
+        "file_line": "DICTUS_MANIFEST_040-646406.json:1586",
+        "text": "\"market_methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "manifest",
+        "file_line": "DICTUS_MANIFEST_040-646406.json:1700",
+        "text": "\"market_methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "manifest",
+        "file_line": "DICTUS_MANIFEST_040-646406.json:1703",
+        "text": "\"market_methodology_file\": \"lonja_baq_metodologia.yaml\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "manifest",
+        "file_line": "DICTUS_MANIFEST_040-646406.json:1719",
+        "text": "\"methodology_file\": \"lonja_baq_metodologia.yaml\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "manifest",
+        "file_line": "DICTUS_MANIFEST_040-646406.json:1721",
+        "text": "\"methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "manifest",
+        "file_line": "DICTUS_MANIFEST_040-646406.json:1731",
+        "text": "\"market_methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "manifest",
+        "file_line": "DICTUS_MANIFEST_040-646406.json:1734",
+        "text": "\"market_methodology_file\": \"lonja_baq_metodologia.yaml\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "manifest",
+        "file_line": "DICTUS_MANIFEST_040-646406.json:1752",
+        "text": "\"market_methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "manifest",
+        "file_line": "DICTUS_MANIFEST_040-646406.json:2920",
+        "text": "\"methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "manifest",
+        "file_line": "DICTUS_MANIFEST_040-646406.json:4771",
+        "text": "\"methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "run_state",
+        "file_line": "DICTUS_RUN_STATE_040-646406.json:1307",
+        "text": "\"market_methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "run_state",
+        "file_line": "DICTUS_RUN_STATE_040-646406.json:1310",
+        "text": "\"market_methodology_file\": \"lonja_baq_metodologia.yaml\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "run_state",
+        "file_line": "DICTUS_RUN_STATE_040-646406.json:1326",
+        "text": "\"methodology_file\": \"lonja_baq_metodologia.yaml\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "run_state",
+        "file_line": "DICTUS_RUN_STATE_040-646406.json:1328",
+        "text": "\"methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "run_state",
+        "file_line": "DICTUS_RUN_STATE_040-646406.json:1338",
+        "text": "\"market_methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "run_state",
+        "file_line": "DICTUS_RUN_STATE_040-646406.json:1341",
+        "text": "\"market_methodology_file\": \"lonja_baq_metodologia.yaml\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "run_state",
+        "file_line": "DICTUS_RUN_STATE_040-646406.json:1359",
+        "text": "\"market_methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "run_state",
+        "file_line": "DICTUS_RUN_STATE_040-646406.json:1663",
+        "text": "\"metodologia_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "executive_document_model",
+        "file_line": "EXECUTIVE_DOCUMENT_MODEL.json:1120",
+        "text": "\"market_methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_arhiax_re.py",
+        "file_line": "tests/test_arhiax_re.py:89",
+        "text": "def test_valoracion_metodologia_lonja_baq_yaml(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_dictus_20c_fidelidad.py",
+        "file_line": "tests/test_dictus_20c_fidelidad.py:162",
+        "text": "\"market_methodology_id\": \"lonja_prueba\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_dictus_20c_fidelidad.py",
+        "file_line": "tests/test_dictus_20c_fidelidad.py:307",
+        "text": "# DOCTRINA \"la Lonja no es fuente\" (decisión de producto): el IDENTIFICADOR",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_dictus_20c_fidelidad.py",
+        "file_line": "tests/test_dictus_20c_fidelidad.py:321",
+        "text": "self.assertEqual(mc[\"market_methodology_id\"], \"lonja_prueba\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_dictus_20c_fidelidad.py",
+        "file_line": "tests/test_dictus_20c_fidelidad.py:324",
+        "text": "self.assertNotIn(\"LONJA\", self._plano())",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_dictus_20d_decision.py",
+        "file_line": "tests/test_dictus_20d_decision.py:101",
+        "text": "\"market_methodology_id\": \"lonja_prueba\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:24",
+        "text": "040-646406 se verifican por TEXTO: sin «Lonja» como fuente, sin estados",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:279",
+        "text": "self.assertEqual(am.entidad_declarada(\"Lonja de Propiedad Raíz de Barranquilla\"),",
+        "motivo": "test-guarda que reproduce el literal prohibido para PROHIBIRLO"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:413",
+        "text": "# ── P8.a · sin «Lonja» como fuente ───────────────────────────────────────",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:414",
+        "text": "def test_assert_lonja_no_esta_en_el_ejecutivo(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:415",
+        "text": "self.assertNotIn(\"Lonja\", self.texto_ejecutivo)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:416",
+        "text": "self.assertNotIn(\"lonja\", self.texto_ejecutivo.lower())",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:418",
+        "text": "def test_assert_lonja_no_esta_en_el_tecnico(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:419",
+        "text": "self.assertNotIn(\"Lonja\", self.texto_tecnico)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:420",
+        "text": "self.assertNotIn(\"lonja\", self.texto_tecnico.lower())",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:422",
+        "text": "def test_assert_lonja_no_se_presenta_como_fuente_en_los_artefactos(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:425",
+        "text": "self.assertNotIn(\"Lonja\", plano,",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:426",
+        "text": "f\"{etiqueta}: la Lonja vuelve a presentarse como fuente\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_dictus_semantica_atributos.py",
+        "file_line": "tests/test_dictus_semantica_atributos.py:428",
+        "text": "self.assertNotIn('\"methodology_entity\": \"Lonja', plano)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_expansion_pasto.py",
+        "file_line": "tests/test_expansion_pasto.py:10",
+        "text": "y NO aplica la Lonja de Barranquilla (regla de honestidad).",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_expansion_pasto.py",
+        "file_line": "tests/test_expansion_pasto.py:94",
+        "text": "def test_valoracion_alert_pasto_no_menciona_lonja_baq(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_expansion_pasto.py",
+        "file_line": "tests/test_expansion_pasto.py:98",
+        "text": "self.assertNotIn(\"Lonja de Barranquilla\", txt)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_golden_evidence_pack.py",
+        "file_line": "tests/test_golden_evidence_pack.py:10",
+        "text": "4. `Lonja purge`                — 0 ocurrencias en los dos PDF entregados.",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_golden_evidence_pack.py",
+        "file_line": "tests/test_golden_evidence_pack.py:235",
+        "text": "class TestLonjaPurge(unittest.TestCase):",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_golden_evidence_pack.py",
+        "file_line": "tests/test_golden_evidence_pack.py:236",
+        "text": "\"\"\"Frente 4 · la Lonja no es fuente y no aparece en lo entregado.\"\"\"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_golden_evidence_pack.py",
+        "file_line": "tests/test_golden_evidence_pack.py:238",
+        "text": "def test_lonja_no_aparece_en_los_dos_pdf(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_golden_evidence_pack.py",
+        "file_line": "tests/test_golden_evidence_pack.py:243",
+        "text": "self.assertEqual(texto.count(\"Lonja\"), 0,",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_golden_evidence_pack.py",
+        "file_line": "tests/test_golden_evidence_pack.py:244",
+        "text": "f\"{ruta.name} menciona «Lonja»: {texto.count('Lonja')} vez/veces\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_golden_evidence_pack.py",
+        "file_line": "tests/test_golden_evidence_pack.py:434",
+        "text": "self.assertEqual(self.full.count(\"Lonja\"), 0)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_golden_evidence_pack.py",
+        "file_line": "tests/test_golden_evidence_pack.py:462",
+        "text": "self.assertEqual(self.full.count(\"Lonja\"), 0)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:2",
+        "text": "\"\"\"GUARDA DE DOCTRINA — la Lonja NO es una fuente de datos.",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:5",
+        "text": "`api/source_licenses_v2.py::PARTNERS_INSTITUCIONALES`): la Lonja **no aporta datos a",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:12",
+        "text": "Lonja. Hoy no existe ninguna fuente real que pueda marcarse como tal, de modo que la",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:16",
+        "text": "problemática tal como la declaró el artefacto local (`+ Lonja BAQ referencial`) y el",
+        "motivo": "test-guarda que reproduce el literal prohibido para PROHIBIRLO"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:17",
+        "text": "identificador sellado `lonja_baq_metodologia`, y se extrae el TEXTO de las páginas con",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:18",
+        "text": "`pypdf`. Ninguna página puede contener «Lonja» (ni en minúsculas), y la etiqueta",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:23",
+        "text": "comentarios): ninguno puede contener «Lonja».",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:25",
+        "text": "Los identificadores sellados (`SOURCE_ID=\"LONJA_MARKET_BAQ\"`, `METHODOLOGY_ID`) NO se",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:49",
+        "text": "SALIDA = ROOT / \"tmp_no_lonja\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:55",
+        "text": "\"(unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial\")",
+        "motivo": "test-guarda que reproduce el literal prohibido para PROHIBIRLO"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:70",
+        "text": "y = mctx._load_lonja()",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:95",
+        "text": "run_id=\"qa-no-lonja\", folio=FOLIO,",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:109",
+        "text": "\"methodology_entity\": \"Lonja de Propiedad Raíz de Barranquilla\",",
+        "motivo": "test-guarda que reproduce el literal prohibido para PROHIBIRLO"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:125",
+        "text": "class TestEjecutivoNoAfirmaFuenteLonja(unittest.TestCase):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:126",
+        "text": "\"\"\"El ejecutivo RENDERIZADO no puede contener «Lonja» en ninguna página.\"\"\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:135",
+        "text": "def test_ninguna_pagina_del_ejecutivo_nombra_la_lonja(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:137",
+        "text": "self.assertNotIn(\"lonja\", pagina.lower(),",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:139",
+        "text": "f\"fuente Lonja: {pagina[:400]!r}\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:144",
+        "text": "\"lonja_baq_metodologia\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:146",
+        "text": "self.assertNotIn(\"LONJA_BAQ_METODOLOGIA\", self.plano)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:159",
+        "text": "self.assertNotIn(\"lonja\", crudo.lower())",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:161",
+        "text": "self.assertNotIn(\"lonja\", \" \".join(str(valor[\"metodologia\"]).split()).lower())",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:166",
+        "text": "def test_el_run_state_declara_el_mercado_sin_fuente_lonja(self):",
+        "motivo": "test-guarda que reproduce el literal prohibido para PROHIBIRLO"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:171",
+        "text": "self.assertNotIn(\"lonja\", str(articulo.get(\"fuente\")).lower())",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:176",
+        "text": "class TestTecnicoNoAfirmaFuenteLonja(unittest.TestCase):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:185",
+        "text": "def test_la_alerta_de_valoracion_no_nombra_la_lonja(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:186",
+        "text": "self.assertNotIn(\"Lonja\", self.alerta)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:187",
+        "text": "self.assertNotIn(\"lonja\", self.alerta.lower())",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:191",
+        "text": "def test_los_modulos_de_documento_no_tienen_literales_con_lonja(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:194",
+        "text": "self.assertNotIn(\"Lonja\", literal,",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:195",
+        "text": "f\"api/{nombre}.py:{linea} vuelve a nombrar la Lonja en un \"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:198",
+        "text": "def test_el_texto_del_tecnico_sobre_mercado_no_atribuye_practica_a_la_lonja(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:201",
+        "text": "for aguja in (\"practica de la Lonja\", \"Lonja de Barranquilla\", \"Lonja/IGAC\"):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:226",
+        "text": "def test_el_registro_no_declara_la_lonja_como_fuente(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:229",
+        "text": "self.assertNotIn(\"LONJA_MARKET_BAQ\", reg[\"sources\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:230",
+        "text": "lonja = reg[\"no_fuentes_institucionales\"][\"aliados\"][\"LONJA_BAQ\"]",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:231",
+        "text": "self.assertFalse(lonja[\"es_fuente_de_datos\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:232",
+        "text": "self.assertFalse(lonja[\"en_source_registry\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:234",
+        "text": "def test_el_manifest_no_declara_metadatos_de_fuente_lonja(self):",
+        "motivo": "test-guarda que reproduce el literal prohibido para PROHIBIRLO"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:239",
+        "text": "self.assertFalse([s for s in man[seccion] if \"LONJA\" in s.upper()], seccion)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:240",
+        "text": "self.assertFalse([s for s in man[\"licenses\"][\"by_source\"] if \"LONJA\" in s.upper()])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:242",
+        "text": "def test_la_matriz_de_cobertura_no_atribuye_el_mercado_a_la_lonja(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:249",
+        "text": "# La columna `source` NO puede ser un `source_id` de la Lonja: se declara que no hay",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_no_lonja_as_source.py",
+        "file_line": "tests/test_no_lonja_as_source.py:252",
+        "text": "self.assertNotIn(\"LONJA\", campos[1].upper())",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_remediacion_03h.py",
+        "file_line": "tests/test_remediacion_03h.py:29",
+        "text": "\"\"\"#16/#17: leer el YAML Lonja y resolver el sector por barrio.\"\"\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_remediacion_03i1.py",
+        "file_line": "tests/test_remediacion_03i1.py:238",
+        "text": "self.assertEqual(m[\"id\"], \"lonja_baq_metodologia\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_acquisition_modes.py",
+        "file_line": "tests/test_source_pack_acquisition_modes.py:193",
+        "text": "self.assertNotIn(\"LONJA_MARKET_BAQ\", self.fuentes)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_acquisition_modes.py",
+        "file_line": "tests/test_source_pack_acquisition_modes.py:378",
+        "text": "def test_el_snapshot_de_la_lonja_esta_vencido_por_su_propia_vigencia(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_acquisition_modes.py",
+        "file_line": "tests/test_source_pack_acquisition_modes.py:380",
+        "text": "vig = acq.evaluar_vigencia(self._snap(\"SNAP_LONJA_METODOLOGIA\"), self.ref,",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_acquisition_modes.py",
+        "file_line": "tests/test_source_pack_acquisition_modes.py:387",
+        "text": "if self._en_registro(\"LONJA_MARKET_BAQ\"):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_acquisition_modes.py",
+        "file_line": "tests/test_source_pack_acquisition_modes.py:388",
+        "text": "self.assertEqual(self._modo(\"LONJA_MARKET_BAQ\")[\"snapshots_usables\"], [])",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_acquisition_modes.py",
+        "file_line": "tests/test_source_pack_acquisition_modes.py:397",
+        "text": "if not self._en_registro(\"LONJA_MARKET_BAQ\"):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_acquisition_modes.py",
+        "file_line": "tests/test_source_pack_acquisition_modes.py:405",
+        "text": "self.assertEqual([v[\"artifact_id\"] for v in vencidos], [\"SNAP_LONJA_METODOLOGIA\"])",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:17",
+        "text": "· La Lonja **NO es una fuente**: ni en el catálogo, ni con bloque de licencia, ni con",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:432",
+        "text": "# 6 · LA LONJA **NO ES UNA FUENTE**",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:434",
+        "text": "class TestLonjaNoEsFuente(unittest.TestCase):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:436",
+        "text": "def test_no_hay_ningun_artefacto_de_lonja_en_este_bloque(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:437",
+        "text": "for ruta in (\"api/lonja_contract.py\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:438",
+        "text": "\"docs/source_pack/LONJA_DATASET_CONTRACT.md\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:439",
+        "text": "\"docs/source_pack/lonja_dataset_contract_v1.json\"):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:441",
+        "text": "f\"no debe existir un artefacto de Lonja: {ruta}\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:443",
+        "text": "def test_la_lonja_no_esta_en_el_catalogo_de_licencias(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:445",
+        "text": "self.assertFalse([sid for sid in ids if \"LONJA\" in sid.upper()])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:446",
+        "text": "self.assertFalse(v.es_fuente_de_datos(\"LONJA_MARKET_BAQ\"))",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:447",
+        "text": "self.assertFalse(v.es_fuente_de_datos(\"LONJA_BAQ\"))",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:448",
+        "text": "# El catálogo v2 sólo reconoce sus propias fuentes (y ninguna es la Lonja).",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:453",
+        "text": "self.assertTrue(v.es_aliado_institucional(\"LONJA_BAQ\"))",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:454",
+        "text": "partner = v.partners_institucionales()[\"LONJA_BAQ\"]",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:466",
+        "text": "lonja = v.auditoria_no_lonja()",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:467",
+        "text": "self.assertTrue(lonja[\"ok\"], lonja[\"sospechosos\"])",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:468",
+        "text": "self.assertFalse(lonja[\"lonja_como_fuente\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:469",
+        "text": "self.assertEqual(lonja[\"sospechosos\"], [])",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:470",
+        "text": "self.assertEqual(lonja[\"partners_institucionales\"], [\"LONJA_BAQ\"])",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:471",
+        "text": "self.assertEqual(lonja[\"source_ids\"], sorted(v.SOURCE_IDS))",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:474",
+        "text": "partner = v.partners_institucionales()[\"LONJA_BAQ\"]",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:481",
+        "text": "self.assertFalse(resumen[\"lonja_como_fuente\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:482",
+        "text": "self.assertEqual(resumen[\"aliados_institucionales\"], [\"LONJA_BAQ\"])",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:484",
+        "text": "def test_la_lonja_no_tiene_estado_de_licencia_ni_permisos(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:485",
+        "text": "for candidato in (\"LONJA_BAQ\", \"LONJA_MARKET_BAQ\", \"LONJA\"):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:491",
+        "text": "self.assertFalse([sid for sid in matriz if \"LONJA\" in sid.upper()])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:497",
+        "text": "for frase in (\"la Lonja no es una fuente de datos\",",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:507",
+        "text": "`LONJA_MARKET_BAQ` está FUERA de `sources` y declarada como aliado institucional, así",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:513",
+        "text": "self.assertNotIn(\"LONJA_MARKET_BAQ\", registro[\"sources\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:514",
+        "text": "lonja = registro[\"no_fuentes_institucionales\"][\"aliados\"][\"LONJA_BAQ\"]",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:515",
+        "text": "self.assertFalse(lonja[\"es_fuente_de_datos\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:516",
+        "text": "self.assertFalse(lonja[\"aporta_datos_a_dictus\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:517",
+        "text": "self.assertFalse(lonja[\"en_source_registry\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:518",
+        "text": "self.assertEqual(lonja[\"product_role\"], v.PRODUCT_ROLE_NOT_A_SOURCE)",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_licenses.py",
+        "file_line": "tests/test_source_pack_licenses.py:519",
+        "text": "self.assertIsNone(lonja[\"authority_class\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:5",
+        "text": "· F. **`LONJA_MARKET_BAQ` NO es una fuente de datos** (decisión de producto: la Lonja no",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:38",
+        "text": "RUTA_TABLA = ROOT / \"docs\" / \"source_pack\" / \"lonja_market_baq_v1.json\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:114",
+        "text": "self.assertEqual(ms.SOURCE_ID, \"LONJA_MARKET_BAQ\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:115",
+        "text": "self.assertEqual(ms.SOURCE_ID_HISTORICO, \"LONJA_MARKET_BAQ\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:121",
+        "text": "# La identidad declarada ya no afirma una institución proveedora ni una Lonja.",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:123",
+        "text": "self.assertNotIn(\"Lonja\", texto)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:124",
+        "text": "self.assertNotIn(\"LONJA\", texto)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:139",
+        "text": "lonja = no_fuentes[\"aliados\"][\"LONJA_BAQ\"]",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:140",
+        "text": "self.assertEqual(lonja[\"source_id_historico\"], ms.SOURCE_ID)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:141",
+        "text": "self.assertFalse(lonja[\"es_fuente_de_datos\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:142",
+        "text": "self.assertFalse(lonja[\"en_source_registry\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:143",
+        "text": "self.assertEqual(lonja[\"product_role\"], ms.PRODUCT_ROLE)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:144",
+        "text": "self.assertTrue(lonja[\"retirada_del_registro\"])",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:145",
+        "text": "self.assertIsNone(lonja[\"authority_class\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:189",
+        "text": "mc._load_lonja().get(\"valor_suelo_por_sector\") or {}, default=str))",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:379",
+        "text": "# La procedencia declarada NO atribuye el valor a la Lonja. (El identificador",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:380",
+        "text": "# sellado `LONJA_MARKET_BAQ` y la explicación de la doctrina sí pueden nombrarla:",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:382",
+        "text": "self.assertNotIn(\"Lonja\", prov[\"source_name\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:383",
+        "text": "self.assertNotIn(\"Lonja\", prov[\"institution\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:384",
+        "text": "self.assertNotIn(\"Lonja\", prov[\"license_or_terms\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:385",
+        "text": "self.assertNotIn(\"Lonja\", r[\"payload_normalized\"][\"fuente_declarada\"])",
+        "motivo": "test-guarda que reproduce el literal prohibido para PROHIBIRLO"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:404",
+        "text": "# La fuente declarada por el artefacto local ya no atribuye nada a la Lonja.",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:405",
+        "text": "self.assertNotIn(\"Lonja\", json.dumps(declarado, ensure_ascii=False))",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:498",
+        "text": "# Nada de esto se atribuye a la Lonja como fuente del valor.",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_market.py",
+        "file_line": "tests/test_source_pack_market.py:500",
+        "text": "self.assertNotIn(\"Lonja\", declarado[\"fuente_declarada\"])",
+        "motivo": "test-guarda que reproduce el literal prohibido para PROHIBIRLO"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:214",
+        "text": "# DECISIÓN DE PRODUCTO: `mercado` NO tiene fuente de datos (la Lonja no es una",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:424",
+        "text": "def test_la_lonja_esta_fuera_del_registro_como_no_fuente(self):",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:425",
+        "text": "\"\"\"DECISIÓN DE PRODUCTO: la Lonja NO es una fuente de datos.",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:427",
+        "text": "`LONJA_MARKET_BAQ` sale de `sources` (ya no es `source_id` del registro) y queda",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:432",
+        "text": "self.assertNotIn(\"LONJA_MARKET_BAQ\", fuentes)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:435",
+        "text": "lonja = (no_fuentes.get(\"aliados\") or {})[\"LONJA_BAQ\"]",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:436",
+        "text": "self.assertFalse(lonja[\"es_fuente_de_datos\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:437",
+        "text": "self.assertFalse(lonja[\"aporta_datos_a_dictus\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:438",
+        "text": "self.assertFalse(lonja[\"en_source_registry\"])",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:439",
+        "text": "self.assertEqual(lonja[\"product_role\"], \"NOT_A_SOURCE\")",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:440",
+        "text": "self.assertEqual(lonja[\"source_id_historico\"], \"LONJA_MARKET_BAQ\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:461",
+        "text": "# DECISIÓN DE PRODUCTO: `LONJA_MARKET_BAQ` ya NO es una fuente del registro (la",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:462",
+        "text": "# Lonja no aporta datos a DICTUS). No tiene `authority_class` que afirmar.",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_pipeline.py",
+        "file_line": "tests/test_source_pack_pipeline.py:463",
+        "text": "self.assertNotIn(\"LONJA_MARKET_BAQ\", fuentes)",
+        "motivo": "aserción de PROHIBICIÓN (exige que la Lonja NO sea la fuente/entidad)"
+      },
+      {
+        "target": "tests/test_source_pack_resolution_ladder.py",
+        "file_line": "tests/test_source_pack_resolution_ladder.py:154",
+        "text": "`mercado` está VACÍO por decisión de producto (la Lonja no es una fuente de datos),",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_resolution_ladder.py",
+        "file_line": "tests/test_source_pack_resolution_ladder.py:167",
+        "text": "\"\"\"DOCTRINA: la Lonja no es una fuente de datos ⇒ el escalón de mercado está VACÍO.\"\"\"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "tests/test_source_pack_resolution_ladder.py",
+        "file_line": "tests/test_source_pack_resolution_ladder.py:523",
+        "text": "\"mercado\": {\"LONJA_MARKET_BAQ\": _estado(\"LONJA_MARKET_BAQ\", ds.FUENTE_NO_DISPONIBLE)},",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "tests/test_source_pack_resolution_ladder.py",
+        "file_line": "tests/test_source_pack_resolution_ladder.py:817",
+        "text": "# datos (`mercado`: la Lonja no es una fuente). Entonces la resolución",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:191",
+        "text": "#                           oficial normalizado; metodología de la Lonja: documento",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:257",
+        "text": "(\"LONJA_\", \"MERCADO\"),",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:344",
+        "text": "\"artifact_id\": \"SNAP_LONJA_METODOLOGIA\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:345",
+        "text": "\"ruta\": (\"motor_tma_lonja_baq_v1.0/motor_tma_lonja_baq_v1.0/lonja_layer/\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:346",
+        "text": "\"lonja_baq_metodologia.yaml\"),",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:349",
+        "text": "\"fuentes\": (\"LONJA_MARKET_BAQ\",),",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:357",
+        "text": "\"LONJA_MARKET_BAQ (declarado NOT_A_SOURCE y fuera del Source \"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:427",
+        "text": "\"motor_tma_lonja_baq_v1.0\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:1216",
+        "text": "base = {\"methodology_id\": \"lonja_baq_metodologia\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/acquisition.py",
+        "file_line": "api/acquisition.py:2198",
+        "text": "\"histórico sellado LONJA_MARKET_BAQ se conserva declarado NOT_A_SOURCE, fuera del \"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/atribucion_mercado.py",
+        "file_line": "api/atribucion_mercado.py:4",
+        "text": "Decisión de producto (docs/source_pack/INSTITUTIONAL_PARTNERS.md): la **Lonja no es",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/atribucion_mercado.py",
+        "file_line": "api/atribucion_mercado.py:36",
+        "text": "_ATRIBUCION_NO_ACREDITADA = \"lonja\"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/atribucion_mercado.py",
+        "file_line": "api/atribucion_mercado.py:39",
+        "text": "_FRAGMENTO = re.compile(r\"(?i)(?:\\s*(?:\\+|·|;|\\|)\\s*|\\s*,\\s*)?(?:la\\s+)?lonja[^.;|·+]*\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/atribucion_mercado.py",
+        "file_line": "api/atribucion_mercado.py:107",
+        "text": "f\"metodología): {SIN_FUENTE_EXTERNA}. La Lonja no es una fuente de \"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/dictamen_data.py",
+        "file_line": "api/dictamen_data.py:238",
+        "text": "yaml_path = (base_dir.parent / \"motor_tma_lonja_baq_v1.0\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/dictamen_data.py",
+        "file_line": "api/dictamen_data.py:239",
+        "text": "/ \"motor_tma_lonja_baq_v1.0\" / \"lonja_layer\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/dictamen_data.py",
+        "file_line": "api/dictamen_data.py:240",
+        "text": "/ \"lonja_baq_metodologia.yaml\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/dictus_historia.py",
+        "file_line": "api/dictus_historia.py:67",
+        "text": "\"servicio\", \"arcgis\", \"lonja\", \"metodolog\", \"pendiente\", \"sin registrar\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/dictus_historia.py",
+        "file_line": "api/dictus_historia.py:218",
+        "text": "\"metodologia\": [r\"lonja_baq_metodologia@[\\w\\.\\-]+\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/index.py",
+        "file_line": "api/index.py:39",
+        "text": "PAQUETE_ROOT = os.path.join(PROJECT_ROOT, \"motor_tma_lonja_baq_v1.0\", \"motor_tma_lonja_baq_v1.0\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/index.py",
+        "file_line": "api/index.py:42",
+        "text": "LONJA_LAYER = os.path.join(PAQUETE_ROOT, \"lonja_layer\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/index.py",
+        "file_line": "api/index.py:46",
+        "text": "sys.path.insert(0, LONJA_LAYER)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/index.py",
+        "file_line": "api/index.py:82",
+        "text": "DEFAULT_YAML_PATH = Path(LONJA_LAYER) / \"lonja_baq_metodologia.yaml\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/index.py",
+        "file_line": "api/index.py:1006",
+        "text": "# 2. Calcular valor consolidado (referencial; compile_pdf recalcula con Lonja)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_context.py",
+        "file_line": "api/market_context.py:63",
+        "text": "/ \"motor_tma_lonja_baq_v1.0\" / \"motor_tma_lonja_baq_v1.0\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_context.py",
+        "file_line": "api/market_context.py:64",
+        "text": "/ \"lonja_layer\" / \"lonja_baq_metodologia.yaml\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_context.py",
+        "file_line": "api/market_context.py:68",
+        "text": "def _load_lonja(yml_path: Optional[Path] = None) -> Dict[str, Any]:",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_context.py",
+        "file_line": "api/market_context.py:74",
+        "text": "def lonja_metadata(yml: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_context.py",
+        "file_line": "api/market_context.py:76",
+        "text": "y = yml or _load_lonja()",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_context.py",
+        "file_line": "api/market_context.py:94",
+        "text": "METHODOLOGY_ID = \"lonja_baq_metodologia\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_context.py",
+        "file_line": "api/market_context.py:105",
+        "text": "meta = lonja_metadata(_load_lonja(p) if p.exists() else None)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_context.py",
+        "file_line": "api/market_context.py:127",
+        "text": "y = _load_lonja(yml_path)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_context.py",
+        "file_line": "api/market_context.py:128",
+        "text": "meta = lonja_metadata(y)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_context.py",
+        "file_line": "api/market_context.py:206",
+        "text": "# DECISIÓN DE PRODUCTO: la Lonja NO es una fuente de datos. La `fuente`",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:2",
+        "text": "\"\"\"ARHIAX RE — SOURCE PACK v1.0-R1 · `LONJA_MARKET_BAQ`: de fuente formalizada a",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:6",
+        "text": "`api/source_licenses_v2.py::PARTNERS_INSTITUCIONALES`): la **Lonja no es una fuente",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:13",
+        "text": "· `SOURCE_ID = \"LONJA_MARKET_BAQ\"` es un **identificador histórico sellado**: NO se",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:15",
+        "text": "· **`LONJA_MARKET_BAQ` ya no está en el Source Registry** (`sources` de",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:37",
+        "text": "(`docs/source_pack/lonja_market_baq_v1.json`), y esa tabla se GENERA desde el",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:113",
+        "text": "SOURCE_ID = \"LONJA_MARKET_BAQ\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:133",
+        "text": "RUTA_TABLA = DIR_PACK / \"lonja_market_baq_v1.json\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:135",
+        "text": "TABLA_VERSION = \"lonja-market-baq-table/1.0.0\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:141",
+        "text": "Hoy la respuesta es **NO** por decisión de producto: `LONJA_MARKET_BAQ` fue",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:317",
+        "text": "(`lonja_baq_metodologia.yaml`). Cada fila cita su valor declarado",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:322",
+        "text": "metodologia = _mc._load_lonja()          # artefacto real (sin caché)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:377",
+        "text": "\"artefacto\": f\"motor_tma_lonja_baq_v1.0/motor_tma_lonja_baq_v1.0/lonja_layer/\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:818",
+        "text": "\"el Source Registry — la Lonja no es una fuente de datos y no aporta el \"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:844",
+        "text": "vigente. Con la doctrina vigente (`LONJA_MARKET_BAQ` no es una fuente de datos) esto",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:1000",
+        "text": "description=\"LONJA_MARKET_BAQ (identificador histórico, NO una fuente de datos) — \"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/market_sources.py",
+        "file_line": "api/market_sources.py:1003",
+        "text": "help=\"regenera docs/source_pack/lonja_market_baq_v1.json desde el producto\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/pdf_compiler.py",
+        "file_line": "api/pdf_compiler.py:13",
+        "text": "PAQUETE_ROOT = os.path.join(str(PROJECT_ROOT), \"motor_tma_lonja_baq_v1.0\", \"motor_tma_lonja_baq_v1.0\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/pdf_compiler.py",
+        "file_line": "api/pdf_compiler.py:16",
+        "text": "LONJA_LAYER = os.path.join(PAQUETE_ROOT, \"lonja_layer\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/pdf_compiler.py",
+        "file_line": "api/pdf_compiler.py:20",
+        "text": "sys.path.insert(0, LONJA_LAYER)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:84",
+        "text": "RUTA_METODOLOGIA_LONJA = (_DIR_RAIZ / \"motor_tma_lonja_baq_v1.0\" / \"motor_tma_lonja_baq_v1.0\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:85",
+        "text": "/ \"lonja_layer\" / \"lonja_baq_metodologia.yaml\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:121",
+        "text": "ATRIBUCION_LONJA = (\"Artefacto local de metodología de mercado del producto \"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:122",
+        "text": "\"(sin institución proveedora verificada; la Lonja no es una fuente de \"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:240",
+        "text": "\"LONJA_METODOLOGIA_LOCAL\": {",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:242",
+        "text": "\"ruta_local\": str(RUTA_METODOLOGIA_LONJA.relative_to(_DIR_RAIZ)),",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:251",
+        "text": "\"contra una URL pública. DECISIÓN DE PRODUCTO: la Lonja NO es una fuente \"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:540",
+        "text": "ev_lonja = _ev(\"LONJA_METODOLOGIA_LOCAL\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:632",
+        "text": "sha_yaml = _sha256_artefacto(RUTA_METODOLOGIA_LONJA)",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:638",
+        "text": "terms_url=str(RUTA_METODOLOGIA_LONJA.relative_to(_DIR_RAIZ)),",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:639",
+        "text": "consulted_at=ev_lonja.get(\"consulted_at\"), terms_hash=sha_yaml,",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:646",
+        "text": "evidence_ids=[\"LONJA_METODOLOGIA_LOCAL\"],",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:647",
+        "text": "gap_para_verified=(\"Contrato firmado de la Lonja BAQ que autorice \"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses.py",
+        "file_line": "api/source_licenses.py:650",
+        "text": "notes=(\"Artefacto local del producto (NO es una fuente de datos: la Lonja no \"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:34",
+        "text": "4. **La Lonja NO es una fuente.** Este módulo no la declara como `source_id`, ni como",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1098",
+        "text": "# 7 · LA LONJA **NO ES UNA FUENTE** (fuera del Source Registry)",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1100",
+        "text": "# Decisión de producto: la Lonja no aporta datos a DICTUS hoy. No es `source_id`, ni",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1104",
+        "text": "\"LONJA_BAQ\": {",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1105",
+        "text": "\"partner_id\": \"LONJA_BAQ\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1106",
+        "text": "\"nombre\": \"Lonja de Propiedad Raíz de Barranquilla — Junta Técnica de Avalúos\",",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1139",
+        "text": "def auditoria_no_lonja() -> Dict[str, Any]:",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1140",
+        "text": "\"\"\"Comprueba que NINGÚN artefacto de esta pieza declara la Lonja como fuente.\"\"\"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1142",
+        "text": "sospechosos = [sid for sid in ids if \"LONJA\" in sid.upper()]",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1148",
+        "text": "\"lonja_como_fuente\": bool(sospechosos),",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1152",
+        "text": "\"nota\": (\"La Lonja vive como aliado institucional fuera del Source Registry: no \"",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1190",
+        "text": "\"lonja_como_fuente\": False,",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1197",
+        "text": "\"de este módulo bloquea CONTRACT_FROZEN ni OPERATIONAL_READY, y la Lonja no \"",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1232",
+        "text": "lonja = auditoria_no_lonja()",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1233",
+        "text": "if not lonja[\"ok\"]:",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1234",
+        "text": "problemas.append(f\"Lonja declarada como fuente: {lonja['sospechosos']}\")",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_licenses_v2.py",
+        "file_line": "api/source_licenses_v2.py:1235",
+        "text": "return {\"ok\": not problemas, \"problemas\": problemas, \"no_lonja\": lonja,",
+        "motivo": "identificador sellado (METHODOLOGY_ID / SOURCE_ID histórico / ruta)"
+      },
+      {
+        "target": "source_registry/source_resolution.py",
+        "file_line": "api/source_resolution.py:376",
+        "text": "# DECISIÓN DE PRODUCTO: la Lonja NO es una fuente de datos (no aporta el valor por",
+        "motivo": "guarda / test / documentación que declara que NO es fuente"
+      }
+    ],
+    "A_en_artefactos_entregados": [],
+    "acceptance": {
+      "categoria_A_count": 13,
+      "categoria_A_en_entregados": 0,
+      "esperado_en_entregados": 0,
+      "ok": true,
+      "nota": "El criterio se evalúa sobre los ARTEFACTOS ENTREGADOS (ejecutivo, técnico, manifest y run_state de la corrida): ahí debe haber 0 menciones. Las menciones del registro de adquisición (`api/acquisition.py`, `api/source_licenses.py`), del artefacto local de metodología y de los artefactos LEGACY (`dictus_2/`) se listan como observación declarada, con su file:line."
+    }
+  },
+  "origin_audit": {
+    "facts": [
+      {
+        "attribute": "Dirección oficial",
+        "value": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3 · Torre 8 · Apartamento 430",
+        "status": "REQUIERE_VALIDACION",
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "selected_source": {
+          "fuentes": [
+            {
+              "proveedor": "SNR + geoportal municipal",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+              "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+            },
+            {
+              "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+              "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+            }
+          ]
+        },
+        "provenance": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ],
+        "authorized": true,
+        "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+      },
+      {
+        "attribute": "Matrícula",
+        "value": "040-646406",
+        "status": "VERIFICADO",
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "selected_source": {
+          "fuentes": [
+            {
+              "proveedor": "SNR + geoportal municipal",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+              "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+            },
+            {
+              "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+              "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+            }
+          ]
+        },
+        "provenance": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ],
+        "authorized": true,
+        "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+      },
+      {
+        "attribute": "NUPRE",
+        "value": "AFT0005BOHA",
+        "status": "REQUIERE_VALIDACION",
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "selected_source": {
+          "fuentes": [
+            {
+              "proveedor": "SNR + geoportal municipal",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+              "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+            },
+            {
+              "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+              "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+            }
+          ]
+        },
+        "provenance": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ],
+        "authorized": true,
+        "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+      },
+      {
+        "attribute": "Número predial",
+        "value": "080010103000010040001908040002",
+        "status": "REQUIERE_VALIDACION",
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "selected_source": {
+          "fuentes": [
+            {
+              "proveedor": "SNR + geoportal municipal",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+              "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+            },
+            {
+              "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+              "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+            }
+          ]
+        },
+        "provenance": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ],
+        "authorized": true,
+        "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+      },
+      {
+        "attribute": "Unidad (torre / apartamento)",
+        "value": "APARTAMENTO 430 TORRE 8",
+        "status": "REQUIERE_VALIDACION",
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "selected_source": {
+          "fuentes": [
+            {
+              "proveedor": "SNR + geoportal municipal",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+              "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+            },
+            {
+              "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+              "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+            }
+          ]
+        },
+        "provenance": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ],
+        "authorized": true,
+        "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+      },
+      {
+        "attribute": "Área",
+        "value": "58.75 m²",
+        "status": "REQUIERE_VALIDACION",
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "selected_source": {
+          "fuentes": [
+            {
+              "proveedor": "SNR + geoportal municipal",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+              "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+            },
+            {
+              "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+              "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+            }
+          ]
+        },
+        "provenance": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ],
+        "authorized": true,
+        "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+      },
+      {
+        "attribute": "Régimen jurídico",
+        "value": "Propiedad Horizontal",
+        "status": "REQUIERE_VALIDACION",
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "selected_source": {
+          "fuentes": [
+            {
+              "proveedor": "SNR + geoportal municipal",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+              "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+            },
+            {
+              "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+              "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+            }
+          ]
+        },
+        "provenance": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ],
+        "authorized": true,
+        "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+      },
+      {
+        "attribute": "Uso (destino catastral)",
+        "value": "Habitacional",
+        "status": "REQUIERE_VALIDACION",
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "selected_source": {
+          "fuentes": [
+            {
+              "proveedor": "SNR + geoportal municipal",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+              "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+            },
+            {
+              "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+              "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+            }
+          ]
+        },
+        "provenance": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ],
+        "authorized": true,
+        "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+      },
+      {
+        "attribute": "Tipología",
+        "value": "Unidad En Propiedad Horizontal",
+        "status": "REQUIERE_VALIDACION",
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "selected_source": {
+          "fuentes": [
+            {
+              "proveedor": "SNR + geoportal municipal",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+              "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+            },
+            {
+              "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+              "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+            }
+          ]
+        },
+        "provenance": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ],
+        "authorized": true,
+        "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+      }
+    ],
+    "facts_verified": [
+      {
+        "attribute": "Matrícula",
+        "value": "040-646406",
+        "status": "VERIFICADO",
+        "origin": "COMPUTED_FROM_SOURCES",
+        "origin_declarado": "COMPUTED_FROM_SOURCES",
+        "origin_gate": true,
+        "selected_source": {
+          "fuentes": [
+            {
+              "proveedor": "SNR + geoportal municipal",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+              "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+            },
+            {
+              "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+              "fecha": "2026-09-30T14:47:40.937950+00:00",
+              "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+              "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+            }
+          ]
+        },
+        "provenance": [
+          {
+            "proveedor": "SNR + geoportal municipal",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+            "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+          },
+          {
+            "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+            "fecha": "2026-09-30T14:47:40.937950+00:00",
+            "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+            "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+          }
+        ],
+        "authorized": true,
+        "file_line": "api/dictus_secciones.py · _origen_de_hecho() + EVIDENCIAS_IDENTIDAD · manifest.hechos_impresos.identidad.filas"
+      }
+    ],
+    "violaciones": [],
+    "regla_aplicada": "REGLA APLICADA (ajustada de forma explícita y razonada): un hecho impreso como VERIFICADO exige un ORIGEN DECLARADO y AUTORIZADO —`EXTERNAL_SOURCE` o `COMPUTED_FROM_SOURCES`, con procedencia completa (fuentes citadas + fecha + sha256)—. `COMPUTED_FROM_SOURCES` PURO se admite como válido: el hecho de identidad no es un literal del render, es el resultado DETERMINISTA de la resolución canónica de la corrida (`canonical.identidad_canonica`: `identity_verified` se deriva de `resolution_confidence == VERIFIED_UNIT_IDENTITY`) sostenido por dos evidencias SELLADAS de esa misma corrida. Si la procedencia no está completa, `clasificar_origen` degrada el origen y el estado impreso se degrada con él (nunca se borra el hecho).",
+    "acceptance": {
+      "facts_leidos": 9,
+      "verified_count": 1,
+      "disallowed_origin_count": 0,
+      "ok": true,
+      "nota": "origin/selected_source/provenance/authorized se LEEN de `manifest.hechos_impresos.identidad.filas` (artefacto de la corrida), no de una tabla del script."
+    }
+  },
+  "cross_page": {
+    "tabla": [
+      {
+        "attribute": "altura_maxima",
+        "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+        "verdad_token_canonico": "HISTORICAL_CONFLICT",
+        "paginas": {
+          "P4": "HISTORICAL_CONFLICT"
+        },
+        "tokens_presentes": {
+          "PP4": "HISTORICAL_CONFLICT"
+        },
+        "consistent_entre_paginas": true,
+        "coincide_con_la_verdad": true,
+        "discrepancias": [],
+        "nota": "valor canónico: 11"
+      },
+      {
+        "attribute": "amenaza",
+        "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+        "verdad_token_canonico": "HISTORICAL_CONFLICT",
+        "paginas": {
+          "P4": "NO UTILIZAR ESTE DATO COMO DEFINITIVO"
+        },
+        "tokens_presentes": {
+          "PP4": "HISTORICAL_CONFLICT"
+        },
+        "consistent_entre_paginas": true,
+        "coincide_con_la_verdad": true,
+        "discrepancias": [],
+        "nota": "valor canónico: n/d"
+      },
+      {
+        "attribute": "binding_geometria",
+        "verdad_unica_del_expediente": "VERIFICADA",
+        "verdad_token_canonico": "VERIFICADA",
+        "paginas": {
+          "P6": "VERIFICADA"
+        },
+        "tokens_presentes": {
+          "PP6": "VERIFICADA"
+        },
+        "consistent_entre_paginas": true,
+        "coincide_con_la_verdad": true,
+        "discrepancias": [],
+        "nota": "atributo `coordenada` = VALOR de la coordenada que usa la corrida (conflicto histórico del expediente) · atributo `binding_geometria` = ¿la geometría OFICIAL corresponde a la identidad canónica? (VERIFIED). Son DOS atributos: no se comparan entre sí."
+      },
+      {
+        "attribute": "coordenada",
+        "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+        "verdad_token_canonico": "HISTORICAL_CONFLICT",
+        "paginas": {
+          "P4": "NO UTILIZAR ESTE DATO COMO DEFINITIVO"
+        },
+        "tokens_presentes": {
+          "PP4": "HISTORICAL_CONFLICT"
+        },
+        "consistent_entre_paginas": true,
+        "coincide_con_la_verdad": true,
+        "discrepancias": [],
+        "nota": "atributo `coordenada` = VALOR de la coordenada que usa la corrida (conflicto histórico del expediente) · atributo `binding_geometria` = ¿la geometría OFICIAL corresponde a la identidad canónica? (VERIFIED). Son DOS atributos: no se comparan entre sí."
+      },
+      {
+        "attribute": "titulares",
+        "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+        "verdad_token_canonico": "HISTORICAL_CONFLICT",
+        "paginas": {
+          "P4": "NO UTILIZAR ESTE DATO COMO DEFINITIVO"
+        },
+        "tokens_presentes": {
+          "PP4": "HISTORICAL_CONFLICT"
+        },
+        "consistent_entre_paginas": true,
+        "coincide_con_la_verdad": true,
+        "discrepancias": [],
+        "nota": "valor canónico: n/d"
+      },
+      {
+        "attribute": "tratamiento",
+        "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+        "verdad_token_canonico": "HISTORICAL_CONFLICT",
+        "paginas": {
+          "P4": "HISTORICAL_CONFLICT"
+        },
+        "tokens_presentes": {
+          "PP4": "HISTORICAL_CONFLICT"
+        },
+        "consistent_entre_paginas": true,
+        "coincide_con_la_verdad": true,
+        "discrepancias": [],
+        "nota": "valor canónico: Consolidacion"
+      },
+      {
+        "attribute": "uso_pot",
+        "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+        "verdad_token_canonico": "HISTORICAL_CONFLICT",
+        "paginas": {
+          "P4": "NO UTILIZAR ESTE DATO COMO DEFINITIVO"
+        },
+        "tokens_presentes": {
+          "PP4": "HISTORICAL_CONFLICT"
+        },
+        "consistent_entre_paginas": true,
+        "coincide_con_la_verdad": true,
+        "discrepancias": [],
+        "nota": "valor canónico: n/d"
+      }
+    ],
+    "inconsistentes": [],
+    "verdad_unica": {
+      "altura_maxima": "HISTORICAL_CONFLICT",
+      "amenaza": "HISTORICAL_CONFLICT",
+      "coordenada": "HISTORICAL_CONFLICT",
+      "titulares": "HISTORICAL_CONFLICT",
+      "tratamiento": "HISTORICAL_CONFLICT",
+      "uso_pot": "HISTORICAL_CONFLICT",
+      "area": "REQUIERE_VALIDACION",
+      "barrio": "REQUIERE_VALIDACION",
+      "clase_suelo": "REQUIERE_VALIDACION",
+      "destino_economico": "REQUIERE_VALIDACION",
+      "direccion": "REQUIERE_VALIDACION",
+      "estrato": "REQUIERE_VALIDACION",
+      "evidencias": "REQUIERE_VALIDACION",
+      "gravamenes": "REQUIERE_VALIDACION",
+      "localidad": "REQUIERE_VALIDACION",
+      "numero_predial": "REQUIERE_VALIDACION",
+      "nupre": "REQUIERE_VALIDACION",
+      "regimen_juridico": "REQUIERE_VALIDACION",
+      "riesgo": "REQUIERE_VALIDACION",
+      "screening": "REQUIERE_VALIDACION",
+      "unidad": "REQUIERE_VALIDACION",
+      "valor_central": "REQUIERE_VALIDACION",
+      "valor_m2": "REQUIERE_VALIDACION",
+      "binding_geometria": "VERIFICADA"
+    },
+    "acceptance": {
+      "atributos_comparados": 7,
+      "inconsistent_count": 0,
+      "ok": true,
+      "nota": "Cada atributo se compara por su CLAVE CANÓNICA: se contrasta con la verdad única del expediente y, si se imprime en más de una página, entre páginas. Un atributo ausente en una página no cuenta como discrepancia."
+    }
+  },
+  "asserts_stdout": "[PASS] valuation_gate['gate_state'] == 'CLOSED' (con decision 'NO EMITIR VALORACIÓN')\r\n        actual gate_state = 'CLOSED' · decision = 'NO EMITIR VALORACIÓN'\r\n        vocabulario CLOSED/OPEN = True · coexisten ambos campos = True\r\n        DICTUS_MANIFEST_040-646406.json · modelo.decision_gates[VALUATION_GATE]\r\n[PASS] valuation_gate['reason'] explícito y con el ORIGEN del bloqueo\r\n        actual = 'La valoración NO está autorizada en esta corrida: el origen de la tasa es MANUAL_CONFIG y su procedencia es INSUFICIENTE para autorizar una cifra (se exige fuente externa citada o cálculo de fuentes citadas, con fecha y sha256). No se emite cifra y se declaran los bloqueos reales.'\r\n        nombra el origen no habilitante (MANUAL_CONFIG / procedencia insuficiente) = True\r\n[PASS] '399.500.000' not in executive_text\r\n        presente = False\r\n        DICTUS_EJECUTIVO_040-646406.pdf · sha256 = 4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c · ocurrencias = 0\r\n[PASS] '$399' not in executive_text\r\n        presente = False\r\n        DICTUS_EJECUTIVO_040-646406.pdf · sha256 = 4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c · ocurrencias = 0\r\n[PASS] 'Lonja' not in executive_text\r\n        presente = False\r\n        DICTUS_EJECUTIVO_040-646406.pdf · sha256 = 4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c · ocurrencias = 0\r\n[PASS] 'Lonja' not in technical_text (salvo guardas/documentación de NO SOURCE)\r\n        ocurrencias 'Lonja' = 0 en DICTUS_TECNICO_040-646406.pdf\r\n[PASS] no_verified_fact_has_disallowed_origin()\r\n        facts de identidad leídos = 9 · impresos VERIFICADO = 1 · violaciones = 0\r\n        \r\n          ✓ Matrícula = '040-646406' · origin=COMPUTED_FROM_SOURCES · fuentes=2\r\n[PASS] no_cross_page_state_contradictions()\r\n        atributos comparados por clave canónica = 7 · contradicciones entre páginas = 0 · discrepancias con la verdad única del expediente = 0\r\n        \r\n          claves y estados impresos: altura_maxima: P4=HISTORICAL_CONFLICT; amenaza: P4=HISTORICAL_CONFLICT; binding_geometria: P6=VERIFICADA; coordenada: P4=HISTORICAL_CONFLICT; titulares: P4=HISTORICAL_CONFLICT; tratamiento: P4=HISTORICAL_CONFLICT; uso_pot: P4=HISTORICAL_CONFLICT\r\n[PASS] manual_market_input_cannot_open_valuation_gate()\r\n        origin=MANUAL_CONFIG · origin_gate=False\r\n        blockers=['origen MANUAL_CONFIG no habilita la valoración (valor declarado a mano por la corrida (sin fuente externa automática))']\r\n[PASS] model_prior_cannot_open_valuation_gate()\r\n        origin=MODEL_PRIOR · origin_gate=False\r\n        blockers=['origen MODEL_PRIOR no habilita la valoración (valor por defecto del modelo (sin fuente: no autoriza cifra))']\r\n[PASS] computed_from_sources_requires_all_material_inputs_authorized()\r\n        sin procedencia completa: origin=MANUAL_CONFIG gate=False blockers=['origen declarado COMPUTED_FROM_SOURCES SIN procedencia completa (falta: fuentes[] (se exigen >= 2)): se degrada a MANUAL_CONFIG']\r\n        con 2 fuentes completas: origin=COMPUTED_FROM_SOURCES gate=True\r\n\r\nTOTAL = 11 · PASS = 11 · FAIL = 0 · NO EVALUABLE = 0\r\n",
+  "asserts_exit": 0,
+  "test_results": [
+    {
+      "archivo": "tests/test_dictus_semantica_atributos.py",
+      "criterio": "origin propagation + semántica de atributos",
+      "passed": 31,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "31 passed in 0.55s"
+    },
+    {
+      "archivo": "tests/test_no_lonja_as_source.py",
+      "criterio": "Lonja purge",
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "12 passed in 0.53s"
+    },
+    {
+      "archivo": "tests/test_source_pack_market.py",
+      "criterio": "market context / mercado",
+      "passed": 60,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "60 passed in 0.50s"
+    },
+    {
+      "archivo": "tests/test_source_pack_licenses.py",
+      "criterio": "licencias de fuente",
+      "passed": 51,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "51 passed in 2.47s"
+    },
+    {
+      "archivo": "tests/test_source_pack_contract.py",
+      "criterio": "contrato del source pack",
+      "passed": 26,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "26 passed in 0.11s"
+    },
+    {
+      "archivo": "tests/test_source_pack_acquisition_modes.py",
+      "criterio": "modos de adquisición",
+      "passed": 73,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 21,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "73 passed, 21 subtests passed in 41.87s"
+    },
+    {
+      "archivo": "tests/test_source_pack_resolution_ladder.py",
+      "criterio": "escalera de resolución",
+      "passed": 59,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 18,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "59 passed, 18 subtests passed in 0.16s"
+    },
+    {
+      "archivo": "tests/test_source_pack_pipeline.py",
+      "criterio": "pipeline del source pack",
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "36 passed in 1.30s"
+    },
+    {
+      "archivo": "tests/test_dictus_20d_r1_p6.py",
+      "criterio": "valuation gate + Golden executive text (P6)",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 1,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "10 passed, 1 xfailed in 0.66s"
+    },
+    {
+      "archivo": "tests/test_dictus_20c_fidelidad.py",
+      "criterio": "Golden executive text (fidelidad)",
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "20 passed in 0.97s"
+    },
+    {
+      "archivo": "tests/test_golden_evidence_pack.py",
+      "criterio": "origin propagation + valuation gate + market unresolved + Lonja purge + verified origin audit + cross-page consistency + Golden executive/technical text + hash change",
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "30 passed in 1.24s"
+    },
+    {
+      "archivo": "tests/test_dictus_20d_decision.py",
+      "criterio": "valuation gate + decision grammar",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "22 passed in 0.68s"
+    },
+    {
+      "archivo": "tests/test_remediacion_03h2a.py",
+      "criterio": "Golden technical text",
+      "passed": 33,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "33 passed in 20.13s"
+    },
+    {
+      "archivo": "tests/test_dictus_20b_integracion.py",
+      "criterio": "hash change + integracion",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "14 passed in 0.52s"
+    },
+    {
+      "archivo": "tests/test_dictus_20b_r1_entrega_ejecutiva.py",
+      "criterio": "Golden executive text (entrega)",
+      "passed": 26,
+      "failed": 0,
+      "skipped": 0,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "26 passed in 2.32s"
+    },
+    {
+      "archivo": "tests/test_dictus_20_ejecutivo.py",
+      "criterio": "Golden executive text (estructura)",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 1,
+      "xfailed": 0,
+      "xpassed": 0,
+      "errors": 0,
+      "subtests": 0,
+      "exit_code": 0,
+      "fallos": [],
+      "resumen": "22 passed, 1 skipped in 0.20s"
+    }
+  ]
+}

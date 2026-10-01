@@ -1,0 +1,2640 @@
+{
+  "root_url": "https://miciudad.barranquilla.gov.co/gis/rest/services",
+  "root_provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+    "transport": "microlink",
+    "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%3Ff%3Djson&meta=false&data.text.selector=pre",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T14:27:08.937900+00:00",
+    "elapsed_s": 0.9,
+    "attempt_count": 2,
+    "served_from_cache": true,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 500,
+        "bytes": 579,
+        "blocked_marker": false,
+        "error": "HTTPError 500",
+        "at": "2026-09-29T14:27:08.206848+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 1488,
+        "blocked_marker": false,
+        "error": null,
+        "at": "2026-09-29T14:27:08.937886+00:00"
+      }
+    ]
+  },
+  "folders": [
+    {
+      "folder": "ambiente",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente",
+      "ok": false,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T14:54:29.778951+00:00",
+        "elapsed_s": 68.9,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:54:02.837882+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:54:02.962433+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:54:03.890051+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:54:08.267163+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:54:08.389128+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:54:09.292797+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:54:10.031884+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:54:10.769280+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:54:11.682105+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:54:29.778884+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "aplicaciones",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/aplicaciones",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/aplicaciones?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Faplicaciones%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:27:41.848899+00:00",
+        "elapsed_s": 12.5,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 408,
+            "bytes": 24,
+            "blocked_marker": true,
+            "error": "HTTPError 408",
+            "at": "2026-09-29T14:27:40.324652+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1180,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:27:41.848888+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 1
+    },
+    {
+      "folder": "catastro",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:27:53.923450+00:00",
+        "elapsed_s": 12.1,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "error": null,
+            "at": "2026-09-29T14:27:52.648550+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1982,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:27:53.923413+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 15
+    },
+    {
+      "folder": "cultura",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura",
+      "ok": false,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T14:55:38.470458+00:00",
+        "elapsed_s": 68.7,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:55:07.947788+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:55:08.063538+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:55:08.978902+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 502,
+            "bytes": 872,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 502",
+            "at": "2026-09-29T14:55:14.756211+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:55:14.859964+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:55:15.764567+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:55:16.531763+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:55:17.289409+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:55:18.176610+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:55:38.470396+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "economico",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico?f=json",
+        "transport": "allorigins",
+        "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Feconomico%3Ff%3Djson",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:56:42.698350+00:00",
+        "elapsed_s": 64.2,
+        "attempt_count": 8,
+        "served_from_cache": false,
+        "attempts": [
+          {
+            "transport": "direct",
+            "attempt": 3,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:55:59.189441+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 4,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:56:00.160940+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:56:20.454646+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:56:20.561833+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:56:21.495483+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 200,
+            "bytes": 155,
+            "reject_reason": null,
+            "error": null,
+            "at": "2026-09-29T14:56:42.698323+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 2
+    },
+    {
+      "folder": "educacion",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion",
+      "ok": false,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T14:58:16.762626+00:00",
+        "elapsed_s": 94.1,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:57:24.620056+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:57:24.746412+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:57:25.628273+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:57:50.946953+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:57:51.067580+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:57:51.981933+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:58:12.046122+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:58:12.167219+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:58:13.062327+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 200,
+            "bytes": 5492,
+            "reject_reason": "html_block_marker",
+            "error": null,
+            "at": "2026-09-29T14:58:16.762553+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "equidad",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/equidad",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/equidad?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fequidad%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:28:03.578149+00:00",
+        "elapsed_s": 2.6,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 500,
+            "bytes": 579,
+            "blocked_marker": false,
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:28:01.804604+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 2490,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:28:03.578138+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 1
+    },
+    {
+      "folder": "espaciopublico",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fespaciopublico%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:28:05.494450+00:00",
+        "elapsed_s": 1.9,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 500,
+            "bytes": 579,
+            "blocked_marker": false,
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:28:03.745778+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1250,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:28:05.494415+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 1
+    },
+    {
+      "folder": "impuesto",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fimpuesto%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:28:11.235048+00:00",
+        "elapsed_s": 5.7,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 408,
+            "bytes": 24,
+            "blocked_marker": true,
+            "error": "HTTPError 408",
+            "at": "2026-09-29T14:28:10.150733+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1218,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:28:11.235024+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 1
+    },
+    {
+      "folder": "movilidad",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fmovilidad%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:28:14.579643+00:00",
+        "elapsed_s": 3.3,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "error": null,
+            "at": "2026-09-29T14:28:13.412541+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1581,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:28:14.579632+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 7
+    },
+    {
+      "folder": "observatorio",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fobservatorio%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:28:47.618405+00:00",
+        "elapsed_s": 33.0,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "error": null,
+            "at": "2026-09-29T14:28:46.507081+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1848,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:28:47.618391+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 11
+    },
+    {
+      "folder": "ordenamiento",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento",
+      "ok": false,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T14:59:42.351994+00:00",
+        "elapsed_s": 85.6,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:58:56.924846+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:58:57.036931+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:58:57.976298+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:58:58.698893+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:58:59.441575+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:59:00.352521+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:59:20.845906+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:59:20.962384+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:59:21.891771+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:59:42.351921+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "ortofotos",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ortofotos",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ortofotos?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fortofotos%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:29:25.811483+00:00",
+        "elapsed_s": 18.6,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 500,
+            "bytes": 579,
+            "blocked_marker": false,
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:29:24.761065+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 937,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:29:25.811471+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 0
+    },
+    {
+      "folder": "participacionciudadana",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/participacionciudadana",
+      "ok": false,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/participacionciudadana?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T15:01:13.420288+00:00",
+        "elapsed_s": 91.1,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 200,
+            "bytes": 5937,
+            "reject_reason": "html_block_marker",
+            "error": null,
+            "at": "2026-09-29T15:00:09.774528+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:00:09.907399+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:00:10.816468+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:00:30.933103+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:00:31.049958+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:00:31.967795+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:00:52.304064+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:00:52.414197+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:00:53.506223+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:01:13.420265+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "proyectos",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fproyectos%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:29:47.440845+00:00",
+        "elapsed_s": 1.9,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 500,
+            "bytes": 579,
+            "blocked_marker": false,
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:29:45.807757+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1457,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:29:47.440834+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 5
+    },
+    {
+      "folder": "recreacionydeporte",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte",
+      "ok": false,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T15:02:25.164578+00:00",
+        "elapsed_s": 71.7,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:01:36.547688+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:01:36.670083+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:01:37.545353+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 200,
+            "bytes": 5925,
+            "reject_reason": "html_block_marker",
+            "error": null,
+            "at": "2026-09-29T15:01:42.671403+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:01:42.786848+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:01:43.690044+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:02:03.695237+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:02:03.821368+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:02:04.722898+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:02:25.164563+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "riesgos",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos",
+      "ok": false,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T15:03:38.929213+00:00",
+        "elapsed_s": 73.8,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 200,
+            "bytes": 5492,
+            "reject_reason": "html_block_marker",
+            "error": null,
+            "at": "2026-09-29T15:02:50.865748+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:02:50.983246+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:02:51.929591+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:03:12.271268+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:03:12.425401+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:03:13.286211+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 200,
+            "bytes": 5871,
+            "reject_reason": "html_block_marker",
+            "error": null,
+            "at": "2026-09-29T15:03:17.678484+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:03:17.803346+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:03:18.704018+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:03:38.929141+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "salud",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fsalud%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:30:33.568388+00:00",
+        "elapsed_s": 6.9,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "error": null,
+            "at": "2026-09-29T14:30:32.542444+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1284,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:30:33.568377+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 2
+    },
+    {
+      "folder": "seguridad",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fseguridad%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:30:38.059103+00:00",
+        "elapsed_s": 4.5,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "error": null,
+            "at": "2026-09-29T14:30:36.637945+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1296,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:30:38.059093+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 2
+    },
+    {
+      "folder": "SERVICIOS",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/SERVICIOS",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/SERVICIOS?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2FSERVICIOS%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:30:42.011254+00:00",
+        "elapsed_s": 4.0,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "error": null,
+            "at": "2026-09-29T14:30:40.393133+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 937,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:30:42.011238+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 0
+    },
+    {
+      "folder": "serviciospublicos",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fserviciospublicos%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:31:06.440193+00:00",
+        "elapsed_s": 24.4,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "error": null,
+            "at": "2026-09-29T14:31:05.019806+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1448,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:31:06.440182+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 3
+    },
+    {
+      "folder": "sitios",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios",
+      "ok": false,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T15:05:03.918493+00:00",
+        "elapsed_s": 85.0,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:04:10.956989+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:04:11.089848+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:04:12.014689+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 408,
+            "bytes": 24,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 408",
+            "at": "2026-09-29T15:04:21.346667+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:04:21.473591+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:04:22.390794+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:04:42.761754+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:04:42.874292+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:04:43.798400+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:05:03.918414+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "social",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fsocial%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:31:33.584195+00:00",
+        "elapsed_s": 7.7,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "error": null,
+            "at": "2026-09-29T14:31:32.408419+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 1232,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:31:33.584145+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 2
+    },
+    {
+      "folder": "Utilities",
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/Utilities",
+      "ok": true,
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/Utilities?f=json",
+        "transport": "microlink",
+        "transport_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2FUtilities%3Ff%3Djson&meta=false&data.text.selector=pre",
+        "http_status": 200,
+        "fetched_at_utc": "2026-09-29T14:31:43.001412+00:00",
+        "elapsed_s": 9.4,
+        "attempt_count": 2,
+        "served_from_cache": true,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 1,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "error": null,
+            "at": "2026-09-29T14:31:41.648606+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 937,
+            "blocked_marker": false,
+            "error": null,
+            "at": "2026-09-29T14:31:43.001402+00:00"
+          }
+        ]
+      },
+      "subfolders": [],
+      "service_count": 0
+    }
+  ],
+  "services": [
+    {
+      "folder": "aplicaciones",
+      "name": "aplicaciones/imprimir",
+      "type": "GPServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/antiguedadpredios",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/concentracionpredio",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/condicion",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/datosabiertos",
+      "type": "FeatureServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/datosabiertos",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/destinoseconomicos",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/gestionpredial",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/huellaurbana",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/informalidad",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/lotes",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/manzanas",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/medianavalorcatastral",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/propiedadhorizontal",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/sectores",
+      "type": "MapServer"
+    },
+    {
+      "folder": "catastro",
+      "name": "catastro/usoconstruccion",
+      "type": "MapServer"
+    },
+    {
+      "folder": "economico",
+      "name": "economico/hoteles",
+      "type": "MapServer"
+    },
+    {
+      "folder": "economico",
+      "name": "economico/tejidoempresarial",
+      "type": "MapServer"
+    },
+    {
+      "folder": "equidad",
+      "name": "equidad/mujerespropietarias",
+      "type": "MapServer"
+    },
+    {
+      "folder": "espaciopublico",
+      "name": "espaciopublico/infraestructuraespaciopublico",
+      "type": "MapServer"
+    },
+    {
+      "folder": "impuesto",
+      "name": "impuesto/ipu",
+      "type": "MapServer"
+    },
+    {
+      "folder": "movilidad",
+      "name": "movilidad/estacionservicio",
+      "type": "MapServer"
+    },
+    {
+      "folder": "movilidad",
+      "name": "movilidad/influenciavial",
+      "type": "MapServer"
+    },
+    {
+      "folder": "movilidad",
+      "name": "movilidad/infraestructuradetransporte",
+      "type": "MapServer"
+    },
+    {
+      "folder": "movilidad",
+      "name": "movilidad/maritimoyportuario",
+      "type": "MapServer"
+    },
+    {
+      "folder": "movilidad",
+      "name": "movilidad/nodosdetransporte",
+      "type": "MapServer"
+    },
+    {
+      "folder": "movilidad",
+      "name": "movilidad/serviciostransporte",
+      "type": "MapServer"
+    },
+    {
+      "folder": "movilidad",
+      "name": "movilidad/transito",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/areaconstruida",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/arrendamientos",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/avaluocatastral",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/cantidadtransacciones",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/destinotransacciones",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/dinamicatransacciones",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/mecanismosfianaciacion",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/valorcompraventas",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/valoresm2_area",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/valorsuelorural",
+      "type": "MapServer"
+    },
+    {
+      "folder": "observatorio",
+      "name": "observatorio/valorsuelourbano",
+      "type": "MapServer"
+    },
+    {
+      "folder": "proyectos",
+      "name": "proyectos/aotronivel",
+      "type": "MapServer"
+    },
+    {
+      "folder": "proyectos",
+      "name": "proyectos/barriosalaobra",
+      "type": "MapServer"
+    },
+    {
+      "folder": "proyectos",
+      "name": "proyectos/comedorescomunitarios",
+      "type": "MapServer"
+    },
+    {
+      "folder": "proyectos",
+      "name": "proyectos/limpiaylinda",
+      "type": "MapServer"
+    },
+    {
+      "folder": "proyectos",
+      "name": "proyectos/mejoramientovivienda",
+      "type": "MapServer"
+    },
+    {
+      "folder": "salud",
+      "name": "salud/bienestaranimal",
+      "type": "MapServer"
+    },
+    {
+      "folder": "salud",
+      "name": "salud/infraestructurasalud",
+      "type": "MapServer"
+    },
+    {
+      "folder": "seguridad",
+      "name": "seguridad/incidenciasciudadanas",
+      "type": "MapServer"
+    },
+    {
+      "folder": "seguridad",
+      "name": "seguridad/justiciayseguridad",
+      "type": "MapServer"
+    },
+    {
+      "folder": "serviciospublicos",
+      "name": "serviciospublicos/cobertura",
+      "type": "MapServer"
+    },
+    {
+      "folder": "serviciospublicos",
+      "name": "serviciospublicos/infraestructuraservicios",
+      "type": "MapServer"
+    },
+    {
+      "folder": "serviciospublicos",
+      "name": "serviciospublicos/redes",
+      "type": "MapServer"
+    },
+    {
+      "folder": "social",
+      "name": "social/condicionesdevida",
+      "type": "MapServer"
+    },
+    {
+      "folder": "social",
+      "name": "social/demografia",
+      "type": "MapServer"
+    }
+  ],
+  "errors": [
+    {
+      "folder": "ambiente",
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T14:54:29.778951+00:00",
+        "elapsed_s": 68.9,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:54:02.837882+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:54:02.962433+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:54:03.890051+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:54:08.267163+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:54:08.389128+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:54:09.292797+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:54:10.031884+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:54:10.769280+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:54:11.682105+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:54:29.778884+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "cultura",
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T14:55:38.470458+00:00",
+        "elapsed_s": 68.7,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:55:07.947788+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:55:08.063538+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:55:08.978902+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 502,
+            "bytes": 872,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 502",
+            "at": "2026-09-29T14:55:14.756211+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:55:14.859964+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:55:15.764567+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:55:16.531763+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:55:17.289409+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:55:18.176610+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:55:38.470396+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "educacion",
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T14:58:16.762626+00:00",
+        "elapsed_s": 94.1,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:57:24.620056+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:57:24.746412+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:57:25.628273+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:57:50.946953+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:57:51.067580+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:57:51.981933+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:58:12.046122+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:58:12.167219+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:58:13.062327+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 200,
+            "bytes": 5492,
+            "reject_reason": "html_block_marker",
+            "error": null,
+            "at": "2026-09-29T14:58:16.762553+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "ordenamiento",
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T14:59:42.351994+00:00",
+        "elapsed_s": 85.6,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:58:56.924846+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:58:57.036931+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:58:57.976298+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 500,
+            "bytes": 579,
+            "reject_reason": "not_json",
+            "error": "HTTPError 500",
+            "at": "2026-09-29T14:58:58.698893+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:58:59.441575+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:59:00.352521+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:59:20.845906+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T14:59:20.962384+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T14:59:21.891771+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T14:59:42.351921+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "participacionciudadana",
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/participacionciudadana?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T15:01:13.420288+00:00",
+        "elapsed_s": 91.1,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 200,
+            "bytes": 5937,
+            "reject_reason": "html_block_marker",
+            "error": null,
+            "at": "2026-09-29T15:00:09.774528+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:00:09.907399+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:00:10.816468+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:00:30.933103+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:00:31.049958+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:00:31.967795+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:00:52.304064+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:00:52.414197+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:00:53.506223+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:01:13.420265+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "recreacionydeporte",
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T15:02:25.164578+00:00",
+        "elapsed_s": 71.7,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:01:36.547688+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:01:36.670083+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:01:37.545353+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 200,
+            "bytes": 5925,
+            "reject_reason": "html_block_marker",
+            "error": null,
+            "at": "2026-09-29T15:01:42.671403+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:01:42.786848+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:01:43.690044+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:02:03.695237+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:02:03.821368+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:02:04.722898+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:02:25.164563+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "riesgos",
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T15:03:38.929213+00:00",
+        "elapsed_s": 73.8,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 200,
+            "bytes": 5492,
+            "reject_reason": "html_block_marker",
+            "error": null,
+            "at": "2026-09-29T15:02:50.865748+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:02:50.983246+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:02:51.929591+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:03:12.271268+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:03:12.425401+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:03:13.286211+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 200,
+            "bytes": 5871,
+            "reject_reason": "html_block_marker",
+            "error": null,
+            "at": "2026-09-29T15:03:17.678484+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:03:17.803346+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:03:18.704018+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:03:38.929141+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    },
+    {
+      "folder": "sitios",
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios?f=json",
+        "transport": null,
+        "ok": false,
+        "fetched_at_utc": "2026-09-29T15:05:03.918493+00:00",
+        "elapsed_s": 85.0,
+        "attempt_count": 14,
+        "attempts": [
+          {
+            "transport": "allorigins",
+            "attempt": 5,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:04:10.956989+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 6,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:04:11.089848+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 7,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:04:12.014689+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 8,
+            "http_status": 408,
+            "bytes": 24,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 408",
+            "at": "2026-09-29T15:04:21.346667+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 9,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:04:21.473591+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 10,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:04:22.390794+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 11,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:04:42.761754+00:00"
+          },
+          {
+            "transport": "direct",
+            "attempt": 12,
+            "http_status": 403,
+            "bytes": 5493,
+            "reject_reason": "html_block_marker",
+            "error": "HTTPError 403",
+            "at": "2026-09-29T15:04:42.874292+00:00"
+          },
+          {
+            "transport": "microlink",
+            "attempt": 13,
+            "http_status": 429,
+            "bytes": 143,
+            "reject_reason": "not_json",
+            "error": "HTTPError 429",
+            "at": "2026-09-29T15:04:43.798400+00:00"
+          },
+          {
+            "transport": "allorigins",
+            "attempt": 14,
+            "http_status": 522,
+            "bytes": 979,
+            "reject_reason": "proxy_error_envelope",
+            "error": "HTTPError 522",
+            "at": "2026-09-29T15:05:03.918414+00:00"
+          }
+        ],
+        "final_error": "no transport returned a valid ArcGIS JSON body"
+      }
+    }
+  ],
+  "currentVersion": 11.5,
+  "root_folders_raw": [
+    "ambiente",
+    "aplicaciones",
+    "catastro",
+    "cultura",
+    "economico",
+    "educacion",
+    "equidad",
+    "espaciopublico",
+    "impuesto",
+    "movilidad",
+    "observatorio",
+    "ordenamiento",
+    "ortofotos",
+    "participacionciudadana",
+    "proyectos",
+    "recreacionydeporte",
+    "riesgos",
+    "salud",
+    "seguridad",
+    "SERVICIOS",
+    "serviciospublicos",
+    "sitios",
+    "social",
+    "Utilities"
+  ],
+  "root_services_raw": []
+}

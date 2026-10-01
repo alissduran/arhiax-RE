@@ -1,0 +1,210 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Permite identificar los tramos en los que se han ejecutado obras de mejoramiento vial a través del programa Distrital Barrios a la Obra. Bajo esta iniciativa se busca mejorar la movilidad y facilitar el desplazamiento de las comunidades mediante la pavimentación integral en concreto rígido con bordillos y andenes.</span></p></div></div></div>",
+    "mapName": "Barrios a la obra",
+    "description": "Permite identificar los tramos en los que se han ejecutado obras de mejoramiento vial a través del programa Distrital Barrios a la Obra. Bajo esta iniciativa se busca mejorar la movilidad y facilitar el desplazamiento de las comunidades mediante la pavimentación integral en concreto rígido con bordillos y andenes.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Barrios a la obra",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolyline",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4792036.330416748,
+      "ymin": 2768415.618678946,
+      "xmax": 4796191.963802358,
+      "ymax": 2769793.6525477488,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4792810.3179,
+      "ymin": 2765350.3280999996,
+      "xmax": 4807138.3236,
+      "ymax": 2779036.609099999,
+      "zmin": 0,
+      "zmax": 0,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Barrios a la obra",
+      "Author": "",
+      "Comments": "Permite identificar los tramos en los que se han ejecutado obras de mejoramiento vial a través del programa Distrital Barrios a la Obra. Bajo esta iniciativa se busca mejorar la movilidad y facilitar el desplazamiento de las comunidades mediante la pavimentación integral en concreto rígido con bordillos y andenes.",
+      "Subject": "Muestra los tramos de vías en los cuales se han ejecutado obras de mejoramiento vial bajo el programa Distrital Barrios a la Obra",
+      "Category": "",
+      "Version": "3.2.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Mejora,Renovación,Vías,Movilidad,Barrios a la Obra,Obras"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "serviceItemId": "b02524b6ad2040ce88ac87dca7556ab4"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/barriosalaobra/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fproyectos%2Fbarriosalaobra%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:49:58.431531+00:00",
+    "elapsed_s": 154.0,
+    "attempt_count": 19,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 14,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:49:10.857009+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 15,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:49:30.322980+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 16,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:49:30.631911+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 17,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T15:49:30.856772+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 18,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:49:50.803985+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 19,
+        "http_status": 200,
+        "bytes": 3755,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:49:58.431462+00:00"
+      }
+    ]
+  }
+}

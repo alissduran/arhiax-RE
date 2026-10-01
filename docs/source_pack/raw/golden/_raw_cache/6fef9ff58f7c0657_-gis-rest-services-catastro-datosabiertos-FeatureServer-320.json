@@ -1,0 +1,420 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 320,
+    "name": "Manzana",
+    "type": "Feature Layer",
+    "parentLayer": {
+      "id": 300,
+      "name": "Áreas catastrales"
+    },
+    "defaultVisibility": true,
+    "minScale": 10000,
+    "maxScale": 0,
+    "canScaleSymbols": false,
+    "geometryType": "esriGeometryPolygon",
+    "description": "File Geodatabase Feature Class - Polygon (Código, Código del barrio, Nombre)",
+    "copyrightText": "IGAC",
+    "editFieldsInfo": null,
+    "ownershipBasedAccessControlForFeatures": null,
+    "syncCanReturnChanges": false,
+    "relationships": [],
+    "isDataVersioned": false,
+    "isDataArchived": false,
+    "infoInEstimates": [
+      "extent",
+      "count"
+    ],
+    "isDataBranchVersioned": false,
+    "isDataReplicaTracked": false,
+    "isCoGoEnabled": false,
+    "supportsRollbackOnFailureParameter": true,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "supportsValidateSQL": true,
+    "supportsCoordinatesQuantization": true,
+    "supportsQuantizationEditMode": true,
+    "supportsCalculate": true,
+    "supportsASyncCalculate": true,
+    "supportsDurableUrlForSyncModelNone": false,
+    "supportsDatumTransformation": true,
+    "advancedQueryCapabilities": {
+      "supportsPagination": true,
+      "supportsQueryWithDistance": true,
+      "supportsReturningQueryExtent": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsCurrentUserQueries": true,
+      "supportsFullTextSearch": true,
+      "fullTextSearchCapabilities": {
+        "supportsSearchOperator": true,
+        "supportsOperator": false,
+        "supportsSqlExpressionInFullText": true
+      },
+      "fullTextSearchableFields": [],
+      "supportsQueryWithResultType": true,
+      "supportsReturningGeometryCentroid": true,
+      "supportsReturningGeometryEnvelope": true,
+      "supportsSqlExpression": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsQueryAnalytic": true,
+      "supportsTrueCurve": true,
+      "supportedCurveTypes": [
+        "esriGeometryCircularArc",
+        "esriGeometryEllipticArc",
+        "esriGeometryBezier3Curve"
+      ],
+      "supportsQueryWithCacheHint": false
+    },
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": true,
+      "supportsPercentileAnalytic": false
+    },
+    "advancedEditingCapabilities": {
+      "supportedSqlFormatsInCalculate": [
+        "standard"
+      ],
+      "supportsAsyncApplyEdits": true,
+      "supportsApplyEditsbyUploadID": true,
+      "supportedApplyEditsUploadIDFormats": "JSON,PBF"
+    },
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "Shape__Area",
+      "shapeLengthFieldName": "Shape__Length",
+      "units": "esriMeters"
+    },
+    "hasMetadata": true,
+    "extent": {
+      "xmin": 4792078.3941,
+      "ymin": 2765373.6522000004,
+      "xmax": 4807916.4988,
+      "ymax": 2779789.3136,
+      "zmin": 0,
+      "zmax": 0,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "drawingInfo": {
+      "renderer": {
+        "type": "simple",
+        "symbol": {
+          "type": "esriSFS",
+          "style": "esriSFSSolid",
+          "color": [
+            228,
+            227,
+            207,
+            178
+          ],
+          "outline": {
+            "type": "esriSLS",
+            "style": "esriSLSSolid",
+            "color": [
+              0,
+              0,
+              0,
+              255
+            ],
+            "width": 0.3
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": [
+        {
+          "labelExpressionInfo": {
+            "expression": "$feature.codigo",
+            "title": "Custom"
+          },
+          "labelPlacement": "esriServerPolygonPlacementAlwaysHorizontal",
+          "multiPart": "labelLargest",
+          "allowOverrun": true,
+          "deconflictionStrategy": "dynamic",
+          "repeatLabel": false,
+          "useClippedGeometry": true,
+          "stackLabel": true,
+          "stackAlignment": "dynamic",
+          "removeDuplicates": "none",
+          "stackRowLength": 24,
+          "useCodedValues": true,
+          "maxScale": 1000,
+          "minScale": 10000,
+          "name": "Class 1",
+          "priority": -1,
+          "symbol": {
+            "type": "esriTS",
+            "color": [
+              169,
+              0,
+              230,
+              255
+            ],
+            "backgroundColor": null,
+            "borderLineColor": null,
+            "borderLineSize": null,
+            "verticalAlignment": "bottom",
+            "horizontalAlignment": "left",
+            "rightToLeft": false,
+            "angle": 0,
+            "xoffset": 0,
+            "yoffset": 0,
+            "kerning": true,
+            "haloColor": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "haloSize": 1,
+            "font": {
+              "family": "Tahoma",
+              "size": 8,
+              "style": "normal",
+              "weight": "bold",
+              "decoration": "none"
+            }
+          }
+        }
+      ]
+    },
+    "hasM": false,
+    "hasZ": true,
+    "enableZDefaults": false,
+    "supportsVCSProjection": true,
+    "allowGeometryUpdates": true,
+    "allowTrueCurvesUpdates": true,
+    "onlyAllowTrueCurveUpdatesByTrueCurveClients": true,
+    "hasAttachments": false,
+    "supportsApplyEditsWithGlobalIds": true,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "objectIdField": "objectid",
+    "globalIdField": "globalid",
+    "displayField": "codigo",
+    "typeIdField": "",
+    "subtypeField": "",
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID",
+        "domain": null,
+        "editable": false,
+        "nullable": false,
+        "defaultValue": null,
+        "modelName": "objectid"
+      },
+      {
+        "name": "codigo",
+        "type": "esriFieldTypeString",
+        "alias": "Código",
+        "domain": null,
+        "editable": true,
+        "nullable": true,
+        "length": 17,
+        "defaultValue": "0",
+        "modelName": "codigo"
+      },
+      {
+        "name": "nombre",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre",
+        "domain": null,
+        "editable": true,
+        "nullable": true,
+        "length": 50,
+        "defaultValue": "0",
+        "modelName": "nombre"
+      },
+      {
+        "name": "Shape__Area",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_area(shape)",
+        "domain": null,
+        "editable": false,
+        "nullable": true,
+        "defaultValue": null,
+        "modelName": "st_area(shape)",
+        "required": true
+      },
+      {
+        "name": "Shape__Length",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_length(shape)",
+        "domain": null,
+        "editable": false,
+        "nullable": true,
+        "defaultValue": null,
+        "modelName": "st_length(shape)",
+        "required": true
+      },
+      {
+        "name": "globalid",
+        "type": "esriFieldTypeGlobalID",
+        "alias": "GlobalID",
+        "domain": null,
+        "editable": false,
+        "nullable": false,
+        "length": 38,
+        "defaultValue": null,
+        "modelName": "globalid"
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "SHAPE",
+      "domain": null,
+      "editable": true,
+      "nullable": true,
+      "defaultValue": null,
+      "modelName": "shape"
+    },
+    "indexes": [
+      {
+        "name": "r705_sde_rowid_uk",
+        "isAscending": true,
+        "isUnique": true,
+        "description": "",
+        "fields": "objectid"
+      },
+      {
+        "name": "uuid_705",
+        "isAscending": true,
+        "isUnique": true,
+        "description": "",
+        "fields": "globalid"
+      },
+      {
+        "name": "a567_ix1",
+        "isAscending": true,
+        "isUnique": true,
+        "description": "",
+        "fields": "shape"
+      }
+    ],
+    "datesInUnknownTimezone": false,
+    "dateFieldsTimeReference": {
+      "timeZone": "UTC",
+      "timeZoneIANA": "Etc/UTC",
+      "respectsDaylightSaving": false
+    },
+    "preferredTimeReference": null,
+    "types": [],
+    "templates": [
+      {
+        "name": "Manzana",
+        "description": "",
+        "prototype": {
+          "attributes": {
+            "codigo": "0",
+            "nombre": "0"
+          }
+        },
+        "drawingTool": "esriFeatureEditToolPolygon"
+      }
+    ],
+    "maxRecordCount": 2000,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "supportedExportFormats": "sqlite,filegdb,shapefile,csv,geojson",
+    "capabilities": "Query,Extract",
+    "useStandardizedQueries": true,
+    "bigIntegerRestrictedTo53Bits": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "supportsAppend": true,
+    "supportedAppendFormats": "FILEGDB,PBF",
+    "standardMaxRecordCount": 4000,
+    "tileMaxRecordCount": 4000,
+    "standardMaxRecordCountNoGeometry": 32000,
+    "maxRecordCountFactor": 1,
+    "serviceItemId": "c5d96cfd4e3e4a398f9a93d444acf3b3"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/320?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F320%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:41:47.939586+00:00",
+    "elapsed_s": 2.7,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 7466,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:41:47.939522+00:00"
+      }
+    ]
+  }
+}

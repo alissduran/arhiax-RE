@@ -1,0 +1,204 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;font-size:12pt'><div><div><p><span>Consolida la diversidad de actividades económicas que impulsan el desarrollo económico del Distrito de Barranquilla, recopila información importante sobre las empresas y el sector económico al que aportan.</span></p><p><span /></p></div></div></div>",
+    "mapName": "Tejido empresarial",
+    "description": "Consolida la diversidad de actividades económicas que impulsan el desarrollo económico del Distrito de Barranquilla, recopila información importante sobre las empresas y el sector económico al que aportan.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Empresas vigentes",
+        "parentLayerId": -1,
+        "defaultVisibility": false,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": false
+      },
+      {
+        "id": 2,
+        "name": "Empresas sector energía",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4790740.038456859,
+      "ymin": 2764500.5311434404,
+      "xmax": 4814691.97874786,
+      "ymax": 2780651.7071207794,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4793236.8522,
+      "ymin": 2765299.9747,
+      "xmax": 4807858.3681,
+      "ymax": 2779050.448000001,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "timeInfo": {
+      "timeExtent": [
+        -851040000000,
+        1735603200000
+      ],
+      "timeReference": null,
+      "timeRelation": "esriTimeRelationOverlaps",
+      "defaultTimeInterval": 10,
+      "defaultTimeIntervalUnits": "esriTimeUnitsYears",
+      "defaultTimeWindow": 10,
+      "defaultTimeWindowUnits": "esriTimeUnitsYears",
+      "hasLiveData": false,
+      "liveModeOffsetDirection": "past"
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Tejido empresarial",
+      "Author": "",
+      "Comments": "Consolida la diversidad de actividades económicas que impulsan el desarrollo económico del Distrito de Barranquilla, recopila información importante sobre las empresas y el sector económico al que aportan.",
+      "Subject": "Consolida la diversidad de actividades económicas que impulsan el desarrollo económico del Distrito y permite conocer cómo se configura la dinámica productiva de la ciudad.",
+      "Category": "",
+      "Version": "3.3.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Empresas,Desarrollo,Economía,Local,Activos,Ventas,Producción,Sectores económicos,Empresas,Microempresas,Desarrollo económico,Economía,Local,Emprendimiento,Recursos,Crecimiento,Desarrollo,Producción,Productivo"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "floorAwareMapProperties": {
+      "defaultFloorFilterSettings": {
+        "isEnabled": false
+      }
+    },
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "WMSServer",
+    "resampling": false,
+    "serviceItemId": "7dae473351fd4e5ab5784942c7db511e"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico/tejidoempresarial/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Feconomico%2Ftejidoempresarial%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:46:06.326459+00:00",
+    "elapsed_s": 21.5,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T15:46:03.135751+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 4227,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:46:06.326449+00:00"
+      }
+    ]
+  }
+}

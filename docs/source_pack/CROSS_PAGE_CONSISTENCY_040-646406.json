@@ -1,0 +1,142 @@
+{
+  "tabla": [
+    {
+      "attribute": "altura_maxima",
+      "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+      "verdad_token_canonico": "HISTORICAL_CONFLICT",
+      "paginas": {
+        "P4": "HISTORICAL_CONFLICT"
+      },
+      "tokens_presentes": {
+        "PP4": "HISTORICAL_CONFLICT"
+      },
+      "consistent_entre_paginas": true,
+      "coincide_con_la_verdad": true,
+      "discrepancias": [],
+      "nota": "valor canónico: 11"
+    },
+    {
+      "attribute": "amenaza",
+      "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+      "verdad_token_canonico": "HISTORICAL_CONFLICT",
+      "paginas": {
+        "P4": "NO UTILIZAR ESTE DATO COMO DEFINITIVO"
+      },
+      "tokens_presentes": {
+        "PP4": "HISTORICAL_CONFLICT"
+      },
+      "consistent_entre_paginas": true,
+      "coincide_con_la_verdad": true,
+      "discrepancias": [],
+      "nota": "valor canónico: n/d"
+    },
+    {
+      "attribute": "binding_geometria",
+      "verdad_unica_del_expediente": "VERIFICADA",
+      "verdad_token_canonico": "VERIFICADA",
+      "paginas": {
+        "P6": "VERIFICADA"
+      },
+      "tokens_presentes": {
+        "PP6": "VERIFICADA"
+      },
+      "consistent_entre_paginas": true,
+      "coincide_con_la_verdad": true,
+      "discrepancias": [],
+      "nota": "atributo `coordenada` = VALOR de la coordenada que usa la corrida (conflicto histórico del expediente) · atributo `binding_geometria` = ¿la geometría OFICIAL corresponde a la identidad canónica? (VERIFIED). Son DOS atributos: no se comparan entre sí."
+    },
+    {
+      "attribute": "coordenada",
+      "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+      "verdad_token_canonico": "HISTORICAL_CONFLICT",
+      "paginas": {
+        "P4": "NO UTILIZAR ESTE DATO COMO DEFINITIVO"
+      },
+      "tokens_presentes": {
+        "PP4": "HISTORICAL_CONFLICT"
+      },
+      "consistent_entre_paginas": true,
+      "coincide_con_la_verdad": true,
+      "discrepancias": [],
+      "nota": "atributo `coordenada` = VALOR de la coordenada que usa la corrida (conflicto histórico del expediente) · atributo `binding_geometria` = ¿la geometría OFICIAL corresponde a la identidad canónica? (VERIFIED). Son DOS atributos: no se comparan entre sí."
+    },
+    {
+      "attribute": "titulares",
+      "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+      "verdad_token_canonico": "HISTORICAL_CONFLICT",
+      "paginas": {
+        "P4": "NO UTILIZAR ESTE DATO COMO DEFINITIVO"
+      },
+      "tokens_presentes": {
+        "PP4": "HISTORICAL_CONFLICT"
+      },
+      "consistent_entre_paginas": true,
+      "coincide_con_la_verdad": true,
+      "discrepancias": [],
+      "nota": "valor canónico: n/d"
+    },
+    {
+      "attribute": "tratamiento",
+      "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+      "verdad_token_canonico": "HISTORICAL_CONFLICT",
+      "paginas": {
+        "P4": "HISTORICAL_CONFLICT"
+      },
+      "tokens_presentes": {
+        "PP4": "HISTORICAL_CONFLICT"
+      },
+      "consistent_entre_paginas": true,
+      "coincide_con_la_verdad": true,
+      "discrepancias": [],
+      "nota": "valor canónico: Consolidacion"
+    },
+    {
+      "attribute": "uso_pot",
+      "verdad_unica_del_expediente": "HISTORICAL_CONFLICT",
+      "verdad_token_canonico": "HISTORICAL_CONFLICT",
+      "paginas": {
+        "P4": "NO UTILIZAR ESTE DATO COMO DEFINITIVO"
+      },
+      "tokens_presentes": {
+        "PP4": "HISTORICAL_CONFLICT"
+      },
+      "consistent_entre_paginas": true,
+      "coincide_con_la_verdad": true,
+      "discrepancias": [],
+      "nota": "valor canónico: n/d"
+    }
+  ],
+  "inconsistentes": [],
+  "verdad_unica": {
+    "altura_maxima": "HISTORICAL_CONFLICT",
+    "amenaza": "HISTORICAL_CONFLICT",
+    "coordenada": "HISTORICAL_CONFLICT",
+    "titulares": "HISTORICAL_CONFLICT",
+    "tratamiento": "HISTORICAL_CONFLICT",
+    "uso_pot": "HISTORICAL_CONFLICT",
+    "area": "REQUIERE_VALIDACION",
+    "barrio": "REQUIERE_VALIDACION",
+    "clase_suelo": "REQUIERE_VALIDACION",
+    "destino_economico": "REQUIERE_VALIDACION",
+    "direccion": "REQUIERE_VALIDACION",
+    "estrato": "REQUIERE_VALIDACION",
+    "evidencias": "REQUIERE_VALIDACION",
+    "gravamenes": "REQUIERE_VALIDACION",
+    "localidad": "REQUIERE_VALIDACION",
+    "numero_predial": "REQUIERE_VALIDACION",
+    "nupre": "REQUIERE_VALIDACION",
+    "regimen_juridico": "REQUIERE_VALIDACION",
+    "riesgo": "REQUIERE_VALIDACION",
+    "screening": "REQUIERE_VALIDACION",
+    "unidad": "REQUIERE_VALIDACION",
+    "valor_central": "REQUIERE_VALIDACION",
+    "valor_m2": "REQUIERE_VALIDACION",
+    "binding_geometria": "VERIFICADA"
+  },
+  "acceptance": {
+    "atributos_comparados": 7,
+    "inconsistent_count": 0,
+    "ok": true,
+    "nota": "Cada atributo se compara por su CLAVE CANÓNICA: se contrasta con la verdad única del expediente y, si se imprime en más de una página, entre páginas. Un atributo ausente en una página no cuenta como discrepancia."
+  }
+}

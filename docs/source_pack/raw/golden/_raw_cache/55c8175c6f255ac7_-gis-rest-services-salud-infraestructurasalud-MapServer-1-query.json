@@ -1,0 +1,117 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "tipo",
+    "fieldAliases": {
+      "objectid": "OBJECTID",
+      "referenciapredios": "Referencia predial",
+      "razonsocial": "Nombre",
+      "categoria": "Categoría",
+      "tipo": "Tipo de atención",
+      "tipopersona": "Tipo persona",
+      "naturalezajuridica": "Naturaleza jurídica",
+      "direccion": "Dirección",
+      "telefono": "Teléfono"
+    },
+    "geometryType": "esriGeometryPoint",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "referenciapredios",
+        "type": "esriFieldTypeString",
+        "alias": "Referencia predial",
+        "length": 255
+      },
+      {
+        "name": "razonsocial",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre",
+        "length": 100
+      },
+      {
+        "name": "categoria",
+        "type": "esriFieldTypeString",
+        "alias": "Categoría",
+        "length": 100
+      },
+      {
+        "name": "tipo",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Tipo de atención"
+      },
+      {
+        "name": "tipopersona",
+        "type": "esriFieldTypeString",
+        "alias": "Tipo persona",
+        "length": 50
+      },
+      {
+        "name": "naturalezajuridica",
+        "type": "esriFieldTypeString",
+        "alias": "Naturaleza jurídica",
+        "length": 20
+      },
+      {
+        "name": "direccion",
+        "type": "esriFieldTypeString",
+        "alias": "Dirección",
+        "length": 100
+      },
+      {
+        "name": "telefono",
+        "type": "esriFieldTypeString",
+        "alias": "Teléfono",
+        "length": 100
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "referenciapredios": "080010107000009600003000000000",
+          "razonsocial": "Liliana Isabel Vasquez Solano",
+          "categoria": "Profesional Independiente",
+          "tipo": 2,
+          "tipopersona": "N",
+          "naturalezajuridica": "P",
+          "direccion": "Carrera 6 Sur #  47 A-65",
+          "telefono": "3638419"
+        },
+        "geometry": {
+          "x": 4802618.7907,
+          "y": 2766172.544399999
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/infraestructurasalud/MapServer/1/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fsalud%2Finfraestructurasalud%2FMapServer%2F1%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:06:20.877573+00:00",
+    "elapsed_s": 0.5,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 1537,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:06:20.877545+00:00"
+      }
+    ]
+  }
+}

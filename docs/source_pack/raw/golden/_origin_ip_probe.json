@@ -1,0 +1,110 @@
+[
+  {
+    "ip": "181.49.136.170",
+    "sni": "miciudad.barranquilla.gov.co",
+    "path": "/gis/rest/services?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "181.49.136.170",
+    "sni": "miciudad.barranquilla.gov.co",
+    "path": "/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "181.49.136.170",
+    "sni": "portal.barranquilla.gov.co",
+    "path": "/gis/rest/services?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "181.49.136.170",
+    "sni": "portal.barranquilla.gov.co",
+    "path": "/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "181.49.136.170",
+    "sni": "www.barranquilla.gov.co",
+    "path": "/gis/rest/services?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "181.49.136.170",
+    "sni": "www.barranquilla.gov.co",
+    "path": "/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "190.248.57.39",
+    "sni": "miciudad.barranquilla.gov.co",
+    "path": "/gis/rest/services?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "190.248.57.39",
+    "sni": "miciudad.barranquilla.gov.co",
+    "path": "/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "190.248.57.39",
+    "sni": "portal.barranquilla.gov.co",
+    "path": "/gis/rest/services?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "190.248.57.39",
+    "sni": "portal.barranquilla.gov.co",
+    "path": "/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "190.248.57.39",
+    "sni": "www.barranquilla.gov.co",
+    "path": "/gis/rest/services?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "190.248.57.39",
+    "sni": "www.barranquilla.gov.co",
+    "path": "/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "result": "HTTP/1.1 404 NOT FOUND | 'c9\\r\\n<!doctype html>\\n<html lang=en>\\n<title>404 Not Found</title>\\n<h1>Not Found</h1>\\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again\\r\\n6\\r\\n.</p>\\n\\r\\n0\\r\\n\\r\\n'"
+  },
+  {
+    "ip": "181.49.136.170",
+    "sni": "miciudad.barranquilla.gov.co",
+    "path": "http:/gis/rest/services?f=json",
+    "result": "TCP FAIL: TimeoutError: timed out"
+  },
+  {
+    "ip": "181.49.136.170",
+    "sni": "portal.barranquilla.gov.co",
+    "path": "http:/gis/rest/services?f=json",
+    "result": "TCP FAIL: TimeoutError: timed out"
+  },
+  {
+    "ip": "181.49.136.170",
+    "sni": "www.barranquilla.gov.co",
+    "path": "http:/gis/rest/services?f=json",
+    "result": "TCP FAIL: TimeoutError: timed out"
+  },
+  {
+    "ip": "190.248.57.39",
+    "sni": "miciudad.barranquilla.gov.co",
+    "path": "http:/gis/rest/services?f=json",
+    "result": "TCP FAIL: TimeoutError: timed out"
+  },
+  {
+    "ip": "190.248.57.39",
+    "sni": "portal.barranquilla.gov.co",
+    "path": "http:/gis/rest/services?f=json",
+    "result": "TCP FAIL: TimeoutError: timed out"
+  },
+  {
+    "ip": "190.248.57.39",
+    "sni": "www.barranquilla.gov.co",
+    "path": "http:/gis/rest/services?f=json",
+    "result": "TCP FAIL: TimeoutError: timed out"
+  }
+]

@@ -26,12 +26,25 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
+try:  # `api/` está en sys.path cuando el producto importa estos módulos
+    import atribucion_mercado as _am
+except Exception:  # noqa: BLE001 — carga determinista por ruta (import por paquete)
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location(
+        "_arhiax_atribucion_mercado",
+        Path(__file__).resolve().parent / "atribucion_mercado.py")
+    _am = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(_am)
+
 # ── Estados de campo ───────────────────────────────────────────────────────────
 STATUS_VERIFIED_OFFICIAL = "VERIFIED_OFFICIAL"
 STATUS_VERIFIED_GEOGRAPHIC = "VERIFIED_GEOGRAPHIC"
 STATUS_VERIFIED_REGISTRAL = "VERIFIED_REGISTRAL"
 STATUS_VERIFIED_CATASTRAL = "VERIFIED_CATASTRAL"
 STATUS_UNRESOLVED = "UNRESOLVED"
+# Estado de FUENTE del contexto de mercado (P7): resuelto sólo si existe un origen
+# habilitante con procedencia suficiente que pueda sostener una cifra.
+STATUS_RESOLVED = "RESOLVED"
 STATUS_SOURCE_UNAVAILABLE = "SOURCE_UNAVAILABLE"
 STATUS_CONFLICT = "CONFLICT"
 
@@ -59,7 +72,7 @@ def _load_lonja(yml_path: Optional[Path] = None) -> Dict[str, Any]:
 
 
 def lonja_metadata(yml: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    """Metadata de metodología (versión + vigencia) desde el YAML Lonja."""
+    """Metadata de metodología (versión + vigencia) desde el artefacto de metodología local."""
     y = yml or _load_lonja()
     decl = y.get("declaracion") or {}
     cons = y.get("regla_consolidacion") or {}
@@ -76,8 +89,8 @@ def lonja_metadata(yml: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
 # Una tasa autorizable NO puede viajar con `methodology_version = null`: el
 # dictamen debe poder citar QUÉ artefacto metodológico la produjo y con qué
 # versión. La versión NO se inventa retrospectivamente: se deriva del artefacto
-# real (`regla_consolidacion.version` del YAML de la Lonja) y se sella con el
-# sha256 del archivo leído.
+# real (`regla_consolidacion.version` del artefacto de metodología local) y se
+# sella con el sha256 del archivo leído.
 METHODOLOGY_ID = "lonja_baq_metodologia"
 
 
@@ -105,7 +118,8 @@ def market_methodology(yml_path: Optional[Path] = None) -> Dict[str, Any]:
 
 def resolve_market_sector(barrio: Optional[str],
                           yml_path: Optional[Path] = None) -> Dict[str, Any]:
-    """MarketSectorResolution: resuelve el sector metodológico de la Lonja por barrio.
+    """MarketSectorResolution: resuelve el sector metodológico local declarado por
+    la corrida, por barrio.
 
     Estados: EXACT / NORMALIZED_EXACT / ALIAS / NO_MATCH / AMBIGUOUS.
     Lee `valor_suelo_por_sector` del YAML. No usa fuzzy semántico automático.
@@ -125,20 +139,28 @@ def resolve_market_sector(barrio: Optional[str],
         "market_methodology_version": _met.get("version"),
         "market_methodology_sha256": _met.get("sha256"),
         "market_methodology_file": _met.get("file"),
-        "methodology_entity": meta.get("entidad"),
+        # La entidad que el artefacto local nombra NO es una fuente de datos del
+        # producto: se declara lo que es en vez de imprimir el nombre como proveedor.
+        "methodology_entity": _am.entidad_declarada(meta.get("entidad")),
         "vigencia_desde": meta.get("vigencia_desde"),
         "value_m2": None,
         "source": None,
         "source_date": None,
         "rango_min_m2": None,
         "rango_max_m2": None,
+        # Sin sector resuelto no hay valor: por definición no hay origen habilitante.
+        "origin": _am.ORIGEN_MANUAL,
+        "origin_declarado": None,
+        "origin_gate": False,
+        "origin_blockers": ["sector metodológico no resuelto: no hay tasa que valorar"],
+        "origin_provenance": {},
         "provenance": {
             "methodology_file": _met.get("file") or _YAML_PATH.name,
             "methodology_version": meta.get("version"),
             "methodology_id": _met.get("id"),
             "methodology_sha256": _met.get("sha256"),
-            "methodology_entity": meta.get("entidad"),
-            "artifact_autor": _met.get("autor"),
+            "methodology_entity": _am.entidad_declarada(meta.get("entidad")),
+            "artifact_autor": _am.entidad_declarada(_met.get("autor")),
         },
     }
 
@@ -171,16 +193,35 @@ def resolve_market_sector(barrio: Optional[str],
     normalized = isinstance(m, tuple)
     key = m[1] if normalized else m
     sector = sectores[key]
+    # ── COMPUERTA SEMÁNTICA: el ORIGEN del valor, no su buena intención ──────────
+    # La fila del artefacto local declara su `fuente` en texto libre. Se clasifica el
+    # origen con el vocabulario cerrado de `atribucion_mercado`: sin procedencia
+    # estructurada (id de fuente, proveedor, fecha, referencia y hash) el valor es un
+    # PARÁMETRO CONFIGURADO A MANO y NO puede habilitar la valoración.
+    origen = _am.clasificar_origen(sector, por_defecto=_am.ORIGEN_MANUAL)
     base.update({
         "matched_sector": key,
         "match_type": MATCH_NORMALIZED_EXACT if normalized else MATCH_EXACT,
         "value_m2": sector.get("valor_central_m2"),
-        "source": sector.get("fuente"),
+        # DECISIÓN DE PRODUCTO: la Lonja NO es una fuente de datos. La `fuente`
+        # declarada por el artefacto local se expone SIN la atribución no acreditada
+        # (sin URL, sin fecha, sin comparables): el valor es un PARÁMETRO DECLARADO
+        # POR LA CORRIDA, sin fuente externa automática verificable. El artefacto
+        # (YAML) conserva su declaración literal: no se muta.
+        "source": (_am.etiqueta_tasa(sector.get("fuente"))
+                   if sector.get("fuente") else None),
         "source_date": sector.get("vigencia"),
         "rango_min_m2": sector.get("rango_min_m2"),
         "rango_max_m2": sector.get("rango_max_m2"),
+        "origin": origen["origin"],
+        "origin_declarado": origen["origin_declarado"],
+        "origin_gate": origen["origin_gate"],
+        "origin_blockers": list(origen["origin_blockers"]),
+        "origin_provenance": dict(origen["origin_provenance"]),
     })
     base["provenance"]["sector"] = key
+    base["provenance"]["origin"] = origen["origin"]
+    base["provenance"]["origin_gate"] = origen["origin_gate"]
     return base
 
 
@@ -209,6 +250,25 @@ def build_market_context(*, identity_verified: bool,
     if market_rate_source is None and match_type not in (MATCH_NO_MATCH, MATCH_AMBIGUOUS):
         _rate_source = sector.get("source")
 
+    # ── COMPUERTA SEMÁNTICA (P4/P6/P7) ────────────────────────────────────────
+    # El ORIGEN de la tasa viaja con el valor y decide si la valoración queda
+    # HABILITADA. Si el sector no declaró origen (o declaró uno no habilitante, o lo
+    # declaró sin procedencia completa), la tasa es un parámetro declarado a mano: el
+    # contexto de mercado se declara `UNRESOLVED` como FUENTE y no habilita la
+    # valoración. No se cae a ningún valor sustituto.
+    if sector.get("origin") in _am.ORIGENES and "origin_gate" in sector:
+        # El resolvedor de sector ya clasificó: se propaga tal cual (una sola verdad).
+        origen = {
+            "origin": sector["origin"],
+            "origin_declarado": sector.get("origin_declarado"),
+            "origin_gate": bool(sector.get("origin_gate")),
+            "origin_blockers": list(sector.get("origin_blockers") or []),
+            "origin_provenance": dict(sector.get("origin_provenance") or {}),
+            "origin_etiqueta": _am.ETIQUETA_ORIGEN.get(sector["origin"], sector["origin"]),
+        }
+    else:
+        origen = _am.clasificar_origen(sector, por_defecto=_am.ORIGEN_MANUAL)
+
     mc = {
         "identity_verified": bool(identity_verified),
         "barrio": _field(barrio, barrio_status, "official POT / Alcaldía" if barrio_status == STATUS_VERIFIED_OFFICIAL else None),
@@ -223,6 +283,13 @@ def build_market_context(*, identity_verified: bool,
         "market_methodology_version": sector.get("market_methodology_version"),
         "market_methodology_sha256": sector.get("market_methodology_sha256"),
         "market_methodology_file": sector.get("market_methodology_file"),
+        # ── origen de la tasa (vocabulario cerrado) ───────────────────────────
+        "origin": origen["origin"],
+        "origin_declarado": origen["origin_declarado"],
+        "origin_gate": bool(origen["origin_gate"]),
+        "origin_blockers": list(origen["origin_blockers"]),
+        "origin_provenance": dict(origen["origin_provenance"]),
+        "origin_etiqueta": origen["origin_etiqueta"],
         "coordinates": coordinates or {},
         "geocoder_source": geocoder_source,
         "geocoder_confidence": geocoder_confidence,
@@ -233,11 +300,21 @@ def build_market_context(*, identity_verified: bool,
             "market_methodology_version": sector.get("market_methodology_version"),
             "market_methodology_sha256": sector.get("market_methodology_sha256"),
             "methodology_entity": sector.get("methodology_entity"),
+            "origin": origen["origin"],
+            "origin_declarado": origen["origin_declarado"],
+            "origin_gate": bool(origen["origin_gate"]),
         },
         "ready": False,
         "blockers": [],
     }
     mc["ready"], mc["blockers"] = _evaluate_ready(mc)
+    # ESTADO DEL CONTEXTO DE MERCADO COMO FUENTE (P7): sólo un origen habilitante con
+    # procedencia suficiente lo declara resuelto. `ready` mide la CONFIANZA del
+    # contexto (barrio/estrato/tipología/sector/tasa resueltos); `status` mide si
+    # existe una fuente que pueda sostener una cifra. Son dos preguntas distintas y
+    # las dos tienen que poder responderse por separado.
+    mc["valoracion_habilitada"] = bool(mc["ready"] and mc["origin_gate"])
+    mc["status"] = STATUS_RESOLVED if mc["valoracion_habilitada"] else STATUS_UNRESOLVED
     return mc
 
 
@@ -296,6 +373,61 @@ def market_context_authorized(mc: Dict[str, Any]) -> bool:
     if sector.get("match_type") == MATCH_GENERIC_ESTRATO_FALLBACK:
         return False
     return (mc or {}).get("market_rate_source") is not None
+
+
+# ── COMPUERTA SEMÁNTICA DEL ORIGEN (P4/P6/P7) ─────────────────────────────────
+def market_context_origen(mc: Dict[str, Any]) -> Dict[str, Any]:
+    """Origen EFECTIVO de la tasa del contexto, con su traza y sus motivos.
+
+    Se lee del contexto (una sola verdad: el resolvedor de sector lo clasificó). Si el
+    contexto no declara origen —capturas antiguas o sintéticas— se clasifica aquí SIN
+    procedencia declarada, lo que por regla da `MANUAL_CONFIG` y NO habilita.
+    """
+    mc = mc or {}
+    sector = mc.get("sector_metodologico") or {}
+    if mc.get("origin") in _am.ORIGENES and "origin_gate" in mc:
+        etiqueta = mc.get("origin_etiqueta") or _am.ETIQUETA_ORIGEN.get(
+            mc["origin"], mc["origin"])
+        return {"origin": mc["origin"],
+                "origin_declarado": mc.get("origin_declarado"),
+                "origin_gate": bool(mc.get("origin_gate")),
+                "origin_blockers": list(mc.get("origin_blockers") or []),
+                "origin_provenance": dict(mc.get("origin_provenance") or {}),
+                "origin_etiqueta": etiqueta}
+    declaracion = dict(sector)
+    if sector.get("origin") in _am.ORIGENES and not declaracion.get("origen_tipo"):
+        declaracion["origen_tipo"] = sector.get("origin")
+    return _am.clasificar_origen(declaracion, por_defecto=_am.ORIGEN_MANUAL)
+
+
+def market_context_origen_bloqueos(mc: Dict[str, Any]) -> List[str]:
+    """Motivos legibles por los que el origen NO habilita la valoración (P7)."""
+    origen = market_context_origen(mc)
+    return list(origen.get("origin_blockers") or [])
+
+
+def market_context_valoracion_habilitada(mc: Dict[str, Any]) -> bool:
+    """¿Puede esta corrida EMITIR una cifra de mercado?
+
+    Tres condiciones, y las tres son independientes:
+
+      1. el contexto tiene la CONFIANZA suficiente (`market_context_authorized`);
+      2. la tasa declara un ORIGEN habilitante ∈ {EXTERNAL_SOURCE,
+         COMPUTED_FROM_SOURCES} con procedencia completa;
+      3. ese origen no es un fallback por estrato (nunca lo es: es `MODEL_PRIOR`).
+
+    Sin (2) no hay fuente: `NO EMITIR VALORACIÓN`. No se inventa un sustituto.
+    """
+    if not market_context_authorized(mc):
+        return False
+    if not bool(market_context_origen(mc).get("origin_gate")):
+        return False
+    return True
+
+
+def market_context_status(mc: Dict[str, Any]) -> str:
+    """Estado de FUENTE del contexto de mercado (P7): RESOLVED / UNRESOLVED."""
+    return STATUS_RESOLVED if market_context_valoracion_habilitada(mc) else STATUS_UNRESOLVED
 
 
 def market_context_blockers(mc: Dict[str, Any]) -> List[str]:

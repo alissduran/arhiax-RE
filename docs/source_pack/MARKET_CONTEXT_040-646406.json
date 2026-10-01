@@ -1,0 +1,93 @@
+{
+  "folio": "040-646406",
+  "A_ruta_del_archivo": "motor_tma_lonja_baq_v1.0\\motor_tma_lonja_baq_v1.0\\lonja_layer\\lonja_baq_metodologia.yaml",
+  "B_lineas_exactas": [
+    "lonja_baq_metodologia.yaml:14: # y se propaga automáticamente a todos los dictámenes posteriores a la fecha",
+    "lonja_baq_metodologia.yaml:15: # de vigencia declarada.",
+    "lonja_baq_metodologia.yaml:16: # ═══════════════════════════════════════════════════════════════════════════════",
+    "lonja_baq_metodologia.yaml:17: ",
+    "lonja_baq_metodologia.yaml:18: declaracion:",
+    "lonja_baq_metodologia.yaml:19:   entidad: \"Lonja de Propiedad Raíz de Barranquilla\"",
+    "lonja_baq_metodologia.yaml:20:   representante_legal: \"[A declarar por la Lonja]\"",
+    "lonja_baq_metodologia.yaml:21:   presidente_comite_tecnico: \"[A declarar por la Lonja]\"",
+    "lonja_baq_metodologia.yaml:22:   vigencia_desde: \"2026-05-08\"",
+    "lonja_baq_metodologia.yaml:23:   vigencia_hasta: \"2026-08-31\"",
+    "lonja_baq_metodologia.yaml:24:   marco_normativo:",
+    "lonja_baq_metodologia.yaml:25:     - \"Ley 1673 de 2013 — Régimen del avaluador\"",
+    "lonja_baq_metodologia.yaml:208:   Miramar:",
+    "lonja_baq_metodologia.yaml:209:     # Actualizado Q3-2026 con precio real de mercado verificado por el",
+    "lonja_baq_metodologia.yaml:210:     # propietario en la constructora del proyecto (unidades ~58 m2 terminadas",
+    "lonja_baq_metodologia.yaml:211:     # en venta ~$420.000.000 ≈ $7.1M/m2). El valor anterior ($4.5M/m2, Q2-2026)",
+    "lonja_baq_metodologia.yaml:212:     # quedaba ~40% por debajo del mercado observado y el dictamen del folio real",
+    "lonja_baq_metodologia.yaml:213:     # 040-646406 (Napoli, Torre 8 apto 430) subestimaba el inmueble.",
+    "lonja_baq_metodologia.yaml:214:     valor_central_m2: 6800000",
+    "lonja_baq_metodologia.yaml:215:     rango_min_m2: 5500000",
+    "lonja_baq_metodologia.yaml:216:     rango_max_m2: 8000000",
+    "lonja_baq_metodologia.yaml:217:     vigencia: \"Q3-2026\"",
+    "lonja_baq_metodologia.yaml:218:     fuente: \"Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial\"",
+    "lonja_baq_metodologia.yaml:219:   Riomar:",
+    "lonja_baq_metodologia.yaml:207: valor_suelo_por_sector:"
+  ],
+  "C_estructura_resultante": {
+    "input_barrio": "Miramar",
+    "matched_sector": "Miramar",
+    "match_type": "EXACT",
+    "value_m2": 6800000,
+    "rango_min_m2": 5500000,
+    "rango_max_m2": 8000000,
+    "methodology_file": "lonja_baq_metodologia.yaml",
+    "methodology_version": "0.1-codiseno",
+    "methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348"
+  },
+  "D_origin": {
+    "origin": "MANUAL_CONFIG",
+    "origin_declarado": null,
+    "origin_gate": false,
+    "origin_blockers": [
+      "origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)"
+    ],
+    "origin_provenance": {},
+    "origin_etiqueta": "valor declarado a mano por la corrida (sin fuente externa automática)"
+  },
+  "E_provenance": {
+    "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+    "methodology_version": "0.1-codiseno",
+    "market_methodology_id": "lonja_baq_metodologia",
+    "market_methodology_version": "0.1-codiseno",
+    "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+    "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+    "origin": "MANUAL_CONFIG",
+    "origin_declarado": null,
+    "origin_gate": false
+  },
+  "F_authorized_for_valuation": {
+    "golden_stored_valoracion_habilitada": false,
+    "golden_stored_status": "UNRESOLVED",
+    "nuevo_codigo_status": false
+  },
+  "market_rate": {
+    "value": 6800000,
+    "origin": "MANUAL_CONFIG",
+    "provenance": {
+      "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+      "methodology_version": "0.1-codiseno",
+      "market_methodology_id": "lonja_baq_metodologia",
+      "market_methodology_version": "0.1-codiseno",
+      "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+      "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+      "origin": "MANUAL_CONFIG",
+      "origin_declarado": null,
+      "origin_gate": false
+    },
+    "authorized_for_valuation": false
+  },
+  "etiqueta_honesta_producto": {
+    "es_fuente_de_datos": false,
+    "aporta_datos_a_dictus": false,
+    "en_source_registry": false,
+    "fuente_externa_verificable": false,
+    "etiqueta": "parámetros declarados por la corrida",
+    "nota": "El valor de mercado es parámetros declarados por la corrida (artefacto local de metodología): sin fuente externa automática verificada. La Lonja no es una fuente de datos y no se sustituye por ninguna fuente inventada."
+  },
+  "market_rate_source_literal": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)"
+}

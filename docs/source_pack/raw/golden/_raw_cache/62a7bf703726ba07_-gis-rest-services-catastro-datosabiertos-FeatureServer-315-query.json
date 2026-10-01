@@ -1,0 +1,146 @@
+{
+  "ok": true,
+  "data": {
+    "objectIdFieldName": "objectid",
+    "globalIdFieldName": "globalid",
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "hasZ": false,
+    "fields": [
+      {
+        "name": "objectid",
+        "alias": "OBJECTID",
+        "type": "esriFieldTypeOID"
+      },
+      {
+        "name": "name",
+        "alias": "Name",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "relacion_superficie",
+        "alias": "Relación Superficie",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "estado_terreno",
+        "alias": "Estado Terreno",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "Shape__Area",
+        "alias": "st_area(shape)",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "Shape__Length",
+        "alias": "st_length(shape)",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "globalid",
+        "alias": "GlobalID",
+        "type": "esriFieldTypeGlobalID",
+        "length": 38
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "name": "080010101000003070025900000000",
+          "relacion_superficie": "En_Rasante",
+          "estado_terreno": 1,
+          "Shape__Area": 522.186719415,
+          "Shape__Length": 106.36381462669033,
+          "globalid": "{CC07140E-7301-47A3-B9F4-92B74E34E6BF}"
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                4803935.0767,
+                2773901.6720000003
+              ],
+              [
+                4803926.8432,
+                2773895.3242000006
+              ],
+              [
+                4803919.063,
+                2773905.7336
+              ],
+              [
+                4803924.3092,
+                2773909.7782000005
+              ],
+              [
+                4803935.0551,
+                2773918.063100001
+              ],
+              [
+                4803943.6266,
+                2773924.6713999994
+              ],
+              [
+                4803945.347,
+                2773925.9979
+              ],
+              [
+                4803950.8888,
+                2773930.2705000006
+              ],
+              [
+                4803954.7046,
+                2773925.165100001
+              ],
+              [
+                4803958.6689,
+                2773919.861199999
+              ],
+              [
+                4803958.5105,
+                2773919.7391
+              ],
+              [
+                4803953.2855,
+                2773915.7106
+              ],
+              [
+                4803935.0767,
+                2773901.6720000003
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/315/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F315%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:41:45.188743+00:00",
+    "elapsed_s": 1.0,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 1561,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:41:45.188718+00:00"
+      }
+    ]
+  }
+}

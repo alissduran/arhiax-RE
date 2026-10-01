@@ -1,0 +1,1889 @@
+{
+  "source_id": "construccion",
+  "business_concept": "Construccion",
+  "requested_layer_id": 4,
+  "alternate_requested_ids": [],
+  "_status": "SUPPORTED",
+  "resolved": [
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer",
+      "layer_id": 4,
+      "name": "Concentración de predios por manzana. Año 2025.",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelorural/MapServer",
+      "layer_id": 4,
+      "name": "Valor por hectárea del suelo rural. Vigencia 2026.",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+      "layer_id": 4,
+      "name": "Destinos predominantes de las transacciones. Año 2022.",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/infraestructuracultural/MapServer",
+      "layer_id": 4,
+      "name": "Museos",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer",
+      "layer_id": 4,
+      "name": "Nodos de equipamientos",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+      "layer_id": 4,
+      "name": "Valor compraventas 2022",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/justiciayseguridad/MapServer",
+      "layer_id": 4,
+      "name": "CAI, Estaciones y Subestaciones",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer",
+      "layer_id": 4,
+      "name": "Municipios",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+      "layer_id": 4,
+      "name": "Densidad de compraventas. Año 2022.",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer",
+      "layer_id": 4,
+      "name": "Rango valores por m². Área (>291m²)",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer",
+      "layer_id": 4,
+      "name": "Tratamientos urbanísticos",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+      "layer_id": 4,
+      "name": "Puntos de hidratación",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer",
+      "layer_id": 4,
+      "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2025.",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto/ipu/MapServer",
+      "layer_id": 4,
+      "name": "Mediana del Impuesto Predial Unificado a nivel de manzana. Vigencia 2025.",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
+      "layer_id": 4,
+      "name": "Condición jurídica. Año 2025.",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+      "layer_id": 4,
+      "name": "Mediana del m² catastral. Año 2022.",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+      "layer_id": 4,
+      "name": "Cantidad de transacciones por manzana. Año 2022.",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
+      "layer_id": 4,
+      "name": "Destinos económicos. Año 2025.",
+      "kind": "layer",
+      "is_group": false
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer",
+      "layer_id": 4,
+      "name": "Recorrido 15k",
+      "kind": "layer",
+      "is_group": false
+    }
+  ],
+  "evidence": {
+    "ids_present_in_captured_index": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      20,
+      21,
+      22,
+      30,
+      31,
+      32,
+      40,
+      41,
+      42,
+      100,
+      105,
+      110,
+      200,
+      205,
+      300,
+      305,
+      310,
+      315,
+      320,
+      500,
+      505,
+      510,
+      515,
+      520,
+      525,
+      530,
+      535,
+      540,
+      545,
+      601,
+      602,
+      603
+    ],
+    "requested_id_present": true,
+    "requested_id_present_meaning": {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer",
+      "layer_id": 4,
+      "name": "Concentración de predios por manzana. Año 2025.",
+      "kind": "layer",
+      "is_group": false
+    },
+    "readable_services_count": 77,
+    "readable_services": [
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/mecanismosfianaciacion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimonio/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/infraestructuraservicios/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/areaconstruida/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimoniohistoricoycultural/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/antiguedadpredios/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/informalidad/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/direcciones/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelorural/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/cobertura/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/barriosalaobra/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/amenazas/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/infraestructuracultural/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/manzanas/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/dinamicaurbana/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/justiciayseguridad/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/propiedadhorizontal/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/eventosculturales/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/economico/hoteles/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/lotes/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/social/demografia/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/topografia/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/transito/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/coberturaterrestre/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/mejoramientovivienda/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/incidenciasciudadanas/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/alcaldiadistrital/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/hidrografia/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/bienestaranimal/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/comedorescomunitarios/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/riesgos/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/participacionciudadana/puestosvotacion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/equidad/mujerespropietarias/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/infraestructuraeducativa/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/influenciavial/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/estacionservicio/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/infraestructuradetransporte/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/infraestructurasalud/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/infraestructuradeporte/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/semanasanta/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/aotronivel/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/sitiosdeinteres/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto/ipu/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/nodosdetransporte/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/economico/tejidoempresarial/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/redes/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/usoconstruccion/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/atencionemergencias/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/primerainfancia/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/maritimoyportuario/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/huellaurbana/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/avaluocatastral/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/serviciostransporte/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/gestionpatrimoniocultural/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/influencia/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/limpiaylinda/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/sectores/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
+      "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer"
+    ],
+    "note": "catastro/datosabiertos/MapServer answers code 500 'Service ... not started' for every layer/table, so its layer metadata is served by the FeatureServer of the same service instead."
+  },
+  "real_equivalents": [
+    {
+      "label": "Construccion (poligono)",
+      "resolved": {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 310,
+        "name": "Construcción",
+        "kind": "layer",
+        "is_group": false
+      },
+      "captured": {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 310,
+        "layer_metadata_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/310?f=json",
+        "layer_metadata_provenance": {
+          "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/310?f=json",
+          "transport": "allorigins",
+          "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F310%3Ff%3Djson",
+          "http_status": 200,
+          "fetched_at_utc": "2026-09-29T16:41:41.401849+00:00",
+          "elapsed_s": 2.8,
+          "attempt_count": 1,
+          "served_from_cache": true,
+          "attempts": [
+            {
+              "transport": "allorigins",
+              "attempt": 1,
+              "http_status": 200,
+              "bytes": 9633,
+              "reject_reason": null,
+              "error": null,
+              "at": "2026-09-29T16:41:41.401778+00:00"
+            }
+          ]
+        },
+        "sample_query_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/310/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+        "sample_query_provenance": {
+          "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/310/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+          "transport": "allorigins",
+          "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F310%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+          "http_status": 200,
+          "fetched_at_utc": "2026-09-29T16:41:43.116255+00:00",
+          "elapsed_s": 1.7,
+          "attempt_count": 1,
+          "served_from_cache": true,
+          "attempts": [
+            {
+              "transport": "allorigins",
+              "attempt": 1,
+              "http_status": 200,
+              "bytes": 2507,
+              "reject_reason": null,
+              "error": null,
+              "at": "2026-09-29T16:41:43.116245+00:00"
+            }
+          ]
+        },
+        "_status": "OK",
+        "layer_name": "Construcción",
+        "layer_type": "Feature Layer",
+        "geometry_type": "esriGeometryPolygon",
+        "display_field": "identificador",
+        "object_id_field": "objectid",
+        "max_record_count": 2000,
+        "field_count": 16,
+        "fields": [
+          {
+            "name": "objectid",
+            "alias": "OBJECTID",
+            "type": "esriFieldTypeOID",
+            "length": null
+          },
+          {
+            "name": "etiqueta",
+            "alias": "Etiqueta",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "relacion_superficie",
+            "alias": "Relación Superficie",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "identificador",
+            "alias": "Identificador",
+            "type": "esriFieldTypeString",
+            "length": 20
+          },
+          {
+            "name": "tipo_construccion",
+            "alias": "Tipo Construcción",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "tipo_dominio",
+            "alias": "Tipo Dominio",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "total_pisos",
+            "alias": "Total Pisos",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "total_sotanos",
+            "alias": "Total Sotanos",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "total_mezanines",
+            "alias": "Total Mezanines",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "total_semisotanos",
+            "alias": "Total Semisotanos",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "altura_total_construccion",
+            "alias": "Altura Total Construcción",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "local_id",
+            "alias": "Local Id",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "estado_construccion",
+            "alias": "Estado Construcción",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "Shape__Area",
+            "alias": "st_area(shape)",
+            "type": "esriFieldTypeDouble",
+            "length": null
+          },
+          {
+            "name": "Shape__Length",
+            "alias": "st_length(shape)",
+            "type": "esriFieldTypeDouble",
+            "length": null
+          },
+          {
+            "name": "globalid",
+            "alias": "GlobalID",
+            "type": "esriFieldTypeGlobalID",
+            "length": 38
+          }
+        ],
+        "raw_layer_metadata": {
+          "currentVersion": 11.5,
+          "cimVersion": "3.5.0",
+          "id": 310,
+          "name": "Construcción",
+          "type": "Feature Layer",
+          "parentLayer": {
+            "id": 300,
+            "name": "Áreas catastrales"
+          },
+          "defaultVisibility": false,
+          "minScale": 2500,
+          "maxScale": 0,
+          "canScaleSymbols": false,
+          "geometryType": "esriGeometryPolygon",
+          "description": "File Geodatabase Feature Class - Polygon (Área Total Construccion, Etiqueta, Total Pisos, Identificador, Tipo Construcción, Tipo Dominio, Total Sotanos, Total Mezanines, Total Semisotanos, Observaciónes, Altura Total Construcción, Relación Superficie)",
+          "copyrightText": "IGAC",
+          "editFieldsInfo": null,
+          "ownershipBasedAccessControlForFeatures": null,
+          "syncCanReturnChanges": false,
+          "relationships": [
+            {
+              "id": 4,
+              "name": "CR_Predio",
+              "relatedTableId": 500,
+              "cardinality": "esriRelCardinalityManyToMany",
+              "role": "esriRelRoleOrigin",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{ACD47D71-88D2-4CF3-8F2C-AB76F999A423}",
+              "relationshipTableId": 603,
+              "keyFieldInRelationshipTable": "CR_Construccion_GUID"
+            },
+            {
+              "id": 3,
+              "name": "CR_UnidadConstruccion",
+              "relatedTableId": 305,
+              "cardinality": "esriRelCardinalityOneToMany",
+              "role": "esriRelRoleOrigin",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{F6B0871F-0537-43DD-AA87-E44908098731}"
+            }
+          ],
+          "isDataVersioned": false,
+          "isDataArchived": false,
+          "infoInEstimates": [
+            "extent",
+            "count"
+          ],
+          "isDataBranchVersioned": false,
+          "isDataReplicaTracked": false,
+          "isCoGoEnabled": false,
+          "supportsRollbackOnFailureParameter": true,
+          "archivingInfo": {
+            "supportsQueryWithHistoricMoment": false,
+            "startArchivingMoment": -1
+          },
+          "supportsStatistics": true,
+          "supportsExceedsLimitStatistics": true,
+          "supportsAdvancedQueries": true,
+          "supportsValidateSQL": true,
+          "supportsCoordinatesQuantization": true,
+          "supportsQuantizationEditMode": true,
+          "supportsCalculate": true,
+          "supportsASyncCalculate": true,
+          "supportsDurableUrlForSyncModelNone": false,
+          "supportsDatumTransformation": true,
+          "advancedQueryCapabilities": {
+            "supportsPagination": true,
+            "supportsQueryWithDistance": true,
+            "supportsReturningQueryExtent": true,
+            "supportsStatistics": true,
+            "supportsPercentileStatistics": true,
+            "supportsHavingClause": true,
+            "supportsOrderBy": true,
+            "supportsDistinct": true,
+            "supportsCountDistinct": true,
+            "supportsAdvancedQueryRelated": true,
+            "supportsQueryRelatedPagination": true,
+            "supportsCurrentUserQueries": true,
+            "supportsFullTextSearch": true,
+            "fullTextSearchCapabilities": {
+              "supportsSearchOperator": true,
+              "supportsOperator": false,
+              "supportsSqlExpressionInFullText": true
+            },
+            "fullTextSearchableFields": [],
+            "supportsQueryWithResultType": true,
+            "supportsReturningGeometryCentroid": true,
+            "supportsReturningGeometryEnvelope": true,
+            "supportsSqlExpression": true,
+            "supportsQueryWithDatumTransformation": true,
+            "supportsLod": false,
+            "supportsQueryWithLodSR": false,
+            "supportsQueryAnalytic": true,
+            "supportsTrueCurve": true,
+            "supportedCurveTypes": [
+              "esriGeometryCircularArc",
+              "esriGeometryEllipticArc",
+              "esriGeometryBezier3Curve"
+            ],
+            "supportsQueryWithCacheHint": false
+          },
+          "advancedQueryAnalyticCapabilities": {
+            "supportsLinearRegression": true,
+            "supportsAsync": true,
+            "supportsPercentileAnalytic": false
+          },
+          "advancedEditingCapabilities": {
+            "supportedSqlFormatsInCalculate": [
+              "standard"
+            ],
+            "supportsAsyncApplyEdits": true,
+            "supportsApplyEditsbyUploadID": true,
+            "supportedApplyEditsUploadIDFormats": "JSON,PBF"
+          },
+          "hasGeometryProperties": true,
+          "geometryProperties": {
+            "shapeAreaFieldName": "Shape__Area",
+            "shapeLengthFieldName": "Shape__Length",
+            "units": "esriMeters"
+          },
+          "hasMetadata": true,
+          "extent": {
+            "xmin": 4788358.4908,
+            "ymin": 2733331.626700001,
+            "xmax": 4807916.4988,
+            "ymax": 2781153.0310999993,
+            "zmin": -41.480200000005425,
+            "zmax": 181.61500000000524,
+            "spatialReference": {
+              "wkid": 9377,
+              "latestWkid": 9377,
+              "xyTolerance": 0.001,
+              "zTolerance": 0.001,
+              "mTolerance": 0.001,
+              "falseX": -618700,
+              "falseY": -8436100,
+              "xyUnits": 10000,
+              "falseZ": -100000,
+              "zUnits": 10000,
+              "falseM": -100000,
+              "mUnits": 10000
+            }
+          },
+          "spatialReference": {
+            "wkid": 9377,
+            "latestWkid": 9377,
+            "xyTolerance": 0.001,
+            "zTolerance": 0.001,
+            "mTolerance": 0.001,
+            "falseX": -618700,
+            "falseY": -8436100,
+            "xyUnits": 10000,
+            "falseZ": -100000,
+            "zUnits": 10000,
+            "falseM": -100000,
+            "mUnits": 10000
+          },
+          "sourceSpatialReference": {
+            "wkid": 9377,
+            "latestWkid": 9377,
+            "xyTolerance": 0.001,
+            "zTolerance": 0.001,
+            "mTolerance": 0.001,
+            "falseX": -618700,
+            "falseY": -8436100,
+            "xyUnits": 10000,
+            "falseZ": -100000,
+            "zUnits": 10000,
+            "falseM": -100000,
+            "mUnits": 10000
+          },
+          "drawingInfo": {
+            "renderer": {
+              "type": "simple",
+              "symbol": {
+                "type": "esriSFS",
+                "style": "esriSFSSolid",
+                "color": [
+                  246,
+                  197,
+                  198,
+                  255
+                ],
+                "outline": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    243,
+                    172,
+                    173,
+                    255
+                  ],
+                  "width": 0.4
+                }
+              }
+            },
+            "scaleSymbols": true,
+            "transparency": 0,
+            "labelingInfo": null
+          },
+          "hasM": false,
+          "hasZ": true,
+          "enableZDefaults": false,
+          "supportsVCSProjection": true,
+          "allowGeometryUpdates": true,
+          "allowTrueCurvesUpdates": true,
+          "onlyAllowTrueCurveUpdatesByTrueCurveClients": true,
+          "hasAttachments": false,
+          "supportsApplyEditsWithGlobalIds": true,
+          "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+          "objectIdField": "objectid",
+          "globalIdField": "globalid",
+          "displayField": "identificador",
+          "typeIdField": "",
+          "subtypeField": "",
+          "fields": [
+            {
+              "name": "objectid",
+              "type": "esriFieldTypeOID",
+              "alias": "OBJECTID",
+              "domain": null,
+              "editable": false,
+              "nullable": false,
+              "defaultValue": null,
+              "modelName": "objectid"
+            },
+            {
+              "name": "etiqueta",
+              "type": "esriFieldTypeString",
+              "alias": "Etiqueta",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": null,
+              "modelName": "etiqueta"
+            },
+            {
+              "name": "relacion_superficie",
+              "type": "esriFieldTypeString",
+              "alias": "Relación Superficie",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "En_Rasante",
+              "modelName": "relacion_superficie"
+            },
+            {
+              "name": "identificador",
+              "type": "esriFieldTypeString",
+              "alias": "Identificador",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 20,
+              "defaultValue": "A",
+              "modelName": "identificador"
+            },
+            {
+              "name": "tipo_construccion",
+              "type": "esriFieldTypeString",
+              "alias": "Tipo Construcción",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "Convencional",
+              "modelName": "tipo_construccion"
+            },
+            {
+              "name": "tipo_dominio",
+              "type": "esriFieldTypeString",
+              "alias": "Tipo Dominio",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "Privado",
+              "modelName": "tipo_dominio"
+            },
+            {
+              "name": "total_pisos",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Total Pisos",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 1,
+              "modelName": "total_pisos"
+            },
+            {
+              "name": "total_sotanos",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Total Sotanos",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 0,
+              "modelName": "total_sotanos"
+            },
+            {
+              "name": "total_mezanines",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Total Mezanines",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 0,
+              "modelName": "total_mezanines"
+            },
+            {
+              "name": "total_semisotanos",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Total Semisotanos",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 0,
+              "modelName": "total_semisotanos"
+            },
+            {
+              "name": "altura_total_construccion",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Altura Total Construcción",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 3,
+              "modelName": "altura_total_construccion"
+            },
+            {
+              "name": "local_id",
+              "type": "esriFieldTypeString",
+              "alias": "Local Id",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "000000000000000000000000000000",
+              "modelName": "local_id"
+            },
+            {
+              "name": "estado_construccion",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Estado Construcción",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 1,
+              "modelName": "estado_construccion"
+            },
+            {
+              "name": "Shape__Area",
+              "type": "esriFieldTypeDouble",
+              "alias": "st_area(shape)",
+              "domain": null,
+              "editable": false,
+              "nullable": true,
+              "defaultValue": null,
+              "modelName": "st_area(shape)",
+              "required": true
+            },
+            {
+              "name": "Shape__Length",
+              "type": "esriFieldTypeDouble",
+              "alias": "st_length(shape)",
+              "domain": null,
+              "editable": false,
+              "nullable": true,
+              "defaultValue": null,
+              "modelName": "st_length(shape)",
+              "required": true
+            },
+            {
+              "name": "globalid",
+              "type": "esriFieldTypeGlobalID",
+              "alias": "GlobalID",
+              "domain": null,
+              "editable": false,
+              "nullable": false,
+              "length": 38,
+              "defaultValue": null,
+              "modelName": "globalid"
+            }
+          ],
+          "geometryField": {
+            "name": "shape",
+            "type": "esriFieldTypeGeometry",
+            "alias": "SHAPE",
+            "domain": null,
+            "editable": true,
+            "nullable": true,
+            "defaultValue": null,
+            "modelName": "shape"
+          },
+          "indexes": [
+            {
+              "name": "r715_sde_rowid_uk",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "objectid"
+            },
+            {
+              "name": "uuid_715",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "globalid"
+            },
+            {
+              "name": "a570_ix1",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "shape"
+            }
+          ],
+          "datesInUnknownTimezone": false,
+          "dateFieldsTimeReference": {
+            "timeZone": "UTC",
+            "timeZoneIANA": "Etc/UTC",
+            "respectsDaylightSaving": false
+          },
+          "preferredTimeReference": null,
+          "types": [],
+          "templates": [
+            {
+              "name": "Construcción",
+              "description": "",
+              "prototype": {
+                "attributes": {
+                  "local_id": "000000000000000000000000000000",
+                  "estado_construccion": 1,
+                  "etiqueta": null,
+                  "relacion_superficie": "En_Rasante",
+                  "identificador": "A",
+                  "tipo_construccion": "Convencional",
+                  "tipo_dominio": "Privado",
+                  "total_pisos": 1,
+                  "total_sotanos": 0,
+                  "total_mezanines": 0,
+                  "total_semisotanos": 0,
+                  "altura_total_construccion": 3
+                }
+              },
+              "drawingTool": "esriFeatureEditToolPolygon"
+            }
+          ],
+          "maxRecordCount": 2000,
+          "supportedQueryFormats": "JSON, geoJSON, PBF",
+          "supportedExportFormats": "sqlite,filegdb,shapefile,csv,geojson",
+          "capabilities": "Query,Extract",
+          "useStandardizedQueries": true,
+          "bigIntegerRestrictedTo53Bits": true,
+          "supportedSpatialRelationships": [
+            "esriSpatialRelIntersects",
+            "esriSpatialRelContains",
+            "esriSpatialRelCrosses",
+            "esriSpatialRelEnvelopeIntersects",
+            "esriSpatialRelIndexIntersects",
+            "esriSpatialRelOverlaps",
+            "esriSpatialRelTouches",
+            "esriSpatialRelWithin",
+            "esriSpatialRelRelation"
+          ],
+          "supportsAppend": true,
+          "supportedAppendFormats": "FILEGDB,PBF",
+          "standardMaxRecordCount": 4000,
+          "tileMaxRecordCount": 4000,
+          "standardMaxRecordCountNoGeometry": 32000,
+          "maxRecordCountFactor": 1,
+          "serviceItemId": "c5d96cfd4e3e4a398f9a93d444acf3b3"
+        },
+        "sample_query": {
+          "objectIdFieldName": "objectid",
+          "globalIdFieldName": "globalid",
+          "geometryType": "esriGeometryPolygon",
+          "spatialReference": {
+            "wkid": 9377,
+            "latestWkid": 9377
+          },
+          "hasZ": false,
+          "fields": [
+            {
+              "name": "objectid",
+              "alias": "OBJECTID",
+              "type": "esriFieldTypeOID"
+            },
+            {
+              "name": "etiqueta",
+              "alias": "Etiqueta",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "relacion_superficie",
+              "alias": "Relación Superficie",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "identificador",
+              "alias": "Identificador",
+              "type": "esriFieldTypeString",
+              "length": 20
+            },
+            {
+              "name": "tipo_construccion",
+              "alias": "Tipo Construcción",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "tipo_dominio",
+              "alias": "Tipo Dominio",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "total_pisos",
+              "alias": "Total Pisos",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "total_sotanos",
+              "alias": "Total Sotanos",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "total_mezanines",
+              "alias": "Total Mezanines",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "total_semisotanos",
+              "alias": "Total Semisotanos",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "altura_total_construccion",
+              "alias": "Altura Total Construcción",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "local_id",
+              "alias": "Local Id",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "estado_construccion",
+              "alias": "Estado Construcción",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "Shape__Area",
+              "alias": "st_area(shape)",
+              "type": "esriFieldTypeDouble"
+            },
+            {
+              "name": "Shape__Length",
+              "alias": "st_length(shape)",
+              "type": "esriFieldTypeDouble"
+            },
+            {
+              "name": "globalid",
+              "alias": "GlobalID",
+              "type": "esriFieldTypeGlobalID",
+              "length": 38
+            }
+          ],
+          "features": [
+            {
+              "attributes": {
+                "objectid": 1,
+                "etiqueta": null,
+                "relacion_superficie": "En_Rasante",
+                "identificador": "A",
+                "tipo_construccion": "Convencional",
+                "tipo_dominio": "Privado",
+                "total_pisos": 1,
+                "total_sotanos": 0,
+                "total_mezanines": 0,
+                "total_semisotanos": 0,
+                "altura_total_construccion": 3,
+                "local_id": "080010104000004660049000000000",
+                "estado_construccion": 1,
+                "Shape__Area": 34.109916435,
+                "Shape__Length": 25.42411398773995,
+                "globalid": "{51EC0E45-BC86-4B7F-A12A-9345BE1CAA86}"
+              },
+              "geometry": {
+                "rings": [
+                  [
+                    [
+                      4801348.3783,
+                      2770736.3910000008
+                    ],
+                    [
+                      4801345.7286,
+                      2770733.4838999994
+                    ],
+                    [
+                      4801342.9114,
+                      2770736.1032
+                    ],
+                    [
+                      4801344.8176,
+                      2770738.1962
+                    ],
+                    [
+                      4801346.2221,
+                      2770739.738399999
+                    ],
+                    [
+                      4801348.8744,
+                      2770742.650699999
+                    ],
+                    [
+                      4801351.7046,
+                      2770740.0404000003
+                    ],
+                    [
+                      4801350.784,
+                      2770739.0303000007
+                    ],
+                    [
+                      4801350.1884,
+                      2770738.3769000005
+                    ],
+                    [
+                      4801348.9843,
+                      2770737.0558
+                    ],
+                    [
+                      4801348.3783,
+                      2770736.3910000008
+                    ]
+                  ]
+                ]
+              }
+            }
+          ],
+          "exceededTransferLimit": true
+        }
+      },
+      "key_fields": {
+        "present": {
+          "etiqueta": "etiqueta"
+        },
+        "absent": [
+          "numero_predial",
+          "numero_predial_anterior",
+          "condicion_predio",
+          "tipo_predio",
+          "estado_predio",
+          "destinacion_economica",
+          "clase_suelo",
+          "categoria_suelo",
+          "codigo_homologado",
+          "vigencia",
+          "fecha_inscripcion",
+          "area_catastral_terreno",
+          "aplica_efectos_registrales",
+          "simb_activ",
+          "actividad",
+          "poligono",
+          "nombre_uso",
+          "tratamient",
+          "tipo_trata",
+          "altura_max",
+          "nivel",
+          "zona",
+          "riesedif",
+          "riespers",
+          "riesmit",
+          "nombre",
+          "localidad"
+        ]
+      }
+    },
+    {
+      "label": "Unidad de Construccion",
+      "resolved": {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 305,
+        "name": "Unidad de Construcción",
+        "kind": "layer",
+        "is_group": false
+      },
+      "captured": {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 305,
+        "layer_metadata_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/305?f=json",
+        "layer_metadata_provenance": {
+          "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/305?f=json",
+          "transport": "allorigins",
+          "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F305%3Ff%3Djson",
+          "http_status": 200,
+          "fetched_at_utc": "2026-09-29T16:38:22.503588+00:00",
+          "elapsed_s": 3.1,
+          "attempt_count": 1,
+          "served_from_cache": true,
+          "attempts": [
+            {
+              "transport": "allorigins",
+              "attempt": 1,
+              "http_status": 200,
+              "bytes": 8722,
+              "reject_reason": null,
+              "error": null,
+              "at": "2026-09-29T16:38:22.503531+00:00"
+            }
+          ]
+        },
+        "sample_query_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/305/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+        "sample_query_provenance": {
+          "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/305/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+          "transport": "allorigins",
+          "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F305%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+          "http_status": 200,
+          "fetched_at_utc": "2026-09-29T16:41:38.621323+00:00",
+          "elapsed_s": 196.1,
+          "attempt_count": 18,
+          "served_from_cache": true,
+          "attempts": [
+            {
+              "transport": "allorigins",
+              "attempt": 13,
+              "http_status": null,
+              "bytes": 0,
+              "reject_reason": "not_json",
+              "error": "TimeoutError: The read operation timed out",
+              "at": "2026-09-29T16:40:48.750617+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 14,
+              "http_status": 522,
+              "bytes": 979,
+              "reject_reason": "proxy_error_envelope",
+              "error": "HTTPError 522",
+              "at": "2026-09-29T16:41:08.490446+00:00"
+            },
+            {
+              "transport": "codetabs",
+              "attempt": 15,
+              "http_status": 522,
+              "bytes": 977,
+              "reject_reason": "proxy_error_envelope",
+              "error": "HTTPError 522",
+              "at": "2026-09-29T16:41:28.189692+00:00"
+            },
+            {
+              "transport": "cors_eu_org",
+              "attempt": 16,
+              "http_status": 429,
+              "bytes": 53086,
+              "reject_reason": "html_block_marker",
+              "error": "HTTPError 429",
+              "at": "2026-09-29T16:41:28.387321+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 17,
+              "http_status": 200,
+              "bytes": 6265,
+              "reject_reason": "html_block_marker",
+              "error": null,
+              "at": "2026-09-29T16:41:33.833430+00:00"
+            },
+            {
+              "transport": "allorigins",
+              "attempt": 18,
+              "http_status": 200,
+              "bytes": 1700,
+              "reject_reason": null,
+              "error": null,
+              "at": "2026-09-29T16:41:38.621310+00:00"
+            }
+          ]
+        },
+        "_status": "OK",
+        "layer_name": "Unidad de Construcción",
+        "layer_type": "Feature Layer",
+        "geometry_type": "esriGeometryPolygon",
+        "display_field": "tipo_planta",
+        "object_id_field": "objectid",
+        "max_record_count": 2000,
+        "field_count": 11,
+        "fields": [
+          {
+            "name": "objectid",
+            "alias": "OBJECTID",
+            "type": "esriFieldTypeOID",
+            "length": null
+          },
+          {
+            "name": "etiqueta",
+            "alias": "Etiqueta",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "relacion_superficie",
+            "alias": "Relación Superficie",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "planta_ubicacion",
+            "alias": "Planta Ubicación",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "altura",
+            "alias": "Altura",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "local_id",
+            "alias": "Local Id",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "tipo_planta",
+            "alias": "Tipo Planta",
+            "type": "esriFieldTypeString",
+            "length": 255
+          },
+          {
+            "name": "estado_unidad_construccion",
+            "alias": "Estado Unidad de Construcción",
+            "type": "esriFieldTypeSmallInteger",
+            "length": null
+          },
+          {
+            "name": "Shape__Area",
+            "alias": "st_area(shape)",
+            "type": "esriFieldTypeDouble",
+            "length": null
+          },
+          {
+            "name": "Shape__Length",
+            "alias": "st_length(shape)",
+            "type": "esriFieldTypeDouble",
+            "length": null
+          },
+          {
+            "name": "globalid",
+            "alias": "GlobalID",
+            "type": "esriFieldTypeGlobalID",
+            "length": 38
+          }
+        ],
+        "raw_layer_metadata": {
+          "currentVersion": 11.5,
+          "cimVersion": "3.5.0",
+          "id": 305,
+          "name": "Unidad de Construcción",
+          "type": "Feature Layer",
+          "parentLayer": {
+            "id": 300,
+            "name": "Áreas catastrales"
+          },
+          "defaultVisibility": true,
+          "minScale": 2500,
+          "maxScale": 0,
+          "canScaleSymbols": false,
+          "geometryType": "esriGeometryPolygon",
+          "description": "File Geodatabase Feature Class - Polygon (Área Construida, Etiqueta, Tipo Planta, Planta Ubicación, Altura, Relación Superficie)",
+          "copyrightText": "IGAC",
+          "editFieldsInfo": null,
+          "ownershipBasedAccessControlForFeatures": null,
+          "syncCanReturnChanges": false,
+          "relationships": [
+            {
+              "id": 1,
+              "name": "CR_Predio",
+              "relatedTableId": 500,
+              "cardinality": "esriRelCardinalityManyToMany",
+              "role": "esriRelRoleOrigin",
+              "keyField": "globalid",
+              "composite": false,
+              "catalogID": "{FA248173-0E6F-4202-ACBA-FB4797F8DDE0}",
+              "relationshipTableId": 602,
+              "keyFieldInRelationshipTable": "CR_UnidadConstruccion_GUID"
+            },
+            {
+              "id": 2,
+              "name": "CR_CaracteristicasUnidadConstruccion",
+              "relatedTableId": 505,
+              "cardinality": "esriRelCardinalityOneToMany",
+              "role": "esriRelRoleDestination",
+              "keyField": "cr_caracteristicasunidad_guid",
+              "composite": false,
+              "catalogID": "{0F6040BB-8E9B-4EB4-A1BE-CF1C9927EC3D}"
+            },
+            {
+              "id": 3,
+              "name": "CR_Construccion",
+              "relatedTableId": 310,
+              "cardinality": "esriRelCardinalityOneToMany",
+              "role": "esriRelRoleDestination",
+              "keyField": "cr_construccion_guid",
+              "composite": false,
+              "catalogID": "{F6B0871F-0537-43DD-AA87-E44908098731}"
+            }
+          ],
+          "isDataVersioned": false,
+          "isDataArchived": false,
+          "infoInEstimates": [
+            "extent",
+            "count"
+          ],
+          "isDataBranchVersioned": false,
+          "isDataReplicaTracked": false,
+          "isCoGoEnabled": false,
+          "supportsRollbackOnFailureParameter": true,
+          "archivingInfo": {
+            "supportsQueryWithHistoricMoment": false,
+            "startArchivingMoment": -1
+          },
+          "supportsStatistics": true,
+          "supportsExceedsLimitStatistics": true,
+          "supportsAdvancedQueries": true,
+          "supportsValidateSQL": true,
+          "supportsCoordinatesQuantization": true,
+          "supportsQuantizationEditMode": true,
+          "supportsCalculate": true,
+          "supportsASyncCalculate": true,
+          "supportsDurableUrlForSyncModelNone": false,
+          "supportsDatumTransformation": true,
+          "advancedQueryCapabilities": {
+            "supportsPagination": true,
+            "supportsQueryWithDistance": true,
+            "supportsReturningQueryExtent": true,
+            "supportsStatistics": true,
+            "supportsPercentileStatistics": true,
+            "supportsHavingClause": true,
+            "supportsOrderBy": true,
+            "supportsDistinct": true,
+            "supportsCountDistinct": true,
+            "supportsAdvancedQueryRelated": true,
+            "supportsQueryRelatedPagination": true,
+            "supportsCurrentUserQueries": true,
+            "supportsFullTextSearch": true,
+            "fullTextSearchCapabilities": {
+              "supportsSearchOperator": true,
+              "supportsOperator": false,
+              "supportsSqlExpressionInFullText": true
+            },
+            "fullTextSearchableFields": [],
+            "supportsQueryWithResultType": true,
+            "supportsReturningGeometryCentroid": true,
+            "supportsReturningGeometryEnvelope": true,
+            "supportsSqlExpression": true,
+            "supportsQueryWithDatumTransformation": true,
+            "supportsLod": false,
+            "supportsQueryWithLodSR": false,
+            "supportsQueryAnalytic": true,
+            "supportsTrueCurve": true,
+            "supportedCurveTypes": [
+              "esriGeometryCircularArc",
+              "esriGeometryEllipticArc",
+              "esriGeometryBezier3Curve"
+            ],
+            "supportsQueryWithCacheHint": false
+          },
+          "advancedQueryAnalyticCapabilities": {
+            "supportsLinearRegression": true,
+            "supportsAsync": true,
+            "supportsPercentileAnalytic": false
+          },
+          "advancedEditingCapabilities": {
+            "supportedSqlFormatsInCalculate": [
+              "standard"
+            ],
+            "supportsAsyncApplyEdits": true,
+            "supportsApplyEditsbyUploadID": true,
+            "supportedApplyEditsUploadIDFormats": "JSON,PBF"
+          },
+          "hasGeometryProperties": true,
+          "geometryProperties": {
+            "shapeAreaFieldName": "Shape__Area",
+            "shapeLengthFieldName": "Shape__Length",
+            "units": "esriMeters"
+          },
+          "hasMetadata": true,
+          "extent": {
+            "xmin": 4790628.9909,
+            "ymin": 2764638.7138,
+            "xmax": 4807916.4988,
+            "ymax": 2781153.0310999993,
+            "zmin": -41.480200000005425,
+            "zmax": 181.61500000000524,
+            "spatialReference": {
+              "wkid": 9377,
+              "latestWkid": 9377,
+              "xyTolerance": 0.001,
+              "zTolerance": 0.001,
+              "mTolerance": 0.001,
+              "falseX": -618700,
+              "falseY": -8436100,
+              "xyUnits": 10000,
+              "falseZ": -100000,
+              "zUnits": 10000,
+              "falseM": -100000,
+              "mUnits": 10000
+            }
+          },
+          "spatialReference": {
+            "wkid": 9377,
+            "latestWkid": 9377,
+            "xyTolerance": 0.001,
+            "zTolerance": 0.001,
+            "mTolerance": 0.001,
+            "falseX": -618700,
+            "falseY": -8436100,
+            "xyUnits": 10000,
+            "falseZ": -100000,
+            "zUnits": 10000,
+            "falseM": -100000,
+            "mUnits": 10000
+          },
+          "sourceSpatialReference": {
+            "wkid": 9377,
+            "latestWkid": 9377,
+            "xyTolerance": 0.001,
+            "zTolerance": 0.001,
+            "mTolerance": 0.001,
+            "falseX": -618700,
+            "falseY": -8436100,
+            "xyUnits": 10000,
+            "falseZ": -100000,
+            "zUnits": 10000,
+            "falseM": -100000,
+            "mUnits": 10000
+          },
+          "drawingInfo": {
+            "renderer": {
+              "type": "simple",
+              "symbol": {
+                "type": "esriSFS",
+                "style": "esriSFSSolid",
+                "color": [
+                  246,
+                  197,
+                  198,
+                  255
+                ],
+                "outline": {
+                  "type": "esriSLS",
+                  "style": "esriSLSSolid",
+                  "color": [
+                    243,
+                    172,
+                    173,
+                    255
+                  ],
+                  "width": 0.4
+                }
+              }
+            },
+            "scaleSymbols": true,
+            "transparency": 0,
+            "labelingInfo": null
+          },
+          "hasM": false,
+          "hasZ": true,
+          "enableZDefaults": false,
+          "supportsVCSProjection": true,
+          "allowGeometryUpdates": true,
+          "allowTrueCurvesUpdates": true,
+          "onlyAllowTrueCurveUpdatesByTrueCurveClients": true,
+          "hasAttachments": false,
+          "supportsApplyEditsWithGlobalIds": true,
+          "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+          "objectIdField": "objectid",
+          "globalIdField": "globalid",
+          "displayField": "tipo_planta",
+          "typeIdField": "",
+          "subtypeField": "",
+          "fields": [
+            {
+              "name": "objectid",
+              "type": "esriFieldTypeOID",
+              "alias": "OBJECTID",
+              "domain": null,
+              "editable": false,
+              "nullable": false,
+              "defaultValue": null,
+              "modelName": "objectid"
+            },
+            {
+              "name": "etiqueta",
+              "type": "esriFieldTypeString",
+              "alias": "Etiqueta",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": null,
+              "modelName": "etiqueta"
+            },
+            {
+              "name": "relacion_superficie",
+              "type": "esriFieldTypeString",
+              "alias": "Relación Superficie",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "En_Rasante",
+              "modelName": "relacion_superficie"
+            },
+            {
+              "name": "planta_ubicacion",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Planta Ubicación",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 1,
+              "modelName": "planta_ubicacion"
+            },
+            {
+              "name": "altura",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Altura",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 3,
+              "modelName": "altura"
+            },
+            {
+              "name": "local_id",
+              "type": "esriFieldTypeString",
+              "alias": "Local Id",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "000000000000000000000000000000",
+              "modelName": "local_id"
+            },
+            {
+              "name": "tipo_planta",
+              "type": "esriFieldTypeString",
+              "alias": "Tipo Planta",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "length": 255,
+              "defaultValue": "Piso",
+              "modelName": "tipo_planta"
+            },
+            {
+              "name": "estado_unidad_construccion",
+              "type": "esriFieldTypeSmallInteger",
+              "alias": "Estado Unidad de Construcción",
+              "domain": null,
+              "editable": true,
+              "nullable": true,
+              "defaultValue": 1,
+              "modelName": "estado_unidad_construccion"
+            },
+            {
+              "name": "Shape__Area",
+              "type": "esriFieldTypeDouble",
+              "alias": "st_area(shape)",
+              "domain": null,
+              "editable": false,
+              "nullable": true,
+              "defaultValue": null,
+              "modelName": "st_area(shape)",
+              "required": true
+            },
+            {
+              "name": "Shape__Length",
+              "type": "esriFieldTypeDouble",
+              "alias": "st_length(shape)",
+              "domain": null,
+              "editable": false,
+              "nullable": true,
+              "defaultValue": null,
+              "modelName": "st_length(shape)",
+              "required": true
+            },
+            {
+              "name": "globalid",
+              "type": "esriFieldTypeGlobalID",
+              "alias": "GlobalID",
+              "domain": null,
+              "editable": false,
+              "nullable": false,
+              "length": 38,
+              "defaultValue": null,
+              "modelName": "globalid"
+            }
+          ],
+          "geometryField": {
+            "name": "shape",
+            "type": "esriFieldTypeGeometry",
+            "alias": "SHAPE",
+            "domain": null,
+            "editable": true,
+            "nullable": true,
+            "defaultValue": null,
+            "modelName": "shape"
+          },
+          "indexes": [
+            {
+              "name": "r718_sde_rowid_uk",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "objectid"
+            },
+            {
+              "name": "uuid_718",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "globalid"
+            },
+            {
+              "name": "a573_ix1",
+              "isAscending": true,
+              "isUnique": true,
+              "description": "",
+              "fields": "shape"
+            }
+          ],
+          "datesInUnknownTimezone": false,
+          "dateFieldsTimeReference": {
+            "timeZone": "UTC",
+            "timeZoneIANA": "Etc/UTC",
+            "respectsDaylightSaving": false
+          },
+          "preferredTimeReference": null,
+          "types": [],
+          "templates": [
+            {
+              "name": "Unidad de Construcción",
+              "description": "",
+              "prototype": {
+                "attributes": {
+                  "tipo_planta": "Piso",
+                  "estado_unidad_construccion": 1,
+                  "etiqueta": null,
+                  "relacion_superficie": "En_Rasante",
+                  "planta_ubicacion": 1,
+                  "altura": 3,
+                  "local_id": "000000000000000000000000000000"
+                }
+              },
+              "drawingTool": "esriFeatureEditToolPolygon"
+            }
+          ],
+          "maxRecordCount": 2000,
+          "supportedQueryFormats": "JSON, geoJSON, PBF",
+          "supportedExportFormats": "sqlite,filegdb,shapefile,csv,geojson",
+          "capabilities": "Query,Extract",
+          "useStandardizedQueries": true,
+          "bigIntegerRestrictedTo53Bits": true,
+          "supportedSpatialRelationships": [
+            "esriSpatialRelIntersects",
+            "esriSpatialRelContains",
+            "esriSpatialRelCrosses",
+            "esriSpatialRelEnvelopeIntersects",
+            "esriSpatialRelIndexIntersects",
+            "esriSpatialRelOverlaps",
+            "esriSpatialRelTouches",
+            "esriSpatialRelWithin",
+            "esriSpatialRelRelation"
+          ],
+          "supportsAppend": true,
+          "supportedAppendFormats": "FILEGDB,PBF",
+          "standardMaxRecordCount": 4000,
+          "tileMaxRecordCount": 4000,
+          "standardMaxRecordCountNoGeometry": 32000,
+          "maxRecordCountFactor": 1,
+          "serviceItemId": "c5d96cfd4e3e4a398f9a93d444acf3b3"
+        },
+        "sample_query": {
+          "objectIdFieldName": "objectid",
+          "globalIdFieldName": "globalid",
+          "geometryType": "esriGeometryPolygon",
+          "spatialReference": {
+            "wkid": 9377,
+            "latestWkid": 9377
+          },
+          "hasZ": false,
+          "fields": [
+            {
+              "name": "objectid",
+              "alias": "OBJECTID",
+              "type": "esriFieldTypeOID"
+            },
+            {
+              "name": "etiqueta",
+              "alias": "Etiqueta",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "relacion_superficie",
+              "alias": "Relación Superficie",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "planta_ubicacion",
+              "alias": "Planta Ubicación",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "altura",
+              "alias": "Altura",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "local_id",
+              "alias": "Local Id",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "tipo_planta",
+              "alias": "Tipo Planta",
+              "type": "esriFieldTypeString",
+              "length": 255
+            },
+            {
+              "name": "estado_unidad_construccion",
+              "alias": "Estado Unidad de Construcción",
+              "type": "esriFieldTypeSmallInteger"
+            },
+            {
+              "name": "Shape__Area",
+              "alias": "st_area(shape)",
+              "type": "esriFieldTypeDouble"
+            },
+            {
+              "name": "Shape__Length",
+              "alias": "st_length(shape)",
+              "type": "esriFieldTypeDouble"
+            },
+            {
+              "name": "globalid",
+              "alias": "GlobalID",
+              "type": "esriFieldTypeGlobalID",
+              "length": 38
+            }
+          ],
+          "features": [
+            {
+              "attributes": {
+                "objectid": 1,
+                "etiqueta": "B",
+                "relacion_superficie": "En_Rasante",
+                "planta_ubicacion": 1,
+                "altura": 3,
+                "local_id": "080010001000000000449000000000",
+                "tipo_planta": "Piso",
+                "estado_unidad_construccion": 1,
+                "Shape__Area": 12.9895372,
+                "Shape__Length": 16.99335246240678,
+                "globalid": "{9ADE3070-6852-4ECD-B946-FA639CE70586}"
+              },
+              "geometry": {
+                "rings": [
+                  [
+                    [
+                      4797456.6673,
+                      2777545.388699999
+                    ],
+                    [
+                      4797463.1404,
+                      2777544.8246999998
+                    ],
+                    [
+                      4797462.9667,
+                      2777542.8331000004
+                    ],
+                    [
+                      4797456.4938,
+                      2777543.3970999997
+                    ],
+                    [
+                      4797456.6673,
+                      2777545.388699999
+                    ]
+                  ]
+                ]
+              }
+            }
+          ],
+          "exceededTransferLimit": true
+        }
+      },
+      "key_fields": {
+        "present": {
+          "etiqueta": "etiqueta"
+        },
+        "absent": [
+          "numero_predial",
+          "numero_predial_anterior",
+          "condicion_predio",
+          "tipo_predio",
+          "estado_predio",
+          "destinacion_economica",
+          "clase_suelo",
+          "categoria_suelo",
+          "codigo_homologado",
+          "vigencia",
+          "fecha_inscripcion",
+          "area_catastral_terreno",
+          "aplica_efectos_registrales",
+          "simb_activ",
+          "actividad",
+          "poligono",
+          "nombre_uso",
+          "tratamient",
+          "tipo_trata",
+          "altura_max",
+          "nivel",
+          "zona",
+          "riesedif",
+          "riespers",
+          "riesmit",
+          "nombre",
+          "localidad"
+        ]
+      }
+    }
+  ]
+}

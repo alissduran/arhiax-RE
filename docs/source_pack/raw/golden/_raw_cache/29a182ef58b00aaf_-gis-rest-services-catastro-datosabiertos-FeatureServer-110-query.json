@@ -1,0 +1,112 @@
+{
+  "ok": true,
+  "data": {
+    "objectIdFieldName": "objectid",
+    "globalIdFieldName": "globalid",
+    "geometryType": "esriGeometryPolyline",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "hasZ": false,
+    "fields": [
+      {
+        "name": "objectid",
+        "alias": "OBJECTID",
+        "type": "esriFieldTypeOID"
+      },
+      {
+        "name": "tipo_via",
+        "alias": "Tipo Vía",
+        "type": "esriFieldTypeString",
+        "length": 50
+      },
+      {
+        "name": "numero_via",
+        "alias": "Número Vía",
+        "type": "esriFieldTypeString",
+        "length": 100
+      },
+      {
+        "name": "Shape__Length",
+        "alias": "st_length(shape)",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "globalid",
+        "alias": "GlobalID",
+        "type": "esriFieldTypeGlobalID",
+        "length": 38
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "tipo_via": "Carrera",
+          "numero_via": "9 G",
+          "Shape__Length": 270.85140142445226,
+          "globalid": "{06A68120-0451-46A9-BE77-50CC5FA912A4}"
+        },
+        "geometry": {
+          "paths": [
+            [
+              [
+                4797741.1593,
+                2769557.6231999993
+              ],
+              [
+                4797891.0104,
+                2769538.355799999
+              ],
+              [
+                4798009.7496,
+                2769522.701199999
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/110/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F110%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:38:12.705308+00:00",
+    "elapsed_s": 43.2,
+    "attempt_count": 3,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:37:49.123981+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:38:08.808763+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 907,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:38:12.705247+00:00"
+      }
+    ]
+  }
+}

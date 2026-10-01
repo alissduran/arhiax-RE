@@ -1,0 +1,308 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "niveldeamenaza",
+    "fieldAliases": {
+      "objectid": "OBJECTID",
+      "niveldeamenaza": "Nivel de amenaza",
+      "clase_suelo": "Clase de suelo",
+      "st_area(shape)": "Área en metros cuadrados"
+    },
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "niveldeamenaza",
+        "type": "esriFieldTypeString",
+        "alias": "Nivel de amenaza",
+        "length": 30
+      },
+      {
+        "name": "clase_suelo",
+        "type": "esriFieldTypeString",
+        "alias": "Clase de suelo",
+        "length": 512
+      },
+      {
+        "name": "st_area(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "Área en metros cuadrados"
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "niveldeamenaza": "Media",
+          "clase_suelo": "01",
+          "st_area(shape)": 1202.020555585
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                4799749.0452,
+                2777150.2387000006
+              ],
+              [
+                4799731.0175,
+                2777105.3627000004
+              ],
+              [
+                4799729.8808,
+                2777105.3696999997
+              ],
+              [
+                4799729.8631,
+                2777102.4891
+              ],
+              [
+                4799729.0144,
+                2777100.3763999995
+              ],
+              [
+                4799724.8519,
+                2777100.4020000007
+              ],
+              [
+                4799724.8213,
+                2777095.4036999997
+              ],
+              [
+                4799719.823,
+                2777095.4343
+              ],
+              [
+                4799719.7311,
+                2777080.4394000005
+              ],
+              [
+                4799714.7328,
+                2777080.4700000007
+              ],
+              [
+                4799714.6354,
+                2777064.5832
+              ],
+              [
+                4799710.9867,
+                2777055.5003999993
+              ],
+              [
+                4799709.5814,
+                2777055.5090999994
+              ],
+              [
+                4799709.5595,
+                2777051.947899999
+              ],
+              [
+                4799706.9805,
+                2777045.527899999
+              ],
+              [
+                4799704.5219,
+                2777045.5430999994
+              ],
+              [
+                4799704.4836,
+                2777039.3126
+              ],
+              [
+                4799700.9712,
+                2777030.5692
+              ],
+              [
+                4799699.4317,
+                2777030.5788000003
+              ],
+              [
+                4799699.4077,
+                2777026.6772000007
+              ],
+              [
+                4799696.9651,
+                2777020.5967999995
+              ],
+              [
+                4799689.3739,
+                2777020.6434000004
+              ],
+              [
+                4799689.4657,
+                2777035.6382999998
+              ],
+              [
+                4799694.464,
+                2777035.6076999996
+              ],
+              [
+                4799694.5559,
+                2777050.602600001
+              ],
+              [
+                4799699.5542,
+                2777050.5720000006
+              ],
+              [
+                4799699.6154,
+                2777060.568600001
+              ],
+              [
+                4799704.6137,
+                2777060.5380000006
+              ],
+              [
+                4799704.6444,
+                2777065.5363
+              ],
+              [
+                4799709.6427,
+                2777065.5056999996
+              ],
+              [
+                4799709.7958,
+                2777090.497300001
+              ],
+              [
+                4799714.7941,
+                2777090.466600001
+              ],
+              [
+                4799714.8553,
+                2777100.463300001
+              ],
+              [
+                4799719.8536,
+                2777100.432600001
+              ],
+              [
+                4799719.9148,
+                2777110.429300001
+              ],
+              [
+                4799724.9132,
+                2777110.398600001
+              ],
+              [
+                4799725.005,
+                2777125.3936
+              ],
+              [
+                4799730.0033,
+                2777125.363
+              ],
+              [
+                4799730.0646,
+                2777135.3596
+              ],
+              [
+                4799735.0629,
+                2777135.329
+              ],
+              [
+                4799735.0935,
+                2777140.327299999
+              ],
+              [
+                4799740.0918,
+                2777140.2967000008
+              ],
+              [
+                4799740.1224,
+                2777145.295
+              ],
+              [
+                4799745.1207,
+                2777145.2643
+              ],
+              [
+                4799745.1513,
+                2777150.262700001
+              ],
+              [
+                4799749.0452,
+                2777150.2387000006
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/amenazas/MapServer/2/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Friesgos%2Famenazas%2FMapServer%2F2%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:15:15.926387+00:00",
+    "elapsed_s": 37.5,
+    "attempt_count": 10,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 429,
+        "bytes": 980,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:14:39.672146+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 6,
+        "http_status": 429,
+        "bytes": 980,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:14:39.939755+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 7,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:14:59.629630+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 8,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:14:59.829085+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 9,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T16:15:11.298915+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 10,
+        "http_status": 200,
+        "bytes": 2596,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:15:15.926357+00:00"
+      }
+    ]
+  }
+}

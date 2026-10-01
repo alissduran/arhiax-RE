@@ -1,0 +1,405 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Datos abiertos de Catastro Barranquilla</span></p></div></div></div>",
+    "mapName": "Barranquilla_Publico_gis",
+    "description": "Datos abiertos de Catastro Barranquilla",
+    "copyrightText": "Gerencia de Gestión Catastral",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 100,
+        "name": "Nomenclatura",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": [
+          105,
+          110
+        ],
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Group Layer",
+        "supportsDynamicLegends": false
+      },
+      {
+        "id": 105,
+        "name": "Dirección",
+        "parentLayerId": 100,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 500,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 110,
+        "name": "Nomenclatura vial",
+        "parentLayerId": 100,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 24000,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolyline",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 200,
+        "name": "Líneas Catastrales",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": [
+          205
+        ],
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Group Layer",
+        "supportsDynamicLegends": false
+      },
+      {
+        "id": 205,
+        "name": "TerrenoL",
+        "parentLayerId": 200,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 500,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolyline",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 300,
+        "name": "Áreas catastrales",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": [
+          305,
+          310,
+          315,
+          320
+        ],
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Group Layer",
+        "supportsDynamicLegends": false
+      },
+      {
+        "id": 305,
+        "name": "Unidad de Construcción",
+        "parentLayerId": 300,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 2500,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 310,
+        "name": "Construcción",
+        "parentLayerId": 300,
+        "defaultVisibility": false,
+        "subLayerIds": null,
+        "minScale": 2500,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 315,
+        "name": "Terreno",
+        "parentLayerId": 300,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 5000,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 320,
+        "name": "Manzana",
+        "parentLayerId": 300,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 10000,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [
+      {
+        "id": 500,
+        "name": "Predio",
+        "type": "Table"
+      },
+      {
+        "id": 505,
+        "name": "Caracteristicas Unidad de Construcción",
+        "type": "Table"
+      },
+      {
+        "id": 510,
+        "name": "Estructura Novedad Numero Predial",
+        "type": "Table"
+      },
+      {
+        "id": 515,
+        "name": "Fuente Administrativa",
+        "type": "Table"
+      },
+      {
+        "id": 520,
+        "name": "Trámites",
+        "type": "Table"
+      },
+      {
+        "id": 525,
+        "name": "Agrupacion de Interesados",
+        "type": "Table"
+      },
+      {
+        "id": 530,
+        "name": "Tipología de la Construcción",
+        "type": "Table"
+      },
+      {
+        "id": 535,
+        "name": "Calificación Convencional",
+        "type": "Table"
+      },
+      {
+        "id": 540,
+        "name": "Estructura Predio Origen NPN",
+        "type": "Table"
+      },
+      {
+        "id": 545,
+        "name": "Datos Adicionales de Levantamiento Catastral",
+        "type": "Table"
+      },
+      {
+        "id": 601,
+        "name": "CR_Terreno_CR_Predio",
+        "type": "Table"
+      },
+      {
+        "id": 602,
+        "name": "CR_UnidadConstruccion_CR_Predio",
+        "type": "Table"
+      },
+      {
+        "id": 603,
+        "name": "CR_Construccion_CR_Predio",
+        "type": "Table"
+      }
+    ],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4801326.629057731,
+      "ymin": 2773324.140380284,
+      "xmax": 4801393.830186245,
+      "ymax": 2773385.7043280397,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4790211.3538,
+      "ymin": 2764638.7138,
+      "xmax": 4807916.4988,
+      "ymax": 2781153.0310999993,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 24000,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Catastro Datos Abiertos",
+      "Author": "",
+      "Comments": "Datos abiertos de Catastro Barranquilla",
+      "Subject": "Datos abiertos de Catastro Barranquilla",
+      "Category": "",
+      "Version": "3.2.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Catastro"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "floorAwareMapProperties": {
+      "defaultFloorFilterSettings": {
+        "isEnabled": false
+      }
+    },
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "FeatureServer, OGCFeatureServer, WFSServer, WMSServer",
+    "serviceItemId": "66dd1c595d9544f3a8274db3bebc6410"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:23:30.032871+00:00",
+    "elapsed_s": 45.7,
+    "attempt_count": 5,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:23:04.011227+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:23:21.226114+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:23:25.639049+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:23:27.424285+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 200,
+        "bytes": 5789,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:23:30.032796+00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,223 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;font-size:12pt'><p><span>Consolida información sobre centros de bienestar animal y veterinarias en el Distrito de Barranquilla, espacios dedicados al cuidado, atención y protección de los animales. Facilita el acceso a servicios de salud y bienestar animal, para la tenencia responsable de mascotas y fortalecer la red de apoyo para la fauna doméstica y silvestre de la ciudad.</span></p></div>",
+    "mapName": "Bienestar animal",
+    "description": "Consolida información sobre centros de bienestar animal y veterinarias en el Distrito de Barranquilla, espacios dedicados al cuidado, atención y protección de los animales. Facilita el acceso a servicios de salud y bienestar animal, para la tenencia responsable de mascotas y fortalecer la red de apoyo para la fauna doméstica y silvestre de la ciudad.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Centro de Bienestar Animal",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Veterinarias",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4792430.699023628,
+      "ymin": 2768628.926860056,
+      "xmax": 4801083.15874246,
+      "ymax": 2774507.5561407926,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4793067.059,
+      "ymin": 2765788.4048999995,
+      "xmax": 4805965.0566,
+      "ymax": 2777311.8061999995,
+      "zmin": 0,
+      "zmax": 0,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Bienestar animal",
+      "Author": "",
+      "Comments": "Consolida información sobre centros de bienestar animal y veterinarias en el Distrito de Barranquilla, espacios dedicados al cuidado, atención y protección de los animales. Facilita el acceso a servicios de salud y bienestar animal, para la tenencia responsable de mascotas y fortalecer la red de apoyo para la fauna doméstica y silvestre de la ciudad.",
+      "Subject": "Permite identificar los lugares en donde se prestan servicios de salud para animales en el Distrito de Barranquilla.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Veterinaria,Animal,Cuidado,Salud,Mascotas,Atención"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "d0c699a420c24372945461fc1d3bb52f"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/bienestaranimal/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fsalud%2Fbienestaranimal%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:29:25.621400+00:00",
+    "elapsed_s": 72.7,
+    "attempt_count": 12,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "codetabs",
+        "attempt": 7,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:28:35.181275+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 8,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:28:35.397861+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 9,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T15:28:49.350962+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 10,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:29:09.261093+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 11,
+        "http_status": 408,
+        "bytes": 24,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 408",
+        "at": "2026-09-29T15:29:21.573324+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 12,
+        "http_status": 200,
+        "bytes": 4067,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:29:25.621348+00:00"
+      }
+    ]
+  }
+}

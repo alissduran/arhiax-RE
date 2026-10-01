@@ -1,0 +1,50 @@
+[
+  {
+    "proxy": "allorigins_raw",
+    "target": "control_arcgis_agol",
+    "status": 408,
+    "head": "Oops... Request Timeout."
+  },
+  {
+    "proxy": "allorigins_raw",
+    "target": "control_example",
+    "status": 408,
+    "head": "Oops... Request Timeout."
+  },
+  {
+    "proxy": "allorigins_raw",
+    "target": "baq_mapserver",
+    "status": 200,
+    "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"no-js ie8 oldie\" lang=\""
+  },
+  {
+    "proxy": "allorigins_raw",
+    "target": "baq_root",
+    "status": 200,
+    "head": "{\"currentVersion\":11.5,\"folders\":[\"ambiente\",\"aplicaciones\",\"catastro\",\"cultura\",\"economico\",\"educacion\",\"equidad\",\"espaciopublico\",\"impuesto\",\"movilidad\",\"observatorio\",\"ordenamiento\",\"ortofotos\",\"participacionciudadana"
+  },
+  {
+    "proxy": "codetabs",
+    "target": "control_arcgis_agol",
+    "status": 503,
+    "head": "error code: 1200\n"
+  },
+  {
+    "proxy": "codetabs",
+    "target": "control_example",
+    "status": 522,
+    "head": "error code: 522\n"
+  },
+  {
+    "proxy": "codetabs",
+    "target": "baq_mapserver",
+    "status": 522,
+    "head": "error code: 522\n"
+  },
+  {
+    "proxy": "codetabs",
+    "target": "baq_root",
+    "status": 522,
+    "head": "error code: 522\n"
+  }
+]

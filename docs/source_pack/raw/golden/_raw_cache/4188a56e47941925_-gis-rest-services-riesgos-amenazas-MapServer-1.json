@@ -1,0 +1,583 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 1,
+    "name": "Amenaza por inundación",
+    "type": "Feature Layer",
+    "description": "Delimita las áreas del Distrito de Barranquilla expuestas a amenaza por inundación, clasificadas según niveles de riesgo que van desde bajo hasta muy alto e incorpora la profundidad estimada del evento. Esta información se establece conforme al instrumento de ordenamiento territorial vigente (Decreto 0212 de 2014).",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de planeación.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "profundidad",
+        "uniqueValueGroups": [
+          {
+            "heading": "Profundidad estimada",
+            "classes": [
+              {
+                "label": "0 - 1,5 metros",
+                "description": "0 - 1,5 metros",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    135,
+                    186,
+                    195,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "0 - 1,5 metros"
+                  ]
+                ]
+              },
+              {
+                "label": "1,5 - 3 metros",
+                "description": "1,5 - 3 metros",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    83,
+                    98,
+                    158,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "1,5 - 3 metros"
+                  ]
+                ]
+              },
+              {
+                "label": "Mayor a 3 metros",
+                "description": "Mayor a 3 metros",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    71,
+                    52,
+                    114,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "Mayor a 3 metros"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                135,
+                186,
+                195,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "0 - 1,5 metros",
+            "label": "0 - 1,5 metros"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                83,
+                98,
+                158,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "1,5 - 3 metros",
+            "label": "1,5 - 3 metros"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                71,
+                52,
+                114,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "Mayor a 3 metros",
+            "label": "Mayor a 3 metros"
+          }
+        ],
+        "fieldDelimiter": ";",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  142,
+                  212,
+                  200,
+                  255
+                ],
+                "toColor": [
+                  142,
+                  212,
+                  200,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  255,
+                  255,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  255,
+                  255,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  189,
+                  184,
+                  217,
+                  255
+                ],
+                "toColor": [
+                  189,
+                  184,
+                  217,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": 4795535.5311,
+      "ymin": 2767100.2496000007,
+      "xmax": 4808313.4969,
+      "ymax": 2778931.8342000004,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "profundidad",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "profundidad",
+        "type": "esriFieldTypeString",
+        "alias": "Profundidad estimada",
+        "length": 25,
+        "domain": {
+          "type": "codedValue",
+          "name": "Profundidad",
+          "description": "Categoriza la profundidad estimada del evento.",
+          "codedValues": [
+            {
+              "name": "0 - 1,5 metros",
+              "code": "0 - 1,5 metros"
+            },
+            {
+              "name": "1,5 - 3 metros",
+              "code": "1,5 - 3 metros"
+            },
+            {
+              "name": "Mayor a 3 metros",
+              "code": "Mayor a 3 metros"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "niveldeamenaza",
+        "type": "esriFieldTypeString",
+        "alias": "Nivel de amenaza",
+        "length": 15,
+        "domain": {
+          "type": "codedValue",
+          "name": "Niveldeamenaza",
+          "description": "Categoriza el nivel de riesgo.",
+          "codedValues": [
+            {
+              "name": "Alto",
+              "code": "Alto"
+            },
+            {
+              "name": "Bajo",
+              "code": "Bajo"
+            },
+            {
+              "name": "Medio",
+              "code": "Medio"
+            },
+            {
+              "name": "Muy alto",
+              "code": "Muy alto"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "clase_suelo",
+        "type": "esriFieldTypeString",
+        "alias": "Clase de suelo",
+        "length": 512,
+        "domain": {
+          "type": "codedValue",
+          "name": "Clasesueloamenaza",
+          "description": "Clase de suelo en amenaza",
+          "codedValues": [
+            {
+              "name": "Rural",
+              "code": "00"
+            },
+            {
+              "name": "Urbano",
+              "code": "01"
+            },
+            {
+              "name": "Expansión urbana",
+              "code": "02"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "st_area(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "Área en metros cuadrados",
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "r87_sde_rowid_uk",
+        "fields": "objectid",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      },
+      {
+        "name": "a69_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Map,Query,Data",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "56c941310a474d96b46639021e0f160d"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/amenazas/MapServer/1?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Friesgos%2Famenazas%2FMapServer%2F1%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:16:37.279895+00:00",
+    "elapsed_s": 121.6,
+    "attempt_count": 17,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 12,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:15:27.147484+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 13,
+        "http_status": null,
+        "bytes": 0,
+        "reject_reason": "not_json",
+        "error": "TimeoutError: The read operation timed out",
+        "at": "2026-09-29T16:15:52.271373+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 14,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:16:11.944732+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 15,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:16:31.827729+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 16,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:16:32.023459+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 17,
+        "http_status": 200,
+        "bytes": 7578,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:16:37.279854+00:00"
+      }
+    ]
+  }
+}

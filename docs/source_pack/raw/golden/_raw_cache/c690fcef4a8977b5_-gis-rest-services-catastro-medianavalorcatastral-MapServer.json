@@ -1,0 +1,474 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Representa</span><span> la mediana del valor integral por metro cuadrado catastral calculada </span><span>a nivel predial </span><span>y representada a nivel de manzana, de manera que cada mapa refleja una medida central y representativa del comportamiento de la mediana del valor integral para </span><span>la</span><span>s</span><span> vigencia</span><span>s</span><span> </span><span>entre </span><span>2018</span><span> a 2026</span><span>; al analizar la</span><span> capa </span><span>se obtiene una visión comparativa que permite identificar variaciones, tendencias y patrones de cambio en la dinámica del valor catastral urbano</span><span>.</span></p></div></div></div>",
+    "mapName": "Mediana del m² catastral",
+    "description": "Representa la mediana del valor integral por metro cuadrado catastral calculada a nivel predial y representada a nivel de manzana, de manera que cada mapa refleja una medida central y representativa del comportamiento de la mediana del valor integral para las vigencias entre 2018 a 2026; al analizar la capa se obtiene una visión comparativa que permite identificar variaciones, tendencias y patrones de cambio en la dinámica del valor catastral urbano.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Mediana del m² catastral. Año 2018.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Mediana del m² catastral. Año 2020.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 3,
+        "name": "Mediana del m² catastral. Año 2021.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 4,
+        "name": "Mediana del m² catastral. Año 2022.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 5,
+        "name": "Mediana del m² catastral. Año 2023.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 6,
+        "name": "Mediana del m² catastral. Año 2024.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 7,
+        "name": "Mediana del m² catastral. Año 2025.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 8,
+        "name": "Mediana del m² catastral. Año 2026.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 102100,
+      "latestWkid": 3857,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -20037700,
+      "falseY": -30241100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": true,
+    "tileInfo": {
+      "rows": 256,
+      "cols": 256,
+      "dpi": 96,
+      "format": "PNG",
+      "compressionQuality": 0,
+      "origin": {
+        "x": -20037508.342787,
+        "y": 20037508.342787
+      },
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 148923141.92838538,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "lods": [
+        {
+          "level": 0,
+          "resolution": 156543.033928,
+          "scale": 591657527.591555
+        },
+        {
+          "level": 1,
+          "resolution": 78271.5169639999,
+          "scale": 295828763.795777
+        },
+        {
+          "level": 2,
+          "resolution": 39135.7584820001,
+          "scale": 147914381.897889
+        },
+        {
+          "level": 3,
+          "resolution": 19567.8792409999,
+          "scale": 73957190.948944
+        },
+        {
+          "level": 4,
+          "resolution": 9783.93962049996,
+          "scale": 36978595.474472
+        },
+        {
+          "level": 5,
+          "resolution": 4891.96981024998,
+          "scale": 18489297.737236
+        },
+        {
+          "level": 6,
+          "resolution": 2445.98490512499,
+          "scale": 9244648.868618
+        },
+        {
+          "level": 7,
+          "resolution": 1222.99245256249,
+          "scale": 4622324.434309
+        },
+        {
+          "level": 8,
+          "resolution": 611.49622628138,
+          "scale": 2311162.217155
+        },
+        {
+          "level": 9,
+          "resolution": 305.748113140558,
+          "scale": 1155581.108577
+        },
+        {
+          "level": 10,
+          "resolution": 152.874056570411,
+          "scale": 577790.554289
+        },
+        {
+          "level": 11,
+          "resolution": 76.4370282850732,
+          "scale": 288895.277144
+        },
+        {
+          "level": 12,
+          "resolution": 38.2185141425366,
+          "scale": 144447.638572
+        },
+        {
+          "level": 13,
+          "resolution": 19.1092570712683,
+          "scale": 72223.819286
+        },
+        {
+          "level": 14,
+          "resolution": 9.55462853563415,
+          "scale": 36111.909643
+        },
+        {
+          "level": 15,
+          "resolution": 4.77731426794937,
+          "scale": 18055.954822
+        },
+        {
+          "level": 16,
+          "resolution": 2.38865713397468,
+          "scale": 9027.977411
+        },
+        {
+          "level": 17,
+          "resolution": 1.19432856685505,
+          "scale": 4513.988705
+        },
+        {
+          "level": 18,
+          "resolution": 0.597164283559817,
+          "scale": 2256.994353
+        },
+        {
+          "level": 19,
+          "resolution": 0.298582141647617,
+          "scale": 1128.497176
+        },
+        {
+          "level": 20,
+          "resolution": 0.14929107082380833,
+          "scale": 564.248588
+        },
+        {
+          "level": 21,
+          "resolution": 0.07464553541190416,
+          "scale": 282.124294
+        },
+        {
+          "level": 22,
+          "resolution": 0.03732276770595208,
+          "scale": 141.062147
+        },
+        {
+          "level": 23,
+          "resolution": 0.01866138385297604,
+          "scale": 70.5310735
+        }
+      ]
+    },
+    "storageInfo": {
+      "storageFormat": "esriMapCacheStorageModeCompactV2",
+      "packetSize": 128
+    },
+    "initialExtent": {
+      "xmin": -8339577.26722142,
+      "ymin": 1223273.3585657342,
+      "xmax": -8318249.990313331,
+      "ymax": 1238545.9108742739,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": -8338279.578510376,
+      "ymin": 1223055.2519156777,
+      "xmax": -8322053.667443092,
+      "ymax": 1237936.7697030718,
+      "zmin": 0,
+      "zmax": 0,
+      "mmin": null,
+      "mmax": null,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "timeInfo": {
+      "timeExtent": [
+        1514678400000,
+        1798675200000
+      ],
+      "timeReference": null,
+      "timeRelation": "esriTimeRelationOverlaps",
+      "defaultTimeInterval": 1,
+      "defaultTimeIntervalUnits": "esriTimeUnitsYears",
+      "defaultTimeWindow": 1,
+      "defaultTimeWindowUnits": "esriTimeUnitsYears",
+      "hasLiveData": false,
+      "liveModeOffsetDirection": "past"
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 591657527.591555,
+    "maxScale": 564.248588,
+    "minLOD": 0,
+    "maxLOD": 20,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Mediana del m² catastral.",
+      "Author": "",
+      "Comments": "Representa la mediana del valor integral por metro cuadrado catastral calculada a nivel predial y representada a nivel de manzana, de manera que cada mapa refleja una medida central y representativa del comportamiento de la mediana del valor integral para las vigencias entre 2018 a 2026; al analizar la capa se obtiene una visión comparativa que permite identificar variaciones, tendencias y patrones de cambio en la dinámica del valor catastral urbano.",
+      "Subject": "Muestra el valor de la mediana del metro cuadrado integral (catastral) a nivel de manzana para el área urbana de Barranquilla para las vigencias entre 2018 a 2026.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Mediana,Valor integral,Tendencia,Predio,Manzana,Indicador central,Distribución,Tendencia,Manzana"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data,TileMap",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "WFSServer, WMSServer",
+    "serviceItemId": "72c08b4a8e5f45cca04caef8343364be"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fmedianavalorcatastral%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:16:59.970495+00:00",
+    "elapsed_s": 27.4,
+    "attempt_count": 5,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "microlink",
+        "attempt": 1,
+        "http_status": 429,
+        "bytes": 143,
+        "reject_reason": "not_json",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:16:32.797405+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:16:53.006493+00:00"
+      },
+      {
+        "transport": "direct",
+        "attempt": 3,
+        "http_status": 403,
+        "bytes": 5493,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 403",
+        "at": "2026-09-29T15:16:53.109104+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 4,
+        "http_status": 429,
+        "bytes": 143,
+        "reject_reason": "not_json",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:16:54.033831+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 200,
+        "bytes": 8805,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:16:59.970427+00:00"
+      }
+    ]
+  }
+}

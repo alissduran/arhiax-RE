@@ -1,0 +1,950 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 3,
+    "name": "Espacio público",
+    "type": "Feature Layer",
+    "description": "Identifica diversos tipos de espacios públicos, como bulevares, canchas deportivas, malecones, parques, plazas, plazoletas y polideportivos, los cuales funcionan como puntos de encuentro, esparcimiento y actividad física para los barranquilleros. Muestra también código identificador del espacio, dirección, barrio y localidad.",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Agencia Distrital de Infraestructura.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "tipo_espacio",
+        "uniqueValueGroups": [
+          {
+            "heading": "Tipo de espacio público",
+            "classes": [
+              {
+                "label": "Boulevard",
+                "description": "Boulevard",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    123,
+                    84,
+                    47,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSNull",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0
+                  }
+                },
+                "values": [
+                  [
+                    "Boulevard"
+                  ]
+                ]
+              },
+              {
+                "label": "Cancha",
+                "description": "Cancha",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    28,
+                    77,
+                    141,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.3
+                  }
+                },
+                "values": [
+                  [
+                    "Cancha"
+                  ]
+                ]
+              },
+              {
+                "label": "Malecón",
+                "description": "Malecón",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    35,
+                    155,
+                    72,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.3
+                  }
+                },
+                "values": [
+                  [
+                    "Malecon"
+                  ]
+                ]
+              },
+              {
+                "label": "Parque",
+                "description": "Parque",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    155,
+                    194,
+                    100,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.1
+                  }
+                },
+                "values": [
+                  [
+                    "Parque"
+                  ]
+                ]
+              },
+              {
+                "label": "Plaza",
+                "description": "Plaza",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    152,
+                    106,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.3
+                  }
+                },
+                "values": [
+                  [
+                    "Plaza"
+                  ]
+                ]
+              },
+              {
+                "label": "Plazoleta",
+                "description": "Plazoleta",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    226,
+                    175,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.2
+                  }
+                },
+                "values": [
+                  [
+                    "Plazoleta"
+                  ]
+                ]
+              },
+              {
+                "label": "Polideportivo",
+                "description": "Polideportivo",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    255,
+                    86,
+                    86,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      255
+                    ],
+                    "width": 0.3
+                  }
+                },
+                "values": [
+                  [
+                    "Polideportivo"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                123,
+                84,
+                47,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSNull",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0
+              }
+            },
+            "value": "Boulevard",
+            "label": "Boulevard"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                28,
+                77,
+                141,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.3
+              }
+            },
+            "value": "Cancha",
+            "label": "Cancha"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                35,
+                155,
+                72,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.3
+              }
+            },
+            "value": "Malecon",
+            "label": "Malecón"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                155,
+                194,
+                100,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.1
+              }
+            },
+            "value": "Parque",
+            "label": "Parque"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                152,
+                106,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.3
+              }
+            },
+            "value": "Plaza",
+            "label": "Plaza"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                226,
+                175,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.2
+              }
+            },
+            "value": "Plazoleta",
+            "label": "Plazoleta"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                255,
+                86,
+                86,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  255
+                ],
+                "width": 0.3
+              }
+            },
+            "value": "Polideportivo",
+            "label": "Polideportivo"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  221,
+                  194,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  221,
+                  194,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  182,
+                  183,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  182,
+                  183,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  182,
+                  252,
+                  183,
+                  255
+                ],
+                "toColor": [
+                  182,
+                  252,
+                  183,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  194,
+                  248,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  194,
+                  248,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  179,
+                  227,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  179,
+                  227,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  246,
+                  252,
+                  187,
+                  255
+                ],
+                "toColor": [
+                  246,
+                  252,
+                  187,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  212,
+                  230,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  212,
+                  230,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  187,
+                  252,
+                  224,
+                  255
+                ],
+                "toColor": [
+                  187,
+                  252,
+                  224,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  189,
+                  217,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  189,
+                  217,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  182,
+                  191,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  182,
+                  191,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  232,
+                  204,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  232,
+                  204,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  211,
+                  252,
+                  202,
+                  255
+                ],
+                "toColor": [
+                  211,
+                  252,
+                  202,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  248,
+                  210,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  248,
+                  210,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": 4792945.6338,
+      "ymin": 2765543.8149999995,
+      "xmax": 4807310.7234,
+      "ymax": 2778816.7686,
+      "zmin": 0,
+      "zmax": 26.299299999998766,
+      "mmin": 0,
+      "mmax": 0,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "codigo",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "codigo",
+        "type": "esriFieldTypeString",
+        "alias": "Código",
+        "length": 255,
+        "domain": null
+      },
+      {
+        "name": "nombre_espacio",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre espacio público",
+        "length": 512,
+        "domain": null
+      },
+      {
+        "name": "tipo_espacio",
+        "type": "esriFieldTypeString",
+        "alias": "Tipo de espacio público",
+        "length": 100,
+        "domain": {
+          "type": "codedValue",
+          "name": "ep_tipo_espacio_publico",
+          "description": "Clasificación del espacio público",
+          "codedValues": [
+            {
+              "name": "Boulevard",
+              "code": "Boulevard"
+            },
+            {
+              "name": "Cancha",
+              "code": "Cancha"
+            },
+            {
+              "name": "Malecón",
+              "code": "Malecon"
+            },
+            {
+              "name": "Parque",
+              "code": "Parque"
+            },
+            {
+              "name": "Plaza",
+              "code": "Plaza"
+            },
+            {
+              "name": "Plazoleta",
+              "code": "Plazoleta"
+            },
+            {
+              "name": "Polideportivo",
+              "code": "Polideportivo"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "direccion",
+        "type": "esriFieldTypeString",
+        "alias": "Dirección",
+        "length": 512,
+        "domain": null
+      },
+      {
+        "name": "barrio",
+        "type": "esriFieldTypeString",
+        "alias": "Barrio",
+        "length": 100,
+        "domain": null
+      },
+      {
+        "name": "localidad",
+        "type": "esriFieldTypeString",
+        "alias": "Localidad",
+        "length": 2,
+        "domain": {
+          "type": "codedValue",
+          "name": "ep_localidades",
+          "description": "Categoriza las localidades.",
+          "codedValues": [
+            {
+              "name": "Riomar",
+              "code": "01"
+            },
+            {
+              "name": "Norte - centro histórico",
+              "code": "02"
+            },
+            {
+              "name": "Suroccidente",
+              "code": "03"
+            },
+            {
+              "name": "Suroriente",
+              "code": "04"
+            },
+            {
+              "name": "Metropolitana",
+              "code": "05"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "a252_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Query,Map,Data",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "hasZ": true,
+    "hasM": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "7328065d63634be4957f2333f8dd6285"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer/3?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fespaciopublico%2Finfraestructuraespaciopublico%2FMapServer%2F3%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:06:03.101431+00:00",
+    "elapsed_s": 39.7,
+    "attempt_count": 3,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T17:05:43.560011+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T17:05:56.855193+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 10384,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:06:03.101389+00:00"
+      }
+    ]
+  }
+}

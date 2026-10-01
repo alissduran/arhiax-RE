@@ -1,0 +1,76 @@
+{
+  "ok": true,
+  "data": {
+    "error": {
+      "code": 499,
+      "message": "Token Required",
+      "details": []
+    }
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/gestionpredial/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fgestionpredial%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:14:56.024914+00:00",
+    "elapsed_s": 72.5,
+    "attempt_count": 11,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "direct",
+        "attempt": 6,
+        "http_status": 403,
+        "bytes": 5493,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 403",
+        "at": "2026-09-29T15:14:25.463027+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 7,
+        "http_status": 429,
+        "bytes": 143,
+        "reject_reason": "not_json",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:14:26.381845+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 8,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:14:46.543646+00:00"
+      },
+      {
+        "transport": "direct",
+        "attempt": 9,
+        "http_status": 403,
+        "bytes": 5493,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 403",
+        "at": "2026-09-29T15:14:46.660045+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 10,
+        "http_status": 429,
+        "bytes": 143,
+        "reject_reason": "not_json",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:14:47.581740+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 11,
+        "http_status": 200,
+        "bytes": 62,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:14:56.024829+00:00"
+      }
+    ]
+  }
+}

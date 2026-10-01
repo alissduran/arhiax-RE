@@ -1,0 +1,188 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Este servicio integra la infraestructura de transporte del Distrito de Barranquilla, incorporando componentes como vías, corredores de movilidad, infraestructura complementaria y elementos asociados a la circulación vehicular, peatonal y alterna. La información permite evaluar la red de transporte en términos de accesibilidad, jerarquía vial, articulación territorial y soporte para la planeación urbana. Asimismo, constituye un insumo clave para estudios de movilidad, gestión de infraestructura y toma de decisiones orientadas al mejoramiento del sistema de transporte y su capacidad de respuesta frente a la demanda urbana.</span></p></div></div></div>",
+    "mapName": "Infraestructura de transporte",
+    "description": "Este servicio integra la infraestructura de transporte del Distrito de Barranquilla, incorporando componentes como vías, corredores de movilidad, infraestructura complementaria y elementos asociados a la circulación vehicular, peatonal y alterna. La información permite evaluar la red de transporte en términos de accesibilidad, jerarquía vial, articulación territorial y soporte para la planeación urbana. Asimismo, constituye un insumo clave para estudios de movilidad, gestión de infraestructura y toma de decisiones orientadas al mejoramiento del sistema de transporte y su capacidad de respuesta frente a la demanda urbana.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Ciclorruta",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolyline",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4795259.623218169,
+      "ymin": 2763392.6294351975,
+      "xmax": 4816120.434810149,
+      "ymax": 2780658.234075824,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4797926.8564,
+      "ymin": 2767050.5528000016,
+      "xmax": 4806479.9983,
+      "ymax": 2777095.995500002,
+      "zmin": 0,
+      "zmax": 0,
+      "mmin": null,
+      "mmax": null,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Infraestructura de Transporte",
+      "Author": "",
+      "Comments": "Este servicio integra la infraestructura de transporte del Distrito de Barranquilla, incorporando componentes como vías, corredores de movilidad, infraestructura complementaria y elementos asociados a la circulación vehicular, peatonal y alterna. La información permite evaluar la red de transporte en términos de accesibilidad, jerarquía vial, articulación territorial y soporte para la planeación urbana. Asimismo, constituye un insumo clave para estudios de movilidad, gestión de infraestructura y toma de decisiones orientadas al mejoramiento del sistema de transporte y su capacidad de respuesta frente a la demanda urbana.",
+      "Subject": "Reúne la infraestructura de transporte del Distrito, incluyendo los diferentes elementos viales y de movilidad que estructuran el territorio. Su propósito es facilitar el análisis de conectividad, funcionalidad y soporte físico para los distintos modos de transporte urbano.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Tránsito,Seguridad vial,Movilidad,Puntos de riesgo,Señalización,Red vial,Circulación,Control vehicular,Movilidad urbana,Barranquilla,Accesibilidad,Transporte"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "698ff10da4ce484a9a6d34090e33a3ee"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/infraestructuradetransporte/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fmovilidad%2Finfraestructuradetransporte%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:58:42.955570+00:00",
+    "elapsed_s": 2.2,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5239,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:58:42.955557+00:00"
+      }
+    ]
+  }
+}

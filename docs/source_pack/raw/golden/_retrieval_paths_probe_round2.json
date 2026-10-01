@@ -1,0 +1,74 @@
+{
+  "translate_goog": {
+    "url": "https://miciudad-barraquilla-gov-co.translate.goog/gis/rest/services/catastro/datosabiertos/MapServer?f=json&_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=en",
+    "status": 404,
+    "error": "HTTPError 404",
+    "head": "<!DOCTYPE html><html><head><script>window['ppConfig'] = {productName: 'a89246f01efa04d48da2a721ccb48e84', deleteIsEnforced:  false , sealIsEnforced:  false , heartbeatRate:  0.5 , periodicReportingRateMillis:  60000.0 , disableAllReporting:  false };(function(){'use strict';function k(a){var b=0;ret"
+  },
+  "translate_goog_root": {
+    "url": "https://miciudad-barraquilla-gov-co.translate.goog/gis/rest/services?f=json&_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=en",
+    "status": 404,
+    "error": "HTTPError 404",
+    "head": "<!DOCTYPE html><html><head><script>window['ppConfig'] = {productName: 'a89246f01efa04d48da2a721ccb48e84', deleteIsEnforced:  false , sealIsEnforced:  false , heartbeatRate:  0.5 , periodicReportingRateMillis:  60000.0 , disableAllReporting:  false };(function(){'use strict';function k(a){var b=0;ret"
+  },
+  "wayback_domain": {
+    "url": "http://web.archive.org/cdx/search/cdx?url=miciudad.barranquilla.gov.co&matchType=domain&output=json&limit=60",
+    "status": 200,
+    "len": 3,
+    "head": "[]\n"
+  },
+  "wayback_prefix": {
+    "url": "http://web.archive.org/cdx/search/cdx?url=miciudad.barranquilla.gov.co/gis/rest&matchType=prefix&output=json&limit=60",
+    "status": 200,
+    "len": 3,
+    "head": "[]\n"
+  },
+  "wayback_any": {
+    "url": "http://web.archive.org/cdx/search/cdx?url=barranquilla.gov.co&matchType=domain&output=json&limit=60&filter=urlkey:.*gis.*",
+    "status": 200,
+    "len": 16717,
+    "head": "[[\"urlkey\",\"timestamp\",\"original\",\"mimetype\",\"statuscode\",\"digest\",\"length\"],\n[\"co,gov,barranquilla)/6-7-6-registro-de-las-observaciones-de-las-veedurias\",\"20260112232006\",\"https://barranquilla.gov.co/6-7-6-registro-de-las-observaciones-de-las-veedurias\",\"text/html\",\"200\",\"3W26BBNNYGOC4M3LP7L3M6F3HOEBJQOT\",\"23607\"],\n[\"co,gov,barranquilla)/6-7-6-registro-de-las-observaciones-de-las-veedurias\",\"2026"
+  },
+  "timemap": {
+    "url": "http://web.archive.org/web/timemap/link/https://miciudad.barranquilla.gov.co/gis/rest/services",
+    "status": 200,
+    "len": 1,
+    "head": "\n"
+  },
+  "cors_lol": {
+    "url": "https://api.cors.lol/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%3Ff%3Djson",
+    "status": 429,
+    "error": "HTTPError 429",
+    "head": "Rate limit exceeded\n"
+  },
+  "whateverorigin": {
+    "url": "http://www.whateverorigin.org/get?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%3Ff%3Djson",
+    "status": 200,
+    "len": 10821,
+    "head": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Whatever Origin | The Original Open Source CORS Proxy</title>\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"/favicon.ico\" />\n    <meta\n      name=\"description\"\n      content=\"Whatever Origin is the original open source CORS proxy, helping d"
+  },
+  "codetabs_alt": {
+    "url": "https://api.codetabs.com/v1/proxy/?quest=https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "status": 522,
+    "error": "HTTPError 522",
+    "head": "{\"type\":\"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\",\"title\":\"Error 522: Connection timed out\",\"status\":522,\"detail\":\"Cloudflare could not establish a TCP connection to the origin server. The TCP handshake timed out, which may indicat"
+  },
+  "allorigins_alt": {
+    "url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%3Ff%3Djson",
+    "status": 522,
+    "error": "HTTPError 522",
+    "head": "{\"type\":\"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\",\"title\":\"Error 522: Connection timed out\",\"status\":522,\"detail\":\"Cloudflare could not establish a TCP connection to the origin server. The TCP handshake timed out, which may indicat"
+  },
+  "12ft": {
+    "url": "https://r.jina.ai/https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+    "status": 403,
+    "error": "HTTPError 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scal"
+  },
+  "textise": {
+    "url": "https://api.scrapingant.com/v2/general?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%3Ff%3Djson",
+    "status": 422,
+    "error": "HTTPError 422",
+    "head": "{\"detail\":\"API token is missing. Please check out the documentation: https://docs.scrapingant.com/\"}"
+  }
+}

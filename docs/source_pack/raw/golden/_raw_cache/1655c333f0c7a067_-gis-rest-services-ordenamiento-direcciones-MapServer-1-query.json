@@ -1,0 +1,219 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "codigopostal",
+    "fieldAliases": {
+      "objectid": "OBJECTID_1",
+      "codigopostal": "Código postal",
+      "secuencia": "Secuencia",
+      "codigomanzana": "Código manzana",
+      "localidad": "Localidad",
+      "barrio": "Barrio",
+      "st_area(shape)": "st_area(shape)",
+      "st_length(shape)": "st_length(shape)"
+    },
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 102100,
+      "latestWkid": 3857
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID_1"
+      },
+      {
+        "name": "codigopostal",
+        "type": "esriFieldTypeString",
+        "alias": "Código postal",
+        "length": 6
+      },
+      {
+        "name": "secuencia",
+        "type": "esriFieldTypeString",
+        "alias": "Secuencia",
+        "length": 4
+      },
+      {
+        "name": "codigomanzana",
+        "type": "esriFieldTypeString",
+        "alias": "Código manzana",
+        "length": 10
+      },
+      {
+        "name": "localidad",
+        "type": "esriFieldTypeString",
+        "alias": "Localidad",
+        "length": 50
+      },
+      {
+        "name": "barrio",
+        "type": "esriFieldTypeString",
+        "alias": "Barrio",
+        "length": 75
+      },
+      {
+        "name": "st_area(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_area(shape)"
+      },
+      {
+        "name": "st_length(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_length(shape)"
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "codigopostal": "05",
+          "secuencia": "199",
+          "codigomanzana": "080005199",
+          "localidad": "04",
+          "barrio": "Simón Bolívar",
+          "st_area(shape)": 9257.01824494,
+          "st_length(shape)": 467.0883002141753
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                -8324074.9213531995,
+                1225931.6538430536
+              ],
+              [
+                -8324076.314069366,
+                1225927.2599258863
+              ],
+              [
+                -8324095.794628604,
+                1225882.4741250013
+              ],
+              [
+                -8324107.90110504,
+                1225889.7017382078
+              ],
+              [
+                -8324120.424179868,
+                1225895.0877546368
+              ],
+              [
+                -8324178.309948743,
+                1225919.6078709222
+              ],
+              [
+                -8324199.599797762,
+                1225928.960133414
+              ],
+              [
+                -8324266.252093324,
+                1225958.0146416111
+              ],
+              [
+                -8324264.722683707,
+                1225962.4084552408
+              ],
+              [
+                -8324251.503354956,
+                1225992.737830389
+              ],
+              [
+                -8324247.188561036,
+                1226004.076689862
+              ],
+              [
+                -8324179.145128345,
+                1225976.7225558015
+              ],
+              [
+                -8324162.725812424,
+                1225969.9201245364
+              ],
+              [
+                -8324111.239984625,
+                1225947.810526935
+              ],
+              [
+                -8324086.193735122,
+                1225937.323631074
+              ],
+              [
+                -8324074.9213531995,
+                1225931.6538430536
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/direcciones/MapServer/1/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Fdirecciones%2FMapServer%2F1%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:24:08.765427+00:00",
+    "elapsed_s": 294.7,
+    "attempt_count": 28,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "codetabs",
+        "attempt": 23,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:23:49.550859+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 24,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:23:50.114268+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 25,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:23:55.362444+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 26,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:23:58.571391+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 27,
+        "http_status": 200,
+        "bytes": 6253,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:24:01.821654+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 28,
+        "http_status": 200,
+        "bytes": 1958,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:24:08.765376+00:00"
+      }
+    ]
+  }
+}

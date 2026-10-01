@@ -1,0 +1,223 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><p><span>Consolida los espacios y servicios orientados a la atención y el desarrollo integral de la primera infancia en el Distrito de Barranquilla. Permite ubicar los centros y unidades de atención, permite identificar los lugares donde niños, niñas y madres gestantes reciben acompañamiento en procesos de cuidado, educación inicial, nutrición y fortalecimiento de su desarrollo físico, cognitivo y socioemocional.</span></p></div></div>",
+    "mapName": "Primera infancia",
+    "description": "Consolida los espacios y servicios orientados a la atención y el desarrollo integral de la primera infancia en el Distrito de Barranquilla. Permite ubicar los centros y unidades de atención, permite identificar los lugares donde niños, niñas y madres gestantes reciben acompañamiento en procesos de cuidado, educación inicial, nutrición y fortalecimiento de su desarrollo físico, cognitivo y socioemocional.",
+    "copyrightText": "Creative Commons By Share Alike 4.0",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Centros de desarrollo infantil",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Unidades de servicio",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPoint",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4799947.237145237,
+      "ymin": 2770832.0685869055,
+      "xmax": 4800780.613306875,
+      "ymax": 2771321.9808143144,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4792851.5326,
+      "ymin": 2765250.7547999993,
+      "xmax": 4807881.5562,
+      "ymax": 2778849.873299999,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Primera infancia",
+      "Author": "",
+      "Comments": "Consolida los espacios y servicios orientados a la atención y el desarrollo integral de la primera infancia en el Distrito de Barranquilla. Permite ubicar los centros y unidades de atención, permite identificar los lugares donde niños, niñas y madres gestantes reciben acompañamiento en procesos de cuidado, educación inicial, nutrición y fortalecimiento de su desarrollo físico, cognitivo y socioemocional.",
+      "Subject": "Recopila los lugares destinados a la atención y el desarrollo integral de la primera infancia en Barranquilla, donde niños, niñas y madres gestantes reciben acompañamiento en procesos de cuidado, educación inicial y nutrición.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Primera infancia,Educación,Niños,Madres gestantes,Social"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 15738,
+            "latestWkid": 15738,
+            "transformForward": true,
+            "name": "MAGNA_To_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 15738,
+            "latestWkid": 15738,
+            "transformForward": false,
+            "name": "MAGNA_To_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "41ec349110614ad3a70f9fd5aee0cba4"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/primerainfancia/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Feducacion%2Fprimerainfancia%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:56:33.017607+00:00",
+    "elapsed_s": 61.1,
+    "attempt_count": 4,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5997,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:55:50.223734+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:56:09.759417+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:56:29.217826+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 200,
+        "bytes": 4592,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:56:33.017562+00:00"
+      }
+    ]
+  }
+}

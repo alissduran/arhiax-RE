@@ -1,0 +1,76 @@
+{
+  "ok": true,
+  "data": {
+    "error": {
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started ",
+      "details": []
+    }
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/100?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%2F100%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:03:04.869605+00:00",
+    "elapsed_s": 139.0,
+    "attempt_count": 10,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": null,
+        "bytes": 0,
+        "reject_reason": "not_json",
+        "error": "TimeoutError: The read operation timed out",
+        "at": "2026-09-29T16:02:14.860374+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 6,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:02:19.999839+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 7,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:02:39.932851+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 8,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:02:40.114252+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 9,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T16:02:59.891456+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 10,
+        "http_status": 200,
+        "bytes": 101,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:03:04.869585+00:00"
+      }
+    ]
+  }
+}

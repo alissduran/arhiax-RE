@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "data": {
+    "error": {
+      "code": 500,
+      "message": "Service catastro/datosabiertos/MapServer not started ",
+      "details": []
+    }
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/315?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FMapServer%2F315%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:11:58.244755+00:00",
+    "elapsed_s": 12.5,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 6000,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:11:50.164302+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 101,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:11:58.244704+00:00"
+      }
+    ]
+  }
+}

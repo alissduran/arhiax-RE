@@ -1,0 +1,105 @@
+{
+  "ok": false,
+  "data": null,
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/infraestructurasalud/MapServer/2?f=json",
+    "transport": null,
+    "ok": false,
+    "fetched_at_utc": "2026-09-29T17:11:16.725115+00:00",
+    "elapsed_s": 305.3,
+    "attempt_count": 30,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 21,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:09:34.280417+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 22,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:09:34.789743+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 23,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T17:09:54.232737+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 24,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T17:09:54.628666+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 25,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T17:10:14.611853+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 26,
+        "http_status": 520,
+        "bytes": 963,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 520",
+        "at": "2026-09-29T17:10:33.509332+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 27,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T17:10:53.352847+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 28,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T17:11:13.117759+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 29,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:11:14.485899+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 30,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:11:16.725091+00:00"
+      }
+    ],
+    "final_error": "no transport returned a valid ArcGIS JSON body"
+  }
+}

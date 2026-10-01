@@ -1,0 +1,39 @@
+{
+  "DICTUS_MASTER_HASH": "c804dc02b223c9be905f9e3103ffa54f355b7aba2986759af2ca470c7f7eee71",
+  "DICTUS_MASTER_HASH_abreviado": "C804DC02B223…EE71",
+  "sha256_ejecutivo": "4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c",
+  "sha256_tecnico": "f480e4d78947f7908198421f478de6f71cf9928011f066e8973e436b439ed80e",
+  "run_id": "16019df2-a4fd-44db-860f-e50a5cdd3c2f",
+  "generated_at": "2026-09-30T14:47:40.937950+00:00",
+  "commit_sha": "c22b1b9df6ee734101150aae0751203d2ff71ee9",
+  "commit_sha_del_run": "c22b1b9df6ee734101150aae0751203d2ff71ee9",
+  "old_master_hash": "1843ec22d0d3a1cb2e63881dcbabc5f0ec1d977a0de5f2b3da3e503005aea865",
+  "new_master_hash": "c804dc02b223c9be905f9e3103ffa54f355b7aba2986759af2ca470c7f7eee71",
+  "changed": true,
+  "old_sha256_ejecutivo": "7223d0c09f809896d36481ba443037845308b8024eec4233581036009c0d3a32",
+  "new_sha256_ejecutivo": "4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c",
+  "sha256_ejecutivo_changed": true,
+  "old_sha256_tecnico": "33265085a0b154d4f44587f55d890af7baa7696d0cb63b7dfcc4229595ad0bac",
+  "new_sha256_tecnico": "f480e4d78947f7908198421f478de6f71cf9928011f066e8973e436b439ed80e",
+  "sha256_tecnico_changed": true,
+  "origen_de_los_sha256_old": "medido con hashlib.sha256 antes de regenerar el Golden en esta tarea (los PDFs no se versionan y el pack anterior no está en git)",
+  "old_run_id": "a02a3c05-4887-4309-aa8f-51f8cc796a17",
+  "old_generated_at": "2026-09-28T20:47:36.354726+00:00",
+  "cambio_de_decision_material": true,
+  "decision_anterior_HEAD": {
+    "gate_state": null,
+    "decision": "INFORMACIÓN VERIFICADA",
+    "reason": "La valoración está autorizada y se imprime con su método y vigencia.",
+    "blocking_conditions": []
+  },
+  "decision_actual": {
+    "gate_state": "CLOSED",
+    "decision": "NO EMITIR VALORACIÓN",
+    "reason": "La valoración NO está autorizada en esta corrida: el origen de la tasa es MANUAL_CONFIG y su procedencia es INSUFICIENTE para autorizar una cifra (se exige fuente externa citada o cálculo de fuentes citadas, con fecha y sha256). No se emite cifra y se declaran los bloqueos reales.",
+    "blocking_conditions": [
+      "no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable"
+    ]
+  },
+  "nota": "cambio_de_decision_material compara la decisión del VALUATION_GATE (gate_state + decision + reason + blocking_conditions) entre la corrida anterior registrada en HEAD y la corrida actual del folio. Los valores `old` de `master_hash`/`run_id`/`generated_at` salen del manifest versionado en HEAD; los de los SHA-256 de los PDFs son la medición registrada en SHA256_PDF_ANTERIOR (no hay fuente en git: los PDFs no se versionan).",
+  "regla_del_pack": "Si la decisión material cambió y el master hash NO cambió ⇒ FAIL. Aquí: decisión material CAMBIÓ y master hash SÍ cambió."
+}

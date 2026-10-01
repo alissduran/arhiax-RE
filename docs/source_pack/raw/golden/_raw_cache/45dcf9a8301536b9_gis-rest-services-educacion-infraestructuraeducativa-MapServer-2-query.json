@@ -1,0 +1,218 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "codigoprincipal",
+    "fieldAliases": {
+      "objectid": "OBJECTID",
+      "referenciapredio": "Referencia predial",
+      "codigodane": "Código DANE",
+      "nombre": "Nombre institución",
+      "nivel_formacion": "Nivel de formación",
+      "correo": "Correo institucional",
+      "telefono": "Teléfono",
+      "direccion": "Dirección",
+      "jornadaacademica": "Jornada académica",
+      "sedeprincipal": "Sede principal",
+      "calendario": "Calendario",
+      "estado": "Estado",
+      "zona": "Zona",
+      "naturaleza_juridica": "Naturaleza jurídica",
+      "sector": "Sector",
+      "universidadalbarrio": "Universidad al Barrio"
+    },
+    "geometryType": "esriGeometryPoint",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "referenciapredio",
+        "type": "esriFieldTypeString",
+        "alias": "Referencia predial",
+        "length": 255
+      },
+      {
+        "name": "codigodane",
+        "type": "esriFieldTypeString",
+        "alias": "Código DANE",
+        "length": 254
+      },
+      {
+        "name": "nombre",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre institución",
+        "length": 254
+      },
+      {
+        "name": "nivel_formacion",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Nivel de formación"
+      },
+      {
+        "name": "correo",
+        "type": "esriFieldTypeString",
+        "alias": "Correo institucional",
+        "length": 254
+      },
+      {
+        "name": "telefono",
+        "type": "esriFieldTypeString",
+        "alias": "Teléfono",
+        "length": 100
+      },
+      {
+        "name": "direccion",
+        "type": "esriFieldTypeString",
+        "alias": "Dirección",
+        "length": 100
+      },
+      {
+        "name": "jornadaacademica",
+        "type": "esriFieldTypeString",
+        "alias": "Jornada académica",
+        "length": 50
+      },
+      {
+        "name": "sedeprincipal",
+        "type": "esriFieldTypeString",
+        "alias": "Sede principal",
+        "length": 2
+      },
+      {
+        "name": "calendario",
+        "type": "esriFieldTypeString",
+        "alias": "Calendario",
+        "length": 15
+      },
+      {
+        "name": "estado",
+        "type": "esriFieldTypeString",
+        "alias": "Estado",
+        "length": 10
+      },
+      {
+        "name": "zona",
+        "type": "esriFieldTypeString",
+        "alias": "Zona",
+        "length": 10
+      },
+      {
+        "name": "naturaleza_juridica",
+        "type": "esriFieldTypeString",
+        "alias": "Naturaleza jurídica",
+        "length": 100
+      },
+      {
+        "name": "sector",
+        "type": "esriFieldTypeString",
+        "alias": "Sector",
+        "length": 80
+      },
+      {
+        "name": "universidadalbarrio",
+        "type": "esriFieldTypeString",
+        "alias": "Universidad al Barrio",
+        "length": 2
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "referenciapredio": "080010107000003670042000000000",
+          "codigodane": "108001000000",
+          "nombre": "Institución Educativa Distrital Alfredo Correa de Andreis Sede Principal",
+          "nivel_formacion": 5,
+          "correo": "Sin información",
+          "telefono": "3644091",
+          "direccion": "Carrera 5B # 49E-27",
+          "jornadaacademica": "UCA",
+          "sedeprincipal": "S",
+          "calendario": "A",
+          "estado": "Activa",
+          "zona": "U",
+          "naturaleza_juridica": "OAL",
+          "sector": "O",
+          "universidadalbarrio": "N"
+        },
+        "geometry": {
+          "x": 4802998.532275778,
+          "y": 2767551.880900075
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/infraestructuraeducativa/MapServer/2/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Feducacion%2Finfraestructuraeducativa%2FMapServer%2F2%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:14:05.711242+00:00",
+    "elapsed_s": 209.5,
+    "attempt_count": 25,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 20,
+        "http_status": 200,
+        "bytes": 6305,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:13:13.580676+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 21,
+        "http_status": 200,
+        "bytes": 6305,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:13:19.829856+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 22,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T17:13:39.650032+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 23,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T17:13:59.227181+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 24,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T17:13:59.414218+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 25,
+        "http_status": 200,
+        "bytes": 2567,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:14:05.711223+00:00"
+      }
+    ]
+  }
+}

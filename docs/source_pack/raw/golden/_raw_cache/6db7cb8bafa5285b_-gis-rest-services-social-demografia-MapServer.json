@@ -1,0 +1,348 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Muestra la población total de Barranquilla, Colombia, junto con su distribución en rangos de edades entre 0 a 89 años. La información utilizada corresponde al Censo Nacional de Población y Vivienda 2018 del DANE.</span></p></div></div></div>",
+    "mapName": "Demografía",
+    "description": "Muestra la población total de Barranquilla, Colombia, junto con su distribución en rangos de edades entre 0 a 89 años. La información utilizada corresponde al Censo Nacional de Población y Vivienda 2018 del DANE.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Densidad poblacional",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Densidad poblacional 2025",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": true,
+    "tileInfo": {
+      "rows": 256,
+      "cols": 256,
+      "dpi": 96,
+      "format": "PNG",
+      "compressionQuality": 0,
+      "origin": {
+        "x": -4993963.156644649,
+        "y": 11552012.688130872
+      },
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "lods": [
+        {
+          "level": 0,
+          "resolution": 78077.83716128633,
+          "scale": 295097337.3024995
+        },
+        {
+          "level": 1,
+          "resolution": 39038.91858064316,
+          "scale": 147548668.65124974
+        },
+        {
+          "level": 2,
+          "resolution": 19519.45929032158,
+          "scale": 73774334.32562487
+        },
+        {
+          "level": 3,
+          "resolution": 9759.72964516079,
+          "scale": 36887167.162812434
+        },
+        {
+          "level": 4,
+          "resolution": 4879.864822580395,
+          "scale": 18443583.581406217
+        },
+        {
+          "level": 5,
+          "resolution": 2439.9324112901977,
+          "scale": 9221791.790703109
+        },
+        {
+          "level": 6,
+          "resolution": 1219.9662056450989,
+          "scale": 4610895.895351554
+        },
+        {
+          "level": 7,
+          "resolution": 609.9831028225494,
+          "scale": 2305447.947675777
+        },
+        {
+          "level": 8,
+          "resolution": 304.9915514112747,
+          "scale": 1152723.9738378886
+        },
+        {
+          "level": 9,
+          "resolution": 152.49577570563736,
+          "scale": 576361.9869189443
+        },
+        {
+          "level": 10,
+          "resolution": 76.24788785281868,
+          "scale": 288180.99345947214
+        },
+        {
+          "level": 11,
+          "resolution": 38.12394392640934,
+          "scale": 144090.49672973607
+        },
+        {
+          "level": 12,
+          "resolution": 19.06197196320467,
+          "scale": 72045.24836486804
+        },
+        {
+          "level": 13,
+          "resolution": 9.530985981602335,
+          "scale": 36022.62418243402
+        },
+        {
+          "level": 14,
+          "resolution": 4.765492990801167,
+          "scale": 18011.31209121701
+        },
+        {
+          "level": 15,
+          "resolution": 2.3827464954005837,
+          "scale": 9005.656045608504
+        },
+        {
+          "level": 16,
+          "resolution": 1.1913732477002918,
+          "scale": 4502.828022804252
+        },
+        {
+          "level": 17,
+          "resolution": 0.5956866238501459,
+          "scale": 2251.414011402126
+        },
+        {
+          "level": 18,
+          "resolution": 0.29784331192507296,
+          "scale": 1125.707005701063
+        },
+        {
+          "level": 19,
+          "resolution": 0.14892165596253648,
+          "scale": 562.8535028505315
+        },
+        {
+          "level": 20,
+          "resolution": 0.07446082798126824,
+          "scale": 281.42675142526576
+        },
+        {
+          "level": 21,
+          "resolution": 0.03723041399063412,
+          "scale": 140.71337571263288
+        },
+        {
+          "level": 22,
+          "resolution": 0.01861520699531706,
+          "scale": 70.35668785631644
+        },
+        {
+          "level": 23,
+          "resolution": 0.00930760349765853,
+          "scale": 35.17834392815822
+        }
+      ]
+    },
+    "storageInfo": {
+      "storageFormat": "esriMapCacheStorageModeCompactV2",
+      "packetSize": 128
+    },
+    "initialExtent": {
+      "xmin": 4761686.347260437,
+      "ymin": 2754814.0928347385,
+      "xmax": 4826216.7688040165,
+      "ymax": 2775872.576855522,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4790285.1222,
+      "ymin": 2764626.1865999997,
+      "xmax": 4808313.497,
+      "ymax": 2785819.9637,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 591657527.591555,
+    "maxScale": 564.248588,
+    "minLOD": 0,
+    "maxLOD": 18,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Demografía",
+      "Author": "",
+      "Comments": "Muestra la población total de Barranquilla, Colombia, junto con su distribución en rangos de edades entre 0 a 89 años. La información utilizada corresponde al Censo Nacional de Población y Vivienda 2018 del DANE.",
+      "Subject": "Muestra la población total de Barranquilla, Colombia, junto con su distribución en rangos de edades entre 0 a 89 años.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Población,Demografía,DANE,Barranquilla,Colombia,Distribución,Censo,Análisis Espacial"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data,TileMap",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "serviceItemId": "5b3bbfd2e7fc499c9b6b35146736283b"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/demografia/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fsocial%2Fdemografia%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:36:51.066762+00:00",
+    "elapsed_s": 1.5,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 6109,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:36:51.066716+00:00"
+      }
+    ]
+  }
+}

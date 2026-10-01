@@ -1,0 +1,116 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "profundidad",
+    "fieldAliases": {
+      "objectid": "OBJECTID",
+      "profundidad": "Profundidad estimada",
+      "niveldeamenaza": "Nivel de amenaza",
+      "clase_suelo": "Clase de suelo",
+      "st_area(shape)": "Área en metros cuadrados"
+    },
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "profundidad",
+        "type": "esriFieldTypeString",
+        "alias": "Profundidad estimada",
+        "length": 25
+      },
+      {
+        "name": "niveldeamenaza",
+        "type": "esriFieldTypeString",
+        "alias": "Nivel de amenaza",
+        "length": 15
+      },
+      {
+        "name": "clase_suelo",
+        "type": "esriFieldTypeString",
+        "alias": "Clase de suelo",
+        "length": 512
+      },
+      {
+        "name": "st_area(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "Área en metros cuadrados"
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "profundidad": "1,5 - 3 metros",
+          "niveldeamenaza": "Medio",
+          "clase_suelo": "01",
+          "st_area(shape)": 99.93576925
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                4800799.0995,
+                2778885.898600001
+              ],
+              [
+                4800789.1029,
+                2778885.959899999
+              ],
+              [
+                4800789.1642,
+                2778895.9564999994
+              ],
+              [
+                4800799.1608,
+                2778895.895199999
+              ],
+              [
+                4800799.0995,
+                2778885.898600001
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/amenazas/MapServer/1/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Friesgos%2Famenazas%2FMapServer%2F1%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:16:58.956345+00:00",
+    "elapsed_s": 21.7,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 520,
+        "bytes": 963,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 520",
+        "at": "2026-09-29T16:16:50.853270+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 1162,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:16:58.956273+00:00"
+      }
+    ]
+  }
+}

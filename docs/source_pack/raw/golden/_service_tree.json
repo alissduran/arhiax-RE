@@ -1,0 +1,65 @@
+{
+  "root_url": "https://miciudad.barranquilla.gov.co/gis/rest/services",
+  "nodes": [],
+  "services": [],
+  "errors": [
+    {
+      "url": "https://miciudad.barranquilla.gov.co/gis/rest/services",
+      "label": "(root)",
+      "provenance": {
+        "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+        "transport": null,
+        "ok": false,
+        "attempts": [
+          {
+            "transport": "direct",
+            "attempt": 1,
+            "http_status": 403,
+            "bytes": 5493,
+            "blocked_marker": true,
+            "json_parse_error": null,
+            "error": "HTTPError 403"
+          },
+          {
+            "transport": "allorigins_raw",
+            "attempt": 1,
+            "http_status": 408,
+            "bytes": 24,
+            "blocked_marker": true,
+            "json_parse_error": null,
+            "error": "HTTPError 408"
+          },
+          {
+            "transport": "allorigins_raw",
+            "attempt": 2,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "json_parse_error": null,
+            "error": null
+          },
+          {
+            "transport": "allorigins_raw",
+            "attempt": 3,
+            "http_status": 200,
+            "bytes": 5492,
+            "blocked_marker": true,
+            "json_parse_error": null,
+            "error": null
+          },
+          {
+            "transport": "allorigins_raw",
+            "attempt": 4,
+            "http_status": 408,
+            "bytes": 24,
+            "blocked_marker": true,
+            "json_parse_error": null,
+            "error": "HTTPError 408"
+          }
+        ],
+        "fetched_at_utc": "2026-09-29T14:04:58.614035+00:00",
+        "final_error": "no transport produced JSON"
+      }
+    }
+  ]
+}

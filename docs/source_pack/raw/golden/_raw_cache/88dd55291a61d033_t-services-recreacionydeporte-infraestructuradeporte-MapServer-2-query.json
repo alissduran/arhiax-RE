@@ -1,0 +1,144 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "nombre_escenario",
+    "fieldAliases": {
+      "objectid": "FID",
+      "nombre_escenario": "Nombre del escenario",
+      "deporte": "Deportes",
+      "capacidad_espectadores": "Capacidad de espectadores",
+      "direccion": "Dirección",
+      "barrio": "Barrio",
+      "localidad": "Localidad",
+      "area_m2": "Área en metros cuadrados"
+    },
+    "geometryType": "esriGeometryPoint",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "FID"
+      },
+      {
+        "name": "nombre_escenario",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre del escenario",
+        "length": 100
+      },
+      {
+        "name": "deporte",
+        "type": "esriFieldTypeString",
+        "alias": "Deportes",
+        "length": 200
+      },
+      {
+        "name": "capacidad_espectadores",
+        "type": "esriFieldTypeInteger",
+        "alias": "Capacidad de espectadores"
+      },
+      {
+        "name": "direccion",
+        "type": "esriFieldTypeString",
+        "alias": "Dirección",
+        "length": 100
+      },
+      {
+        "name": "barrio",
+        "type": "esriFieldTypeString",
+        "alias": "Barrio",
+        "length": 100
+      },
+      {
+        "name": "localidad",
+        "type": "esriFieldTypeString",
+        "alias": "Localidad",
+        "length": 50
+      },
+      {
+        "name": "area_m2",
+        "type": "esriFieldTypeInteger",
+        "alias": "Área en metros cuadrados"
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "nombre_escenario": "Estadio de béisbol 'Édgar Rentería'",
+          "deporte": "Béisbol",
+          "capacidad_espectadores": 12000,
+          "direccion": "Calle 54 #40-224",
+          "barrio": "Montecristo",
+          "localidad": "Nch",
+          "area_m2": 51815
+        },
+        "geometry": {
+          "x": 4805132.0876,
+          "y": 2773654.6732
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/infraestructuradeporte/MapServer/2/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Frecreacionydeporte%2Finfraestructuradeporte%2FMapServer%2F2%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:10:04.357704+00:00",
+    "elapsed_s": 40.2,
+    "attempt_count": 5,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:09:28.473240+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:09:34.329178+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:09:40.334271+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T17:10:00.100132+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 200,
+        "bytes": 1383,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:10:04.357658+00:00"
+      }
+    ]
+  }
+}

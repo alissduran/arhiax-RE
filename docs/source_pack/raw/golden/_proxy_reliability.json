@@ -1,0 +1,112 @@
+{
+  "allorigins_raw": {
+    "counts": {
+      "OTHER(522)": 6,
+      "OTHER(408)": 2
+    },
+    "samples": [
+      {
+        "kind": "OTHER(522)",
+        "head": "error code: 522\n"
+      },
+      {
+        "kind": "OTHER(522)",
+        "head": "error code: 522\n"
+      }
+    ]
+  },
+  "allorigins_get": {
+    "counts": {
+      "OTHER(522)": 3,
+      "OTHER(520)": 1,
+      "CF_BLOCK": 4
+    },
+    "samples": [
+      {
+        "kind": "OTHER(522)",
+        "head": "error code: 522\n"
+      },
+      {
+        "kind": "OTHER(520)",
+        "head": "error code: 520\n"
+      }
+    ]
+  },
+  "codetabs": {
+    "counts": {
+      "OTHER(522)": 8
+    },
+    "samples": [
+      {
+        "kind": "OTHER(522)",
+        "head": "error code: 522\n"
+      },
+      {
+        "kind": "OTHER(522)",
+        "head": "error code: 522\n"
+      }
+    ]
+  },
+  "corsfix": {
+    "counts": {
+      "OTHER(400)": 8
+    },
+    "samples": [
+      {
+        "kind": "OTHER(400)",
+        "head": "{\n  \"corsfix_error\": \"invalid_origin\",\n  \"message\": \"Request is missing a valid Origin header\",\n  \"if_you_are_admin\": \"E"
+      },
+      {
+        "kind": "OTHER(400)",
+        "head": "{\n  \"corsfix_error\": \"invalid_origin\",\n  \"message\": \"Request is missing a valid Origin header\",\n  \"if_you_are_admin\": \"E"
+      }
+    ]
+  },
+  "cors_workers_dev": {
+    "counts": {
+      "OTHER(429)": 8
+    },
+    "samples": [
+      {
+        "kind": "OTHER(429)",
+        "head": "error code: 1027\n"
+      },
+      {
+        "kind": "OTHER(429)",
+        "head": "error code: 1027\n"
+      }
+    ]
+  },
+  "cors_lol": {
+    "counts": {
+      "CF_BLOCK": 3,
+      "OTHER(429)": 5
+    },
+    "samples": [
+      {
+        "kind": "CF_BLOCK",
+        "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+      },
+      {
+        "kind": "OTHER(429)",
+        "head": "Rate limit exceeded\n"
+      }
+    ]
+  },
+  "wayback_save": {
+    "counts": {
+      "OTHER(520)": 3,
+      "OTHER(429)": 5
+    },
+    "samples": [
+      {
+        "kind": "OTHER(520)",
+        "head": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Wayback Machine</title>\n    <script>\n    /*\n    @licstart  The foll"
+      },
+      {
+        "kind": "OTHER(520)",
+        "head": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Wayback Machine</title>\n    <script>\n    /*\n    @licstart  The foll"
+      }
+    ]
+  }
+}

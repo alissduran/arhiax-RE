@@ -1,0 +1,319 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "codigo",
+    "fieldAliases": {
+      "objectid": "OBJECTID",
+      "codigo": "Código",
+      "planparcial": "Plan parcial",
+      "estado": "Estado",
+      "actoadmin": "Acto administrativo",
+      "enlacegaceta": "Enlace de gaceta",
+      "areautil": "Área útil",
+      "usoprincipal": "Uso principal",
+      "otrosusos": "Otro usos",
+      "areatotal": "Área total",
+      "vigencia": "Vigencia"
+    },
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "codigo",
+        "type": "esriFieldTypeString",
+        "alias": "Código",
+        "length": 254
+      },
+      {
+        "name": "planparcial",
+        "type": "esriFieldTypeString",
+        "alias": "Plan parcial",
+        "length": 254
+      },
+      {
+        "name": "estado",
+        "type": "esriFieldTypeString",
+        "alias": "Estado",
+        "length": 254
+      },
+      {
+        "name": "actoadmin",
+        "type": "esriFieldTypeString",
+        "alias": "Acto administrativo",
+        "length": 254
+      },
+      {
+        "name": "enlacegaceta",
+        "type": "esriFieldTypeString",
+        "alias": "Enlace de gaceta",
+        "length": 254
+      },
+      {
+        "name": "areautil",
+        "type": "esriFieldTypeDouble",
+        "alias": "Área útil"
+      },
+      {
+        "name": "usoprincipal",
+        "type": "esriFieldTypeString",
+        "alias": "Uso principal",
+        "length": 254
+      },
+      {
+        "name": "otrosusos",
+        "type": "esriFieldTypeString",
+        "alias": "Otro usos",
+        "length": 254
+      },
+      {
+        "name": "areatotal",
+        "type": "esriFieldTypeDouble",
+        "alias": "Área total"
+      },
+      {
+        "name": "vigencia",
+        "type": "esriFieldTypeString",
+        "alias": "Vigencia",
+        "length": 50
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "codigo": "PP0002",
+          "planparcial": "Centro Empresarial y de Negocios Puerta de Oro",
+          "estado": "Aprobado",
+          "actoadmin": "Decreto 607 del 2012",
+          "enlacegaceta": "https://barranquilla.gov.co/documento/centro-empresarial-y-de-negocios/?version=1",
+          "areautil": 358971.0,
+          "usoprincipal": "Comercial",
+          "otrosusos": "Comercial, Institucional",
+          "areatotal": 430470.0,
+          "vigencia": "Mayo 23 del 2012 a mayo 23 del 2024"
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                4797275.0027,
+                2772685.3213
+              ],
+              [
+                4797303.2518,
+                2772654.5811
+              ],
+              [
+                4797316.5505,
+                2772640.1097999997
+              ],
+              [
+                4797351.7252,
+                2772595.996200001
+              ],
+              [
+                4797363.7155,
+                2772580.958900001
+              ],
+              [
+                4797371.5626,
+                2772571.2235000003
+              ],
+              [
+                4797413.6878,
+                2772490.1105000004
+              ],
+              [
+                4797428.224,
+                2772462.1206
+              ],
+              [
+                4797468.37,
+                2772387.8347999994
+              ],
+              [
+                4797486.6392,
+                2772352.3911000006
+              ],
+              [
+                4797506.6122,
+                2772312.8574
+              ],
+              [
+                4797516.4072,
+                2772293.5063000005
+              ],
+              [
+                4797570.0095,
+                2772187.6966999993
+              ],
+              [
+                4797620.4619,
+                2772091.7225
+              ],
+              [
+                4797643.5887,
+                2772045.8395000007
+              ],
+              [
+                4797661.6231,
+                2772009.8181999996
+              ],
+              [
+                4797734.0575,
+                2771867.5014999993
+              ],
+              [
+                4797803.3363,
+                2771723.759400001
+              ],
+              [
+                4797774.9024,
+                2771710.271299999
+              ],
+              [
+                4797707.174,
+                2771676.9263000004
+              ],
+              [
+                4797664.483,
+                2771657.1564000007
+              ],
+              [
+                4797659.7067,
+                2771654.363500001
+              ],
+              [
+                4797536.1091,
+                2771594.835000001
+              ],
+              [
+                4797419.1143,
+                2771539.444700001
+              ],
+              [
+                4797385.1945,
+                2771523.4159999993
+              ],
+              [
+                4797359.806,
+                2771578.4217000008
+              ],
+              [
+                4797317.196,
+                2771672.7167000007
+              ],
+              [
+                4797274.5207,
+                2771763.112400001
+              ],
+              [
+                4797232.6122,
+                2771853.867799999
+              ],
+              [
+                4797191.0677,
+                2771944.790100001
+              ],
+              [
+                4797149.5228,
+                2772035.7136000004
+              ],
+              [
+                4797107.9726,
+                2772126.6488000005
+              ],
+              [
+                4797017.2835,
+                2772330.5407
+              ],
+              [
+                4796998.6889,
+                2772369.0995000005
+              ],
+              [
+                4796993.4851,
+                2772359.6513
+              ],
+              [
+                4796960.9985,
+                2772426.9466999993
+              ],
+              [
+                4797157.3797,
+                2772783.4729999993
+              ],
+              [
+                4797160.6807,
+                2772780.5024999995
+              ],
+              [
+                4797176.8889,
+                2772767.1614999995
+              ],
+              [
+                4797185.5168,
+                2772760.0595999993
+              ],
+              [
+                4797205.127,
+                2772743.918400001
+              ],
+              [
+                4797232.3662,
+                2772721.707800001
+              ],
+              [
+                4797269.0601,
+                2772691.787799999
+              ],
+              [
+                4797275.0027,
+                2772685.3213
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/3/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Fplaneacion%2FMapServer%2F3%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:13:47.015390+00:00",
+    "elapsed_s": 4.8,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:13:44.226655+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 3498,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:13:47.015371+00:00"
+      }
+    ]
+  }
+}

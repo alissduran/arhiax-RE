@@ -1,0 +1,103 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "folders": [],
+    "services": [
+      {
+        "name": "ordenamiento/dinamicaconstruccion",
+        "type": "MapServer"
+      },
+      {
+        "name": "ordenamiento/dinamicaurbana",
+        "type": "MapServer"
+      },
+      {
+        "name": "ordenamiento/direcciones",
+        "type": "MapServer"
+      },
+      {
+        "name": "ordenamiento/estratificacion",
+        "type": "MapServer"
+      },
+      {
+        "name": "ordenamiento/planeacion",
+        "type": "MapServer"
+      },
+      {
+        "name": "ordenamiento/topografia",
+        "type": "MapServer"
+      },
+      {
+        "name": "ordenamiento/unidadesadministrativas",
+        "type": "MapServer"
+      }
+    ]
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:55:27.019292+00:00",
+    "elapsed_s": 126.7,
+    "attempt_count": 14,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 9,
+        "http_status": null,
+        "bytes": 0,
+        "reject_reason": "not_json",
+        "error": "TimeoutError: The read operation timed out",
+        "at": "2026-09-29T15:54:46.507999+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 10,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T15:55:07.520979+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 11,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T15:55:07.704030+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 12,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T15:55:19.223210+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 13,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:55:24.438716+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 14,
+        "http_status": 200,
+        "bytes": 460,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:55:27.019270+00:00"
+      }
+    ]
+  }
+}

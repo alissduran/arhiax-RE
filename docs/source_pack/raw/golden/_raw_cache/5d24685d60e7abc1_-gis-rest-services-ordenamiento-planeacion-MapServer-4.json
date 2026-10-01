@@ -1,0 +1,1047 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 4,
+    "name": "Tratamientos urbanísticos",
+    "type": "Feature Layer",
+    "description": "Muestra las determinaciones del Decreto 0212 de 2014, que atendiendo las características físicas, establecen normas urbanísticas que definen un manejo diferenciado para los distintos sectores del suelo urbano y de expansión urbana.",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de planeación.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "tratamiento",
+        "uniqueValueGroups": [
+          {
+            "heading": "Tratamiento",
+            "classes": [
+              {
+                "label": "Conservación patrimonial",
+                "description": "Conservación patrimonial",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    230,
+                    179,
+                    177,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Conservacion"
+                  ]
+                ]
+              },
+              {
+                "label": "Consolidación",
+                "description": "Consolidación",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    192,
+                    209,
+                    199,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Consolidacion"
+                  ]
+                ]
+              },
+              {
+                "label": "Desarrollo",
+                "description": "Desarrollo",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    97,
+                    53,
+                    50,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Desarrollo"
+                  ]
+                ]
+              },
+              {
+                "label": "Espacio público",
+                "description": "Espacio público",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    240,
+                    237,
+                    223,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Espacio_publico"
+                  ]
+                ]
+              },
+              {
+                "label": "Espacio público propuesto",
+                "description": "Espacio público propuesto",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    143,
+                    181,
+                    173,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Espacio_publico_propuesto"
+                  ]
+                ]
+              },
+              {
+                "label": "Mejoramiento integral",
+                "description": "Mejoramiento integral",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    89,
+                    115,
+                    128,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Mejoramiento_integral"
+                  ]
+                ]
+              },
+              {
+                "label": "Renovación",
+                "description": "Renovación",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    143,
+                    96,
+                    94,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Renovacion"
+                  ]
+                ]
+              },
+              {
+                "label": "Suelo de protección",
+                "description": "Suelo de protección",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    33,
+                    46,
+                    79,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      110,
+                      110,
+                      110,
+                      0
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Suelo_proteccion"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                230,
+                179,
+                177,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Conservacion",
+            "label": "Conservación patrimonial"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                192,
+                209,
+                199,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Consolidacion",
+            "label": "Consolidación"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                97,
+                53,
+                50,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Desarrollo",
+            "label": "Desarrollo"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                240,
+                237,
+                223,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Espacio_publico",
+            "label": "Espacio público"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                143,
+                181,
+                173,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Espacio_publico_propuesto",
+            "label": "Espacio público propuesto"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                89,
+                115,
+                128,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Mejoramiento_integral",
+            "label": "Mejoramiento integral"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                143,
+                96,
+                94,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Renovacion",
+            "label": "Renovación"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                33,
+                46,
+                79,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  110,
+                  110,
+                  110,
+                  0
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Suelo_proteccion",
+            "label": "Suelo de protección"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  227,
+                  252,
+                  210,
+                  255
+                ],
+                "toColor": [
+                  227,
+                  252,
+                  210,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  218,
+                  179,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  218,
+                  179,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  185,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  185,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  187,
+                  229,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  187,
+                  229,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  179,
+                  222,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  179,
+                  222,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  252,
+                  238,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  252,
+                  238,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  226,
+                  184,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  226,
+                  184,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  220,
+                  212,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  220,
+                  212,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  252,
+                  195,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  252,
+                  195,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  212,
+                  223,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  212,
+                  223,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  245,
+                  252,
+                  179,
+                  255
+                ],
+                "toColor": [
+                  245,
+                  252,
+                  179,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  179,
+                  190,
+                  252,
+                  255
+                ],
+                "toColor": [
+                  179,
+                  190,
+                  252,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  252,
+                  207,
+                  249,
+                  255
+                ],
+                "toColor": [
+                  252,
+                  207,
+                  249,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": 4790285.1222,
+      "ymin": 2764626.1866999995,
+      "xmax": 4807917.3818,
+      "ymax": 2785978.8736000005,
+      "zmin": 0,
+      "zmax": 0,
+      "mmin": -9.999e+35,
+      "mmax": -9.999e+35,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "tratamiento",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "FID",
+        "domain": null
+      },
+      {
+        "name": "tratamiento",
+        "type": "esriFieldTypeString",
+        "alias": "Tratamiento",
+        "length": 50,
+        "domain": {
+          "type": "codedValue",
+          "name": "ot_tratamiento",
+          "description": "Define el tratamiento urbanístico establecido en el Decreto 0212 de 2014",
+          "codedValues": [
+            {
+              "name": "Consolidación",
+              "code": "Consolidacion"
+            },
+            {
+              "name": "Desarrollo",
+              "code": "Desarrollo"
+            },
+            {
+              "name": "Espacio público",
+              "code": "Espacio_publico"
+            },
+            {
+              "name": "Espacio público propuesto",
+              "code": "Espacio_publico_propuesto"
+            },
+            {
+              "name": "Mejoramiento integral",
+              "code": "Mejoramiento_integral"
+            },
+            {
+              "name": "Suelo de protección",
+              "code": "Suelo_proteccion"
+            },
+            {
+              "name": "Renovación",
+              "code": "Renovacion"
+            },
+            {
+              "name": "Conservación patrimonial",
+              "code": "Conservacion"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "tipo_tratamiento",
+        "type": "esriFieldTypeString",
+        "alias": "Tipo de tratamiento",
+        "length": 50,
+        "domain": null
+      },
+      {
+        "name": "altura_maxima",
+        "type": "esriFieldTypeString",
+        "alias": "Altura máxima",
+        "length": 15,
+        "domain": null
+      },
+      {
+        "name": "clase_suelo",
+        "type": "esriFieldTypeString",
+        "alias": "Clase de suelo",
+        "length": 2,
+        "domain": {
+          "type": "codedValue",
+          "name": "pl_clasesuelo",
+          "description": "Clase de suelo en los tratamientos urbanísticos",
+          "codedValues": [
+            {
+              "name": "Urbano",
+              "code": "01"
+            },
+            {
+              "name": "Expansión",
+              "code": "02"
+            },
+            {
+              "name": "Rural",
+              "code": "00"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "observaciones",
+        "type": "esriFieldTypeString",
+        "alias": "Observaciones",
+        "length": 10,
+        "domain": {
+          "type": "codedValue",
+          "name": "pl_obstratamientos",
+          "description": "Describe las observaciones en los tratamientos urbanísticos del Decreto 0212 de 2014",
+          "codedValues": [
+            {
+              "name": "Densidad",
+              "code": "Densidad"
+            },
+            {
+              "name": "Propuesto",
+              "code": "Propuesto"
+            }
+          ],
+          "mergePolicy": "esriMPTDefaultValue",
+          "splitPolicy": "esriSPTDefaultValue"
+        }
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "shape",
+        "domain": null
+      },
+      {
+        "name": "st_area(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_area(shape)",
+        "domain": null
+      },
+      {
+        "name": "st_length(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_length(shape)",
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "shape"
+    },
+    "indexes": [
+      {
+        "name": "r511_sde_rowid_uk",
+        "fields": "objectid",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      },
+      {
+        "name": "a421_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Query,Map,Data",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "hasZ": true,
+    "hasM": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "cf9427507835407fb7d8fd382319eeb3"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/4?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Fplaneacion%2FMapServer%2F4%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:14:31.560027+00:00",
+    "elapsed_s": 44.5,
+    "attempt_count": 5,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:14:07.016009+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T16:14:24.137251+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:14:27.829232+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:14:30.767019+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 200,
+        "bytes": 11758,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:14:31.559956+00:00"
+      }
+    ]
+  }
+}

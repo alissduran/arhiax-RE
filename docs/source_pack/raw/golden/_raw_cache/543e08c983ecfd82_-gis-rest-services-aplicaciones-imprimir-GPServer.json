@@ -1,0 +1,86 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "Returns a printable page layout or basic map of a specified area of interest based on the state of a web app (for example, included services, layer visibility settings, and client-side graphics).",
+    "tasks": [
+      "Export Web Map"
+    ],
+    "executionType": "esriExecutionTypeAsynchronous",
+    "resultMapServerName": "",
+    "maximumRecords": 1000,
+    "capabilities": "",
+    "schema": {
+      "json-schema": {
+        "url": "https://miciudad.barranquilla.gov.co/gis/rest/directories/arcgisoutput/aplicaciones/imprimir_GPServer/aplicaciones_imprimir/spec/json-schema.json"
+      }
+    }
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/aplicaciones/imprimir/GPServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Faplicaciones%2Fimprimir%2FGPServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:45:08.556007+00:00",
+    "elapsed_s": 147.1,
+    "attempt_count": 18,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 13,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:44:10.906003+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 14,
+        "http_status": 520,
+        "bytes": 963,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 520",
+        "at": "2026-09-29T15:44:26.797586+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 15,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:44:46.673577+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 16,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:44:46.848022+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 17,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:45:06.404942+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 18,
+        "http_status": 200,
+        "bytes": 584,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:45:08.555989+00:00"
+      }
+    ]
+  }
+}

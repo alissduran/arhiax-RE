@@ -1,0 +1,86 @@
+﻿GOLDEN EVIDENCE LITERAL PACK · folio 040-646406
+Log literal de la secuencia de reproduccion (task D).
+
+### PASO 1 · python scripts/dictus_run.py
+[PDF][RELEASE-GATE] VALID_FOR_RELEASE · env=test
+[PDF][CLASIFICACION] regimen=PROPIEDAD_HORIZONTAL (VERIFIED_REGISTRAL) · uso=HABITACIONAL · tipologia=UNIDAD_EN_PROPIEDAD_HORIZONTAL (VERIFIED_REGISTRAL) · mercado=True (régimen PROPIEDAD_HORIZONTAL (VERIFIED_REGISTRAL))
+[PDF][OFFICIAL_CONTEXT] num_predial='080010103000010040001908040002' estrato='4' origen=None
+[PDF][COORD-PROVENANCE] source='OFFICIAL_PREDIO' system='CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS' layer='105 · direccion' feature_id='6c663607-5509-401f-b57d-384d2beeeac1' method='DIRECCION_OFICIAL_LIGADA_POR_GUID' verificado=True binding='VERIFIED' campos=['nupre', 'numero_predial']
+[PDF][URBAN-SOURCE] modo=MIXED campos=['altura_maxima', 'amenaza_remocion_masa', 'areas_en_riesgo', 'arroyos', 'barrio', 'estrato', 'inundacion', 'localidad', 'pieza_urbana', 'riesgo_no_mitigable', 'tipo_tratamiento', 'tratamiento']
+[PDF][URBAN-AUTHORITY] aplicados=8 conflictos=0 no_aplicados=0
+[PDF][ORIGEN-MERCADO] origin=MANUAL_CONFIG gate=CERRADA motivos=1
+[PDF][VOLCAN] disponible=True nivel=NO EVALUADO zonas=0
+[PDF][AREA] unidad PH: el área catastral de terreno (22.05 m²) NO se usa como área comparable del apartamento; contraste = REGISTRAL_ONLY
+[PDF][TITULUX] disponible=True screening=sinCoincidencia pendientes=[]
+OK - Test de no contradiccion: PASADO
+OK - Test de boundary de avaluo: PASADO
+[PDF][GATE] ok=True bloqueantes=0 advertencias=0
+SUCCESS: PDF GENERADO: C:\Users\aliss\.gemini\antigravity-ide\scratch\20260825_DeepSeek_Harness_Web\arhiax-RE\docs\forensics\040-646406\dictus_2b\DICTUS_TECNICO_040-646406.pdf
+  Folio: 040-646406
+  Sello de ejecucion SHA-256: 802098a0fd35ee7be08cfc1560ea3433714e0b8e1d0fcd8d5dc87ac91de07930
+  Hash del archivo emitido SHA-256: f480e4d78947f7908198421f478de6f71cf9928011f066e8973e436b439ed80e
+  Timestamp: 2026-09-30T14:46:47.508558+00:00
+[PDF][NOTIF] correo de pendientes enviado=False n=2 -> ['hipoteca', 'afectacion']
+[run] 16019df2 · DX-040-646406-20260930 · master hash c804dc02b223c9be…
+[run] PRINCIPAL DICTUS_EJECUTIVO_040-646406.pdf · 6 páginas · sha256 4960b12a08f5…
+[run]           arquitectura: P1 DECISIÓN DEL INMUEBLE → P2 DECISIÓN JURÍDICA → P3 DECISIÓN DE CONTRAPARTES → P4 DECISIÓN TERRITORIAL Y URBANÍSTICA → P5 ENTORNO, EQUIPAMIENTO, ASOLEAMIENTO Y SOMBRAS → P6 IDENTIDAD, MERCADO Y VALOR
+[run] ANEXO     DICTUS_TECNICO_040-646406.pdf · 17 páginas · sha256 f480e4d78947…
+[run] evidencias 10 (PARCIAL_CON_DECLARACIONES) · verificación MATCH · retícula OK
+[run] POI en el estado: 12 ítems · distancias sí
+RUN_EXIT=0
+
+### PASO 2 · python scripts/golden_evidence_pack.py
+{
+  "master_hash": "c804dc02b223c9be905f9e3103ffa54f355b7aba2986759af2ca470c7f7eee71",
+  "sha256_ejecutivo": "4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c",
+  "sha256_tecnico": "f480e4d78947f7908198421f478de6f71cf9928011f066e8973e436b439ed80e",
+  "run_id": "16019df2-a4fd-44db-860f-e50a5cdd3c2f",
+  "valuation_gate_gate_state": "CLOSED",
+  "valuation_gate_decision": "NO EMITIR VALORACIÓN",
+  "lonja_categoria_A_total": 13,
+  "lonja_categoria_A_en_entregados": 0,
+  "verified_disallowed_origin": 0,
+  "cross_page_inconsistent": 0,
+  "asserts_exit": 0
+}
+PACK_EXIT=0
+
+### PASO 3 · python scripts/golden_evidence_asserts.py
+[PASS] valuation_gate['gate_state'] == 'CLOSED' (con decision 'NO EMITIR VALORACIÓN')
+        actual gate_state = 'CLOSED' · decision = 'NO EMITIR VALORACIÓN'
+        vocabulario CLOSED/OPEN = True · coexisten ambos campos = True
+        DICTUS_MANIFEST_040-646406.json · modelo.decision_gates[VALUATION_GATE]
+[PASS] valuation_gate['reason'] explícito y con el ORIGEN del bloqueo
+        actual = 'La valoración NO está autorizada en esta corrida: el origen de la tasa es MANUAL_CONFIG y su procedencia es INSUFICIENTE para autorizar una cifra (se exige fuente externa citada o cálculo de fuentes citadas, con fecha y sha256). No se emite cifra y se declaran los bloqueos reales.'
+        nombra el origen no habilitante (MANUAL_CONFIG / procedencia insuficiente) = True
+[PASS] '399.500.000' not in executive_text
+        presente = False
+        DICTUS_EJECUTIVO_040-646406.pdf · sha256 = 4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c · ocurrencias = 0
+[PASS] '$399' not in executive_text
+        presente = False
+        DICTUS_EJECUTIVO_040-646406.pdf · sha256 = 4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c · ocurrencias = 0
+[PASS] 'Lonja' not in executive_text
+        presente = False
+        DICTUS_EJECUTIVO_040-646406.pdf · sha256 = 4960b12a08f5b447c6cc364b5aee7bfeb905ccd5ce0d8421f8e1a92955908c6c · ocurrencias = 0
+[PASS] 'Lonja' not in technical_text (salvo guardas/documentación de NO SOURCE)
+        ocurrencias 'Lonja' = 0 en DICTUS_TECNICO_040-646406.pdf
+[PASS] no_verified_fact_has_disallowed_origin()
+        facts de identidad leídos = 9 · impresos VERIFICADO = 1 · violaciones = 0
+        
+          ✓ Matrícula = '040-646406' · origin=COMPUTED_FROM_SOURCES · fuentes=2
+[PASS] no_cross_page_state_contradictions()
+        atributos comparados por clave canónica = 7 · contradicciones entre páginas = 0 · discrepancias con la verdad única del expediente = 0
+        
+          claves y estados impresos: altura_maxima: P4=HISTORICAL_CONFLICT; amenaza: P4=HISTORICAL_CONFLICT; binding_geometria: P6=VERIFICADA; coordenada: P4=HISTORICAL_CONFLICT; titulares: P4=HISTORICAL_CONFLICT; tratamiento: P4=HISTORICAL_CONFLICT; uso_pot: P4=HISTORICAL_CONFLICT
+[PASS] manual_market_input_cannot_open_valuation_gate()
+        origin=MANUAL_CONFIG · origin_gate=False
+        blockers=['origen MANUAL_CONFIG no habilita la valoración (valor declarado a mano por la corrida (sin fuente externa automática))']
+[PASS] model_prior_cannot_open_valuation_gate()
+        origin=MODEL_PRIOR · origin_gate=False
+        blockers=['origen MODEL_PRIOR no habilita la valoración (valor por defecto del modelo (sin fuente: no autoriza cifra))']
+[PASS] computed_from_sources_requires_all_material_inputs_authorized()
+        sin procedencia completa: origin=MANUAL_CONFIG gate=False blockers=['origen declarado COMPUTED_FROM_SOURCES SIN procedencia completa (falta: fuentes[] (se exigen >= 2)): se degrada a MANUAL_CONFIG']
+        con 2 fuentes completas: origin=COMPUTED_FROM_SOURCES gate=True
+
+TOTAL = 11 · PASS = 11 · FAIL = 0 · NO EVALUABLE = 0
+ASSERTS_EXIT=0

@@ -1,0 +1,721 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "id": 4,
+    "name": "Nodos de equipamientos",
+    "type": "Feature Layer",
+    "description": "Delimita los nodos o concentraciones de equipamientos urbanos de carácter colectivo clasificadas de acuerdo el tipo de nodo definidos en el Plan de Ordenamiento Territorial vigente (Decreto 0212 de 2014), los cuales se definen: Tipo 1: En los cuales se prioriza la localización de instituciones que prestan servicios básicos y de primera necesidad en educación, salud, bienestar, seguridad y recreación en una escala menor, con una cobertura barrial.Tipo 2: Aquellos en los cuales se prestan servicios de una mayor escala y cobertura en los grupos de administración, educación, salud, bienestar social, recreación, culto y seguridad, los cuales proveen servicios y cubren un grupo de barrios o hasta una localidad.Tipo 3: Aquellos de gran complejidad, con mayor cobertura y abarcan todos los tipos de equipamientos y por lo general demandan amplias áreas y se convierten en puntos de referencia para la totalidad del territorio.Tipo 4: Aquellos con mayor complejidad, mayor cobertura y radio de influencia, que abarcan todos los tipos de equipamientos. Prestan servicios a toda la ciudad e incluso a los municipios aledaños del área metropolitana o de la región.",
+    "geometryType": "esriGeometryPolygon",
+    "sourceSpatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Planeación.",
+    "parentLayer": null,
+    "subLayers": [],
+    "minScale": 0,
+    "maxScale": 0,
+    "referenceScale": 0.0,
+    "drawingInfo": {
+      "renderer": {
+        "type": "uniqueValue",
+        "field1": "tipo_nodo",
+        "uniqueValueGroups": [
+          {
+            "heading": "Tipo de nodo",
+            "classes": [
+              {
+                "label": "Nodo - Tipo 1",
+                "description": "Nodo - Tipo 1",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    240,
+                    206,
+                    185,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      240,
+                      206,
+                      185,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Nodo - Tipo 1"
+                  ]
+                ]
+              },
+              {
+                "label": "Nodo - Tipo 2",
+                "description": "Nodo - Tipo 2",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    230,
+                    132,
+                    53,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      230,
+                      132,
+                      53,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Nodo - Tipo 2"
+                  ]
+                ]
+              },
+              {
+                "label": "Nodo - Tipo 3",
+                "description": "Nodo - Tipo 3",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    194,
+                    127,
+                    93,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      194,
+                      127,
+                      93,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Nodo - Tipo 3"
+                  ]
+                ]
+              },
+              {
+                "label": "Nodo - Tipo 4",
+                "description": "Nodo - Tipo 4",
+                "symbol": {
+                  "type": "esriSFS",
+                  "style": "esriSFSSolid",
+                  "color": [
+                    247,
+                    185,
+                    119,
+                    255
+                  ],
+                  "outline": {
+                    "type": "esriSLS",
+                    "style": "esriSLSSolid",
+                    "color": [
+                      247,
+                      185,
+                      119,
+                      255
+                    ],
+                    "width": 0.7
+                  }
+                },
+                "values": [
+                  [
+                    "Nodo - Tipo 4"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
+        "uniqueValueInfos": [
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                240,
+                206,
+                185,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  240,
+                  206,
+                  185,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Nodo - Tipo 1",
+            "label": "Nodo - Tipo 1"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                230,
+                132,
+                53,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  230,
+                  132,
+                  53,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Nodo - Tipo 2",
+            "label": "Nodo - Tipo 2"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                194,
+                127,
+                93,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  194,
+                  127,
+                  93,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Nodo - Tipo 3",
+            "label": "Nodo - Tipo 3"
+          },
+          {
+            "symbol": {
+              "type": "esriSFS",
+              "style": "esriSFSSolid",
+              "color": [
+                247,
+                185,
+                119,
+                255
+              ],
+              "outline": {
+                "type": "esriSLS",
+                "style": "esriSLSSolid",
+                "color": [
+                  247,
+                  185,
+                  119,
+                  255
+                ],
+                "width": 0.7
+              }
+            },
+            "value": "Nodo - Tipo 4",
+            "label": "Nodo - Tipo 4"
+          }
+        ],
+        "fieldDelimiter": ",",
+        "authoringInfo": {
+          "colorRamp": {
+            "type": "multipart",
+            "colorRamps": [
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  235,
+                  184,
+                  136,
+                  255
+                ],
+                "toColor": [
+                  235,
+                  184,
+                  136,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  181,
+                  94,
+                  40,
+                  255
+                ],
+                "toColor": [
+                  181,
+                  94,
+                  40,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  245,
+                  171,
+                  69,
+                  255
+                ],
+                "toColor": [
+                  245,
+                  171,
+                  69,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  189,
+                  121,
+                  87,
+                  255
+                ],
+                "toColor": [
+                  189,
+                  121,
+                  87,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  186,
+                  161,
+                  149,
+                  255
+                ],
+                "toColor": [
+                  186,
+                  161,
+                  149,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  250,
+                  150,
+                  100,
+                  255
+                ],
+                "toColor": [
+                  250,
+                  150,
+                  100,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  245,
+                  119,
+                  51,
+                  255
+                ],
+                "toColor": [
+                  245,
+                  119,
+                  51,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  245,
+                  217,
+                  193,
+                  255
+                ],
+                "toColor": [
+                  245,
+                  217,
+                  193,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  189,
+                  134,
+                  57,
+                  255
+                ],
+                "toColor": [
+                  189,
+                  134,
+                  57,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  207,
+                  179,
+                  143,
+                  255
+                ],
+                "toColor": [
+                  207,
+                  179,
+                  143,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  191,
+                  144,
+                  119,
+                  255
+                ],
+                "toColor": [
+                  191,
+                  144,
+                  119,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  217,
+                  137,
+                  52,
+                  255
+                ],
+                "toColor": [
+                  217,
+                  137,
+                  52,
+                  255
+                ]
+              },
+              {
+                "type": "algorithmic",
+                "algorithm": "esriCIELabAlgorithm",
+                "fromColor": [
+                  194,
+                  156,
+                  99,
+                  255
+                ],
+                "toColor": [
+                  194,
+                  156,
+                  99,
+                  255
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "scaleSymbols": true,
+      "transparency": 0,
+      "labelingInfo": null
+    },
+    "defaultVisibility": true,
+    "extent": {
+      "xmin": 4798843.062,
+      "ymin": 2765811.1404999997,
+      "xmax": 4806607.4225,
+      "ymax": 2776959.1284999996,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "hasAttachments": false,
+    "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+    "displayField": "nombre_nodo",
+    "typeIdField": null,
+    "subtypeFieldName": null,
+    "subtypeField": null,
+    "defaultSubtypeCode": null,
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "FID",
+        "domain": null
+      },
+      {
+        "name": "shape",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+      },
+      {
+        "name": "nombre_nodo",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre nodo",
+        "length": 100,
+        "domain": null
+      },
+      {
+        "name": "actividad",
+        "type": "esriFieldTypeString",
+        "alias": "Actividad",
+        "length": 50,
+        "domain": null
+      },
+      {
+        "name": "tipo_nodo",
+        "type": "esriFieldTypeString",
+        "alias": "Tipo de nodo",
+        "length": 20,
+        "domain": null
+      }
+    ],
+    "geometryField": {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape"
+    },
+    "indexes": [
+      {
+        "name": "a427_ix1",
+        "fields": "shape",
+        "isAscending": true,
+        "isUnique": true,
+        "description": ""
+      }
+    ],
+    "subtypes": [],
+    "relationships": [],
+    "canModifyLayer": true,
+    "canScaleSymbols": false,
+    "hasLabels": false,
+    "capabilities": "Query,Map,Data",
+    "maxRecordCount": 2000,
+    "maxSelectionCount": 2000,
+    "supportsStatistics": true,
+    "supportsExceedsLimitStatistics": true,
+    "supportsAdvancedQueries": true,
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "isDataVersioned": false,
+    "ownershipBasedAccessControlForFeatures": {
+      "allowOthersToQuery": true
+    },
+    "useStandardizedQueries": true,
+    "supportedSpatialRelationships": [
+      "esriSpatialRelIntersects",
+      "esriSpatialRelContains",
+      "esriSpatialRelCrosses",
+      "esriSpatialRelEnvelopeIntersects",
+      "esriSpatialRelIndexIntersects",
+      "esriSpatialRelOverlaps",
+      "esriSpatialRelTouches",
+      "esriSpatialRelWithin",
+      "esriSpatialRelRelation"
+    ],
+    "advancedQueryCapabilities": {
+      "useStandardizedQueries": true,
+      "supportsStatistics": true,
+      "supportsPercentileStatistics": true,
+      "supportsHavingClause": true,
+      "supportsOrderBy": true,
+      "supportsDistinct": true,
+      "supportsCountDistinct": true,
+      "supportsAdvancedQueryRelated": true,
+      "supportsQueryRelatedPagination": true,
+      "supportsPagination": true,
+      "supportsLod": false,
+      "supportsQueryWithLodSR": false,
+      "supportsTrueCurve": true,
+      "supportsQueryWithDatumTransformation": true,
+      "supportsReturningQueryExtent": true,
+      "supportsQueryWithDistance": true,
+      "supportsSqlExpression": true,
+      "supportsTimeRelation": true,
+      "supportsSqlFormat": false,
+      "supportsQueryAnalytic": true,
+      "supportsCurrentUserQueries": true
+    },
+    "supportsDatumTransformation": true,
+    "advancedQueryAnalyticCapabilities": {
+      "supportsLinearRegression": true,
+      "supportsAsync": false,
+      "supportsPercentileAnalytic": false
+    },
+    "dateFieldsTimeReference": null,
+    "preferredTimeReference": null,
+    "datesInUnknownTimezone": false,
+    "hasGeometryProperties": true,
+    "geometryProperties": {
+      "shapeAreaFieldName": "st_area(shape)",
+      "shapeLengthFieldName": "st_length(shape)",
+      "units": "esriMeters",
+      "mapUnits": {
+        "uwkid": 9001
+      }
+    },
+    "hasMetadata": true,
+    "isDataArchived": false,
+    "archivingInfo": {
+      "supportsQueryWithHistoricMoment": false,
+      "startArchivingMoment": -1
+    },
+    "supportsCoordinatesQuantization": true,
+    "supportsDynamicLegends": true,
+    "serviceItemId": "7328065d63634be4957f2333f8dd6285"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer/4?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fespaciopublico%2Finfraestructuraespaciopublico%2FMapServer%2F4%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:06:13.957579+00:00",
+    "elapsed_s": 50.6,
+    "attempt_count": 6,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 520,
+        "bytes": 963,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 520",
+        "at": "2026-09-29T17:05:32.521285+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 6082,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:05:55.488040+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:06:00.611913+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 520,
+        "bytes": 963,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 520",
+        "at": "2026-09-29T17:06:11.743813+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T17:06:12.077457+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 6,
+        "http_status": 200,
+        "bytes": 8854,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:06:13.957560+00:00"
+      }
+    ]
+  }
+}

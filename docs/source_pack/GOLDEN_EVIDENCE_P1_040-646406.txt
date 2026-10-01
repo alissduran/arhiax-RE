@@ -1,0 +1,90 @@
+
+DICTUS
+DECISIÓN DEL INMUEBLE
+DX-040-646406-20260930
+Página 1 de 6 · ejecutivo
+DECISIÓN DEL INMUEBLE
+TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 E…
+bloque a · identidad del inmueble
+INFORMACIÓN GENERAL
+DIRECCIÓN
+TV 43 # 100 - 50 CONJUNTO RESIDENC…
+MATRÍCULA
+040-646406
+CIUDAD
+Barranquilla
+BARRIO
+Miramar
+ÁREA
+58.75 m²
+USO
+Habitacional
+RÉGIMEN
+Propiedad Horizontal
+VALOR ESTIMADO
+no disponible (valoración no autorizada)
+identidad · títulos · contrapartes · territorio · entorno · valoración
+ESTADO POR DOMINIO
+IDENTIDAD
+VERIFICADO
+TÍTULOS
+CON CONDICIONES
+CONTRAPARTES
+SIN COINCIDENCIAS
+TERRITORIO
+REQUIERE VALIDACIÓN
+VALOR
+NO DISPONIBLE
+conflictos entre versiones del expediente
+COHERENCIA DE LA INFORMACIÓN
+COHERENCIA DE INFORMACIÓN — 6 atributo(s) requieren reconciliación histórica
+AFECTA A: COMPRADOR, INMOBILIARIA, BANCO / FINANCIADOR, ASEGURADORA DE TÍTULO
+Detalle por atributo: página 4 →
+El expediente del mismo inmueble produjo valores distintos entre versiones. No es un riesgo del inmueble: es calidad de la información.
+· Altura / edificabilidad: 8 / 11
+· Amenaza por remoción en masa: Sin afectacion / AMENAZA BAJA
+· Coordenada del predio: 10.9870 -74.8115 / 11.00538 -74.83862
+· Titularidad: Duran Bacca Alisso / DURAN BACCA ALISSO
+· Tratamiento urbanístico: CONSOLIDACION URBA / CONSOLIDACION -- N
+· Uso del suelo (POT): ACTIVIDAD CENTRAL  / ACTIVIDAD URBANA R
+qué encontró DICTUS · qué decisión produce · a quién afecta · qué hacer
+DECISION BOARD
+TEMA
+HALLAZGO · QUÉ ENCONTRÓ DICTUS
+DECISIÓN DICTUS
+TÍTULO
+ALTO · El folio registra una HIPOTECA VIGENTE inscrita el 22-01-2024 (anot. 007…
+PROCEDER CON CONDICIONES
+AFECTA A: COMPRADOR, VENDEDOR, INMOBILIARIA, BANCO / FINANCIADOR
+ACCIÓN: Para vender, refinanciar o dar este inmueble en garantia, primero hay que gestionar el credito con BANCO DE BOGOTA S.A y tramitar la CANCELACION de la hipoteca ante la O…
++1 hallazgo(s) del mismo tema con su propia acción: página 2.
+ENTORNO Y RIESGOS
+MEDIO · Media · polígono: intersecta el predio
+PROCEDER CON CONDICIONES
+AFECTA A: COMPRADOR, VENDEDOR, INMOBILIARIA, BANCO / FINANCIADOR
+ACCIÓN: Afectacion presente declarada por la fuente oficial: se recomienda verificacion puntual por profesional competente en caso de intervencion fisica del predio; impacto esperado men…
+POT / CALIDAD DE DATOS
+6 atributo(s) con resultados incompatibles entre versiones del expediente
+NO UTILIZAR ESTE DATO COMO DEFINITIVO
+AFECTA A: COMPRADOR, INMOBILIARIA, BANCO / FINANCIADOR, ASEGURADORA DE TÍTULO
+ACCIÓN: Reconciliar con la ficha/polígono POT aplicable antes de usar la cifra.
+DISPOSICIÓN GLOBAL: PROCEDER CON CONDICIONES IDENTIFICADAS · VALUATION_GATE: La valoración NO está autorizada en esta
+corrida: el origen de la tasa es MANUAL_CONFIG y su procedencia es INSUFICIENTE para autorizar una cifra (se exige fuente externa citada
+o cálculo de fuentes citadas, con fecha y sha256). No se emite cifra y se declaran los bloqueos reales. · Cobertura parcial declarada —
+ENVIRONMENT_GATE: Inundación: sin dato de fuente
+SELLO GLOBAL
+DICTUS ID
+DX-040-646406-20260930
+Fecha: 2026-09-30
+Evidencias: 10 · Estado: PARCIAL_CON_DECLARACIONES
+Cadena de custodia del expediente: Anexo G.
+DICTUS_MASTER_HASH
+c804dc02b223c9be905f9e
+…3103ffa54f355b7aba2986
+Verificación: DICTUS ID + hash
+maestro abreviado. El hash del archivo
+PDF consta aparte (Anexo G).
+DICTUS_MASTER_HASH C804DC02B223…EE71
+Evidencias 10 · sello PARCIAL_CON_DECLARACIONES · verificación por DICTUS ID (Anexo G)
+El hash del archivo PDF no es el hash maestro: consta en el anexo G.
+

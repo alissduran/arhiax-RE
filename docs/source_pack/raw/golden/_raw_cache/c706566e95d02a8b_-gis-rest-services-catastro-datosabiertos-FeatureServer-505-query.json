@@ -1,0 +1,159 @@
+{
+  "ok": true,
+  "data": {
+    "objectIdFieldName": "objectid",
+    "globalIdFieldName": "globalid",
+    "fields": [
+      {
+        "name": "objectid",
+        "alias": "OBJECTID",
+        "type": "esriFieldTypeOID"
+      },
+      {
+        "name": "anio_construccion",
+        "alias": "Año Construcción",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "area_construida",
+        "alias": "Área Construida",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "identificador",
+        "alias": "Identificador",
+        "type": "esriFieldTypeString",
+        "length": 20
+      },
+      {
+        "name": "tipo_unidad_construccion",
+        "alias": "Tipo Unidad Construcción",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "total_banios",
+        "alias": "Total Baños",
+        "type": "esriFieldTypeInteger"
+      },
+      {
+        "name": "total_habitaciones",
+        "alias": "Total Habitaciones",
+        "type": "esriFieldTypeInteger"
+      },
+      {
+        "name": "total_locales",
+        "alias": "Total Locales",
+        "type": "esriFieldTypeInteger"
+      },
+      {
+        "name": "total_plantas",
+        "alias": "Total Pisos",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "uso",
+        "alias": "Uso",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "estado_conservacion",
+        "alias": "Estado Conservación",
+        "type": "esriFieldTypeString",
+        "length": 30
+      },
+      {
+        "name": "globalid",
+        "alias": "GlobalID",
+        "type": "esriFieldTypeGlobalID",
+        "length": 38
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "anio_construccion": 2014,
+          "area_construida": 27.07,
+          "identificador": "C",
+          "tipo_unidad_construccion": "Comercial",
+          "total_banios": 1,
+          "total_habitaciones": 1,
+          "total_locales": 0,
+          "total_plantas": 1,
+          "uso": "Comercial_Oficinas_Consultorios",
+          "estado_conservacion": "Sin información",
+          "globalid": "{0E3CED55-B4DA-45AD-A27C-051E52603CC4}"
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/505/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F505%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:04:54.502529+00:00",
+    "elapsed_s": 44.7,
+    "attempt_count": 6,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:04:10.912844+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T17:04:27.766292+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 3,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T17:04:28.008654+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 4,
+        "http_status": 200,
+        "bytes": 6265,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:04:31.010488+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T17:04:50.627792+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 6,
+        "http_status": 200,
+        "bytes": 1484,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:04:54.502515+00:00"
+      }
+    ]
+  }
+}

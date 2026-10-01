@@ -1,0 +1,177 @@
+[
+  {
+    "name": "translate_goog_fixed",
+    "target_url": "https://miciudad-barranquilla-gov-co.translate.goog/gis/rest/services?f=json&_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=en&_x_tr_pto=wapp",
+    "control_url": null,
+    "baq": {
+      "status": 403,
+      "kind": "CF_BLOCK",
+      "head": "<!doctype html><!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]--><!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]--><!--[if IE 8]>    <html class=\"no-js "
+    }
+  },
+  {
+    "name": "translate_goog_root",
+    "target_url": "https://miciudad-barranquilla-gov-co.translate.goog/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=en",
+    "control_url": null,
+    "baq": {
+      "status": 403,
+      "kind": "CF_BLOCK",
+      "head": "<!doctype html><!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]--><!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]--><!--[if IE 8]>    <html class=\"no-js "
+    }
+  },
+  {
+    "name": "allorigins_raw",
+    "target_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%3Ff%3Djson",
+    "control_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fhttpbin.org%2Fjson",
+    "control": {
+      "status": 522,
+      "kind": "JSON",
+      "head": "{\"type\":\"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\",\"title\":\"Error 522: Connection timed out\",\"status\":522,\"detail\":\"Cloudflare could"
+    },
+    "baq": {
+      "status": 522,
+      "kind": "JSON",
+      "head": "{\"type\":\"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\",\"title\":\"Error 522: Connection timed out\",\"status\":522,\"detail\":\"Cloudflare could"
+    }
+  },
+  {
+    "name": "cors_eu_org",
+    "target_url": "https://cors.eu.org/https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+    "control_url": "https://cors.eu.org/https://httpbin.org/json",
+    "control": {
+      "status": 429,
+      "kind": "HTML/OTHER",
+      "head": "\n\t<!doctype html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"n"
+    },
+    "baq": {
+      "status": 429,
+      "kind": "HTML/OTHER",
+      "head": "\n\t<!doctype html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"n"
+    }
+  },
+  {
+    "name": "jsonp_afeld",
+    "target_url": "https://jsonp.afeld.me/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%3Ff%3Djson",
+    "control_url": null,
+    "baq": {
+      "status": null,
+      "kind": "HTML/OTHER",
+      "head": "URLError: <urlopen error [Errno 11001] getaddrinfo failed>"
+    }
+  },
+  {
+    "name": "yacdn",
+    "target_url": "https://yacdn.org/proxy/https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+    "control_url": null,
+    "baq": {
+      "status": null,
+      "kind": "HTML/OTHER",
+      "head": "URLError: <urlopen error [Errno 11002] getaddrinfo failed>"
+    }
+  },
+  {
+    "name": "corsproxy_org",
+    "target_url": "https://corsproxy.org/?https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%3Ff%3Djson",
+    "control_url": null,
+    "baq": {
+      "status": 200,
+      "kind": "HTML/OTHER",
+      "head": "<!DOCTYPE html><html lang=\"en\"><head>\n<meta charset=\"utf-8\"><link rel=\"preconnect\" href=\"https://cdn.jivosite.com\"/><link rel=\"canonical\" href=\"https://hide.mn/en/\"/><link rel=\"icon\" type=\"image/svg+x"
+    }
+  },
+  {
+    "name": "proxy_cors_sh",
+    "target_url": "https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+    "control_url": null,
+    "baq": {
+      "status": 403,
+      "kind": "CF_BLOCK",
+      "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 8]>    <html class=\"no-"
+    }
+  },
+  {
+    "name": "cors_anywhere",
+    "target_url": "https://cors-anywhere.herokuapp.com/https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+    "control_url": null,
+    "baq": {
+      "status": 403,
+      "kind": "HTML/OTHER",
+      "head": "<form><p>This demo of CORS Anywhere should only be used for development purposes, see <a href=\"https://github.com/Rob--W/cors-anywhere/issues/301\">https://github.com/Rob--W/cors-anywhere/issues/301</a"
+    }
+  },
+  {
+    "name": "cors_lol_retry",
+    "target_url": "https://api.cors.lol/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%3Ff%3Djson",
+    "control_url": null,
+    "baq": {
+      "status": 429,
+      "kind": "HTML/OTHER",
+      "head": "Rate limit exceeded\n"
+    }
+  },
+  {
+    "name": "api_allorigins_win_get",
+    "target_url": "https://api.allorigins.win/get?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%3Ff%3Djson",
+    "control_url": null,
+    "baq": {
+      "status": 200,
+      "kind": "JSON",
+      "head": "{\"contents\":\"<!DOCTYPE html>\\n<!--[if lt IE 7]> <html class=\\\"no-js ie6 oldie\\\" lang=\\\"en-US\\\"> <![endif]-->\\n<!--[if IE 7]>    <html class=\\\"no-js ie7 oldie\\\" lang=\\\"en-US\\\"> <![endif]-->\\n<!--[if IE"
+    }
+  },
+  {
+    "name": "codetabs_retry",
+    "target_url": "https://api.codetabs.com/v1/proxy?quest=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%3Ff%3Djson",
+    "control_url": "https://api.codetabs.com/v1/proxy?quest=https%3A%2F%2Fhttpbin.org%2Fjson",
+    "control": {
+      "status": 522,
+      "kind": "JSON",
+      "head": "{\"type\":\"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\",\"title\":\"Error 522: Connection timed out\",\"status\":522,\"detail\":\"Cloudflare could"
+    },
+    "baq": {
+      "status": 522,
+      "kind": "JSON",
+      "head": "{\"type\":\"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\",\"title\":\"Error 522: Connection timed out\",\"status\":522,\"detail\":\"Cloudflare could"
+    }
+  },
+  {
+    "name": "jina_retry",
+    "target_url": "https://r.jina.ai/https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+    "control_url": null,
+    "baq": {
+      "status": 403,
+      "kind": "CF_CHALLENGE",
+      "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta nam"
+    }
+  },
+  {
+    "name": "thingproxy_alt",
+    "target_url": "https://cors.bridged.cc/https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+    "control_url": null,
+    "baq": {
+      "status": null,
+      "kind": "HTML/OTHER",
+      "head": "URLError: <urlopen error [Errno 11001] getaddrinfo failed>"
+    }
+  },
+  {
+    "name": "whateverorigin",
+    "target_url": "http://www.whateverorigin.org/get?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%3Ff%3Djson",
+    "control_url": null,
+    "baq": {
+      "status": 200,
+      "kind": "HTML/OTHER",
+      "head": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Whatever Origin | The Original Open Sourc"
+    }
+  },
+  {
+    "name": "walking_me",
+    "target_url": "https://api.microlink.io/?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%3Ff%3Djson&meta=false&data.status=true",
+    "control_url": null,
+    "baq": {
+      "status": 400,
+      "kind": "JSON",
+      "head": "{\"status\":\"fail\",\"data\":{\"data\":\"EINVALDATA, The `data.status` has an invalid value (empty). rule must be an object (or array of objects) with extraction options.\"},\"more\":\"https://microlink.io/einval"
+    }
+  }
+]

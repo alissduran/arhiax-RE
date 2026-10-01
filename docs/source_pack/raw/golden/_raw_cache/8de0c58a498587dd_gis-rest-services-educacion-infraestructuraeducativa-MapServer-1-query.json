@@ -1,0 +1,215 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "codigo_snies",
+    "fieldAliases": {
+      "objectid": "OBJECTID",
+      "referenciapredio": "Referencia predial",
+      "codigo_snies": "Código SNIES",
+      "nombreinstitucion": "Nombre institución",
+      "caracter_academico": "Carácter académico",
+      "direccion": "Dirección",
+      "telefono": "Teléfono",
+      "naturalezajuridica": "Naturaleza jurídica",
+      "sector": "Sector",
+      "estado": "Estado",
+      "acreditacion": "Acreditación de alta calidad",
+      "principalseccional": "Principal seccional",
+      "programasvigentes": "Programas vigentes",
+      "paginaweb": "Página web",
+      "fechaacreditacion": "Fecha acreditación",
+      "vigenciaacreditacion": "Vigencia acreditación (años)"
+    },
+    "geometryType": "esriGeometryPoint",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "referenciapredio",
+        "type": "esriFieldTypeString",
+        "alias": "Referencia predial",
+        "length": 255
+      },
+      {
+        "name": "codigo_snies",
+        "type": "esriFieldTypeString",
+        "alias": "Código SNIES",
+        "length": 20
+      },
+      {
+        "name": "nombreinstitucion",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre institución",
+        "length": 100
+      },
+      {
+        "name": "caracter_academico",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Carácter académico"
+      },
+      {
+        "name": "direccion",
+        "type": "esriFieldTypeString",
+        "alias": "Dirección",
+        "length": 50
+      },
+      {
+        "name": "telefono",
+        "type": "esriFieldTypeBigInteger",
+        "alias": "Teléfono"
+      },
+      {
+        "name": "naturalezajuridica",
+        "type": "esriFieldTypeString",
+        "alias": "Naturaleza jurídica",
+        "length": 50
+      },
+      {
+        "name": "sector",
+        "type": "esriFieldTypeString",
+        "alias": "Sector",
+        "length": 50
+      },
+      {
+        "name": "estado",
+        "type": "esriFieldTypeString",
+        "alias": "Estado",
+        "length": 15
+      },
+      {
+        "name": "acreditacion",
+        "type": "esriFieldTypeString",
+        "alias": "Acreditación de alta calidad",
+        "length": 5
+      },
+      {
+        "name": "principalseccional",
+        "type": "esriFieldTypeString",
+        "alias": "Principal seccional",
+        "length": 50
+      },
+      {
+        "name": "programasvigentes",
+        "type": "esriFieldTypeInteger",
+        "alias": "Programas vigentes"
+      },
+      {
+        "name": "paginaweb",
+        "type": "esriFieldTypeString",
+        "alias": "Página web",
+        "length": 100
+      },
+      {
+        "name": "fechaacreditacion",
+        "type": "esriFieldTypeDateOnly",
+        "alias": "Fecha acreditación",
+        "length": 8
+      },
+      {
+        "name": "vigenciaacreditacion",
+        "type": "esriFieldTypeInteger",
+        "alias": "Vigencia acreditación (años)"
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "referenciapredio": "080010103000003580020000000000",
+          "codigo_snies": "1804",
+          "nombreinstitucion": "Universidad Autonoma del Caribe- Uniautónoma",
+          "caracter_academico": 4,
+          "direccion": "Calle 90 #46-112",
+          "telefono": 3671000,
+          "naturalezajuridica": "C",
+          "sector": "N",
+          "estado": "Activa",
+          "acreditacion": "N",
+          "principalseccional": "P",
+          "programasvigentes": 46,
+          "paginaweb": "www.uac.edu.co",
+          "fechaacreditacion": null,
+          "vigenciaacreditacion": null
+        },
+        "geometry": {
+          "x": 4800832.694404947,
+          "y": 2774633.554649439
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/infraestructuraeducativa/MapServer/1/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Feducacion%2Finfraestructuraeducativa%2FMapServer%2F1%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T17:15:32.627372+00:00",
+    "elapsed_s": 273.8,
+    "attempt_count": 30,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 25,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:15:11.891114+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 26,
+        "http_status": 520,
+        "bytes": 963,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 520",
+        "at": "2026-09-29T17:15:21.248191+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 27,
+        "http_status": 500,
+        "bytes": 579,
+        "reject_reason": "not_json",
+        "error": "HTTPError 500",
+        "at": "2026-09-29T17:15:21.414870+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 28,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:15:23.184238+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 29,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T17:15:29.363561+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 30,
+        "http_status": 200,
+        "bytes": 2679,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T17:15:32.627352+00:00"
+      }
+    ]
+  }
+}

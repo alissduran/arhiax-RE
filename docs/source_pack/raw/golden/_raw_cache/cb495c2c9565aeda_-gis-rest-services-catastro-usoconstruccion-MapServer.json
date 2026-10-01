@@ -1,0 +1,400 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;font-size:12pt'><p><span>Muestra el conjunto de elementos constructivos que conforman una edificación para el año 2025, clasificadas de acuerdo con sus características en convencionales, para usos residencial, comercial e industrial y no convencionales cuando son anexos de la construcción. La información permite analizar la dinámica constructiva y apoyar procesos de planificación y control urbano.</span></p></div>",
+    "mapName": "Uso de la construcción",
+    "description": "Muestra el conjunto de elementos constructivos que conforman una edificación para el año 2025, clasificadas de acuerdo con sus características en convencionales, para usos residencial, comercial e industrial y no convencionales cuando son anexos de la construcción. La información permite analizar la dinámica constructiva y apoyar procesos de planificación y control urbano.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Uso de la construcción 2025",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Uso de la construcción 2026",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 102100,
+      "latestWkid": 3857,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -20037700,
+      "falseY": -30241100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": true,
+    "tileInfo": {
+      "rows": 256,
+      "cols": 256,
+      "dpi": 96,
+      "format": "PNG",
+      "compressionQuality": 0,
+      "origin": {
+        "x": -20037508.342787,
+        "y": 20037508.342787
+      },
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 148923141.92838538,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "lods": [
+        {
+          "level": 0,
+          "resolution": 156543.033928,
+          "scale": 591657527.591555
+        },
+        {
+          "level": 1,
+          "resolution": 78271.5169639999,
+          "scale": 295828763.795777
+        },
+        {
+          "level": 2,
+          "resolution": 39135.7584820001,
+          "scale": 147914381.897889
+        },
+        {
+          "level": 3,
+          "resolution": 19567.8792409999,
+          "scale": 73957190.948944
+        },
+        {
+          "level": 4,
+          "resolution": 9783.93962049996,
+          "scale": 36978595.474472
+        },
+        {
+          "level": 5,
+          "resolution": 4891.96981024998,
+          "scale": 18489297.737236
+        },
+        {
+          "level": 6,
+          "resolution": 2445.98490512499,
+          "scale": 9244648.868618
+        },
+        {
+          "level": 7,
+          "resolution": 1222.99245256249,
+          "scale": 4622324.434309
+        },
+        {
+          "level": 8,
+          "resolution": 611.49622628138,
+          "scale": 2311162.217155
+        },
+        {
+          "level": 9,
+          "resolution": 305.748113140558,
+          "scale": 1155581.108577
+        },
+        {
+          "level": 10,
+          "resolution": 152.874056570411,
+          "scale": 577790.554289
+        },
+        {
+          "level": 11,
+          "resolution": 76.4370282850732,
+          "scale": 288895.277144
+        },
+        {
+          "level": 12,
+          "resolution": 38.2185141425366,
+          "scale": 144447.638572
+        },
+        {
+          "level": 13,
+          "resolution": 19.1092570712683,
+          "scale": 72223.819286
+        },
+        {
+          "level": 14,
+          "resolution": 9.55462853563415,
+          "scale": 36111.909643
+        },
+        {
+          "level": 15,
+          "resolution": 4.77731426794937,
+          "scale": 18055.954822
+        },
+        {
+          "level": 16,
+          "resolution": 2.38865713397468,
+          "scale": 9027.977411
+        },
+        {
+          "level": 17,
+          "resolution": 1.19432856685505,
+          "scale": 4513.988705
+        },
+        {
+          "level": 18,
+          "resolution": 0.597164283559817,
+          "scale": 2256.994353
+        },
+        {
+          "level": 19,
+          "resolution": 0.298582141647617,
+          "scale": 1128.497176
+        },
+        {
+          "level": 20,
+          "resolution": 0.14929107082380833,
+          "scale": 564.248588
+        },
+        {
+          "level": 21,
+          "resolution": 0.07464553541190416,
+          "scale": 282.124294
+        },
+        {
+          "level": 22,
+          "resolution": 0.03732276770595208,
+          "scale": 141.062147
+        },
+        {
+          "level": 23,
+          "resolution": 0.01866138385297604,
+          "scale": 70.5310735
+        }
+      ]
+    },
+    "storageInfo": {
+      "storageFormat": "esriMapCacheStorageModeCompactV2",
+      "packetSize": 128
+    },
+    "initialExtent": {
+      "xmin": -8343156.681513894,
+      "ymin": 1217353.4123913848,
+      "xmax": -8308523.0428808825,
+      "ymax": 1242547.513743535,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": -8339765.458981746,
+      "ymin": 1222292.4301735642,
+      "xmax": -8322049.314825047,
+      "ymax": 1239335.587449491,
+      "zmin": 0,
+      "zmax": 95.54499999999825,
+      "mmin": null,
+      "mmax": null,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 591657527.591555,
+    "maxScale": 564.248588,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Uso de la construcción",
+      "Author": "",
+      "Comments": "Muestra el conjunto de elementos constructivos que conforman una edificación para el año 2025, clasificadas de acuerdo con sus características en convencionales, para usos residencial, comercial e industrial y no convencionales cuando son anexos de la construcción. La información permite analizar la dinámica constructiva y apoyar procesos de planificación y control urbano.",
+      "Subject": "Clasifica las construcciones según su uso predominante como residencial, comercial, institucional, industrial, anexo, entre otros. Permitiendo identificar las tipologías de cada edificación.",
+      "Category": "",
+      "Version": "3.2.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Construcciones,Uso del suelo,Tipología,Planeación urbana,Catastro,Ordenamiento territorial,Clasificación"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "floorAwareMapProperties": {
+      "defaultFloorFilterSettings": {
+        "isEnabled": false
+      }
+    },
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "serviceItemId": "19785a56fdc542c5bb69fa1af61f0fe5"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/usoconstruccion/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fusoconstruccion%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:56:40.303112+00:00",
+    "elapsed_s": 142.5,
+    "attempt_count": 18,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 13,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:55:53.526734+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 14,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:55:55.439087+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 15,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:56:15.310622+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 16,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:56:15.535240+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 17,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:56:35.361266+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 18,
+        "http_status": 200,
+        "bytes": 6732,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:56:40.303101+00:00"
+      }
+    ]
+  }
+}

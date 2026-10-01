@@ -1,0 +1,185 @@
+{
+  "ok": true,
+  "data": {
+    "objectIdFieldName": "objectid",
+    "globalIdFieldName": "globalid",
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "hasZ": false,
+    "fields": [
+      {
+        "name": "objectid",
+        "alias": "OBJECTID",
+        "type": "esriFieldTypeOID"
+      },
+      {
+        "name": "etiqueta",
+        "alias": "Etiqueta",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "relacion_superficie",
+        "alias": "Relación Superficie",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "planta_ubicacion",
+        "alias": "Planta Ubicación",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "altura",
+        "alias": "Altura",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "local_id",
+        "alias": "Local Id",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "tipo_planta",
+        "alias": "Tipo Planta",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "estado_unidad_construccion",
+        "alias": "Estado Unidad de Construcción",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "Shape__Area",
+        "alias": "st_area(shape)",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "Shape__Length",
+        "alias": "st_length(shape)",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "globalid",
+        "alias": "GlobalID",
+        "type": "esriFieldTypeGlobalID",
+        "length": 38
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "etiqueta": "B",
+          "relacion_superficie": "En_Rasante",
+          "planta_ubicacion": 1,
+          "altura": 3,
+          "local_id": "080010001000000000449000000000",
+          "tipo_planta": "Piso",
+          "estado_unidad_construccion": 1,
+          "Shape__Area": 12.9895372,
+          "Shape__Length": 16.99335246240678,
+          "globalid": "{9ADE3070-6852-4ECD-B946-FA639CE70586}"
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                4797456.6673,
+                2777545.388699999
+              ],
+              [
+                4797463.1404,
+                2777544.8246999998
+              ],
+              [
+                4797462.9667,
+                2777542.8331000004
+              ],
+              [
+                4797456.4938,
+                2777543.3970999997
+              ],
+              [
+                4797456.6673,
+                2777545.388699999
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/305/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F305%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:41:38.621323+00:00",
+    "elapsed_s": 196.1,
+    "attempt_count": 18,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 13,
+        "http_status": null,
+        "bytes": 0,
+        "reject_reason": "not_json",
+        "error": "TimeoutError: The read operation timed out",
+        "at": "2026-09-29T16:40:48.750617+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 14,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:41:08.490446+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 15,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:41:28.189692+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 16,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:41:28.387321+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 17,
+        "http_status": 200,
+        "bytes": 6265,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:41:33.833430+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 18,
+        "http_status": 200,
+        "bytes": 1700,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:41:38.621310+00:00"
+      }
+    ]
+  }
+}

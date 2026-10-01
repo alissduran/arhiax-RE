@@ -1,0 +1,3539 @@
+{
+  "generated_from": "raw/golden/_raw_cache (raw ArcGIS REST responses)",
+  "readable_services": [
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/mecanismosfianaciacion/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimonio/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/infraestructuraservicios/MapServer",
+      "n_layers": 3,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer",
+      "n_layers": 5,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/areaconstruida/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+      "n_layers": 12,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -400,
+        "falseY": -400,
+        "xyUnits": 999999999.9999999,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimoniohistoricoycultural/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/antiguedadpredios/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/informalidad/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/direcciones/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelorural/MapServer",
+      "n_layers": 4,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+      "n_layers": 7,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/cobertura/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/barriosalaobra/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/amenazas/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/infraestructuracultural/MapServer",
+      "n_layers": 5,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/manzanas/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer",
+      "n_layers": 5,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+      "n_layers": 7,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/dinamicaurbana/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/justiciayseguridad/MapServer",
+      "n_layers": 5,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkt2": "PROJCRS[\"PCS_ATL_BARRANQUILLA\",BASEGEOGCRS[\"CGS_ATL_BARRANQUILLA\",DATUM[\"D_MAGNA_ATL_BARRANQUILLA\",ELLIPSOID[\"GRS_1980_ATL_BARRANQUILLA\",6378237.0,298.257222101,LENGTHUNIT[\"Meter\",1.0]]],PRIMEM[\"Greenwich\",0.0,ANGLEUNIT[\"Degree\",0.0174532925199433]],CS[ellipsoidal,2],ANGLEUNIT[\"Degree\",0.0174532925199433]],CONVERSION[\"Transverse_Mercator\",METHOD[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",917264.406,LENGTHUNIT[\"Meter\",1.0]],PARAMETER[\"False_Northing\",1699839.935,LENGTHUNIT[\"Meter\",1.0]],PARAMETER[\"Central_Meridian\",-74.8343313333333,ANGLEUNIT[\"Degree\",0.0174532925199433]],PARAMETER[\"Scale_Factor\",1.0,SCALEUNIT[\"Unity\",1.0]],PARAMETER[\"Latitude_Of_Origin\",10.9231830833333,ANGLEUNIT[\"Degree\",0.0174532925199433]]],CS[Cartesian,2],AXIS[\"Easting (X)\",east,ORDER[1]],AXIS[\"Northing (Y)\",north,ORDER[2]],LENGTHUNIT[\"Meter\",1.0]]",
+        "wkt": "PROJCS[\"PCS_ATL_BARRANQUILLA\",GEOGCS[\"CGS_ATL_BARRANQUILLA\",DATUM[\"D_MAGNA_ATL_BARRANQUILLA\",SPHEROID[\"GRS_1980_ATL_BARRANQUILLA\",6378237.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",917264.406],PARAMETER[\"False_Northing\",1699839.935],PARAMETER[\"Central_Meridian\",-74.8343313333333],PARAMETER[\"Scale_Factor\",1.0],PARAMETER[\"Latitude_Of_Origin\",10.9231830833333],UNIT[\"Meter\",1.0]]",
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -4706000,
+        "falseY": -9510400,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/propiedadhorizontal/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/eventosculturales/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico/hoteles/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/lotes/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/demografia/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer",
+      "n_layers": 4,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+      "n_layers": 7,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/topografia/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/transito/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/coberturaterrestre/MapServer",
+      "n_layers": 3,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/mejoramientovivienda/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+      "n_layers": 10,
+      "n_tables": 13,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer",
+      "n_layers": 4,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/incidenciasciudadanas/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/alcaldiadistrital/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/hidrografia/MapServer",
+      "n_layers": 3,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/bienestaranimal/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/comedorescomunitarios/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/riesgos/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/participacionciudadana/puestosvotacion/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/equidad/mujerespropietarias/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/infraestructuraeducativa/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/influenciavial/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 450623577.5299045,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/estacionservicio/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer",
+      "n_layers": 5,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/infraestructuradetransporte/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+      "n_layers": 7,
+      "n_tables": 13,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Extract"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/infraestructurasalud/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+      "n_layers": 9,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/infraestructuradeporte/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/semanasanta/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/aotronivel/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer",
+      "n_layers": 5,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/sitiosdeinteres/MapServer",
+      "n_layers": 3,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto/ipu/MapServer",
+      "n_layers": 5,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
+      "n_layers": 5,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/nodosdetransporte/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico/tejidoempresarial/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/redes/MapServer",
+      "n_layers": 3,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+      "n_layers": 8,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/usoconstruccion/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/atencionemergencias/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/primerainfancia/MapServer",
+      "n_layers": 2,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/maritimoyportuario/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/huellaurbana/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/avaluocatastral/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/serviciostransporte/MapServer",
+      "n_layers": 3,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/gestionpatrimoniocultural/MapServer",
+      "n_layers": 3,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+      "n_layers": 8,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/influencia/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/limpiaylinda/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/sectores/MapServer",
+      "n_layers": 1,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
+      "n_layers": 5,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 102100,
+        "latestWkid": 3857,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -20037700,
+        "falseY": -30241100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Map,Query,Data,TileMap"
+    },
+    {
+      "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer",
+      "n_layers": 7,
+      "n_tables": 0,
+      "currentVersion": 11.5,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "maxRecordCount": 2000,
+      "capabilities": "Query,Map,Data"
+    }
+  ],
+  "ids": {
+    "1": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/mecanismosfianaciacion/MapServer",
+        "layer_id": 1,
+        "name": "Leasing",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer",
+        "layer_id": 1,
+        "name": "Estratificación por manzanas",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimonio/MapServer",
+        "layer_id": 1,
+        "name": "Rutas patrimoniales",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/infraestructuraservicios/MapServer",
+        "layer_id": 1,
+        "name": "Zonas de reserva servicios públicos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer",
+        "layer_id": 1,
+        "name": "Concentración de predios por manzana. Año 2016.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/areaconstruida/MapServer",
+        "layer_id": 1,
+        "name": "Área construida. Vigencia 2026.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimoniohistoricoycultural/MapServer",
+        "layer_id": 1,
+        "name": "Predios declarados patrimonio histórico",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/antiguedadpredios/MapServer",
+        "layer_id": 1,
+        "name": "Antigüedad de predios. Año 1905-2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/informalidad/MapServer",
+        "layer_id": 1,
+        "name": "Predios informales",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/direcciones/MapServer",
+        "layer_id": 1,
+        "name": "Código postal",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelorural/MapServer",
+        "layer_id": 1,
+        "name": "Valor por hectárea del suelo rural. Vigencia 2019.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+        "layer_id": 1,
+        "name": "Destinos predominantes de las transacciones. Año 2019.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/cobertura/MapServer",
+        "layer_id": 1,
+        "name": "Disponibilidad de servicios públicos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/barriosalaobra/MapServer",
+        "layer_id": 1,
+        "name": "Barrios a la obra",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/amenazas/MapServer",
+        "layer_id": 1,
+        "name": "Amenaza por inundación",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/infraestructuracultural/MapServer",
+        "layer_id": 1,
+        "name": "Biblioteca",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/manzanas/MapServer",
+        "layer_id": 1,
+        "name": "Manzanas",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer",
+        "layer_id": 1,
+        "name": "Ecoparque Ciénaga de Mallorquín",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+        "layer_id": 1,
+        "name": "Valor compraventas 2019",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/dinamicaurbana/MapServer",
+        "layer_id": 1,
+        "name": "huellaurbana",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/justiciayseguridad/MapServer",
+        "layer_id": 1,
+        "name": "Juzgados",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/propiedadhorizontal/MapServer",
+        "layer_id": 1,
+        "name": "Predios en Propiedad Horizontal",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/eventosculturales/MapServer",
+        "layer_id": 1,
+        "name": "Eventos del Carnaval de Barranquilla",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico/hoteles/MapServer",
+        "layer_id": 1,
+        "name": "Oferta hotelera",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/lotes/MapServer",
+        "layer_id": 1,
+        "name": "Lotes",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/demografia/MapServer",
+        "layer_id": 1,
+        "name": "Densidad poblacional",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer",
+        "layer_id": 1,
+        "name": "Barrios",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+        "layer_id": 1,
+        "name": "Densidad de compraventas. Año 2019.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/topografia/MapServer",
+        "layer_id": 1,
+        "name": "Pendiente",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/transito/MapServer",
+        "layer_id": 1,
+        "name": "Tráfico vehicular",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/coberturaterrestre/MapServer",
+        "layer_id": 1,
+        "name": "Geoformas de la Ciénaga de Mallorquín",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer",
+        "layer_id": 1,
+        "name": "Valor arrendamientos. Año 2024.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/mejoramientovivienda/MapServer",
+        "layer_id": 1,
+        "name": "Mejoramiento de vivienda",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer",
+        "layer_id": 1,
+        "name": "Rango valores por m². Área (36-60m²).",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/incidenciasciudadanas/MapServer",
+        "layer_id": 1,
+        "name": "Homicidios",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/alcaldiadistrital/MapServer",
+        "layer_id": 1,
+        "name": "Dependencias",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/hidrografia/MapServer",
+        "layer_id": 1,
+        "name": "Batimetría del Río Magdalena",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/bienestaranimal/MapServer",
+        "layer_id": 1,
+        "name": "Centro de Bienestar Animal",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/comedorescomunitarios/MapServer",
+        "layer_id": 1,
+        "name": "Comedores comunitarios",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/riesgos/MapServer",
+        "layer_id": 1,
+        "name": "Áreas en riesgo",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/participacionciudadana/puestosvotacion/MapServer",
+        "layer_id": 1,
+        "name": "Puestos de votación",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/equidad/mujerespropietarias/MapServer",
+        "layer_id": 1,
+        "name": "Mujeres propietarias de vivienda. Año 2026.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/infraestructuraeducativa/MapServer",
+        "layer_id": 1,
+        "name": "Instituciones de educación superior",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/influenciavial/MapServer",
+        "layer_id": 1,
+        "name": "Estado de las vías",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/estacionservicio/MapServer",
+        "layer_id": 1,
+        "name": "Estaciones de servicio",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer",
+        "layer_id": 1,
+        "name": "Clases de suelo",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/infraestructuradetransporte/MapServer",
+        "layer_id": 1,
+        "name": "Ciclorruta",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/infraestructurasalud/MapServer",
+        "layer_id": 1,
+        "name": "Salud privada",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+        "layer_id": 1,
+        "name": "Punto de partida y llegada",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/infraestructuradeporte/MapServer",
+        "layer_id": 1,
+        "name": "Canchas",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/semanasanta/MapServer",
+        "layer_id": 1,
+        "name": "Iglesias",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/aotronivel/MapServer",
+        "layer_id": 1,
+        "name": "Barranquilla: A Otro Nivel",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer",
+        "layer_id": 1,
+        "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2022.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/sitiosdeinteres/MapServer",
+        "layer_id": 1,
+        "name": "Sitios de interés turístico",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto/ipu/MapServer",
+        "layer_id": 1,
+        "name": "Mediana del Impuesto Predial Unificado a nivel de manzana. Vigencia 2007.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
+        "layer_id": 1,
+        "name": "Condición jurídica. Año 2016.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/nodosdetransporte/MapServer",
+        "layer_id": 1,
+        "name": "Transporte terrestre intermunicipal",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico/tejidoempresarial/MapServer",
+        "layer_id": 1,
+        "name": "Empresas vigentes",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/redes/MapServer",
+        "layer_id": 1,
+        "name": "Red de alcantarillado",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+        "layer_id": 1,
+        "name": "Mediana del m² catastral. Año 2018.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/usoconstruccion/MapServer",
+        "layer_id": 1,
+        "name": "Uso de la construcción 2025",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/atencionemergencias/MapServer",
+        "layer_id": 1,
+        "name": "Estaciones de bomberos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/primerainfancia/MapServer",
+        "layer_id": 1,
+        "name": "Centros de desarrollo infantil",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/maritimoyportuario/MapServer",
+        "layer_id": 1,
+        "name": "Sociedades portuarias",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/huellaurbana/MapServer",
+        "layer_id": 1,
+        "name": "huellaurbana",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/avaluocatastral/MapServer",
+        "layer_id": 1,
+        "name": "Avalúo catastral por destino económico. Vigencia 2026.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/serviciostransporte/MapServer",
+        "layer_id": 1,
+        "name": "Ruta de buses colectivos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/gestionpatrimoniocultural/MapServer",
+        "layer_id": 1,
+        "name": "Predios PEMP",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+        "layer_id": 1,
+        "name": "Cantidad de transacciones por manzana. Año 2019.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/influencia/MapServer",
+        "layer_id": 1,
+        "name": "Zonificación por influencia de arroyos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos/limpiaylinda/MapServer",
+        "layer_id": 1,
+        "name": "Barranquilla Limpia y Linda",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/sectores/MapServer",
+        "layer_id": 1,
+        "name": "Sectores",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
+        "layer_id": 1,
+        "name": "Destinos económicos. Año 2016.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer",
+        "layer_id": 1,
+        "name": "Puntos de hidratación",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "2": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimonio/MapServer",
+        "layer_id": 2,
+        "name": "Recorridos patrimoniales",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/infraestructuraservicios/MapServer",
+        "layer_id": 2,
+        "name": "Infraestructura de saneamiento",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer",
+        "layer_id": 2,
+        "name": "Concentración de predios por manzana. Año 2019.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/patrimoniohistoricoycultural/MapServer",
+        "layer_id": 2,
+        "name": "Bienes de interés cultural nacional",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelorural/MapServer",
+        "layer_id": 2,
+        "name": "Valor por hectárea del suelo rural. Vigencia 2023.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+        "layer_id": 2,
+        "name": "Destinos predominantes de las transacciones. Año 2020.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos/amenazas/MapServer",
+        "layer_id": 2,
+        "name": "Amenaza por remoción en masa",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/infraestructuracultural/MapServer",
+        "layer_id": 2,
+        "name": "Conchas acusticas",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer",
+        "layer_id": 2,
+        "name": "Parques",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+        "layer_id": 2,
+        "name": "Valor compraventas 2020",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/justiciayseguridad/MapServer",
+        "layer_id": 2,
+        "name": "Fiscalias",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/eventosculturales/MapServer",
+        "layer_id": 2,
+        "name": "Desfiles del Carnaval de Barranquilla",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/demografia/MapServer",
+        "layer_id": 2,
+        "name": "Densidad poblacional 2025",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer",
+        "layer_id": 2,
+        "name": "Piezas urbanas",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+        "layer_id": 2,
+        "name": "Densidad de compraventas. Año 2020.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/topografia/MapServer",
+        "layer_id": 2,
+        "name": "Curvas de nivel",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/coberturaterrestre/MapServer",
+        "layer_id": 2,
+        "name": "Árboles",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer",
+        "layer_id": 2,
+        "name": "Rango valores por m². Área (61-175m²).",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/alcaldiadistrital/MapServer",
+        "layer_id": 2,
+        "name": "Sedes de atención",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/hidrografia/MapServer",
+        "layer_id": 2,
+        "name": "Cuerpos de agua",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/bienestaranimal/MapServer",
+        "layer_id": 2,
+        "name": "Veterinarias",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/infraestructuraeducativa/MapServer",
+        "layer_id": 2,
+        "name": "Educación básica y media",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/influenciavial/MapServer",
+        "layer_id": 2,
+        "name": "Influencia vial",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer",
+        "layer_id": 2,
+        "name": "Norma uso suelo",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud/infraestructurasalud/MapServer",
+        "layer_id": 2,
+        "name": " Mi Red Barranquilla IPS",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+        "layer_id": 2,
+        "name": "Puntos de ambulancia",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/infraestructuradeporte/MapServer",
+        "layer_id": 2,
+        "name": "Escenarios deportivos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/semanasanta/MapServer",
+        "layer_id": 2,
+        "name": "Ruta de los siete templos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer",
+        "layer_id": 2,
+        "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2023.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/sitiosdeinteres/MapServer",
+        "layer_id": 2,
+        "name": "Sitios de interés",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto/ipu/MapServer",
+        "layer_id": 2,
+        "name": "Mediana del Impuesto Predial Unificado a nivel de manzana. Vigencia 2008.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
+        "layer_id": 2,
+        "name": "Condición jurídica. Año 2019.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico/tejidoempresarial/MapServer",
+        "layer_id": 2,
+        "name": "Empresas sector energía",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/redes/MapServer",
+        "layer_id": 2,
+        "name": "Red de acueducto",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+        "layer_id": 2,
+        "name": "Mediana del m² catastral. Año 2020.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/usoconstruccion/MapServer",
+        "layer_id": 2,
+        "name": "Uso de la construcción 2026",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion/primerainfancia/MapServer",
+        "layer_id": 2,
+        "name": "Unidades de servicio",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/serviciostransporte/MapServer",
+        "layer_id": 2,
+        "name": "Estaciones de Transmetro",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/gestionpatrimoniocultural/MapServer",
+        "layer_id": 2,
+        "name": "Sectores normativos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+        "layer_id": 2,
+        "name": "Cantidad de transacciones por manzana. Año 2020.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
+        "layer_id": 2,
+        "name": "Destinos económicos. Año 2019.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer",
+        "layer_id": 2,
+        "name": "Punto de partida y llegada",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "3": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/infraestructuraservicios/MapServer",
+        "layer_id": 3,
+        "name": "Subestaciones de energía eléctrica",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer",
+        "layer_id": 3,
+        "name": "Concentración de predios por manzana. Año 2022.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelorural/MapServer",
+        "layer_id": 3,
+        "name": "Valor por hectárea del suelo rural. Vigencia 2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+        "layer_id": 3,
+        "name": "Destinos predominantes de las transacciones. Año 2021.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/infraestructuracultural/MapServer",
+        "layer_id": 3,
+        "name": "Teatro",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer",
+        "layer_id": 3,
+        "name": "Espacio público",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+        "layer_id": 3,
+        "name": "Valor compraventas 2021",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/justiciayseguridad/MapServer",
+        "layer_id": 3,
+        "name": "Carceles",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer",
+        "layer_id": 3,
+        "name": "Localidades",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+        "layer_id": 3,
+        "name": "Densidad de compraventas. Año 2021.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/coberturaterrestre/MapServer",
+        "layer_id": 3,
+        "name": "Bosques urbanos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer",
+        "layer_id": 3,
+        "name": "Rango valores por m². Área (176-290m²)",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente/hidrografia/MapServer",
+        "layer_id": 3,
+        "name": "Arroyos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer",
+        "layer_id": 3,
+        "name": "Planes parciales",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+        "layer_id": 3,
+        "name": "Puntos de asistencia medica",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer",
+        "layer_id": 3,
+        "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2024.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios/sitiosdeinteres/MapServer",
+        "layer_id": 3,
+        "name": "Fuentes de agua",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto/ipu/MapServer",
+        "layer_id": 3,
+        "name": "Mediana del Impuesto Predial Unificado a nivel de manzana. Vigencia 2009.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
+        "layer_id": 3,
+        "name": "Condición jurídica. Año 2022.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos/redes/MapServer",
+        "layer_id": 3,
+        "name": "Red de energía eléctrica",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+        "layer_id": 3,
+        "name": "Mediana del m² catastral. Año 2021.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/serviciostransporte/MapServer",
+        "layer_id": 3,
+        "name": "Rutas de Transmetro",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/gestionpatrimoniocultural/MapServer",
+        "layer_id": 3,
+        "name": "Niveles de intervención",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+        "layer_id": 3,
+        "name": "Cantidad de transacciones por manzana. Año 2021.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
+        "layer_id": 3,
+        "name": "Destinos económicos. Año 2022.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer",
+        "layer_id": 3,
+        "name": "Kilómetros",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "4": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer",
+        "layer_id": 4,
+        "name": "Concentración de predios por manzana. Año 2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelorural/MapServer",
+        "layer_id": 4,
+        "name": "Valor por hectárea del suelo rural. Vigencia 2026.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+        "layer_id": 4,
+        "name": "Destinos predominantes de las transacciones. Año 2022.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/infraestructuracultural/MapServer",
+        "layer_id": 4,
+        "name": "Museos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer",
+        "layer_id": 4,
+        "name": "Nodos de equipamientos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+        "layer_id": 4,
+        "name": "Valor compraventas 2022",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/justiciayseguridad/MapServer",
+        "layer_id": 4,
+        "name": "CAI, Estaciones y Subestaciones",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer",
+        "layer_id": 4,
+        "name": "Municipios",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+        "layer_id": 4,
+        "name": "Densidad de compraventas. Año 2022.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer",
+        "layer_id": 4,
+        "name": "Rango valores por m². Área (>291m²)",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer",
+        "layer_id": 4,
+        "name": "Tratamientos urbanísticos",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+        "layer_id": 4,
+        "name": "Puntos de hidratación",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer",
+        "layer_id": 4,
+        "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto/ipu/MapServer",
+        "layer_id": 4,
+        "name": "Mediana del Impuesto Predial Unificado a nivel de manzana. Vigencia 2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
+        "layer_id": 4,
+        "name": "Condición jurídica. Año 2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+        "layer_id": 4,
+        "name": "Mediana del m² catastral. Año 2022.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+        "layer_id": 4,
+        "name": "Cantidad de transacciones por manzana. Año 2022.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
+        "layer_id": 4,
+        "name": "Destinos económicos. Año 2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer",
+        "layer_id": 4,
+        "name": "Recorrido 15k",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "5": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer",
+        "layer_id": 5,
+        "name": "Concentración de predios por manzana. Año 2026.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+        "layer_id": 5,
+        "name": "Destinos predominantes de las transacciones. Año 2023.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura/infraestructuracultural/MapServer",
+        "layer_id": 5,
+        "name": "Librerias",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico/infraestructuraespaciopublico/MapServer",
+        "layer_id": 5,
+        "name": "Corredores verdes",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+        "layer_id": 5,
+        "name": "Valor compraventas 2023",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad/justiciayseguridad/MapServer",
+        "layer_id": 5,
+        "name": "Batallón, Escuelas y Brigadas",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+        "layer_id": 5,
+        "name": "Densidad de compraventas. Año 2023.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer",
+        "layer_id": 5,
+        "name": "Planes de reordenamiento",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+        "layer_id": 5,
+        "name": "Puntos de bebidas hidratantes",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer",
+        "layer_id": 5,
+        "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2026.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto/ipu/MapServer",
+        "layer_id": 5,
+        "name": "Mediana del Impuesto Predial Unificado a nivel de manzana. Vigencia 2026.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer",
+        "layer_id": 5,
+        "name": "Condición jurídica. Año 2026.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+        "layer_id": 5,
+        "name": "Mediana del m² catastral. Año 2023.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+        "layer_id": 5,
+        "name": "Cantidad de transacciones por manzana. Año 2023.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer",
+        "layer_id": 5,
+        "name": "Destinos económicos. Año 2026",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer",
+        "layer_id": 5,
+        "name": "Recorrido 10k",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "6": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+        "layer_id": 6,
+        "name": "Destinos predominantes de las transacciones. Año 2024.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+        "layer_id": 6,
+        "name": "Valor compraventas 2024",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+        "layer_id": 6,
+        "name": "Densidad de compraventas. Año 2024.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+        "layer_id": 6,
+        "name": "Recorrido 5k",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+        "layer_id": 6,
+        "name": "Mediana del m² catastral. Año 2024.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+        "layer_id": 6,
+        "name": "Cantidad de transacciones por manzana. Año 2024.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer",
+        "layer_id": 6,
+        "name": "Recorrido 5k",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "7": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer",
+        "layer_id": 7,
+        "name": "Destinos predominantes de las transacciones. Año 2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer",
+        "layer_id": 7,
+        "name": "Valor compraventas 2025",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer",
+        "layer_id": 7,
+        "name": "Densidad de compraventas. Año 2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+        "layer_id": 7,
+        "name": "Recorrido 10k",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+        "layer_id": 7,
+        "name": "Mediana del m² catastral. Año 2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+        "layer_id": 7,
+        "name": "Cantidad de transacciones por manzana. Año 2025.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/carreradelasrosas/MapServer",
+        "layer_id": 7,
+        "name": "Recorrido 2k",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "8": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+        "layer_id": 8,
+        "name": "Recorrido 21k",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer",
+        "layer_id": 8,
+        "name": "Mediana del m² catastral. Año 2026.",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer",
+        "layer_id": 8,
+        "name": "Cantidad de transacciones por manzana. Año 2026.",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "9": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte/maratonbq/MapServer",
+        "layer_id": 9,
+        "name": "Recorrido 42k",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "10": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 10,
+        "name": "ÍndIce de Pobreza Multidimensional (IPM)",
+        "kind": "layer",
+        "is_group": true
+      }
+    ],
+    "11": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 11,
+        "name": "IPM Sisbén",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "12": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 12,
+        "name": "IPM DANE",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "20": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 20,
+        "name": "Déficit habitacional cuantitativo",
+        "kind": "layer",
+        "is_group": true
+      }
+    ],
+    "21": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 21,
+        "name": "Déficit Cuantitativo DANE",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "22": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 22,
+        "name": "Déficit Cuantitativo Sisbén",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "30": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 30,
+        "name": "Déficit habitacional cualitativo",
+        "kind": "layer",
+        "is_group": true
+      }
+    ],
+    "31": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 31,
+        "name": "Déficit Cualitativo Sisbén",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "32": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 32,
+        "name": "Déficit Cualitativo DANE",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "40": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 40,
+        "name": "Hacinamiento",
+        "kind": "layer",
+        "is_group": true
+      }
+    ],
+    "41": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 41,
+        "name": "Hacinamiento Mitigable",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "42": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer",
+        "layer_id": 42,
+        "name": "Hacinamiento No Mitigable",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "100": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 100,
+        "name": "Nomenclatura",
+        "kind": "layer",
+        "is_group": true
+      }
+    ],
+    "105": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 105,
+        "name": "Dirección",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 105,
+        "name": "Dirección",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "110": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 110,
+        "name": "Nomenclatura vial",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 110,
+        "name": "Nomenclatura vial",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "200": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 200,
+        "name": "Líneas Catastrales",
+        "kind": "layer",
+        "is_group": true
+      }
+    ],
+    "205": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 205,
+        "name": "TerrenoL",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 205,
+        "name": "TerrenoL",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "300": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 300,
+        "name": "Áreas catastrales",
+        "kind": "layer",
+        "is_group": true
+      }
+    ],
+    "305": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 305,
+        "name": "Unidad de Construcción",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 305,
+        "name": "Unidad de Construcción",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "310": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 310,
+        "name": "Construcción",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 310,
+        "name": "Construcción",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "315": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 315,
+        "name": "Terreno",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 315,
+        "name": "Terreno",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "320": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 320,
+        "name": "Manzana",
+        "kind": "layer",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 320,
+        "name": "Manzana",
+        "kind": "layer",
+        "is_group": false
+      }
+    ],
+    "500": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 500,
+        "name": "Predio",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 500,
+        "name": "Predio",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "505": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 505,
+        "name": "Caracteristicas Unidad de Construcción",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 505,
+        "name": "Caracteristicas Unidad de Construcción",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "510": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 510,
+        "name": "Estructura Novedad Numero Predial",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 510,
+        "name": "Estructura Novedad Numero Predial",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "515": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 515,
+        "name": "Fuente Administrativa",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 515,
+        "name": "Fuente Administrativa",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "520": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 520,
+        "name": "Trámites",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 520,
+        "name": "Trámites",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "525": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 525,
+        "name": "Agrupacion de Interesados",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 525,
+        "name": "Agrupacion de Interesados",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "530": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 530,
+        "name": "Tipología de la Construcción",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 530,
+        "name": "Tipología de la Construcción",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "535": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 535,
+        "name": "Calificación Convencional",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 535,
+        "name": "Calificación Convencional",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "540": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 540,
+        "name": "Estructura Predio Origen NPN",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 540,
+        "name": "Estructura Predio Origen NPN",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "545": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 545,
+        "name": "Datos Adicionales de Levantamiento Catastral",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 545,
+        "name": "Datos Adicionales de Levantamiento Catastral",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "601": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 601,
+        "name": "CR_Terreno_CR_Predio",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 601,
+        "name": "CR_Terreno_CR_Predio",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "602": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 602,
+        "name": "CR_UnidadConstruccion_CR_Predio",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 602,
+        "name": "CR_UnidadConstruccion_CR_Predio",
+        "kind": "table",
+        "is_group": false
+      }
+    ],
+    "603": [
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+        "layer_id": 603,
+        "name": "CR_Construccion_CR_Predio",
+        "kind": "table",
+        "is_group": false
+      },
+      {
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer",
+        "layer_id": 603,
+        "name": "CR_Construccion_CR_Predio",
+        "kind": "table",
+        "is_group": false
+      }
+    ]
+  }
+}

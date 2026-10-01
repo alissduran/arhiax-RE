@@ -1,0 +1,565 @@
+{
+ "acquisition_modes": {
+  "docs": "docs/source_pack/ACQUISITION_MODES.md",
+  "freshness_default_dias": {
+   "CALCULADA": 1,
+   "CATASTRO": 90,
+   "CONTEXTO": 30,
+   "CONTEXTO_IMAGEN": 30,
+   "EQUIPAMIENTO": 365,
+   "MERCADO": 180,
+   "POT": 365,
+   "RIESGO": 365
+  },
+  "matrix_file": "docs/source_pack/SOURCE_ACQUISITION_MATRIX_040-646406.csv",
+  "modes": [
+   "LIVE_QUERY",
+   "AUTOMATED_SNAPSHOT",
+   "AUTHORIZED_FALLBACK"
+  ],
+  "reference_date": "2026-09-29",
+  "rule": "Si LIVE_QUERY falla (SOURCE_UNAVAILABLE/NOT_SUPPORTED/QUERY_FAILED) y existe un snapshot automático dentro de su freshness_policy, se resuelve desde el snapshot CONSERVANDO la authority_class de la fuente ORIGINAL. Un snapshot vencido NO resuelve: se declara y se sigue la escalera.",
+  "snapshot_inventory": "docs/source_pack/SNAPSHOT_INVENTORY.json",
+  "version": "barranquilla-source-pack/1.0.0 · acquisition-modes/1"
+ },
+ "approved_sources": [
+  "CATASTRO_BAQ_ADOPCION_ANEXO1",
+  "CATASTRO_BAQ_CONSTRUCCION",
+  "CATASTRO_BAQ_DESTINO_ECONOMICO",
+  "CATASTRO_BAQ_DIRECCION",
+  "CATASTRO_BAQ_MANZANA",
+  "CATASTRO_BAQ_PREDIO",
+  "CATASTRO_BAQ_TERRENO",
+  "GOOGLE_STREET_VIEW",
+  "MAPILLARY",
+  "OSM_OVERPASS",
+  "POT_BAQ_BARRIOS",
+  "POT_BAQ_EDIFICABILIDAD",
+  "POT_BAQ_ESTRATIFICACION",
+  "POT_BAQ_LOCALIDADES",
+  "POT_BAQ_REMOCION_2024",
+  "POT_BAQ_RIESGO_2024",
+  "POT_BAQ_TRATAMIENTO",
+  "SHADOW_FACADE_EXPOSURE",
+  "SOLAR_ENGINE"
+ ],
+ "coverage": {
+  "columns": [
+   "row",
+   "source",
+   "status",
+   "value_or_result",
+   "authority",
+   "provenance",
+   "hash"
+  ],
+  "generated_at": "2026-09-29T16:54:05.622350+00:00",
+  "matrix_file": "docs/source_pack/SOURCE_COVERAGE_MATRIX_040-646406.csv",
+  "rows": 18,
+  "source_of_input": {
+   "read_not_hardcoded": true,
+   "run_id": "a02a3c05-4887-4309-aa8f-51f8cc796a17",
+   "run_state": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json"
+  },
+  "statuses": {
+   "01-identidad": "AVAILABLE",
+   "02-direccion": "SOURCE_UNAVAILABLE",
+   "03-predio": "SOURCE_UNAVAILABLE",
+   "04-construccion": "SOURCE_UNAVAILABLE",
+   "05-barrio": "SOURCE_UNAVAILABLE",
+   "06-localidad": "SOURCE_UNAVAILABLE",
+   "07-destino": "SOURCE_UNAVAILABLE",
+   "08-uso_pot": "NOT_SUPPORTED",
+   "09-tratamiento": "SOURCE_UNAVAILABLE",
+   "10-edificabilidad": "SOURCE_UNAVAILABLE",
+   "11-remocion": "AVAILABLE",
+   "12-inundacion": "NOT_SUPPORTED",
+   "13-riesgo": "AVAILABLE",
+   "14-equipamiento_oficial": "NOT_SUPPORTED",
+   "15-servicios_contexto": "AVAILABLE",
+   "16-street_imagery": "SOURCE_UNAVAILABLE",
+   "17-solar": "AVAILABLE",
+   "18-mercado": "SOURCE_UNAVAILABLE"
+  }
+ },
+ "credential_gaps": {
+  "affected_sources": [
+   "MAPILLARY",
+   "GOOGLE_STREET_VIEW"
+  ],
+  "declared_effect": "credentials_status=MISSING → facade_view_level=NO_IMAGE_AVAILABLE, request_made=False, blocks_dictus=False (la ausencia de imagen NO bloquea el pack).",
+  "env_files_present": [],
+  "missing_env": [
+   "ARHIAX_MAPILLARY_TOKEN",
+   "MAPILLARY_TOKEN",
+   "MAPILLARY_ACCESS_TOKEN",
+   "ARHIAX_GOOGLE_MAPS_API_KEY",
+   "GOOGLE_MAPS_API_KEY",
+   "GOOGLE_STREETVIEW_API_KEY",
+   "ARHIAX_IMAGERY_STRICT_TERMS"
+  ]
+ },
+ "disabled_sources": [
+  "EQUIPAMIENTO_18",
+  "EQUIPAMIENTO_20",
+  "EQUIPAMIENTO_21",
+  "EQUIPAMIENTO_22",
+  "EQUIPAMIENTO_23",
+  "EQUIPAMIENTO_24",
+  "EQUIPAMIENTO_25",
+  "EQUIPAMIENTO_26",
+  "EQUIPAMIENTO_27",
+  "POT_BAQ_AREAS_ACTIVIDAD",
+  "POT_BAQ_INUNDACION_2024",
+  "POT_BAQ_INUNDACION_HIST",
+  "POT_BAQ_POLIGONOS_USO",
+  "POT_BAQ_REMOCION_HIST",
+  "POT_BAQ_RIESGO_HIST"
+ ],
+ "fallback_declared": {
+  "OSM_OVERPASS": "docs/source_pack/raw/golden/osm_overpass.json",
+  "POT_BAQ_REMOCION_2024": "api/data/amenaza_remocion_masa.geojson",
+  "POT_BAQ_RIESGO_2024": "api/data/areas_en_riesgo.geojson"
+ },
+ "generated_at": "2026-09-29T14:39:51.199096+00:00",
+ "golden_case": {
+  "barrio": "Miramar",
+  "coordenada": {
+   "coordinate_source": "OFFICIAL_PREDIO",
+   "lat": 11.006055954316363,
+   "lon": -74.8375696549899
+  },
+  "direccion": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8",
+  "estrato": "4",
+  "folio": "040-646406",
+  "numero_predial": "080010103000010040001908040002",
+  "nupre": "AFT0005BOHA",
+  "run_state": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json (los identificadores se LEEN de ese archivo; no están codificados a mano en la matriz)",
+  "tratamiento": "Consolidacion"
+ },
+ "known_limitations": [
+  "El geoportal miciudad.barranquilla.gov.co devolvió HTTP 403 (Cloudflare) a toda consulta desde esta máquina durante la ventana de congelación: las fuentes de catastro y POT quedan declaradas SOURCE_UNAVAILABLE, no NO_MATCH.",
+  "Ninguna ruta alternativa de recuperación funcionó (Wayback sin capturas, espejos de la API de ArcGIS Online sin resultados, proxies CORS con error 522/401/429). Evidencia: raw/golden/_retrieval_paths_probe*.json.",
+  "Las capas POT demandadas por el enunciado (3, 4, 83, 85, 87, 89, 91, 92, 71/73/75/77/79/81, equipamiento 18/20-27) NO se pudieron verificar; donde hubo evidencia real de otra capa se registró esa capa y se conservó el id declarado en `spec_layer_id`. Las capas sin ninguna evidencia quedaron `enabled: false`.",
+  "Sin credenciales de street imagery (Mapillary/Google): nivel NO_IMAGE_AVAILABLE declarado; no bloquea el resto del pack.",
+  "La amenaza por remoción del predio Golden cae en DOS polígonos superpuestos (objectid 469 «Media» y 1369 «Baja»): el pack reporta el nivel más alto y lista ambos; no elige en silencio.",
+  "La amenaza por inundación no tiene capa verificada ni copia empaquetada: se declara NOT_SUPPORTED, nunca «sin amenaza».",
+  "La localidad del predio Golden quedó NO RESUELTA en la corrida de origen (NULL_VALUE); el pack la declara como tal.",
+  "El equipo de equipamiento OFICIAL (OFFICIAL_EQUIPMENT_CONTEXT) está registrado pero DESHABILITADO hasta verificar las capas: el equipo que hoy se reporta proviene de OSM (contexto), no de la Alcaldía.",
+  "Las capas POT empaquetadas NO llevan dentro un sello de decreto ni de versión (campos reales: objectid, niveldeamenaza/clase_suelo y nivelderiesgo/clasesuelo): la atribución «Decreto 893 de 2024» es del registro del pack y no es verificable dentro del artefacto GeoJSON.",
+  "La metodología local declara vigencia hasta 2026-08-31, anterior a esta corrida; ningún consumidor la convierte en bloqueo y el pack la declara como metodología en revisión (no la silencia).",
+  "MERCADO SIN FUENTE EXTERNA VERIFICABLE: el valor por m² del producto es una constante declarada en el artefacto local de metodología (sin URL, sin fecha de consulta, sin `sample_size` y sin comparables). No existe una fuente de mercado en el Source Registry: `LONJA_MARKET_BAQ` se retiró por decisión de producto (la Lonja no aporta datos a DICTUS) y la resolución de mercado declara SOURCE_UNAVAILABLE / DATOS_AUSENTES, nunca un valor sustituido. Para OPERATIONAL_READY en mercado hace falta una fuente de mercado de tercero verificable (URL + fecha de consulta + sha256 + comparables) o la validación firmada del avaluador. Detalle: docs/source_pack/acceptance_report.md §Mercado.",
+  "Las rutas alternativas de recuperación (proxies CORS de terceros, espejos, traducción, Wayback) NO son una vía de obtención autorizada: se documentan como intentos fallidos (raw/golden/_retrieval_paths_probe*.json, _proxy_control_matrix.json) y la política del pack es fail-closed.",
+  "Solo hay crudos persistidos de 4 fuentes (3 con nombre canónico + una de prueba): las demás fuentes no produjeron crudo porque no fueron alcanzables o porque su licencia no lo permite (Google).",
+  "Los rótulos de precedencia CONTEXTUAL_REFERENCE y COMPUTED_REFERENCE son etiquetas propias del REGISTRO (no constantes de api/dictus_sources.py, que no se modifica): resolver_precedencia manda cualquier nivel desconocido a `displaced`, que es la dirección segura."
+ ],
+ "legal_context": {
+  "adopcion_catastral": "Resolución GGCD 003 del 07/03/2025 (Anexo 1)",
+  "catastro": "Ley 14 de 1983 y Resolución IGAC 1040 de 2023 (gestión catastral); acuerdo de adopción catastral de Barranquilla, Resolución GGCD 003 de 2025.",
+  "ordenamiento_territorial": "Ley 388 de 1997 (zonas de riesgo no mitigable; determinantes de ordenamiento)",
+  "pot_vigente": "Decreto 893 de 2024",
+  "valoracion": "Ley 1673 de 2013; Decreto 556 de 2014; Decreto 1420 de 1998; Resolución IGAC 620 de 2008; Resolución IGAC 1040 de 2023 mod. 746 de 2024 (parámetros declarados por la corrida; la Lonja no es una fuente de datos)"
+ },
+ "licenses": {
+  "by_source": {
+   "CATASTRO_BAQ_ADOPCION_ANEXO1": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Certificado de Tradición y Libertad (SNR) y anexo de adopción catastral: documentos oficiales aportados por el usuario; se conserva copia normalizada con hash, no el original completo.",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "CATASTRO_BAQ_CONSTRUCCION": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "CATASTRO_BAQ_DESTINO_ECONOMICO": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "CATASTRO_BAQ_DIRECCION": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "CATASTRO_BAQ_MANZANA": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "CATASTRO_BAQ_PREDIO": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "CATASTRO_BAQ_TERRENO": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "EQUIPAMIENTO_18": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "EQUIPAMIENTO_20": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "EQUIPAMIENTO_21": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "EQUIPAMIENTO_22": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "EQUIPAMIENTO_23": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "EQUIPAMIENTO_24": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "EQUIPAMIENTO_25": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "EQUIPAMIENTO_26": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "EQUIPAMIENTO_27": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "GOOGLE_STREET_VIEW": {
+    "can_embed_image": false,
+    "can_persist_raw": false,
+    "license_or_terms": "Google Maps Platform / Street View: sus términos prohíben almacenar o redistribuir las imágenes. provider_terms_status=UNVERIFIED → FAIL-CLOSED: no se persiste el crudo ni se incrusta la imagen.",
+    "provider_terms_status": "UNVERIFIED (fail-closed: no se persiste crudo ni se incrusta imagen)"
+   },
+   "MAPILLARY": {
+    "can_embed_image": true,
+    "can_persist_raw": true,
+    "license_or_terms": "CC BY-SA 4.0 — © Mapillary contributors. Atribución obligatoria y share-alike (texto de atribución declarado por api/street_imagery.py).",
+    "provider_terms_status": "UNVERIFIED (licencia CC BY-SA 4.0 declarada por el proveedor; atribución obligatoria)"
+   },
+   "OSM_OVERPASS": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Open Database License (ODbL) 1.0 — © OpenStreetMap contributors. Atribución obligatoria; share-alike sobre bases derivadas.",
+    "provider_terms_status": "ODbL 1.0 (términos públicos verificados)"
+   },
+   "POT_BAQ_AREAS_ACTIVIDAD": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_BARRIOS": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_EDIFICABILIDAD": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_ESTRATIFICACION": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_INUNDACION_2024": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_INUNDACION_HIST": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_LOCALIDADES": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_POLIGONOS_USO": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_REMOCION_2024": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Capa POT oficial empaquetada localmente como copia normalizada (GeoJSON) del servicio de la Alcaldía; datos abiertos con atribución a la fuente oficial. Hash del archivo declarado en el manifest.",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_REMOCION_HIST": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_RIESGO_2024": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Capa POT oficial empaquetada localmente como copia normalizada (GeoJSON) del servicio de la Alcaldía; datos abiertos con atribución a la fuente oficial. Hash del archivo declarado en el manifest.",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_RIESGO_HIST": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "POT_BAQ_TRATAMIENTO": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Datos abiertos de la Alcaldía Distrital de Barranquilla (geoportal miciudad.barranquilla.gov.co). Uso permitido con atribución a la fuente oficial. Los términos específicos no se publican junto al servicio (provider_terms_status=UNVERIFIED).",
+    "provider_terms_status": "UNVERIFIED (no publicados junto al servicio; uso con atribución a la fuente oficial)"
+   },
+   "SHADOW_FACADE_EXPOSURE": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Cálculo propio de ARHIAX RE sobre entradas declaradas (coordenada, fecha, geometría oficial). Sin licencia de terceros sobre el resultado; reproducible y auditable.",
+    "provider_terms_status": "N/A (cálculo propio)"
+   },
+   "SOLAR_ENGINE": {
+    "can_embed_image": false,
+    "can_persist_raw": true,
+    "license_or_terms": "Cálculo propio de ARHIAX RE sobre entradas declaradas (coordenada, fecha, geometría oficial). Sin licencia de terceros sobre el resultado; reproducible y auditable.",
+    "provider_terms_status": "N/A (cálculo propio)"
+   }
+  },
+  "fail_closed_policy": "El pack es MÁS ESTRICTO que el valor por defecto del código: mientras no exista evidencia hasheada (evidence_url + retrieved_at + sha256), provider_terms_status queda UNVERIFIED — también para Mapillary, cuyo módulo declara CC BY-SA 4.0 por defecto. UNVERIFIED cierra can_persist/can_embed_in_pdf.",
+  "policy": "El crudo se preserva sin modificar solo si la licencia lo permite; la normalización vive en un objeto aparte. Si no puede persistirse, el resultado declara estado y no se escribe archivo.",
+  "unverified_terms": [
+   "GOOGLE_STREET_VIEW",
+   "MAPILLARY"
+  ]
+ },
+ "manifest_version": "barranquilla-source-pack-manifest/1.1.0",
+ "operational_readiness": {
+  "contract_frozen": true,
+  "core_cubiertos": [
+   "identidad",
+   "remocion",
+   "riesgo"
+  ],
+  "core_no_cubiertos": [
+   "direccion",
+   "predio",
+   "uso_pot",
+   "tratamiento",
+   "edificabilidad",
+   "inundacion",
+   "mercado"
+  ],
+  "dominios_bloqueantes": [
+   "direccion",
+   "predio",
+   "uso_pot",
+   "tratamiento",
+   "edificabilidad",
+   "inundacion",
+   "mercado"
+  ],
+  "geoportal_http_403_verificado": true,
+  "justificacion": "El CONTRATO está congelado (registro, roles, modos, escalera, licencias y precedencia) y los dominios CORE con snapshot vigente resuelven con su authority_class original; pero direccion, predio, uso_pot, tratamiento, edificabilidad, inundacion, mercado NO tiene ruta automática válida hoy (geoportal HTTP 403 verificado y/o snapshot vencido o inexistente). Un CORE que solo puede declararse SOURCE_UNAVAILABLE no es «operativo»: por eso el veredicto NO es PRODUCTION_READY.",
+  "operational_ready": false,
+  "veredicto": "CONTRACT_FROZEN / OPERATIONAL_NOT_READY"
+ },
+ "pack_version": "barranquilla-source-pack/1.0.0",
+ "precedence_rules": {
+  "authority_classes": [
+   "AUTHORITATIVE_OFFICIAL",
+   "AUTHORITATIVE_CONTRACTUAL",
+   "CONTEXTUAL_EXTERNAL",
+   "COMPUTED"
+  ],
+  "binding_precedence_order": [
+   "NUPRE_EXACTO",
+   "NUMERO_PREDIAL_EXACTO",
+   "RELACION_OFICIAL_PREDIO",
+   "DIRECCION_OFICIAL_LIGADA",
+   "ESPACIAL_SOLO_CONTEXTO"
+  ],
+  "normative_classes": [
+   "AUTHORITATIVE_OFFICIAL",
+   "AUTHORITATIVE_CONTRACTUAL"
+  ],
+  "risk_precedence_order": [
+   "CURRENT_NORMATIVE",
+   "CURRENT_OFFICIAL",
+   "HISTORICAL_REFERENCE"
+  ],
+  "rules": [
+   "CURRENT_NORMATIVE (POT vigente, Decreto 893 de 2024) > CURRENT_OFFICIAL > HISTORICAL_REFERENCE. Una capa histórica nunca se asciende en silencio.",
+   "Identidad del predio: NUPRE exacto > número predial exacto > relación oficial > dirección ligada. La coincidencia ESPACIAL es solo contexto y NUNCA autoriza identidad; jamás se elige features[0].",
+   "AUTHORITATIVE_CONTRACTUAL es una autoridad DECLARADA: sostiene la metodología de valoración, no una afirmación normativa territorial. La Lonja NO es una fuente de datos (decisión de producto): el valor de mercado es un parámetro declarado por la corrida, sin fuente externa verificable.",
+   "CONTEXTUAL_REFERENCE (OSM/Mapillary/Google) y COMPUTED_REFERENCE (motor solar/sombras) no sostienen afirmaciones normativas.",
+   "Destino económico catastral (hecho) ≠ uso normativo del POT (norma): nunca se copia uno sobre el otro.",
+   "POT.altura_max es altura NORMATIVA en pisos: nunca altura física del edificio."
+  ],
+  "silent_override": false
+ },
+ "product_roles": {
+  "core_roles": [
+   "CORE_IDENTITY",
+   "CORE_NORMATIVE",
+   "CORE_RISK",
+   "CORE_MARKET"
+  ],
+  "historica_es_referencia": {
+   "blocking_if_missing": false,
+   "required_for_decision": false
+  },
+  "requisitos_por_rol": {
+   "CORE_IDENTITY": {
+    "blocking_if_missing": true,
+    "required_for_decision": true
+   },
+   "CORE_MARKET": {
+    "blocking_if_missing": true,
+    "required_for_decision": true
+   },
+   "CORE_NORMATIVE": {
+    "blocking_if_missing": true,
+    "required_for_decision": true
+   },
+   "CORE_RISK": {
+    "blocking_if_missing": true,
+    "required_for_decision": true
+   },
+   "DECISION_CONTEXT": {
+    "blocking_if_missing": false,
+    "required_for_decision": true
+   },
+   "OPTIONAL_ENRICHMENT": {
+    "blocking_if_missing": false,
+    "required_for_decision": false
+   }
+  },
+  "vocabulary": [
+   "CORE_IDENTITY",
+   "CORE_NORMATIVE",
+   "CORE_RISK",
+   "CORE_MARKET",
+   "DECISION_CONTEXT",
+   "OPTIONAL_ENRICHMENT"
+  ]
+ },
+ "registry_version": "barranquilla-sources-v1",
+ "snapshot_inventory": {
+  "declarados": 7,
+  "fuentes_con_snapshot": [
+   "CATASTRO_BAQ_ADOPCION_ANEXO1",
+   "LONJA_MARKET_BAQ",
+   "OSM_OVERPASS",
+   "POT_BAQ_REMOCION_2024",
+   "POT_BAQ_RIESGO_2024"
+  ],
+  "fuentes_que_resuelven_hoy": [
+   "CATASTRO_BAQ_ADOPCION_ANEXO1",
+   "OSM_OVERPASS",
+   "POT_BAQ_REMOCION_2024",
+   "POT_BAQ_RIESGO_2024"
+  ],
+  "no_resuelven_en_la_ventana": [
+   {
+    "artifact_id": "SNAP_LONJA_METODOLOGIA",
+    "estado": "VENCIDO",
+    "ruta": "motor_tma_lonja_baq_v1.0/motor_tma_lonja_baq_v1.0/lonja_layer/lonja_baq_metodologia.yaml"
+   }
+  ],
+  "no_usables": 306,
+  "por_modo": {
+   "AUTHORIZED_FALLBACK": [
+    "CATASTRO_BAQ_ADOPCION_ANEXO1",
+    "LONJA_MARKET_BAQ"
+   ],
+   "AUTOMATED_SNAPSHOT": [
+    "OSM_OVERPASS",
+    "POT_BAQ_REMOCION_2024",
+    "POT_BAQ_RIESGO_2024"
+   ]
+  },
+  "resuelven_en_la_ventana": 4,
+  "total_artefactos": 311,
+  "usables": 5
+ },
+ "source_metadata_hashes": {
+  "CATASTRO_BAQ_ADOPCION_ANEXO1": "2b650170bf4b7364c6f0ec12f2a31aa4ef482b318e1277903bedfec233d02140",
+  "CATASTRO_BAQ_CONSTRUCCION": "239b74914ec184e6cad8cac5c536eb6b901dfe12f215298563f422dcbf579626",
+  "CATASTRO_BAQ_DESTINO_ECONOMICO": "06144006fdfb7d3fdaa188ad2a898501d6a0fbc25a694c1d9255c636cfe7c471",
+  "CATASTRO_BAQ_DIRECCION": "de233df3516f6ea60b6e178ca3271c0a160c305ad8a91adeacb87644efa50da6",
+  "CATASTRO_BAQ_MANZANA": "b1b3e5f45a591e38989226ed46f68a747fef42f3d217ee1259bbf44e2cb4c946",
+  "CATASTRO_BAQ_PREDIO": "27a57aa89651abe8c8cf3b9bec7a233b4a61eeb13a1e49ef28f288a5bedeb83c",
+  "CATASTRO_BAQ_TERRENO": "7d88ddea66433f7ec1db5a3135b9d11f8cdae34c44f6386bd2edad09982a7ee5",
+  "EQUIPAMIENTO_18": "5f85f42090f66bf8d147ea13a58bbe8d965c38ee36cd9d20a40e560de0bbe15e",
+  "EQUIPAMIENTO_20": "5f61a62b40d67a5be2e9d0d74886ae001e3f544c7e54f59165d733d218f16051",
+  "EQUIPAMIENTO_21": "dd332021aa94e6cad05c17309c4f956d547d56517a566c8d40ec34f001dbe3fe",
+  "EQUIPAMIENTO_22": "7946122d9a3be77e6a9fafd8606e42b4bd709dc7d0362bf79cefd3b8d6bc876e",
+  "EQUIPAMIENTO_23": "3e620ad492529f119c2c1504616c93181bf4d5c71aadd6d47645b50bd529163d",
+  "EQUIPAMIENTO_24": "27e95544511b19e3662fbbb8a391a76b8eb3f839b437ccc6cc9a0b9d6f768b55",
+  "EQUIPAMIENTO_25": "5d169a563387f2b9c590e6cd159e314a5a7aaa175bb7e65b70959f5708ddb209",
+  "EQUIPAMIENTO_26": "15f9b11df70b4c0d120e3dd3fd799692425424f8653b308311b7045d89a9d99b",
+  "EQUIPAMIENTO_27": "36d16afc66e72810853acd5ec8ea4913bd161318b98380fca3a9ff0015762d16",
+  "GOOGLE_STREET_VIEW": "609f10eef4efa319017533de7dd16eb4816982643d3707d354436e25c2659d02",
+  "MAPILLARY": "57fd5fcb04139bfb7227a36b763181b2490283672324139835da4d56a345775c",
+  "OSM_OVERPASS": "2f778e22c0e3221c77770af2702e73f93420f26ff2718d7c9c355f275030b306",
+  "POT_BAQ_AREAS_ACTIVIDAD": "60549046d00f47e1672c11315466b74d7ed7c73122d0887d1f07eec091cafbc6",
+  "POT_BAQ_BARRIOS": "6d036e8718c2b89ecb5a1395c5ef161b88019f1c63a533bccb749c3080f25e60",
+  "POT_BAQ_EDIFICABILIDAD": "eb47fa037157951ba66304aab9b56f658262808d52e3cb2b07a3b014cce6a3a5",
+  "POT_BAQ_ESTRATIFICACION": "5965a8cd117f08f5e97b497a566db504ad6a26e4bc9dbe45fae2c53c7ea59bdd",
+  "POT_BAQ_INUNDACION_2024": "c96390f08d60113158701436ec39e971e8a61ec21a9aa3c76891d66662e44136",
+  "POT_BAQ_INUNDACION_HIST": "05223129b2b1fc002401418e388b39fabab42e4bb8152ac5e250ab6b2fe51eaa",
+  "POT_BAQ_LOCALIDADES": "2a70714ee907a29a31db55ab5c465f3b7febec76484feed262204f31e8f79166",
+  "POT_BAQ_POLIGONOS_USO": "04f3f9491e1cb9827b14d3c2efeea312aff8628d0d95cfb41e3dcac4611c4b72",
+  "POT_BAQ_REMOCION_2024": "37f69aefcaf7ad740cc8ab1f11e6705055df15c65e2ede202aecf303488523e4",
+  "POT_BAQ_REMOCION_HIST": "847807b817b25e2631e4fed9622173b68aec8fb5e444cdc4b89b7dd7bd15c2d9",
+  "POT_BAQ_RIESGO_2024": "46aa9f87e6bca09460a452a85aaecf6002b803cb7e6c910f1de5ea77ee50e530",
+  "POT_BAQ_RIESGO_HIST": "c5462005dbcbce05c9982109412338297fe9acc430e4b99f56a0e82585533b30",
+  "POT_BAQ_TRATAMIENTO": "71ffc6834b20fe7e1ed4e5ecca2db753c38f8ed1c2375c1fde782fd28e963e26",
+  "SHADOW_FACADE_EXPOSURE": "45af3a5c11f8b9c6f8b57ae11828a7e4a0be563da1e776d85de02e2c34afb33d",
+  "SOLAR_ENGINE": "84a13349fdaec825ea931e27b0bab23203e522cfdc87ffa50d11201e3772a98f"
+ },
+ "source_metadata_hashes_formula": "sha256 canónico de la entrada de la fuente sin `evidence` (incluye product_role, acquisition_mode y acquisition_snapshot)",
+ "tested_at": "2026-09-29T21:44:17.186560+00:00"
+}

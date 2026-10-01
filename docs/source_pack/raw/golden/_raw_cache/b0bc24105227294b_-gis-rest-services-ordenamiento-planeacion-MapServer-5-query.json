@@ -1,0 +1,225 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "nombre_plan",
+    "fieldAliases": {
+      "objectid": "FID",
+      "nombre_plan": "Nombre del plan",
+      "tratamiento": "Tratamiento",
+      "tipo_tratamiento": "Tipo de tratamiento",
+      "altura_maxima": "Altura máxima",
+      "st_area(shape)": "st_area(shape)",
+      "st_length(shape)": "st_length(shape)"
+    },
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "FID"
+      },
+      {
+        "name": "nombre_plan",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre del plan",
+        "length": 100
+      },
+      {
+        "name": "tratamiento",
+        "type": "esriFieldTypeString",
+        "alias": "Tratamiento",
+        "length": 50
+      },
+      {
+        "name": "tipo_tratamiento",
+        "type": "esriFieldTypeString",
+        "alias": "Tipo de tratamiento",
+        "length": 50
+      },
+      {
+        "name": "altura_maxima",
+        "type": "esriFieldTypeSmallInteger",
+        "alias": "Altura máxima"
+      },
+      {
+        "name": "st_area(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_area(shape)"
+      },
+      {
+        "name": "st_length(shape)",
+        "type": "esriFieldTypeDouble",
+        "alias": "st_length(shape)"
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "nombre_plan": "Plan de Reordenamiento Cárcel Bosque",
+          "tratamiento": "Consolidacion",
+          "tipo_tratamiento": "Especial",
+          "altura_maxima": 5,
+          "st_area(shape)": 69873.726592635,
+          "st_length(shape)": 1099.656375296671
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                4800934.4226,
+                2768875.8353000004
+              ],
+              [
+                4800934.3769,
+                2768875.8137
+              ],
+              [
+                4800934.9986,
+                2768867.6764
+              ],
+              [
+                4800933.6198,
+                2768866.9354
+              ],
+              [
+                4800933.5093,
+                2768866.9397
+              ],
+              [
+                4800783.3562,
+                2768872.9181999993
+              ],
+              [
+                4800787.1656,
+                2768970.754899999
+              ],
+              [
+                4800794.8404,
+                2769166.0780999996
+              ],
+              [
+                4800795.0971,
+                2769172.6120999996
+              ],
+              [
+                4800802.5685,
+                2769172.2990000006
+              ],
+              [
+                4800835.8987,
+                2769170.9023
+              ],
+              [
+                4800836.1567,
+                2769170.8915
+              ],
+              [
+                4800856.9583,
+                2769170.0198
+              ],
+              [
+                4801060.6079,
+                2769161.4858
+              ],
+              [
+                4801060.6225,
+                2769161.485200001
+              ],
+              [
+                4801060.6111,
+                2769161.1664000005
+              ],
+              [
+                4801055.9469,
+                2769030.5906000007
+              ],
+              [
+                4801055.4216,
+                2769015.8883999996
+              ],
+              [
+                4801030.8774,
+                2768985.5657
+              ],
+              [
+                4801023.4229,
+                2768976.3564
+              ],
+              [
+                4801012.0595,
+                2768951.7687999997
+              ],
+              [
+                4801012.0026,
+                2768951.6457
+              ],
+              [
+                4801008.9914,
+                2768947.1158000007
+              ],
+              [
+                4801003.1167,
+                2768938.2786999997
+              ],
+              [
+                4800965.3131,
+                2768941.867799999
+              ],
+              [
+                4800962.5725,
+                2768908.2994
+              ],
+              [
+                4800934.9536,
+                2768910.4222999997
+              ],
+              [
+                4800934.7763,
+                2768899.7839
+              ],
+              [
+                4800934.4598,
+                2768880.7925000004
+              ],
+              [
+                4800934.3772,
+                2768875.8343
+              ],
+              [
+                4800934.4226,
+                2768875.8353000004
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/5/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Fplaneacion%2FMapServer%2F5%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:14:35.790351+00:00",
+    "elapsed_s": 0.6,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 2468,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:14:35.790217+00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,280 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Representa el valor</span><span> de</span><span> la hectárea </span><span>del suelo </span><span>rural</span><span> </span><span>para la</span><span>s</span><span> </span><span>vigencia</span><span>s</span><span> </span><span>entre </span><span>20</span><span>19</span><span> </span><span>a 2026 </span><span>en el distrito de Barranquilla.</span><span> Permite identificar el valor base </span><span>por hectárea</span><span> </span><span>asignado a cada zona, facilitando</span><span> el</span><span> análisis de referencia económica, estudios de mercado, procesos de avalúo y consultas ciudadanas.</span></p></div></div></div>",
+    "mapName": "Valor por hectárea del suelo rural",
+    "description": "Representa el valor de la hectárea del suelo rural para las vigencias entre 2019 a 2026 en el distrito de Barranquilla. Permite identificar el valor base por hectárea asignado a cada zona, facilitando el análisis de referencia económica, estudios de mercado, procesos de avalúo y consultas ciudadanas.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Valor por hectárea del suelo rural. Vigencia 2019.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Valor por hectárea del suelo rural. Vigencia 2023.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 3,
+        "name": "Valor por hectárea del suelo rural. Vigencia 2025.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 4,
+        "name": "Valor por hectárea del suelo rural. Vigencia 2026.",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4781273.396210081,
+      "ymin": 2763526.082604153,
+      "xmax": 4804470.327828825,
+      "ymax": 2783444.647013396,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4790211.3537,
+      "ymin": 2764626.1866999995,
+      "xmax": 4801786.1139,
+      "ymax": 2785978.8736000005,
+      "zmin": 0,
+      "zmax": 0,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "timeInfo": {
+      "timeExtent": [
+        1577750400000,
+        1798675200000
+      ],
+      "timeReference": null,
+      "timeRelation": "esriTimeRelationOverlaps",
+      "defaultTimeInterval": 3.0226518283680863,
+      "defaultTimeIntervalUnits": "esriTimeUnitsMonths",
+      "defaultTimeWindow": 3.0226518283680863,
+      "defaultTimeWindowUnits": "esriTimeUnitsMonths",
+      "hasLiveData": false,
+      "liveModeOffsetDirection": "past"
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Valor por hectárea del suelo rural.",
+      "Author": "",
+      "Comments": "Representa el valor de la hectárea del suelo rural para las vigencias entre 2019 a 2026 en el distrito de Barranquilla. Permite identificar el valor base por hectárea asignado a cada zona, facilitando el análisis de referencia económica, estudios de mercado, procesos de avalúo y consultas ciudadanas.",
+      "Subject": "Representa el valor oficial por hectárea del suelo rural para las vigencias entre 2019 a 2026 en el distrito de Barranquilla.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Valor del suelo,Hectárea,Suelo rural,Avalúo catastral,Actualización catastral,Información económica,Catastro,Barranquilla,Vigencia"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "serviceItemId": "d8495a98bcac49a196e28477e3159d45"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelorural/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fobservatorio%2Fvalorsuelorural%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:21:20.194403+00:00",
+    "elapsed_s": 48.9,
+    "attempt_count": 8,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "direct",
+        "attempt": 3,
+        "http_status": 403,
+        "bytes": 5493,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 403",
+        "at": "2026-09-29T15:20:52.034266+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 4,
+        "http_status": 429,
+        "bytes": 143,
+        "reject_reason": "not_json",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:20:52.929950+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 5,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T15:21:13.137136+00:00"
+      },
+      {
+        "transport": "direct",
+        "attempt": 6,
+        "http_status": 403,
+        "bytes": 5493,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 403",
+        "at": "2026-09-29T15:21:13.251143+00:00"
+      },
+      {
+        "transport": "microlink",
+        "attempt": 7,
+        "http_status": 429,
+        "bytes": 143,
+        "reject_reason": "not_json",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T15:21:14.138015+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 8,
+        "http_status": 200,
+        "bytes": 5503,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:21:20.194334+00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,386 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;font-size:12pt'><p><span>Esta capa integra indicadores sociales y habitacionales que permiten caracterizar las condiciones de vida de los hogares en el territorio. Incluye el Índice de Pobreza Multidimensional (IPM), el déficit habitacional cualitativo y cuantitativo, y los niveles de hacinamiento mitigable y no mitigable. La información consolida variables clave para describir el bienestar de la población y las características estructurales de la vivienda.</span></p></div>",
+    "mapName": "Condiciones de vida",
+    "description": "Esta capa integra indicadores sociales y habitacionales que permiten caracterizar las condiciones de vida de los hogares en el territorio. Incluye el Índice de Pobreza Multidimensional (IPM), el déficit habitacional cualitativo y cuantitativo, y los niveles de hacinamiento mitigable y no mitigable. La información consolida variables clave para describir el bienestar de la población y las características estructurales de la vivienda.",
+    "copyrightText": "Alcaldía del Distrito Especial, Industrial y Portuario de Barranquilla. Secretaría de Hacienda. Gerencia de Gestión Catastral.",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 10,
+        "name": "ÍndIce de Pobreza Multidimensional (IPM)",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": [
+          11,
+          12
+        ],
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Group Layer",
+        "supportsDynamicLegends": false
+      },
+      {
+        "id": 11,
+        "name": "IPM Sisbén",
+        "parentLayerId": 10,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 12,
+        "name": "IPM DANE",
+        "parentLayerId": 10,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 20,
+        "name": "Déficit habitacional cuantitativo",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": [
+          21,
+          22
+        ],
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Group Layer",
+        "supportsDynamicLegends": false
+      },
+      {
+        "id": 21,
+        "name": "Déficit Cuantitativo DANE",
+        "parentLayerId": 20,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 22,
+        "name": "Déficit Cuantitativo Sisbén",
+        "parentLayerId": 20,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 30,
+        "name": "Déficit habitacional cualitativo",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": [
+          31,
+          32
+        ],
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Group Layer",
+        "supportsDynamicLegends": false
+      },
+      {
+        "id": 31,
+        "name": "Déficit Cualitativo Sisbén",
+        "parentLayerId": 30,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 32,
+        "name": "Déficit Cualitativo DANE",
+        "parentLayerId": 30,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 40,
+        "name": "Hacinamiento",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": [
+          41,
+          42
+        ],
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Group Layer",
+        "supportsDynamicLegends": false
+      },
+      {
+        "id": 41,
+        "name": "Hacinamiento Mitigable",
+        "parentLayerId": 40,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 42,
+        "name": "Hacinamiento No Mitigable",
+        "parentLayerId": 40,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -400,
+      "falseY": -400,
+      "xyUnits": 999999999.9999999,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4785102.183442131,
+      "ymin": 2758124.3530501644,
+      "xmax": 4818509.12263561,
+      "ymax": 2785991.3081607255,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -400,
+        "falseY": -400,
+        "xyUnits": 999999999.9999999,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4791929.6433201125,
+      "ymin": 2764636.169551941,
+      "xmax": 4807916.498928282,
+      "ymax": 2781184.5262273424,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -400,
+        "falseY": -400,
+        "xyUnits": 999999999.9999999,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Condiciones de vida",
+      "Author": "",
+      "Comments": "Esta capa integra indicadores sociales y habitacionales que permiten caracterizar las condiciones de vida de los hogares en el territorio. Incluye el Índice de Pobreza Multidimensional (IPM), el déficit habitacional cualitativo y cuantitativo, y los niveles de hacinamiento mitigable y no mitigable. La información consolida variables clave para describir el bienestar de la población y las características estructurales de la vivienda.",
+      "Subject": "Esta capa geográfica reúne indicadores socioeconómicos y habitacionales utilizados para evaluar las condiciones de vida de la población.",
+      "Category": "",
+      "Version": "3.4.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Condiciones de vida,IPM,Déficit habitacional,Déficit cualitativo,Déficit cuantitativo,Hacinamiento mitigable,Hacinamiento no mitigable,Vivienda,Calidad de vida,Indicadores sociales,Barranquilla.Dane,Sisbèn."
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 15738,
+            "latestWkid": 15738,
+            "transformForward": false,
+            "name": "MAGNA_To_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 15738,
+            "latestWkid": 15738,
+            "transformForward": true,
+            "name": "MAGNA_To_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          },
+          {
+            "wkid": 15738,
+            "latestWkid": 15738,
+            "transformForward": false,
+            "name": "MAGNA_To_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 15738,
+            "latestWkid": 15738,
+            "transformForward": true,
+            "name": "MAGNA_To_WGS_1984_1"
+          },
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "floorAwareMapProperties": {
+      "defaultFloorFilterSettings": {
+        "isEnabled": false
+      }
+    },
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "e7d45fa8a5f24756a1dc1ae6e578fcbf"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social/condicionesdevida/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fsocial%2Fcondicionesdevida%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:01:20.200140+00:00",
+    "elapsed_s": 160.3,
+    "attempt_count": 17,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 12,
+        "http_status": 429,
+        "bytes": 980,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:00:06.652502+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 13,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:00:26.253817+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 14,
+        "http_status": 522,
+        "bytes": 979,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:00:46.249823+00:00"
+      },
+      {
+        "transport": "codetabs",
+        "attempt": 15,
+        "http_status": 522,
+        "bytes": 977,
+        "reject_reason": "proxy_error_envelope",
+        "error": "HTTPError 522",
+        "at": "2026-09-29T16:01:05.726922+00:00"
+      },
+      {
+        "transport": "cors_eu_org",
+        "attempt": 16,
+        "http_status": 429,
+        "bytes": 53086,
+        "reject_reason": "html_block_marker",
+        "error": "HTTPError 429",
+        "at": "2026-09-29T16:01:06.112850+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 17,
+        "http_status": 200,
+        "bytes": 7211,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:01:20.200109+00:00"
+      }
+    ]
+  }
+}

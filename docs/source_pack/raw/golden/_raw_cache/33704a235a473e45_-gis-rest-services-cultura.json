@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "folders": [],
+    "services": [
+      {
+        "name": "cultura/eventosculturales",
+        "type": "MapServer"
+      },
+      {
+        "name": "cultura/gestionpatrimoniocultural",
+        "type": "MapServer"
+      },
+      {
+        "name": "cultura/infraestructuracultural",
+        "type": "MapServer"
+      },
+      {
+        "name": "cultura/patrimoniohistoricoycultural",
+        "type": "MapServer"
+      },
+      {
+        "name": "cultura/patrimonio",
+        "type": "MapServer"
+      },
+      {
+        "name": "cultura/semanasanta",
+        "type": "MapServer"
+      }
+    ]
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcultura%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:23:36.877655+00:00",
+    "elapsed_s": 4.5,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 397,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:23:36.877624+00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,278 @@
+[
+  {
+    "file": "0c02712c2d13477e_-gis-rest-services-catastro-concentracionpredio-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/concentracionpredio/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "0f28222f11469a85_-gis-rest-services-ambiente.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "13551a5f6677fd28_-gis-rest-services-catastro-catastro-condicion-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/condicion/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "1aa1a681a82d9226_-gis-rest-services-educacion.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-502/\", \"title\": \"Error 502: Bad gateway\", \"status\": 502, \"detail\": \"The origin web ser"
+  },
+  {
+    "file": "1aee088cd76e4b41_-gis-rest-services-observatorio-observatorio-areaconstruida-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/areaconstruida/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "1be708a63af36da0_-gis-rest-services-catastro-antiguedadpredios-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/antiguedadpredios/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "1c1276f4b1d571e4_-gis-rest-services-movilidad-movilidad-nodosdetransporte-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/nodosdetransporte/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "1e6479c33a26c0b0_-gis-rest-services-sitios.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "202e9e13ed3a76fc_-gis-rest-services-participacionciudadana.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/participacionciudadana?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "21b83e1ff0979a5f_-gis-rest-services-movilidad-movilidad-influenciavial-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/influenciavial/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "244159961e2db48a_-gis-rest-services-catastro-informalidad-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/informalidad/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "27fe01891b21d0ce_st-services-observatorio-observatorio-mecanismosfianaciacion-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/mecanismosfianaciacion/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "2e4f3aa0c66ac0ad_est-services-movilidad-movilidad-infraestructuradetransporte-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/infraestructuradetransporte/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "32420c71a87aa25d_-gis-rest-services-catastro-gestionpredial-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/gestionpredial/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "33704a235a473e45_-gis-rest-services-cultura.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-502/\", \"title\": \"Error 502: Bad gateway\", \"status\": 502, \"detail\": \"The origin web ser"
+  },
+  {
+    "file": "34150581f07a1181_-gis-rest-services-catastro-catastro-manzanas-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/manzanas/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "379f006f46b9d19e_-gis-rest-services-catastro-catastro-gestionpredial-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/gestionpredial/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-502/\", \"title\": \"Error 502: Bad gateway\", \"status\": 502, \"detail\": \"The origin web ser"
+  },
+  {
+    "file": "38d6248a0edd675b_-gis-rest-services-catastro-catastro-usoconstruccion-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/usoconstruccion/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "39f7fd88d4706692_-gis-rest-services-ordenamiento.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "3bf5357db4315eb4_-gis-rest-services-recreacionydeporte.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "3d2085e5c6252059_-gis-rest-services-observatorio-observatorio-arrendamientos-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/arrendamientos/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "47b054d0f83b3675_-gis-rest-services-catastro-catastro-concentracionpredio-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/concentracionpredio/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "51a9217f45340a69_-gis-rest-services-catastro-manzanas-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/manzanas/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "61263ba3a9ae4161_-gis-rest-services-movilidad-movilidad-maritimoyportuario-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/maritimoyportuario/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "643b58c39088d7ec_-gis-rest-services-catastro-propiedadhorizontal-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/propiedadhorizontal/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "6d8f12da9dbc70d4_-gis-rest-services-catastro-lotes-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/lotes/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "6fa46c5be05c0c4c_-gis-rest-services-catastro-catastro-huellaurbana-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/huellaurbana/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-502/\", \"title\": \"Error 502: Bad gateway\", \"status\": 502, \"detail\": \"The origin web ser"
+  },
+  {
+    "file": "718a4b38a82d3d5d_-gis-rest-services-movilidad-movilidad-serviciostransporte-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/serviciostransporte/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "75c10500fe5ba38e_-gis-rest-services-catastro-catastro-destinoseconomicos-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/destinoseconomicos/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-502/\", \"title\": \"Error 502: Bad gateway\", \"status\": 502, \"detail\": \"The origin web ser"
+  },
+  {
+    "file": "79914e3f42952f61_rest-services-observatorio-observatorio-destinotransacciones-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/destinotransacciones/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "7ae152618dc8218b_est-services-observatorio-observatorio-cantidadtransacciones-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/cantidadtransacciones/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-520/\", \"title\": \"Error 520: Web server is returning an unknown error\", \"status\": 520, "
+  },
+  {
+    "file": "82e57f2ce5af6653_-gis-rest-services-catastro-datosabiertos-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "8a66582d7c3a582f_-gis-rest-services-riesgos.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "90dd28413f632b8e_-gis-rest-services-economico.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-502/\", \"title\": \"Error 502: Bad gateway\", \"status\": 502, \"detail\": \"The origin web ser"
+  },
+  {
+    "file": "9451bd821cf444b3_-gis-rest-services-observatorio-observatorio-avaluocatastral-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/avaluocatastral/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "a0ebf2e163842ba5_-gis-rest-services-movilidad-movilidad-transito-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/transito/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "a8050bcf186b7a97_-gis-rest-services-catastro-datosabiertos-FeatureServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "b02f7774ac1fa383_-gis-rest-services-movilidad-movilidad-estacionservicio-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/movilidad/estacionservicio/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "b980ee99d2afcf78_-gis-rest-services-catastro-condicion-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/condicion/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "c04aa03565d6f024_est-services-observatorio-observatorio-dinamicatransacciones-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/dinamicatransacciones/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "c326c45f26876c56_gis-rest-services-observatorio-observatorio-valorsuelourbano-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/valorsuelourbano/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "c690fcef4a8977b5_-gis-rest-services-catastro-medianavalorcatastral-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/medianavalorcatastral/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "d52f8de57b1c3acf_-gis-rest-services-observatorio-observatorio-valorsuelorural-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/observatorio/valorsuelorural/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "e048f7999017c249_-gis-rest-services-catastro-huellaurbana-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/huellaurbana/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "fd4f3f34faade604_-gis-rest-services-catastro-catastro-medianavalorcatastral-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/catastro/medianavalorcatastral/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  },
+  {
+    "file": "fdf51a4cf9fad5c1_-gis-rest-services-catastro-destinoseconomicos-MapServer.json",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/destinoseconomicos/MapServer?f=json",
+    "why": "accepted earlier by the buggy validator; body is a proxy error envelope",
+    "data_head": "{\"type\": \"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/\", \"title\": \"Error 522: Connection timed out\", \"status\": 522, \"detail\": \"Cloudflar"
+  }
+]

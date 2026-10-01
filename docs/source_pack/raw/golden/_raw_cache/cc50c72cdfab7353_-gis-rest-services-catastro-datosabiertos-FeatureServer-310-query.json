@@ -1,0 +1,196 @@
+{
+  "ok": true,
+  "data": {
+    "objectIdFieldName": "objectid",
+    "globalIdFieldName": "globalid",
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377
+    },
+    "hasZ": false,
+    "fields": [
+      {
+        "name": "objectid",
+        "alias": "OBJECTID",
+        "type": "esriFieldTypeOID"
+      },
+      {
+        "name": "etiqueta",
+        "alias": "Etiqueta",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "relacion_superficie",
+        "alias": "Relación Superficie",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "identificador",
+        "alias": "Identificador",
+        "type": "esriFieldTypeString",
+        "length": 20
+      },
+      {
+        "name": "tipo_construccion",
+        "alias": "Tipo Construcción",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "tipo_dominio",
+        "alias": "Tipo Dominio",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "total_pisos",
+        "alias": "Total Pisos",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "total_sotanos",
+        "alias": "Total Sotanos",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "total_mezanines",
+        "alias": "Total Mezanines",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "total_semisotanos",
+        "alias": "Total Semisotanos",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "altura_total_construccion",
+        "alias": "Altura Total Construcción",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "local_id",
+        "alias": "Local Id",
+        "type": "esriFieldTypeString",
+        "length": 255
+      },
+      {
+        "name": "estado_construccion",
+        "alias": "Estado Construcción",
+        "type": "esriFieldTypeSmallInteger"
+      },
+      {
+        "name": "Shape__Area",
+        "alias": "st_area(shape)",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "Shape__Length",
+        "alias": "st_length(shape)",
+        "type": "esriFieldTypeDouble"
+      },
+      {
+        "name": "globalid",
+        "alias": "GlobalID",
+        "type": "esriFieldTypeGlobalID",
+        "length": 38
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "etiqueta": null,
+          "relacion_superficie": "En_Rasante",
+          "identificador": "A",
+          "tipo_construccion": "Convencional",
+          "tipo_dominio": "Privado",
+          "total_pisos": 1,
+          "total_sotanos": 0,
+          "total_mezanines": 0,
+          "total_semisotanos": 0,
+          "altura_total_construccion": 3,
+          "local_id": "080010104000004660049000000000",
+          "estado_construccion": 1,
+          "Shape__Area": 34.109916435,
+          "Shape__Length": 25.42411398773995,
+          "globalid": "{51EC0E45-BC86-4B7F-A12A-9345BE1CAA86}"
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                4801348.3783,
+                2770736.3910000008
+              ],
+              [
+                4801345.7286,
+                2770733.4838999994
+              ],
+              [
+                4801342.9114,
+                2770736.1032
+              ],
+              [
+                4801344.8176,
+                2770738.1962
+              ],
+              [
+                4801346.2221,
+                2770739.738399999
+              ],
+              [
+                4801348.8744,
+                2770742.650699999
+              ],
+              [
+                4801351.7046,
+                2770740.0404000003
+              ],
+              [
+                4801350.784,
+                2770739.0303000007
+              ],
+              [
+                4801350.1884,
+                2770738.3769000005
+              ],
+              [
+                4801348.9843,
+                2770737.0558
+              ],
+              [
+                4801348.3783,
+                2770736.3910000008
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/FeatureServer/310/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fdatosabiertos%2FFeatureServer%2F310%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:41:43.116255+00:00",
+    "elapsed_s": 1.7,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 2507,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:41:43.116245+00:00"
+      }
+    ]
+  }
+}

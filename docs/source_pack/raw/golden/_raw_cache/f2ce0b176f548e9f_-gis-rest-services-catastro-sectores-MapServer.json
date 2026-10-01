@@ -1,0 +1,183 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Muestra </span><span>los sectores catastrales del distrito de Barranquilla, abarcando tanto el área urbana como la rural. Cada sector está delimitado espacialmente y asociado a un código único de identificación, lo que permite su integración con bases de datos catastrales y facilita procesos de gestión territorial, análisis espacial y planificación urbana. Esta información es clave para la organización del territorio, el control predial y la administración eficiente de los recursos municipales.</span></p></div></div></div>",
+    "mapName": "Sectores",
+    "description": "Muestra los sectores catastrales del distrito de Barranquilla, abarcando tanto el área urbana como la rural. Cada sector está delimitado espacialmente y asociado a un código único de identificación, lo que permite su integración con bases de datos catastrales y facilita procesos de gestión territorial, análisis espacial y planificación urbana. Esta información es clave para la organización del territorio, el control predial y la administración eficiente de los recursos municipales.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Sectores",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 10000,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4785734.181536335,
+      "ymin": 2767626.776581836,
+      "xmax": 4815302.197316117,
+      "ymax": 2778535.6488724975,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4790211.3538,
+      "ymin": 2764627.7964999992,
+      "xmax": 4807916.4988,
+      "ymax": 2781707.073000001,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Sectores catastrales de Barranquilla",
+      "Author": "",
+      "Comments": "Muestra los sectores catastrales del distrito de Barranquilla, abarcando tanto el área urbana como la rural. Cada sector está delimitado espacialmente y asociado a un código único de identificación, lo que permite su integración con bases de datos catastrales y facilita procesos de gestión territorial, análisis espacial y planificación urbana. Esta información es clave para la organización del territorio, el control predial y la administración eficiente de los recursos municipales.",
+      "Subject": "Representa los sectores catastrales del distrito de Barranquilla, para el área urbana y rural. Además, muestra los códigos de identificación correspondiente a cada sector.",
+      "Category": "",
+      "Version": "3.5.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Catastro,Sectores,Planeación urbana,Ordenamiento territorial,Área urbana,Área rural,Gestión catastral,División administrativa,Datos,Georreferenciación,Catastro"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Query,Map,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "WFSServer, WMSServer",
+    "serviceItemId": "d6a24e36a1ed4f9ea0acf2981b9f3ed9"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/sectores/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fcatastro%2Fsectores%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:30:58.648033+00:00",
+    "elapsed_s": 1.4,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 4630,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:30:58.648021+00:00"
+      }
+    ]
+  }
+}

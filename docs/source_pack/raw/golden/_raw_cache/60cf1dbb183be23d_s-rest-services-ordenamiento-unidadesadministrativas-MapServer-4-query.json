@@ -1,0 +1,205 @@
+{
+  "ok": true,
+  "data": {
+    "displayFieldName": "codigo",
+    "fieldAliases": {
+      "objectid": "OBJECTID",
+      "codigo": "Código",
+      "nombre": "Nombre",
+      "depto": "Departamento"
+    },
+    "geometryType": "esriGeometryPolygon",
+    "spatialReference": {
+      "wkid": 102100,
+      "latestWkid": 3857
+    },
+    "fields": [
+      {
+        "name": "objectid",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID"
+      },
+      {
+        "name": "codigo",
+        "type": "esriFieldTypeString",
+        "alias": "Código",
+        "length": 1073741822
+      },
+      {
+        "name": "nombre",
+        "type": "esriFieldTypeString",
+        "alias": "Nombre",
+        "length": 1073741822
+      },
+      {
+        "name": "depto",
+        "type": "esriFieldTypeString",
+        "alias": "Departamento",
+        "length": 1073741822
+      }
+    ],
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1,
+          "codigo": "08770",
+          "nombre": "Suan",
+          "depto": "Atlántico"
+        },
+        "geometry": {
+          "rings": [
+            [
+              [
+                -8337522.969957684,
+                1158923.0090727387
+              ],
+              [
+                -8337313.0007736245,
+                1158650.766690681
+              ],
+              [
+                -8337387.320622706,
+                1158150.4763432846
+              ],
+              [
+                -8337195.791086935,
+                1158093.446506158
+              ],
+              [
+                -8337140.1688108845,
+                1158619.0805888858
+              ],
+              [
+                -8336231.035897521,
+                1158832.9139914683
+              ],
+              [
+                -8336365.056816543,
+                1158532.3079964004
+              ],
+              [
+                -8335757.309212128,
+                1158026.3801354386
+              ],
+              [
+                -8335004.89879133,
+                1157885.8975421214
+              ],
+              [
+                -8334314.159229474,
+                1157413.268876663
+              ],
+              [
+                -8337308.44584493,
+                1152301.199245528
+              ],
+              [
+                -8338174.780809337,
+                1150015.6676017551
+              ],
+              [
+                -8338734.178836898,
+                1147531.87276769
+              ],
+              [
+                -8341985.065911327,
+                1151626.340572498
+              ],
+              [
+                -8341806.622956961,
+                1152015.8066758004
+              ],
+              [
+                -8342050.111489933,
+                1153024.4277180247
+              ],
+              [
+                -8342432.185557237,
+                1153460.756643384
+              ],
+              [
+                -8341653.89148317,
+                1154291.1208973061
+              ],
+              [
+                -8341735.566905151,
+                1154635.8729482742
+              ],
+              [
+                -8341087.960793021,
+                1155265.591581993
+              ],
+              [
+                -8340023.666076001,
+                1155694.5621594843
+              ],
+              [
+                -8339706.532440538,
+                1156825.7071266028
+              ],
+              [
+                -8339934.437756578,
+                1156795.3953389057
+              ],
+              [
+                -8339546.111737318,
+                1157427.438483457
+              ],
+              [
+                -8339798.950517541,
+                1157817.6555132382
+              ],
+              [
+                -8339510.809403103,
+                1158241.4608271967
+              ],
+              [
+                -8338301.933904561,
+                1158363.9999497354
+              ],
+              [
+                -8338267.152286801,
+                1158830.432380048
+              ],
+              [
+                -8337522.969957684,
+                1158923.0090727387
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "exceededTransferLimit": true
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/4/query?where=1=1&resultRecordCount=1&outFields=*&f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Funidadesadministrativas%2FMapServer%2F4%2Fquery%3Fwhere%3D1%3D1%26resultRecordCount%3D1%26outFields%3D%2A%26f%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T16:14:32.752043+00:00",
+    "elapsed_s": 6.6,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T16:14:31.246473+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 1881,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T16:14:32.752033+00:00"
+      }
+    ]
+  }
+}

@@ -1,0 +1,771 @@
+{
+ "probe": "layers",
+ "bases": {
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer": {
+   "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer",
+   "root_status": 403,
+   "root_ok": false,
+   "root_error": "HTTPError 403",
+   "layers": []
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento": {
+   "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento",
+   "root_status": 403,
+   "root_ok": false,
+   "root_error": "HTTPError 403",
+   "layers": []
+  }
+ },
+ "results": {
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/3": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/3": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/3": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/3": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/3": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/4": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/4": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/4": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/4": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/4": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/18": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/18": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/18": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/18": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/18": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/20": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/20": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/20": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/20": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/20": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/21": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/21": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/21": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/21": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/21": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/22": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/22": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/22": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/22": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/22": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/23": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/23": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/23": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/23": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/23": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/24": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/24": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/24": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/24": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/24": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/25": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/25": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/25": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/25": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/25": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/26": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/26": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/26": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/26": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/26": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/27": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/27": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/27": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/27": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/27": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/71": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/71": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/71": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/71": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/71": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/73": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/73": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/73": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/73": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/73": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/75": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/75": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/75": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/75": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/75": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/77": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/77": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/77": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/77": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/77": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/79": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/79": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/79": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/79": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/79": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/81": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/81": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/81": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/81": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/81": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/83": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/83": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/83": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/83": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/83": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/85": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/85": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/85": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/85": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/85": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/87": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/87": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/87": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/87": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/87": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/89": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/89": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/89": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/89": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/89": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/91": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/91": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/91": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/91": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/91": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/92": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/92": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/92": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/92": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/92": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/100": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/100": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/100": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/100": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/100": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/105": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/105": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/105": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/105": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/105": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/315": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/315": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/315": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/315": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/315": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/310": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/310": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/310": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/310": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/310": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/320": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/320": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/320": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/320": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/320": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/500": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/500": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/500": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/500": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/500": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro/datosabiertos/MapServer/545": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/unidadesadministrativas/MapServer/545": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/planeacion/MapServer/545": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/estratificacion/MapServer/545": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  },
+  "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/ordenamientoterritorial/MapServer/545": {
+   "status": 403,
+   "error": "HTTPError 403",
+   "head": "<!DOCTYPE html>\n<!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]-->\n<!--[if IE 7]>    <html class"
+  }
+ }
+}

@@ -1,0 +1,101 @@
+{
+  "gate": "VALUATION_GATE",
+  "gate_state": "CLOSED",
+  "gate_state_vocabulario": [
+    "CLOSED",
+    "OPEN"
+  ],
+  "decision": "NO EMITIR VALORACIÓN",
+  "reason": "La valoración NO está autorizada en esta corrida: el origen de la tasa es MANUAL_CONFIG y su procedencia es INSUFICIENTE para autorizar una cifra (se exige fuente externa citada o cálculo de fuentes citadas, con fecha y sha256). No se emite cifra y se declaran los bloqueos reales.",
+  "required_inputs": [
+    "autorización de identidad",
+    "autorización de contexto de mercado",
+    "método y vigencia"
+  ],
+  "blocking_conditions": [
+    "no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable"
+  ],
+  "evidence_refs": [
+    {
+      "evidence_id": "EV-VALOR",
+      "type": "VALUATION",
+      "source": "metodología de mercado",
+      "timestamp": "2026-09-30T14:47:40.937950+00:00",
+      "sha256": null,
+      "detail": null
+    }
+  ],
+  "origin_summary": "MANUAL_CONFIG",
+  "authorized_inputs": null,
+  "rejected_inputs": null,
+  "observations": [
+    {
+      "observation_id": "OBS-VALUATION-78067",
+      "domain": "VALUATION",
+      "subject": "Valor estimado y su banda",
+      "source": "parámetros de mercado declarados por la corrida",
+      "status": "NOT_EVALUATED",
+      "value": {
+        "consolidado": 0,
+        "banda_baja": 0,
+        "banda_alta": 0,
+        "value_m2": null,
+        "origin": "MANUAL_CONFIG",
+        "origin_gate": false
+      },
+      "detail": "no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable",
+      "observed_at": "2026-09-30T14:47:40.937950+00:00",
+      "query": null,
+      "evidence_refs": [
+        {
+          "evidence_id": "EV-VALOR",
+          "type": "VALUATION",
+          "source": "metodología de mercado",
+          "timestamp": "2026-09-30T14:47:40.937950+00:00",
+          "sha256": null,
+          "detail": null
+        }
+      ],
+      "methodology_id": "lonja_baq_metodologia",
+      "origin": "MANUAL_CONFIG",
+      "origin_gate": false
+    }
+  ],
+  "todos_los_gates": [
+    {
+      "gate": "IDENTITY_GATE",
+      "gate_state": "OPEN",
+      "decision": "INFORMACIÓN VERIFICADA"
+    },
+    {
+      "gate": "TITLE_GATE",
+      "gate_state": "OPEN",
+      "decision": "PROCEDER CON CONDICIONES"
+    },
+    {
+      "gate": "COUNTERPARTY_GATE",
+      "gate_state": "OPEN",
+      "decision": "SIN HALLAZGO MATERIAL EN ESTA FUENTE"
+    },
+    {
+      "gate": "URBAN_GATE",
+      "gate_state": "CLOSED",
+      "decision": "NO UTILIZAR ESTE DATO COMO DEFINITIVO"
+    },
+    {
+      "gate": "ENVIRONMENT_GATE",
+      "gate_state": "CLOSED",
+      "decision": "INFORMACIÓN INSUFICIENTE"
+    },
+    {
+      "gate": "VALUATION_GATE",
+      "gate_state": "CLOSED",
+      "decision": "NO EMITIR VALORACIÓN"
+    },
+    {
+      "gate": "EVIDENCE_GATE",
+      "gate_state": "OPEN",
+      "decision": "INFORMACIÓN VERIFICADA"
+    }
+  ]
+}

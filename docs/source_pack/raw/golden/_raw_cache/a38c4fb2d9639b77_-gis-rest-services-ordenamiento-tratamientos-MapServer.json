@@ -1,0 +1,31 @@
+{
+  "ok": true,
+  "data": {
+    "error": {
+      "code": 499,
+      "message": "Token Required",
+      "details": []
+    }
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento/tratamientos/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fordenamiento%2Ftratamientos%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:53:32.110043+00:00",
+    "elapsed_s": 1.7,
+    "attempt_count": 1,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 62,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:53:32.110027+00:00"
+      }
+    ]
+  }
+}

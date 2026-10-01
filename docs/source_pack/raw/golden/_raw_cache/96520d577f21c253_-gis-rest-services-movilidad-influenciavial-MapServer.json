@@ -1,0 +1,194 @@
+{
+  "ok": true,
+  "data": {
+    "currentVersion": 11.5,
+    "cimVersion": "3.5.0",
+    "serviceDescription": "<div style='text-align:Left;font-size:12pt'><p><span>Este mapa presenta la distribución espacial de la influencia vial en la ciudad de Barranquilla, permitiendo visualizar de forma general las condiciones de accesibilidad y el tipo de vías predominantes en cada zona. La clasificación incluye sectores con vías pavimentadas, vías sin pavimentar y vías peatonales, lo que facilita la comprensión del estado de la infraestructura vial y su relación con la movilidad en el territorio.</span></p></div>",
+    "mapName": "Influencia vial",
+    "description": "Este mapa presenta la distribución espacial de la influencia vial en la ciudad de Barranquilla, permitiendo visualizar de forma general las condiciones de accesibilidad y el tipo de vías predominantes en cada zona. La clasificación incluye sectores con vías pavimentadas, vías sin pavimentar y vías peatonales, lo que facilita la comprensión del estado de la infraestructura vial y su relación con la movilidad en el territorio.",
+    "copyrightText": "",
+    "supportsDynamicLayers": true,
+    "layers": [
+      {
+        "id": 1,
+        "name": "Estado de las vías",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      },
+      {
+        "id": 2,
+        "name": "Influencia vial",
+        "parentLayerId": -1,
+        "defaultVisibility": true,
+        "subLayerIds": null,
+        "minScale": 0,
+        "maxScale": 0,
+        "type": "Feature Layer",
+        "geometryType": "esriGeometryPolygon",
+        "supportsDynamicLegends": true
+      }
+    ],
+    "tables": [],
+    "spatialReference": {
+      "wkid": 9377,
+      "latestWkid": 9377,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -618700,
+      "falseY": -8436100,
+      "xyUnits": 450623577.5299045,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    },
+    "singleFusedMapCache": false,
+    "initialExtent": {
+      "xmin": 4790192.369395989,
+      "ymin": 2762421.881782221,
+      "xmax": 4810789.303650924,
+      "ymax": 2782419.4872033554,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 450623577.5299045,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "fullExtent": {
+      "xmin": 4790211.353738889,
+      "ymin": 2764626.1866904553,
+      "xmax": 4807915.198809465,
+      "ymax": 2785978.8735676203,
+      "zmin": 0,
+      "zmax": 0,
+      "mmin": null,
+      "mmax": null,
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 450623577.5299045,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      }
+    },
+    "datesInUnknownTimezone": false,
+    "minScale": 0,
+    "maxScale": 0,
+    "units": "esriMeters",
+    "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+    "documentInfo": {
+      "Title": "Influencia vial",
+      "Author": "",
+      "Comments": "Este mapa presenta la distribución espacial de la influencia vial en la ciudad de Barranquilla, permitiendo visualizar de forma general las condiciones de accesibilidad y el tipo de vías predominantes en cada zona. La clasificación incluye sectores con vías pavimentadas, vías sin pavimentar y vías peatonales, lo que facilita la comprensión del estado de la infraestructura vial y su relación con la movilidad en el territorio.",
+      "Subject": "Representa la influencia de la red vial en la ciudad de Barranquilla, clasificando las zonas según la presencia de vías pavimentadas, sin pavimentar o peatonales para facilitar el análisis territorial y la interpretación visual.",
+      "Category": "",
+      "Version": "3.4.0",
+      "AntialiasingMode": "Fast",
+      "TextAntialiasingMode": "Force",
+      "Keywords": "Vías,Red vial,Movilidad,Accesibilidad,Infraestructura vial,Zona vial,Barranquilla"
+    },
+    "supportsQueryDomains": true,
+    "capabilities": "Map,Query,Data",
+    "supportedQueryFormats": "JSON, geoJSON, PBF",
+    "exportTilesAllowed": false,
+    "referenceScale": 0.0,
+    "datumTransformations": [
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": false,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      },
+      {
+        "geoTransforms": [
+          {
+            "wkid": 10149,
+            "latestWkid": 10149,
+            "transformForward": true,
+            "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+          }
+        ]
+      }
+    ],
+    "supportsDatumTransformation": true,
+    "floorAwareMapProperties": {
+      "defaultFloorFilterSettings": {
+        "isEnabled": false
+      }
+    },
+    "archivingInfo": {
+      "supportsHistoricMoment": false
+    },
+    "supportsClipping": true,
+    "supportsSpatialFilter": true,
+    "supportsTimeRelation": true,
+    "supportsQueryDataElements": true,
+    "mapUnits": {
+      "uwkid": 9001
+    },
+    "maxSelectionCount": 2000,
+    "maxRecordCount": 2000,
+    "maxImageHeight": 4096,
+    "maxImageWidth": 4096,
+    "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+    "resampling": false,
+    "serviceItemId": "1ef29af3cd0b4a04b35c761bd36648b1"
+  },
+  "provenance": {
+    "requested_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad/influenciavial/MapServer?f=json",
+    "transport": "allorigins",
+    "transport_url": "https://api.allorigins.win/raw?url=https%3A%2F%2Fmiciudad.barranquilla.gov.co%2Fgis%2Frest%2Fservices%2Fmovilidad%2Finfluenciavial%2FMapServer%3Ff%3Djson",
+    "http_status": 200,
+    "fetched_at_utc": "2026-09-29T15:58:48.386216+00:00",
+    "elapsed_s": 6.3,
+    "attempt_count": 2,
+    "served_from_cache": false,
+    "attempts": [
+      {
+        "transport": "allorigins",
+        "attempt": 1,
+        "http_status": 200,
+        "bytes": 5492,
+        "reject_reason": "html_block_marker",
+        "error": null,
+        "at": "2026-09-29T15:58:44.405640+00:00"
+      },
+      {
+        "transport": "allorigins",
+        "attempt": 2,
+        "http_status": 200,
+        "bytes": 4590,
+        "reject_reason": null,
+        "error": null,
+        "at": "2026-09-29T15:58:48.386201+00:00"
+      }
+    ]
+  }
+}
