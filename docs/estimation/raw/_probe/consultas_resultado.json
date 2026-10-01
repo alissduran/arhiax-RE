@@ -1,0 +1,514 @@
+{
+  "valoresm2_area/1": {
+    "etiqueta": "Rango valores por m2. Area (36-60m2).",
+    "count_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&where=1%3D1&returnCountOnly=true",
+    "count": 5,
+    "count_status": 200,
+    "count_sha256": "a7b59f14220279bf034e35863bb5c8f0e489b130e214b6eead2d04fe26f2ea8b",
+    "query_url_punto": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects",
+    "query_status_punto": 200,
+    "query_sha256_punto": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+    "query_bytes_punto": 740,
+    "features_punto": [
+      {
+        "attributes": {
+          "objectid": 5,
+          "nombre": "Norte - centro histórico",
+          "area_construida": "36-60",
+          "min_valor_m2": 2222222.22,
+          "max_valor_m2": 8190568.05
+        }
+      }
+    ],
+    "raw_punto": {
+      "displayFieldName": "nombre",
+      "fieldAliases": {
+        "objectid": "objectid",
+        "nombre": "nombre",
+        "area_construida": "area_construida",
+        "min_valor_m2": "min_valor_m2",
+        "max_valor_m2": "max_valor_m2"
+      },
+      "fields": [
+        {
+          "name": "objectid",
+          "type": "esriFieldTypeOID",
+          "alias": "objectid"
+        },
+        {
+          "name": "nombre",
+          "type": "esriFieldTypeString",
+          "alias": "nombre",
+          "length": 50
+        },
+        {
+          "name": "area_construida",
+          "type": "esriFieldTypeString",
+          "alias": "area_construida",
+          "length": 8000
+        },
+        {
+          "name": "min_valor_m2",
+          "type": "esriFieldTypeDouble",
+          "alias": "min_valor_m2"
+        },
+        {
+          "name": "max_valor_m2",
+          "type": "esriFieldTypeDouble",
+          "alias": "max_valor_m2"
+        }
+      ],
+      "features": [
+        {
+          "attributes": {
+            "objectid": 5,
+            "nombre": "Norte - centro histórico",
+            "area_construida": "36-60",
+            "min_valor_m2": 2222222.22,
+            "max_valor_m2": 8190568.05
+          }
+        }
+      ]
+    }
+  },
+  "valorsuelourbano/5": {
+    "etiqueta": "Suelo urbano vigencia 2026",
+    "count_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer/5/query?f=json&outFields=%2A&returnGeometry=false&where=1%3D1&returnCountOnly=true",
+    "count": 339,
+    "count_status": 200,
+    "count_sha256": "de2d38b63aee5f572c5126dfbb22c07a5140998f8bcce2610cc200059e5b2635",
+    "query_url_punto": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer/5/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects",
+    "query_status_punto": 200,
+    "query_sha256_punto": "f2e28ccc2e248f8f910a307b82709b66ad4916eb1668ce09c7927b19abfe74de",
+    "query_bytes_punto": 922,
+    "features_punto": [
+      {
+        "attributes": {
+          "objectid": 316,
+          "valorm2": 1646200.0,
+          "codigozona": "045",
+          "vigencia": "2026-12-31",
+          "st_area(shape)": 660719.78447462,
+          "st_length(shape)": 14921.46382598902
+        }
+      }
+    ],
+    "raw_punto": {
+      "displayFieldName": "codigozona",
+      "fieldAliases": {
+        "objectid": "OBJECTID",
+        "valorm2": "Valor metro cuadrado",
+        "codigozona": "Código zona geoeconómica",
+        "vigencia": "Vigencia",
+        "st_area(shape)": "st_area(shape)",
+        "st_length(shape)": "st_length(shape)"
+      },
+      "fields": [
+        {
+          "name": "objectid",
+          "type": "esriFieldTypeOID",
+          "alias": "OBJECTID"
+        },
+        {
+          "name": "valorm2",
+          "type": "esriFieldTypeDouble",
+          "alias": "Valor metro cuadrado"
+        },
+        {
+          "name": "codigozona",
+          "type": "esriFieldTypeString",
+          "alias": "Código zona geoeconómica",
+          "length": 50
+        },
+        {
+          "name": "vigencia",
+          "type": "esriFieldTypeDateOnly",
+          "alias": "Vigencia",
+          "length": 8
+        },
+        {
+          "name": "st_area(shape)",
+          "type": "esriFieldTypeDouble",
+          "alias": "st_area(shape)"
+        },
+        {
+          "name": "st_length(shape)",
+          "type": "esriFieldTypeDouble",
+          "alias": "st_length(shape)"
+        }
+      ],
+      "features": [
+        {
+          "attributes": {
+            "objectid": 316,
+            "valorm2": 1646200.0,
+            "codigozona": "045",
+            "vigencia": "2026-12-31",
+            "st_area(shape)": 660719.78447462,
+            "st_length(shape)": 14921.46382598902
+          }
+        }
+      ]
+    }
+  },
+  "valorcompraventas/7": {
+    "etiqueta": "Valor compraventas 2025",
+    "count_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer/7/query?f=json&outFields=%2A&returnGeometry=false&where=1%3D1&returnCountOnly=true",
+    "count": 6792,
+    "count_status": 200,
+    "count_sha256": "2b6c459f053f6e8aaada32563d4d2dbc50312f863300d5df021109917bfa1757",
+    "query_url_punto": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer/7/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects",
+    "query_status_punto": 200,
+    "query_sha256_punto": "735181abd84624ab8c0768cb3f65e9d899899fbbb6ba6d489b9c57a8fda3f30b",
+    "query_bytes_punto": 804,
+    "features_punto": [],
+    "raw_punto": {
+      "displayFieldName": "valor_millones",
+      "fieldAliases": {
+        "objectid": "objectid",
+        "valor_millones": "valor_millones",
+        "fecha_captura_oferta": "fecha_captura_oferta",
+        "condicion_predio": "condicion_predio",
+        "destinacion_economica": "destinacion_economica",
+        "anio": "anio"
+      },
+      "fields": [
+        {
+          "name": "objectid",
+          "type": "esriFieldTypeOID",
+          "alias": "objectid"
+        },
+        {
+          "name": "valor_millones",
+          "type": "esriFieldTypeDouble",
+          "alias": "valor_millones"
+        },
+        {
+          "name": "fecha_captura_oferta",
+          "type": "esriFieldTypeDate",
+          "alias": "fecha_captura_oferta",
+          "length": 8
+        },
+        {
+          "name": "condicion_predio",
+          "type": "esriFieldTypeString",
+          "alias": "condicion_predio",
+          "length": 255
+        },
+        {
+          "name": "destinacion_economica",
+          "type": "esriFieldTypeString",
+          "alias": "destinacion_economica",
+          "length": 255
+        },
+        {
+          "name": "anio",
+          "type": "esriFieldTypeString",
+          "alias": "anio",
+          "length": 512
+        }
+      ],
+      "features": []
+    }
+  },
+  "arrendamientos/1": {
+    "etiqueta": "Arrendamientos 2024",
+    "count_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&where=1%3D1&returnCountOnly=true",
+    "count": 8292,
+    "count_status": 200,
+    "count_sha256": "d4e1704d2cd90316ce6d01c635fedca7fbb95add4fbd9769445f23d399b62c23",
+    "query_url_punto": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects",
+    "query_status_punto": 200,
+    "query_sha256_punto": "ffa258eb33ba326a3bb5bdd31a52ee7bbb69f0d49142c64cbe50f892a02b282e",
+    "query_bytes_punto": 1271,
+    "features_punto": [
+      {
+        "attributes": {
+          "objectid": 695,
+          "codigo_manzana": "08001010300001004",
+          "cantidad_ofertas": 48,
+          "valor_promedio": 1714570.29166667,
+          "valor_minimo": 140560.0,
+          "valor_maximo": 3519000.0,
+          "st_area(shape)": 10823.9481974,
+          "st_length(shape)": 419.2669285433654
+        }
+      }
+    ],
+    "raw_punto": {
+      "displayFieldName": "codigo_manzana",
+      "fieldAliases": {
+        "objectid": "OBJECTID",
+        "codigo_manzana": "Código manzana",
+        "cantidad_ofertas": "Cantidad ofertas de arriendo",
+        "valor_promedio": "Promedio valor arriendo",
+        "valor_minimo": "Valor mínimo",
+        "valor_maximo": "Valor máximo",
+        "st_area(shape)": "st_area(shape)",
+        "st_length(shape)": "st_length(shape)"
+      },
+      "fields": [
+        {
+          "name": "objectid",
+          "type": "esriFieldTypeOID",
+          "alias": "OBJECTID"
+        },
+        {
+          "name": "codigo_manzana",
+          "type": "esriFieldTypeString",
+          "alias": "Código manzana",
+          "length": 17
+        },
+        {
+          "name": "cantidad_ofertas",
+          "type": "esriFieldTypeInteger",
+          "alias": "Cantidad ofertas de arriendo"
+        },
+        {
+          "name": "valor_promedio",
+          "type": "esriFieldTypeDouble",
+          "alias": "Promedio valor arriendo"
+        },
+        {
+          "name": "valor_minimo",
+          "type": "esriFieldTypeDouble",
+          "alias": "Valor mínimo"
+        },
+        {
+          "name": "valor_maximo",
+          "type": "esriFieldTypeDouble",
+          "alias": "Valor máximo"
+        },
+        {
+          "name": "st_area(shape)",
+          "type": "esriFieldTypeDouble",
+          "alias": "st_area(shape)"
+        },
+        {
+          "name": "st_length(shape)",
+          "type": "esriFieldTypeDouble",
+          "alias": "st_length(shape)"
+        }
+      ],
+      "features": [
+        {
+          "attributes": {
+            "objectid": 695,
+            "codigo_manzana": "08001010300001004",
+            "cantidad_ofertas": 48,
+            "valor_promedio": 1714570.29166667,
+            "valor_minimo": 140560.0,
+            "valor_maximo": 3519000.0,
+            "st_area(shape)": 10823.9481974,
+            "st_length(shape)": 419.2669285433654
+          }
+        }
+      ]
+    },
+    "query_url_where": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&where=codigo_manzana+%3D+%2708001010300001004%27",
+    "query_status_where": 200,
+    "query_sha256_where": "ffa258eb33ba326a3bb5bdd31a52ee7bbb69f0d49142c64cbe50f892a02b282e",
+    "features_where": [
+      {
+        "attributes": {
+          "objectid": 695,
+          "codigo_manzana": "08001010300001004",
+          "cantidad_ofertas": 48,
+          "valor_promedio": 1714570.29166667,
+          "valor_minimo": 140560.0,
+          "valor_maximo": 3519000.0,
+          "st_area(shape)": 10823.9481974,
+          "st_length(shape)": 419.2669285433654
+        }
+      }
+    ]
+  },
+  "avaluocatastral/1": {
+    "etiqueta": "Avaluo catastral 2026",
+    "count_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/avaluocatastral/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&where=1%3D1&returnCountOnly=true",
+    "count": 24,
+    "count_status": 200,
+    "count_sha256": "d3b8577e55040f9d0e1b8503df146d9d20cbe6ca96c6bcd7ebdb204458838640",
+    "query_url_punto": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/avaluocatastral/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects",
+    "query_status_punto": 200,
+    "query_sha256_punto": "5f21b1eb72c7f1e25c6562e922a2a8f10d01891a13395372df10f7e5678d5441",
+    "query_bytes_punto": 755,
+    "features_punto": [
+      {
+        "attributes": {
+          "objectid": 8,
+          "destino": "Habitacional",
+          "avaluo": 73577978028277.69,
+          "st_area(shape)": 37206484.16454388,
+          "st_length(shape)": 2705624.671660511
+        }
+      }
+    ],
+    "raw_punto": {
+      "displayFieldName": "destino",
+      "fieldAliases": {
+        "objectid": "OBJECTID",
+        "destino": "Destino",
+        "avaluo": "Avalúo catastral",
+        "st_area(shape)": "st_area(shape)",
+        "st_length(shape)": "st_length(shape)"
+      },
+      "fields": [
+        {
+          "name": "objectid",
+          "type": "esriFieldTypeOID",
+          "alias": "OBJECTID"
+        },
+        {
+          "name": "destino",
+          "type": "esriFieldTypeString",
+          "alias": "Destino",
+          "length": 250
+        },
+        {
+          "name": "avaluo",
+          "type": "esriFieldTypeDouble",
+          "alias": "Avalúo catastral"
+        },
+        {
+          "name": "st_area(shape)",
+          "type": "esriFieldTypeDouble",
+          "alias": "st_area(shape)"
+        },
+        {
+          "name": "st_length(shape)",
+          "type": "esriFieldTypeDouble",
+          "alias": "st_length(shape)"
+        }
+      ],
+      "features": [
+        {
+          "attributes": {
+            "objectid": 8,
+            "destino": "Habitacional",
+            "avaluo": 73577978028277.69,
+            "st_area(shape)": 37206484.16454388,
+            "st_length(shape)": 2705624.671660511
+          }
+        }
+      ]
+    }
+  },
+  "cantidadtransacciones/8": {
+    "etiqueta": "Transacciones por manzana 2026",
+    "count_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer/8/query?f=json&outFields=%2A&returnGeometry=false&where=1%3D1&returnCountOnly=true",
+    "count": 8286,
+    "count_status": 200,
+    "count_sha256": "357b2f31488a57f903303d569bc6f3fc5980802579951ab6d103f839b375f546",
+    "query_url_punto": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer/8/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects",
+    "query_status_punto": 200,
+    "query_sha256_punto": "0b415d83fe439a12650a297af5a65dd271c73d91ca55c6d415145f7730dd19f9",
+    "query_bytes_punto": 1234,
+    "features_punto": [
+      {
+        "attributes": {
+          "objectid": 369,
+          "codigo_manzana": "08001010300001004",
+          "cantidad": 12,
+          "destino_predominante": "Habitacional",
+          "anio": "2026-01-01",
+          "identificador_barrio": "119",
+          "nombre_barrio": "Miramar",
+          "localidad": "02"
+        }
+      }
+    ],
+    "raw_punto": {
+      "displayFieldName": "codigo_manzana",
+      "fieldAliases": {
+        "objectid": "OBJECTID",
+        "codigo_manzana": "Código manzana",
+        "cantidad": "Cantidad de transacciones",
+        "destino_predominante": "Destino predominante",
+        "anio": "Año",
+        "identificador_barrio": "Identificador barrio",
+        "nombre_barrio": "Barrio",
+        "localidad": "Localidad"
+      },
+      "fields": [
+        {
+          "name": "objectid",
+          "type": "esriFieldTypeOID",
+          "alias": "OBJECTID"
+        },
+        {
+          "name": "codigo_manzana",
+          "type": "esriFieldTypeString",
+          "alias": "Código manzana",
+          "length": 17
+        },
+        {
+          "name": "cantidad",
+          "type": "esriFieldTypeInteger",
+          "alias": "Cantidad de transacciones"
+        },
+        {
+          "name": "destino_predominante",
+          "type": "esriFieldTypeString",
+          "alias": "Destino predominante",
+          "length": 255
+        },
+        {
+          "name": "anio",
+          "type": "esriFieldTypeDateOnly",
+          "alias": "Año",
+          "length": 8
+        },
+        {
+          "name": "identificador_barrio",
+          "type": "esriFieldTypeString",
+          "alias": "Identificador barrio",
+          "length": 512
+        },
+        {
+          "name": "nombre_barrio",
+          "type": "esriFieldTypeString",
+          "alias": "Barrio",
+          "length": 75
+        },
+        {
+          "name": "localidad",
+          "type": "esriFieldTypeString",
+          "alias": "Localidad",
+          "length": 50
+        }
+      ],
+      "features": [
+        {
+          "attributes": {
+            "objectid": 369,
+            "codigo_manzana": "08001010300001004",
+            "cantidad": 12,
+            "destino_predominante": "Habitacional",
+            "anio": "2026-01-01",
+            "identificador_barrio": "119",
+            "nombre_barrio": "Miramar",
+            "localidad": "02"
+          }
+        }
+      ]
+    },
+    "query_url_where": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer/8/query?f=json&outFields=%2A&returnGeometry=false&where=codigo_manzana+%3D+%2708001010300001004%27",
+    "query_status_where": 200,
+    "query_sha256_where": "0b415d83fe439a12650a297af5a65dd271c73d91ca55c6d415145f7730dd19f9",
+    "features_where": [
+      {
+        "attributes": {
+          "objectid": 369,
+          "codigo_manzana": "08001010300001004",
+          "cantidad": 12,
+          "destino_predominante": "Habitacional",
+          "anio": "2026-01-01",
+          "identificador_barrio": "119",
+          "nombre_barrio": "Miramar",
+          "localidad": "02"
+        }
+      }
+    ]
+  }
+}

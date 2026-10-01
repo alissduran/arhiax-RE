@@ -1,0 +1,252 @@
+[
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services?f=json",
+    "http_status": 200,
+    "bytes": 360,
+    "sha256": "f61328264b30853ff6daff72bba31789261ec16b34e6513b491e57a12ed79a85",
+    "ms": 328,
+    "cf_ray": "a43499a82f4d4e97-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ambiente?f=json",
+    "http_status": 200,
+    "bytes": 424,
+    "sha256": "fc9c5a88c76b2a939769f72a159e570254d409105663ef1e10b02d523e593211",
+    "ms": 364,
+    "cf_ray": "a43499a9e8b706f3-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/aplicaciones?f=json",
+    "http_status": 200,
+    "bytes": 100,
+    "sha256": "4f94ef83f096314d6373282a9e6eb54b540e3136172596b6291f24ab3a7ca64d",
+    "ms": 294,
+    "cf_ray": "a43499ac3d4cb70c-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/catastro?f=json",
+    "http_status": 200,
+    "bytes": 856,
+    "sha256": "aec7b5f8b57b5134249dead16bcf17597bd086b2cbbcb8035f06d3581b7cf52c",
+    "ms": 375,
+    "cf_ray": "a43499ae2e4192c2-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/cultura?f=json",
+    "http_status": 200,
+    "bytes": 397,
+    "sha256": "949c3a5abb2b678f505e61e1e1ac2bccfb11be16f8282756d95cb207631c91a3",
+    "ms": 317,
+    "cf_ray": "a43499b07a3d3490-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/economico?f=json",
+    "http_status": 200,
+    "bytes": 155,
+    "sha256": "47f644eeb34c21af4531f4a7db956bb97e7d155314393bc762c9849f0790f230",
+    "ms": 317,
+    "cf_ray": "a43499b28a0d1ed3-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/educacion?f=json",
+    "http_status": 200,
+    "bytes": 170,
+    "sha256": "56d312157c17dcee7459c2be1684565a622e2f7bd1288b21681909b72d3bc8de",
+    "ms": 358,
+    "cf_ray": "a43499b49853f2a4-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/equidad?f=json",
+    "http_status": 200,
+    "bytes": 107,
+    "sha256": "5f219fe8da8461953aadf4caac6995305aa9c9f6723b649ac86b6313bdb702fe",
+    "ms": 305,
+    "cf_ray": "a43499b6bc886dca-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/espaciopublico?f=json",
+    "http_status": 200,
+    "bytes": 124,
+    "sha256": "44b58861daa01726543c11d9f3b6803eaa014e840c27ec4e2e5a18b43d1cd698",
+    "ms": 312,
+    "cf_ray": "a43499b8abc5f2a4-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/impuesto?f=json",
+    "http_status": 200,
+    "bytes": 92,
+    "sha256": "2a5cd84cfab4c7f211b6b051d4af812f9a0a5b879dedb17ea31045e0f3fb2ad9",
+    "ms": 324,
+    "cf_ray": "a43499baaf945408-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/movilidad?f=json",
+    "http_status": 200,
+    "bytes": 455,
+    "sha256": "2c2ab8c5c5a8cf1d525cd0fda74c6032d5cefb12cc754153bff2ca1f112e6b53",
+    "ms": 361,
+    "cf_ray": "a43499bca8c7aece-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio?f=json",
+    "http_status": 200,
+    "bytes": 722,
+    "sha256": "73e4a1db81ddea4f4c1b464054b1cc0328562e612b9c03051fd0e525fdc250a6",
+    "ms": 367,
+    "cf_ray": "a43499bede0e5f8c-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/ordenamiento?f=json",
+    "http_status": 200,
+    "bytes": 460,
+    "sha256": "af7c9a9203a37f26bc8e14effc9a801e582e18300686b7edf6ed351312c8ad3f",
+    "ms": 334,
+    "cf_ray": "a43499c12bede564-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/participacionciudadana?f=json",
+    "http_status": 200,
+    "bytes": 118,
+    "sha256": "802098f1df2c34dafee3c93cffdb82205d98201a03b9e74c2dd08938c7a77db5",
+    "ms": 306,
+    "cf_ray": "a43499c34cdd6e78-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/proyectos?f=json",
+    "http_status": 200,
+    "bytes": 331,
+    "sha256": "5467a610891dad3b3ae48c325c8b7480374eb5e29fcc7d85fe1d1886ccac76cf",
+    "ms": 329,
+    "cf_ray": "a43499c52e31e70e-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/recreacionydeporte?f=json",
+    "http_status": 200,
+    "bytes": 247,
+    "sha256": "69da26964a44c4fa88cc322762780d0d934c6246216b031352b4eba178763f74",
+    "ms": 324,
+    "cf_ray": "a43499c74eaa8cab-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/riesgos?f=json",
+    "http_status": 200,
+    "bytes": 249,
+    "sha256": "c3284b099a97d3027c739352da6c187db9bcb693ef8bd61835f7fa65b959a646",
+    "ms": 326,
+    "cf_ray": "a43499c9496d9821-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/salud?f=json",
+    "http_status": 200,
+    "bytes": 158,
+    "sha256": "b1dd17d9aa5fc815724408c4b92465bfc7902056406c8f0f4f90652b0ab79969",
+    "ms": 349,
+    "cf_ray": "a43499cba9b407ce-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/seguridad?f=json",
+    "http_status": 200,
+    "bytes": 170,
+    "sha256": "7459f93377735cd52470991335e27d81d653e0cabb425cc2f48bd502b3de4b23",
+    "ms": 305,
+    "cf_ray": "a43499cd8e8eb226-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/SERVICIOS?f=json",
+    "http_status": 200,
+    "bytes": 62,
+    "sha256": "ca1489e43448fa7e2b5cb79548c3678ce3c1e15a56308b1b841aea42ae4de860",
+    "ms": 290,
+    "cf_ray": "a43499cf8ab9e6fb-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/serviciospublicos?f=json",
+    "http_status": 200,
+    "bytes": 234,
+    "sha256": "bd4187b882fd3d378f7fdc283d7066e442884257a7d29a0069238d322a9de565",
+    "ms": 302,
+    "cf_ray": "a43499d13b316ebd-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/sitios?f=json",
+    "http_status": 200,
+    "bytes": 157,
+    "sha256": "c6894556223083c96b4a884e0581d28ab8e7d7ba70996e1db772dd05f7a4dc1e",
+    "ms": 306,
+    "cf_ray": "a43499d31f6249e0-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/social?f=json",
+    "http_status": 200,
+    "bytes": 152,
+    "sha256": "4eb9dc51a2f3d60cab26b41630e70218f157192692d02e73ed47bf4450d9a552",
+    "ms": 325,
+    "cf_ray": "a43499d52eb6f6f8-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/turismo?f=json",
+    "http_status": 200,
+    "bytes": 95,
+    "sha256": "ad2b6138a9f39ae6596881b47e77fc0a043855bdcc90f8177c1620bc2e5ada7f",
+    "ms": 301,
+    "cf_ray": "a43499d70d5d4e97-BOG",
+    "error": null,
+    "intentos": 1
+  },
+  {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/Utilities?f=json",
+    "http_status": 200,
+    "bytes": 62,
+    "sha256": "ca1489e43448fa7e2b5cb79548c3678ce3c1e15a56308b1b841aea42ae4de860",
+    "ms": 244,
+    "cf_ray": "a43499d8da1de336-BOG",
+    "error": null,
+    "intentos": 1
+  }
+]

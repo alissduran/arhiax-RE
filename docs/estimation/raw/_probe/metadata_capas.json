@@ -1,0 +1,1197 @@
+{
+  "valoresm2_area": {
+    "http_status": 200,
+    "bytes": 4570,
+    "sha256": "c0b5dae0b16fdb38d386da792149e134e9403060e8d4587861b398dc06e99af8",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer?f=json",
+    "meta": {
+      "currentVersion": 11.5,
+      "cimVersion": "3.5.0",
+      "serviceDescription": "<div style='text-align:Left;'><div><div style='font-size:12pt'><p><span>Muestra el resultado del análisis de las compraventas inmobiliarias registradas por la Superintendencia de Notariado y Registro durante el periodo de enero a mayo de 2026. La información muestra, para cada localidad, los rangos de valores mínimos y máximos agrupados por áreas.</span></p></div></div></div>",
+      "mapName": "Rango valores m² por área. Año 2026.",
+      "description": "Muestra el resultado del análisis de las compraventas inmobiliarias registradas por la Superintendencia de Notariado y Registro durante el periodo de enero a mayo de 2026. La información muestra, para cada localidad, los rangos de valores mínimos y máximos agrupados por áreas.",
+      "copyrightText": "",
+      "supportsDynamicLayers": true,
+      "layers": [
+        {
+          "id": 1,
+          "name": "Rango valores por m². Área (36-60m²).",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 2,
+          "name": "Rango valores por m². Área (61-175m²).",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 3,
+          "name": "Rango valores por m². Área (176-290m²)",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 4,
+          "name": "Rango valores por m². Área (>291m²)",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        }
+      ],
+      "tables": [],
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "singleFusedMapCache": false,
+      "initialExtent": {
+        "xmin": 4792273.7761267265,
+        "ymin": 2764596.8437840547,
+        "xmax": 4812547.924367146,
+        "ymax": 2779782.5000940533,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "fullExtent": {
+        "xmin": -618514.06253367,
+        "ymin": -8435913.625158427,
+        "xmax": 10618514.062533671,
+        "ymax": 11552012.688130872,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "datesInUnknownTimezone": false,
+      "minScale": 0,
+      "maxScale": 0,
+      "units": "esriMeters",
+      "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+      "documentInfo": {
+        "Title": "Rango valores m² de las compraventas. Año 2026.",
+        "Author": "",
+        "Comments": "Muestra el resultado del análisis de las compraventas inmobiliarias registradas por la Superintendencia de Notariado y Registro durante el periodo de enero a mayo de 2026. La información muestra, para cada localidad, los rangos de valores mínimos y máximos agrupados por áreas.",
+        "Subject": "Muestra los resultados del análisis de las compraventas inmobiliarias registradas por la Superintendencia de Notariado y Registro entre enero y mayo de 2026, con rangos de valores mínimos y máximos por m², agrupados según el área",
+        "Category": "",
+        "Version": "3.2.0",
+        "AntialiasingMode": "Fast",
+        "TextAntialiasingMode": "Force",
+        "Keywords": "Compraventas,Mercado,Inmobiliario,Habitacional,Área"
+      },
+      "supportsQueryDomains": true,
+      "capabilities": "Query,Map,Data",
+      "supportedQueryFormats": "JSON, geoJSON, PBF",
+      "exportTilesAllowed": false,
+      "referenceScale": 0.0,
+      "datumTransformations": [
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": false,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": true,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        }
+      ],
+      "supportsDatumTransformation": true,
+      "archivingInfo": {
+        "supportsHistoricMoment": false
+      },
+      "supportsClipping": true,
+      "supportsSpatialFilter": true,
+      "supportsTimeRelation": true,
+      "supportsQueryDataElements": true,
+      "mapUnits": {
+        "uwkid": 9001
+      },
+      "maxSelectionCount": 2000,
+      "maxRecordCount": 2000,
+      "maxImageHeight": 4096,
+      "maxImageWidth": 4096,
+      "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+      "serviceItemId": "74608fe6430340fe9546a9c56eff1b28"
+    }
+  },
+  "valorsuelourbano": {
+    "http_status": 200,
+    "bytes": 5631,
+    "sha256": "e49afe6cb67e7f005e7591a84a1d7ab1c29edc6dcf0b7c9d727868feb077b194",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer?f=json",
+    "meta": {
+      "currentVersion": 11.5,
+      "cimVersion": "3.5.0",
+      "serviceDescription": "<div style='text-align:Left;font-size:12pt'><div><div><p><span>Representa el valor</span><span> </span><span>por </span><span>metro cuadrado</span><span> </span><span>del suelo urbano </span><span>para la</span><span>s</span><span> </span><span>vigencia</span><span>s</span><span> </span><span>entre </span><span>202</span><span>2</span><span> </span><span>a 2026 </span><span>en el distrito de Barranquilla.</span><span> Permite identificar el valor base </span><span>por </span><span>metro cuadrado</span><span> </span><span>asignado a cada zona o sector, facilitando</span><span> el</span><span> análisis de referencia económica, estudios de mercado, procesos de avalúo y consultas ciudadanas.</span></p></div></div></div>",
+      "mapName": "Valor metro cuadrado del suelo urbano",
+      "description": "Representa el valor por metro cuadrado del suelo urbano para las vigencias entre 2022 a 2026 en el distrito de Barranquilla. Permite identificar el valor base por metro cuadrado asignado a cada zona o sector, facilitando el análisis de referencia económica, estudios de mercado, procesos de avalúo y consultas ciudadanas.",
+      "copyrightText": "",
+      "supportsDynamicLayers": true,
+      "layers": [
+        {
+          "id": 1,
+          "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2022.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 2,
+          "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2023.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 3,
+          "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2024.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 4,
+          "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2025.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 5,
+          "name": "Valor del metro cuadrado del suelo urbano. Vigencia 2026.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        }
+      ],
+      "tables": [],
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "singleFusedMapCache": false,
+      "initialExtent": {
+        "xmin": 4793971.70912543,
+        "ymin": 2767150.45598304,
+        "xmax": 4810972.828891863,
+        "ymax": 2781748.8479023958,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "fullExtent": {
+        "xmin": 4791864.1039,
+        "ymin": 2765346.965399999,
+        "xmax": 4807917.4,
+        "ymax": 2785978.8499999996,
+        "zmin": 0,
+        "zmax": 0,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "timeInfo": {
+        "timeExtent": [
+          1672444800000,
+          1798675200000
+        ],
+        "timeReference": null,
+        "timeRelation": "esriTimeRelationOverlaps",
+        "defaultTimeInterval": 1,
+        "defaultTimeIntervalUnits": "esriTimeUnitsYears",
+        "defaultTimeWindow": 1,
+        "defaultTimeWindowUnits": "esriTimeUnitsYears",
+        "hasLiveData": false,
+        "liveModeOffsetDirection": "past"
+      },
+      "datesInUnknownTimezone": false,
+      "minScale": 0,
+      "maxScale": 0,
+      "units": "esriMeters",
+      "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+      "documentInfo": {
+        "Title": "Valor del metro cuadrado del suelo urbano.",
+        "Author": "",
+        "Comments": "Representa el valor por metro cuadrado del suelo urbano para las vigencias entre 2022 a 2026 en el distrito de Barranquilla. Permite identificar el valor base por metro cuadrado asignado a cada zona o sector, facilitando el análisis de referencia económica, estudios de mercado, procesos de avalúo y consultas ciudadanas.",
+        "Subject": "Representa el valor oficial por metro cuadrado del suelo urbano para las vigencias entre 2022 a 2026 en el distrito de Barranquilla.",
+        "Category": "",
+        "Version": "3.5.0",
+        "AntialiasingMode": "Fast",
+        "TextAntialiasingMode": "Force",
+        "Keywords": "Valor del suelo,Metro cuadrado,Suelo urbano,Avalúo catastral,Actualización catastral,Información económica,Catastro,Barranquilla,Vigencia"
+      },
+      "supportsQueryDomains": true,
+      "capabilities": "Query,Map,Data",
+      "supportedQueryFormats": "JSON, geoJSON, PBF",
+      "exportTilesAllowed": false,
+      "referenceScale": 0.0,
+      "datumTransformations": [
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": false,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": true,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        }
+      ],
+      "supportsDatumTransformation": true,
+      "archivingInfo": {
+        "supportsHistoricMoment": false
+      },
+      "supportsClipping": true,
+      "supportsSpatialFilter": true,
+      "supportsTimeRelation": true,
+      "supportsQueryDataElements": true,
+      "mapUnits": {
+        "uwkid": 9001
+      },
+      "maxSelectionCount": 2000,
+      "maxRecordCount": 2000,
+      "maxImageHeight": 4096,
+      "maxImageWidth": 4096,
+      "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+      "serviceItemId": "780010bd084a484b930a9d0ff5f3d4a6"
+    }
+  },
+  "valorcompraventas": {
+    "http_status": 200,
+    "bytes": 5004,
+    "sha256": "78cc949f883b1f171569a07f8463a9fc904c8fd8eebdb4f22c16f826852765b6",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer?f=json",
+    "meta": {
+      "currentVersion": 11.5,
+      "cimVersion": "3.5.0",
+      "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Muestra </span><span>el comportamiento del mercado inmobiliario en Barranquilla entre 2019 y 2025</span><span>. Permite responder a la pregunta de en dónde ocurren las transacciones de mayor y menor valor en la ciudad. </span></p></div></div></div>",
+      "mapName": "Valor de las compraventas",
+      "description": "Muestra el comportamiento del mercado inmobiliario en Barranquilla entre 2019 y 2025. Permite responder a la pregunta de en dónde ocurren las transacciones de mayor y menor valor en la ciudad. ",
+      "copyrightText": "",
+      "supportsDynamicLayers": true,
+      "layers": [
+        {
+          "id": 1,
+          "name": "Valor compraventas 2019",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPoint",
+          "supportsDynamicLegends": false
+        },
+        {
+          "id": 2,
+          "name": "Valor compraventas 2020",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 2256.994353,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPoint",
+          "supportsDynamicLegends": false
+        },
+        {
+          "id": 3,
+          "name": "Valor compraventas 2021",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 2256.994353,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPoint",
+          "supportsDynamicLegends": false
+        },
+        {
+          "id": 4,
+          "name": "Valor compraventas 2022",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 2256.994353,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPoint",
+          "supportsDynamicLegends": false
+        },
+        {
+          "id": 5,
+          "name": "Valor compraventas 2023",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 2256.994353,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPoint",
+          "supportsDynamicLegends": false
+        },
+        {
+          "id": 6,
+          "name": "Valor compraventas 2024",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 2256.994353,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPoint",
+          "supportsDynamicLegends": false
+        },
+        {
+          "id": 7,
+          "name": "Valor compraventas 2025",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 2256.994353,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPoint",
+          "supportsDynamicLegends": false
+        }
+      ],
+      "tables": [],
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "singleFusedMapCache": false,
+      "initialExtent": {
+        "xmin": 4791186.858921349,
+        "ymin": 2763617.2004692703,
+        "xmax": 4812476.916466497,
+        "ymax": 2779900.350008826,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "fullExtent": {
+        "xmin": 4792093.3376,
+        "ymin": 2764826.4453,
+        "xmax": 4807205.5018,
+        "ymax": 2779023.5766000003,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "datesInUnknownTimezone": false,
+      "minScale": 0,
+      "maxScale": 0,
+      "units": "esriMeters",
+      "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+      "documentInfo": {
+        "Title": "Valor de las compraventas",
+        "Author": "",
+        "Comments": "Muestra el comportamiento del mercado inmobiliario en Barranquilla entre 2019 y 2025. Permite responder a la pregunta de en dónde ocurren las transacciones de mayor y menor valor en la ciudad. ",
+        "Subject": "Permite conocer el comportamiento del mercado inmobiliario en Barranquilla entre 2019 y 2025.",
+        "Category": "",
+        "Version": "3.2.0",
+        "AntialiasingMode": "Fast",
+        "TextAntialiasingMode": "Force",
+        "Keywords": "Compraventas,Transacciones,Mercado,Inmobiliario,Barranquilla"
+      },
+      "supportsQueryDomains": true,
+      "capabilities": "Query,Map,Data",
+      "supportedQueryFormats": "JSON, geoJSON, PBF",
+      "exportTilesAllowed": false,
+      "referenceScale": 0.0,
+      "datumTransformations": [
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": false,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": true,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": false,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": true,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        }
+      ],
+      "supportsDatumTransformation": true,
+      "archivingInfo": {
+        "supportsHistoricMoment": false
+      },
+      "supportsClipping": true,
+      "supportsSpatialFilter": true,
+      "supportsTimeRelation": true,
+      "supportsQueryDataElements": true,
+      "mapUnits": {
+        "uwkid": 9001
+      },
+      "maxSelectionCount": 2000,
+      "maxRecordCount": 2000,
+      "maxImageHeight": 4096,
+      "maxImageWidth": 4096,
+      "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+      "serviceItemId": "67792958d6d640549651dd0251376518"
+    }
+  },
+  "arrendamientos": {
+    "http_status": 200,
+    "bytes": 4499,
+    "sha256": "52b2251a6a1cbcab60b504a44c0525c23b7a42a6d6601572065c17adad75db2c",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer?f=json",
+    "meta": {
+      "currentVersion": 11.5,
+      "cimVersion": "3.5.0",
+      "serviceDescription": "<div style='text-align:Left;'><div><div><p style='text-align:Justify;'><span>Consolida información sobre los cánones de arrendamiento recopilados de diferentes fuentes para diferentes periodos en el Distrito de Barranquilla. Permite visualizar y analizar la distribución espacial de los valores de renta, facilitando la identificación de zonas con mayores y menores niveles de arriendo, apoyando el análisis del mercado inmobiliario y la toma de decisiones en materia de planificación y gestión territorial.</span></p></div></div></div>",
+      "mapName": "Arrendamientos",
+      "description": "Consolida información sobre los cánones de arrendamiento recopilados de diferentes fuentes para diferentes periodos en el Distrito de Barranquilla. Permite visualizar y analizar la distribución espacial de los valores de renta, facilitando la identificación de zonas con mayores y menores niveles de arriendo, apoyando el análisis del mercado inmobiliario y la toma de decisiones en materia de planificación y gestión territorial.",
+      "copyrightText": "",
+      "supportsDynamicLayers": true,
+      "layers": [
+        {
+          "id": 1,
+          "name": "Valor arrendamientos. Año 2024.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        }
+      ],
+      "tables": [],
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "singleFusedMapCache": false,
+      "initialExtent": {
+        "xmin": 4799985.736698672,
+        "ymin": 2772023.738123516,
+        "xmax": 4803699.222649261,
+        "ymax": 2775252.4799873163,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "fullExtent": {
+        "xmin": 4792078.3941,
+        "ymin": 2765373.6522000004,
+        "xmax": 4807916.4988,
+        "ymax": 2779789.3136,
+        "zmin": 0,
+        "zmax": 0,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "datesInUnknownTimezone": false,
+      "minScale": 0,
+      "maxScale": 0,
+      "units": "esriMeters",
+      "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+      "documentInfo": {
+        "Title": "Arrendamientos",
+        "Author": "",
+        "Comments": "Consolida información sobre los cánones de arrendamiento recopilados de diferentes fuentes para diferentes periodos en el Distrito de Barranquilla. Permite visualizar y analizar la distribución espacial de los valores de renta, facilitando la identificación de zonas con mayores y menores niveles de arriendo, apoyando el análisis del mercado inmobiliario y la toma de decisiones en materia de planificación y gestión territorial.",
+        "Subject": "Visualiza la distribución espacial de los cánones de arrendamiento en el Distrito de Barranquilla, facilitando la identificación de zonas con diferentes niveles de renta y el análisis del mercado inmobiliario para diferentes periodos.",
+        "Category": "",
+        "Version": "3.5.0",
+        "AntialiasingMode": "Fast",
+        "TextAntialiasingMode": "Force",
+        "Keywords": "Arriendos,Inmobiliario,Mercado,Casas,Apartamento,Cánon"
+      },
+      "supportsQueryDomains": true,
+      "capabilities": "Query,Map,Data",
+      "supportedQueryFormats": "JSON, geoJSON, PBF",
+      "exportTilesAllowed": false,
+      "referenceScale": 0.0,
+      "datumTransformations": [
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": false,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": true,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": false,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": true,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        }
+      ],
+      "supportsDatumTransformation": true,
+      "archivingInfo": {
+        "supportsHistoricMoment": false
+      },
+      "supportsClipping": true,
+      "supportsSpatialFilter": true,
+      "supportsTimeRelation": true,
+      "supportsQueryDataElements": true,
+      "mapUnits": {
+        "uwkid": 9001
+      },
+      "maxSelectionCount": 2000,
+      "maxRecordCount": 2000,
+      "maxImageHeight": 4096,
+      "maxImageWidth": 4096,
+      "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+      "serviceItemId": "4861e00a388b4041bbf75fd12aab8895"
+    }
+  },
+  "avaluocatastral": {
+    "http_status": 200,
+    "bytes": 3614,
+    "sha256": "81a1843dc96f393cd4c54698e722fb4b4a6ce5983982808e083b453e9398d39a",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/avaluocatastral/MapServer?f=json",
+    "meta": {
+      "currentVersion": 11.5,
+      "cimVersion": "3.5.0",
+      "serviceDescription": "<div style='text-align:Left;'><div><div><p><span>Muestra el avalúo catastral total clasificados según el destino económico predominante, permitiendo realizar análisis comparativos, fiscales.</span></p></div></div></div>",
+      "mapName": "Avalúo catastral",
+      "description": "Muestra el avalúo catastral total clasificados según el destino económico predominante, permitiendo realizar análisis comparativos, fiscales.",
+      "copyrightText": "",
+      "supportsDynamicLayers": true,
+      "layers": [
+        {
+          "id": 1,
+          "name": "Avalúo catastral por destino económico. Vigencia 2026.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        }
+      ],
+      "tables": [],
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "singleFusedMapCache": false,
+      "initialExtent": {
+        "xmin": 4797971.09506349,
+        "ymin": 2767784.5977667635,
+        "xmax": 4804437.6305865245,
+        "ymax": 2771245.1684268666,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "fullExtent": {
+        "xmin": 4790211.3538,
+        "ymin": 2764638.7138,
+        "xmax": 4807916.4988,
+        "ymax": 2781153.0310999993,
+        "zmin": 0,
+        "zmax": 0,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "datesInUnknownTimezone": false,
+      "minScale": 0,
+      "maxScale": 0,
+      "units": "esriMeters",
+      "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+      "documentInfo": {
+        "Title": "Avalúo catastral",
+        "Author": "",
+        "Comments": "Muestra el avalúo catastral total clasificados según el destino económico predominante, permitiendo realizar análisis comparativos, fiscales.",
+        "Subject": "Muestra el avalúo catastral total según el destino económico de los predios en el distrito de Barranquilla.",
+        "Category": "",
+        "Version": "3.5.0",
+        "AntialiasingMode": "Fast",
+        "TextAntialiasingMode": "Force",
+        "Keywords": "Avalúo catastral,Destino económico,Catastro,Distrito,Barranquilla,Clasificación,Mercado inmobiliario,Gestión tributaria,Análisis urbano,Predios,Información catastral"
+      },
+      "supportsQueryDomains": true,
+      "capabilities": "Query,Map,Data",
+      "supportedQueryFormats": "JSON, geoJSON, PBF",
+      "exportTilesAllowed": false,
+      "referenceScale": 0.0,
+      "datumTransformations": [
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": false,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": true,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": false,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": true,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        }
+      ],
+      "supportsDatumTransformation": true,
+      "archivingInfo": {
+        "supportsHistoricMoment": false
+      },
+      "supportsClipping": true,
+      "supportsSpatialFilter": true,
+      "supportsTimeRelation": true,
+      "supportsQueryDataElements": true,
+      "mapUnits": {
+        "uwkid": 9001
+      },
+      "maxSelectionCount": 2000,
+      "maxRecordCount": 2000,
+      "maxImageHeight": 4096,
+      "maxImageWidth": 4096,
+      "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+      "serviceItemId": "68111ab7f94f4cc781c52ee09249e5c8"
+    }
+  },
+  "cantidadtransacciones": {
+    "http_status": 200,
+    "bytes": 5818,
+    "sha256": "1dd39c1ec8e59e897b257bf89b5d173b400f1f036e46f72c4a964359949092c3",
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer?f=json",
+    "meta": {
+      "currentVersion": 11.5,
+      "cimVersion": "3.5.0",
+      "serviceDescription": "<div style='text-align:Left;'><div><div><div style='font-size:12pt'><p><span>Reúne información que permite analizar el comportamiento del mercado inmobiliario en el Distrito de Barranquilla. Muestra, de manera anual y a nivel de manzanas, las zonas donde se concentra la mayor cantidad de transacciones realizadas entre 2019 y 2025, facilitando la comprensión de las dinámicas y tendencias del mercado de la propiedad.</span></p></div></div></div></div>",
+      "mapName": "Cantidad de transacciones",
+      "description": "Reúne información que permite analizar el comportamiento del mercado inmobiliario en el Distrito de Barranquilla. Muestra, de manera anual y a nivel de manzanas, las zonas donde se concentra la mayor cantidad de transacciones realizadas entre 2019 y 2025, facilitando la comprensión de las dinámicas y tendencias del mercado de la propiedad.",
+      "copyrightText": "",
+      "supportsDynamicLayers": true,
+      "layers": [
+        {
+          "id": 1,
+          "name": "Cantidad de transacciones por manzana. Año 2019.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 2,
+          "name": "Cantidad de transacciones por manzana. Año 2020.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 3,
+          "name": "Cantidad de transacciones por manzana. Año 2021.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 4,
+          "name": "Cantidad de transacciones por manzana. Año 2022.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 5,
+          "name": "Cantidad de transacciones por manzana. Año 2023.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 6,
+          "name": "Cantidad de transacciones por manzana. Año 2024.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 7,
+          "name": "Cantidad de transacciones por manzana. Año 2025.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        },
+        {
+          "id": 8,
+          "name": "Cantidad de transacciones por manzana. Año 2026.",
+          "parentLayerId": -1,
+          "defaultVisibility": true,
+          "subLayerIds": null,
+          "minScale": 0,
+          "maxScale": 0,
+          "type": "Feature Layer",
+          "geometryType": "esriGeometryPolygon",
+          "supportsDynamicLegends": true
+        }
+      ],
+      "tables": [],
+      "spatialReference": {
+        "wkid": 9377,
+        "latestWkid": 9377,
+        "xyTolerance": 0.001,
+        "zTolerance": 0.001,
+        "mTolerance": 0.001,
+        "falseX": -618700,
+        "falseY": -8436100,
+        "xyUnits": 10000,
+        "falseZ": -100000,
+        "zUnits": 10000,
+        "falseM": -100000,
+        "mUnits": 10000
+      },
+      "singleFusedMapCache": false,
+      "initialExtent": {
+        "xmin": 4791672.393222818,
+        "ymin": 2764597.7875699988,
+        "xmax": 4810174.0258964,
+        "ymax": 2779640.247468072,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "fullExtent": {
+        "xmin": 4792078.3941,
+        "ymin": 2765373.6522000004,
+        "xmax": 4807916.4988,
+        "ymax": 2779789.3136,
+        "spatialReference": {
+          "wkid": 9377,
+          "latestWkid": 9377,
+          "xyTolerance": 0.001,
+          "zTolerance": 0.001,
+          "mTolerance": 0.001,
+          "falseX": -618700,
+          "falseY": -8436100,
+          "xyUnits": 10000,
+          "falseZ": -100000,
+          "zUnits": 10000,
+          "falseM": -100000,
+          "mUnits": 10000
+        }
+      },
+      "datesInUnknownTimezone": false,
+      "minScale": 0,
+      "maxScale": 0,
+      "units": "esriMeters",
+      "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
+      "documentInfo": {
+        "Title": "Cantidad de transacciones anuales. Años 2019-2025.",
+        "Author": "",
+        "Comments": "Reúne información que permite analizar el comportamiento del mercado inmobiliario en el Distrito de Barranquilla. Muestra, de manera anual y a nivel de manzanas, las zonas donde se concentra la mayor cantidad de transacciones realizadas entre 2019 y 2025, facilitando la comprensión de las dinámicas y tendencias del mercado de la propiedad.",
+        "Subject": "Reúne información que refleja el comportamiento del mercado inmobiliario en Barranquilla. Muestra anualmente en dónde se realizan mayor cantidad de transacciones entre 2019 y 2025.",
+        "Category": "",
+        "Version": "3.2.0",
+        "AntialiasingMode": "Fast",
+        "TextAntialiasingMode": "Force",
+        "Keywords": "Transacciones,Compraventas,Inmuebles,Observatorio,Inmobiliario,Manzana,Barrio,Catastro"
+      },
+      "supportsQueryDomains": true,
+      "capabilities": "Query,Map,Data",
+      "supportedQueryFormats": "JSON, geoJSON, PBF",
+      "exportTilesAllowed": false,
+      "referenceScale": 0.0,
+      "datumTransformations": [
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": false,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        },
+        {
+          "geoTransforms": [
+            {
+              "wkid": 10149,
+              "latestWkid": 10149,
+              "transformForward": true,
+              "name": "MAGNA-SIRGAS_2018_to_WGS_1984_1"
+            }
+          ]
+        }
+      ],
+      "supportsDatumTransformation": true,
+      "floorAwareMapProperties": {
+        "defaultFloorFilterSettings": {
+          "isEnabled": false
+        }
+      },
+      "archivingInfo": {
+        "supportsHistoricMoment": false
+      },
+      "supportsClipping": true,
+      "supportsSpatialFilter": true,
+      "supportsTimeRelation": true,
+      "supportsQueryDataElements": true,
+      "mapUnits": {
+        "uwkid": 9001
+      },
+      "maxSelectionCount": 2000,
+      "maxRecordCount": 2000,
+      "maxImageHeight": 4096,
+      "maxImageWidth": 4096,
+      "supportedExtensions": "OGCFeatureServer, WFSServer, WMSServer",
+      "serviceItemId": "562d6c30716c4db19637e851006ea3c0"
+    }
+  }
+}

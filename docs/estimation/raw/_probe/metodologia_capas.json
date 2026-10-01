@@ -1,0 +1,1891 @@
+{
+  "valoresm2_area": {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer?f=json",
+    "http_status": 200,
+    "bytes": 4570,
+    "sha256": "c0b5dae0b16fdb38d386da792149e134e9403060e8d4587861b398dc06e99af8",
+    "description_plano": "Muestra el resultado del análisis de las compraventas inmobiliarias registradas por la Superintendencia de Notariado y Registro durante el periodo de enero a mayo de 2026. La información muestra, para cada localidad, los rangos de valores mínimos y máximos agrupados por áreas.",
+    "serviceDescription_plano": "Muestra el resultado del análisis de las compraventas inmobiliarias registradas por la Superintendencia de Notariado y Registro durante el periodo de enero a mayo de 2026. La información muestra, para cada localidad, los rangos de valores mínimos y máximos agrupados por áreas."
+  },
+  "valorsuelourbano": {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer?f=json",
+    "http_status": 200,
+    "bytes": 5631,
+    "sha256": "e49afe6cb67e7f005e7591a84a1d7ab1c29edc6dcf0b7c9d727868feb077b194",
+    "description_plano": "Representa el valor por metro cuadrado del suelo urbano para las vigencias entre 2022 a 2026 en el distrito de Barranquilla. Permite identificar el valor base por metro cuadrado asignado a cada zona o sector, facilitando el análisis de referencia económica, estudios de mercado, procesos de avalúo y consultas ciudadanas.",
+    "serviceDescription_plano": "Representa el valor por metro cuadrado del suelo urbano para la s vigencia s entre 202 2 a 2026 en el distrito de Barranquilla. Permite identificar el valor base por metro cuadrado asignado a cada zona o sector, facilitando el análisis de referencia económica, estudios de mercado, procesos de avalúo y consultas ciudadanas."
+  },
+  "valorcompraventas": {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer?f=json",
+    "http_status": 200,
+    "bytes": 5004,
+    "sha256": "78cc949f883b1f171569a07f8463a9fc904c8fd8eebdb4f22c16f826852765b6",
+    "description_plano": "Muestra el comportamiento del mercado inmobiliario en Barranquilla entre 2019 y 2025. Permite responder a la pregunta de en dónde ocurren las transacciones de mayor y menor valor en la ciudad.",
+    "serviceDescription_plano": "Muestra el comportamiento del mercado inmobiliario en Barranquilla entre 2019 y 2025 . Permite responder a la pregunta de en dónde ocurren las transacciones de mayor y menor valor en la ciudad."
+  },
+  "arrendamientos": {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer?f=json",
+    "http_status": 200,
+    "bytes": 4499,
+    "sha256": "52b2251a6a1cbcab60b504a44c0525c23b7a42a6d6601572065c17adad75db2c",
+    "description_plano": "Consolida información sobre los cánones de arrendamiento recopilados de diferentes fuentes para diferentes periodos en el Distrito de Barranquilla. Permite visualizar y analizar la distribución espacial de los valores de renta, facilitando la identificación de zonas con mayores y menores niveles de arriendo, apoyando el análisis del mercado inmobiliario y la toma de decisiones en materia de planificación y gestión territorial.",
+    "serviceDescription_plano": "Consolida información sobre los cánones de arrendamiento recopilados de diferentes fuentes para diferentes periodos en el Distrito de Barranquilla. Permite visualizar y analizar la distribución espacial de los valores de renta, facilitando la identificación de zonas con mayores y menores niveles de arriendo, apoyando el análisis del mercado inmobiliario y la toma de decisiones en materia de planificación y gestión territorial."
+  },
+  "avaluocatastral": {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/avaluocatastral/MapServer?f=json",
+    "http_status": 200,
+    "bytes": 3614,
+    "sha256": "81a1843dc96f393cd4c54698e722fb4b4a6ce5983982808e083b453e9398d39a",
+    "description_plano": "Muestra el avalúo catastral total clasificados según el destino económico predominante, permitiendo realizar análisis comparativos, fiscales.",
+    "serviceDescription_plano": "Muestra el avalúo catastral total clasificados según el destino económico predominante, permitiendo realizar análisis comparativos, fiscales."
+  },
+  "cantidadtransacciones": {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer?f=json",
+    "http_status": 200,
+    "bytes": 5818,
+    "sha256": "1dd39c1ec8e59e897b257bf89b5d173b400f1f036e46f72c4a964359949092c3",
+    "description_plano": "Reúne información que permite analizar el comportamiento del mercado inmobiliario en el Distrito de Barranquilla. Muestra, de manera anual y a nivel de manzanas, las zonas donde se concentra la mayor cantidad de transacciones realizadas entre 2019 y 2025, facilitando la comprensión de las dinámicas y tendencias del mercado de la propiedad.",
+    "serviceDescription_plano": "Reúne información que permite analizar el comportamiento del mercado inmobiliario en el Distrito de Barranquilla. Muestra, de manera anual y a nivel de manzanas, las zonas donde se concentra la mayor cantidad de transacciones realizadas entre 2019 y 2025, facilitando la comprensión de las dinámicas y tendencias del mercado de la propiedad."
+  },
+  "valoresm2_area_1_universo": {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&where=1%3D1",
+    "http_status": 200,
+    "bytes": 1261,
+    "sha256": "bfe9e53e78fa314a7300bca91e2ca48bd17e40a7f1dc4d964e0aa66c8f412c0e",
+    "features": [
+      {
+        "attributes": {
+          "objectid": 4,
+          "nombre": "Riomar",
+          "area_construida": "36-60",
+          "min_valor_m2": 4418604.65,
+          "max_valor_m2": 8461538.46
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5,
+          "nombre": "Norte - centro histórico",
+          "area_construida": "36-60",
+          "min_valor_m2": 2222222.22,
+          "max_valor_m2": 8190568.05
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3,
+          "nombre": "Suroccidente",
+          "area_construida": "36-60",
+          "min_valor_m2": 1730690.38,
+          "max_valor_m2": 3331311.82
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2,
+          "nombre": "Suroriente",
+          "area_construida": "36-60",
+          "min_valor_m2": 2870370.37,
+          "max_valor_m2": 2870370.37
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1,
+          "nombre": "Metropolitana",
+          "area_construida": "36-60",
+          "min_valor_m2": 2704987.32,
+          "max_valor_m2": 3338618.55
+        }
+      }
+    ]
+  },
+  "valorcompraventas_7_buffer300": {
+    "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer/7/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=300&units=esriSRUnit_Meter",
+    "http_status": 200,
+    "bytes": 34103,
+    "sha256": "3b686759e4acc01fdf9d278b43f0d688ae4b79a4a0da5c2d9c808ce669ad4430",
+    "features": [
+      {
+        "attributes": {
+          "objectid": 1004,
+          "valor_millones": 296.78,
+          "fecha_captura_oferta": 1751500800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1110,
+          "valor_millones": 340.8957,
+          "fecha_captura_oferta": 1743724800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1112,
+          "valor_millones": 348.722,
+          "fecha_captura_oferta": 1745539200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1213,
+          "valor_millones": 376.586051,
+          "fecha_captura_oferta": 1750982400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1541,
+          "valor_millones": 370.645332,
+          "fecha_captura_oferta": 1755129600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4256,
+          "valor_millones": 330.0,
+          "fecha_captura_oferta": 1741824000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4364,
+          "valor_millones": 289.107,
+          "fecha_captura_oferta": 1747180800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4366,
+          "valor_millones": 324.711018,
+          "fecha_captura_oferta": 1747699200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4369,
+          "valor_millones": 297.137,
+          "fecha_captura_oferta": 1747958400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4829,
+          "valor_millones": 311.0,
+          "fecha_captura_oferta": 1738108800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6054,
+          "valor_millones": 401.58565,
+          "fecha_captura_oferta": 1761177600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6057,
+          "valor_millones": 370.1648,
+          "fecha_captura_oferta": 1761177600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6462,
+          "valor_millones": 275.0,
+          "fecha_captura_oferta": 1763596800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6463,
+          "valor_millones": 300.372,
+          "fecha_captura_oferta": 1764115200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6469,
+          "valor_millones": 335.019,
+          "fecha_captura_oferta": 1764115200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 570,
+          "valor_millones": 452.0088,
+          "fecha_captura_oferta": 1749081600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 571,
+          "valor_millones": 386.6988,
+          "fecha_captura_oferta": 1750118400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 572,
+          "valor_millones": 386.048,
+          "fecha_captura_oferta": 1749081600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 749,
+          "valor_millones": 521.702,
+          "fecha_captura_oferta": 1764892800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1077,
+          "valor_millones": 459.3057,
+          "fecha_captura_oferta": 1753315200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1078,
+          "valor_millones": 358.0681,
+          "fecha_captura_oferta": 1753142400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1079,
+          "valor_millones": 410.375,
+          "fecha_captura_oferta": 1752105600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1447,
+          "valor_millones": 396.8111,
+          "fecha_captura_oferta": 1753315200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1449,
+          "valor_millones": 383.3751,
+          "fecha_captura_oferta": 1753315200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1450,
+          "valor_millones": 394.6284,
+          "fecha_captura_oferta": 1753315200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1853,
+          "valor_millones": 220.0,
+          "fecha_captura_oferta": 1744329600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1931,
+          "valor_millones": 265.0,
+          "fecha_captura_oferta": 1755734400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2027,
+          "valor_millones": 242.0,
+          "fecha_captura_oferta": 1753401600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2430,
+          "valor_millones": 240.0,
+          "fecha_captura_oferta": 1744329600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2590,
+          "valor_millones": 396.2007,
+          "fecha_captura_oferta": 1744329600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2591,
+          "valor_millones": 374.0521,
+          "fecha_captura_oferta": 1745366400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2593,
+          "valor_millones": 374.173345,
+          "fecha_captura_oferta": 1745193600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2594,
+          "valor_millones": 389.5328,
+          "fecha_captura_oferta": 1745539200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2641,
+          "valor_millones": 389.0068,
+          "fecha_captura_oferta": 1755561600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2643,
+          "valor_millones": 405.5814,
+          "fecha_captura_oferta": 1754611200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3105,
+          "valor_millones": 366.8511,
+          "fecha_captura_oferta": 1741305600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3108,
+          "valor_millones": 440.002,
+          "fecha_captura_oferta": 1742515200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3109,
+          "valor_millones": 415.711,
+          "fecha_captura_oferta": 1741651200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3496,
+          "valor_millones": 398.9411,
+          "fecha_captura_oferta": 1737072000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3894,
+          "valor_millones": 366.562,
+          "fecha_captura_oferta": 1741737600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3898,
+          "valor_millones": 447.8478,
+          "fecha_captura_oferta": 1742515200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3900,
+          "valor_millones": 394.20458,
+          "fecha_captura_oferta": 1741737600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4031,
+          "valor_millones": 470.4187,
+          "fecha_captura_oferta": 1765497600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5076,
+          "valor_millones": 390.1511,
+          "fecha_captura_oferta": 1747353600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5080,
+          "valor_millones": 449.6198,
+          "fecha_captura_oferta": 1746748800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5467,
+          "valor_millones": 398.0037,
+          "fecha_captura_oferta": 1747353600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6096,
+          "valor_millones": 474.306,
+          "fecha_captura_oferta": 1760572800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6412,
+          "valor_millones": 428.2078,
+          "fecha_captura_oferta": 1761264000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6417,
+          "valor_millones": 408.0394,
+          "fecha_captura_oferta": 1760659200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6514,
+          "valor_millones": 447.687,
+          "fecha_captura_oferta": 1763078400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6515,
+          "valor_millones": 568.617,
+          "fecha_captura_oferta": 1762214400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1080,
+          "valor_millones": 422.336356,
+          "fecha_captura_oferta": 1752710400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1181,
+          "valor_millones": 352.074,
+          "fecha_captura_oferta": 1744329600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1448,
+          "valor_millones": 394.861,
+          "fecha_captura_oferta": 1751414400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1596,
+          "valor_millones": 457.9847,
+          "fecha_captura_oferta": 1755561600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1603,
+          "valor_millones": 480.412,
+          "fecha_captura_oferta": 1749081600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2642,
+          "valor_millones": 500.78004,
+          "fecha_captura_oferta": 1755561600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3106,
+          "valor_millones": 373.7251,
+          "fecha_captura_oferta": 1741305600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3107,
+          "valor_millones": 462.3247,
+          "fecha_captura_oferta": 1741737600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3897,
+          "valor_millones": 422.4097,
+          "fecha_captura_oferta": 1743120000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4032,
+          "valor_millones": 456.445,
+          "fecha_captura_oferta": 1765929600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4033,
+          "valor_millones": 455.026,
+          "fecha_captura_oferta": 1765497600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4034,
+          "valor_millones": 487.571,
+          "fecha_captura_oferta": 1765756800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5078,
+          "valor_millones": 398.884,
+          "fecha_captura_oferta": 1747008000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5958,
+          "valor_millones": 503.417,
+          "fecha_captura_oferta": 1762473600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6097,
+          "valor_millones": 490.766689,
+          "fecha_captura_oferta": 1759363200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6098,
+          "valor_millones": 372.5418,
+          "fecha_captura_oferta": 1761177600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6099,
+          "valor_millones": 452.3508,
+          "fecha_captura_oferta": 1759276800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6516,
+          "valor_millones": 479.5677,
+          "fecha_captura_oferta": 1762473600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 628,
+          "valor_millones": 430.0,
+          "fecha_captura_oferta": 1766534400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 887,
+          "valor_millones": 447.965,
+          "fecha_captura_oferta": 1750982400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1893,
+          "valor_millones": 496.351063,
+          "fecha_captura_oferta": 1743724800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2017,
+          "valor_millones": 330.0,
+          "fecha_captura_oferta": 1752796800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2019,
+          "valor_millones": 310.0,
+          "fecha_captura_oferta": 1752796800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4724,
+          "valor_millones": 410.0,
+          "fecha_captura_oferta": 1764201600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4776,
+          "valor_millones": 420.0,
+          "fecha_captura_oferta": 1764288000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6763,
+          "valor_millones": 430.0,
+          "fecha_captura_oferta": 1760486400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6808,
+          "valor_millones": 380.797065,
+          "fecha_captura_oferta": 1761609600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2885,
+          "valor_millones": 400.007,
+          "fecha_captura_oferta": 1754352000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2968,
+          "valor_millones": 370.0,
+          "fecha_captura_oferta": 1765929600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4988,
+          "valor_millones": 371.63091,
+          "fecha_captura_oferta": 1741305600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4990,
+          "valor_millones": 360.0,
+          "fecha_captura_oferta": 1743033600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1006,
+          "valor_millones": 348.757,
+          "fecha_captura_oferta": 1752796800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1106,
+          "valor_millones": 339.5838,
+          "fecha_captura_oferta": 1745280000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1107,
+          "valor_millones": 330.046212,
+          "fecha_captura_oferta": 1744588800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1109,
+          "valor_millones": 281.2771,
+          "fecha_captura_oferta": 1743984000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1111,
+          "valor_millones": 333.465286,
+          "fecha_captura_oferta": 1744761600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1380,
+          "valor_millones": 289.1349,
+          "fecha_captura_oferta": 1752796800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1844,
+          "valor_millones": 290.0,
+          "fecha_captura_oferta": 1744243200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2023,
+          "valor_millones": 400.0,
+          "fecha_captura_oferta": 1752796800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3357,
+          "valor_millones": 263.447,
+          "fecha_captura_oferta": 1765411200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3841,
+          "valor_millones": 375.2217,
+          "fecha_captura_oferta": 1736985600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4363,
+          "valor_millones": 326.1478,
+          "fecha_captura_oferta": 1747180800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4365,
+          "valor_millones": 374.717,
+          "fecha_captura_oferta": 1747699200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4370,
+          "valor_millones": 356.699,
+          "fecha_captura_oferta": 1747180800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5281,
+          "valor_millones": 290.111,
+          "fecha_captura_oferta": 1742428800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6461,
+          "valor_millones": 398.3727,
+          "fecha_captura_oferta": 1762732800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 449,
+          "valor_millones": 280.0,
+          "fecha_captura_oferta": 1749168000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 642,
+          "valor_millones": 205.0,
+          "fecha_captura_oferta": 1765324800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 840,
+          "valor_millones": 328.0,
+          "fecha_captura_oferta": 1749772800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1005,
+          "valor_millones": 320.199,
+          "fecha_captura_oferta": 1753660800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1007,
+          "valor_millones": 357.2868,
+          "fecha_captura_oferta": 1752796800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1105,
+          "valor_millones": 300.0,
+          "fecha_captura_oferta": 1745884800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1108,
+          "valor_millones": 305.463445,
+          "fecha_captura_oferta": 1745366400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1212,
+          "valor_millones": 270.542,
+          "fecha_captura_oferta": 1749600000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1379,
+          "valor_millones": 250.0,
+          "fecha_captura_oferta": 1752796800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1539,
+          "valor_millones": 367.4137,
+          "fecha_captura_oferta": 1755734400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1543,
+          "valor_millones": 304.109613,
+          "fecha_captura_oferta": 1754352000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2459,
+          "valor_millones": 260.0,
+          "fecha_captura_oferta": 1745884800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2485,
+          "valor_millones": 350.0,
+          "fecha_captura_oferta": 1745971200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2889,
+          "valor_millones": 300.0,
+          "fecha_captura_oferta": 1756080000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3473,
+          "valor_millones": 250.0,
+          "fecha_captura_oferta": 1738108800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3612,
+          "valor_millones": 290.0,
+          "fecha_captura_oferta": 1765929600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3624,
+          "valor_millones": 340.0,
+          "fecha_captura_oferta": 1766448000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4361,
+          "valor_millones": 318.982497,
+          "fecha_captura_oferta": 1747958400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4362,
+          "valor_millones": 327.277,
+          "fecha_captura_oferta": 1746576000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4662,
+          "valor_millones": 270.0,
+          "fecha_captura_oferta": 1747008000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4741,
+          "valor_millones": 210.0,
+          "fecha_captura_oferta": 1763683200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4783,
+          "valor_millones": 250.0,
+          "fecha_captura_oferta": 1737936000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4814,
+          "valor_millones": 320.0,
+          "fecha_captura_oferta": 1738281600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4826,
+          "valor_millones": 310.0,
+          "fecha_captura_oferta": 1737072000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5280,
+          "valor_millones": 323.9918,
+          "fecha_captura_oferta": 1742860800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6056,
+          "valor_millones": 387.37705,
+          "fecha_captura_oferta": 1761177600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6467,
+          "valor_millones": 383.0987,
+          "fecha_captura_oferta": 1762905600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2044,
+          "valor_millones": 333.7307,
+          "fecha_captura_oferta": 1752105600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3688,
+          "valor_millones": 289.329,
+          "fecha_captura_oferta": 1765411200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4640,
+          "valor_millones": 290.0,
+          "fecha_captura_oferta": 1746576000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 498,
+          "valor_millones": 450.0,
+          "fecha_captura_oferta": 1750377600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 885,
+          "valor_millones": 477.430649,
+          "fecha_captura_oferta": 1750982400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1505,
+          "valor_millones": 501.867649,
+          "fecha_captura_oferta": 1755648000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1838,
+          "valor_millones": 467.701489,
+          "fecha_captura_oferta": 1744675200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2000,
+          "valor_millones": 437.396,
+          "fecha_captura_oferta": 1752796800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2003,
+          "valor_millones": 350.0,
+          "fecha_captura_oferta": 1752537600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3818,
+          "valor_millones": 508.239649,
+          "fecha_captura_oferta": 1737676800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4259,
+          "valor_millones": 419.574,
+          "fecha_captura_oferta": 1741651200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4857,
+          "valor_millones": 454.60314,
+          "fecha_captura_oferta": 1736985600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5030,
+          "valor_millones": 235.0,
+          "fecha_captura_oferta": 1742947200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6617,
+          "valor_millones": 265.0,
+          "fecha_captura_oferta": 1759968000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1865,
+          "valor_millones": 344.393,
+          "fecha_captura_oferta": 1745366400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1866,
+          "valor_millones": 311.8798,
+          "fecha_captura_oferta": 1743984000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1958,
+          "valor_millones": 265.0,
+          "fecha_captura_oferta": 1754265600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1980,
+          "valor_millones": 305.011,
+          "fecha_captura_oferta": 1755734400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2014,
+          "valor_millones": 265.0,
+          "fecha_captura_oferta": 1752019200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2021,
+          "valor_millones": 281.0379,
+          "fecha_captura_oferta": 1752796800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2045,
+          "valor_millones": 310.0,
+          "fecha_captura_oferta": 1752192000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4243,
+          "valor_millones": 260.0,
+          "fecha_captura_oferta": 1742169600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4335,
+          "valor_millones": 316.492833,
+          "fecha_captura_oferta": 1747958400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 4754,
+          "valor_millones": 290.0,
+          "fecha_captura_oferta": 1762214400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6780,
+          "valor_millones": 343.832,
+          "fecha_captura_oferta": 1759363200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6781,
+          "valor_millones": 250.0,
+          "fecha_captura_oferta": 1761177600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6782,
+          "valor_millones": 260.0,
+          "fecha_captura_oferta": 1759708800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6783,
+          "valor_millones": 285.0,
+          "fecha_captura_oferta": 1759363200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 567,
+          "valor_millones": 347.7051,
+          "fecha_captura_oferta": 1750809600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 568,
+          "valor_millones": 400.248,
+          "fecha_captura_oferta": 1749081600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 748,
+          "valor_millones": 385.0,
+          "fecha_captura_oferta": 1766102400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1445,
+          "valor_millones": 357.565,
+          "fecha_captura_oferta": 1753315200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 1446,
+          "valor_millones": 403.2247,
+          "fecha_captura_oferta": 1753315200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2589,
+          "valor_millones": 423.7878,
+          "fecha_captura_oferta": 1744329600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 2592,
+          "valor_millones": 411.2428,
+          "fecha_captura_oferta": 1744329600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3495,
+          "valor_millones": 383.6601,
+          "fecha_captura_oferta": 1736899200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3791,
+          "valor_millones": 265.0,
+          "fecha_captura_oferta": 1738281600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3892,
+          "valor_millones": 385.1101,
+          "fecha_captura_oferta": 1741305600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3893,
+          "valor_millones": 382.9474,
+          "fecha_captura_oferta": 1741737600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3895,
+          "valor_millones": 437.422,
+          "fecha_captura_oferta": 1741737600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 3896,
+          "valor_millones": 361.996,
+          "fecha_captura_oferta": 1741737600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5074,
+          "valor_millones": 337.5331,
+          "fecha_captura_oferta": 1747008000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5075,
+          "valor_millones": 396.773,
+          "fecha_captura_oferta": 1747008000000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5077,
+          "valor_millones": 492.4747,
+          "fecha_captura_oferta": 1746748800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5466,
+          "valor_millones": 400.0,
+          "fecha_captura_oferta": 1748217600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5939,
+          "valor_millones": 380.71947,
+          "fecha_captura_oferta": 1746748800000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5955,
+          "valor_millones": 407.535,
+          "fecha_captura_oferta": 1763078400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 5956,
+          "valor_millones": 388.301,
+          "fecha_captura_oferta": 1763078400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6100,
+          "valor_millones": 399.751549,
+          "fecha_captura_oferta": 1760486400000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6413,
+          "valor_millones": 398.1057,
+          "fecha_captura_oferta": 1760659200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6414,
+          "valor_millones": 437.8088,
+          "fecha_captura_oferta": 1760659200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6415,
+          "valor_millones": 475.633234,
+          "fecha_captura_oferta": 1759363200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6416,
+          "valor_millones": 420.6437,
+          "fecha_captura_oferta": 1760659200000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      },
+      {
+        "attributes": {
+          "objectid": 6760,
+          "valor_millones": 235.0,
+          "fecha_captura_oferta": 1761609600000,
+          "condicion_predio": "PH_Unidad_Predial",
+          "destinacion_economica": "Habitacional",
+          "anio": "2025"
+        }
+      }
+    ]
+  }
+}

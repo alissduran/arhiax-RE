@@ -1,0 +1,459 @@
+{
+  "raiz": {
+    "currentVersion": 11.5,
+    "folders": [
+      "ambiente",
+      "aplicaciones",
+      "catastro",
+      "cultura",
+      "economico",
+      "educacion",
+      "equidad",
+      "espaciopublico",
+      "impuesto",
+      "movilidad",
+      "observatorio",
+      "ordenamiento",
+      "participacionciudadana",
+      "proyectos",
+      "recreacionydeporte",
+      "riesgos",
+      "salud",
+      "seguridad",
+      "SERVICIOS",
+      "serviciospublicos",
+      "sitios",
+      "social",
+      "turismo",
+      "Utilities"
+    ],
+    "services": []
+  },
+  "servicios": {
+    "ambiente/ambiente/analisiscobertura": {
+      "name": "ambiente/analisiscobertura",
+      "type": "MapServer",
+      "carpeta": "ambiente"
+    },
+    "ambiente/ambiente/areasproteccion": {
+      "name": "ambiente/areasproteccion",
+      "type": "MapServer",
+      "carpeta": "ambiente"
+    },
+    "ambiente/ambiente/coberturaterrestre": {
+      "name": "ambiente/coberturaterrestre",
+      "type": "MapServer",
+      "carpeta": "ambiente"
+    },
+    "ambiente/ambiente/contaminacion": {
+      "name": "ambiente/contaminacion",
+      "type": "MapServer",
+      "carpeta": "ambiente"
+    },
+    "ambiente/ambiente/ecosistemas": {
+      "name": "ambiente/ecosistemas",
+      "type": "MapServer",
+      "carpeta": "ambiente"
+    },
+    "ambiente/ambiente/hidrografia": {
+      "name": "ambiente/hidrografia",
+      "type": "MapServer",
+      "carpeta": "ambiente"
+    },
+    "ambiente/ambiente/influencia": {
+      "name": "ambiente/influencia",
+      "type": "MapServer",
+      "carpeta": "ambiente"
+    },
+    "aplicaciones/aplicaciones/imprimir": {
+      "name": "aplicaciones/imprimir",
+      "type": "GPServer",
+      "carpeta": "aplicaciones"
+    },
+    "catastro/catastro/antiguedadpredios": {
+      "name": "catastro/antiguedadpredios",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/concentracionpredio": {
+      "name": "catastro/concentracionpredio",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/condicion": {
+      "name": "catastro/condicion",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/datosabiertos": {
+      "name": "catastro/datosabiertos",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/destinoseconomicos": {
+      "name": "catastro/destinoseconomicos",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/gestionpredial": {
+      "name": "catastro/gestionpredial",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/huellaurbana": {
+      "name": "catastro/huellaurbana",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/informalidad": {
+      "name": "catastro/informalidad",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/lotes": {
+      "name": "catastro/lotes",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/manzanas": {
+      "name": "catastro/manzanas",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/medianavalorcatastral": {
+      "name": "catastro/medianavalorcatastral",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/propiedadhorizontal": {
+      "name": "catastro/propiedadhorizontal",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/sectores": {
+      "name": "catastro/sectores",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "catastro/catastro/usoconstruccion": {
+      "name": "catastro/usoconstruccion",
+      "type": "MapServer",
+      "carpeta": "catastro"
+    },
+    "cultura/cultura/eventosculturales": {
+      "name": "cultura/eventosculturales",
+      "type": "MapServer",
+      "carpeta": "cultura"
+    },
+    "cultura/cultura/gestionpatrimoniocultural": {
+      "name": "cultura/gestionpatrimoniocultural",
+      "type": "MapServer",
+      "carpeta": "cultura"
+    },
+    "cultura/cultura/infraestructuracultural": {
+      "name": "cultura/infraestructuracultural",
+      "type": "MapServer",
+      "carpeta": "cultura"
+    },
+    "cultura/cultura/patrimoniohistoricoycultural": {
+      "name": "cultura/patrimoniohistoricoycultural",
+      "type": "MapServer",
+      "carpeta": "cultura"
+    },
+    "cultura/cultura/patrimonio": {
+      "name": "cultura/patrimonio",
+      "type": "MapServer",
+      "carpeta": "cultura"
+    },
+    "cultura/cultura/semanasanta": {
+      "name": "cultura/semanasanta",
+      "type": "MapServer",
+      "carpeta": "cultura"
+    },
+    "economico/economico/hoteles": {
+      "name": "economico/hoteles",
+      "type": "MapServer",
+      "carpeta": "economico"
+    },
+    "economico/economico/tejidoempresarial": {
+      "name": "economico/tejidoempresarial",
+      "type": "MapServer",
+      "carpeta": "economico"
+    },
+    "educacion/educacion/infraestructuraeducativa": {
+      "name": "educacion/infraestructuraeducativa",
+      "type": "MapServer",
+      "carpeta": "educacion"
+    },
+    "educacion/educacion/primerainfancia": {
+      "name": "educacion/primerainfancia",
+      "type": "MapServer",
+      "carpeta": "educacion"
+    },
+    "equidad/equidad/mujerespropietarias": {
+      "name": "equidad/mujerespropietarias",
+      "type": "MapServer",
+      "carpeta": "equidad"
+    },
+    "espaciopublico/espaciopublico/infraestructuraespaciopublico": {
+      "name": "espaciopublico/infraestructuraespaciopublico",
+      "type": "MapServer",
+      "carpeta": "espaciopublico"
+    },
+    "impuesto/impuesto/ipu": {
+      "name": "impuesto/ipu",
+      "type": "MapServer",
+      "carpeta": "impuesto"
+    },
+    "movilidad/movilidad/estacionservicio": {
+      "name": "movilidad/estacionservicio",
+      "type": "MapServer",
+      "carpeta": "movilidad"
+    },
+    "movilidad/movilidad/influenciavial": {
+      "name": "movilidad/influenciavial",
+      "type": "MapServer",
+      "carpeta": "movilidad"
+    },
+    "movilidad/movilidad/infraestructuradetransporte": {
+      "name": "movilidad/infraestructuradetransporte",
+      "type": "MapServer",
+      "carpeta": "movilidad"
+    },
+    "movilidad/movilidad/maritimoyportuario": {
+      "name": "movilidad/maritimoyportuario",
+      "type": "MapServer",
+      "carpeta": "movilidad"
+    },
+    "movilidad/movilidad/nodosdetransporte": {
+      "name": "movilidad/nodosdetransporte",
+      "type": "MapServer",
+      "carpeta": "movilidad"
+    },
+    "movilidad/movilidad/serviciostransporte": {
+      "name": "movilidad/serviciostransporte",
+      "type": "MapServer",
+      "carpeta": "movilidad"
+    },
+    "movilidad/movilidad/transito": {
+      "name": "movilidad/transito",
+      "type": "MapServer",
+      "carpeta": "movilidad"
+    },
+    "observatorio/observatorio/areaconstruida": {
+      "name": "observatorio/areaconstruida",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "observatorio/observatorio/arrendamientos": {
+      "name": "observatorio/arrendamientos",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "observatorio/observatorio/avaluocatastral": {
+      "name": "observatorio/avaluocatastral",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "observatorio/observatorio/cantidadtransacciones": {
+      "name": "observatorio/cantidadtransacciones",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "observatorio/observatorio/destinotransacciones": {
+      "name": "observatorio/destinotransacciones",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "observatorio/observatorio/dinamicatransacciones": {
+      "name": "observatorio/dinamicatransacciones",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "observatorio/observatorio/mecanismosfianaciacion": {
+      "name": "observatorio/mecanismosfianaciacion",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "observatorio/observatorio/valorcompraventas": {
+      "name": "observatorio/valorcompraventas",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "observatorio/observatorio/valoresm2_area": {
+      "name": "observatorio/valoresm2_area",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "observatorio/observatorio/valorsuelorural": {
+      "name": "observatorio/valorsuelorural",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "observatorio/observatorio/valorsuelourbano": {
+      "name": "observatorio/valorsuelourbano",
+      "type": "MapServer",
+      "carpeta": "observatorio"
+    },
+    "ordenamiento/ordenamiento/dinamicaconstruccion": {
+      "name": "ordenamiento/dinamicaconstruccion",
+      "type": "MapServer",
+      "carpeta": "ordenamiento"
+    },
+    "ordenamiento/ordenamiento/dinamicaurbana": {
+      "name": "ordenamiento/dinamicaurbana",
+      "type": "MapServer",
+      "carpeta": "ordenamiento"
+    },
+    "ordenamiento/ordenamiento/direcciones": {
+      "name": "ordenamiento/direcciones",
+      "type": "MapServer",
+      "carpeta": "ordenamiento"
+    },
+    "ordenamiento/ordenamiento/estratificacion": {
+      "name": "ordenamiento/estratificacion",
+      "type": "MapServer",
+      "carpeta": "ordenamiento"
+    },
+    "ordenamiento/ordenamiento/planeacion": {
+      "name": "ordenamiento/planeacion",
+      "type": "MapServer",
+      "carpeta": "ordenamiento"
+    },
+    "ordenamiento/ordenamiento/topografia": {
+      "name": "ordenamiento/topografia",
+      "type": "MapServer",
+      "carpeta": "ordenamiento"
+    },
+    "ordenamiento/ordenamiento/unidadesadministrativas": {
+      "name": "ordenamiento/unidadesadministrativas",
+      "type": "MapServer",
+      "carpeta": "ordenamiento"
+    },
+    "participacionciudadana/participacionciudadana/puestosvotacion": {
+      "name": "participacionciudadana/puestosvotacion",
+      "type": "MapServer",
+      "carpeta": "participacionciudadana"
+    },
+    "proyectos/proyectos/aotronivel": {
+      "name": "proyectos/aotronivel",
+      "type": "MapServer",
+      "carpeta": "proyectos"
+    },
+    "proyectos/proyectos/barriosalaobra": {
+      "name": "proyectos/barriosalaobra",
+      "type": "MapServer",
+      "carpeta": "proyectos"
+    },
+    "proyectos/proyectos/comedorescomunitarios": {
+      "name": "proyectos/comedorescomunitarios",
+      "type": "MapServer",
+      "carpeta": "proyectos"
+    },
+    "proyectos/proyectos/limpiaylinda": {
+      "name": "proyectos/limpiaylinda",
+      "type": "MapServer",
+      "carpeta": "proyectos"
+    },
+    "proyectos/proyectos/mejoramientovivienda": {
+      "name": "proyectos/mejoramientovivienda",
+      "type": "MapServer",
+      "carpeta": "proyectos"
+    },
+    "recreacionydeporte/recreacionydeporte/carreradelasrosas": {
+      "name": "recreacionydeporte/carreradelasrosas",
+      "type": "MapServer",
+      "carpeta": "recreacionydeporte"
+    },
+    "recreacionydeporte/recreacionydeporte/infraestructuradeporte": {
+      "name": "recreacionydeporte/infraestructuradeporte",
+      "type": "MapServer",
+      "carpeta": "recreacionydeporte"
+    },
+    "recreacionydeporte/recreacionydeporte/maratonbq": {
+      "name": "recreacionydeporte/maratonbq",
+      "type": "MapServer",
+      "carpeta": "recreacionydeporte"
+    },
+    "riesgos/riesgos/amenazas": {
+      "name": "riesgos/amenazas",
+      "type": "MapServer",
+      "carpeta": "riesgos"
+    },
+    "riesgos/riesgos/atencionemergencias": {
+      "name": "riesgos/atencionemergencias",
+      "type": "MapServer",
+      "carpeta": "riesgos"
+    },
+    "riesgos/riesgos/influencia": {
+      "name": "riesgos/influencia",
+      "type": "MapServer",
+      "carpeta": "riesgos"
+    },
+    "riesgos/riesgos/riesgos": {
+      "name": "riesgos/riesgos",
+      "type": "MapServer",
+      "carpeta": "riesgos"
+    },
+    "salud/salud/bienestaranimal": {
+      "name": "salud/bienestaranimal",
+      "type": "MapServer",
+      "carpeta": "salud"
+    },
+    "salud/salud/infraestructurasalud": {
+      "name": "salud/infraestructurasalud",
+      "type": "MapServer",
+      "carpeta": "salud"
+    },
+    "seguridad/seguridad/incidenciasciudadanas": {
+      "name": "seguridad/incidenciasciudadanas",
+      "type": "MapServer",
+      "carpeta": "seguridad"
+    },
+    "seguridad/seguridad/justiciayseguridad": {
+      "name": "seguridad/justiciayseguridad",
+      "type": "MapServer",
+      "carpeta": "seguridad"
+    },
+    "serviciospublicos/serviciospublicos/cobertura": {
+      "name": "serviciospublicos/cobertura",
+      "type": "MapServer",
+      "carpeta": "serviciospublicos"
+    },
+    "serviciospublicos/serviciospublicos/infraestructuraservicios": {
+      "name": "serviciospublicos/infraestructuraservicios",
+      "type": "MapServer",
+      "carpeta": "serviciospublicos"
+    },
+    "serviciospublicos/serviciospublicos/redes": {
+      "name": "serviciospublicos/redes",
+      "type": "MapServer",
+      "carpeta": "serviciospublicos"
+    },
+    "sitios/sitios/alcaldiadistrital": {
+      "name": "sitios/alcaldiadistrital",
+      "type": "MapServer",
+      "carpeta": "sitios"
+    },
+    "sitios/sitios/sitiosdeinteres": {
+      "name": "sitios/sitiosdeinteres",
+      "type": "MapServer",
+      "carpeta": "sitios"
+    },
+    "social/social/condicionesdevida": {
+      "name": "social/condicionesdevida",
+      "type": "MapServer",
+      "carpeta": "social"
+    },
+    "social/social/demografia": {
+      "name": "social/demografia",
+      "type": "MapServer",
+      "carpeta": "social"
+    },
+    "turismo/turismo/baqtour": {
+      "name": "turismo/baqtour",
+      "type": "MapServer",
+      "carpeta": "turismo"
+    }
+  }
+}

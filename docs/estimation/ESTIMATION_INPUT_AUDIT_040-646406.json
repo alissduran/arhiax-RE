@@ -1,0 +1,1924 @@
+{
+  "audit_version": "estimation-input-audit/1.0.0",
+  "fase": "DICTUS ESTIMATION ENGINE v1.0 · FASE 1 (auditoría + contratos)",
+  "folio": "040-646406",
+  "ciudad": "barranquilla",
+  "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+  "generado_por": "scripts/estimation_input_audit.py",
+  "golden_leido": {
+    "run_state": "docs\\forensics\\040-646406\\dictus_2b\\DICTUS_RUN_STATE_040-646406.json",
+    "run_state_sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+    "manifest": "docs\\forensics\\040-646406\\dictus_2b\\DICTUS_MANIFEST_040-646406.json",
+    "manifest_sha256": "3a2241baca4153f7c1ff934c0a1ccbb4955bed47315cedaca65691d3d3b8e7d1",
+    "master_hash": "6ff21c3055d1cde5bf11afc43b53caab3ac75ef66330853fe8f1879594fce474"
+  },
+  "vocabulario_source_class": [
+    "AUTHORITATIVE_OFFICIAL",
+    "AUTHORITATIVE_CONTRACTUAL",
+    "CONTEXTUAL_EXTERNAL",
+    "COMPUTED",
+    "NO_SOURCE",
+    "MANUAL_CONFIG",
+    "MODEL_PRIOR",
+    "NOT_DECLARED"
+  ],
+  "criterio_usable_for_estimation": "`usable_for_estimation` es true SÓLO si se cumplen las tres condiciones: (a) el valor existe hoy en el Golden real; (b) su `origin` es habilitante (EXTERNAL_SOURCE o COMPUTED_FROM_SOURCES con procedencia completa) tratándose de un descriptor del sujeto debidamente verificado; y (c) el input es un INSUMO DE ESTIMACIÓN (descriptor del sujeto o evidencia de mercado). Un dato de contexto de decisión (POT, riesgo, equipamiento, solar, título, screening) NO es insumo de estimación aunque esté verificado, y un parámetro MANUAL_CONFIG / MODEL_PRIOR / STATIC_REFERENCE NO sostiene cifra alguna: en ambos casos es false y el `reason` dice por qué.",
+  "nota_source_id": "`source_id` usa el identificador REAL del Source Registry cuando existe; cuando el Golden solo declara una etiqueta de fuente, se transcribe la etiqueta literal en vez de inventar un ID.",
+  "escalera_evidencia_mercado": {
+    "version": "market-evidence-ladder/1.0.0",
+    "niveles": [
+      "LEVEL_1_DIRECT_COMPARABLES",
+      "LEVEL_2_LOCAL_MARKET_OBSERVATIONS",
+      "LEVEL_3_AGGREGATED_MARKET_REFERENCES",
+      "LEVEL_4_CALIBRATED_MODEL_PRIOR",
+      "LEVEL_5_STATIC_REFERENCE"
+    ],
+    "regla_ausencia_level_1": "La ausencia de LEVEL 1 (comparables directos) NO implica CLOSED. No tener comparables directos degrada la CALIDAD de la evidencia y obliga a declarar el nivel realmente usado y su límite; no cierra por sí sola el juicio económico. Cerrar exige que falte TODO soporte utilizable (niveles 1 a 3) o que falte un atributo con required_for_estimation=True.",
+    "evaluacion": {
+      "version_escalera": "market-evidence-ladder/1.0.0",
+      "niveles_disponibles": [
+        "LEVEL_5_STATIC_REFERENCE"
+      ],
+      "niveles_con_soporte": [],
+      "mejor_nivel": "LEVEL_5_STATIC_REFERENCE",
+      "mejor_nivel_con_soporte": null,
+      "sin_level_1": true,
+      "implica_closed": false,
+      "closed_por_ausencia_total_de_soporte": true,
+      "regla_ausencia_level_1": "La ausencia de LEVEL 1 (comparables directos) NO implica CLOSED. No tener comparables directos degrada la CALIDAD de la evidencia y obliga a declarar el nivel realmente usado y su límite; no cierra por sí sola el juicio económico. Cerrar exige que falte TODO soporte utilizable (niveles 1 a 3) o que falte un atributo con required_for_estimation=True.",
+      "regla_level_5": "LEVEL 5 (referencia estática) NUNCA sostiene una cifra: se declara y se traza, pero no habilita la estimación. Lo mismo vale para MANUAL_CONFIG y LEGACY_MODEL_PRIOR.",
+      "calibracion": {
+        "calibrado": false,
+        "dataset_declarado": null
+      },
+      "lectura": "Sólo hay evidencia de nivel 5 (estática) o un prior no calibrado: se declara y NO sostiene ninguna cifra. La estimación no puede emitirse con soporte económico."
+    }
+  },
+  "conteo": {
+    "total_inputs": 46,
+    "usable_for_estimation_true": 12,
+    "usable_for_estimation_false": 34,
+    "niveles_con_evidencia_utilizable": [],
+    "observaciones_de_mercado_reales": 0
+  },
+  "blocking_por_proposito": {
+    "version": "blocking-por-proposito/1.0.0",
+    "propositos": [
+      "ESTIMACION",
+      "DECISION"
+    ],
+    "atributos": {
+      "identidad_unidad": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "Sin unidad identificada no se sabe QUÉ se estima."
+      },
+      "matricula": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Vincula el informe al folio correcto; no altera el valor de mercado de una unidad ya identificada."
+      },
+      "nupre": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Identificador nacional de trazabilidad: no cambia el valor."
+      },
+      "numero_predial": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Identificador catastral de trazabilidad: no cambia el valor."
+      },
+      "area_m2": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "El valor de una unidad es proporcional a su área privada."
+      },
+      "regimen_ph": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "PH vs lote cambia el universo de comparables admisibles."
+      },
+      "tipologia": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "Apartamento/PH/casa/bodega son mercados distintos."
+      },
+      "destino": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "Habitacional vs comercial usan tasas distintas."
+      },
+      "barrio": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "Es la unidad de segmentación de mercado."
+      },
+      "localidad": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Agrupa por encima del barrio: no segmenta el precio de una unidad."
+      },
+      "estrato": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "Estratifica la comparación y llavea la tasa de capitalización; no sustituye a una tasa de mercado."
+      },
+      "coordenadas": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "Sin geometría del sujeto no hay distancia ni matching espacial."
+      },
+      "sector_mercado": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "Es el pivote entre el sujeto y cualquier comparación."
+      },
+      "altura_maxima_pot": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "La altura máxima POT puede ser CRÍTICA para urbanismo (uso, edificabilidad, viabilidad de intervención) y NO es necesariamente necesaria para ESTIMAR el valor de mercado de una UNIDAD PH ya construida: la unidad ya existe, tiene área privada y régimen propios. Por eso required_for_decision=True y required_for_estimation=False. Mezclar ambos propósitos bloquearía la estimación por un dato que no la sostiene."
+      },
+      "tratamiento_pot": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Regula la intervención urbanística; una unidad PH terminada se estima con su propio mercado."
+      },
+      "edificabilidad_pot": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Sostiene potencial constructivo futuro, no el valor actual de la unidad."
+      },
+      "uso_pot": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Compatibilidad normativa del uso, no precio observado."
+      },
+      "referencias_historicas": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Sirven para explicar deriva y contradicciones del expediente."
+      },
+      "riesgo_amenaza": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Afecta la decisión de riesgo; el ajuste por riesgo es otra fase."
+      },
+      "titulo_gravamenes": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Afecta la negociabilidad, no el valor de mercado del inmueble."
+      },
+      "screening_contrapartes": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Riesgo de contraparte, no valor del activo."
+      },
+      "equipamiento_poi": {
+        "required_for_estimation": false,
+        "required_for_decision": false,
+        "motivo": "Enriquecimiento de contexto; no bloquea ninguno de los dos propósitos."
+      },
+      "release_gate": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "Gobierna la entrega del documento, no el cálculo."
+      },
+      "comparables_directos": {
+        "required_for_estimation": false,
+        "required_for_decision": true,
+        "motivo": "La ausencia de LEVEL 1 (comparables directos) NO implica CLOSED. No tener comparables directos degrada la CALIDAD de la evidencia y obliga a declarar el nivel realmente usado y su límite; no cierra por sí sola el juicio económico. Cerrar exige que falte TODO soporte utilizable (niveles 1 a 3) o que falte un atributo con required_for_estimation=True."
+      },
+      "soporte_de_mercado_utilizable": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "Es el único bloqueo de mercado que sí cierra la estimación: sin un nivel 1-3 con origen habilitante no hay cifra sostenible."
+      },
+      "tasa_mercado_m2": {
+        "required_for_estimation": true,
+        "required_for_decision": true,
+        "motivo": "Una tasa MANUAL_CONFIG/MODEL_PRIOR no es tasa: se exige origen habilitante."
+      },
+      "rentas_observadas": {
+        "required_for_estimation": false,
+        "required_for_decision": false,
+        "motivo": "Sólo se exige si el método elegido es capitalización de rentas."
+      },
+      "costos_construccion": {
+        "required_for_estimation": false,
+        "required_for_decision": false,
+        "motivo": "Sólo se exige si el método elegido es reposición física."
+      },
+      "model_priors": {
+        "required_for_estimation": false,
+        "required_for_decision": false,
+        "motivo": "Un prior del modelo no es un requisito: es un valor por defecto que no sostiene cifra."
+      }
+    },
+    "solo_estimacion": [],
+    "solo_decision": [
+      "altura_maxima_pot",
+      "comparables_directos",
+      "edificabilidad_pot",
+      "localidad",
+      "matricula",
+      "numero_predial",
+      "nupre",
+      "referencias_historicas",
+      "release_gate",
+      "riesgo_amenaza",
+      "screening_contrapartes",
+      "titulo_gravamenes",
+      "tratamiento_pot",
+      "uso_pot"
+    ],
+    "ambos": [
+      "area_m2",
+      "barrio",
+      "coordenadas",
+      "destino",
+      "estrato",
+      "identidad_unidad",
+      "regimen_ph",
+      "sector_mercado",
+      "soporte_de_mercado_utilizable",
+      "tasa_mercado_m2",
+      "tipologia"
+    ],
+    "ninguno": [
+      "costos_construccion",
+      "equipamiento_poi",
+      "model_priors",
+      "rentas_observadas"
+    ],
+    "declaracion_altura_pot": "La altura máxima POT puede ser CRÍTICA para urbanismo (uso, edificabilidad, viabilidad de intervención) y NO es necesariamente necesaria para ESTIMAR el valor de mercado de una UNIDAD PH ya construida: la unidad ya existe, tiene área privada y régimen propios. Por eso required_for_decision=True y required_for_estimation=False. Mezclar ambos propósitos bloquearía la estimación por un dato que no la sostiene.",
+    "regla_pot": "`SOURCE_UNAVAILABLE` en POT/altura/tratamiento/edificabilidad/uso NO bloquea por sí solo la ESTIMACIÓN económica: degrada el semáforo urbanístico de la DECISIÓN y se declara como tal. Para bloquear la estimación tiene que faltar un atributo con `required_for_estimation=True` (área, tipología, régimen, ubicación, o el propio soporte de mercado)."
+  },
+  "entradas": [
+    {
+      "attribute": "identidad_unidad",
+      "value": {
+        "folio": "040-646406",
+        "nupre": "AFT0005BOHA",
+        "codigo_catastral": "080010103000010040001908040002",
+        "torre": "8",
+        "apartamento": "430",
+        "unidad": "APARTAMENTO 430 TORRE 8",
+        "direccion_raw": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3",
+        "estado": "MATCH_BY_NUPRE",
+        "resolution_status": "EXACT",
+        "resolution_method": "nupre",
+        "resolution_confidence": "VERIFIED_UNIT_IDENTITY",
+        "identity_verified": true
+      },
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "SNR + geoportal municipal",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "evidencia": "EV-IDENTIDAD",
+        "evidencia_sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "Identidad de la unidad VERIFICADA (MATCH_BY_NUPRE, EXACT, VERIFIED_UNIT_IDENTITY): sin saber QUÉ se estima no hay estimación. Es insumo de estimación por ser descriptor del sujeto verificado."
+    },
+    {
+      "attribute": "matricula",
+      "value": "040-646406",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "SNR + geoportal municipal",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": "22-01-2024",
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "circulo_registral": "040 - BARRANQUILLA",
+        "certificado_adjuntado": true,
+        "fuente": "Certificado de tradición y libertad (SNR)",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_MANIFEST_040-646406.json",
+        "sha256": "3a2241baca4153f7c1ff934c0a1ccbb4955bed47315cedaca65691d3d3b8e7d1",
+        "master_hash": "6ff21c3055d1cde5bf11afc43b53caab3ac75ef66330853fe8f1879594fce474"
+      },
+      "usable_for_estimation": true,
+      "reason": "Matrícula 040-646406 verificada contra el CTL aportado. Es el vínculo al folio del sujeto estimado; sin ella la estimación no es atribuible."
+    },
+    {
+      "attribute": "nupre",
+      "value": "AFT0005BOHA",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "CATASTRO_BAQ_ADOPCION_ANEXO1",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "rol_en_la_corrida": "método de resolución de identidad (nupre)",
+        "resolution_status": "EXACT",
+        "evidencia": "EV-IDENTIDAD",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "NUPRE verificado: es la llave con la que se resuelve y se ata el sujeto. Insumo de estimación como identificador del sujeto."
+    },
+    {
+      "attribute": "numero_predial",
+      "value": "080010103000010040001908040002",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "feature_id": "6c663607-5509-401f-b57d-384d2beeeac1",
+        "layer": "105 · direccion",
+        "resolution_method": "DIRECCION_OFICIAL_LIGADA_POR_GUID",
+        "link_verificado": true,
+        "canonical_binding_status": "VERIFIED",
+        "evidencia": "EV-GEOMETRIA",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "Número predial verificado y ligado por GUID a la geometría oficial del predio: ata la estimación al predio correcto."
+    },
+    {
+      "attribute": "area_construida_m2",
+      "value": 58.75,
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "SNR + geoportal municipal",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "campo_golden": "urban_context.area",
+        "nota": "Área privada de la unidad: es el multiplicador del valor de mercado; el área catastral del TERRENO no es comparable",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "Área privada de la unidad declarada por la corrida con procedencia COMPUTED_FROM_SOURCES; es el multiplicador de cualquier valor por m²."
+    },
+    {
+      "attribute": "regimen_ph",
+      "value": "Propiedad Horizontal",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "SNR + geoportal municipal",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "status": "VERIFIED_REGISTRAL",
+        "campo_golden": "urban_context.condicion_juridica",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "Régimen Propiedad Horizontal VERIFIED_REGISTRAL: define el universo de comparables admisibles (unidad PH, no lote)."
+    },
+    {
+      "attribute": "tipologia",
+      "value": "Unidad En Propiedad Horizontal",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "SNR + geoportal municipal",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "status": "VERIFIED_REGISTRAL",
+        "market_context": {
+          "value": "Unidad -- Propiedad Horizontal (inferido del CTL)",
+          "status": "VERIFIED_REGISTRAL",
+          "source": "CTL + registro oficial"
+        },
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "Tipología «Unidad En Propiedad Horizontal» VERIFIED_REGISTRAL: segmenta el mercado del sujeto. Insumo de estimación."
+    },
+    {
+      "attribute": "destino_economico",
+      "value": "Habitacional",
+      "origin": null,
+      "source_id": null,
+      "source_class": "NOT_DECLARED",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "market_context.uso": {
+          "value": "Habitacional",
+          "status": "VERIFIED_OFFICIAL",
+          "source": null
+        },
+        "urban_context.destino_economico": "Habitacional",
+        "traza_aplicada_segun_urban_render_provenance": [
+          "altura_maxima",
+          "barrio",
+          "codigo_manzana",
+          "estrato",
+          "localidad",
+          "pieza_urbana",
+          "tipo_tratamiento",
+          "tratamiento"
+        ],
+        "contradiccion_detectada": "`market_context.uso.source` es null (ni el barrio, localidad, estrato, tratamiento, altura, pieza urbana ni manzana trazan el destino en urban_render_provenance), mientras la matriz de cobertura del pack marca 07-destino = SOURCE_UNAVAILABLE y 08-uso_pot = NOT_SUPPORTED",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": false,
+      "reason": "El Golden estampa el destino como VERIFIED_OFFICIAL pero NO declara fuente para él (`source: null`) y el pack declara ese dominio SOURCE_UNAVAILABLE / NOT_SUPPORTED. Por la regla vigente del producto («un contexto sin origen declarado NO habilita»), NO se admite como insumo de estimación: el valor existe y se transcribe, la procedencia no. Se reporta como contradicción abierta, no se rellena."
+    },
+    {
+      "attribute": "barrio",
+      "value": "Miramar",
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "official_urban_layer",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "status": "VERIFIED_OFFICIAL",
+        "source": "official POT / Alcaldía",
+        "modo": "LIVE_OFFICIAL",
+        "trazas": {
+          "fuente": "geoportal (DPA sector)",
+          "estado": "RESUELTO"
+        },
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "Barrio Miramar VERIFIED_OFFICIAL en vivo: es la unidad de segmentación de mercado del sujeto."
+    },
+    {
+      "attribute": "localidad",
+      "value": "02",
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "official_urban_layer",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "status": "OK",
+        "modo": "LIVE_OFFICIAL",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "Localidad 02 declarada por la capa urbana oficial en vivo: descriptor de estratificación del sujeto (agrupa por encima del barrio)."
+    },
+    {
+      "attribute": "estrato",
+      "value": "4",
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "official_urban_layer",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "status": "VERIFIED_OFFICIAL",
+        "source": "estratificación oficial",
+        "estrato_origen": null,
+        "estrato_trace": null,
+        "trazas": {
+          "fuente": "geoportal (tabla estratificacion)",
+          "estado": "RESUELTO"
+        },
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "Estrato 4 VERIFIED_OFFICIAL: estratifica la comparación y llavea la tasa de capitalización. Es insumo descriptivo; NO es una tasa de mercado."
+    },
+    {
+      "attribute": "coordenadas",
+      "value": {
+        "lat": 11.006055954316363,
+        "lon": -74.8375696549899
+      },
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "coordinate_source": "OFFICIAL_PREDIO",
+        "coordinate_source_verified": true,
+        "geocoder_source": null,
+        "coordinate_scope": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación",
+        "canonical_binding_fields": [
+          "nupre",
+          "numero_predial"
+        ],
+        "canonical_binding_scope": "NATIONAL_IDENTIFIERS",
+        "canonical_binding_status": "VERIFIED",
+        "direccion_origen": "Transversal 43 # 100-50 TO 8 AP 430",
+        "feature_id": "6c663607-5509-401f-b57d-384d2beeeac1",
+        "feature_id_kind": "cr_predio_guid",
+        "geometry_type": "Point",
+        "layer": "105 · direccion",
+        "link_verificado": true,
+        "numero_predial": "080010103000010040001908040002",
+        "nupre": "AFT0005BOHA",
+        "predio_globalid": "6c663607-5509-401f-b57d-384d2beeeac1",
+        "resolution_method": "DIRECCION_OFICIAL_LIGADA_POR_GUID",
+        "source_system": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "Coordenada de geometría OFICIAL DEL PREDIO verificada por GUID. Sin punto del sujeto no hay distancia a comparables, luego es insumo de estimación. Su alcance (lote/edificio, no la posición del apartamento) queda declarado."
+    },
+    {
+      "attribute": "sector_mercado",
+      "value": "Miramar",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "official_urban_layer",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": "2026-05-08",
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-05-08",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 145,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "145 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "input_barrio": "Miramar",
+        "match_type": "EXACT",
+        "fuentes_citadas": [
+          "official_urban_layer (barrio VERIFIED_OFFICIAL en vivo)",
+          "lonja_baq_metodologia.yaml::4ccd5832eacf"
+        ],
+        "methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+        "provenance": {
+          "methodology_file": "lonja_baq_metodologia.yaml",
+          "methodology_version": "0.1-codiseno",
+          "methodology_id": "lonja_baq_metodologia",
+          "methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+          "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+          "artifact_autor": "artefacto local de metodología (sin institución proveedora verificada)",
+          "sector": "Miramar",
+          "origin": "MANUAL_CONFIG",
+          "origin_gate": false
+        },
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": true,
+      "reason": "El SECTOR Miramar RESUELVE por EXACT: lookup determinista del barrio verificado (official_urban_layer) contra la tabla versionada — derivación COMPUTED_FROM_SOURCES de dos fuentes citadas, auditable y repetible. Es insumo de estimación como SELECTOR de comparables. AVISO: el mapeo es insumo; el VALOR por m² de ese sector NO lo es — ver `precio_m2_mercado_declarado` (origin=MANUAL_CONFIG, VENCIDA)."
+    },
+    {
+      "attribute": "observaciones_de_mercado_comparables",
+      "value": null,
+      "origin": null,
+      "source_id": null,
+      "source_class": "NO_SOURCE",
+      "queried_at": null,
+      "effective_date": null,
+      "freshness": {
+        "regla": "una ausencia no tiene frescura",
+        "estado": "SIN_DATO",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no existe ninguna observación que fechar"
+      },
+      "provenance": {
+        "evidencia_de_la_ausencia": [
+          "docs/source_pack/SOURCE_COVERAGE_MATRIX_040-646406.csv fila 18-mercado",
+          "docs/source_pack/SOURCE_ACQUISITION_MATRIX_040-646406.csv dominio mercado",
+          "docs/source_pack/barranquilla_sources_v1.json (34 fuentes: NINGUNA CORE_MARKET)"
+        ],
+        "pack_sha256": "2cefbe88ae20a1282854761f879ccba69efcde93601d4bc8ac101b0d5b4368b3"
+      },
+      "usable_for_estimation": false,
+      "reason": "CERO comparables. No hay ninguna fuente de mercado en el registro del pack (34 fuentes, ninguna con product_role=CORE_MARKET), ningún listing, ningún registro de transacción y ningún campo de precio/área por unidad en el Golden. No se inventa ninguno: el nivel 1 está VACÍO y el 2 también."
+    },
+    {
+      "attribute": "precios_m2_observados",
+      "value": null,
+      "origin": null,
+      "source_id": null,
+      "source_class": "NO_SOURCE",
+      "queried_at": null,
+      "effective_date": null,
+      "freshness": {
+        "regla": "una ausencia no tiene frescura",
+        "estado": "SIN_DATO",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no hay precio observado que fechar"
+      },
+      "provenance": {
+        "evidencia_de_la_ausencia": "docs/source_pack/SOURCE_COVERAGE_MATRIX_040-646406.csv fila 18-mercado",
+        "pack_sha256": "2cefbe88ae20a1282854761f879ccba69efcde93601d4bc8ac101b0d5b4368b3"
+      },
+      "usable_for_estimation": false,
+      "reason": "No existe un solo precio por m² OBSERVADO (pedido o de transacción) para Miramar ni para comparables. El único $/m² disponible es un parámetro declarado a mano."
+    },
+    {
+      "attribute": "transacciones_observadas",
+      "value": null,
+      "origin": null,
+      "source_id": null,
+      "source_class": "NO_SOURCE",
+      "queried_at": null,
+      "effective_date": null,
+      "freshness": {
+        "regla": "una ausencia no tiene frescura",
+        "estado": "SIN_DATO",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no hay transacción que fechar"
+      },
+      "provenance": {
+        "candidatos_descubiertos_no_cosechados": [
+          {
+            "servicio": "observatorio/avaluocatastral",
+            "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/avaluocatastral/MapServer?f=json",
+            "mapName": "Avalúo catastral",
+            "capas": [
+              "Avalúo catastral por destino económico. Vigencia 2026."
+            ],
+            "fetched_at_utc": "2026-09-29T15:36:46.783832+00:00",
+            "cache_files": [
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\e44f235d827bc8f3_-gis-rest-services-observatorio-avaluocatastral-MapServer.json",
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\f18c68162143db93_-gis-rest-services-observatorio-avaluocatastral-MapServer-1.json"
+            ],
+            "cache_sha256": [
+              "4a366475a25c69ff695fb56f0ec5c24465ff9700e362727c98ab6218c756bd93",
+              "d9e270f98b1a9e9ac040ee4f77ca03cf2fc31d7c5ead866da35088efa249bc79"
+            ]
+          },
+          {
+            "servicio": "observatorio/cantidadtransacciones",
+            "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/cantidadtransacciones/MapServer/8?f=json",
+            "mapName": "Cantidad de transacciones",
+            "capas": [
+              "Cantidad de transacciones por manzana. Año 2019.",
+              "Cantidad de transacciones por manzana. Año 2020.",
+              "Cantidad de transacciones por manzana. Año 2021.",
+              "Cantidad de transacciones por manzana. Año 2022.",
+              "Cantidad de transacciones por manzana. Año 2023.",
+              "Cantidad de transacciones por manzana. Año 2024.",
+              "Cantidad de transacciones por manzana. Año 2025.",
+              "Cantidad de transacciones por manzana. Año 2026."
+            ],
+            "fetched_at_utc": "2026-09-29T16:03:40.636424+00:00",
+            "cache_files": [
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\518b9ab1739dc691_-gis-rest-services-observatorio-cantidadtransacciones-MapServer-8.json",
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\ebd23a94a3f4bce3_-gis-rest-services-observatorio-cantidadtransacciones-MapServer.json"
+            ],
+            "cache_sha256": [
+              "64f366fe659c7222fe5932ebb7f32daa86a5274b0228e2a2c3991db691a6e4dc",
+              "ed3cb75d5bbca499e6e583342bafb4c78de990e2b38b37aed7764a0f20cad969"
+            ]
+          },
+          {
+            "servicio": "observatorio/destinotransacciones",
+            "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/destinotransacciones/MapServer?f=json",
+            "mapName": "Destino económico predominante por transacciones",
+            "capas": [
+              "Destinos predominantes de las transacciones. Año 2019.",
+              "Destinos predominantes de las transacciones. Año 2020.",
+              "Destinos predominantes de las transacciones. Año 2021.",
+              "Destinos predominantes de las transacciones. Año 2022.",
+              "Destinos predominantes de las transacciones. Año 2023.",
+              "Destinos predominantes de las transacciones. Año 2024.",
+              "Destinos predominantes de las transacciones. Año 2025."
+            ],
+            "fetched_at_utc": "2026-09-29T15:46:12.167019+00:00",
+            "cache_files": [
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\31a5b28cd5c92f01_-gis-rest-services-observatorio-destinotransacciones-MapServer.json",
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\7b923714d635ed78_-gis-rest-services-observatorio-destinotransacciones-MapServer-6.json",
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\8c17dcd814d3470d_-gis-rest-services-observatorio-destinotransacciones-MapServer-1.json"
+            ],
+            "cache_sha256": [
+              "519346c51aeb9914db2fca2dbb0935caa8d89c4ed674feb9854d9d798d326f0a",
+              "2c409dfea971ab7d2acf0bd563499edbd9cee542529773a7ea4a9650635c985a",
+              "c516f6a26730ece85b6a77306c2959a6ecbba39ff170935a993a64fbcf23da0c"
+            ]
+          },
+          {
+            "servicio": "observatorio/dinamicatransacciones",
+            "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/dinamicatransacciones/MapServer?f=json",
+            "mapName": "Dinámica de transacciones inmobiliarias",
+            "capas": [
+              "Densidad de compraventas. Año 2019.",
+              "Densidad de compraventas. Año 2020.",
+              "Densidad de compraventas. Año 2021.",
+              "Densidad de compraventas. Año 2022.",
+              "Densidad de compraventas. Año 2023.",
+              "Densidad de compraventas. Año 2024.",
+              "Densidad de compraventas. Año 2025."
+            ],
+            "fetched_at_utc": "2026-09-29T16:00:34.906635+00:00",
+            "cache_files": [
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\731d25f518b0cbff_-gis-rest-services-observatorio-dinamicatransacciones-MapServer.json"
+            ],
+            "cache_sha256": [
+              "49a43e3728552f2143b8f6fbc89239ae9f5f73a5364001d9d152730a22fdbf67"
+            ]
+          },
+          {
+            "servicio": "observatorio/valorcompraventas",
+            "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorcompraventas/MapServer/4?f=json",
+            "mapName": "Valor de las compraventas",
+            "capas": [
+              "Valor compraventas 2019",
+              "Valor compraventas 2020",
+              "Valor compraventas 2021",
+              "Valor compraventas 2022",
+              "Valor compraventas 2023",
+              "Valor compraventas 2024",
+              "Valor compraventas 2025"
+            ],
+            "fetched_at_utc": "2026-09-29T16:00:38.185837+00:00",
+            "cache_files": [
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\4b18a9e9a0f60b47_-gis-rest-services-observatorio-valorcompraventas-MapServer-4.json",
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\565d06afdb7eb82b_-gis-rest-services-observatorio-valorcompraventas-MapServer.json",
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\65919b75bedc6223_-gis-rest-services-observatorio-valorcompraventas-MapServer-6.json",
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\79ae93df6c5f3dff_-gis-rest-services-observatorio-valorcompraventas-MapServer-1.json"
+            ],
+            "cache_sha256": [
+              "bb1e0a3061df5a8bda6f078b24b12aad7b503e63fed49d54f5cd04f2f952bdf9",
+              "407daaa5266ce3bfb5d471feef65f4b672143ac1e20cbb1a4f77387bb670c37f",
+              "757f8f79221a9ace624eb75d56cb1749eda987a30f0186f6888e243e910b4ae1",
+              "ef93ada62bedfe4b82c87ce64e4a3a3eed6c5218cf037c07f7cde3ea5b369ee6"
+            ]
+          },
+          {
+            "servicio": "observatorio/valoresm2_area",
+            "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer?f=json",
+            "mapName": "Rango valores m² por área. Año 2026.",
+            "capas": [
+              "Rango valores por m². Área (36-60m²).",
+              "Rango valores por m². Área (61-175m²).",
+              "Rango valores por m². Área (176-290m²)",
+              "Rango valores por m². Área (>291m²)"
+            ],
+            "fetched_at_utc": "2026-09-29T15:49:32.905611+00:00",
+            "cache_files": [
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\840317bbeb5ffe92_-gis-rest-services-observatorio-valoresm2-area-MapServer.json",
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\ce31d425e66abd5d_-gis-rest-services-observatorio-valoresm2-area-MapServer-2.json"
+            ],
+            "cache_sha256": [
+              "4ed92a3e63797413e488b0061637c7bc94a10c2b7f6d781c949d14b93bb633c3",
+              "0800e423011ccb3413c31ecf0d586a8a4ef91d58170e084f56de9fe8f730a93c"
+            ]
+          },
+          {
+            "servicio": "observatorio/valorsuelourbano",
+            "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valorsuelourbano/MapServer?f=json",
+            "mapName": "Valor metro cuadrado del suelo urbano",
+            "capas": [
+              "Valor del metro cuadrado del suelo urbano. Vigencia 2022.",
+              "Valor del metro cuadrado del suelo urbano. Vigencia 2023.",
+              "Valor del metro cuadrado del suelo urbano. Vigencia 2024.",
+              "Valor del metro cuadrado del suelo urbano. Vigencia 2025.",
+              "Valor del metro cuadrado del suelo urbano. Vigencia 2026."
+            ],
+            "fetched_at_utc": "2026-09-29T15:54:15.402922+00:00",
+            "cache_files": [
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\b347cb3d00b28d7c_-gis-rest-services-observatorio-valorsuelourbano-MapServer.json"
+            ],
+            "cache_sha256": [
+              "d90cd67616ca3327f12e69710a626f0435ae7a29549f31a015d62c2677dcbef5"
+            ]
+          }
+        ],
+        "pack_sha256": "2cefbe88ae20a1282854761f879ccba69efcde93601d4bc8ac101b0d5b4368b3"
+      },
+      "usable_for_estimation": false,
+      "reason": "No se cosechó ninguna transacción. El geoportal municipal SÍ publica las capas «Valor de las compraventas» y «Cantidad de transacciones por manzana», descubiertas en el pack el 2026-09-29, pero NUNCA fueron consultadas: metadata sin datos. No se convierten en valor."
+    },
+    {
+      "attribute": "rentas_observadas",
+      "value": null,
+      "origin": null,
+      "source_id": null,
+      "source_class": "NO_SOURCE",
+      "queried_at": null,
+      "effective_date": null,
+      "freshness": {
+        "regla": "una ausencia no tiene frescura",
+        "estado": "SIN_DATO",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no hay renta que fechar"
+      },
+      "provenance": {
+        "candidatos_descubiertos_no_cosechados": [
+          {
+            "servicio": "observatorio/arrendamientos",
+            "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/arrendamientos/MapServer?f=json",
+            "mapName": "Arrendamientos",
+            "capas": [
+              "Valor arrendamientos. Año 2024."
+            ],
+            "fetched_at_utc": "2026-09-29T15:46:26.243546+00:00",
+            "cache_files": [
+              "docs\\source_pack\\raw\\golden\\_raw_cache\\7a64d901c76a4895_-gis-rest-services-observatorio-arrendamientos-MapServer.json"
+            ],
+            "cache_sha256": [
+              "ad26dc0c733bb6b50cc8fedfdf100654c0aa43936843ad3b482f869a9c3872c8"
+            ]
+          }
+        ],
+        "pack_sha256": "2cefbe88ae20a1282854761f879ccba69efcde93601d4bc8ac101b0d5b4368b3"
+      },
+      "usable_for_estimation": false,
+      "reason": "No hay ninguna renta observada. Existe un único coeficiente de canon codificado (0.00538) que es MODEL_PRIOR: no es una renta, es un supuesto."
+    },
+    {
+      "attribute": "costos_observados",
+      "value": null,
+      "origin": null,
+      "source_id": null,
+      "source_class": "NO_SOURCE",
+      "queried_at": null,
+      "effective_date": null,
+      "freshness": {
+        "regla": "una ausencia no tiene frescura",
+        "estado": "SIN_DATO",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no hay costo que fechar"
+      },
+      "provenance": {
+        "nota": "no hay tabla de costos de construcción citada en el pack",
+        "pack_sha256": "2cefbe88ae20a1282854761f879ccba69efcde93601d4bc8ac101b0d5b4368b3"
+      },
+      "usable_for_estimation": false,
+      "reason": "No hay ningún costo de construcción observado (ni cámara, ni lista de precios, ni índice citado). El costo base 2.800.000/m² es MODEL_PRIOR escrito en el código."
+    },
+    {
+      "attribute": "precio_m2_mercado_declarado",
+      "value": 6800000,
+      "origin": "MANUAL_CONFIG",
+      "source_id": "lonja_baq_metodologia",
+      "source_class": "MANUAL_CONFIG",
+      "queried_at": "2026-05-08",
+      "effective_date": "2026-05-08",
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-05-08",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 145,
+        "vigencia_hasta": "2026-08-31",
+        "estado": "VENCIDA",
+        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después): el valor NO se presenta como vigente"
+      },
+      "provenance": {
+        "fuente_declarada": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+        "source_date": "Q3-2026",
+        "origin_gate": false,
+        "origin_blockers": [
+          "origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)"
+        ],
+        "origin_etiqueta": "valor declarado a mano por la corrida (sin fuente externa automática)",
+        "documento": "docs/source_pack/lonja_market_baq_v1.json",
+        "sha256": "c45b1fefc6eac8e089a1bcc6381f1a56cd700f7bdd09e955346d6398b4de9586",
+        "table_version": "lonja-market-baq-table/1.0.0",
+        "methodology_file": "lonja_baq_metodologia.yaml",
+        "methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+        "derivation": {
+          "metodo": "api/market_context.py::market_methodology + resolve_market_sector",
+          "artefacto": "motor_tma_lonja_baq_v1.0/motor_tma_lonja_baq_v1.0/lonja_layer/lonja_baq_metodologia.yaml",
+          "ciudad_declarada_en": "docs/source_pack/barranquilla_sources_v1.json::ciudad",
+          "generado_por": "api/market_sources.py::derivar_tabla_desde_producto",
+          "regla": "Todo valor proviene del artefacto metodológico del producto; un atributo que el producto no declara queda AUSENTE."
+        }
+      },
+      "usable_for_estimation": false,
+      "reason": "Valor 6800000 declarado a mano (origin=MANUAL_CONFIG, origin_gate=false): NO es una fuente y NO sostiene cifra. Además su vigencia declarada termina el 2026-08-31 y la corrida es del 2026-09-30: VENCIDA. Dos causas independientes de NO uso."
+    },
+    {
+      "attribute": "banda_precio_m2_declarada",
+      "value": {
+        "rango_min_m2": 5500000,
+        "rango_max_m2": 8000000
+      },
+      "origin": "MANUAL_CONFIG",
+      "source_id": "lonja_baq_metodologia",
+      "source_class": "MANUAL_CONFIG",
+      "queried_at": "2026-05-08",
+      "effective_date": "2026-05-08",
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-05-08",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 145,
+        "vigencia_hasta": "2026-08-31",
+        "estado": "VENCIDA",
+        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después): el valor NO se presenta como vigente"
+      },
+      "provenance": {
+        "valor_declarado_en": "valor_suelo_por_sector.Miramar.rango_min_m2/rango_max_m2",
+        "documento": "docs/source_pack/lonja_market_baq_v1.json",
+        "sha256": "c45b1fefc6eac8e089a1bcc6381f1a56cd700f7bdd09e955346d6398b4de9586",
+        "table_version": "lonja-market-baq-table/1.0.0",
+        "methodology_file": "lonja_baq_metodologia.yaml",
+        "methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+        "derivation": {
+          "metodo": "api/market_context.py::market_methodology + resolve_market_sector",
+          "artefacto": "motor_tma_lonja_baq_v1.0/motor_tma_lonja_baq_v1.0/lonja_layer/lonja_baq_metodologia.yaml",
+          "ciudad_declarada_en": "docs/source_pack/barranquilla_sources_v1.json::ciudad",
+          "generado_por": "api/market_sources.py::derivar_tabla_desde_producto",
+          "regla": "Todo valor proviene del artefacto metodológico del producto; un atributo que el producto no declara queda AUSENTE."
+        }
+      },
+      "usable_for_estimation": false,
+      "reason": "La banda 5.500.000–8.000.000 es un parámetro declarado a mano (MANUAL_CONFIG), no una banda observada: no puede usarse para contrastar comparables sin convertir un supuesto en evidencia."
+    },
+    {
+      "attribute": "metodologia_mercado",
+      "value": {
+        "market_methodology_id": "lonja_baq_metodologia",
+        "market_methodology_version": "0.1-codiseno",
+        "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+        "market_methodology_file": "lonja_baq_metodologia.yaml",
+        "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+        "matcher_version": null
+      },
+      "origin": "MANUAL_CONFIG",
+      "source_id": "lonja_baq_metodologia",
+      "source_class": "NO_SOURCE",
+      "queried_at": "2026-09-29T21:44:17.418249+00:00",
+      "effective_date": "2026-05-08",
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-29T21:44:17.418249+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 1,
+        "vigencia_hasta": "2026-08-31",
+        "estado": "VENCIDA",
+        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después): el valor NO se presenta como vigente"
+      },
+      "provenance": {
+        "artefacto": "motor_tma_lonja_baq_v1.0/motor_tma_lonja_baq_v1.0/lonja_layer/lonja_baq_metodologia.yaml",
+        "methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+        "table_sha256": "c45b1fefc6eac8e089a1bcc6381f1a56cd700f7bdd09e955346d6398b4de9586"
+      },
+      "usable_for_estimation": false,
+      "reason": "El artefacto de metodología es local del producto («sin institución proveedora verificada») y su $/m² no lo suministra un proveedor externo: es MANUAL_CONFIG. Sirve para ESTRUCTURA (qué métodos y qué vigencia se declaran), no como soporte económico."
+    },
+    {
+      "attribute": "parametros_de_mercado_declarados",
+      "value": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+      "origin": "MANUAL_CONFIG",
+      "source_id": "lonja_baq_metodologia",
+      "source_class": "MANUAL_CONFIG",
+      "queried_at": "2026-09-29T21:44:17.418249+00:00",
+      "effective_date": "2026-05-08",
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-29T21:44:17.418249+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 1,
+        "vigencia_hasta": "2026-08-31",
+        "estado": "VENCIDA",
+        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después): el valor NO se presenta como vigente"
+      },
+      "provenance": {
+        "procedencia": {
+          "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+          "methodology_version": "0.1-codiseno",
+          "market_methodology_id": "lonja_baq_metodologia",
+          "market_methodology_version": "0.1-codiseno",
+          "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+          "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+          "origin": "MANUAL_CONFIG",
+          "origin_declarado": null,
+          "origin_gate": false
+        },
+        "market_rate": {
+          "value": 6800000,
+          "origin": "MANUAL_CONFIG",
+          "provenance": {
+            "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+            "methodology_version": "0.1-codiseno",
+            "market_methodology_id": "lonja_baq_metodologia",
+            "market_methodology_version": "0.1-codiseno",
+            "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+            "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+            "origin": "MANUAL_CONFIG",
+            "origin_declarado": null,
+            "origin_gate": false
+          },
+          "authorized_for_valuation": false
+        }
+      },
+      "usable_for_estimation": false,
+      "reason": "Procedencia INSUFICIENTE: la propia corrida declara origin_blockers «origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)». Queda trazado y NO se usa."
+    },
+    {
+      "attribute": "vigencia_de_la_tasa_declarada",
+      "value": {
+        "vigencia_desde": "2026-05-08",
+        "vigencia_hasta": "2026-08-31",
+        "source_date": "Q3-2026"
+      },
+      "origin": "MANUAL_CONFIG",
+      "source_id": "lonja_baq_metodologia",
+      "source_class": "MANUAL_CONFIG",
+      "queried_at": "2026-05-08",
+      "effective_date": "2026-05-08",
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-05-08",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 145,
+        "vigencia_hasta": "2026-08-31",
+        "estado": "VENCIDA",
+        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después): el valor NO se presenta como vigente"
+      },
+      "provenance": {
+        "regla": "api/market_sources.py::evaluar_vigencia — corrida > effective_to ⇒ VENCIDA",
+        "tabla_vigencia": {
+          "desde": "2026-05-08",
+          "hasta": "2026-08-31"
+        },
+        "documento": "docs/source_pack/lonja_market_baq_v1.json",
+        "sha256": "c45b1fefc6eac8e089a1bcc6381f1a56cd700f7bdd09e955346d6398b4de9586",
+        "table_version": "lonja-market-baq-table/1.0.0",
+        "methodology_file": "lonja_baq_metodologia.yaml",
+        "methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
+        "derivation": {
+          "metodo": "api/market_context.py::market_methodology + resolve_market_sector",
+          "artefacto": "motor_tma_lonja_baq_v1.0/motor_tma_lonja_baq_v1.0/lonja_layer/lonja_baq_metodologia.yaml",
+          "ciudad_declarada_en": "docs/source_pack/barranquilla_sources_v1.json::ciudad",
+          "generado_por": "api/market_sources.py::derivar_tabla_desde_producto",
+          "regla": "Todo valor proviene del artefacto metodológico del producto; un atributo que el producto no declara queda AUSENTE."
+        }
+      },
+      "usable_for_estimation": false,
+      "reason": "VENCIDA: la tabla declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después). Aun con origen habilitante, un dato vencido no se presenta como vigente."
+    },
+    {
+      "attribute": "cap_rate",
+      "value": null,
+      "origin": "MODEL_PRIOR",
+      "source_id": "api/dictamen_data.py::get_valuation",
+      "source_class": "MODEL_PRIOR",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "un default codificado no tiene vigencia de mercado",
+        "estado": "NO_APLICA",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no es un dato fechado: es una constante del código"
+      },
+      "provenance": {
+        "campo_golden": "valuation_state.origins.cap_rate",
+        "nota": "el run state declara el ORIGEN del cap rate (MODEL_PRIOR) pero NO publica su cifra: no se transcribe un número que el Golden no declara",
+        "campos_publicados_en_valuation_state": [
+          "authorization",
+          "banda_alta",
+          "banda_baja",
+          "consolidado",
+          "m1",
+          "m2",
+          "m3",
+          "match_type",
+          "metodologia_aplica",
+          "motivo_no_aplica",
+          "origin",
+          "origin_blockers",
+          "origin_etiqueta",
+          "origin_gate",
+          "origins",
+          "sector",
+          "value_m2"
+        ],
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": false,
+      "reason": "Tasa de capitalización con origin=MODEL_PRIOR y origin_gate=false. El Golden publica el ORIGEN y no la cifra: queda declarado como supuesto codificado del modelo, nunca como dato. No sostiene la M3."
+    },
+    {
+      "attribute": "factor_costos",
+      "value": null,
+      "origin": "MODEL_PRIOR",
+      "source_id": "api/dictamen_data.py::get_valuation",
+      "source_class": "MODEL_PRIOR",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "un default codificado no tiene vigencia de mercado",
+        "estado": "NO_APLICA",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no es un dato fechado: es una constante del código"
+      },
+      "provenance": {
+        "campo_golden": "valuation_state.origins.factor_costos",
+        "nota": "el run state declara el ORIGEN (MODEL_PRIOR) y no imprime la cifra: no se transcribe una cifra que el Golden no publica",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": false,
+      "reason": "Factor de actualización de costos con origin=MODEL_PRIOR: es un supuesto codificado, no un índice de costos citado. No sostiene la M2."
+    },
+    {
+      "attribute": "costo_construccion_base",
+      "value": null,
+      "origin": "MODEL_PRIOR",
+      "source_id": "api/dictamen_data.py::get_valuation",
+      "source_class": "MODEL_PRIOR",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "un default codificado no tiene vigencia de mercado",
+        "estado": "NO_APLICA",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no es un dato fechado: es una constante del código"
+      },
+      "provenance": {
+        "campo_golden": "valuation_state.origins.costo_construccion_base",
+        "nota": "el Golden declara el origen y no imprime la cifra",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": false,
+      "reason": "Costo base de construcción «multifamiliar típico» codificado (MODEL_PRIOR): no hay tabla de costos citada. No sostiene la M2."
+    },
+    {
+      "attribute": "canon_renta_pct",
+      "value": null,
+      "origin": "MODEL_PRIOR",
+      "source_id": "api/dictamen_data.py::get_valuation",
+      "source_class": "MODEL_PRIOR",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "un default codificado no tiene vigencia de mercado",
+        "estado": "NO_APLICA",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no es un dato fechado: es una constante del código"
+      },
+      "provenance": {
+        "campo_golden": "valuation_state.origins.canon_renta_pct",
+        "nota": "el Golden declara el origen y no imprime la cifra",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": false,
+      "reason": "Porcentaje de canon de renta implícito codificado (MODEL_PRIOR): es un supuesto, no una renta observada. No sostiene la M3."
+    },
+    {
+      "attribute": "participacion_lote",
+      "value": null,
+      "origin": "MODEL_PRIOR",
+      "source_id": "api/dictamen_data.py::get_valuation",
+      "source_class": "MODEL_PRIOR",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "un default codificado no tiene vigencia de mercado",
+        "estado": "NO_APLICA",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no es un dato fechado: es una constante del código"
+      },
+      "provenance": {
+        "campo_golden": "valuation_state.origins.participacion_lote",
+        "nota": "el Golden declara el origen y no imprime la cifra",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": false,
+      "reason": "Participación del lote en el valor (MODEL_PRIOR) codificada: no hay coeficiente de copropiedad citado del reglamento de PH."
+    },
+    {
+      "attribute": "fallback_por_estrato",
+      "value": null,
+      "origin": "MODEL_PRIOR",
+      "source_id": "api/dictamen_data.py::FALLBACK_ESTRATO_M2",
+      "source_class": "MODEL_PRIOR",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "un fallback codificado no tiene vigencia de mercado",
+        "estado": "NO_APLICA",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "no es un dato fechado: es una constante del código"
+      },
+      "provenance": {
+        "nota": "api/dictamen_data.py declara FALLBACK_ESTRATO_M2 como «HARDCODE DE RESPALDO POR ESTRATO — MODEL_PRIOR · FALLBACK LEGACY NO PRODUCTIVO» y exige allow_legacy_reference=True, que NO abre la compuerta de valoración",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": false,
+      "reason": "Fallback genérico por estrato (MODEL_PRIOR): la propia corrida declara que es un fallback NO productivo que no autoriza ninguna cifra."
+    },
+    {
+      "attribute": "model_priors_declarados",
+      "value": {
+        "market_value_m2": "MANUAL_CONFIG",
+        "cap_rate": "MODEL_PRIOR",
+        "factor_costos": "MODEL_PRIOR",
+        "costo_construccion_base": "MODEL_PRIOR",
+        "canon_renta_pct": "MODEL_PRIOR",
+        "participacion_lote": "MODEL_PRIOR"
+      },
+      "origin": "MODEL_PRIOR",
+      "source_id": "api/dictamen_data.py::get_valuation · valuation_state.origins",
+      "source_class": "MODEL_PRIOR",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "los priors no tienen vigencia de mercado",
+        "estado": "NO_APLICA",
+        "dias_desde_consulta": null,
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "vigencia_hasta": null,
+        "motivo": "son constantes del código, no datos fechados"
+      },
+      "provenance": {
+        "campo_golden": "valuation_state.origins",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": false,
+      "reason": "Los 5 parámetros distintos de la tasa están declarados con origin=MODEL_PRIOR y ninguno es una fuente externa. Se inventarían todos y se declaran TODOS como no utilizables."
+    },
+    {
+      "attribute": "referencias_historicas",
+      "value": {
+        "version": "dictus-historical-consistency/1.0.0",
+        "versiones_comparadas": 14,
+        "generado_en": "2026-09-24T21:40:49.033019+00:00",
+        "conflictos_abiertos": [
+          "altura_maxima",
+          "amenaza",
+          "coordenada",
+          "titulares",
+          "tratamiento",
+          "uso_pot"
+        ]
+      },
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "expediente histórico del mismo inmueble",
+      "source_class": "COMPUTED",
+      "queried_at": "2026-09-24T21:40:49.033019+00:00",
+      "effective_date": "2026-09-24T21:40:49.033019+00:00",
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-24T21:40:49.033019+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 6,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "6 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "evidencia": "EV-COHERENCIA",
+        "evidencia_sha256": "71b4f2e88a62ab0073ccfba218a8fce5389ea4d6a161ce3ead9aa0fcf0aa86a3",
+        "estado_evidencia": "CONFLICTO_ABIERTO",
+        "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+        "dictus_id": "DX-040-646406-20260930",
+        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+      },
+      "usable_for_estimation": false,
+      "reason": "El expediente tiene 6 conflictos abiertos (altura 8 vs 11, amenaza en 3 valores) marcados UNEXPLAINED_CONFLICT. Sirven para CAUTELA y trazabilidad; no son evidencia de mercado ni un precio observado."
+    },
+    {
+      "attribute": "uso_pot",
+      "value": null,
+      "origin": null,
+      "source_id": "POT_BAQ_POLIGONOS_USO",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "value": null,
+        "status": null,
+        "fuente": null,
+        "modo": null
+      },
+      "usable_for_estimation": false,
+      "reason": "El uso del POT gobierna la compatibilidad normativa de la decisión, no el precio de una unidad ya construida. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "tratamiento_pot",
+      "value": "Consolidacion",
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "POT_BAQ_TRATAMIENTO",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "value": "Consolidacion",
+        "status": "VERIFIED_OFFICIAL",
+        "fuente": "official_urban_layer",
+        "modo": "LIVE_OFFICIAL"
+      },
+      "usable_for_estimation": false,
+      "reason": "El tratamiento urbanístico condiciona la intervención futura, no el valor de mercado actual de la unidad. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "tipo_tratamiento",
+      "value": "Nivel 2",
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "POT_BAQ_TRATAMIENTO",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "valor_golden": "Nivel 2"
+      },
+      "usable_for_estimation": false,
+      "reason": "Subcategoría del tratamiento: contexto normativo. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "altura_maxima_pot",
+      "value": "11",
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "POT_BAQ_EDIFICABILIDAD",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "value": "11",
+        "status": null,
+        "fuente": null,
+        "modo": "PACKAGED_REFERENCE"
+      },
+      "usable_for_estimation": false,
+      "reason": "DECLARACIÓN EXPLÍCITA (§26): la altura POT puede ser CRÍTICA para urbanismo y NO es necesariamente necesaria para estimar una unidad PH YA CONSTRUIDA. Su ausencia NO bloquea la estimación (required_for_estimation=False, required_for_decision=True). Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "pieza_urbana",
+      "value": 6,
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "official_urban_layer",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "valor_golden": 6
+      },
+      "usable_for_estimation": false,
+      "reason": "Pieza urbana: descriptor territorial del contexto. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "amenaza_remocion_masa",
+      "value": "Media · polígono: intersecta el predio",
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "POT_BAQ_REMOCION_2024",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "value": "Media · polígono: intersecta el predio",
+        "status": null,
+        "modo": "PACKAGED_REFERENCE"
+      },
+      "usable_for_estimation": false,
+      "reason": "Riesgo: afecta la decisión de riesgo; el ajuste por riesgo es otra fase. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "areas_en_riesgo",
+      "value": "Medio · polígono: intersecta el predio",
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "POT_BAQ_RIESGO_2024",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "value": "Medio · polígono: intersecta el predio",
+        "status": null,
+        "modo": "PACKAGED_REFERENCE"
+      },
+      "usable_for_estimation": false,
+      "reason": "Zonificación de riesgo: contexto de decisión. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "inundacion",
+      "value": null,
+      "origin": null,
+      "source_id": "POT_BAQ_INUNDACION_2024",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "value": null,
+        "status": null,
+        "modo": "PACKAGED_REFERENCE"
+      },
+      "usable_for_estimation": false,
+      "reason": "Inundación: contexto de decisión; sin dato, se declara la ausencia. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "riesgo_no_mitigable",
+      "value": null,
+      "origin": null,
+      "source_id": "POT_BAQ_RIESGO_2024",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "value": null,
+        "status": null,
+        "modo": "PACKAGED_REFERENCE"
+      },
+      "usable_for_estimation": false,
+      "reason": "Riesgo no mitigable: contexto de decisión. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "equipamiento_contexto",
+      "value": {
+        "items": 12,
+        "queried_at": "2026-09-30T21:32:28.508974+00:00"
+      },
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "OSM_OVERPASS",
+      "source_class": "CONTEXTUAL_EXTERNAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "valor_golden": {
+          "items": 12,
+          "queried_at": "2026-09-30T21:32:28.508974+00:00"
+        }
+      },
+      "usable_for_estimation": false,
+      "reason": "Equipamiento cercano: enriquece el contexto, no mide precio. No es insumo de estimación. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "simulacion_solar",
+      "value": {
+        "momentos": [
+          {
+            "hora": "09:00 COT",
+            "azimut": "105.19°",
+            "elevacion": "45.82°",
+            "estado": "Sol Directo",
+            "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 4.8°."
+          },
+          {
+            "hora": "12:00 COT",
+            "azimut": "191.4°",
+            "elevacion": "76.25°",
+            "estado": "Sol Directo",
+            "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 81.4°."
+          },
+          {
+            "hora": "15:00 COT",
+            "azimut": "256.93°",
+            "elevacion": "40.66°",
+            "estado": "Sombra (Orientación)",
+            "descripcion": "El sol está detrás del inmueble (fachada opuesta)."
+          }
+        ],
+        "altura_dependiente": true,
+        "tipo": "SIMULACION_GEOMETRICA",
+        "advertencia": "La proyección corresponde a una simulación geométrica y no sustituye una inspección física.",
+        "habitacion_ambigua": {}
+      },
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "SOLAR_ENGINE+SHADOW_FACADE_EXPOSURE",
+      "source_class": "COMPUTED",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "valor_golden": {
+          "momentos": [
+            {
+              "hora": "09:00 COT",
+              "azimut": "105.19°",
+              "elevacion": "45.82°",
+              "estado": "Sol Directo",
+              "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 4.8°."
+            },
+            {
+              "hora": "12:00 COT",
+              "azimut": "191.4°",
+              "elevacion": "76.25°",
+              "estado": "Sol Directo",
+              "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 81.4°."
+            },
+            {
+              "hora": "15:00 COT",
+              "azimut": "256.93°",
+              "elevacion": "40.66°",
+              "estado": "Sombra (Orientación)",
+              "descripcion": "El sol está detrás del inmueble (fachada opuesta)."
+            }
+          ],
+          "altura_dependiente": true,
+          "tipo": "SIMULACION_GEOMETRICA",
+          "advertencia": "La proyección corresponde a una simulación geométrica y no sustituye una inspección física.",
+          "habitacion_ambigua": {}
+        }
+      },
+      "usable_for_estimation": false,
+      "reason": "Simulación geométrica de asoleamiento: declara su propia advertencia de que no sustituye inspección física. No es insumo de estimación. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "titulo_y_gravamenes",
+      "value": {
+        "titulares": "DURAN BACCA ALISSON CC# 1045718995X 50%",
+        "anotaciones_total": 8,
+        "gravamenes_vigentes": 2,
+        "hipoteca_vigente_acreedor": "BANCO DE BOGOTA S.A.NIT# 8600029644"
+      },
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "SNR",
+      "source_class": "AUTHORITATIVE_OFFICIAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "valor_golden": {
+          "titulares": "DURAN BACCA ALISSON CC# 1045718995X 50%",
+          "anotaciones_total": 8,
+          "gravamenes_vigentes": 2,
+          "hipoteca_vigente_acreedor": "BANCO DE BOGOTA S.A.NIT# 8600029644"
+        }
+      },
+      "usable_for_estimation": false,
+      "reason": "Gravámenes y titularidad: afectan negociabilidad y decisión, no el valor de mercado del inmueble. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "screening_contrapartes",
+      "value": {
+        "status": "SCREENING_COMPLETE",
+        "subjects_declared": 3,
+        "subjects_screened": 3
+      },
+      "origin": "EXTERNAL_SOURCE",
+      "source_id": "núcleo de screening sancionado",
+      "source_class": "AUTHORITATIVE_CONTRACTUAL",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "valor_golden": {
+          "status": "SCREENING_COMPLETE",
+          "subjects_declared": 3,
+          "subjects_screened": 3
+        }
+      },
+      "usable_for_estimation": false,
+      "reason": "Riesgo de contraparte: no es valor del activo. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "release_gate",
+      "value": {
+        "release_status": "VALID_FOR_RELEASE",
+        "policy": "MARK",
+        "environment": "test"
+      },
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "núcleo de screening sancionado",
+      "source_class": "COMPUTED",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "valor_golden": {
+          "release_status": "VALID_FOR_RELEASE",
+          "policy": "MARK",
+          "environment": "test"
+        }
+      },
+      "usable_for_estimation": false,
+      "reason": "Gobierna la entrega del documento, no el cálculo. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    },
+    {
+      "attribute": "master_hash",
+      "value": "6ff21c3055d1cde5bf11afc43b53caab3ac75ef66330853fe8f1879594fce474",
+      "origin": "COMPUTED_FROM_SOURCES",
+      "source_id": "dictus-manifiesto",
+      "source_class": "COMPUTED",
+      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "effective_date": null,
+      "freshness": {
+        "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
+        "queried_at": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "dias_desde_consulta": 0,
+        "vigencia_hasta": null,
+        "estado": "VIGENTE",
+        "motivo": "0 día(s) entre la consulta y la corrida"
+      },
+      "provenance": {
+        "valor_golden": "6ff21c3055d1cde5bf11afc43b53caab3ac75ef66330853fe8f1879594fce474"
+      },
+      "usable_for_estimation": false,
+      "reason": "Sello de integridad del expediente: sirve para verificar, no para estimar. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."
+    }
+  ]
+}

@@ -1,0 +1,547 @@
+{
+  "result_version": "dictus-estimation-engine/1.0.0",
+  "folio": "040-646406",
+  "state": "INDICATIVE_ESTIMATE",
+  "counters": {
+    "market_observations_count": 1,
+    "comparables_accepted": 0,
+    "comparables_rejected": 0,
+    "origins_used": [
+      "EXTERNAL_SOURCE"
+    ],
+    "manual_inputs_used": 0,
+    "legacy_priors_used": 0
+  },
+  "estimation_gate_state": "OPEN_WITH_LIMITATIONS",
+  "verified_market_evidence_gate_state": "CLOSED",
+  "status": "INDICATIVE_ESTIMATE",
+  "status_label": "ESTIMACIÓN INDICATIVA",
+  "range_low": 130000000,
+  "range_high": 490000000,
+  "central_estimate": 310000000,
+  "value_m2_central": 5206395.13,
+  "value_m2_low": 2183326.99,
+  "value_m2_high": 8229463.28,
+  "currency": "COP",
+  "methods_used": [
+    "M5_AGGREGATED_MARKET_REFERENCE"
+  ],
+  "methods_rejected": [
+    "M1_MARKET_COMPARISON",
+    "M2_REPLACEMENT_COST",
+    "M3_INCOME_CAPITALIZATION",
+    "M4_CALIBRATED_MODEL_PRIOR"
+  ],
+  "confidence_label": "INDICATIVE",
+  "confidence_label_impreso": "INDICATIVA",
+  "confidence_reasons": [
+    "evidencia INDICATIVE: la cifra es una ESTIMACIÓN INDICATIVA, no un valor verificado"
+  ],
+  "origin_composition": {
+    "composicion_version": "dictus-origin-composition/1.0.0",
+    "origin": "EXTERNAL_SOURCE",
+    "origin_etiqueta": "evidencia de una fuente externa citada",
+    "regla": "R6_CLASE_UNICA",
+    "regla_detalle": "un solo insumo económico declarado: la composición es su propia clase",
+    "clases_usadas": [
+      "EXTERNAL_SOURCE"
+    ],
+    "cuenta_por_clase": {
+      "EXTERNAL_SOURCE": 1
+    },
+    "clases_excluidas": [
+      "MANUAL_CONFIG",
+      "LEGACY_MODEL_PRIOR"
+    ],
+    "peso_resultante": "ALTO",
+    "sostiene_estimacion": true,
+    "abre_verified_gate": true,
+    "techo_calidad": "HIGH",
+    "excluidos": [
+      {
+        "clase": "MANUAL_CONFIG",
+        "motivo": "declarado y NO usado como insumo del cálculo",
+        "blockers": [
+          "valor declarado a mano por la corrida: NO sostiene una estimación productiva"
+        ]
+      },
+      {
+        "clase": "LEGACY_MODEL_PRIOR",
+        "motivo": "declarado y NO usado como insumo del cálculo",
+        "blockers": [
+          "prior legacy del modelo: se conserva por compatibilidad y NO sostiene ninguna estimación productiva"
+        ]
+      }
+    ],
+    "no_lavado": true,
+    "motivos": [
+      "un solo insumo económico declarado: la composición es su propia clase",
+      "insumos declarados que NO participan del cálculo: LEGACY_MODEL_PRIOR, MANUAL_CONFIG (no se cuentan como fuente)"
+    ],
+    "hash": "f741b5dc32c2c6b90f66149a02aa239ac48fae9397c629471c53f378c78ba173"
+  },
+  "origins": {
+    "composicion": "EXTERNAL_SOURCE",
+    "clases_usadas": [
+      "EXTERNAL_SOURCE"
+    ],
+    "clases_excluidas": [
+      "MANUAL_CONFIG",
+      "LEGACY_MODEL_PRIOR"
+    ],
+    "abre_verified_gate": true
+  },
+  "sources": [
+    {
+      "source_id": "BAQ_OBS_VALORESM2_AREA",
+      "proveedor": "Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
+      "referencia": "valoresm2_area/MapServer/1",
+      "fecha": "2026-09-30",
+      "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+      "es_fuente_no_acreditada": false
+    }
+  ],
+  "inputs": {
+    "area_m2": 58.75,
+    "tipologia": "UNIDAD EN PROPIEDAD HORIZONTAL",
+    "comparables_declarados": 0,
+    "comparables_usados": 0,
+    "comparables_rechazados": [],
+    "insumos_disponibles": [
+      "area",
+      "estadisticas_externas",
+      "identidad",
+      "modelo_legacy",
+      "tasa_manual",
+      "tipologia",
+      "ubicacion"
+    ]
+  },
+  "assumptions": [
+    "El rango es la salida primaria; la cifra central es secundaria y se redondea según el ancho del rango (§12).",
+    "La estimación se apoya en fuentes disponibles + análisis técnico automatizado + metodología versionada."
+  ],
+  "limitations": [
+    "La base es una referencia AGREGADA de nivel 3 (agrega por sector y banda de área): NO acredita la unidad. El rango es la salida y la referencia central es el centro de la banda declarada por la fuente, no un valor de mercado de esta unidad.",
+    "Insumo declarado y NO usado como fuente (MANUAL_CONFIG): no participa del cálculo ni lo sostiene.",
+    "Insumo declarado y NO usado como fuente (LEGACY_MODEL_PRIOR): no participa del cálculo ni lo sostiene.",
+    "La evidencia de mercado es antigua o no declara fecha: el rango se amplía por ello (no se ajusta con índices inventados).",
+    "La dispersión de los comparables es alta o no medible.",
+    "Pocos comparables utilizables (0): muestra insuficiente para un estándar verificado.",
+    "M1_MARKET_COMPARISON no entró: no se declararon comparables de mercado: M1 no aplica. Una TASA MANUAL (MANUAL_CONFIG) NO equivale a comparables y no puede sustituirlos.",
+    "M2_REPLACEMENT_COST no entró: no se declaró costo de reposición (costo unitario, edad/vida útil): M2 no aplica y NO se rellena con ningún valor",
+    "M3_INCOME_CAPITALIZATION no entró: no se declaró rental_reference: M3 no aplica (sin renta de referencia no hay capitalización posible)",
+    "M4_CALIBRATED_MODEL_PRIOR no entró: no se declaró modelo calibrado con contrato auditable (§16): el prior legacy del modelo NO se usa",
+    "M5_AGGREGATED_MARKET_REFERENCE · promedio aritmético de los extremos NO aplicado: la fuente declara un rango: el rango de la fuente es el rango. El punto medio se declara como DERIVACIÓN central de DICTUS (DERIVED_FROM_EXTERNAL_SOURCE: una sola fuente externa, declarada en `derivation`), no como valor de la fuente",
+    "M5_AGGREGATED_MARKET_REFERENCE · división por el área del sujeto NO aplicado: no se deriva un precio/m² de ningún valor total: la referencia ya está expresada por m²",
+    "M5_AGGREGATED_MARKET_REFERENCE · traslado de la unidad al sector NO aplicado: la referencia NO se corrige por posición, piso, vista ni estado: esa incertidumbre la absorbe el ANCHO del rango, no un ajuste inventado",
+    "M5_AGGREGATED_MARKET_REFERENCE · muestra (N) del análisis NO aplicado: la fuente NO publica el tamaño de muestra: no se rellena; la ausencia degrada la calidad y viaja en las limitaciones",
+    "Sin rental_reference: no se pudo contrastar por capitalización de rentas (§20).",
+    "Sin costo de reposición declarado: no se pudo contrastar por costo de sustitución (§19)."
+  ],
+  "range": {
+    "low": 130000000,
+    "high": 490000000,
+    "semi_ancho_relativo": 0.5806451612903226,
+    "porcentaje": "±58.06%",
+    "formula_version": "dictus-range-width/1.0.0",
+    "componentes": {
+      "base": 0.06,
+      "dispersion": 0.3,
+      "cv_usado": 0.25,
+      "comparables": 0.15,
+      "antiguedad": 0.0,
+      "trimestres_antiguedad": 0,
+      "matching": 0.0,
+      "tipo_evidencia": 0.0,
+      "error_modelo": 0.0,
+      "semi_ancho_calculado": 0.51,
+      "dispersion_origen": "M5_AGGREGATED_MARKET_REFERENCE"
+    },
+    "ajustes": [
+      "base metodológica versionada = ±6%",
+      "dispersión de comparables (cv = 0.5732 → 0.2500) → +30.00%",
+      "nº de comparables usados = 0 → +0.15",
+      "antigüedad de la evidencia = None meses (0 trimestres) → +0.00%",
+      "calidad del matching = 1.00 → +0.00%",
+      "tipo de evidencia (EXTERNAL_SOURCE) → +0.00%",
+      "error del modelo no declarado → +0.00"
+    ],
+    "motivos": [
+      "semi-ancho final = ±51.00% con calidad efectiva INDICATIVE",
+      "el rango oficial de la fuente es más ancho (±58.06%) que el ancho calculado (±51.00%): el rango NO se estrecha por debajo de la evidencia publicada"
+    ],
+    "clamp": "DENTRO_DE_BANDA",
+    "banda_calidad": [
+      0.15,
+      0.6
+    ],
+    "banda_oficial_usada": {
+      "min": 2222222.22,
+      "max": 8190568.05,
+      "unidad": "COP/m2",
+      "banda_area_m2": "36-60",
+      "area_sujeto_m2": 58.75,
+      "contiene_el_area_del_sujeto": true,
+      "reference_id": "BAQ_OBS_VALORESM2_AREA/L1/Norte - centro histórico",
+      "source_id": "BAQ_OBS_VALORESM2_AREA",
+      "evidence_hash": "6a307f15e38cba0c4edfd02111589fe6620a22169e3a3d95f28e7d7e2331060b",
+      "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+      "low_pesos": 130000000,
+      "high_pesos": 490000000,
+      "low_ancho": 150000000,
+      "high_ancho": 470000000,
+      "basis": "min/max LITERALES de la fuente aplicados al área del sujeto"
+    }
+  },
+  "central_reference_visibility": {
+    "policy_version": "dictus-central-reference-visibility/1.0.0",
+    "state": "DEEMPHASIZED",
+    "imprime_la_cifra": true,
+    "reasons": [
+      "la base es una referencia AGREGADA de nivel 3: agrega por sector y banda de área y NO acredita esta unidad",
+      "la fuente NO declara el tamaño de la muestra (N) del análisis: no se rellena",
+      "0 comparables usados: ninguna observación acredita la unidad",
+      "amplitud relativa ±58.06% ≥ ±30%",
+      "el extremo superior es 3.77× el inferior (≥ 2.5×)",
+      "nivel de evidencia INDICATIVE: la cifra no es un valor verificado"
+    ],
+    "reasons_short": [
+      "no acredita la unidad",
+      "sin muestra (N) declarada",
+      "sin comparables",
+      "rango muy ancho (±58.06%)",
+      "banda de 3.77× entre extremos",
+      "evidencia INDICATIVE"
+    ],
+    "reason_short": "no acredita la unidad · sin muestra (N) declarada",
+    "umbrales_aplicados": {
+      "semi_ancho_oculta": 0.6,
+      "semi_ancho_deenfatiza": 0.3,
+      "ratio_oculta": 4.0,
+      "ratio_deenfatiza": 2.5,
+      "comparables_minimo_visible": 3
+    },
+    "fundamento": "Política de producto VERSIONADA, declarada y auditable: la referencia central es secundaria respecto del rango (§12), así que su visibilidad depende de cuánto la sostiene la evidencia —amplitud relativa, salto entre extremos, `sample_size` declarado, nivel de calidad, nº de comparables y naturaleza AGREGADA de la referencia de nivel 3—. Los umbrales NO están calibrados empíricamente: son una decisión declarada, revisable en una versión posterior.",
+    "calibrada_empiricamente": false,
+    "entradas": {
+      "semi_ancho_relativo": 0.5806451612903226,
+      "ratio_high_low": 3.769230769230769,
+      "sample_size": null,
+      "sample_size_declarado": false,
+      "comparables_usados": 0,
+      "evidence_quality": "INDICATIVE",
+      "referencia_agregada_level_3": true,
+      "central": 310000000,
+      "low": 130000000,
+      "high": 490000000
+    }
+  },
+  "historical_estimate_reference": {
+    "old_run_id": null,
+    "old_value": null,
+    "old_range": null,
+    "old_method": null,
+    "old_inputs": null,
+    "old_origin": null,
+    "old_master_hash": null,
+    "usado_como_input": false,
+    "naturaleza": "REFERENCIA FORENSE: se conserva para comparar corridas y NO es input de la nueva estimación",
+    "campos_contrato": [
+      "old_run_id",
+      "old_value",
+      "old_range",
+      "old_method",
+      "old_inputs",
+      "old_origin",
+      "old_master_hash"
+    ]
+  },
+  "envelope": {
+    "naturaleza": "ESTIMACIÓN (análisis técnico automatizado), NO VALOR VERIFICADO NI AVALÚO",
+    "es_valor_verificado": false,
+    "etiqueta_prohibida_usada": false,
+    "vocabulario": {
+      "ESTIMATED": "ESTIMACIÓN DISPONIBLE",
+      "ESTIMATED_WITH_LIMITATIONS": "ESTIMACIÓN DISPONIBLE CON LIMITACIONES",
+      "INDICATIVE_ESTIMATE": "ESTIMACIÓN INDICATIVA",
+      "NOT_ESTIMABLE": "NO FUE POSIBLE ESTIMAR"
+    },
+    "metodologia": {
+      "metodologia_version": "dictus-metodologia-base/1.0.0",
+      "metodologia_base": "fuentes disponibles + análisis técnico automatizado + metodología versionada",
+      "componentes": [
+        "fuentes disponibles",
+        "análisis técnico automatizado",
+        "metodología versionada"
+      ],
+      "revision_profesional": "DICTUS + REVIEW (producto separado): la revisión profesional NO forma parte de la metodología base",
+      "naturaleza_de_la_salida": "ESTIMACIÓN (análisis técnico automatizado), NO VALOR VERIFICADO NI AVALÚO",
+      "no_es": [
+        "avalúo",
+        "valor verificado",
+        "dictamen firmado",
+        "peritaje"
+      ]
+    }
+  },
+  "hash_payload": "1dd745d4b6612142399c53718edba93f3708b36f259ef0ef9ecffca74d548529",
+  "generated_at": "2026-09-30T21:34:05.166625+00:00",
+  "contadores": {
+    "market_observations_count": 1,
+    "market_observations_detail": {
+      "comparables_declarados": 0,
+      "estadisticas_agregadas_externas": 1,
+      "cosecha_municipal_incorporada": true
+    },
+    "comparables_accepted": 0,
+    "comparables_rejected": 0,
+    "origins_used": [
+      "EXTERNAL_SOURCE"
+    ],
+    "origins_used_count": 1,
+    "origin_composition": "EXTERNAL_SOURCE",
+    "origin_rule": "R6_CLASE_UNICA",
+    "manual_inputs_used": 0,
+    "legacy_priors_used": 0,
+    "manual_inputs_declared": 1,
+    "legacy_priors_declared": 1,
+    "declarados_y_excluidos": [
+      "MANUAL_CONFIG",
+      "LEGACY_MODEL_PRIOR"
+    ]
+  },
+  "contratos_de_impresion": {
+    "p1": {
+      "etiqueta": "ESTIMACIÓN INDICATIVA",
+      "status": "INDICATIVE_ESTIMATE",
+      "confianza": "INDICATIVA",
+      "central": 310000000,
+      "rango": "Rango: $ 130.000.000 – $ 490.000.000",
+      "central_reference_visibility": {
+        "policy_version": "dictus-central-reference-visibility/1.0.0",
+        "state": "DEEMPHASIZED",
+        "imprime_la_cifra": true,
+        "reasons": [
+          "la base es una referencia AGREGADA de nivel 3: agrega por sector y banda de área y NO acredita esta unidad",
+          "la fuente NO declara el tamaño de la muestra (N) del análisis: no se rellena",
+          "0 comparables usados: ninguna observación acredita la unidad",
+          "amplitud relativa ±58.06% ≥ ±30%",
+          "el extremo superior es 3.77× el inferior (≥ 2.5×)",
+          "nivel de evidencia INDICATIVE: la cifra no es un valor verificado"
+        ],
+        "reasons_short": [
+          "no acredita la unidad",
+          "sin muestra (N) declarada",
+          "sin comparables",
+          "rango muy ancho (±58.06%)",
+          "banda de 3.77× entre extremos",
+          "evidencia INDICATIVE"
+        ],
+        "reason_short": "no acredita la unidad · sin muestra (N) declarada",
+        "umbrales_aplicados": {
+          "semi_ancho_oculta": 0.6,
+          "semi_ancho_deenfatiza": 0.3,
+          "ratio_oculta": 4.0,
+          "ratio_deenfatiza": 2.5,
+          "comparables_minimo_visible": 3
+        },
+        "fundamento": "Política de producto VERSIONADA, declarada y auditable: la referencia central es secundaria respecto del rango (§12), así que su visibilidad depende de cuánto la sostiene la evidencia —amplitud relativa, salto entre extremos, `sample_size` declarado, nivel de calidad, nº de comparables y naturaleza AGREGADA de la referencia de nivel 3—. Los umbrales NO están calibrados empíricamente: son una decisión declarada, revisable en una versión posterior.",
+        "calibrada_empiricamente": false,
+        "entradas": {
+          "semi_ancho_relativo": 0.5806451612903226,
+          "ratio_high_low": 3.769230769230769,
+          "sample_size": null,
+          "sample_size_declarado": false,
+          "comparables_usados": 0,
+          "evidence_quality": "INDICATIVE",
+          "referencia_agregada_level_3": true,
+          "central": 310000000,
+          "low": 130000000,
+          "high": 490000000
+        }
+      },
+      "linea_1": "ESTIMACIÓN ECONÓMICA DICTUS · ESTIMACIÓN INDICATIVA",
+      "linea_2": "Rango: $ 130.000.000 – $ 490.000.000 · Referencia central: $ 310.000.000 (secundaria · no acredita la unidad · sin muestra (N) declarada) · Confianza: INDICATIVA",
+      "linea_3": "Base: ESTIMACIÓN INDICATIVA · ESTIMATION_GATE = OPEN_WITH_LIMITATIONS · evidencia utilizada: Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
+      "sin_evidencia": "Sin evidencia de mercado suficiente"
+    },
+    "p6": {
+      "estado": "OPEN_WITH_LIMITATIONS",
+      "estimation_gate": "OPEN_WITH_LIMITATIONS",
+      "verified_market_evidence_gate": "CLOSED",
+      "razon_verified_market_evidence_gate": "no existen comparables individualizados suficientes para atribuir un valor verificado a esta unidad",
+      "central_reference_visibility": {
+        "policy_version": "dictus-central-reference-visibility/1.0.0",
+        "state": "DEEMPHASIZED",
+        "imprime_la_cifra": true,
+        "reasons": [
+          "la base es una referencia AGREGADA de nivel 3: agrega por sector y banda de área y NO acredita esta unidad",
+          "la fuente NO declara el tamaño de la muestra (N) del análisis: no se rellena",
+          "0 comparables usados: ninguna observación acredita la unidad",
+          "amplitud relativa ±58.06% ≥ ±30%",
+          "el extremo superior es 3.77× el inferior (≥ 2.5×)",
+          "nivel de evidencia INDICATIVE: la cifra no es un valor verificado"
+        ],
+        "reasons_short": [
+          "no acredita la unidad",
+          "sin muestra (N) declarada",
+          "sin comparables",
+          "rango muy ancho (±58.06%)",
+          "banda de 3.77× entre extremos",
+          "evidencia INDICATIVE"
+        ],
+        "reason_short": "no acredita la unidad · sin muestra (N) declarada",
+        "umbrales_aplicados": {
+          "semi_ancho_oculta": 0.6,
+          "semi_ancho_deenfatiza": 0.3,
+          "ratio_oculta": 4.0,
+          "ratio_deenfatiza": 2.5,
+          "comparables_minimo_visible": 3
+        },
+        "fundamento": "Política de producto VERSIONADA, declarada y auditable: la referencia central es secundaria respecto del rango (§12), así que su visibilidad depende de cuánto la sostiene la evidencia —amplitud relativa, salto entre extremos, `sample_size` declarado, nivel de calidad, nº de comparables y naturaleza AGREGADA de la referencia de nivel 3—. Los umbrales NO están calibrados empíricamente: son una decisión declarada, revisable en una versión posterior.",
+        "calibrada_empiricamente": false,
+        "entradas": {
+          "semi_ancho_relativo": 0.5806451612903226,
+          "ratio_high_low": 3.769230769230769,
+          "sample_size": null,
+          "sample_size_declarado": false,
+          "comparables_usados": 0,
+          "evidence_quality": "INDICATIVE",
+          "referencia_agregada_level_3": true,
+          "central": 310000000,
+          "low": 130000000,
+          "high": 490000000
+        }
+      },
+      "etiqueta": "ESTIMACIÓN INDICATIVA",
+      "habilitado": true,
+      "RANGO ESTIMADO": "$ 130.000.000 – $ 490.000.000",
+      "REFERENCIA CENTRAL": "$ 310.000.000 (secundaria)",
+      "VALOR/M²": "$ 5.206.395 / m²",
+      "CONFIANZA": "INDICATIVA",
+      "MÉTODO": "REFERENCIA AGREGADA OFICIAL POR LOCALIDAD Y BANDA DE ÁREA · BAQ_OBS_VALORESM2_AREA · banda oficial $ 2.222.222–$ 8.190.568 COP/m²",
+      "EVIDENCIA UTILIZADA": "1 fuente(s) con procedencia completa: Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
+      "LIMITACIONES": "La base es una referencia AGREGADA de nivel 3 (agrega por sector y banda de área): NO acredita la unidad. El rango es la salida y la referencia central es el centro de la banda declarada por la fuente, no un valor de mercado de esta unidad.",
+      "TRAZABILIDAD": "TRAZABILIDAD · Fuentes: BAQ_OBS_VALORESM2_AREA · Consulta: 2026-09-30 · motor dictus-estimation-engine/1.0.0",
+      "NOTA": "Estimación automatizada de DICTUS basada en la información disponible para esta corrida. No constituye un avalúo comercial certificado cuando este sea legal o contractualmente requerido.",
+      "METODOLOGIA": "Metodología: fuentes disponibles + análisis técnico automatizado + metodología versionada · detalle completo en el informe técnico.",
+      "cosecha": {
+        "estado": "INCORPORADA",
+        "ruta": "docs\\estimation\\MARKET_HARVEST_040-646406.json",
+        "version_cosecha": "market-harvest/1.0.0",
+        "proveedor": "Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
+        "portal": "https://miciudad.barranquilla.gov.co/gis/rest/services",
+        "referencias_nivel_3_incorporadas": 1,
+        "observaciones_rechazadas": [],
+        "capas_consultadas": [
+          "valoresm2_area",
+          "valorsuelourbano",
+          "valorcompraventas",
+          "arrendamientos",
+          "avaluocatastral",
+          "cantidadtransacciones"
+        ],
+        "referencias_incorporadas": [
+          {
+            "source_id": "BAQ_OBS_VALORESM2_AREA",
+            "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&inSR=4326&where=1%3D1",
+            "http": 200,
+            "bytes": 740,
+            "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+            "content_hash": "6a307f15e38cba0c4edfd02111589fe6620a22169e3a3d95f28e7d7e2331060b",
+            "payload_sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+            "acquisition_id": "ACQ-BAQ_OBS_VALORESM2_AREA-45be72ac6ef5",
+            "acquisition_hash": "45be72ac6ef543fa68edfd672764fba2356ffd8cff69a2a538d8a796c44001f3",
+            "consultado_en": "2026-09-30T16:41:08+00:00",
+            "server": "cloudflare",
+            "cf_ray": "a434ac712a2221b7-BOG",
+            "nivel": "LEVEL_3_AGGREGATED_MARKET_REFERENCES",
+            "rango_valor_m2": {
+              "min": 2222222.22,
+              "max": 8190568.05,
+              "unidad": "COP/m2"
+            },
+            "sample_size": null,
+            "campos_que_la_fuente_no_declara": [
+              "muestra"
+            ]
+          }
+        ],
+        "declaracion_de_la_cosecha": "Adquisición AUTOMÁTICA de evidencia de mercado real. Cero valores inventados: lo que la fuente declara viaja literal; lo que no declara viaja en null con el motivo. Ausencia ≠ NO_MATCH."
+      },
+      "status": "INDICATIVE_ESTIMATE",
+      "confianza": "INDICATIVA"
+    }
+  },
+  "evidencia_literal": {
+    "ESTIMATION_RESULT": {
+      "status": "INDICATIVE_ESTIMATE",
+      "range_low": 130000000,
+      "range_high": 490000000,
+      "central_estimate": 310000000,
+      "value_m2": 5206395.13,
+      "methods_used": [
+        "M5_AGGREGATED_MARKET_REFERENCE"
+      ],
+      "central_reference_visibility": {
+        "policy_version": "dictus-central-reference-visibility/1.0.0",
+        "state": "DEEMPHASIZED",
+        "imprime_la_cifra": true,
+        "reasons": [
+          "la base es una referencia AGREGADA de nivel 3: agrega por sector y banda de área y NO acredita esta unidad",
+          "la fuente NO declara el tamaño de la muestra (N) del análisis: no se rellena",
+          "0 comparables usados: ninguna observación acredita la unidad",
+          "amplitud relativa ±58.06% ≥ ±30%",
+          "el extremo superior es 3.77× el inferior (≥ 2.5×)",
+          "nivel de evidencia INDICATIVE: la cifra no es un valor verificado"
+        ],
+        "reasons_short": [
+          "no acredita la unidad",
+          "sin muestra (N) declarada",
+          "sin comparables",
+          "rango muy ancho (±58.06%)",
+          "banda de 3.77× entre extremos",
+          "evidencia INDICATIVE"
+        ],
+        "reason_short": "no acredita la unidad · sin muestra (N) declarada",
+        "umbrales_aplicados": {
+          "semi_ancho_oculta": 0.6,
+          "semi_ancho_deenfatiza": 0.3,
+          "ratio_oculta": 4.0,
+          "ratio_deenfatiza": 2.5,
+          "comparables_minimo_visible": 3
+        },
+        "fundamento": "Política de producto VERSIONADA, declarada y auditable: la referencia central es secundaria respecto del rango (§12), así que su visibilidad depende de cuánto la sostiene la evidencia —amplitud relativa, salto entre extremos, `sample_size` declarado, nivel de calidad, nº de comparables y naturaleza AGREGADA de la referencia de nivel 3—. Los umbrales NO están calibrados empíricamente: son una decisión declarada, revisable en una versión posterior.",
+        "calibrada_empiricamente": false,
+        "entradas": {
+          "semi_ancho_relativo": 0.5806451612903226,
+          "ratio_high_low": 3.769230769230769,
+          "sample_size": null,
+          "sample_size_declarado": false,
+          "comparables_usados": 0,
+          "evidence_quality": "INDICATIVE",
+          "referencia_agregada_level_3": true,
+          "central": 310000000,
+          "low": 130000000,
+          "high": 490000000
+        }
+      }
+    },
+    "contadores": {
+      "market_observations_count": 1,
+      "comparables_accepted": 0,
+      "comparables_rejected": 0,
+      "origins_used": [
+        "EXTERNAL_SOURCE"
+      ],
+      "manual_inputs_used": 0,
+      "legacy_priors_used": 0
+    },
+    "aceptacion": {
+      "manual inputs used = 0": true,
+      "legacy priors used = 0": true
+    }
+  },
+  "veredicto": "DICTUS ESTIMATION ENGINE — INDICATIVE ESTIMATE PRODUCED"
+}

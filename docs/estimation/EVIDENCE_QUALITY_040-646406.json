@@ -1,0 +1,89 @@
+{
+  "quality_version": "dictus-evidence-quality/1.0.0",
+  "folio": "040-646406",
+  "state": "INDICATIVE",
+  "counters": {
+    "market_observations_count": 1,
+    "comparables_accepted": 0,
+    "comparables_rejected": 0,
+    "origins_used": [
+      "EXTERNAL_SOURCE"
+    ],
+    "manual_inputs_used": 0,
+    "legacy_priors_used": 0
+  },
+  "level": "INDICATIVE",
+  "reasons": [
+    "identidad: HIGH — identidad resuelta con origen COMPUTED_FROM_SOURCES",
+    "ubicación: HIGH — ubicación con estado OFFICIAL_PREDIO",
+    "área: HIGH — área declarada con origen COMPUTED_FROM_SOURCES",
+    "tipología: HIGH — tipología verificada (VERIFIED_REGISTRAL)",
+    "evidencia de mercado: LOW — 0 comparables usados de 0 · 1 referencia(s) agregada(s) de nivel 3 (agregan por sector y banda de área: NO acreditan la unidad)",
+    "vigencia: ABSENT — sin fecha declarada en la evidencia de mercado",
+    "dispersión: ABSENT — dispersión no medible (menos de 2 comparables)",
+    "modelo: ABSENT",
+    "techo por dimensión: area=HIGH, composicion=HIGH, identidad=HIGH, mercado=INDICATIVE, tipologia=HIGH, ubicacion=HIGH"
+  ],
+  "dimensiones": {
+    "identity_quality": "HIGH",
+    "location_quality": "HIGH",
+    "market_evidence_quality": "LOW",
+    "market_freshness": {
+      "level": "ABSENT",
+      "meses": null,
+      "detalle": "sin fecha declarada en la evidencia de mercado"
+    },
+    "comparable_quality": "ABSENT",
+    "comparable_count": 0,
+    "typology_quality": "HIGH",
+    "area_quality": "HIGH",
+    "model_quality": "ABSENT",
+    "dispersion": {
+      "level": "ABSENT",
+      "cv": null,
+      "n": 0,
+      "detalle": "dispersión no medible (menos de 2 comparables)"
+    }
+  },
+  "comparable_count": 0,
+  "comparable_count_declarados": 0,
+  "sin_score_publico": true,
+  "confianza_derivada": "INDICATIVA",
+  "evidencia_literal": {
+    "EVIDENCE_QUALITY": {
+      "level": "INDICATIVE",
+      "reasons": [
+        "identidad: HIGH — identidad resuelta con origen COMPUTED_FROM_SOURCES",
+        "ubicación: HIGH — ubicación con estado OFFICIAL_PREDIO",
+        "área: HIGH — área declarada con origen COMPUTED_FROM_SOURCES",
+        "tipología: HIGH — tipología verificada (VERIFIED_REGISTRAL)",
+        "evidencia de mercado: LOW — 0 comparables usados de 0 · 1 referencia(s) agregada(s) de nivel 3 (agregan por sector y banda de área: NO acreditan la unidad)",
+        "vigencia: ABSENT — sin fecha declarada en la evidencia de mercado",
+        "dispersión: ABSENT — dispersión no medible (menos de 2 comparables)",
+        "modelo: ABSENT",
+        "techo por dimensión: area=HIGH, composicion=HIGH, identidad=HIGH, mercado=INDICATIVE, tipologia=HIGH, ubicacion=HIGH"
+      ],
+      "dimensiones": {
+        "identity_quality": "HIGH",
+        "location_quality": "HIGH",
+        "market_evidence_quality": "LOW",
+        "market_freshness": {
+          "level": "ABSENT",
+          "meses": null,
+          "detalle": "sin fecha declarada en la evidencia de mercado"
+        },
+        "comparable_quality": "ABSENT",
+        "comparable_count": 0,
+        "typology_quality": "HIGH",
+        "area_quality": "HIGH",
+        "model_quality": "ABSENT",
+        "dispersion": {
+          "level": "ABSENT",
+          "cv": null,
+          "n": 0,
+          "detalle": "dispersión no medible (menos de 2 comparables)"
+        }
+      }
+    }
+  }
+}

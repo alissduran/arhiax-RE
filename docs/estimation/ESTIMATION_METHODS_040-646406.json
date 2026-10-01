@@ -1,0 +1,800 @@
+{
+  "methods_version": "dictus-estimation-methods/1.0.0",
+  "folio": "040-646406",
+  "state": "OPEN_WITH_LIMITATIONS",
+  "counters": {
+    "market_observations_count": 1,
+    "comparables_accepted": 0,
+    "comparables_rejected": 0,
+    "origins_used": [
+      "EXTERNAL_SOURCE"
+    ],
+    "manual_inputs_used": 0,
+    "legacy_priors_used": 0
+  },
+  "verified_market_evidence_gate_state": "CLOSED",
+  "extension_de_contrato": {
+    "version_fase_2": "dictus-estimation-engine/1.0.0 (M1-M4)",
+    "extension": "M5_AGGREGATED_MARKET_REFERENCE · FASE 3",
+    "por_que": "el §5 de la escalera dice que LEVEL 3 SOSTIENE, el §29 exige OPEN_WITH_LIMITATIONS + INDICATIVE_ESTIMATE con «precio/m² sectorial válido» y el §41 prohíbe convertir la prudencia en «no intento estimar». Sin un método que consuma el nivel 3, el motor cerraba con evidencia oficial real: M5 cierra esa brecha y NO modifica ninguno de los métodos anteriores.",
+    "metodos_anteriores_intactos": [
+      "M1_MARKET_COMPARISON",
+      "M2_REPLACEMENT_COST",
+      "M3_INCOME_CAPITALIZATION",
+      "M4_CALIBRATED_MODEL_PRIOR"
+    ],
+    "regla_de_entrada": "sólo LEVEL_3_AGGREGATED_MARKET_REFERENCES con origin=EXTERNAL_SOURCE y procedencia completa (source_id, url, consultado_en, http=200, bytes, sha256, metodología declarada) y banda de área que CONTIENE el área del sujeto; si falta algo → INSUFFICIENT_DATA",
+    "rango": "`range_low`/`range_high` = min/max LITERALES de la fuente aplicados al área del sujeto, redondeados hacia FUERA; el ancho calculado nunca lo estrecha",
+    "central": "derivación EXPLÍCITA de DICTUS: punto medio del rango oficial, declarada en `derivation` (type=MIDPOINT_OF_SOURCE_RANGE, source_count=1) con origen DERIVED_FROM_EXTERNAL_SOURCE; la evidencia base es EXTERNAL_SOURCE. NUNCA COMPUTED_FROM_SOURCES, que exige ≥2 fuentes materiales",
+    "identidad_de_la_evidencia": "§7.1 · `content_hash` es ESTABLE (contenido publicado por la fuente, verificado contra los bytes crudos de raw/); `acquisition_id` y `acquisition_hash` identifican el EVENTO de adquisición y son volátiles por diseño"
+  },
+  "metodos": [
+    "M1_MARKET_COMPARISON",
+    "M2_REPLACEMENT_COST",
+    "M3_INCOME_CAPITALIZATION",
+    "M4_CALIBRATED_MODEL_PRIOR",
+    "M5_AGGREGATED_MARKET_REFERENCE"
+  ],
+  "nombres": {
+    "M1_MARKET_COMPARISON": "MARKET COMPARISON",
+    "M2_REPLACEMENT_COST": "REPLACEMENT COST",
+    "M3_INCOME_CAPITALIZATION": "INCOME CAPITALIZATION",
+    "M4_CALIBRATED_MODEL_PRIOR": "MODELO CALIBRADO (base indicativa, §16)",
+    "M5_AGGREGATED_MARKET_REFERENCE": "REFERENCIA AGREGADA OFICIAL POR LOCALIDAD Y BANDA DE ÁREA"
+  },
+  "methods_used_ids": [
+    "M5_AGGREGATED_MARKET_REFERENCE"
+  ],
+  "methods_rejected_ids": [
+    "M1_MARKET_COMPARISON",
+    "M2_REPLACEMENT_COST",
+    "M3_INCOME_CAPITALIZATION",
+    "M4_CALIBRATED_MODEL_PRIOR"
+  ],
+  "methods_used": [
+    {
+      "method_id": "M5_AGGREGATED_MARKET_REFERENCE",
+      "method_name": "REFERENCIA AGREGADA OFICIAL POR LOCALIDAD Y BANDA DE ÁREA",
+      "methods_version": "dictus-estimation-methods/1.0.0",
+      "inputs": {
+        "reference_id": "BAQ_OBS_VALORESM2_AREA/L1/Norte - centro histórico",
+        "evidence_hash": "6a307f15e38cba0c4edfd02111589fe6620a22169e3a3d95f28e7d7e2331060b",
+        "source_id": "BAQ_OBS_VALORESM2_AREA",
+        "nivel": "LEVEL_3_AGGREGATED_MARKET_REFERENCES",
+        "service_url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&inSR=4326&where=1%3D1",
+        "consultado_en": "2026-09-30T16:41:08+00:00",
+        "http": 200,
+        "bytes": 740,
+        "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+        "metodologia_declarada": "Muestra el resultado del análisis de las compraventas inmobiliarias registradas por la Superintendencia de Notariado y Registro durante el periodo de enero a mayo de 2026. La información muestra, para cada localidad, los rangos de valores mínimos y máximos agrupados por áreas.",
+        "sector_referencia": "Norte - centro histórico",
+        "banda_area_m2": "36-60",
+        "area_sujeto_m2": 58.75,
+        "rango_declarado": {
+          "min": 2222222.22,
+          "max": 8190568.05,
+          "unidad": "COP/m2",
+          "basis": "min/max literales de la fuente"
+        },
+        "sample_size": null,
+        "sample_size_declarado": false,
+        "vigencia_declarada": {
+          "effective_from": null,
+          "effective_to": null,
+          "basis": "descripción del servicio",
+          "precision": "TEXTO",
+          "texto_literal": "Muestra el resultado del análisis de las compraventas inmobiliarias registradas por la Superintendencia de Notariado y Registro durante el periodo de enero a mayo de 2026. La información muestra, para cada localidad, los rangos de valores mínimos y máximos agrupados por áreas."
+        },
+        "provenance": {
+          "source_id": "BAQ_OBS_VALORESM2_AREA",
+          "proveedor": "Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
+          "fecha": "2026-09-30",
+          "referencia": "valoresm2_area/MapServer/1",
+          "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+          "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&inSR=4326&where=1%3D1",
+          "consultado_en": "2026-09-30T16:41:08+00:00",
+          "http": 200,
+          "bytes": 740,
+          "server": "cloudflare",
+          "cf_ray": "a434ac712a2221b7-BOG"
+        },
+        "limitaciones_declaradas": [
+          "el rango agregado NO acredita una unidad: agrega por localidad y banda de área",
+          "la fuente NO declara el tamaño de la muestra (N) del análisis",
+          "la vigencia es a nivel de MES según el texto de la fuente, no una fecha exacta por registro"
+        ]
+      },
+      "result": {
+        "value_m2": 5206395.135,
+        "basis": "punto medio del rango oficial aplicado al área del sujeto: DERIVACIÓN EXPLÍCITA de DICTUS, no un valor de la fuente",
+        "referencia_central_del_rango": true,
+        "derivation": {
+          "type": "MIDPOINT_OF_SOURCE_RANGE",
+          "formula": "(min + max) / 2",
+          "source_count": 1,
+          "source_ids": [
+            "BAQ_OBS_VALORESM2_AREA"
+          ],
+          "origin": "DERIVED_FROM_EXTERNAL_SOURCE",
+          "declaracion": "punto medio del rango publicado por la fuente: DERIVACIÓN determinista de UNA sola fuente externa. NO es una composición de fuentes (COMPUTED_FROM_SOURCES exige ≥2) y NO es un valor publicado por la fuente.",
+          "no_es_composicion_de_fuentes": true,
+          "no_es_valor_de_la_fuente": true
+        },
+        "derivacion": "punto medio del rango oficial (min_valor_m2 + max_valor_m2) / 2",
+        "origen_tipo": "DERIVED_FROM_EXTERNAL_SOURCE",
+        "origen_evidencia_base": "EXTERNAL_SOURCE",
+        "fuentes": [
+          {
+            "proveedor": "Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
+            "fecha": "2026-09-30",
+            "referencia": "valoresm2_area/MapServer/1",
+            "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4"
+          }
+        ],
+        "no_es_valor_de_la_fuente": true,
+        "no_es_valor_de_la_unidad": true
+      },
+      "range": {
+        "low": 2222222.22,
+        "high": 8190568.05,
+        "basis": "banda oficial declarada por la fuente (min/max LITERALES)"
+      },
+      "result_range": {
+        "low": 2222222.22,
+        "high": 8190568.05,
+        "basis": "banda oficial declarada por la fuente (min/max LITERALES)"
+      },
+      "origin": "EXTERNAL_SOURCE",
+      "confidence": "BAJA",
+      "adjustments": [
+        {
+          "tipo": "promedio aritmético de los extremos",
+          "estado": "NO_APLICADO",
+          "detalle": "la fuente declara un rango: el rango de la fuente es el rango. El punto medio se declara como DERIVACIÓN central de DICTUS (DERIVED_FROM_EXTERNAL_SOURCE: una sola fuente externa, declarada en `derivation`), no como valor de la fuente"
+        },
+        {
+          "tipo": "división por el área del sujeto",
+          "estado": "NO_APLICADO",
+          "detalle": "no se deriva un precio/m² de ningún valor total: la referencia ya está expresada por m²"
+        },
+        {
+          "tipo": "traslado de la unidad al sector",
+          "estado": "NO_APLICADO",
+          "detalle": "la referencia NO se corrige por posición, piso, vista ni estado: esa incertidumbre la absorbe el ANCHO del rango, no un ajuste inventado"
+        },
+        {
+          "tipo": "muestra (N) del análisis",
+          "estado": "NO_APLICADO",
+          "detalle": "la fuente NO publica el tamaño de muestra: no se rellena; la ausencia degrada la calidad y viaja en las limitaciones"
+        }
+      ],
+      "status": "AVAILABLE",
+      "origin_basis": "la evidencia base es UNA referencia externa citada (LEVEL_3_AGGREGATED_MARKET_REFERENCES con procedencia HTTP completa); la transformación de DICTUS viaja en `derivation`",
+      "derivation": {
+        "type": "MIDPOINT_OF_SOURCE_RANGE",
+        "formula": "(min + max) / 2",
+        "source_count": 1,
+        "source_ids": [
+          "BAQ_OBS_VALORESM2_AREA"
+        ],
+        "origin": "DERIVED_FROM_EXTERNAL_SOURCE",
+        "declaracion": "punto medio del rango publicado por la fuente: DERIVACIÓN determinista de UNA sola fuente externa. NO es una composición de fuentes (COMPUTED_FROM_SOURCES exige ≥2) y NO es un valor publicado por la fuente.",
+        "no_es_composicion_de_fuentes": true,
+        "no_es_valor_de_la_fuente": true
+      },
+      "central_reference": {
+        "value_m2": 5206395.13,
+        "moneda": "COP",
+        "unidad": "COP/m2",
+        "derivation": {
+          "type": "MIDPOINT_OF_SOURCE_RANGE",
+          "formula": "(min + max) / 2",
+          "source_count": 1,
+          "source_ids": [
+            "BAQ_OBS_VALORESM2_AREA"
+          ],
+          "origin": "DERIVED_FROM_EXTERNAL_SOURCE",
+          "declaracion": "punto medio del rango publicado por la fuente: DERIVACIÓN determinista de UNA sola fuente externa. NO es una composición de fuentes (COMPUTED_FROM_SOURCES exige ≥2) y NO es un valor publicado por la fuente.",
+          "no_es_composicion_de_fuentes": true,
+          "no_es_valor_de_la_fuente": true
+        },
+        "visibility": "DEEMPHASIZED",
+        "visibility_policy": {
+          "policy_version": "dictus-central-reference-visibility/1.0.0",
+          "imprime_la_cifra": true,
+          "reasons": [
+            "la base es una referencia AGREGADA de nivel 3: agrega por sector y banda de área y NO acredita esta unidad",
+            "la fuente NO declara el tamaño de la muestra (N) del análisis: no se rellena",
+            "0 comparables usados: ninguna observación acredita la unidad",
+            "amplitud relativa ±58.06% ≥ ±30%",
+            "el extremo superior es 3.77× el inferior (≥ 2.5×)",
+            "nivel de evidencia INDICATIVE: la cifra no es un valor verificado"
+          ],
+          "umbrales_aplicados": {
+            "semi_ancho_oculta": 0.6,
+            "semi_ancho_deenfatiza": 0.3,
+            "ratio_oculta": 4.0,
+            "ratio_deenfatiza": 2.5,
+            "comparables_minimo_visible": 3
+          },
+          "calibrada_empiricamente": false
+        },
+        "no_es_valor_de_la_fuente": true,
+        "no_es_valor_de_la_unidad": true
+      },
+      "banda_oficial": {
+        "min": 2222222.22,
+        "max": 8190568.05,
+        "unidad": "COP/m2",
+        "banda_area_m2": "36-60",
+        "area_sujeto_m2": 58.75,
+        "contiene_el_area_del_sujeto": true,
+        "reference_id": "BAQ_OBS_VALORESM2_AREA/L1/Norte - centro histórico",
+        "source_id": "BAQ_OBS_VALORESM2_AREA",
+        "evidence_hash": "6a307f15e38cba0c4edfd02111589fe6620a22169e3a3d95f28e7d7e2331060b",
+        "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4"
+      },
+      "dispersion": {
+        "cv": 0.573174497444286,
+        "n": null,
+        "basis": "semi-amplitud relativa de la banda oficial: no se inventa una dispersión de comparables"
+      },
+      "dispersion_cv": 0.573174497444286,
+      "reason": "referencia agregada oficial BAQ_OBS_VALORESM2_AREA (Norte - centro histórico · banda 36-60 m² ⊇ 58.75 m²): rango oficial 2,222,222.22–8,190,568.05 COP/m². Agrega por localidad y banda de área: NO acredita la unidad y su techo es INDICATIVE",
+      "central_reference_visibility": {
+        "policy_version": "dictus-central-reference-visibility/1.0.0",
+        "state": "DEEMPHASIZED",
+        "imprime_la_cifra": true,
+        "reasons": [
+          "la base es una referencia AGREGADA de nivel 3: agrega por sector y banda de área y NO acredita esta unidad",
+          "la fuente NO declara el tamaño de la muestra (N) del análisis: no se rellena",
+          "0 comparables usados: ninguna observación acredita la unidad",
+          "amplitud relativa ±58.06% ≥ ±30%",
+          "el extremo superior es 3.77× el inferior (≥ 2.5×)",
+          "nivel de evidencia INDICATIVE: la cifra no es un valor verificado"
+        ],
+        "reasons_short": [
+          "no acredita la unidad",
+          "sin muestra (N) declarada",
+          "sin comparables",
+          "rango muy ancho (±58.06%)",
+          "banda de 3.77× entre extremos",
+          "evidencia INDICATIVE"
+        ],
+        "reason_short": "no acredita la unidad · sin muestra (N) declarada",
+        "umbrales_aplicados": {
+          "semi_ancho_oculta": 0.6,
+          "semi_ancho_deenfatiza": 0.3,
+          "ratio_oculta": 4.0,
+          "ratio_deenfatiza": 2.5,
+          "comparables_minimo_visible": 3
+        },
+        "fundamento": "Política de producto VERSIONADA, declarada y auditable: la referencia central es secundaria respecto del rango (§12), así que su visibilidad depende de cuánto la sostiene la evidencia —amplitud relativa, salto entre extremos, `sample_size` declarado, nivel de calidad, nº de comparables y naturaleza AGREGADA de la referencia de nivel 3—. Los umbrales NO están calibrados empíricamente: son una decisión declarada, revisable en una versión posterior.",
+        "calibrada_empiricamente": false,
+        "entradas": {
+          "semi_ancho_relativo": 0.5806451612903226,
+          "ratio_high_low": 3.769230769230769,
+          "sample_size": null,
+          "sample_size_declarado": false,
+          "comparables_usados": 0,
+          "evidence_quality": "INDICATIVE",
+          "referencia_agregada_level_3": true,
+          "central": 310000000,
+          "low": 130000000,
+          "high": 490000000
+        }
+      }
+    }
+  ],
+  "methods_rejected": [
+    {
+      "method_id": "M1_MARKET_COMPARISON",
+      "method_name": "MARKET COMPARISON",
+      "methods_version": "dictus-estimation-methods/1.0.0",
+      "inputs": {},
+      "result": null,
+      "range": null,
+      "result_range": null,
+      "origin": null,
+      "confidence": null,
+      "comparables_used": [],
+      "comparables_rejected": [],
+      "median_price_m2": null,
+      "weighted_price_m2": null,
+      "dispersion": null,
+      "adjustments": [],
+      "status": "NOT_APPLICABLE",
+      "reason": "no se declararon comparables de mercado: M1 no aplica. Una TASA MANUAL (MANUAL_CONFIG) NO equivale a comparables y no puede sustituirlos."
+    },
+    {
+      "method_id": "M2_REPLACEMENT_COST",
+      "method_name": "REPLACEMENT COST",
+      "methods_version": "dictus-estimation-methods/1.0.0",
+      "inputs": {},
+      "result": null,
+      "range": null,
+      "result_range": null,
+      "origin": null,
+      "confidence": null,
+      "adjustments": [],
+      "status": "NOT_APPLICABLE",
+      "reason": "no se declaró costo de reposición (costo unitario, edad/vida útil): M2 no aplica y NO se rellena con ningún valor"
+    },
+    {
+      "method_id": "M3_INCOME_CAPITALIZATION",
+      "method_name": "INCOME CAPITALIZATION",
+      "methods_version": "dictus-estimation-methods/1.0.0",
+      "inputs": {},
+      "result": null,
+      "range": null,
+      "result_range": null,
+      "origin": null,
+      "confidence": null,
+      "adjustments": [],
+      "status": "NOT_APPLICABLE",
+      "reason": "no se declaró rental_reference: M3 no aplica (sin renta de referencia no hay capitalización posible)"
+    },
+    {
+      "method_id": "M4_CALIBRATED_MODEL_PRIOR",
+      "method_name": "MODELO CALIBRADO (base indicativa, §16)",
+      "methods_version": "dictus-estimation-methods/1.0.0",
+      "inputs": {},
+      "result": null,
+      "range": null,
+      "result_range": null,
+      "origin": null,
+      "confidence": null,
+      "adjustments": [],
+      "status": "NOT_APPLICABLE",
+      "reason": "no se declaró modelo calibrado con contrato auditable (§16): el prior legacy del modelo NO se usa"
+    }
+  ],
+  "ensemble": {
+    "ensemble_version": "dictus-estimation-methods/1.0.0",
+    "methods": [
+      {
+        "method": "M1_MARKET_COMPARISON",
+        "method_name": "MARKET COMPARISON",
+        "status": "NOT_APPLICABLE",
+        "weight": 0.0,
+        "reason_for_weight": "NO entra en el ensemble (status NOT_APPLICABLE): no se declararon comparables de mercado: M1 no aplica. Una TASA MANUAL (MANUAL_CONFIG) NO equivale a comparables y no puede sustituirlos.",
+        "origin": null,
+        "value_m2": null,
+        "value_total": null,
+        "confidence": null,
+        "weight_normalizado": 0.0
+      },
+      {
+        "method": "M2_REPLACEMENT_COST",
+        "method_name": "REPLACEMENT COST",
+        "status": "NOT_APPLICABLE",
+        "weight": 0.0,
+        "reason_for_weight": "NO entra en el ensemble (status NOT_APPLICABLE): no se declaró costo de reposición (costo unitario, edad/vida útil): M2 no aplica y NO se rellena con ningún valor",
+        "origin": null,
+        "value_m2": null,
+        "value_total": null,
+        "confidence": null,
+        "weight_normalizado": 0.0
+      },
+      {
+        "method": "M3_INCOME_CAPITALIZATION",
+        "method_name": "INCOME CAPITALIZATION",
+        "status": "NOT_APPLICABLE",
+        "weight": 0.0,
+        "reason_for_weight": "NO entra en el ensemble (status NOT_APPLICABLE): no se declaró rental_reference: M3 no aplica (sin renta de referencia no hay capitalización posible)",
+        "origin": null,
+        "value_m2": null,
+        "value_total": null,
+        "confidence": null,
+        "weight_normalizado": 0.0
+      },
+      {
+        "method": "M4_CALIBRATED_MODEL_PRIOR",
+        "method_name": "MODELO CALIBRADO (base indicativa, §16)",
+        "status": "NOT_APPLICABLE",
+        "weight": 0.0,
+        "reason_for_weight": "NO entra en el ensemble (status NOT_APPLICABLE): no se declaró modelo calibrado con contrato auditable (§16): el prior legacy del modelo NO se usa",
+        "origin": null,
+        "value_m2": null,
+        "value_total": null,
+        "confidence": null,
+        "weight_normalizado": 0.0
+      },
+      {
+        "method": "M5_AGGREGATED_MARKET_REFERENCE",
+        "method_name": "REFERENCIA AGREGADA OFICIAL POR LOCALIDAD Y BANDA DE ÁREA",
+        "status": "AVAILABLE",
+        "weight": 0.35,
+        "reason_for_weight": "referencia AGREGADA de nivel 3: agrega por sector y banda de área, así que NO acredita la unidad; peso bajo y techo INDICATIVE (§22)",
+        "origin": "EXTERNAL_SOURCE",
+        "value_m2": 5206395.135,
+        "value_total": null,
+        "confidence": "BAJA",
+        "weight_normalizado": 1.0
+      }
+    ],
+    "central_value_m2": 5206395.135,
+    "central_value_total": null,
+    "origins_usados": [
+      "EXTERNAL_SOURCE"
+    ],
+    "disponibles": [
+      "M5_AGGREGATED_MARKET_REFERENCE"
+    ]
+  },
+  "referencia_agregada_citada": [
+    {
+      "reference_id": "BAQ_OBS_VALORESM2_AREA/L1/Norte - centro histórico",
+      "source_id": "BAQ_OBS_VALORESM2_AREA",
+      "nivel": "LEVEL_3_AGGREGATED_MARKET_REFERENCES",
+      "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+      "evidence_hash": "6a307f15e38cba0c4edfd02111589fe6620a22169e3a3d95f28e7d7e2331060b",
+      "sector_referencia": "Norte - centro histórico",
+      "banda_area_m2": "36-60",
+      "area_sujeto_m2": 58.75,
+      "rango_valor_m2": {
+        "min": 2222222.22,
+        "max": 8190568.05,
+        "unidad": "COP/m2"
+      },
+      "valor_m2": null,
+      "sample_size": null,
+      "provenance": {
+        "source_id": "BAQ_OBS_VALORESM2_AREA",
+        "proveedor": "Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
+        "fecha": "2026-09-30",
+        "referencia": "valoresm2_area/MapServer/1",
+        "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+        "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&inSR=4326&where=1%3D1",
+        "consultado_en": "2026-09-30T16:41:08+00:00",
+        "http": 200,
+        "bytes": 740,
+        "server": "cloudflare",
+        "cf_ray": "a434ac712a2221b7-BOG"
+      }
+    }
+  ],
+  "comparables_usados": 0,
+  "ancho_version": "dictus-range-width/1.0.0",
+  "ancho": {
+    "low": 130000000,
+    "high": 490000000,
+    "semi_ancho_relativo": 0.5806451612903226,
+    "porcentaje": "±58.06%",
+    "formula_version": "dictus-range-width/1.0.0",
+    "componentes": {
+      "base": 0.06,
+      "dispersion": 0.3,
+      "cv_usado": 0.25,
+      "comparables": 0.15,
+      "antiguedad": 0.0,
+      "trimestres_antiguedad": 0,
+      "matching": 0.0,
+      "tipo_evidencia": 0.0,
+      "error_modelo": 0.0,
+      "semi_ancho_calculado": 0.51,
+      "dispersion_origen": "M5_AGGREGATED_MARKET_REFERENCE"
+    },
+    "ajustes": [
+      "base metodológica versionada = ±6%",
+      "dispersión de comparables (cv = 0.5732 → 0.2500) → +30.00%",
+      "nº de comparables usados = 0 → +0.15",
+      "antigüedad de la evidencia = None meses (0 trimestres) → +0.00%",
+      "calidad del matching = 1.00 → +0.00%",
+      "tipo de evidencia (EXTERNAL_SOURCE) → +0.00%",
+      "error del modelo no declarado → +0.00"
+    ],
+    "motivos": [
+      "semi-ancho final = ±51.00% con calidad efectiva INDICATIVE",
+      "el rango oficial de la fuente es más ancho (±58.06%) que el ancho calculado (±51.00%): el rango NO se estrecha por debajo de la evidencia publicada"
+    ],
+    "clamp": "DENTRO_DE_BANDA",
+    "banda_calidad": [
+      0.15,
+      0.6
+    ],
+    "banda_oficial_usada": {
+      "min": 2222222.22,
+      "max": 8190568.05,
+      "unidad": "COP/m2",
+      "banda_area_m2": "36-60",
+      "area_sujeto_m2": 58.75,
+      "contiene_el_area_del_sujeto": true,
+      "reference_id": "BAQ_OBS_VALORESM2_AREA/L1/Norte - centro histórico",
+      "source_id": "BAQ_OBS_VALORESM2_AREA",
+      "evidence_hash": "6a307f15e38cba0c4edfd02111589fe6620a22169e3a3d95f28e7d7e2331060b",
+      "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+      "low_pesos": 130000000,
+      "high_pesos": 490000000,
+      "low_ancho": 150000000,
+      "high_ancho": 470000000,
+      "basis": "min/max LITERALES de la fuente aplicados al área del sujeto"
+    }
+  },
+  "verificado_con": {
+    "verified_market_evidence_gate": "CLOSED",
+    "estimation_gate": "OPEN_WITH_LIMITATIONS",
+    "nota": "coexisten (§30): la referencia de nivel 3 sostiene una ESTIMACIÓN INDICATIVA, no un valor verificado de la unidad"
+  },
+  "entrada_del_motor": {
+    "identidad": {
+      "resuelta": true,
+      "origen_tipo": "COMPUTED_FROM_SOURCES",
+      "fuentes": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "estado": "EXACT",
+      "metodo_resolucion": "nupre",
+      "folio": "040-646406",
+      "declarado_en": "property_identity (identity_verified)"
+    },
+    "ubicacion": {
+      "utilizable": true,
+      "status": "OFFICIAL_PREDIO",
+      "coordinate_source": "OFFICIAL_PREDIO",
+      "canonical_binding_status": "VERIFIED",
+      "declarado_en": "market_context.coordinate_source_verified"
+    },
+    "area": {
+      "valor_m2": 58.75,
+      "origen_tipo": "COMPUTED_FROM_SOURCES",
+      "fuentes": [
+        {
+          "proveedor": "SNR + geoportal municipal",
+          "fecha": "2026-09-30",
+          "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
+          "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
+        },
+        {
+          "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+          "fecha": "2026-09-30",
+          "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
+          "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
+        }
+      ],
+      "fuente_declarada": "urban_context.area (área privada de la unidad)",
+      "declarado_en": "urban_context.area"
+    },
+    "tipologia": {
+      "valor": "Unidad En Propiedad Horizontal",
+      "status": "VERIFIED_REGISTRAL",
+      "declarado_en": "urban_context.tipologia"
+    },
+    "comparables": [],
+    "estadisticas_externas": [
+      {
+        "origen_tipo": "EXTERNAL_SOURCE",
+        "nivel": "LEVEL_3_AGGREGATED_MARKET_REFERENCES",
+        "reference_id": "BAQ_OBS_VALORESM2_AREA/L1/Norte - centro histórico",
+        "evidence_hash": "6a307f15e38cba0c4edfd02111589fe6620a22169e3a3d95f28e7d7e2331060b",
+        "content_hash": "6a307f15e38cba0c4edfd02111589fe6620a22169e3a3d95f28e7d7e2331060b",
+        "acquisition_id": "ACQ-BAQ_OBS_VALORESM2_AREA-45be72ac6ef5",
+        "acquisition_hash": "45be72ac6ef543fa68edfd672764fba2356ffd8cff69a2a538d8a796c44001f3",
+        "payload_sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+        "hash_policy": {
+          "version": "dictus-evidence-hash/2.0.0",
+          "content_hash": "sha256 canónico del CONTENIDO publicado por la fuente: los BYTES CRUDOS (`payload_sha256`) + los campos materiales del contrato. ESTABLE entre adquisiciones.",
+          "acquisition_id": "identificador del EVENTO de adquisición (fuente, URL exacta, `queried_at`, HTTP, bytes, borde Cloudflare). VOLÁTIL por diseño: se declara aparte y NUNCA entra al `content_hash`.",
+          "evidence_hash": "alias del `content_hash` (estable). Antes incluía `queried_at` y cambiaba en cada adquisición, así que no era verificable.",
+          "campos_contenido_estable": [
+            "source_id",
+            "reference_id",
+            "layer_id",
+            "banda_area_m2",
+            "area_sujeto_m2",
+            "rango_valor_m2",
+            "valor_m2",
+            "sample_size",
+            "metodologia_declarada",
+            "vigencia_declarada",
+            "payload_sha256"
+          ],
+          "campos_adquisicion_volatil": [
+            "source_id",
+            "url_consultada",
+            "service_url",
+            "queried_at",
+            "http_status",
+            "bytes",
+            "cf_ray",
+            "layer_id"
+          ]
+        },
+        "source_id": "BAQ_OBS_VALORESM2_AREA",
+        "proveedor": "Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
+        "fecha": "2026-09-30",
+        "referencia": "valoresm2_area/MapServer/1",
+        "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+        "provenance": {
+          "source_id": "BAQ_OBS_VALORESM2_AREA",
+          "proveedor": "Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
+          "fecha": "2026-09-30",
+          "referencia": "valoresm2_area/MapServer/1",
+          "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+          "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&inSR=4326&where=1%3D1",
+          "consultado_en": "2026-09-30T16:41:08+00:00",
+          "http": 200,
+          "bytes": 740,
+          "server": "cloudflare",
+          "cf_ray": "a434ac712a2221b7-BOG"
+        },
+        "valor_m2": null,
+        "rango_valor_m2": {
+          "min": 2222222.22,
+          "max": 8190568.05,
+          "unidad": "COP/m2"
+        },
+        "sample_size": null,
+        "vigencia_declarada": {
+          "effective_from": null,
+          "effective_to": null,
+          "basis": "descripción del servicio",
+          "precision": "TEXTO",
+          "texto_literal": "Muestra el resultado del análisis de las compraventas inmobiliarias registradas por la Superintendencia de Notariado y Registro durante el periodo de enero a mayo de 2026. La información muestra, para cada localidad, los rangos de valores mínimos y máximos agrupados por áreas."
+        },
+        "metodologia_declarada": "Muestra el resultado del análisis de las compraventas inmobiliarias registradas por la Superintendencia de Notariado y Registro durante el periodo de enero a mayo de 2026. La información muestra, para cada localidad, los rangos de valores mínimos y máximos agrupados por áreas.",
+        "sector_referencia": "Norte - centro histórico",
+        "banda_area_m2": "36-60",
+        "limitaciones_declaradas": [
+          "el rango agregado NO acredita una unidad: agrega por localidad y banda de área",
+          "la fuente NO declara el tamaño de la muestra (N) del análisis",
+          "la vigencia es a nivel de MES según el texto de la fuente, no una fecha exacta por registro"
+        ],
+        "checklist_procedencia": {
+          "url": true,
+          "consultado_en": true,
+          "http": true,
+          "bytes": true,
+          "sha256": true,
+          "vigencia": true,
+          "muestra": false
+        },
+        "campos_que_la_fuente_no_declara": [
+          "muestra"
+        ],
+        "valor_m2_no_promediado": "la fuente declara un RANGO (min_valor_m2 / max_valor_m2) y NO un valor único; promediar los extremos sería un valor inventado por este módulo"
+      }
+    ],
+    "modelo_calibrado": null,
+    "costo_reposicion": null,
+    "rental_reference": null,
+    "cap_rate": null,
+    "referencia_estatica": null,
+    "tasa_manual": {
+      "origen_tipo": "MANUAL_CONFIG",
+      "valor": 6800000.0,
+      "valor_m2": 6800000.0,
+      "rango": [
+        5500000,
+        8000000
+      ],
+      "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+      "fuente_declarada": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
+      "vigencia_desde": "2026-05-08",
+      "vigencia_hasta": null,
+      "declarado_en": "market_context.sector_metodologico.value_m2",
+      "metodologia_id": "lonja_baq_metodologia"
+    },
+    "modelo_legacy": {
+      "origen_tipo": "LEGACY_MODEL_PRIOR",
+      "parametros_declarados": {
+        "market_value_m2": "MANUAL_CONFIG",
+        "cap_rate": "MODEL_PRIOR",
+        "factor_costos": "MODEL_PRIOR",
+        "costo_construccion_base": "MODEL_PRIOR",
+        "canon_renta_pct": "MODEL_PRIOR",
+        "participacion_lote": "MODEL_PRIOR"
+      },
+      "valores": {
+        "market_value_m2": null,
+        "cap_rate": null,
+        "factor_costos": null,
+        "costo_construccion_base": null,
+        "canon_renta_pct": null,
+        "participacion_lote": null
+      },
+      "motivo": "priors del modelo declarados por la corrida por parámetro, sin valores numéricos: no hay un modelo calibrado con muestra, error y vigencia",
+      "sample_size": null,
+      "calibration_error": null
+    },
+    "contexto": {
+      "ciudad": "barranquilla",
+      "sector": "Miramar",
+      "barrio": "Miramar",
+      "localidad": "02",
+      "estrato": "4",
+      "match_type": "EXACT"
+    },
+    "auditoria_de_entrada": {
+      "integracion_version": "dictus-estimation-integration/1.0.0",
+      "cosecha_municipal": {
+        "estado": "INCORPORADA",
+        "ruta": "docs\\estimation\\MARKET_HARVEST_040-646406.json",
+        "version_cosecha": "market-harvest/1.0.0",
+        "proveedor": "Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
+        "portal": "https://miciudad.barranquilla.gov.co/gis/rest/services",
+        "referencias_nivel_3_incorporadas": 1,
+        "observaciones_rechazadas": [],
+        "capas_consultadas": [
+          "valoresm2_area",
+          "valorsuelourbano",
+          "valorcompraventas",
+          "arrendamientos",
+          "avaluocatastral",
+          "cantidadtransacciones"
+        ],
+        "referencias_incorporadas": [
+          {
+            "source_id": "BAQ_OBS_VALORESM2_AREA",
+            "url": "https://miciudad.barranquilla.gov.co/gis/rest/services/observatorio/valoresm2_area/MapServer/1/query?f=json&outFields=%2A&returnGeometry=false&geometry=-74.8375696549899%2C11.006055954316363&geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&inSR=4326&where=1%3D1",
+            "http": 200,
+            "bytes": 740,
+            "sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+            "content_hash": "6a307f15e38cba0c4edfd02111589fe6620a22169e3a3d95f28e7d7e2331060b",
+            "payload_sha256": "d514aa27fc3fb79b6323ccdfdb7d322b03a738342dc11dceb79fbebde562abd4",
+            "acquisition_id": "ACQ-BAQ_OBS_VALORESM2_AREA-45be72ac6ef5",
+            "acquisition_hash": "45be72ac6ef543fa68edfd672764fba2356ffd8cff69a2a538d8a796c44001f3",
+            "consultado_en": "2026-09-30T16:41:08+00:00",
+            "server": "cloudflare",
+            "cf_ray": "a434ac712a2221b7-BOG",
+            "nivel": "LEVEL_3_AGGREGATED_MARKET_REFERENCES",
+            "rango_valor_m2": {
+              "min": 2222222.22,
+              "max": 8190568.05,
+              "unidad": "COP/m2"
+            },
+            "sample_size": null,
+            "campos_que_la_fuente_no_declara": [
+              "muestra"
+            ]
+          }
+        ],
+        "declaracion_de_la_cosecha": "Adquisición AUTOMÁTICA de evidencia de mercado real. Cero valores inventados: lo que la fuente declara viaja literal; lo que no declara viaja en null con el motivo. Ausencia ≠ NO_MATCH."
+      },
+      "cosas_que_no_se_hicieron": [
+        "no se convirtió la tasa declarada a mano en comparables ni en estadística",
+        "no se rellenó ningún insumo con un valor inferido o supuesto",
+        "no se incorporó la cosecha municipal porque no está disponible"
+      ],
+      "origenes_declarados_por_la_corrida": {
+        "market_value_m2": "MANUAL_CONFIG",
+        "cap_rate": "MODEL_PRIOR",
+        "factor_costos": "MODEL_PRIOR",
+        "costo_construccion_base": "MODEL_PRIOR",
+        "canon_renta_pct": "MODEL_PRIOR",
+        "participacion_lote": "MODEL_PRIOR"
+      }
+    }
+  },
+  "referencia_historica_forense": {
+    "old_run_id": null,
+    "old_value": null,
+    "old_range": null,
+    "old_method": null,
+    "old_inputs": null,
+    "old_origin": null,
+    "old_master_hash": null,
+    "usado_como_input": false,
+    "naturaleza": "REFERENCIA FORENSE: se conserva para comparar corridas y NO es input de la nueva estimación",
+    "campos_contrato": [
+      "old_run_id",
+      "old_value",
+      "old_range",
+      "old_method",
+      "old_inputs",
+      "old_origin",
+      "old_master_hash"
+    ]
+  }
+}
