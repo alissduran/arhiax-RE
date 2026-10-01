@@ -80,6 +80,62 @@ def _num(v, tipos=(int, float)):
     return f
 
 
+# ── COMPUERTA SEMÁNTICA · ORIGEN DE LA TASA DE MERCADO (P4/P6/P7) ─────────────
+def _clasificador_de_origen():
+    """Cargador tolerante del clasificador de origen (una sola definición).
+
+    Vive en `atribucion_mercado`; `market_context` lo reexporta con el contexto de
+    mercado ya resuelto. Si el módulo no se puede cargar, el estado NO se queda sin
+    respuesta: se degrada a `MANUAL_CONFIG` (no habilitante), que es la clasificación
+    conservadora y la única honesta cuando nadie puede probar el origen.
+    """
+    try:
+        import market_context as _mc_mod
+        return _mc_mod.market_context_origen
+    except Exception:  # noqa: BLE001 — sin clasificador no hay origen habilitante
+        try:
+            import atribucion_mercado as _am_mod
+
+            def _clasificar(mc):
+                return _am_mod.clasificar_origen(mc.get("sector_metodologico") or mc,
+                                                 por_defecto=_am_mod.ORIGEN_MANUAL)
+            return _clasificar
+        except Exception:  # noqa: BLE001
+            return None
+
+
+def normalizar_origen_de_mercado(mc: Any) -> Dict[str, Any]:
+    """Devuelve el contexto de mercado con su ORIGEN declarado y su estado de fuente.
+
+    Es idempotente: si el producto ya clasificó el origen (`origin`/`origin_gate`), se
+    respeta —una sola verdad por atributo—; si no lo declaró, se clasifica aquí. El
+    `status` resultante es `RESOLVED` sólo si existe un origen habilitante con
+    procedencia suficiente; en cualquier otro caso es `UNRESOLVED` (nunca se inventa
+    una fuente sustituta).
+    """
+    mc = dict(mc) if isinstance(mc, dict) else {}
+    if not mc:
+        return mc
+    clasificar = _clasificador_de_origen()
+    if clasificar is None:
+        origen = {"origin": "MANUAL_CONFIG", "origin_declarado": None,
+                  "origin_gate": False, "origin_etiqueta": None,
+                  "origin_provenance": {},
+                  "origin_blockers": ["clasificador de origen no disponible: "
+                                      "no se puede probar la procedencia"]}
+    else:
+        origen = clasificar(mc)
+    mc["origin"] = origen.get("origin")
+    mc["origin_declarado"] = origen.get("origin_declarado")
+    mc["origin_gate"] = bool(origen.get("origin_gate"))
+    mc["origin_etiqueta"] = origen.get("origin_etiqueta")
+    mc["origin_blockers"] = list(origen.get("origin_blockers") or [])
+    mc["origin_provenance"] = dict(origen.get("origin_provenance") or {})
+    mc["valoracion_habilitada"] = bool(mc.get("ready") and mc["origin_gate"])
+    mc["status"] = "RESOLVED" if mc["valoracion_habilitada"] else "UNRESOLVED"
+    return mc
+
+
 # ── activos visuales de la corrida (§7/§20: transporte, no invención) ────────
 def inventariar_activos_visuales(assets_dir: Any) -> Dict[str, Any]:
     """Inventario de los activos gráficos que ESTA corrida produjo.
@@ -490,6 +546,36 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
     _actos = actos_adquisicion(analysis)
     _modalidad, _modalidad_ev = modalidad_adquisicion(_actos)
 
+    # ── COMPUERTA SEMÁNTICA · ORIGEN DE LA TASA DE MERCADO (P4/P6/P7) ─────────
+    # El estado canónico NO acepta una autorización de valoración cuyo origen no la
+    # habilite. Un `allowed=True` que viaje sin origen habilitante se DEGRADA (nunca
+    # se emite una cifra con una autorización que su propio origen no sostiene) y la
+    # degradación queda declarada con su motivo: no es un fallo silencioso.
+    _mc = normalizar_origen_de_mercado(ctx.get("market_context") or {})
+    _origen = _mc.get("origin")
+    _origin_gate = bool(_mc.get("origin_gate"))
+    _auth = dict(ctx.get("valuation_authorization") or {})
+    _res_avaluo = ctx.get("res_avaluo") or {}
+    if _auth.get("allowed") and not _origin_gate:
+        _motivo_origen = (
+            "no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida "
+            f"proviene de parámetros declarados a mano (origin={_origen or 'NO_DECLARADO'}), "
+            "sin procedencia externa verificable")
+        _auth = {
+            **_auth,
+            "allowed": False,
+            "allowed_declarado_por_la_corrida": True,
+            "demoted_by": "ORIGIN_GATE",
+            "origin": _origen,
+            "origin_gate": False,
+            "origin_blockers": list(_mc.get("origin_blockers") or []),
+            "motivo": ("la corrida declaró autorización de valoración, pero el origen "
+                       "de la tasa no la habilita"),
+        }
+    else:
+        _auth = {**_auth, "origin": _origen, "origin_gate": _origin_gate}
+        _motivo_origen = None
+
     return {
         "run_state_version": RUN_STATE_VERSION,
         "run_id": run_id,
@@ -574,14 +660,25 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
         "valuation_state": {
             **{k: res.get(k) for k in ("value_m2", "consolidado", "banda_baja", "banda_alta",
                                        "sector", "match_type", "metodologia_aplica",
-                                       "motivo_no_aplica", "m1", "m2", "m3")},
-            "authorization": ctx.get("valuation_authorization") or {},
+                                       "m1", "m2", "m3")},
+            # Origen de CADA parámetro de la cifra, tal como lo declaró `get_valuation`.
+            "origins": dict(res.get("origins") or {}),
+            # P7 · si la compuerta de origen degradó la autorización, el MOTIVO se
+            # declara (el ejecutivo lo imprime: dice qué falta, nunca un monto).
+            "motivo_no_aplica": (res.get("motivo_no_aplica") or _motivo_origen),
+            "authorization": _auth,
+            # El ORIGEN viaja CON el valor (P4): junto a cada cifra se sabe de dónde
+            # sale y si esa procedencia habilita a emitirla.
+            "origin": _origen,
+            "origin_gate": _origin_gate,
+            "origin_etiqueta": _mc.get("origin_etiqueta"),
+            "origin_blockers": list(_mc.get("origin_blockers") or []),
         },
         "release_state": captura.get("release") or {},
         # ── DICTUS 2.0C: hechos que el producto YA calculaba y el estado no recibía ──
         # Contexto de mercado (sector, tasa, banda, procedencia y binding de la
         # coordenada, procedencia de capas urbanas, bloqueos de autorización).
-        "market_context": ctx.get("market_context") or {},
+        "market_context": _mc,
         # Activos gráficos REALES de esta corrida (mapa, sombras): estado + huella.
         "visual_assets": inventariar_activos_visuales(ctx.get("assets_dir")),
         # 2.0D: procedencia de la simulación de sombras (huella, altura y sus fuentes,
@@ -596,7 +693,7 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
                 {"tipo": "URBANO", "fuente": "capas oficiales del municipio"},
                 {"tipo": "EQUIPAMIENTO", "fuente": "proveedor de mapas abierto"},
                 {"tipo": "AMENAZAS", "fuente": "servicios municipales y SGC"},
-                {"tipo": "VALORACION", "fuente": "metodología de mercado (Lonja)"},
+                {"tipo": "VALORACION", "fuente": "parámetros de mercado declarados por la corrida"},
             ],
             "versionado": versionado or {},
         },

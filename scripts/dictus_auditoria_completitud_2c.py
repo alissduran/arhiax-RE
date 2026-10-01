@@ -218,10 +218,11 @@ def catalogo(ctx, rs, modelo):
         _f("Sector de mercado", mc.get("sector_metodologico", {}).get("matched_sector"),
            rmc.get("sector_metodologico", {}).get("matched_sector"),
            (mmc.get("sector_metodologico") or {}).get("matched_sector"), "SECTOR DE MERCADO",
-           "lonja_baq_metodologia"),
-        _f("Metodología", mc.get("market_methodology_id"),
-           rmc.get("market_methodology_id"), (mmc.get("market_methodology_id")),
-           "LONJA_BAQ_METODOLOGIA", "matriz de versiones"),
+           "contexto de mercado"),
+        # El identificador sellado del artefacto metodológico NO es una fuente y NO se
+        # imprime: lo que se audita es el ORIGEN de la tasa (vocabulario cerrado).
+        _f("Origen de la tasa", mc.get("origin"), rmc.get("origin"),
+           mmc.get("origin"), "MANUAL_CONFIG", "compuerta semántica (P4)"),
         _f("Tasa y fuente", mc.get("market_rate_source"), rmc.get("market_rate_source"),
            mmc.get("market_rate_source"), "PRECIO DE VENTA VERIFICADO",
            "contexto de mercado"),

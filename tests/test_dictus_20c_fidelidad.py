@@ -18,6 +18,7 @@ introduce:
      ninguna caja intersecta otra; ninguna página desborda.
 """
 import json
+import hashlib
 import os
 import sys
 import unittest
@@ -35,6 +36,28 @@ import dictus_secciones as sec         # noqa: E402
 FOLIO = "TST-000001"
 SALIDA = ROOT / "tmp_dictus_2c"
 GOLDEN = ROOT / "docs" / "forensics" / "040-646406" / "dictus_2c"
+
+
+# ── procedencia SINTÉTICA COMPLETA de la tasa del fixture de QA ───────────────
+def procedencia_sintetica(referencia: str) -> dict:
+    """Procedencia que la COMPUERTA SEMÁNTICA exige para habilitar la valoración.
+
+    Un fixture que quiera probar la composición del ejecutivo CON una cifra tiene que
+    declarar el origen de esa cifra, y declararlo con procedencia completa (id de
+    fuente, proveedor, fecha, referencia y huella). La clave `synthetic: True` deja la
+    naturaleza QA DENTRO del artefacto: nadie puede confundirla con una fuente real, y
+    la corrida REAL del producto no la declara (por eso su compuerta queda CERRADA).
+    """
+    declaracion = f"QA_FIXTURE_MARKET::{referencia}"
+    return {
+        "origen_tipo": "EXTERNAL_SOURCE",
+        "source_id": "QA_FIXTURE_MARKET",
+        "proveedor": "Fixture sintético de QA (no es una institución real)",
+        "fecha": "2026-01-15",
+        "referencia": referencia,
+        "sha256": hashlib.sha256(declaracion.encode("utf-8")).hexdigest(),
+        "synthetic": True,
+    }
 
 
 # ── corrida sintética (misma FORMA que la corrida real) ───────────────────────
@@ -129,8 +152,13 @@ def _captura(*, cadena="SEALED", assets=None):
         },
         "market_context": {
             "ready": True,
-            "sector_metodologico": {"matched_sector": "SECTOR DE PRUEBA",
-                                    "match_type": "EXACT"},
+            # La tasa del fixture declara su ORIGEN con procedencia COMPLETA: es lo
+            # único que habilita la valoración (compuerta semántica P4/P6/P7).
+            "sector_metodologico": {
+                "matched_sector": "SECTOR DE PRUEBA",
+                "match_type": "EXACT",
+                **procedencia_sintetica("tests/test_dictus_20c_fidelidad.py::_captura"),
+            },
             "market_methodology_id": "lonja_prueba",
             "market_methodology_version": "0.9-test",
             "market_rate_source": "Tasa de prueba verificada",
@@ -234,6 +262,9 @@ class TestSinPerdidaMaterial(unittest.TestCase):
         cls.pdf, cls.rs, cls.modelo, cls.secciones, cls.paginas = _render("fidelidad")
         cls.texto = "\n".join(cls.paginas)
 
+    def _plano(self) -> str:
+        return " ".join(self.texto.upper().split())
+
     def _imprime(self, aguja) -> bool:
         # El texto extraído parte las líneas: la comparación ignora los saltos.
         plano = " ".join(self.texto.upper().split())
@@ -273,13 +304,24 @@ class TestSinPerdidaMaterial(unittest.TestCase):
             "rango": "330.000.000",
             "valor/m²": "6.000.000",
             "sector de mercado": mc["sector_metodologico"]["matched_sector"],
-            "metodología": mc["market_methodology_id"],
+            # DOCTRINA "la Lonja no es fuente" (decisión de producto): el IDENTIFICADOR
+            # sellado (`market_methodology_id`) sigue viajando en el plano máquina
+            # (modelo, run state, manifest) y NO se renombra, pero el PDF ya no lo
+            # imprime como si fuera el nombre de una fuente: imprime la etiqueta
+            # verdadera de la metodología declarada por la corrida.
+            "metodología (etiqueta verdadera)":
+                "Comparación de mercado (parámetros declarados por la corrida)",
             "tasa y fuente": mc["market_rate_source"],
             "coordenada oficial": "11.00550",
             "binding": "VERIFICADA",
         }
         faltan = {k: v for k, v in esenciales.items() if not self._imprime(str(v))}
         self.assertEqual(faltan, {}, f"hechos materiales no impresos: {faltan}")
+        # El puente entre los dos planos: el id sigue en el plano máquina…
+        self.assertEqual(mc["market_methodology_id"], "lonja_prueba")
+        # …y NO se imprime en el ejecutivo como atribución de fuente.
+        self.assertNotIn(str(mc["market_methodology_id"]).upper(), self._plano())
+        self.assertNotIn("LONJA", self._plano())
         self.assertEqual(val["consolidado"], 352500000)
 
     def test_lo_que_no_existe_se_declara_no_se_inventa(self):
@@ -353,9 +395,21 @@ class TestSinPerdidaMaterial(unittest.TestCase):
                          f"la afectación no depende del acreedor: {accion[:120]}")
 
     def test_identidad_y_geometria_son_dos_conceptos(self):
+        """(C) La P6 rotula el atributo que su estado describe, no «geometría» a secas.
+
+        ANTES esta prueba exigía el literal «Geometría oficial: VERIFICADA». Ese rótulo
+        era ambiguo: se leía como una afirmación sobre la COORDENADA (atributo
+        `coordenada`, con conflicto histórico abierto y chip «NO UTILIZAR ESTE DATO COMO
+        DEFINITIVO» en la P4) cuando en realidad afirmaba otra cosa: el BINDING de la
+        geometría oficial contra la identidad canónica (atributo `binding_geometria`). El
+        rótulo vigente nombra ese atributo y deja de fabricar la contradicción.
+        """
         p6 = self.paginas[5]
         self.assertIn("Identidad registral y catastral: VERIFICADA", p6)
-        self.assertIn("Geometría oficial: VERIFICADA", p6)
+        self.assertIn("Binding de la geometría oficial: VERIFICADA", p6)
+        self.assertNotIn("Geometría oficial: VERIFICADA", p6,
+                         "el rótulo ambiguo (que se lee como el valor de la coordenada) "
+                         "no debe volver")
         self.assertIn("NO acredita la posición del apartamento", p6)
         self.assertIn("Sector de mercado", p6)
         self.assertIn("Comparación de mercado", p6)

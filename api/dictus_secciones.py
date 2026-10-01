@@ -19,10 +19,32 @@ transportaba (§1 STATE_PROJECTION_LOSS):
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 import dictus_decision as dd
 import dictus_estado as dse
+
+try:  # `api/` está en sys.path cuando el producto importa estos módulos
+    import atribucion_mercado as _am
+except Exception:  # noqa: BLE001 — carga determinista por ruta
+    import importlib.util as _ilu
+    from pathlib import Path as _Path
+    _spec = _ilu.spec_from_file_location(
+        "_arhiax_atribucion_mercado",
+        _Path(__file__).resolve().parent / "atribucion_mercado.py")
+    _am = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(_am)
+
+try:
+    import estimation_state as _egs   # §32/§33 · puente estado → motor de estimación
+except Exception:  # noqa: BLE001 — carga determinista por ruta
+    import importlib.util as _ilu2
+    from pathlib import Path as _Path2
+    _spec2 = _ilu2.spec_from_file_location(
+        "_arhiax_estimation_state",
+        _Path2(__file__).resolve().parent / "estimation_state.py")
+    _egs = _ilu2.module_from_spec(_spec2)
+    _spec2.loader.exec_module(_egs)
 
 LISTAS_FALLBACK = ("Lista Consolidada ONU", "OFAC SDN", "UK Sanctions List")
 
@@ -50,9 +72,34 @@ TITULO_ATRIBUTO = {
     "altura_maxima": "Altura / edificabilidad",
     "tratamiento": "Tratamiento urbanístico",
     "uso_pot": "Uso del suelo (POT)",
+    # C · DOS ATRIBUTOS DISTINTOS, DOS ETIQUETAS DISTINTAS. El conflicto histórico del
+    # expediente es sobre el VALOR de la coordenada que la corrida usa (`coordenada`);
+    # el «binding de la geometría oficial» —¿el polígono oficial corresponde a este
+    # predio?— es OTRO atributo y su estado viaja aparte, rotulado sin ambigüedad en la
+    # página 6 («Binding de la geometría oficial»). La etiqueta de esta fila NO se alarga
+    # con un calificativo: la columna de título del panel mide 95.6 pt a 7.6 pt y
+    # cualquier sufijo se RECORTA («COORDENADA DEL PREDIO (…»), que es precisamente lo que
+    # hacía ilegible el atributo. La separación se sostiene en la CLAVE canónica
+    # (`coordenada` ≠ `binding_geometria`), no en un texto truncado.
     "coordenada": "Coordenada del predio",
     "titulares": "Titularidad",
     "amenaza": "Amenaza por remoción en masa",
+}
+
+# Clave canónica del atributo del BINDING de la geometría. No es `coordenada`: es la
+# pregunta «¿el polígono/coordenada OFICIAL corresponde a la identidad canónica de este
+# predio?». Su estado NO se degrada por el conflicto del valor de la coordenada.
+ATRIBUTO_GEOMETRIA_BINDING = "binding_geometria"
+
+# (C) Término IMPRESO por estado de atributo (vocabulario de decisión, sin abreviaturas).
+# Es la ÚNICA traducción estado→texto de la página 4: un atributo se rotula con SU
+# estado, nunca con el de la compuerta de otro dominio.
+TERMINO_IMPRESO_POR_ESTADO = {
+    dse.HISTORICAL_CONFLICT: dd.NO_USAR_COMO_DEFINITIVO,
+    dse.REQUIERE_VALIDACION: "REQUIERE VALIDACIÓN",
+    dse.CAMBIO_CON_FUENTE: "CAMBIO CON FUENTE",
+    dse.VERIFICADO: dd.INFORMACION_VERIFICADA,
+    dse.SIN_DATO: "SIN DATO",
 }
 
 # Actores que la DECISIÓN de cada atributo afecta realmente (§9). Un conflicto de
@@ -279,10 +326,19 @@ def _actual_de_atributo(atributo: str, rs: Dict[str, Any], mc: Dict[str, Any]) -
 
 def _coherencia_detallada(hist: Dict[str, Any], rs: Dict[str, Any],
                           mc: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Un registro por ATRIBUTO con su estado: el chip de la página 4 sale de AQUÍ.
+
+    (C) Antes la página 4 estampaba la decisión del `URBAN_GATE` en TODOS los atributos
+    del panel, incluidos los que no son urbanísticos (`coordenada`, `titulares`,
+    `amenaza`). Coincidía por casualidad —todos están en conflicto histórico—, pero un
+    atributo con otro estado habría salido rotulado con el estado ajeno. Ahora cada fila
+    declara `estado_impreso`, derivado de SU estado, y el render lo imprime tal cual.
+    """
     filas: List[Dict[str, Any]] = []
     for c in (hist.get("conflictos_abiertos") or []):
         atributo = str(c.get("atributo") or "")
         actual = _actual_de_atributo(atributo, rs, mc)
+        estado = dse.HISTORICAL_CONFLICT
         filas.append({
             "atributo": atributo,
             "titulo": TITULO_ATRIBUTO.get(atributo, atributo.replace("_", " ").title()),
@@ -291,10 +347,57 @@ def _coherencia_detallada(hist: Dict[str, Any], rs: Dict[str, Any],
             "modo_actual": actual.get("modo"),
             "historico": list(c.get("valores") or []),
             "detalle": c.get("detalle"),
-            "estado": dse.HISTORICAL_CONFLICT,
+            "estado": estado,
+            "estado_impreso": TERMINO_IMPRESO_POR_ESTADO.get(estado, estado),
+            "decision": TERMINO_IMPRESO_POR_ESTADO.get(estado, estado),
             "afectados": AFECTADOS_POR_ATRIBUTO.get(atributo, []),
         })
     return filas
+
+
+def _tipologia_inferida(mc: Dict[str, Any], urb: Dict[str, Any]) -> bool:
+    """¿La tipología física de esta corrida es una INFERENCIA, no un dato de la fuente?
+
+    El producto la deriva de la condición registral/catastral y lo dice con todas las
+    letras en su propio valor («(inferido del CTL)»). Un hecho inferido no es un hecho
+    verificado: se declara como tal.
+    """
+    for valor in (_dato(urb.get("tipologia")),
+                  _dato((mc.get("tipologia") or {}).get("value"))):
+        if valor and "INFERID" in str(valor).upper():
+            return True
+    return False
+
+
+def verdad_por_atributo(hist: Optional[Dict[str, Any]]) -> Dict[str, str]:
+    """UNA sola verdad por atributo: el estado que ESTA corrida sostiene.
+
+    El informe de coherencia histórica ya declara, atributo por atributo, qué se puede
+    afirmar (`dictus_historia.conflicto_de_atributo`):
+
+      · `conflictos_abiertos`  → `HISTORICAL_CONFLICT`   (no se usa como definitivo)
+      · `requieren_revision`   → `REQUIERE_VALIDACION`   (cambió sin explicación)
+      · `cambios_explicados`   → `CAMBIO_CON_FUENTE`     (cambió y la fuente lo explica)
+
+    Esta función es el ÚNICO lugar donde ese estado se resuelve para las páginas: así la
+    página 4, la página 6 y el bloque de coherencia no pueden discrepar sobre el mismo
+    atributo. Un atributo ausente del informe conserva su estado por procedencia.
+    """
+    estado: Dict[str, str] = {}
+    hist = hist or {}
+    for c in hist.get("conflictos_abiertos") or []:
+        atributo = c.get("atributo")
+        if atributo:
+            estado[str(atributo)] = dse.HISTORICAL_CONFLICT
+    for r in hist.get("requieren_revision") or []:
+        atributo = r.get("atributo")
+        if atributo and str(atributo) not in estado:
+            estado[str(atributo)] = str(r.get("estado") or dse.REQUIERE_VALIDACION)
+    for e in hist.get("cambios_explicados") or []:
+        atributo = e.get("atributo")
+        if atributo and str(atributo) not in estado:
+            estado[str(atributo)] = dse.CAMBIO_CON_FUENTE
+    return estado
 
 
 def _geometria_estado(mc: Dict[str, Any]) -> str:
@@ -326,6 +429,97 @@ def _geometria_detalle(mc: Dict[str, Any]) -> str:
     if fuente:
         partes.append(f"Fuente: {fuente}.")
     return " ".join(partes)
+
+
+# ── B · ORIGEN DE UN HECHO IMPRESO ───────────────────────────────────────────
+# Un hecho que el documento imprime como VERIFICADO tiene que declarar DE DÓNDE SALE,
+# igual que una tasa de mercado: no basta con etiquetarlo «verificado». La procedencia
+# se toma del MANIFEST DE EVIDENCIAS de ESTA corrida —cada fuente cita su proveedor
+# declarado, su fecha y el `content_hash` SELLADO de esa evidencia, nunca una constante
+# escrita a mano—. Sin evidencia sellada no hay procedencia: `clasificar_origen` degrada
+# el origen y la fila se imprime DEGRADADA; el hecho nunca se borra.
+#
+# POR QUÉ ESTAS DOS FUENTES (y no un literal del render): el estado VERIFICADO de la
+# matrícula no lo decide el renderizador, lo decide la RESOLUCIÓN CANÓNICA de identidad
+# de la corrida (`canonical.identidad_canonica`): `identity_verified` se deriva de
+# `resolution_confidence == VERIFIED_UNIT_IDENTITY`, es decir del ACUERDO entre los dos
+# dominios que la corrida sí comparó y selló como evidencia:
+#
+#   · `EV-IDENTIDAD`  (SELLADA) — el registro canónico de identidad de ESTA corrida:
+#                      su contenido lleva `folio` (la matrícula que se imprime), `nupre`,
+#                      `codigo_catastral`, `estado` y `confianza`.
+#   · `EV-GEOMETRIA`  (SELLADA) — el registro oficial del catastro municipal
+#                      (`CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS`) que liga NUPRE y número
+#                      predial al predio con `binding=VERIFIED`.
+#
+# Las dos viajan con proveedor, fecha y `sha256` REALES (el `content_hash` sellado de la
+# evidencia), así que el hecho es `COMPUTED_FROM_SOURCES`: un cálculo determinista de la
+# corrida sobre fuentes citadas. NO es hardcode (ningún literal del render), NO es
+# `MODEL_PRIOR` (no hay default) y NO es `MANUAL_CONFIG` (no lo escribió una persona).
+# Si esas evidencias no estuvieran selladas, `clasificar_origen` lo degrada solo.
+EVIDENCIAS_IDENTIDAD = ("EV-IDENTIDAD", "EV-GEOMETRIA")
+
+
+def _fuentes_selladas(modelo: Dict[str, Any],
+                      ids: Sequence[str]) -> List[Dict[str, Any]]:
+    """Fuentes citables: sólo evidencias SELLADAS, con su hash real de contenido."""
+    evidencias = ((modelo.get("evidence_manifest") or {}).get("evidencias") or [])
+    por_id = {str(e.get("evidence_id")): e for e in evidencias if isinstance(e, dict)}
+    fuentes: List[Dict[str, Any]] = []
+    for eid in ids:
+        e = por_id.get(str(eid))
+        if not e or str(e.get("status") or "").upper() != "SELLADA":
+            continue  # una evidencia no sellada no sostiene un hecho verificado
+        fuentes.append({
+            "proveedor": str(e.get("source") or ""),
+            "fecha": str(e.get("timestamp") or ""),
+            "referencia": f"{eid} · {e.get('evidence_type')}",
+            "sha256": str(e.get("content_hash") or ""),
+        })
+    return fuentes
+
+
+def _origen_de_hecho(modelo: Dict[str, Any],
+                     ids: Sequence[str] = EVIDENCIAS_IDENTIDAD) -> Dict[str, Any]:
+    """Origen EFECTIVO de un hecho, con la procedencia REAL de la corrida.
+
+    El hecho de identidad no se lee de un literal del render: es el resultado
+    DETERMINISTA de la resolución de identidad de la corrida (folio ↔ NUPRE ↔ número
+    predial) sostenido por dos evidencias selladas de la MISMA corrida. Por eso se
+    declara `COMPUTED_FROM_SOURCES`; si esa procedencia no estuviera completa, la propia
+    función lo degrada a `MANUAL_CONFIG` y el hecho pierde el VERIFICADO.
+    """
+    return _am.clasificar_origen(
+        {"origen_tipo": _am.ORIGEN_COMPUTADO,
+         "fuentes": _fuentes_selladas(modelo, ids)},
+        por_defecto=_am.ORIGEN_MANUAL)
+
+
+def _seccion_estimacion(rs: Dict[str, Any], modelo: Dict[str, Any],
+                        hist: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """§32/§33 · ESTIMACIÓN: corre el motor sobre el estado y expone sus contratos.
+
+    El ejecutivo NO redacta la estimación: la PIDE. Aquí se ejecuta
+    `estimation.estimar(...)` con la entrada construida desde el estado real (con su
+    procedencia) y se devuelven los dos contratos de impresión —`p1` y `p6`— junto al
+    resultado completo y sus contadores, para que el render los imprima literales.
+    """
+    salida = _egs.ejecutar(rs, modelo, historico_forense=hist or {})
+    resultado = salida["resultado"]
+    consulta = str((modelo.get("document_identity") or {}).get("generated_at")
+                   or rs.get("generated_at") or "")[:10]
+    cosecha = (salida["entrada"].get("auditoria_de_entrada") or {}).get("cosecha_municipal")
+    return {"p1": _egs.contrato_p1(resultado),
+            "p6": _egs.contrato_p6(resultado, cosecha=cosecha,
+                                   consulta=consulta or None),
+            "status": resultado.get("status"),
+            "estado": (resultado.get("estimation_gate") or {}).get("gate_state"),
+            "confianza": _egs.confianza_de(resultado),
+            "hash_payload": resultado.get("hash_payload"),
+            "contadores": salida["contadores"],
+            "resultado": resultado,
+            "entrada": salida["entrada"],
+            "referencia": salida["referencia"]}
 
 
 def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
@@ -362,19 +556,67 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
     hist_comparado = bool(hist) and int(hist.get("versiones_comparadas") or 0) > 0
     _conf_urb = {c.get("atributo"): c for c in (hist.get("conflictos_abiertos") or [])}
 
+    # ── UNA SOLA VERDAD POR ATRIBUTO (P3) ─────────────────────────────────────
+    # El MISMO dictus declara, en su informe de coherencia, el estado de cada atributo.
+    # Imprimir «VERIFICADO» un atributo que la corrida declara `REQUIERE_VALIDACION`
+    # (o `HISTORICAL_CONFLICT`) es una contradicción INTERNA del documento, no una
+    # opinión: aquí se vuelve imposible, porque las filas leen esa única verdad.
+    verdad_atributos = verdad_por_atributo(hist)
+
+    def _estado_atributo(atributo: str, valor: Any,
+                         origen: Optional[Dict[str, Any]] = None) -> str:
+        """Estado de UNA fila: sin valor -> SIN_DATO; con valor -> la verdad única.
+
+        Nunca se imprime VERIFICADO un atributo que el expediente marca por revisar, y
+        nunca se borra el hecho: el VALOR se sigue imprimiendo con su estado degradado.
+        (B) Tampoco se imprime VERIFICADO un hecho cuyo ORIGEN declarado no lo sostiene:
+        un origen no habilitante DEGRADA el estado; no lo esconde.
+        """
+        if not _dato(valor):
+            return dse.SIN_DATO
+        est = verdad_atributos.get(atributo, dse.VERIFICADO)
+        if (est == dse.VERIFICADO and isinstance(origen, dict)
+                and not origen.get("origin_gate")):
+            return dse.REQUIERE_VALIDACION
+        return est
+
+    def _nota_atributo(atributo: str, base: Optional[str] = None) -> Optional[str]:
+        est = verdad_atributos.get(atributo)
+        if est == dse.HISTORICAL_CONFLICT:
+            return base or "Distintos entre versiones · ver coherencia abajo."
+        # `REQUIERE_VALIDACION` NO lleva nota por fila: el chip ya lo declara y el
+        # presupuesto de la página 4 no admite una línea más por atributo. La causa
+        # viaja en el MODELO (`historical_consistency.requieren_revision`), que es
+        # donde el lector técnico la consulta.
+        if est == dse.REQUIERE_VALIDACION:
+            return base
+        if not hist_comparado:
+            return base or "Sin expediente histórico comparado."
+        return base
+
     def _estado_urb(atributo: str) -> str:
-        if atributo in _conf_urb:
-            return dse.HISTORICAL_CONFLICT
-        return dse.VERIFICADO if hist_comparado else dse.REQUIERE_VALIDACION
+        if not hist_comparado and atributo not in verdad_atributos:
+            return dse.REQUIERE_VALIDACION
+        return verdad_atributos.get(atributo, dse.VERIFICADO)
 
     def _nota_urb(atributo: str) -> Optional[str]:
         # Nota de UNA línea: el detalle completo vive en el bloque «Coherencia de datos
         # por atributo» de esta misma página.
-        if atributo in _conf_urb:
-            return "Distintos entre versiones · ver coherencia abajo."
-        if not hist_comparado:
-            return "Sin expediente histórico comparado."
-        return None
+        return _nota_atributo(atributo)
+
+    def _valor_tipologia():
+        return (_dato(urb.get("tipologia"))
+                or _dato((mc.get("tipologia") or {}).get("value")))
+
+    def _estado_tipologia() -> str:
+        """La tipología física que la fuente no declara se INFIERE: se declara como tal."""
+        valor = _valor_tipologia()
+        if not valor:
+            return dse.SIN_DATO
+        est = verdad_atributos.get("tipologia")
+        if est:
+            return est
+        return (dse.REQUIERE_VALIDACION if _tipologia_inferida(mc, urb) else dse.VERIFICADO)
     # §15: «sellado» significa que el SELLO DEL EXPEDIENTE está completo — el estado
     # del manifest—, no que la cadena técnica interna esté cerrada. El sello es el que
     # se imprime en el pie y en la página 1: el texto no puede decir otra cosa.
@@ -382,6 +624,9 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
     sellado = sello_manifiesto.upper() == "SELLADO"
     cadena_cerrada = str(scr.get("evidence_chain_status") or "") == "SEALED"
     coherencia_attrs = _coherencia_detallada(hist, rs, mc)
+    # (B) ORIGEN de los hechos de identidad, resuelto UNA vez por corrida desde las
+    # evidencias selladas de su propio manifest.
+    origen_identidad = _origen_de_hecho(modelo)
 
     indicadores = [
         ("Identidad", dse.VERIFICADO if pi.get("identity_verified") else dse.REQUIERE_VALIDACION,
@@ -398,7 +643,12 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
         ("Territorio", dse.REQUIERE_VALIDACION if hay_conf_urb else dse.VERIFICADO,
          ("Coherencia histórica abierta en atributos urbanísticos." if hay_conf_urb
           else "Capas oficiales del municipio consultadas.")),
-        ("Valor", "DISPONIBLE" if aut else "NO_DISPONIBLE",
+        # §7 · El indicador se llama «Valoración corrida» (no «Valor»): el estado
+        # «NO DISPONIBLE» de este dominio es el de la VALORACIÓN QUE DECLARA LA CORRIDA,
+        # no la ausencia de estimación —DICTUS estima e imprime su tira aparte—. Imprimir
+        # «VALOR NO DISPONIBLE» al lado de «ESTIMACIÓN INDICATIVA» era la contradicción
+        # visual que el lector leía como «no hay valor».
+        ("Valoración corrida", "DISPONIBLE" if aut else "NO_DISPONIBLE",
          "Valoración autorizada." if aut else
          f"No autorizada: {_v(val.get('motivo_no_aplica'), 'se declara el blocker, sin cifras')}"),
     ]
@@ -481,8 +731,22 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
     direccion_ejecutiva = " · ".join(
         x for x in (base_dir, None if _ya_incluye else sufijo) if x)
 
-    valor_estimado_txt = (_pesos(val.get("consolidado")) if aut else
-                          "no disponible (valoración no autorizada)")
+    # El rótulo de la P1 nombra SU objeto: es la valoración que declara LA CORRIDA, no la
+    # estimación de DICTUS (que imprime su propia tira, con su etiqueta y su confianza).
+    # Antes se llamaba «Valor estimado» y convivía confundiendo con esa tira.
+    # §7 (Fase 3 · cierre semántico): cuando la valoración de la corrida está bloqueada,
+    # el texto nombra la COMPUERTA que realmente cierra (`VERIFIED_MARKET_EVIDENCE_GATE`
+    # = evidencia de mercado verificada) y NO deja leer «no hay valor» al lado de la
+    # ESTIMACIÓN INDICATIVA de DICTUS, que es OTRO hecho.
+    _estado_verif = str(val.get("gate_state") or val.get("verified_market_evidence_gate")
+                        or "CLOSED")
+    # El texto cabe en la celda de la P1 (24 caracteres útiles a 9,4 pt): nombra el hecho
+    # —evidencia NO verificada— sin el rótulo ambiguo «VALORACIÓN NO DISPONIBLE», que el
+    # lector cruzaba con la ESTIMACIÓN INDICATIVA de DICTUS impresa justo debajo.
+    valor_corrida_txt = (
+        _pesos(val.get("consolidado")) if aut else
+        "no habilitada (evidencia no verificada)")
+    valor_estimado_txt = valor_corrida_txt     # nombre histórico del mismo hecho
     fecha_consulta = str(rs.get("generated_at") or "")[:10] or None
 
     general = [
@@ -495,7 +759,7 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
         ("Uso", _v(urb.get("destino_economico") or (mc.get("uso") or {}).get("value"),
                    "no declarado")),
         ("Régimen", _v(urb.get("condicion_juridica"), "no declarado")),
-        ("Valor estimado", valor_estimado_txt),
+        ("Valoración de la corrida", valor_corrida_txt),
     ]
 
     # ── condiciones para cerrar la operación (§7/§12) ─────────────────────────
@@ -515,12 +779,19 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
                                  "Contexto de mercado no autorizado")):
             if auth.get(clave) is False and etiqueta not in blockers:
                 blockers.append(etiqueta)
+        # P7 · el ORIGEN no habilitante entra a las condiciones declaradas: el lector
+        # ve qué falta exactamente (una fuente de mercado), no un bloqueo sin causa.
+        for etiqueta in (auth.get("origin_blockers") or mc.get("origin_blockers") or []):
+            if isinstance(etiqueta, str) and etiqueta not in blockers:
+                blockers.append(etiqueta)
         if val.get("motivo_no_aplica") and str(val["motivo_no_aplica"]) not in blockers:
             blockers.append(str(val["motivo_no_aplica"]))
     sector_met = (mc.get("sector_metodologico") or {})
     if aut and mc.get("market_methodology_id"):
-        metodo_txt = (f"Comparación de mercado · {mc.get('market_methodology_id')} "
-                      f"v{mc.get('market_methodology_version')}")
+        # S2 · El identificador sellado (`market_methodology_id`) sigue viajando en su
+        # campo de máquina (`:738` y provenance) y NO se renombra; lo que NO se imprime
+        # es como si fuera el nombre de una fuente: el lector lee la verdad.
+        metodo_txt = _am.ETIQUETA_METODO
     elif aut:
         metodo_txt = "Comparación de mercado (metodología declarada por la corrida)"
     else:
@@ -539,6 +810,9 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
             "matrix": matriz,
             "board": tablero_unico[:5],
             "gate_decisions": {g: (c.get("decision")) for g, c in compuertas.items()},
+            # (A) `gate_state` viaja junto a `decision`: vocabulario CERRADO CLOSED/OPEN.
+            # Los dos campos conviven; ninguno sustituye al otro.
+            "gate_states": {g: (c.get("gate_state")) for g, c in compuertas.items()},
             "gate_reasons": {g: (c.get("reasons") or [None])[0] for g, c in compuertas.items()},
             "gate_blocking": {g: list(c.get("blocking_conditions") or [])
                               for g, c in compuertas.items()},
@@ -563,7 +837,10 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
                 "participacion": "según el folio",
                 "adquisicion": _dato(ts.get("modalidad_adquisicion")),
                 "adquisicion_evidencia": _dato(ts.get("modalidad_evidencia")),
-                "verificacion": dse.VERIFICADO,
+                # Un literal «VERIFICADO» aquí afirmaba como hecho un atributo que el
+                # MISMO dictus declara en conflicto abierto (P2/P3): el estado sale de
+                # la única verdad por atributo.
+                "verificacion": verdad_atributos.get("titulares", dse.VERIFICADO),
             }] if ts.get("titulares") else []),
             "gravamenes": [
                 {"severidad": "ALTO",
@@ -627,7 +904,8 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
         "urbano": {"filas": [
             {"etiqueta": "Destino económico (catastro)",
              "valor": urb.get("destino_economico"),
-             "estado": dse.VERIFICADO if urb.get("destino_economico") else dse.SIN_DATO},
+             "estado": _estado_atributo("destino_economico", urb.get("destino_economico")),
+             "nota": _nota_atributo("destino_economico")},
             {"etiqueta": "Uso / actividad POT",
              "valor": _dato((mc.get("uso") or {}).get("value")) or urb.get("area_actividad"),
              "estado": _estado_urb("uso_pot"), "nota": _nota_urb("uso_pot")},
@@ -639,16 +917,19 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
                        if _dato(urb.get("altura_maxima")) else None),
              "estado": _estado_urb("altura_maxima"), "nota": _nota_urb("altura_maxima")},
             {"etiqueta": "Clase de suelo", "valor": _dato(urb.get("clase_suelo")),
-             "estado": dse.VERIFICADO if urb.get("clase_suelo") else dse.SIN_DATO,
+             "estado": _estado_atributo("clase_suelo", urb.get("clase_suelo")),
              "nota": (None if urb.get("clase_suelo") else
                       "La capa de clase de suelo no viene en las capas POT de esta corrida: "
                       "sin dato de fuente.")},
             {"etiqueta": "Estrato", "valor": _dato(urb.get("estrato")),
-             "estado": dse.VERIFICADO if _dato(urb.get("estrato")) else dse.SIN_DATO},
+             "estado": _estado_atributo("estrato", urb.get("estrato")),
+             "nota": _nota_atributo("estrato")},
             {"etiqueta": "Barrio", "valor": _dato(urb.get("barrio")),
-             "estado": dse.VERIFICADO if urb.get("barrio") else dse.SIN_DATO},
+             "estado": _estado_atributo("barrio", urb.get("barrio")),
+             "nota": _nota_atributo("barrio")},
             {"etiqueta": "Localidad / comuna", "valor": _dato(urb.get("localidad")),
-             "estado": dse.VERIFICADO if urb.get("localidad") else dse.SIN_DATO},
+             "estado": _estado_atributo("localidad", urb.get("localidad")),
+             "nota": _nota_atributo("localidad")},
         ]},
         "riesgos": [
             {"tipo": "Inundación", "nivel": _dato(risk.get("inundacion")),
@@ -690,27 +971,60 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
         "solar": solar,
         "visual": vis,
         "identidad": {
+            # (B) El ORIGEN de cada hecho de identidad viaja declarado con su procedencia
+            # real (evidencias selladas de esta corrida). Es el mismo contrato que ya
+            # exige la valoración: un hecho sin origen no puede imprimirse VERIFICADO.
+            "origen": origen_identidad,
             "filas": [
                 {"etiqueta": "Dirección oficial",
                  "valor": (base_dir + (f" · {sufijo}" if sufijo else "")) if base_dir else None,
-                 "estado": dse.VERIFICADO},
-                {"etiqueta": "Matrícula", "valor": pi.get("folio"), "estado": dse.VERIFICADO},
+                 "estado": _estado_atributo("direccion", base_dir, origen_identidad),
+                 "nota": _nota_atributo("direccion"),
+                 "origin": origen_identidad},
+                {"etiqueta": "Matrícula", "valor": pi.get("folio"),
+                 # §El certificado adjunto es lo que sostiene la matrícula: sin CTL la
+                 # fila NO puede decir VERIFICADO (antes era un literal incondicional).
+                 "estado": _estado_atributo(
+                     "matricula", pi.get("folio") if ts.get("certificado_adjuntado") else None,
+                     origen_identidad),
+                 "nota": (None if ts.get("certificado_adjuntado") else
+                          "Sin certificado de tradición y libertad adjunto en esta corrida."),
+                 "origin": origen_identidad},
                 {"etiqueta": "NUPRE", "valor": pi.get("nupre"),
-                 "estado": dse.VERIFICADO if pi.get("nupre") else dse.SIN_DATO},
+                 "estado": _estado_atributo("nupre", pi.get("nupre"), origen_identidad),
+                 "nota": _nota_atributo("nupre"),
+                 "origin": origen_identidad},
                 {"etiqueta": "Número predial", "valor": pi.get("codigo_catastral"),
-                 "estado": dse.VERIFICADO if pi.get("codigo_catastral") else dse.SIN_DATO},
+                 "estado": _estado_atributo("numero_predial", pi.get("codigo_catastral"),
+                                            origen_identidad),
+                 "nota": _nota_atributo("numero_predial"),
+                 "origin": origen_identidad},
                 {"etiqueta": "Unidad (torre / apartamento)", "valor": pi.get("unidad"),
-                 "estado": dse.VERIFICADO if pi.get("unidad") else dse.SIN_DATO},
+                 "estado": _estado_atributo("unidad", pi.get("unidad"), origen_identidad),
+                 "nota": _nota_atributo("unidad"),
+                 "origin": origen_identidad},
                 {"etiqueta": "Área", "valor": area_txt,
-                 "estado": dse.VERIFICADO if urb.get("area") else dse.SIN_DATO},
+                 "estado": _estado_atributo("area", urb.get("area"), origen_identidad),
+                 "nota": _nota_atributo(
+                     "area", None if urb.get("area") else "Sin área declarada en la entrada."),
+                 "origin": origen_identidad},
                 {"etiqueta": "Régimen jurídico", "valor": urb.get("condicion_juridica"),
-                 "estado": dse.VERIFICADO if urb.get("condicion_juridica") else dse.SIN_DATO},
+                 "estado": _estado_atributo("regimen_juridico", urb.get("condicion_juridica"),
+                                            origen_identidad),
+                 "nota": _nota_atributo("regimen_juridico"),
+                 "origin": origen_identidad},
                 {"etiqueta": "Uso (destino catastral)", "valor": urb.get("destino_economico"),
-                 "estado": dse.VERIFICADO if urb.get("destino_economico") else dse.SIN_DATO},
+                 "estado": _estado_atributo("destino_economico", urb.get("destino_economico"),
+                                            origen_identidad),
+                 "nota": _nota_atributo("destino_economico"),
+                 "origin": origen_identidad},
                 {"etiqueta": "Tipología",
-                 "valor": _dato(urb.get("tipologia"))
-                 or _dato((mc.get("tipologia") or {}).get("value")),
-                 "estado": dse.VERIFICADO},
+                 "valor": _valor_tipologia(),
+                 "estado": _estado_tipologia(),
+                 "nota": ("Inferida del régimen/condición registral: la fuente no declara la "
+                          "unidad física. Requiere validación."
+                          if _tipologia_inferida(mc, urb) else None),
+                 "origin": origen_identidad},
             ],
             # §21: identidad y geometría son DOS conceptos; el binding se explica en
             # lenguaje llano en vez de imprimirse como contradicción.
@@ -718,9 +1032,19 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
                                  else "REQUIERE VALIDACIÓN"),
             "identidad_detalle": ("Matrícula, NUPRE y número predial resueltos y ligados "
                                   f"entre sí ({_v(pi.get('resolution_method'))})."),
+            # (C) La etiqueta nombra el ATRIBUTO EXACTO que el estado describe: el
+            # BINDING de la geometría oficial contra la identidad canónica. NO es el
+            # valor de la coordenada (atributo `coordenada`, con su propio estado en P4).
+            "geometria_atributo": ATRIBUTO_GEOMETRIA_BINDING,
+            "geometria_etiqueta": "Binding de la geometría oficial",
             "geometria_estado": _geometria_estado(mc),
             "geometria_detalle": _geometria_detalle(mc),
         },
+        # §32/§33 · ESTIMACIÓN ECONÓMICA (Fase 3): la salida del motor, con su contrato
+        # de impresión para la P1 y la P6. Es un hecho DISTINTO del estado de valoración
+        # de la corrida (`valor`): aquí vive lo que DICTUS estima; allí, lo que la
+        # corrida autoriza.
+        "estimacion": _seccion_estimacion(rs, modelo, hist),
         "valor": {
             "autorizado": aut,
             "consolidado": _pesos(val.get("consolidado")),
@@ -730,7 +1054,20 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
             "valor_m2": (_pesos(val.get("value_m2")) + " / m²" if val.get("value_m2") else None),
             "sector": _dato(sector_met.get("matched_sector")) or _dato(val.get("sector")),
             "sector_match": sector_met.get("match_type"),
-            "tasa_fuente": _dato(mc.get("market_rate_source")),
+            # S3 · `market_rate_source` sale del artefacto local de metodología. NO se
+            # muta el YAML: la etiqueta verdadera se aplica al RENDERIZAR (idempotente).
+            "tasa_fuente": _am.etiqueta_tasa(_dato(mc.get("market_rate_source"))),
+            # ── P4 · ORIGEN junto al valor ────────────────────────────────────
+            # `origin` es el origen EFECTIVO de la tasa (vocabulario cerrado) y
+            # `origin_gate` dice si esa procedencia HABILITA emitir la cifra. Los dos
+            # viajan juntos: un valor sin origen habilitante no se imprime.
+            "origin": (val.get("origin") or mc.get("origin") or auth.get("origin")),
+            "origin_etiqueta": (mc.get("origin_etiqueta") or auth.get("origin_etiqueta")),
+            "origin_gate": bool(val.get("origin_gate") is True
+                                or auth.get("origin_gate") is True),
+            "origin_blockers": list(auth.get("origin_blockers")
+                                    or mc.get("origin_blockers") or []),
+            "precio_m2_origin": ((val.get("origins") or {}).get("market_value_m2")),
             "fecha": fecha_consulta,
             "vigencia": (f"{fecha_consulta} · vigencia de la metodología aplicada"
                          if fecha_consulta else None),

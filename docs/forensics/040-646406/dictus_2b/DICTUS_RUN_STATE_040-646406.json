@@ -1,7 +1,7 @@
 {
  "run_state_version": "dictus-run-state/1.0.0",
- "run_id": "a02a3c05-4887-4309-aa8f-51f8cc796a17",
- "generated_at": "2026-09-28T20:47:36.354726+00:00",
+ "run_id": "6429974c-f9bf-494f-99d2-aff0c9495d14",
+ "generated_at": "2026-10-01T13:47:11.075169+00:00",
  "ciudad": "barranquilla",
  "property_identity": {
   "folio": "040-646406",
@@ -311,9 +311,9 @@
     "matching_reasons": [
      "mejor similitud 0.564 (bajo umbral)"
     ],
-    "snapshot_id": "UN_CONSOLIDATED:680907c13aa23afc",
-    "snapshot_sha256": "680907c13aa23afc226558529a0e97be8b644e0b6f0068e37965bd3b3977c025",
-    "snapshot_effective_date": "2026-09-28T07:26:55.703Z",
+    "snapshot_id": "UN_CONSOLIDATED:e8e4123cd45fd055",
+    "snapshot_sha256": "e8e4123cd45fd055d5c38a4748d2cdee54f493df95c767dbb13b5a8c2293928f",
+    "snapshot_effective_date": "2026-09-29T23:00:05.384Z",
     "parser_version": "onu_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -328,9 +328,9 @@
     "matching_reasons": [
      "mejor similitud 0.581 (bajo umbral)"
     ],
-    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
-    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
-    "snapshot_effective_date": "09/23/2026",
+    "snapshot_id": "OFAC_SDN:aa5e6f8f9ba4b4e1",
+    "snapshot_sha256": "aa5e6f8f9ba4b4e11a8544344b599418870a22991f4cb6c26b284733e978817b",
+    "snapshot_effective_date": "09/30/2026",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -345,9 +345,9 @@
     "matching_reasons": [
      "mejor similitud 0.588 (bajo umbral)"
     ],
-    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
-    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
-    "snapshot_effective_date": "21/09/2026",
+    "snapshot_id": "UK_SANCTIONS_LIST:b75359df7c941171",
+    "snapshot_sha256": "b75359df7c941171c6c68c47f24c9505c141453142b4db6fb0c539ffdb6ec571",
+    "snapshot_effective_date": "29/09/2026",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -362,9 +362,9 @@
     "matching_reasons": [
      "mejor similitud 0.500 (bajo umbral)"
     ],
-    "snapshot_id": "UN_CONSOLIDATED:680907c13aa23afc",
-    "snapshot_sha256": "680907c13aa23afc226558529a0e97be8b644e0b6f0068e37965bd3b3977c025",
-    "snapshot_effective_date": "2026-09-28T07:26:55.703Z",
+    "snapshot_id": "UN_CONSOLIDATED:e8e4123cd45fd055",
+    "snapshot_sha256": "e8e4123cd45fd055d5c38a4748d2cdee54f493df95c767dbb13b5a8c2293928f",
+    "snapshot_effective_date": "2026-09-29T23:00:05.384Z",
     "parser_version": "onu_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -379,9 +379,9 @@
     "matching_reasons": [
      "mejor similitud 0.683 (bajo umbral)"
     ],
-    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
-    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
-    "snapshot_effective_date": "09/23/2026",
+    "snapshot_id": "OFAC_SDN:aa5e6f8f9ba4b4e1",
+    "snapshot_sha256": "aa5e6f8f9ba4b4e11a8544344b599418870a22991f4cb6c26b284733e978817b",
+    "snapshot_effective_date": "09/30/2026",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -396,9 +396,9 @@
     "matching_reasons": [
      "mejor similitud 0.564 (bajo umbral)"
     ],
-    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
-    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
-    "snapshot_effective_date": "21/09/2026",
+    "snapshot_id": "UK_SANCTIONS_LIST:b75359df7c941171",
+    "snapshot_sha256": "b75359df7c941171c6c68c47f24c9505c141453142b4db6fb0c539ffdb6ec571",
+    "snapshot_effective_date": "29/09/2026",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -413,9 +413,9 @@
     "matching_reasons": [
      "mejor similitud 0.526 (bajo umbral)"
     ],
-    "snapshot_id": "UN_CONSOLIDATED:680907c13aa23afc",
-    "snapshot_sha256": "680907c13aa23afc226558529a0e97be8b644e0b6f0068e37965bd3b3977c025",
-    "snapshot_effective_date": "2026-09-28T07:26:55.703Z",
+    "snapshot_id": "UN_CONSOLIDATED:e8e4123cd45fd055",
+    "snapshot_sha256": "e8e4123cd45fd055d5c38a4748d2cdee54f493df95c767dbb13b5a8c2293928f",
+    "snapshot_effective_date": "2026-09-29T23:00:05.384Z",
     "parser_version": "onu_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -430,9 +430,9 @@
     "matching_reasons": [
      "mejor similitud 0.667 (bajo umbral)"
     ],
-    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
-    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
-    "snapshot_effective_date": "09/23/2026",
+    "snapshot_id": "OFAC_SDN:aa5e6f8f9ba4b4e1",
+    "snapshot_sha256": "aa5e6f8f9ba4b4e11a8544344b599418870a22991f4cb6c26b284733e978817b",
+    "snapshot_effective_date": "09/30/2026",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -447,9 +447,9 @@
     "matching_reasons": [
      "mejor similitud 0.605 (bajo umbral)"
     ],
-    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
-    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
-    "snapshot_effective_date": "21/09/2026",
+    "snapshot_id": "UK_SANCTIONS_LIST:b75359df7c941171",
+    "snapshot_sha256": "b75359df7c941171c6c68c47f24c9505c141453142b4db6fb0c539ffdb6ec571",
+    "snapshot_effective_date": "29/09/2026",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "freshness": "CACHED_FRESH",
     "review_status": "NO_REQUIERE",
@@ -469,14 +469,14 @@
   "sources_unavailable": [],
   "snapshots": [
    {
-    "snapshot_id": "OFAC_SDN:d533a38ee0a8dc1d",
+    "snapshot_id": "OFAC_SDN:aa5e6f8f9ba4b4e1",
     "source_id": "OFAC_SDN",
     "authority": "US Department of the Treasury — OFAC (Sanctions List Service)",
-    "retrieved_at": "2026-09-28T14:44:03.549438Z",
-    "effective_date": "09/23/2026",
+    "retrieved_at": "2026-09-30T17:24:04.361109Z",
+    "effective_date": "09/30/2026",
     "source_url": "https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.XML",
-    "sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
-    "record_count": 19391,
+    "sha256": "aa5e6f8f9ba4b4e11a8544344b599418870a22991f4cb6c26b284733e978817b",
+    "record_count": 19452,
     "parser_version": "ofac_sdn_xml/1.1.0",
     "acquisition_status": "OPERATIVA",
     "freshness": "CACHED_FRESH",
@@ -484,13 +484,13 @@
     "refresh_error": null
    },
    {
-    "snapshot_id": "UK_SANCTIONS_LIST:50b83b8202daf366",
+    "snapshot_id": "UK_SANCTIONS_LIST:b75359df7c941171",
     "source_id": "UK_SANCTIONS_LIST",
     "authority": "UK FCDO / OFSI (UK Sanctions List)",
-    "retrieved_at": "2026-09-28T14:44:12.992475Z",
-    "effective_date": "21/09/2026",
+    "retrieved_at": "2026-09-30T17:24:11.997470Z",
+    "effective_date": "29/09/2026",
     "source_url": "https://sanctionslist.fcdo.gov.uk/docs/UK-Sanctions-List.xml",
-    "sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+    "sha256": "b75359df7c941171c6c68c47f24c9505c141453142b4db6fb0c539ffdb6ec571",
     "record_count": 6339,
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "acquisition_status": "OPERATIVA",
@@ -499,13 +499,13 @@
     "refresh_error": null
    },
    {
-    "snapshot_id": "UN_CONSOLIDATED:680907c13aa23afc",
+    "snapshot_id": "UN_CONSOLIDATED:e8e4123cd45fd055",
     "source_id": "UN_CONSOLIDATED",
     "authority": "United Nations Security Council",
-    "retrieved_at": "2026-09-28T14:43:49.445165Z",
-    "effective_date": "2026-09-28T07:26:55.703Z",
+    "retrieved_at": "2026-09-30T17:23:50.720677Z",
+    "effective_date": "2026-09-29T23:00:05.384Z",
     "source_url": "https://scsanctions.un.org/resources/xml/en/consolidated.xml",
-    "sha256": "680907c13aa23afc226558529a0e97be8b644e0b6f0068e37965bd3b3977c025",
+    "sha256": "e8e4123cd45fd055d5c38a4748d2cdee54f493df95c767dbb13b5a8c2293928f",
     "record_count": 1011,
     "parser_version": "onu_xml/1.1.0",
     "acquisition_status": "OPERATIVA",
@@ -517,21 +517,21 @@
   "review_required_subjects": [],
   "matched_subjects": [],
   "reason": "Sin coincidencias en las fuentes efectivamente consultadas. Cobertura completa: ONU (lista consolidada del Consejo de Seguridad); OFAC — SDN (solo SDN); UK Sanctions List (FCDO/OFSI).",
-  "executed_at": "2026-09-28T20:47:01.526966+00:00",
+  "executed_at": "2026-10-01T13:46:34.235525+00:00",
   "algorithm_version": "sanctions-matcher/1.1.0",
   "scope_note": "Este screening es apoyo automatizado a la debida diligencia LA/FT: identifica y consulta contrapartes contra fuentes oficiales y deja evidencia versionada. NO declara cumplimiento normativo, no determina si una parte es sujeto obligado y no sustituye la verificación del oficial de cumplimiento.",
   "evidence_records": [
    {
-    "evidence_id": "28aee4be317409fcc718e169",
+    "evidence_id": "97e3941beaacf2afc6d01db3",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
     "document_number_masked": "1045******X",
     "source_id": "UN_CONSOLIDATED",
-    "snapshot_sha256": "680907c13aa23afc226558529a0e97be8b644e0b6f0068e37965bd3b3977c025",
-    "snapshot_effective_date": "2026-09-28T07:26:55.703Z",
-    "query_hash": "32cb99331146280e673b1698ccad4f5a98c7c54c8c33edb136944f93b5f97791",
-    "screened_at": "2026-09-28T20:47:33.853235Z",
+    "snapshot_sha256": "e8e4123cd45fd055d5c38a4748d2cdee54f493df95c767dbb13b5a8c2293928f",
+    "snapshot_effective_date": "2026-09-29T23:00:05.384Z",
+    "query_hash": "2e874c31cc166eae020afcc2a552c45722312b8b3d32f041d50b61029d3299f7",
+    "screened_at": "2026-10-01T13:47:08.828451Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5641,
@@ -541,23 +541,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "28aee4be317409fcc718e16906894a9cb4562e0fba2c01430fc55deb50c0328a",
+    "evidence_hash": "97e3941beaacf2afc6d01db3214678e5c14f99cac5344a714151fc28e22d602a",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
-    "evidence_content_hash": "38fc15772f790a6530b098657ecd3cced99126f4564bfacf6bf59e00aaab848f"
+    "evidence_content_hash": "a2bf20fb11a6442dc388af243be6bb4357c4cb2fd89d44e0b9b9314e81cfc4ae"
    },
    {
-    "evidence_id": "cdeaf7a66e366461a0e2d9a7",
+    "evidence_id": "5146494de05842a7519f93be",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
     "document_number_masked": "1045******X",
     "source_id": "OFAC_SDN",
-    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
-    "snapshot_effective_date": "09/23/2026",
-    "query_hash": "a47883a6b4ccc730fb6121766a89efe0a5bfc10b170dbbe5f83a0004ac276d9f",
-    "screened_at": "2026-09-28T20:47:33.853967Z",
+    "snapshot_sha256": "aa5e6f8f9ba4b4e11a8544344b599418870a22991f4cb6c26b284733e978817b",
+    "snapshot_effective_date": "09/30/2026",
+    "query_hash": "af62551959ddeebd2fc8f5eb9d16068cf1cb99cdb300d92688eea26bc557a232",
+    "screened_at": "2026-10-01T13:47:08.829742Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5806,
@@ -567,23 +567,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "cdeaf7a66e366461a0e2d9a79e62a07594413d08ff0dae8a94f97ccfe29f392a",
+    "evidence_hash": "5146494de05842a7519f93be00d4971fc2b84eb51a58f41ffa24dd787351511b",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
-    "evidence_content_hash": "89a218c902974de5573737089b6a4244f4706f67a4362957099f3936d23972e7"
+    "evidence_content_hash": "92bdf238c6df38318dee42fd754844f3727eb5b2d909a7ff28cb8fdbf7ad5763"
    },
    {
-    "evidence_id": "2e6b559c48e0bb0b16113a00",
+    "evidence_id": "71965243c01d2a64ad21a947",
     "subject_id": "titular_actual-1045718995",
     "canonical_name": "DURAN BACCA ALISSON",
     "document_type": "cc",
     "document_number_masked": "1045******X",
     "source_id": "UK_SANCTIONS_LIST",
-    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
-    "snapshot_effective_date": "21/09/2026",
-    "query_hash": "87ff6c8f353af3b24752160f12c611285117272ae8776e64aec95673fbf4be39",
-    "screened_at": "2026-09-28T20:47:33.854446Z",
+    "snapshot_sha256": "b75359df7c941171c6c68c47f24c9505c141453142b4db6fb0c539ffdb6ec571",
+    "snapshot_effective_date": "29/09/2026",
+    "query_hash": "e0ff487a8e01807ea72c53439e567e238f8782d3a11dd2861cd215c957e333e8",
+    "screened_at": "2026-10-01T13:47:08.830079Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5882,
@@ -593,23 +593,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "4ecf2463057fae7df0a121843c9cf38c635ab028f55fb316f30b7637cd05cef4",
-    "evidence_hash": "2e6b559c48e0bb0b16113a00971a489972fb2088bb10312f744aa032adc1ede5",
+    "evidence_hash": "71965243c01d2a64ad21a947ba1c65d479462db7ad28776f2e68fa937b330f96",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "ecdeb8d8d94bbdf3c35e28d9cae1800d99aadfa1889da88e16b39c22cb262299",
-    "evidence_content_hash": "2bfcf126ead8b0d88239f769a5d6e65490061cd8a4605331fb704a71e867dd45"
+    "evidence_content_hash": "3ec53b82e70980e1a6f5ed6fcd02d5951e5d2bf180e04273e550eb305debca86"
    },
    {
-    "evidence_id": "66c73714762b365f210ca88c",
+    "evidence_id": "838506e825780117ea36ce7e",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
     "document_number_masked": "8600*****4",
     "source_id": "UN_CONSOLIDATED",
-    "snapshot_sha256": "680907c13aa23afc226558529a0e97be8b644e0b6f0068e37965bd3b3977c025",
-    "snapshot_effective_date": "2026-09-28T07:26:55.703Z",
-    "query_hash": "7f43f2047ce0476e113ff09d6a5fe8cc24ad94adfe952a77488f4117228cad58",
-    "screened_at": "2026-09-28T20:47:33.854849Z",
+    "snapshot_sha256": "e8e4123cd45fd055d5c38a4748d2cdee54f493df95c767dbb13b5a8c2293928f",
+    "snapshot_effective_date": "2026-09-29T23:00:05.384Z",
+    "query_hash": "46a08ba505d70f83dcbdb10d66468adcac2be3b47e21723535d28e5e4544cf14",
+    "screened_at": "2026-10-01T13:47:08.830342Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5,
@@ -619,23 +619,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "66c73714762b365f210ca88c9be9239fa73c397cf1daa71a86e4aa0094f1e490",
+    "evidence_hash": "838506e825780117ea36ce7e74a4aab5648ea02413373ee8706ca6f34a5f3966",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
-    "evidence_content_hash": "9b09e31a208b86833f4c2a94d47bae3d27be91ba964a401c8bb1d5c3cf8030aa"
+    "evidence_content_hash": "0b1b1e18fe17ea8c60c5e3b829d726dfe139e1cfe6ad658b6c946eedbfe7b020"
    },
    {
-    "evidence_id": "d1a1869b052b1e79f3c6ae0f",
+    "evidence_id": "5fa09ad4cf68d97653839ccd",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
     "document_number_masked": "8600*****4",
     "source_id": "OFAC_SDN",
-    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
-    "snapshot_effective_date": "09/23/2026",
-    "query_hash": "8ab4110c5989ab290accac739a3ffe77b9e8ff279819ab586307a629a89654c9",
-    "screened_at": "2026-09-28T20:47:33.855239Z",
+    "snapshot_sha256": "aa5e6f8f9ba4b4e11a8544344b599418870a22991f4cb6c26b284733e978817b",
+    "snapshot_effective_date": "09/30/2026",
+    "query_hash": "c2b1531fe1064503c4f6190d2c20ab2d6be518088c05c1898f1fed16bb5d7a79",
+    "screened_at": "2026-10-01T13:47:08.830594Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6829,
@@ -645,23 +645,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "d1a1869b052b1e79f3c6ae0fcd74d0cfeac1875a5700dcb758a7a93d760eb73b",
+    "evidence_hash": "5fa09ad4cf68d97653839ccd5c7a953134441b744e9a826d1cdf3c2fc595161f",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
-    "evidence_content_hash": "1f3b2cb3b6ee3cece8f53f6bb7c9cb42fd2405abcb7e5dc859e13ae8c8cc171a"
+    "evidence_content_hash": "cd6fa8448445535bde86697aa27d857b5e141659263577250a78a04034a48f2a"
    },
    {
-    "evidence_id": "95eb607402413aac032c6e07",
+    "evidence_id": "b1fe45d904286750075fe0bc",
     "subject_id": "acreedor_hipotecario-8600029644",
     "canonical_name": "BANCO DE BOGOTA S.A.",
     "document_type": "nit",
     "document_number_masked": "8600*****4",
     "source_id": "UK_SANCTIONS_LIST",
-    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
-    "snapshot_effective_date": "21/09/2026",
-    "query_hash": "7a092e6b93ec384851dad82c123c0e9ac79573c1acc3bce396025b57366da817",
-    "screened_at": "2026-09-28T20:47:33.855650Z",
+    "snapshot_sha256": "b75359df7c941171c6c68c47f24c9505c141453142b4db6fb0c539ffdb6ec571",
+    "snapshot_effective_date": "29/09/2026",
+    "query_hash": "c3df832cd64595a0734ec99254ad16af42bc6b04eadd2a256f3c3b05a413a01e",
+    "screened_at": "2026-10-01T13:47:08.830849Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5641,
@@ -671,23 +671,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "80024facaa7d139ae7581e5e5f4f10849851bf74e264f98b4fd90e30d4c4a23c",
-    "evidence_hash": "95eb607402413aac032c6e07f5d5fa714233e9d6fd08da041c30f72a2022b6eb",
+    "evidence_hash": "b1fe45d904286750075fe0bc59dfaef3b665db732f4ad1bcb3114c0b845ce676",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "55adc2a81dcf115f387c78b1814211b2c1315906cf4ea661408bc269d9197b42",
-    "evidence_content_hash": "31be91334a6cf8eaa7338dccb2332989bb3748088bd671cdc31465d0b3a642b1"
+    "evidence_content_hash": "13c9a30461c887fe300f20a715f802b363e9069383f090b0fd9a5f894a7b4597"
    },
    {
-    "evidence_id": "ee83bb6ab3b5f818382e0911",
+    "evidence_id": "3b391cccc220bc4a746b33aa",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
     "document_number_masked": "N/D",
     "source_id": "UN_CONSOLIDATED",
-    "snapshot_sha256": "680907c13aa23afc226558529a0e97be8b644e0b6f0068e37965bd3b3977c025",
-    "snapshot_effective_date": "2026-09-28T07:26:55.703Z",
-    "query_hash": "9dfa239ee3830d4a7cc0afc2261d41c5fd531c6cb4a97f9dddb04e5e31c8697c",
-    "screened_at": "2026-09-28T20:47:33.856025Z",
+    "snapshot_sha256": "e8e4123cd45fd055d5c38a4748d2cdee54f493df95c767dbb13b5a8c2293928f",
+    "snapshot_effective_date": "2026-09-29T23:00:05.384Z",
+    "query_hash": "a27b415a9fc9d29a342704c6c8ca5b05a2ce13cf843a81d1785c617ae36af2e0",
+    "screened_at": "2026-10-01T13:47:08.831108Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.5263,
@@ -697,23 +697,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "ee83bb6ab3b5f818382e09117dad71d8c04dc87bffcb6cfcf9e205b973c2d33c",
+    "evidence_hash": "3b391cccc220bc4a746b33aa6bb0a276be48b64dbb44fffa559c3097390631f1",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "onu_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
-    "evidence_content_hash": "59d27048a859ecb7308ba965497dbb0508a1c7ae38505480f47e0317d6999732"
+    "evidence_content_hash": "acc34bff29a05c23ff672392d09ac4da87e50230e0c4b02d78a8a11c2342ac09"
    },
    {
-    "evidence_id": "5b9208cdfb180f91cc918df7",
+    "evidence_id": "b934fc2649ee1b61746674a2",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
     "document_number_masked": "N/D",
     "source_id": "OFAC_SDN",
-    "snapshot_sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
-    "snapshot_effective_date": "09/23/2026",
-    "query_hash": "80050a97643f4a6700e0393be601746a3416d98406f76374e56a8bccf5927bc9",
-    "screened_at": "2026-09-28T20:47:33.856393Z",
+    "snapshot_sha256": "aa5e6f8f9ba4b4e11a8544344b599418870a22991f4cb6c26b284733e978817b",
+    "snapshot_effective_date": "09/30/2026",
+    "query_hash": "aa02180441b194756979f6f009ddbd10ea1871bfe57e65f3d33e338e5bf0b953",
+    "screened_at": "2026-10-01T13:47:08.831346Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6667,
@@ -723,23 +723,23 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "5b9208cdfb180f91cc918df7e7eb11c7469838de1169482df24a5101151c6f0b",
+    "evidence_hash": "b934fc2649ee1b61746674a2ec4815fe988c789c774d059b3f5b28512a4d98ca",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "ofac_sdn_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
-    "evidence_content_hash": "0c75cda26b8d63215844622a7d03ef7e33ee1b458cdd3fc303b48d822cb81bc4"
+    "evidence_content_hash": "c13349ef20e3749b8925c58c03db5a8541f813c42ce7dd9853c8b0a4e211032c"
    },
    {
-    "evidence_id": "6211c3e9e9047de3bf4589f6",
+    "evidence_id": "bc1e8b92074dfeb41aaba157",
     "subject_id": "constructor_enajenante-urbanizadora-marval-s-a-s",
     "canonical_name": "URBANIZADORA MARVAL S.A.S.",
     "document_type": null,
     "document_number_masked": "N/D",
     "source_id": "UK_SANCTIONS_LIST",
-    "snapshot_sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
-    "snapshot_effective_date": "21/09/2026",
-    "query_hash": "18404c2adcf3685bb7f2ac7592009cb72864d451809fdd139b17890374a1e90f",
-    "screened_at": "2026-09-28T20:47:33.856752Z",
+    "snapshot_sha256": "b75359df7c941171c6c68c47f24c9505c141453142b4db6fb0c539ffdb6ec571",
+    "snapshot_effective_date": "29/09/2026",
+    "query_hash": "37795769c00bb22051c1a8da1acad329c50fd91ce8c6e4097cd7a5a666162e0b",
+    "screened_at": "2026-10-01T13:47:08.831574Z",
     "algorithm_version": "sanctions-matcher/1.1.0",
     "result": "NO_MATCH",
     "score": 0.6047,
@@ -749,11 +749,11 @@
     ],
     "review_status": "NO_REQUIERE",
     "subject_hash": "b0c9487bdd9d79d447471d7b2cd1288b3b7be48be30c46ea68fc8dd124733071",
-    "evidence_hash": "6211c3e9e9047de3bf4589f6e872ba341cde7d4c7acb3a86c871302a794c31a2",
+    "evidence_hash": "bc1e8b92074dfeb41aaba1575cfa31cb8e0c1d2d2b72ab96ee81160a47297a79",
     "matcher_version": "sanctions-matcher/1.1.0",
     "parser_version": "uk_sanctions_list_xml/1.1.0",
     "screening_input_hash": "8900af84e01f395a25fc9663ecd70e97b059ca807edd16e7d70e0fc026c1e0a1",
-    "evidence_content_hash": "99d05cc09a17fefa955b90225336a07edf94614ea9788c524378e78b9dc5ada9"
+    "evidence_content_hash": "0332f294a64fc79a14477d84c32938e935bd0d14a1289ac88690fbc2ce763483"
    }
   ],
   "evidence_expected_count": 9,
@@ -807,7 +807,7 @@
  },
  "poi_state": {
   "version": "dictus-run-state/1.0.0",
-  "queried_at": "2026-09-28T20:47:38.335972+00:00",
+  "queried_at": "2026-10-01T13:47:12.547814+00:00",
   "items": [
    {
     "category": "Educacion",
@@ -819,7 +819,7 @@
     "walking_time_estimate": "~18 min a pie",
     "travel_time_estimate": "~18 min a pie",
     "source": "PHOTON_OSM",
-    "queried_at": "2026-09-28T20:47:38.335972+00:00",
+    "queried_at": "2026-10-01T13:47:12.547814+00:00",
     "status": "OBTENIDO"
    },
    {
@@ -832,7 +832,7 @@
     "walking_time_estimate": "~22 min a pie",
     "travel_time_estimate": "~22 min a pie",
     "source": "PHOTON_OSM",
-    "queried_at": "2026-09-28T20:47:38.335972+00:00",
+    "queried_at": "2026-10-01T13:47:12.547814+00:00",
     "status": "OBTENIDO"
    },
    {
@@ -845,7 +845,7 @@
     "walking_time_estimate": "~24 min a pie",
     "travel_time_estimate": "~24 min a pie",
     "source": "PHOTON_OSM",
-    "queried_at": "2026-09-28T20:47:38.335972+00:00",
+    "queried_at": "2026-10-01T13:47:12.547814+00:00",
     "status": "OBTENIDO"
    },
    {
@@ -858,7 +858,7 @@
     "walking_time_estimate": "~24 min a pie",
     "travel_time_estimate": "~24 min a pie",
     "source": "PHOTON_OSM",
-    "queried_at": "2026-09-28T20:47:38.335972+00:00",
+    "queried_at": "2026-10-01T13:47:12.547814+00:00",
     "status": "OBTENIDO"
    },
    {
@@ -871,7 +871,7 @@
     "walking_time_estimate": "~25 min a pie",
     "travel_time_estimate": "~25 min a pie",
     "source": "PHOTON_OSM",
-    "queried_at": "2026-09-28T20:47:38.335972+00:00",
+    "queried_at": "2026-10-01T13:47:12.547814+00:00",
     "status": "OBTENIDO"
    }
   ],
@@ -898,7 +898,7 @@
       "walking_time_estimate": "~18 min a pie",
       "travel_time_estimate": "~18 min a pie",
       "source": "PHOTON_OSM",
-      "queried_at": "2026-09-28T20:47:38.335972+00:00",
+      "queried_at": "2026-10-01T13:47:12.547814+00:00",
       "status": "OBTENIDO"
      },
      {
@@ -911,7 +911,7 @@
       "walking_time_estimate": "~22 min a pie",
       "travel_time_estimate": "~22 min a pie",
       "source": "PHOTON_OSM",
-      "queried_at": "2026-09-28T20:47:38.335972+00:00",
+      "queried_at": "2026-10-01T13:47:12.547814+00:00",
       "status": "OBTENIDO"
      }
     ],
@@ -941,7 +941,7 @@
       "walking_time_estimate": "~24 min a pie",
       "travel_time_estimate": "~24 min a pie",
       "source": "PHOTON_OSM",
-      "queried_at": "2026-09-28T20:47:38.335972+00:00",
+      "queried_at": "2026-10-01T13:47:12.547814+00:00",
       "status": "OBTENIDO"
      },
      {
@@ -954,7 +954,7 @@
       "walking_time_estimate": "~24 min a pie",
       "travel_time_estimate": "~24 min a pie",
       "source": "PHOTON_OSM",
-      "queried_at": "2026-09-28T20:47:38.335972+00:00",
+      "queried_at": "2026-10-01T13:47:12.547814+00:00",
       "status": "OBTENIDO"
      },
      {
@@ -967,7 +967,7 @@
       "walking_time_estimate": "~25 min a pie",
       "travel_time_estimate": "~25 min a pie",
       "source": "PHOTON_OSM",
-      "queried_at": "2026-09-28T20:47:38.335972+00:00",
+      "queried_at": "2026-10-01T13:47:12.547814+00:00",
       "status": "OBTENIDO"
      }
     ],
@@ -990,22 +990,22 @@
   "momentos": [
    {
     "hora": "09:00 COT",
-    "azimut": "104.05°",
-    "elevacion": "45.89°",
+    "azimut": "105.76°",
+    "elevacion": "45.77°",
     "estado": "Sol Directo",
-    "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 6.0°."
+    "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 4.2°."
    },
    {
     "hora": "12:00 COT",
-    "azimut": "191.32°",
-    "elevacion": "77.05°",
+    "azimut": "191.43°",
+    "elevacion": "75.86°",
     "estado": "Sol Directo",
-    "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 81.3°."
+    "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 81.4°."
    },
    {
     "hora": "15:00 COT",
-    "azimut": "257.85°",
-    "elevacion": "41.04°",
+    "azimut": "256.47°",
+    "elevacion": "40.46°",
     "estado": "Sombra (Orientación)",
     "descripcion": "El sol está detrás del inmueble (fachada opuesta)."
    }
@@ -1016,23 +1016,45 @@
   "habitacion_ambigua": {}
  },
  "valuation_state": {
-  "value_m2": 6800000,
-  "consolidado": 399500000,
-  "banda_baja": 373532500,
-  "banda_alta": 435455000,
+  "value_m2": null,
+  "consolidado": 0,
+  "banda_baja": 0,
+  "banda_alta": 0,
   "sector": null,
   "match_type": null,
-  "metodologia_aplica": true,
-  "motivo_no_aplica": null,
-  "m1": 407490000,
-  "m2": 295690000,
-  "m3": 446700000,
+  "metodologia_aplica": false,
+  "m1": 0,
+  "m2": 0,
+  "m3": 0,
+  "origins": {
+   "market_value_m2": "MANUAL_CONFIG",
+   "cap_rate": "MODEL_PRIOR",
+   "factor_costos": "MODEL_PRIOR",
+   "costo_construccion_base": "MODEL_PRIOR",
+   "canon_renta_pct": "MODEL_PRIOR",
+   "participacion_lote": "MODEL_PRIOR"
+  },
+  "motivo_no_aplica": "no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida proviene de parámetros declarados a mano (origin=MANUAL_CONFIG: valor declarado a mano por la corrida (sin fuente externa automática)), sin procedencia externa verificable",
   "authorization": {
-   "allowed": true,
+   "allowed": false,
    "identity_authorized": true,
    "market_context_authorized": true,
-   "identity_level": "VERIFIED_UNIT_IDENTITY"
-  }
+   "identity_level": "VERIFIED_UNIT_IDENTITY",
+   "origin": "MANUAL_CONFIG",
+   "origin_gate": false,
+   "origin_etiqueta": "valor declarado a mano por la corrida (sin fuente externa automática)",
+   "origin_blockers": [
+    "origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)"
+   ],
+   "market_context_status": "UNRESOLVED",
+   "tasa_habilitante": false
+  },
+  "origin": "MANUAL_CONFIG",
+  "origin_gate": false,
+  "origin_etiqueta": "valor declarado a mano por la corrida (sin fuente externa automática)",
+  "origin_blockers": [
+   "origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)"
+  ]
  },
  "release_state": {
   "evaluation_status": "EVALUATED",
@@ -1063,11 +1085,11 @@
     "UK_SANCTIONS_LIST",
     "UN_CONSOLIDATED"
    ],
-   "commit": "a1bbac27ae2e6605821512a7021452bc2a67de64"
+   "commit": "fa0372dee4eda75ef93d5a5347a91578575edc97"
   },
   "ancestry": {
    "estado": "VERIFIED",
-   "detalle": "a1bbac27 desciende de acc8a949"
+   "detalle": "fa0372de desciende de acc8a949"
   },
   "contract_valid": true,
   "contract_problems": []
@@ -1103,28 +1125,45 @@
    "market_methodology_version": "0.1-codiseno",
    "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
    "market_methodology_file": "lonja_baq_metodologia.yaml",
-   "methodology_entity": "Lonja de Propiedad Raíz de Barranquilla",
+   "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
    "vigencia_desde": "2026-05-08",
    "value_m2": 6800000,
-   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+   "source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
    "source_date": "Q3-2026",
    "rango_min_m2": 5500000,
    "rango_max_m2": 8000000,
+   "origin": "MANUAL_CONFIG",
+   "origin_declarado": null,
+   "origin_gate": false,
+   "origin_blockers": [
+    "origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)"
+   ],
+   "origin_provenance": {},
    "provenance": {
     "methodology_file": "lonja_baq_metodologia.yaml",
     "methodology_version": "0.1-codiseno",
     "methodology_id": "lonja_baq_metodologia",
     "methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
-    "methodology_entity": "Lonja de Propiedad Raíz de Barranquilla",
-    "artifact_autor": "Junta Técnica de Avalúos Corporativos — Lonja BAQ",
-    "sector": "Miramar"
+    "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+    "artifact_autor": "artefacto local de metodología (sin institución proveedora verificada)",
+    "sector": "Miramar",
+    "origin": "MANUAL_CONFIG",
+    "origin_gate": false
    }
   },
-  "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+  "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
   "market_methodology_id": "lonja_baq_metodologia",
   "market_methodology_version": "0.1-codiseno",
   "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
   "market_methodology_file": "lonja_baq_metodologia.yaml",
+  "origin": "MANUAL_CONFIG",
+  "origin_declarado": null,
+  "origin_gate": false,
+  "origin_blockers": [
+   "origen no declarado por el artefacto: se clasifica MANUAL_CONFIG (no habilita la valoración)"
+  ],
+  "origin_provenance": {},
+  "origin_etiqueta": "valor declarado a mano por la corrida (sin fuente externa automática)",
   "coordinates": {
    "lat": 11.006055954316363,
    "lon": -74.8375696549899
@@ -1132,15 +1171,20 @@
   "geocoder_source": null,
   "geocoder_confidence": null,
   "provenance": {
-   "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) + Lonja BAQ referencial",
+   "market_rate_source": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
    "methodology_version": "0.1-codiseno",
    "market_methodology_id": "lonja_baq_metodologia",
    "market_methodology_version": "0.1-codiseno",
    "market_methodology_sha256": "4ccd5832eacf3117424fa436765e80d3e9198b666d9e3c293063a5b207ebd348",
-   "methodology_entity": "Lonja de Propiedad Raíz de Barranquilla"
+   "methodology_entity": "artefacto local de metodología (sin institución proveedora verificada)",
+   "origin": "MANUAL_CONFIG",
+   "origin_declarado": null,
+   "origin_gate": false
   },
   "ready": true,
   "blockers": [],
+  "valoracion_habilitada": false,
+  "status": "UNRESOLVED",
   "coordinate_source": "OFFICIAL_PREDIO",
   "coordinate_source_verified": true,
   "authoritative_address": null,
@@ -1328,7 +1372,7 @@
     "path": "C:\\Users\\aliss\\.gemini\\antigravity-ide\\scratch\\20260825_DeepSeek_Harness_Web\\arhiax-RE\\docs\\forensics\\040-646406\\dictus_2b\\poi_map.png",
     "bytes": 94326,
     "sha256": "a8bdd952b880aebe4409fdbd8e90e826e562a465acf8b1391ffea5e5e219f2fe",
-    "generated_at": "2026-09-28T20:47:01.478325+00:00",
+    "generated_at": "2026-10-01T13:46:34.125067+00:00",
     "provenance": "SAME_RUN"
    },
    "shadow_09": {
@@ -1387,7 +1431,7 @@
    },
    {
     "tipo": "VALORACION",
-    "fuente": "metodología de mercado (Lonja)"
+    "fuente": "parámetros de mercado declarados por la corrida"
    }
   ],
   "versionado": {
@@ -1399,7 +1443,7 @@
   }
  },
  "receipts": {
-  "generated_at": "2026-09-28T20:47:36.354726+00:00",
+  "generated_at": "2026-10-01T13:47:11.075169+00:00",
   "ciudad": "barranquilla",
   "versionado": {
    "ARHIAX_RE_VERSION": "1.4.0",
@@ -1407,7 +1451,7 @@
    "GIS_ADAPTER_VERSION": "1.2.0",
    "TITULUX_VERSION": "1.1.0",
    "RULESET_VERSION": "1.3.0",
-   "GIT_COMMIT_SHA": "a1bbac27ae2e6605821512a7021452bc2a67de64"
+   "GIT_COMMIT_SHA": "fa0372dee4eda75ef93d5a5347a91578575edc97"
   },
   "ctl_adjuntado": true,
   "catastro": {
@@ -1525,8 +1569,8 @@
      "source_id": "UN_CONSOLIDATED",
      "sigla": "UN_CONSOLIDATED",
      "freshness": "CACHED_FRESH",
-     "effective_date": "2026-09-28T07:26:55.703Z",
-     "sha256": "680907c13aa23afc226558529a0e97be8b644e0b6f0068e37965bd3b3977c025",
+     "effective_date": "2026-09-29T23:00:05.384Z",
+     "sha256": "e8e4123cd45fd055d5c38a4748d2cdee54f493df95c767dbb13b5a8c2293928f",
      "record_count": 1011,
      "parser_version": "onu_xml/1.1.0"
     },
@@ -1534,17 +1578,17 @@
      "source_id": "OFAC_SDN",
      "sigla": "OFAC_SDN",
      "freshness": "CACHED_FRESH",
-     "effective_date": "09/23/2026",
-     "sha256": "d533a38ee0a8dc1dca61574cda864d1740ec6785f1ae93f00e678fdf01654227",
-     "record_count": 19391,
+     "effective_date": "09/30/2026",
+     "sha256": "aa5e6f8f9ba4b4e11a8544344b599418870a22991f4cb6c26b284733e978817b",
+     "record_count": 19452,
      "parser_version": "ofac_sdn_xml/1.1.0"
     },
     {
      "source_id": "UK_SANCTIONS_LIST",
      "sigla": "UK_SANCTIONS_LIST",
      "freshness": "CACHED_FRESH",
-     "effective_date": "21/09/2026",
-     "sha256": "50b83b8202daf366976dd35c9d1e9c24edf6ab73b4063cfef8e95d6cc2f0452f",
+     "effective_date": "29/09/2026",
+     "sha256": "b75359df7c941171c6c68c47f24c9505c141453142b4db6fb0c539ffdb6ec571",
      "record_count": 6339,
      "parser_version": "uk_sanctions_list_xml/1.1.0"
     }

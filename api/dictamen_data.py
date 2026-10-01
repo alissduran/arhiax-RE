@@ -15,10 +15,74 @@ C_DORADO = colors.HexColor("#C19C4D")
 C_BORDE = colors.HexColor("#E2E8F0")
 C_NEGRO_MONO = colors.HexColor("#0A1424")
 
+# ══════════════════════════════════════════════════════════════════════════════
+# HARDCODE DE RESPALDO POR ESTRATO — `MODEL_PRIOR` · FALLBACK LEGACY NO PRODUCTIVO
+# ══════════════════════════════════════════════════════════════════════════════
+# Estos valores están ESCRITOS EN EL CÓDIGO. NO son una fuente de mercado: son un
+# prior del modelo que existe sólo para reproducir dictámenes históricos en el modo
+# `allow_legacy_reference=True` (exploratorio).
+#
+# DECISIÓN EXPLÍCITA (P6):
+#   · NO entran en los hechos resueltos del estado (`DictusRunState`): se declaran
+#     como `origin = MODEL_PRIOR` y `origin_gate = False`, nunca como tasa resuelta.
+#   · NO autorizan valoración: `VALUATION_GATE` queda CERRADA (`NO EMITIR VALORACIÓN`).
+#     Lo garantizan `market_context_authorized` (rechaza `GENERIC_ESTRATO_FALLBACK`)
+#     y la compuerta de `origin` en `get_valuation`/`pdf_compiler`.
+#   · NO se imprimen en el ejecutivo: sin origen habilitante no hay cifra.
+#   · NO se borran: hay pruebas de remediación histórica que los necesitan.
+FALLBACK_ESTRATO_M2 = {3: 3_800_000, 4: 5_200_000, 5: 6_500_000, 6: 7_800_000}
+FALLBACK_ESTRATO_M2_DEFAULT = 5_200_000
+MATCH_GENERIC_ESTRATO_FALLBACK = "GENERIC_ESTRATO_FALLBACK"
+
+# ── vocabulario de origen (única definición: `atribucion_mercado`) ────────────
+try:  # `api/` está en sys.path cuando el producto importa estos módulos
+    import atribucion_mercado as _am  # noqa: E402
+except Exception:  # noqa: BLE001 — carga determinista por ruta
+    import importlib.util as _ilu
+    from pathlib import Path as _Path
+    _spec = _ilu.spec_from_file_location(
+        "_arhiax_atribucion_mercado",
+        _Path(__file__).resolve().parent / "atribucion_mercado.py")
+    _am = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(_am)
+
+ORIGEN_EXTERNO = _am.ORIGEN_EXTERNO
+ORIGEN_COMPUTADO = _am.ORIGEN_COMPUTADO
+ORIGEN_MANUAL = _am.ORIGEN_MANUAL
+ORIGEN_ESTATICO = _am.ORIGEN_ESTATICO
+ORIGEN_PRIOR = _am.ORIGEN_PRIOR
+ORIGENES = _am.ORIGENES
+ORIGENES_HABILITANTES = _am.ORIGENES_HABILITANTES
+
+
+def _estrato_int(valor):
+    """Estrato como entero, o `None` si no es utilizable (nunca un 0 silencioso)."""
+    try:
+        return int(str(valor).replace("No_Aplica", "").split("_")[0].strip())
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _origen_de_market_context(mc) -> dict:
+    """Origen EFECTIVO de la tasa de un MarketContext (una sola verdad).
+
+    Si el contexto ya lo clasificó (`origin`/`origin_gate`), se respeta; si no, se
+    clasifica aquí. Un contexto sin origen declarado NO habilita: `MANUAL_CONFIG`.
+    """
+    mc = mc if isinstance(mc, dict) else {}
+    if mc.get("origin") in ORIGENES and "origin_gate" in mc:
+        return {"origin": mc["origin"], "origin_declarado": mc.get("origin_declarado"),
+                "origin_gate": bool(mc.get("origin_gate")),
+                "origin_blockers": list(mc.get("origin_blockers") or []),
+                "origin_provenance": dict(mc.get("origin_provenance") or {})}
+    return _am.clasificar_origen(mc.get("sector_metodologico") or mc,
+                                 por_defecto=ORIGEN_MANUAL)
+
 
 def precondiciones_valoracion(clase_suelo=None, destino=None, tipologia=None,
                               unidad_ph_no_resuelta=False,
-                              market_context_blocked=False):
+                              market_context_blocked=False,
+                              market_context_motivo=None):
     """Precondiciones de valoración por tipología (bug L), identidad (03D) y
     contexto de mercado (03H).
 
@@ -28,13 +92,18 @@ def precondiciones_valoracion(clase_suelo=None, destino=None, tipologia=None,
     está suficientemente resuelta (03D) NI con contexto de mercado insuficiente
     (03H: barrio/estrato/tipología/tasa no resueltos). Devuelve procede=False +
     motivo.
+
+    `market_context_motivo` permite declarar la CAUSA REAL del bloqueo de contexto
+    (p. ej. «la tasa no tiene origen habilitante») en vez del texto genérico: el
+    motivo UMBRAL no cambia —sigue bloqueando igual—, sólo se dice la verdad.
     """
     if unidad_ph_no_resuelta:
         return {"procede": False,
                 "motivo": "identidad predial de la unidad PH insuficientemente resuelta"}
     if market_context_blocked:
         return {"procede": False,
-                "motivo": "contexto de mercado insuficiente (barrio/estrato/tipología/tasa de mercado no resueltos)"}
+                "motivo": (market_context_motivo
+                           or "contexto de mercado insuficiente (barrio/estrato/tipología/tasa de mercado no resueltos)")}
     cs = (clase_suelo or "").strip().lower()
     dst = (destino or "").strip().lower()
     tip = (tipologia or "").strip().lower()
@@ -52,7 +121,7 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                   ciudad="barranquilla", clase_suelo=None, destino=None, tipologia=None,
                   unidad_ph_no_resuelta=False, market_context_blocked=False,
                   valuation_authorized=False, market_context=None,
-                  allow_legacy_reference=False):
+                  allow_legacy_reference=False, market_context_motivo=None):
     """
     Retorna la valoracion tecnica de mercado consolidando M1 (comparacion de
     mercado), M2 (costo de reposicion) y M3 (capitalizacion de rentas).
@@ -66,14 +135,25 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
     desde el YAML cuando recibe un MarketContext; solo lee cap_rate y factor de
     costos de la metodología. Sin tasa válida en el contexto -> bloqueado.
 
-    Regla de negocio (practica de la LONJA de Barranquilla, no de la Resolucion
-    IGAC 941/2026): propiedad horizontal terminada -> metodo principal M1
+    Regla de negocio (practica declarada por la metodología local de la corrida, no
+    de la Resolucion IGAC 941/2026): propiedad horizontal terminada -> metodo
+    principal M1
     (comparacion de mercado, 100%); M3 (capitalizacion de rentas) solo en casos
     excepcionales con renta demostrable. La seleccion definitiva del metodo y la
     firma son del avaluador inscrito en el RAA.
     """
     import yaml
     from pathlib import Path
+
+    try:  # `api/` está en sys.path cuando el producto importa estos módulos
+        import atribucion_mercado as _am
+    except Exception:  # noqa: BLE001 — carga determinista por ruta
+        import importlib.util as _ilu
+        _spec = _ilu.spec_from_file_location(
+            "_arhiax_atribucion_mercado",
+            Path(__file__).resolve().parent / "atribucion_mercado.py")
+        _am = _ilu.module_from_spec(_spec)
+        _spec.loader.exec_module(_am)
 
     cap_rate_neto = 0.0485
     val_m2_mercado = None
@@ -82,6 +162,41 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
     market_rate_source = None
     market_rate_sector = None
     market_rate_match_type = None
+    # ── ORIGEN de cada parámetro que entra en la cifra (P4) ───────────────────
+    # Se declara AL LADO del valor, no en un comentario: un lector (o una prueba)
+    # puede verificar de dónde sale cada número sin leer el código.
+    origen_tasa = None
+    origen_parametros = {
+        "market_value_m2": None,
+        "cap_rate": ORIGEN_PRIOR,
+        "factor_costos": ORIGEN_PRIOR,
+        "costo_construccion_base": ORIGEN_PRIOR,
+        "canon_renta_pct": ORIGEN_PRIOR,
+        "participacion_lote": ORIGEN_PRIOR,
+    }
+
+    # ── ORIGEN de la tasa de mercado (P4) ────────────────────────────────────
+    # Se clasifica ANTES de cualquier salida: una corrida BLOQUEADA también tiene que
+    # poder declarar el origen de la tasa que NO se emitió (si no, el bloqueo no dice
+    # de dónde venía el número y la auditoría pierde la traza).
+    origen_tasa = None
+    origen_gate = False
+    origen_tasa_motivos: list = []
+    if market_context is not None:
+        _origen_mc = _origen_de_market_context(market_context)
+        origen_tasa = _origen_mc.get("origin")
+        origen_gate = bool(_origen_mc.get("origin_gate"))
+        origen_tasa_motivos = list(_origen_mc.get("origin_blockers") or [])
+        origen_parametros["market_value_m2"] = origen_tasa
+    elif allow_legacy_reference:
+        # Modo LEGACY exploratorio: NADA de lo que resuelve aquí es una fuente. El modo
+        # existe para reproducir dictámenes históricos, no para entregar cifras: por
+        # construcción no puede abrir la compuerta.
+        origen_tasa = ORIGEN_PRIOR
+        origen_parametros["market_value_m2"] = ORIGEN_PRIOR
+        origen_tasa_motivos = [
+            "modo legacy explícito: la tasa sale del artefacto local o del fallback "
+            "codificado por estrato (MODEL_PRIOR), nunca de una fuente externa"]
 
     def _bloqueado(motivo):
         return {
@@ -95,18 +210,24 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
             "motivo_no_aplica": motivo,
             "value_m2": None, "market_rate_source": None,
             "market_rate_sector": None, "market_rate_match_type": None,
+            # Ninguna cifra se emitió, pero el ORIGEN de lo que NO se emitió se declara.
+            "origin": origen_tasa, "origin_gate": False,
+            "origin_blockers": list(origen_tasa_motivos),
+            "origins": dict(origen_parametros),
         }
 
     # ── 03H.1A: fail-closed. No hay permiso implícito. ──
     if not valuation_authorized and not allow_legacy_reference:
-        return _bloqueado("valoración no autorizada (identidad o contexto de "
-                          "mercado insuficiente)")
+        return _bloqueado(market_context_motivo
+                          or "valoración no autorizada (identidad o contexto de "
+                             "mercado insuficiente)")
 
     # ── Precondición por tipología (bug L), identidad (03D) y contexto (03H) ──
     _pre = precondiciones_valoracion(clase_suelo=clase_suelo, destino=destino,
                                      tipologia=tipologia,
                                      unidad_ph_no_resuelta=unidad_ph_no_resuelta,
-                                     market_context_blocked=market_context_blocked)
+                                     market_context_blocked=market_context_blocked,
+                                     market_context_motivo=market_context_motivo)
     if not _pre["procede"]:
         return _bloqueado(_pre["motivo"])
 
@@ -122,7 +243,7 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                 with open(yaml_path, "r", encoding="utf-8") as f:
                     _yml = yaml.safe_load(f)
         except Exception as e:
-            print(f"[VALUATION][WARN] YAML Lonja no legible: {e}")
+            print(f"[VALUATION][WARN] artefacto de metodología local no legible: {e}")
 
     # ── 03H.1A: la tasa viene EXCLUSIVAMENTE del MarketContext ──
     if market_context is not None:
@@ -146,8 +267,8 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
         # Modo LEGACY explícito y exploratorio: resuelve del YAML con fallback
         # MARCADO (nunca autoriza una valoración de alta confianza).
         if es_pasto:
-            estrato_map = {3: 3800000, 4: 5200000, 5: 6500000, 6: 7800000}
-            val_m2_mercado = estrato_map.get(int(estrato), 5200000)
+            val_m2_mercado = FALLBACK_ESTRATO_M2.get(_estrato_int(estrato),
+                                                     FALLBACK_ESTRATO_M2_DEFAULT)
             market_rate_match_type = "GENERIC_ESTRATO_FALLBACK"
             market_rate_source = "referencia genérica por estrato (sin metodología local)"
         elif _yml:
@@ -161,7 +282,8 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                     break
             if sector_match:
                 _v = valores_suelo[sector_match].get("valor_central_m2")
-                market_rate_source = valores_suelo[sector_match].get("fuente")
+                market_rate_source = _am.etiqueta_tasa(
+                    valores_suelo[sector_match].get("fuente"))
                 market_rate_sector = sector_match
                 if _v is None or _v <= 0:
                     val_m2_mercado = None
@@ -170,8 +292,8 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
                     val_m2_mercado = _v
                     market_rate_match_type = "EXACT"
             else:
-                estrato_map = {3: 3800000, 4: 5200000, 5: 6500000, 6: 7800000}
-                val_m2_mercado = estrato_map.get(int(estrato), 5200000)
+                val_m2_mercado = FALLBACK_ESTRATO_M2.get(_estrato_int(estrato),
+                                                         FALLBACK_ESTRATO_M2_DEFAULT)
                 market_rate_source = ("fallback genérico por estrato "
                                       "(no específico de sector)")
                 market_rate_match_type = "GENERIC_ESTRATO_FALLBACK"
@@ -182,14 +304,46 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
         return _bloqueado("autorización sin MarketContext (tasa de mercado no "
                           "resuelta por la única autoridad)")
 
+    # ── ORIGEN EFECTIVO de la tasa ya resuelta ───────────────────────────────
+    # (la clasificación base se hizo al principio; aquí sólo se aplica la regla que
+    # depende del modo de match: el fallback por estrato es un PRIOR del modelo).
+    if market_context is not None:
+        _origen_mc = _origen_de_market_context(market_context)
+        origen_tasa = _origen_mc.get("origin")
+        origen_gate = bool(_origen_mc.get("origin_gate"))
+        origen_tasa_motivos = list(_origen_mc.get("origin_blockers") or [])
+    # HARDCODE POR ESTRATO: es un PRIOR del modelo, no una fuente. Se declara como tal
+    # y se EXCLUYE de la autorización: no puede abrir `VALUATION_GATE` (P6).
+    if market_rate_match_type == MATCH_GENERIC_ESTRATO_FALLBACK:
+        origen_parametros["market_value_m2"] = ORIGEN_PRIOR
+        origen_tasa = ORIGEN_PRIOR
+        origen_gate = False
+        origen_tasa_motivos = list(origen_tasa_motivos) + [
+            "fallback genérico por estrato (MODEL_PRIOR): un valor por defecto del "
+            "modelo no es una fuente y no autoriza ninguna cifra"]
+    elif origen_tasa is not None:
+        origen_parametros["market_value_m2"] = origen_tasa
+
     # Cap Rate (M3) y factor de costos (M2) — parámetros de metodología.
+    # Su ORIGEN se declara igual que el de la tasa: lo que viene del artefacto local
+    # está configurado a mano (MANUAL_CONFIG); lo que cae al default del código es un
+    # prior del modelo (MODEL_PRIOR). Ninguno de los dos es una fuente externa.
     if _yml:
         tasas_tip = _yml.get("capitalizacion_rentas", {}).get("tasas_por_tipologia", {})
         estrato_key = f"apto_NO_VIS_estrato_{estrato}"
         if estrato_key in tasas_tip:
-            cap_rate_neto = tasas_tip[estrato_key].get("tasa_central", 0.0485)
-        factor_costos = _yml.get("costos_construccion", {}).get(
-            "factor_actualizacion", 1.2576)
+            _tasa_tip = tasas_tip[estrato_key].get("tasa_central")
+            if _tasa_tip is None:
+                origen_parametros["cap_rate"] = ORIGEN_PRIOR
+            else:
+                cap_rate_neto = _tasa_tip
+                origen_parametros["cap_rate"] = ORIGEN_MANUAL
+        _factor = _yml.get("costos_construccion", {}).get("factor_actualizacion")
+        if _factor is None:
+            origen_parametros["factor_costos"] = ORIGEN_PRIOR
+        else:
+            factor_costos = _factor
+            origen_parametros["factor_costos"] = ORIGEN_MANUAL
 
     # M1: Comparacion de Mercado (metodo principal para PH terminada, 100%)
     m1_base = int(area_construida_m2 * val_m2_mercado)
@@ -207,7 +361,8 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
     valor_lote_m2 = int(val_m2_mercado * 0.30) # 30% del valor total es el lote
     m2_total_central = int(area_construida_m2 * (costo_construccion_base * factor_costos * 0.85 + valor_lote_m2))
 
-    # Valor consolidado segun metodo principal (practica Lonja): PH -> M1 (100%); excepcional -> M3.
+    # Valor consolidado segun metodo principal (practica declarada por la metodología
+    # local de la corrida): PH -> M1 (100%); excepcional -> M3.
     val_consolidado = m3_total_central if metodo_principal == "m3" else m1_base
     val_consolidado = int(round(val_consolidado, -4))
     m1_total_central = int(round(m1_total_central, -4))
@@ -237,6 +392,11 @@ def get_valuation(area_construida_m2, barrio, estrato=4, metodo_principal="m1",
         "market_rate_source": market_rate_source,
         "market_rate_sector": market_rate_sector,
         "market_rate_match_type": market_rate_match_type,
+        # ── ORIGEN junto al valor (P4): de dónde sale CADA parámetro y si habilita ──
+        "origin": origen_tasa,
+        "origin_gate": bool(origen_gate),
+        "origin_blockers": list(origen_tasa_motivos),
+        "origins": dict(origen_parametros),
     }
 
 
@@ -477,12 +637,13 @@ def get_valoracion_alert(barrio, val_data, fmt_cop, ciudad="barranquilla"):
         metodo_txt = ("el método de comparación de mercado (M1) como método principal para "
                       "propiedad horizontal terminada")
     # Pasto: sin metodología local verificada, la estimación es referencia genérica
-    # por estrato (nunca la Lonja de Barranquilla).
+    # por estrato (nunca la metodología de Barranquilla).
     if "pasto" in (ciudad or "").lower():
         metodo_ref = ("Referencia genérica por estrato (sin metodología local de Pasto "
                       "verificada): valor sujeto a validación del avaluador RAA.")
     else:
-        metodo_ref = "Práctica de la Lonja de Barranquilla: PH = 100% M1; M3 solo excepcional."
+        metodo_ref = ("Práctica declarada por la metodología local de la corrida: "
+                      "PH = 100% M1; M3 solo excepcional.")
     return (
         f"<b>SINTESIS DE VALORACION:</b> La estimación comercial de "
         f"<b>{fmt_cop(val_data['consolidado'])} COP</b> responde a {metodo_txt}, "

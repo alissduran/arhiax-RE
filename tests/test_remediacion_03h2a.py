@@ -648,12 +648,24 @@ class TestGoldenPdf(_Base):
         self.assertIn("fuente de construcción", self.txt)
 
     def test_sin_contradicciones_de_tasa(self):
-        """K: si el contexto está completo, la tasa es la del sector del predio."""
-        # Contexto resuelto (fixture) -> la tasa aplicada es la de Miramar.
-        self.assertIn("6.800.000", self.txt)
-        # Y NO se declara "no autorizada" contradiciendo el contexto completo.
-        self.assertNotIn("valoración no autorizada", self.txt)
-        self.assertNotIn("contexto de mercado: incompleto", self.txt)
+        """K + COMPUERTA SEMÁNTICA: la tasa del artefacto local NO se estampa.
+
+        DOCTRINA ACTUALIZADA (P4/P6/P7). Antes esta prueba exigía que la cifra se
+        aplicara y prohibía la frase «valoración no autorizada». Hoy un contexto
+        suficiente en CONFIANZA ya no basta: la tasa de este escenario sale del artefacto
+        local de metodología (escrita a mano), su `origin` es `MANUAL_CONFIG` y ese
+        origen no habilita la valoración. La prueba verifica lo correcto hoy: la cifra NO
+        se estampa, la causa se declara, y no se inventa una fuente sustituta.
+        """
+        # La cifra del sector NO se aplica (58,75 m² × 6.800.000 = 399.500.000).
+        self.assertNotIn("6.800.000", self.txt)
+        self.assertNotIn("399.500.000", self.txt)
+        # La causa se declara con su ORIGEN real: sin fuente de mercado no hay cifra.
+        self.assertIn("no hay fuente de mercado que sostenga la cifra", self.txt)
+        self.assertIn("origin=manual_config", self.txt)
+        # Y no se rotula «automática» un valor configurado a mano (P5).
+        self.assertNotIn("(automática)", self.txt)
+        self.assertNotIn("caracter automatico", self.txt)
 
     def test_tipologia_no_atribuye_al_ctl_lo_que_vino_del_catastro(self):
         """#G: la condición es catastral, no una inferencia del CTL adjunto."""
@@ -665,9 +677,20 @@ class TestGoldenPdf(_Base):
         self.assertIn("norte centro histórico", self.txt[_i:_i + 60])
 
     def test_identidad_y_contexto_coherentes(self):
-        """K: 07 no puede decir INCOMPLETO si 6.1/6.3 traen los datos verificados."""
-        self.assertNotIn("contexto de mercado: incompleto", self.txt)
-        self.assertNotIn("estimación referencial no emitida", self.txt)
+        """K + COMPUERTA SEMÁNTICA: 6.1/6.3 y 07 no se contradicen.
+
+        DOCTRINA ACTUALIZADA (P7): los datos catastrales/urbanos que la fuente devolvió
+        siguen impresos en 6.1/6.3, y 07 declara que la VALORACIÓN no se emite porque NO
+        hay fuente de mercado que la sostenga. Son dos preguntas distintas —«¿está
+        resuelto el contexto?» y «¿existe fuente que sostenga la cifra?»— y el documento
+        responde las dos, sin rotularse «automática» y sin inventar una fuente.
+        """
+        self.assertIn("barrio / sector oficial", self.txt)
+        self.assertIn("consolidación", self.txt)
+        self.assertIn("estimación referencial no emitida", self.txt)
+        self.assertNotIn("(automática)", self.txt)
+        # Ninguna fuente sustituta inventada.
+        self.assertNotIn("fuente verificada de mercado", self.txt)
 
 
 class TestGoldenSinFuentes(_Base):

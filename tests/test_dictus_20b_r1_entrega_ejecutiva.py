@@ -30,6 +30,7 @@ sys.path.insert(0, str(ROOT / "api"))
 
 import dictus_entrega as entrega        # noqa: E402
 import dictus_ejecutivo as de           # noqa: E402
+from test_dictus_20c_fidelidad import procedencia_sintetica   # noqa: E402
 
 FOLIO_QA = "TST-000001"
 JOB_QA = "qa-test-20b-r1-0000-0000-000000000000"
@@ -103,6 +104,21 @@ def _captura_sintetica(*, cadena_evidencia="SEALED"):
                        "sector": "SECTOR DE PRUEBA", "metodologia_aplica": True},
         "valuation_authorization": {"allowed": True, "identity_authorized": True,
                                     "market_context_authorized": True},
+        # La tasa del fixture declara su ORIGEN con procedencia COMPLETA: es lo único
+        # que habilita la valoración (compuerta semántica P4/P6/P7).
+        "market_context": {
+            "ready": True,
+            "sector_metodologico": {
+                "matched_sector": "SECTOR DE PRUEBA",
+                "match_type": "EXACT",
+                **procedencia_sintetica(
+                    "tests/test_dictus_20b_r1_entrega_ejecutiva.py::_captura"),
+            },
+            "market_methodology_id": "metodologia_prueba",
+            "market_methodology_version": "0.9-test",
+            "market_rate_source": "Tasa de prueba verificada",
+            "blockers": [],
+        },
         "clasificacion": {
             "juridical_regime": {"value": "PROPIEDAD_HORIZONTAL", "status": "VERIFIED_REGISTRAL"},
             "economic_use": {"value": "HABITACIONAL", "status": "VERIFIED_REGISTRAL"},
@@ -188,8 +204,18 @@ class TestPdfEntregado(unittest.TestCase):
         self.assertIn("ESTADO POR DOMINIO", p1)
         self.assertIn("SELLO GLOBAL", p1)
         for campo in ("Dirección", "Matrícula", "Ciudad", "Barrio", "Área", "Uso",
-                      "Régimen", "Valor estimado"):
+                      "Régimen", "Valoración de la corrida"):
             self.assertIn(campo.upper(), p1.upper(), f"falta el campo «{campo}» en el bloque A")
+        # (FASE 3 §32) DOCTRINA ACTUALIZADA — el campo del bloque A nombra SU objeto: la
+        # valoración que declara la CORRIDA. Se llamaba «Valor estimado» y convivía
+        # confundiendo con la tira de ESTIMACIÓN de DICTUS, que es otro hecho y trae su
+        # propia etiqueta. La aserción queda MÁS estricta: exige el rótulo vigente…
+        self.assertIn("VALORACIÓN DE LA CORRIDA", p1.upper())
+        # …y PROHÍBE el ambiguo: en esta corrida la valoración no está autorizada, así que
+        # la página 1 no puede declarar ningún «valor estimado» de la corrida.
+        self.assertNotIn("VALOR ESTIMADO", p1.upper())
+        # La estimación de DICTUS sí se declara, con su propio contrato y su etiqueta.
+        self.assertIn("ESTIMACIÓN ECONÓMICA DICTUS", p1.upper())
         # 2.0D: la página 1 es un TABLERO DE DECISIÓN, no un resumen de datos.
         self.assertIn("DECISION BOARD", p1)
         for columna in ("TEMA", "HALLAZGO", "DECISIÓN DICTUS", "AFECTA A", "ACCIÓN"):
@@ -262,7 +288,17 @@ class TestPdfEntregado(unittest.TestCase):
             tecnico=salida / entrega.ARCHIVO_TECNICO.format(folio=FOLIO_QA),
             salida_dir=salida, area=58.75, run_id="qa-sin-valoracion")
         p6 = _paginas(Path(r["ejecutivo"]))[5]
-        self.assertIn("VALORACIÓN NO DISPONIBLE", p6)
+        # §7 (cierre semántico Fase 3) · DOCTRINA ACTUALIZADA — el bloque inferior de la
+        # página 6 ya NO se titula «VALOR ESTIMADO POR LA CORRIDA · VALORACIÓN NO
+        # DISPONIBLE»: ese rótulo nombraba un hecho (la estimación) que DICTUS SÍ produce
+        # y lo hacía al lado de la ESTIMACIÓN INDICATIVA, y el cliente lo leía como «no
+        # hay estimación». Ahora nombra la COMPUERTA que realmente cierra —la evidencia de
+        # mercado VERIFICADA, que no acredita esta unidad— y lo declara con su nombre.
+        # La aserción ENDURECE: exige el rótulo vigente y PROHÍBE el retirado.
+        self.assertIn("EVIDENCIA DE MERCADO VERIFICADA · NO HABILITADA", p6)
+        self.assertIn("VERIFIED_MARKET_EVIDENCE_GATE = CLOSED", p6)
+        self.assertNotIn("VALOR ESTIMADO POR LA CORRIDA", p6)
+        self.assertNotIn("VALORACIÓN NO DISPONIBLE", p6)
         self.assertNotIn("$ 0", p6)
         self.assertIn("no se imprime ningún monto", p6.lower())
 

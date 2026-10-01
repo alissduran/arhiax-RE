@@ -87,13 +87,22 @@ PATRONES_PROHIBIDOS = (
 )
 
 # Contenido mínimo exigido por página (§14). Se comprueba sobre el texto extraído.
+#
+# §7 (cierre semántico Fase 3) · La página 6 exigía la marca «Valor estimado», que era el
+# rótulo del bloque legacy («VALOR ESTIMADO POR LA CORRIDA · VALORACIÓN NO DISPONIBLE»).
+# Ese rótulo nombraba un hecho —la estimación— que DICTUS SÍ produce y lo hacía al lado
+# de la ESTIMACIÓN INDICATIVA, y el cliente lo leía como «no hay estimación»: se
+# RENOMBRÓ al de la compuerta que realmente cierra (`VERIFIED_MARKET_EVIDENCE_GATE`).
+# La marca se sustituye por las dos que SÍ declaran el contenido material de la página en
+# las DOS ramas (con cifra y sin cifra) y la aserción ENDURECE: pasa de 2 marcas
+# semánticamente ambiguas a 3 marcas verificables.
 CONTENIDO_MINIMO = {
     # §14 · 2.0D: la página 1 es un TABLERO DE DECISIÓN, no un resumen de datos.
     1: ("DECISIÓN DEL INMUEBLE", "hallazgo", "DECISIÓN DICTUS", "AFECTA A",
         "DISPOSICIÓN GLOBAL"),
     3: ("ONU", "OFAC SDN", "UK Sanctions List"),
     5: ("Salud", "Educación"),
-    6: ("Valor estimado", "Mercado"),
+    6: ("ESTIMACIÓN ECONÓMICA", "VERIFIED_MARKET_EVIDENCE_GATE", "Mercado"),
 }
 
 
@@ -199,6 +208,38 @@ def construir_entregables(
     # manifest del producto (no es bloque canónico: no altera el hash maestro).
     presupuesto = {str(p): de.page_budget(p) for p in range(1, MAX_PAGINAS_EJECUTIVO + 1)}
     modelo["render_budget"] = presupuesto
+
+    # (B) HECHOS IMPRESOS CON SU ORIGEN. El manifest del producto registra QUÉ hecho se
+    # imprimió, con qué ESTADO y con qué ORIGEN declarado (vocabulario cerrado de
+    # `atribucion_mercado`) más su procedencia. Sin este registro, auditar si un hecho
+    # VERIFICADO tiene un origen prohibido obligaría a re-derivar las secciones desde el
+    # código: aquí se lee el artefacto que la corrida produjo. Es el mismo criterio que
+    # `render_budget`: se añade DESPUÉS del hash maestro (no es bloque canónico), porque
+    # describe el render, no el estado.
+    manifiesto_hechos = secciones.get("identidad") or {}
+    modelo["hechos_impresos"] = {
+        "identidad": {
+            "origen": manifiesto_hechos.get("origen"),
+            "filas": [
+                {"etiqueta": f.get("etiqueta"), "valor": f.get("valor"),
+                 "estado": f.get("estado"),
+                 "origin": (f.get("origin") or {}).get("origin"),
+                 "origin_declarado": (f.get("origin") or {}).get("origin_declarado"),
+                 "origin_gate": (f.get("origin") or {}).get("origin_gate"),
+                 "origin_etiqueta": (f.get("origin") or {}).get("origin_etiqueta"),
+                 "origin_blockers": (f.get("origin") or {}).get("origin_blockers"),
+                 "origin_provenance": (f.get("origin") or {}).get("origin_provenance")}
+                for f in (manifiesto_hechos.get("filas") or [])],
+        },
+        "geometria": {
+            "atributo": manifiesto_hechos.get("geometria_atributo"),
+            "etiqueta": manifiesto_hechos.get("geometria_etiqueta"),
+            "estado": manifiesto_hechos.get("geometria_estado"),
+        },
+        "nota": ("`origin` es el origen EFECTIVO (nunca una clase habilitante sin "
+                 "procedencia); `origin_declarado` es lo que declaró la corrida, para que "
+                 "la degradación sea visible."),
+    }
 
     manifest = {
         "master_manifest_version": dm.MASTER_MANIFEST_VERSION,

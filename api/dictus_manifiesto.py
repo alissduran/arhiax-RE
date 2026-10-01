@@ -115,7 +115,16 @@ def dictus_id(folio: str, fecha_iso: str) -> str:
 def _ev(evidence_id: str, tipo: str, source: Optional[str], source_version: Optional[str],
         subject: Optional[str], timestamp: Optional[str], contenido: Any,
         status: str = "SELLADA") -> Dict[str, Any]:
-    cuerpo = serializacion_canonica({"bloques": {"_evidencia": contenido}})
+    # `content_hash` = SHA-256 del CONTENIDO de ESTA evidencia.
+    #
+    # Antes se calculaba con `serializacion_canonica({"bloques": {"_evidencia": ...}})`,
+    # pero `serializacion_canonica` sólo serializa las claves de `BLOQUES_CANONICOS`:
+    # `_evidencia` no está ahí, así que TODAS las evidencias del manifest salían con el
+    # MISMO hash constante (`a789f78c…`), ajeno a su contenido. Un `content_hash` que no
+    # depende del contenido no sella nada: es una constante. Aquí se hashea el contenido
+    # de verdad, con la MISMA normalización determinista (`_canonico` + JSON ordenado).
+    cuerpo = json.dumps(_canonico({"evidencia": contenido}), ensure_ascii=False,
+                        sort_keys=True, separators=(",", ":"))
     return {
         "evidence_id": evidence_id,
         "evidence_type": tipo,
@@ -172,28 +181,58 @@ def construir_evidence_manifest(estado: Dict[str, Any], *,
                       "feature_id": prov.get("feature_id"), "layer": prov.get("layer"),
                       "binding": prov.get("canonical_binding_status")},
                      "SELLADA" if coords.get("verified") else "NO_VERIFICADA"))
-    items.append(_ev("EV-URBANO", "CAPAS_OFICIALES_MUNICIPALES", urb.get("source"),
+    # El estado de la evidencia urbana se lee del contexto OFICIAL de la corrida (donde
+    # el estado realmente vive), sin inventarlo ni degradarlo por una clave ausente.
+    _ouc = e.get("official_urban_context") or {}
+    _urb_estado = (_ouc.get("barrio_status") or urb.get("barrio_status")
+                   or (usm.get("source_mode") if usm.get("source_mode") == "LIVE_OFFICIAL"
+                       else None))
+    items.append(_ev("EV-URBANO", "CAPAS_OFICIALES_MUNICIPALES",
+                     _ouc.get("barrio_source") or urb.get("source"),
                      usm.get("source_mode"), sujeto, ts,
                      {"barrio": urb.get("barrio"), "estrato": urb.get("estrato"),
                       "tratamiento": urb.get("tratamiento"),
                       "altura_maxima": urb.get("altura_maxima"),
+                      "barrio_status": _ouc.get("barrio_status"),
+                      "estrato_status": _ouc.get("estrato_status"),
                       "clase_suelo": urb.get("predio_entorno", {}).get("clase_suelo")
                       if isinstance(urb.get("predio_entorno"), dict) else None,
                       "modo": usm.get("source_mode")},
-                     "SELLADA" if urb.get("barrio_status") == "VERIFIED_OFFICIAL" else "PARCIAL"))
-    items.append(_ev("EV-MERCADO", "METODOLOGIA_DE_MERCADO", market.get("rate_source"),
+                     "SELLADA" if _urb_estado == "VERIFIED_OFFICIAL" else "PARCIAL"))
+    # ── La evidencia de MERCADO y de VALORACIÓN dependen del ORIGEN de la tasa ──
+    # Una tasa escrita a mano en un artefacto local NO es una fuente sellable: la
+    # evidencia se declara como PARÁMETRO DECLARADO y la valoración como no autorizada
+    # por falta de FUENTE (no por falta de umbral). Es la misma verdad que imprime el
+    # ejecutivo.
+    _origen_mercado = str(market.get("origin") or "").upper()
+    _origen_gate = bool(market.get("origin_gate"))
+    _estado_mercado = ({"EXTERNAL_SOURCE": "SELLADA",
+                        "COMPUTED_FROM_SOURCES": "SELLADA",
+                        "MANUAL_CONFIG": "PARAMETRO_DECLARADO",
+                        "STATIC_REFERENCE": "PARAMETRO_DECLARADO",
+                        "MODEL_PRIOR": "PRIOR_DEL_MODELO"}.get(_origen_mercado)
+                       or "SIN_ORIGEN_DECLARADO")
+    items.append(_ev("EV-MERCADO", "METODOLOGIA_DE_MERCADO",
+                     market.get("market_rate_source") or market.get("rate_source"),
                      market.get("market_methodology_version"), sujeto, ts,
                      {"sector": market.get("sector"), "match_type": market.get("match_type"),
                       "value_m2": market.get("value_m2"),
+                      "origin": _origen_mercado or None,
+                      "origin_gate": _origen_gate,
+                      "origin_blockers": market.get("origin_blockers") or [],
                       "metodologia_sha256": market.get("market_methodology_sha256")},
-                     "SELLADA" if market.get("ready") else "PARCIAL"))
+                     _estado_mercado))
     items.append(_ev("EV-VALORACION", "VALORACION", val.get("source_m2"),
                      market.get("market_methodology_version"), sujeto, ts,
                      {"autorizada": (val.get("authorization") or {}).get("allowed"),
                       "consolidado": val.get("consolidado"),
                       "value_m2": val.get("value_m2"),
+                      "origin": val.get("origin") or _origen_mercado or None,
+                      "origin_gate": bool(val.get("origin_gate")) or _origen_gate,
                       "motivo_no_aplica": val.get("motivo_no_aplica")},
-                     "SELLADA" if (val.get("authorization") or {}).get("allowed") else "NO_AUTORIZADA"))
+                     ("SELLADA" if ((val.get("authorization") or {}).get("allowed")
+                                    and _origen_gate)
+                      else "NO_AUTORIZADA_SIN_FUENTE")))
     items.append(_ev("EV-CONTRAPARTES", "SCREENING_CONTRAPARTES",
                      "listas restrictivas y sancionatorias aplicables",
                      scr.get("matcher_version"), "contrapartes del caso", ts,
@@ -282,9 +321,25 @@ def estado_legacy_desde_run_state(rs: Dict[str, Any]) -> Dict[str, Any]:
         "identity": {**pi, **{k: adm.get(k) for k in
                               ("barrio", "comuna", "estrato", "tratamiento",
                                "edificabilidad_texto") if adm.get(k)}},
-        "coordinates": mc.get("coordinates") or {},
+        # La procedencia REAL de la coordenada vive en el market_context (fuente, si está
+        # verificada y su binding canónico). Antes se pasaba solo `coordinates`, que no
+        # trae `verified` ni `provenance`: la evidencia de geometría salía con
+        # `source: null` y «NO_VERIFICADA» mientras el ejecutivo de la MISMA corrida
+        # imprimía «Geometría oficial: VERIFICADA». Un dato, un estado (P3).
+        "coordinates": {
+            **(mc.get("coordinates") or {}),
+            "source": mc.get("coordinate_source"),
+            "verified": bool(mc.get("coordinate_source_verified")),
+            "coordinate_scope": mc.get("coordinate_scope"),
+            "canonical_binding_status": mc.get("canonical_binding_status"),
+            "provenance": mc.get("coordinate_provenance") or {},
+        },
         "urban": rs.get("urban_context") or {},
         "urban_source_summary": mc.get("urban_source_summary") or {},
+        # El estado urbano oficial vive en `market_context.official_urban_context`;
+        # `urban_context` no tiene `barrio_status`, de modo que la evidencia urbana
+        # nacía «PARCIAL» para siempre mientras la página 4 imprimía VERIFICADO.
+        "official_urban_context": mc.get("official_urban_context") or {},
         "market": mc,
         "poi": rs.get("poi_state") or {},
         "volcan": (rs.get("risk_context") or {}).get("volcan") or {},

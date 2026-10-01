@@ -24,6 +24,7 @@ Qué cambia frente a 2.0B/R1 (y por qué)
 from __future__ import annotations
 
 import math
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
@@ -33,6 +34,12 @@ from reportlab.pdfgen import canvas
 
 from dictus_historia import (HISTORICAL_CONFLICT, REQUIERE_VALIDACION, SIN_DATO,
                              VERIFICADO)
+
+# §32/§33 · El contrato de estimación (P1 y P6) y su vocabulario viven en UN solo
+# módulo: `api/estimation_state.py`. El renderizador NO redacta ni deriva ninguno de
+# esos literales: los imprime tal como el motor los produce.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import estimation_state as _egs   # noqa: E402
 
 # ── geometría ────────────────────────────────────────────────────────────────
 W, H = 595.28, 841.89          # A4 vertical
@@ -47,8 +54,90 @@ PIE_Y = 56.0                   # límite inferior del contenido
 TOPE_BLOCKERS_PDF = 3
 # §8 · tamaño mínimo del cuerpo: la compactación NUNCA baja de aquí (no 6–7 pt).
 CUERPO_MINIMO_PT = 8.2
-METODOLOGIA_VALORACION = ("Metodología: norma + concepto técnico + validación "
-                          "profesional · detalle completo en el informe técnico.")
+# §32 · tira de estimación de la página 1 (tres líneas de contrato) y §33 · bloque
+# `ESTIMACIÓN ECONÓMICA` de la página 6. Las alturas están dentro del presupuesto
+# medido de cada página (`page_budget`).
+ALTO_ESTIMACION_P1 = 38.0
+# P6 · cabecera + rejilla de cuatro campos + las cuatro líneas de contrato + el texto
+# fijo permitido. Debajo se dibuja el estado de valoración declarado por la corrida.
+# La altura está medida contra el presupuesto REAL de la página 6 (ver `page_budget`):
+# el bloque entra con margen sobre el límite del pie en las tres corridas de prueba
+# (Golden, contenido máximo autorizado y contenido máximo bloqueado).
+ALTO_ESTIMACION_P6_FIJO = 132.0
+ALTO_ESTADO_AUTORIZADO = 92.0
+
+
+def alto_estado_bloqueado(impresos: int, extra: bool, origen: bool) -> float:
+    """Alto del sub-bloque «estado de la corrida» dentro de `ESTIMACIÓN ECONÓMICA`."""
+    return 66.0 + impresos * 12.0 + (12.0 if extra else 0.0) + (12.0 if origen else 0.0)
+
+
+def bloque_estimacion_p6(est: Dict[str, Any], dibujar_estado, alto_estado: float):
+    """Bloque `ESTIMACIÓN ECONÓMICA` de la página 6 (§32/§33).
+
+    Imprime los OCHO campos del contrato —RANGO ESTIMADO, REFERENCIA CENTRAL,
+    VALOR/M², CONFIANZA, MÉTODO, EVIDENCIA UTILIZADA, LIMITACIONES y TRAZABILIDAD—,
+    el TEXTO FIJO permitido y, debajo, el estado de valoración que la corrida declara
+    (`dibujar_estado`). El bloque no calcula nada: imprime lo que el motor produjo, y
+    cuando el motor no produjo cifra lo dice con el literal «no disponible» (nunca con
+    un $0 ni con un monto inferido).
+    """
+    def dibujar(cc, x, yy, a):
+        alto = ALTO_ESTIMACION_P6_FIJO + alto_estado
+        panel(cc, x, yy - alto, a, alto, CARD, HAIR)
+        _abre = bool(est.get("habilitado")) if "habilitado" in est \
+            else str(est.get("estado") or "CLOSED").startswith("OPEN")
+        caja_estado(cc, x + 9, yy - 15, 158, "DISPONIBLE" if _abre else "NO_DISPONIBLE",
+                    7.2, 14)
+        txt(cc, x + 176, yy - 13, _v(est.get("etiqueta")), FB, 9.6, INK)
+        _campos = (("RANGO ESTIMADO", est.get("RANGO ESTIMADO")),
+                   ("REFERENCIA CENTRAL", est.get("REFERENCIA CENTRAL")),
+                   ("VALOR/M²", est.get("VALOR/M²")),
+                   ("CONFIANZA", est.get("CONFIANZA")))
+        _cw = (a - 22) / 4
+        for i, (k, v) in enumerate(_campos):
+            xx = x + 11 + i * _cw
+            txt(cc, xx, yy - 35, k, FB, 6.6, TEXT_3)
+            _t, _s = ajustar(cc, _v(v), FB, 8.6, _cw - 7)
+            txt(cc, xx, yy - 45, _t, FB, _s, INK)
+        rule(cc, x + 11, yy - 51, x + a - 11, yy - 51, HAIR_2)
+        for i, k in enumerate(("MÉTODO", "EVIDENCIA UTILIZADA", "LIMITACIONES",
+                               "TRAZABILIDAD")):
+            _t, _s = ajustar(cc, f"{k}: {_v(est.get(k))}", F, 7.6, a - 22)
+            txt(cc, x + 11, yy - 62 - i * 11, _t, F, _s, TEXT_2)
+        # §34 · el marco metodológico VIGENTE se declara aquí (sustituye a «norma +
+        # concepto técnico + validación profesional», que describía otro producto).
+        _mt, _mts = ajustar(cc, METODOLOGIA_VALORACION, FO, 7.6, a - 22)
+        txt(cc, x + 11, yy - 106, _mt, FO, _mts, TEXT_2)
+        # §33 · TEXTO FIJO permitido: se imprime literal, sin parafrasear.
+        for i, ln in enumerate(_lineas(cc, NOTA_ESTIMACION, FO, 6.8, a - 22)[:2]):
+            txt(cc, x + 11, yy - 117 - i * 9, ln, FO, 6.8, TEXT_3)
+        dibujar_estado(cc, x, yy - ALTO_ESTIMACION_P6_FIJO, a)
+    return dibujar
+
+# §34 · El marco de la estimación es «fuentes disponibles + análisis técnico
+# automatizado + metodología versionada». La antigua fórmula «norma + concepto técnico +
+# validación profesional» describía un producto DISTINTO (la revisión profesional), que
+# sigue existiendo como producto separado y ya no se imprime aquí como si la estimación
+# dependiera de ella.
+METODOLOGIA_VALORACION = _egs.METODOLOGIA_IMPRESA
+# Texto FIJO permitido de la estimación automatizada (§33). No se parafrasea.
+NOTA_ESTIMACION = _egs.NOTA_ESTIMACION_FIJA
+# §33 · los OCHO campos obligatorios del bloque `ESTIMACIÓN ECONÓMICA` de la página 6,
+# en el orden en que se imprimen.
+CAMPOS_ESTIMACION_P6 = ("RANGO ESTIMADO", "REFERENCIA CENTRAL", "VALOR/M²", "CONFIANZA",
+                        "MÉTODO", "EVIDENCIA UTILIZADA", "LIMITACIONES", "TRAZABILIDAD")
+
+# §7/§8 (cierre semántico) · VOCABULARIO DEL BLOQUE DE VALORACIÓN BLOQUEADA.
+# El bloque inferior de la P6 declara UN hecho: la EVIDENCIA DE MERCADO VERIFICADA no
+# habilita una valoración de ESTA unidad. NO es «VALOR ESTIMADO» —ese rótulo nombraba la
+# estimación, que DICTUS SÍ produce y publica arriba como ESTIMACIÓN INDICATIVA— y por eso
+# está PROHIBIDO aquí: era el origen de la contradicción que el cliente leía como «no hay
+# estimación». Las tres constantes son la ÚNICA fuente de esos literales.
+ROTULO_VALORACION_BLOQUEADA = "EVIDENCIA DE MERCADO VERIFICADA · NO HABILITADA"
+TEXTO_GARANTIA_SIN_CIFRA = "no se imprime ningún monto, ni $0"
+RAZON_VERIFIED_MARKET_EVIDENCE_NO_HABILITADA = \
+    _egs.razon_evidencia_verificada_no_habilitada()
 
 # ── paleta mineral (tinta + marfil + oro) ────────────────────────────────────
 INK = HexColor("#0B1C2B")
@@ -512,7 +601,7 @@ class Filas(Bloque):
 
     def __init__(self, filas: Sequence[Dict[str, Any]], pagina: int = 1,
                  ancho_etiqueta=150.0, size_valor=9.5, con_estado=True, alto_min=24.0,
-                 nota_size=8.0):
+                 nota_size=8.0, holgura: float = 14.0):
         super().__init__(pagina)
         self.filas = list(filas)
         self.ancho_etiqueta = ancho_etiqueta
@@ -520,6 +609,10 @@ class Filas(Bloque):
         self.con_estado = con_estado
         self.alto_min = alto_min
         self.nota_size = nota_size
+        # Holgura vertical de cada fila por encima de su texto. Es un parámetro para que
+        # una página con presupuesto justo pueda apretar SIN degradar el cuerpo: el
+        # tamaño de las letras no cambia nunca (`CUERPO_MINIMO_PT`).
+        self.holgura = holgura
 
     def _calc(self, c, ancho):
         ancho_valor = ancho - self.ancho_etiqueta - (140.0 if self.con_estado else 8.0)
@@ -536,7 +629,7 @@ class Filas(Bloque):
                     c, f["nota"], FO, self.nota_size,
                     ancho_sin_columna(ancho - self.ancho_etiqueta, 160.0),
                     self.nota_size * 1.3)
-            alto = max(self.alto_min, alto_v + alto_n + 14.0)
+            alto = max(self.alto_min, alto_v + alto_n + self.holgura)
             detalle.append({"lineas": lineas, "lineas_nota": lineas_n, "alto": alto})
             total += alto + 2.0
         return detalle, total
@@ -1016,8 +1109,7 @@ def pagina1(c, modelo, secciones):
             _val, _vsz = ajustar(cc, valor, FB, 9.4, cw - 12)
             txt(cc, xx, yt - 21, _val, FB, _vsz, INK)
 
-    y = emitir(c, y, [Titulo("INFORMACIÓN GENERAL", "bloque a · identidad del inmueble", 1,
-                             size=11.0),
+    y = emitir(c, y, [Titulo("INFORMACIÓN GENERAL", "", 1, size=11.0),
                       PanelLibre("bloque_general", 58.0, _dibujar_general, 1)])
 
     indicadores = secciones.get("indicadores") or []
@@ -1041,6 +1133,27 @@ def pagina1(c, modelo, secciones):
                              "identidad · títulos · contrapartes · territorio · entorno · "
                              "valoración", 1, size=11.0),
                       PanelLibre("dominios", 34.0, _dib_dominios, 1)], dy=5.0)
+
+    # ── §32 · CONTRATO DE ESTIMACIÓN EN LA PÁGINA 1 ───────────────────────────
+    # Tres ramas, leídas del motor (nunca redactadas aquí): `VALOR ESTIMADO` con cifra,
+    # rango y confianza; `ESTIMACIÓN INDICATIVA` con rango y confianza indicativa; y
+    # `ESTIMACIÓN NO DISPONIBLE` con el literal «Sin evidencia de mercado suficiente».
+    # Si el motor no produjo cifra, AQUÍ NO SE IMPRIME NINGUNA: no hay rama que invente
+    # un monto.
+    _est_p1 = (secciones.get("estimacion") or {}).get("p1") or {}
+
+    if _est_p1:
+        def _dib_estimacion_p1(cc, x, yy, a):
+            panel(cc, x, yy - ALTO_ESTIMACION_P1, a, ALTO_ESTIMACION_P1, PAPER, HAIR)
+            _l1, _s1 = ajustar(cc, str(_est_p1.get("linea_1") or ""), FB, 9.0, a - 18)
+            txt(cc, x + 9, yy - 12, _l1, FB, _s1, INK)
+            _l2, _s2 = ajustar(cc, str(_est_p1.get("linea_2") or ""), F, 8.2, a - 18)
+            txt(cc, x + 9, yy - 24, _l2, F, _s2, TEXT_2)
+            _l3, _s3 = ajustar(cc, str(_est_p1.get("linea_3") or ""), FO, 7.4, a - 18)
+            txt(cc, x + 9, yy - 34, _l3, FO, _s3, TEXT_3)
+
+        y = emitir(c, y, [PanelLibre("estimacion_p1", ALTO_ESTIMACION_P1,
+                                     _dib_estimacion_p1, 1)], dy=5.0)
 
     y = emitir(c, y, [Titulo("COHERENCIA DE LA INFORMACIÓN",
                              "conflictos entre versiones del expediente", 1, size=11.0),
@@ -1427,12 +1540,17 @@ def pagina4(c, modelo, secciones):
                                    f"{_v(at.get('fuente_actual'), 'no declarada')}",
                                F, 7.2, cw - 16)
             txt(cc, xx + 8, yt - 29, _th, F, _sh, TEXT_2)
+            # (C) El chip dice el estado de ESTE atributo (`estado_impreso`, derivado de su
+            # propio estado). Antes estampaba la decisión del URBAN_GATE en todos los
+            # atributos del panel —incluidos `coordenada`, `titulares` y `amenaza`, que no
+            # son urbanísticos—: coincidía por casualidad, no por corrección. El respaldo
+            # al gate se conserva SOLO para una fila que no declare su término.
             _dec_urb = (secciones.get("decision") or {}).get("gate_decisions", {}).get(
                 "URBAN_GATE")
-            chip(cc, xx + cw - 6 - 150, yt - 11,
-                 _dec_urb if _dec_urb in ("NO UTILIZAR ESTE DATO COMO DEFINITIVO",
-                                          "INFORMACIÓN VERIFICADA") else "CONFLICTO HISTÓRICO",
-                 "warn" if (_dec_urb or "").startswith("NO UTILIZAR") else "err", 6.2, 12, 5)
+            _termino = str(at.get("estado_impreso") or at.get("decision")
+                           or _dec_urb or "CONFLICTO HISTÓRICO")
+            chip(cc, xx + cw - 6 - 150, yt - 11, _termino,
+                 "warn" if _termino.startswith("NO UTILIZAR") else "err", 6.2, 12, 5)
 
     if attrs:
         _dec_u, _mot_u = _decision_de(secciones, "URBAN_GATE")
@@ -1632,44 +1750,55 @@ def pagina6(c, modelo, secciones):
     cabecera(c, modelo, 6)
     identidad = secciones.get("identidad") or {}
     valor = secciones.get("valor") or {}
-    y = emitir(c, TOPE, [Titulo(TITULOS_PAGINA[5], "lo que se verificó y cuánto vale", 6)])
+    est_p6 = (secciones.get("estimacion") or {}).get("p6") or {}
+    y = emitir(c, TOPE, [Titulo(TITULOS_PAGINA[5], "", 6)])
 
-    y = emitir(c, y, [Titulo("IDENTIDAD DEL INMUEBLE", "registral y catastral", 6, size=11.0),
+    y = emitir(c, y, [Titulo("IDENTIDAD DEL INMUEBLE", "", 6, size=11.0),
                       Filas([{"etiqueta": f.get("etiqueta"), "valor": f.get("valor"),
                               "estado": f.get("estado")}
                              for f in (identidad.get("filas") or [])],
                             pagina=6, ancho_etiqueta=168.0, size_valor=9.6,
-                            alto_min=24.0)])
+                            alto_min=24.0, holgura=10.0)])
 
-    def _dib_ident(cc, x, yy, a):
-        panel(cc, x, yy - 50, a, 50, OK_BG if identidad.get("identidad_estado") == "VERIFICADA"
-              else WARN_BG, HAIR)
-        txt(cc, x + 9, yy - 15, f"Identidad registral y catastral: "
+    def _dib_ident_geom(cc, x, yy, a):
+        # Identidad y geometría son DOS conceptos y se declaran juntos en UN solo panel:
+        # la página 6 tiene presupuesto medido y separarlos costaba 56 pt sin añadir
+        # ningún hecho (los dos bloques se leían como uno).
+        panel(cc, x, yy - 86, a, 86,
+              OK_BG if identidad.get("identidad_estado") == "VERIFICADA" else WARN_BG, HAIR)
+        txt(cc, x + 9, yy - 14, f"Identidad registral y catastral: "
                                 f"{_v(identidad.get('identidad_estado'))}", FB, 9.4, INK)
-        txt(cc, x + 9, yy - 28, _v(identidad.get("identidad_detalle")), F, 8.4, TEXT_2)
+        txt(cc, x + 9, yy - 26, _v(identidad.get("identidad_detalle")), F, 8.4, TEXT_2)
         _di, _mi = _decision_de(secciones, "IDENTITY_GATE")
         _t, _s = ajustar(cc, "DECISIÓN DICTUS: " + _v(_di, "no declarada"), FB, 8.2, a - 18)
-        txt(cc, x + 9, yy - 41, _t, FB, _s, INK)
-
-    def _dib_geom(cc, x, yy, a):
-        panel(cc, x, yy - 56, a, 56, PAPER, HAIR)
-        txt(cc, x + 9, yy - 15, f"Geometría oficial: {_v(identidad.get('geometria_estado'))}",
-            FB, 9.4, INK)
-        ls = _lineas(cc, _v(identidad.get("geometria_detalle")), F, 8.4, a - 18)[:4]
+        txt(cc, x + 9, yy - 38, _t, FB, _s, INK)
+        rule(cc, x + 11, yy - 45, x + a - 11, yy - 45, HAIR_2)
+        # (C) La etiqueta NOMBRA el atributo que el estado describe: el BINDING de la
+        # geometría oficial contra la identidad canónica. El VALOR de la coordenada que
+        # usa la corrida es OTRO atributo y declara su estado en la página 4 (coherencia
+        # por atributo): imprimir los dos como «geometría» fabricaba una contradicción.
+        txt(cc, x + 9, yy - 57,
+            f"{_v(identidad.get('geometria_etiqueta'), 'Binding de la geometría oficial')}: "
+            f"{_v(identidad.get('geometria_estado'))}", FB, 9.0, INK)
+        ls = _lineas(cc, _v(identidad.get("geometria_detalle")), F, 8.2, a - 18)[:2]
         for i, ln in enumerate(ls):
-            txt(cc, x + 9, yy - 29 - i * 9.4, ln, F, 8.4, TEXT_2)
+            txt(cc, x + 9, yy - 68 - i * 9.0, ln, F, 8.2, TEXT_2)
 
-    y = emitir(c, y, [PanelLibre("identidad_estado", 50.0, _dib_ident, 6),
-                      PanelLibre("geometria", 56.0, _dib_geom, 6)])
+    y = emitir(c, y, [PanelLibre("identidad_geometria", 86.0, _dib_ident_geom, 6)])
 
     aut = bool(valor.get("autorizado"))
+    # (A) Los dos vocabularios de la compuerta de valoración, leídos del MODELO: la
+    # DECISIÓN (gramática) y el ESTADO (`CLOSED`/`OPEN`). Se imprimen juntos en las dos
+    # ramas —con cifra y sin cifra— porque describen hechos distintos.
+    _dec_v = (secciones.get("decision") or {})
+    _gd = (_dec_v.get("gate_decisions") or {})
+    _gr = (_dec_v.get("gate_reasons") or {})
+    _gs = (_dec_v.get("gate_states") or {})
     if aut:
-        y = emitir(c, y, [Titulo("VALOR ESTIMADO", "valoración autorizada en esta corrida",
-                                 6, size=11.0)])
-
         def _dib_valor(cc, x, yy, a):
-            panel(cc, x, yy - 92, a, 92, CARD)
-            txt(cc, x + 11, yy - 17, "Valor estimado (valor central)", FB, 8.0, TEXT_3)
+            panel(cc, x, yy - ALTO_ESTADO_AUTORIZADO, a, ALTO_ESTADO_AUTORIZADO, PAPER, HAIR)
+            txt(cc, x + 11, yy - 17, "Valor estimado por la corrida (valor central)",
+                FB, 8.0, TEXT_3)
             txt(cc, x + 11, yy - 42, _v(valor.get("consolidado")), FB, 20, INK)
             _res, _rsz = ajustar(
                 cc, f"Rango {_v(valor.get('rango'), '—')} – "
@@ -1677,41 +1806,67 @@ def pagina6(c, modelo, secciones):
                     f"Valor/m² {_v(valor.get('valor_m2'), '—')} · "
                     f"Área {_v(valor.get('area'), '—')}", F, 8.4, 248)
             txt(cc, x + 11, yy - 58, _res, F, _rsz, TEXT_2)
-            txt(cc, x + 11, yy - 70, f"Vigencia: {_v(valor.get('vigencia'), 'no declarada')} · "
-                                     f"DECISIÓN DICTUS: {_v(valor.get('decision'), 'no declarada')}",
-                F, 8.0, TEXT_3)
+            _vig, _vsz = ajustar(
+                cc, f"Vigencia: {_v(valor.get('vigencia'), 'no declarada')} · "
+                    f"DECISIÓN DICTUS: {_v(valor.get('decision'), 'no declarada')} · "
+                    f"COMPUERTA {_v(_gs.get('VALUATION_GATE'), 'OPEN')} "
+                    f"(VERIFIED_MARKET_EVIDENCE_GATE)", F, 8.0, a - 22)
+            txt(cc, x + 11, yy - 70, _vig, F, _vsz, TEXT_3)
             for i, (k, v) in enumerate([("Sector de mercado", valor.get("sector")),
                                         ("Método principal", valor.get("metodologia"))]):
                 xx = x + 300 + i * 110
                 txt(cc, xx, yy - 24, k, FB, 7.4, TEXT_3)
                 wrap(cc, xx, yy - 36, _v(v, "no declarado"), FB, 8.4, INK, 104, leading=9.4)
-            # §6 · la nota metodológica vive DENTRO del panel (no en un bloque aparte).
-            _met, _ms = ajustar(cc, METODOLOGIA_VALORACION, FO, 8.2, a - 22)
-            txt(cc, x + 11, yy - 82, _met, FO, _ms, TEXT_3)
+            # La TASA declarada por la corrida se imprime dentro del mismo bloque: es el
+            # puente entre la estimación de DICTUS (arriba) y el parámetro que la corrida
+            # sí declara a mano. Antes vivía en un bloque aparte de 22 pt que decía lo
+            # mismo que este.
+            if valor.get("tasa_fuente"):
+                for i, ln in enumerate(_lineas(
+                        cc, "Tasa y parámetros: " + str(valor["tasa_fuente"]), FO, 7.4,
+                        a - 22)[:2]):
+                    txt(cc, x + 11, yy - 82 - i * 8.6, ln, FO, 7.4, TEXT_3)
 
-        y = emitir(c, y, [PanelLibre("valor", 92.0, _dib_valor, 6)])
-        if valor.get("tasa_fuente"):
-            y = emitir(c, y, [Nota("Tasa y parámetros: " + str(valor["tasa_fuente"]), 6)])
+        _dib_estado = _dib_valor
+        _alto_estado = ALTO_ESTADO_AUTORIZADO
     else:
         blockers = valor.get("blockers") or []
-        _dec = (secciones.get("decision") or {})
-        _gd = (_dec.get("gate_decisions") or {})
-        _gr = (_dec.get("gate_reasons") or {})
         _decision_val = str(_gd.get("VALUATION_GATE") or "NO EMITIR VALORACIÓN")
-        _motivo_val = str(_gr.get("VALUATION_GATE") or "")
+        # La razón declarada por la corrida (`_gr`) NO se pierde: sigue en el manifest y
+        # en el run state (plano máquina), y su sustancia se imprime arriba (motivo de la
+        # corrida) y debajo (condiciones materiales). El hueco que ocupaba se usa para el
+        # hecho que el bloque inferior DEBE nombrar: la compuerta de evidencia verificada.
+        # Dos vocabularios conviven y el lector ve qué se decidió Y si la compuerta abre.
+        _estado_val = str(_gs.get("VALUATION_GATE") or "CLOSED")
         # §4 · el PDF imprime hasta TOPE_BLOCKERS condiciones materiales; si hay más, lo
         # declara y remite al informe técnico y al expediente de decisión. El MODELO y el
         # MANIFEST conservan la lista completa: no se pierde ni se recorta el dato.
         _impresos = list(blockers[:TOPE_BLOCKERS_PDF])
         _extra_blockers = max(0, len(blockers) - len(_impresos))
-        _lineas_blockers = len(_impresos) + (1 if _extra_blockers else 0)
-        _alto_blockers = max(86.0, 74.0 + _lineas_blockers * 12.0 + 12.0)
-        _texto_dec_val = "DECISIÓN DICTUS: " + _decision_val
+        # P4 · el ORIGEN se declara junto al valor también cuando NO se emite cifra — pero
+        # sólo si el origen es la CAUSA del bloqueo. Si el origen sí habilita y el bloqueo
+        # viene de otro lado, el motivo ya lo dice y no se contradice al lector.
+        _linea_origen = bool(valor.get("origin")) and not bool(valor.get("origin_gate"))
+        _alto_blockers = alto_estado_bloqueado(len(_impresos), bool(_extra_blockers),
+                                               _linea_origen)
+        # §7/§8 · NOMBRE DEL HECHO QUE ESTÁ CERRADO. El rótulo del bloque inferior dice
+        # la COMPUERTA que realmente cierra: `VERIFIED_MARKET_EVIDENCE_GATE` (¿la
+        # evidencia de mercado acredita ESTA unidad?), NO la estimación —que sí se
+        # produjo y se imprime arriba como ESTIMACIÓN INDICATIVA—. Y la razón exigida va
+        # impresa literal. PROHIBIDO el rótulo «VALOR ESTIMADO» en este bloque: era lo
+        # que el cliente leía como «no hay estimación» al lado de la estimación.
+        _razon_gate = RAZON_VERIFIED_MARKET_EVIDENCE_NO_HABILITADA
+        _texto_dec_val = (f"DECISIÓN DICTUS: {_decision_val} · COMPUERTA {_estado_val} · "
+                          f"{TEXTO_GARANTIA_SIN_CIFRA}")
 
         def _dib_blockers(cc, x, yy, a):
             panel(cc, x, yy - _alto_blockers, a, _alto_blockers, PAPER, HAIR)
-            caja_estado(cc, x + 11, yy - 14, 190, "NO_DISPONIBLE", 7.4, 14)
-            txt(cc, x + 210, yy - 13, "VALORACIÓN NO DISPONIBLE", FB, 9.0, WARN_FG)
+            caja_estado(cc, x + 11, yy - 14, 130, "NO_DISPONIBLE", 7.4, 14)
+            # El rótulo conserva el literal «no se imprime ningún monto, ni $0» en la
+            # línea de la decisión (garantía de que NO hay cifra de la corrida) y aquí
+            # nombra el objeto REAL del bloque: la evidencia de mercado verificada.
+            _rot, _rsz = ajustar(cc, ROTULO_VALORACION_BLOQUEADA, FB, 8.2, a - 159)
+            txt(cc, x + 148, yy - 13, _rot, FB, _rsz, WARN_FG)
             # §28/§43 · la DECISIÓN de la compuerta, con su motivo: una valoración
             # bloqueada no se convierte después en «el valor fue calculado».
             _dch, _dsc = ajustar(cc, _texto_dec_val, FB, 7.6, a - 26)
@@ -1720,10 +1875,28 @@ def pagina6(c, modelo, secciones):
                 _v(valor.get("motivo"),
                    "La corrida no declara por qué no se autorizó la valoración: "
                    "requiere revisión."), FB, 9.0, WARN_FG)
-            if _motivo_val:
-                txt(cc, x + 11, yy - 60,
-                    _v(_corto(_motivo_val, 150)), F, 7.4, TEXT_3)
-            _yy = yy - 74
+            # P4 · el ORIGEN de la tasa se declara junto al valor aunque no se emita
+            # cifra: sin origen habilitante el lector tiene que ver de dónde venía.
+            if _linea_origen:
+                txt(cc, x + 11, yy - 59,
+                    "Origen de la tasa declarada: "
+                    f"{_v(valor.get('origin_etiqueta'), valor.get('origin'))} "
+                    f"({valor.get('origin')}) · NO HABILITA VALORACIÓN",
+                    F, 7.4, TEXT_3)
+            # §7 · La línea nombra la COMPUERTA y su razón EXIGIDA. Antes este hueco
+            # repetía la razón de la corrida (idéntica en sustancia a la línea del motivo
+            # de arriba y a las condiciones listadas debajo) y el bloque se titulaba
+            # «VALOR ESTIMADO POR LA CORRIDA · VALORACIÓN NO DISPONIBLE»: eso era la
+            # contradicción. Un hecho, un nombre, una compuerta. Lo que se imprime aquí
+            # es SUSTITUCIÓN DECLARADA, no pérdida: la razón de `VALUATION_GATE` sigue
+            # en el manifest y en el run state (plano máquina), y su sustancia está
+            # impresa arriba (motivo de la corrida) y debajo (condiciones materiales).
+            _gl, _gls = ajustar(
+                cc,
+                f"VERIFIED_MARKET_EVIDENCE_GATE = {_estado_val} · {_razon_gate}",
+                F, 7.4, a - 22, minimo=7.2)
+            txt(cc, x + 11, yy - (71 if _linea_origen else 60), _gl, F, _gls, TEXT_3)
+            _yy = yy - (86 if _linea_origen else 74)
             for b in _impresos:
                 txt(cc, x + 11, _yy, "· " + str(b), F, 8.4, TEXT_2)
                 _yy -= 12.0
@@ -1733,29 +1906,25 @@ def pagina6(c, modelo, secciones):
                     f"el informe técnico (contexto de mercado) y en el expediente de "
                     f"decisión.", F, 8.2, TEXT_3)
                 _yy -= 12.0
-            _met, _ms = ajustar(cc, METODOLOGIA_VALORACION, FO, 8.2, a - 22)
-            txt(cc, x + 11, _yy, _met, FO, _ms, TEXT_3)
 
-        y = emitir(c, y, [Titulo("VALOR ESTIMADO",
-                                 "qué falta para habilitar la valoración · no se "
-                                 "imprime ningún monto, ni $0", 6, size=11.0)])
-        y = emitir(c, y, [PanelLibre("blockers", _alto_blockers + 12.0,
-                                     _dib_blockers, 6)])
+        _dib_estado = _dib_blockers
+        _alto_estado = _alto_blockers
 
-    # §2/§3 · UN solo bloque inferior de trazabilidad: el pie global ya demuestra
-    # evidencia, sello y hash maestro en esta y en todas las páginas; aquí se añade lo
-    # que el pie NO lleva —fuente y fecha— en una única línea de 8.2 pt. El bloque
-    # «Traza» de 46 pt se elimina SOLO en la página 6 (en las demás sigue igual).
-    _fecha_consulta = str((modelo.get("document_identity") or {}).get("generated_at")
-                          or "")[:10]
-    y = emitir(c, y, [Nota("TRAZABILIDAD · Fuentes: Metodología de mercado (Lonja) · "
-                           "Catastro · Identidad canónica · Consulta: "
-                           f"{_fecha_consulta or 'no declarada'}", 6, size=8.2)], dy=0)
+    # §32/§33 · UN solo bloque económico en la página 6: el contrato de estimación del
+    # motor (ocho campos) y —debajo— el estado de valoración que la corrida declara. Los
+    # dos hechos son distintos y por eso se declaran juntos: el lector ve qué estimó
+    # DICTUS y qué autorizó (o no) la corrida, sin confundir uno con otro.
+    y = emitir(c, y, [Titulo("ESTIMACIÓN ECONÓMICA", "", 6, size=11.0)])
+    y = emitir(c, y, [PanelLibre("estimacion", ALTO_ESTIMACION_P6_FIJO + _alto_estado,
+                                 bloque_estimacion_p6(est_p6, _dib_estado, _alto_estado),
+                                 6)])
+
     _cerrar_pagina(6, y, identity_row_count=len(identidad.get("filas") or []),
                    blocker_count=len(valor.get("blockers") or []),
                    blockers_printed=min(len(valor.get("blockers") or []),
                                         TOPE_BLOCKERS_PDF))
     pie(c, modelo, 6)
+
 
 
 # ── render ────────────────────────────────────────────────────────────────────

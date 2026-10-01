@@ -44,7 +44,7 @@ BLOCKERS_SEIS = [
     "Sin tasación de referencia vigente para el sector",
     "Área registral y área catastral no conciliadas",
     "Sin testigos comparables suficientes en el radio analizado",
-    "Metodología de lonja sin versión declarada por la corrida",
+    "Método de mercado sin versión declarada por la corrida",
     "Vigencia de la tasa fuera de la ventana aceptada",
 ]
 
@@ -131,11 +131,35 @@ class TestPagina6Presupuesto(unittest.TestCase):
                 self.assertIn(" ".join(valor.split())[:12], p6,
                               f"fila de identidad ausente en la página 6: {fila}")
         self.assertIn("Identidad registral y catastral: VERIFICADA", p6)
-        self.assertIn("Geometría oficial: VERIFICADA", p6)
+        # (C) Doctrina ACTUALIZADA: la P6 nombra el atributo exacto que su estado
+        # describe («Binding de la geometría oficial»), no «Geometría oficial» a secas,
+        # que se leía como una afirmación sobre el VALOR de la coordenada —atributo
+        # distinto y en conflicto histórico, con su propio estado en la P4—.
+        self.assertIn("Binding de la geometría oficial: VERIFICADA", p6)
+        self.assertNotIn("Geometría oficial: VERIFICADA", p6)
         self.assertIn("DECISIÓN DICTUS: INFORMACIÓN VERIFICADA", p6)
-        self.assertIn("Valor estimado (valor central)", p6)
-        self.assertIn("Metodología: norma + concepto técnico + validación profesional", p6)
+        # (A) El estado de la compuerta viaja junto a su decisión, en las dos ramas.
+        self.assertIn("COMPUERTA OPEN", p6)
+        # (FASE 3 §32) El rótulo de la valoración de la corrida nombra SU objeto, para no
+        # confundirse con la tira de ESTIMACIÓN de DICTUS que ahora vive en la misma
+        # página. La aserción es más estricta: exige el rótulo vigente y niega el ambiguo.
+        self.assertIn("Valor estimado por la corrida (valor central)", p6)
+        self.assertNotIn("Valor estimado (valor central)", p6)
+        # §34 (FASE 3) · DOCTRINA ACTUALIZADA — el marco «norma + concepto técnico +
+        # validación profesional» describía OTRO producto (la revisión profesional, que
+        # sigue existiendo como producto separado) y se sustituyó por «fuentes
+        # disponibles + análisis técnico automatizado + metodología versionada». Las dos
+        # afirmaciones que siguen fijan el cambio: el marco VIGENTE está impreso y el
+        # ANTIGUO no puede volver.
+        self.assertIn("Metodología: fuentes disponibles + análisis técnico automatizado + "
+                      "metodología versionada", p6)
+        self.assertNotIn("norma + concepto técnico + validación profesional", p6)
         self.assertIn("TRAZABILIDAD · Fuentes:", p6)
+        # §32/§33 · El bloque de estimación de la P6, con sus ocho campos.
+        self.assertIn("ESTIMACIÓN ECONÓMICA", p6)
+        for campo in de.CAMPOS_ESTIMACION_P6:
+            self.assertIn(campo, p6, f"falta el campo «{campo}» del bloque de estimación")
+        self.assertIn(de.NOTA_ESTIMACION, " ".join(p6.split()))
 
     def test_p6_un_solo_bloque_de_trazabilidad(self):
         """§3 · ni Traza + pie, ni hash/evidencia duplicados en la página 6."""
@@ -161,7 +185,17 @@ class TestPagina6Presupuesto(unittest.TestCase):
         p6 = " ".join(paginas[5].split())
         # La valoración bloqueada se declara, nunca como cifra calculada.
         self.assertIn("NO EMITIR VALORACIÓN", p6.upper())
-        self.assertIn("Metodología: norma + concepto técnico + validación profesional", p6)
+        # (A) Y declara el ESTADO de la compuerta (vocabulario cerrado CLOSED/OPEN) junto
+        # a su decisión: los dos campos conviven y ninguno sustituye al otro.
+        self.assertIn("COMPUERTA CLOSED", p6)
+        gate_bloqueado = [g for g in modelo["decision_gates"]
+                          if g["gate"] == "VALUATION_GATE"][0]
+        self.assertEqual(gate_bloqueado["gate_state"], "CLOSED")
+        self.assertEqual(gate_bloqueado["decision"], "NO EMITIR VALORACIÓN")
+        # §34 (FASE 3) · marco metodológico VIGENTE (ver la nota de doctrina arriba).
+        self.assertIn("Metodología: fuentes disponibles + análisis técnico automatizado + "
+                      "metodología versionada", p6)
+        self.assertNotIn("norma + concepto técnico + validación profesional", p6)
         # TODAS las condiciones declaradas viajan en el modelo y en la compuerta.
         declaradas = list(secciones["valor"]["blockers"])
         for condicion in BLOCKERS_SEIS:
@@ -232,7 +266,7 @@ class TestPagina6Presupuesto(unittest.TestCase):
         self.assertTrue(cajas, "la página 6 debe registrar sus cajas")
         # Las dos líneas compactas del hotfix se imprimen al tamaño mínimo del cuerpo.
         self.assertIn("TRAZABILIDAD · Fuentes:", self.p6)
-        self.assertIn("Metodología: norma", self.p6)
+        self.assertIn("Metodología: fuentes disponibles", self.p6)
 
     def test_el_gate_sigue_rechazando_un_pdf_desbordado(self):
         """§11 · el límite no se relaja: con desborde, la entrega se rechaza."""

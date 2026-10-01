@@ -493,6 +493,26 @@ def _gate_liberacion_inicial():
             }
 
 
+def _motivo_bloqueo_mercado(contexto_autorizado: bool, origen: dict,
+                            origen_gate: bool = False):
+    """Causa REAL de que la valoración no pueda emitirse (P7), en una frase.
+
+    Dos causas distintas que antes se mezclaban en un texto genérico. Aquí sólo se
+    devuelve texto cuando lo que falta es **FUENTE**: el contexto tiene la confianza
+    suficiente (barrio, estrato, tipología, sector y tasa resueltos) pero la tasa NO
+    tiene un origen habilitante. Si además falta confianza, se devuelve `None` y el
+    motivo genérico existente describe la insuficiencia de contexto.
+    """
+    if not contexto_autorizado or origen_gate:
+        return None
+    origen = origen or {}
+    clase = origen.get("origin") or "NO_DECLARADO"
+    etiqueta = origen.get("origin_etiqueta") or clase
+    return ("no hay fuente de mercado que sostenga la cifra: la tasa de esta corrida "
+            f"proviene de parámetros declarados a mano (origin={clase}: {etiqueta}), "
+            "sin procedencia externa verificable")
+
+
 def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 03I.2A §3/§4: el gate de liberación se evalúa ANTES de construir nada ────
     # Si bloquea, se lanza la excepción bloqueante aquí: no se construye historia, no
@@ -1020,7 +1040,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
           f"({_clasif['physical_typology'].get('status')}) · "
           f"mercado={_mercado_clasif_ok} ({_mercado_clasif_detalle})")
 
-    # Val data con metodologia Lonja BAQ (estrato e integracion YAML)
+    # Val data con parámetros de la metodología local de la corrida (estrato e
+    # integracion YAML)
     # C-01: sin estrato verificado -> `None` (el render imprime PENDIENTE y el gate de
     # contexto de mercado NO se abre). Antes esta línea caía a 4 por defecto y además
     # convertía "No_Aplica" en 4, es decir: inventaba un estrato residencial.
@@ -1110,7 +1131,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
         except Exception as _e_dir:
             print(f"[PDF][ADOPCION] direccion oficial no promovida: {_e_dir}")
 
-    # Metodo principal de valoracion (practica de la Lonja de Barranquilla, no
+    # Metodo principal de valoracion (practica declarada por la metodología local de
+    # la corrida, no
     # de la Res. IGAC 941): "m1" = comparacion de mercado (100% para PH terminada);
     # "m3" = capitalizacion de rentas (caso excepcional con renta demostrable).
     # El caso puede forzarlo via metodo_avaluo.
@@ -1235,7 +1257,8 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # sustituye por 4; sector sin match NO cae a fallback por estrato sin marcar.
     try:
         from market_context import (
-            build_market_context, market_context_authorized, resolve_market_sector)
+            build_market_context, market_context_authorized, resolve_market_sector,
+            market_context_origen, market_context_valoracion_habilitada)
         # barrio / estrato: prioridad contexto OFICIAL por coordenadas autorizadas.
         if _oficial_urbano.get("barrio_status") == _STATUS_VERIFIED_OFFICIAL:
             _mc_barrio = _oficial_urbano.get("barrio")
@@ -1337,9 +1360,22 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
               f"conflictos={len(_urban_provenance['conflictos'])} "
               f"no_aplicados={len(_urban_provenance['no_aplicados'])}")
         _market_context_authorized = market_context_authorized(market_context)
+        # ── COMPUERTA SEMÁNTICA DEL ORIGEN (P4/P6/P7) ─────────────────────────
+        # Un contexto puede ser suficiente en CONFIANZA (barrio, estrato, tipología,
+        # sector y tasa resueltos) y aun así no tener FUENTE: la tasa sale de un
+        # artefacto local escrito a mano. En ese caso NO hay valoración que emitir.
+        _origen_mercado = market_context_origen(market_context)
+        _origen_habilitante = market_context_valoracion_habilitada(market_context)
+        print(f"[PDF][ORIGEN-MERCADO] origin={_origen_mercado.get('origin')} "
+              f"gate={'ABIERTA' if _origen_habilitante else 'CERRADA'} "
+              f"motivos={len(_origen_mercado.get('origin_blockers') or [])}")
     except Exception as _e_mc:
         market_context = {"ready": False, "blockers": [f"market_context error: {_e_mc}"]}
         _market_context_authorized = False
+        _origen_habilitante = False
+        _origen_mercado = {"origin": None, "origin_gate": False,
+                           "origin_blockers": [f"market_context error: {_e_mc}"],
+                           "origin_etiqueta": None}
         print(f"[PDF][MARKET_CONTEXT] no disponible: {_e_mc}")
 
     # 03H.1A: coherencia cross-chapter — si el contexto oficial resolvió barrio/
@@ -1359,15 +1395,26 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     # ── 03H: valuation_authorized = identity_authorized AND market_context_authorized ──
     # Dos gates separados. Invariante: UNRESOLVED + PH + VALUATION EMITTED = INVALID;
     # y también: identity_verified + barrio/estrato/tasa no resueltos -> BLOCKED.
+    # ── COMPUERTA SEMÁNTICA (P4/P6/P7): y además el ORIGEN de la tasa tiene que
+    # habilitarla. `EXTERNAL_SOURCE`/`COMPUTED_FROM_SOURCES` con procedencia completa,
+    # y nunca un fallback por estrato (`MODEL_PRIOR`): eso no es una fuente.
     _identity_authorized = identity_authorized(canonical_identity)
-    _valuation_authorized = _identity_authorized and _market_context_authorized
+    _valuation_authorized = (_identity_authorized and _market_context_authorized
+                             and _origen_habilitante)
     _unidad_ph_no_resuelta = not _identity_authorized
-    _market_context_blocked = not _market_context_authorized
+    _market_context_blocked = not (_market_context_authorized and _origen_habilitante)
     _valuation_authorization = {
         "allowed": _valuation_authorized,
         "identity_authorized": _identity_authorized,
         "market_context_authorized": _market_context_authorized,
         "identity_level": canonical_identity.get("resolution_confidence") or "UNKNOWN",
+        # El ORIGEN viaja CON el valor: quién lo declara, si habilita y por qué no.
+        "origin": _origen_mercado.get("origin"),
+        "origin_gate": bool(_origen_habilitante),
+        "origin_etiqueta": _origen_mercado.get("origin_etiqueta"),
+        "origin_blockers": list(_origen_mercado.get("origin_blockers") or []),
+        "market_context_status": ("RESOLVED" if _origen_habilitante else "UNRESOLVED"),
+        "tasa_habilitante": bool(_origen_habilitante),
     }
     val_data = get_valuation(area, barrio, estrato, metodo_principal=_metodo_principal,
                              ciudad=ciudad, clase_suelo=_ent2.get("clase_suelo"),
@@ -1376,7 +1423,12 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
                              market_context_blocked=_market_context_blocked,
                              valuation_authorized=_valuation_authorized,
                              # 03H.1A: ÚNICA autoridad de la tasa de mercado.
-                             market_context=market_context)
+                             market_context=market_context,
+                             # P7: la causa REAL del bloqueo se declara (no el texto
+                             # genérico): falta una fuente de mercado, no un umbral.
+                             market_context_motivo=_motivo_bloqueo_mercado(
+                                 _market_context_authorized, _origen_mercado,
+                                 _origen_habilitante))
     res_avaluo = val_data
     
     # Cargar hallazgos y recomendaciones dinamicas del analizador legal
@@ -2845,8 +2897,10 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
     if es_pasto:
         story.append(body(
             "Determinacion del valor comercial y rango de valor estimado del inmueble. Para Pasto "
-            "aun no hay una metodologia local verificada (Lonja/IGAC): la estimacion se calcula con "
-            "una <b>referencia generica por estrato</b> y NO con los parametros de la Lonja de "
+            "aun no hay una metodologia local verificada (metodología local/IGAC): la estimacion "
+            "se calcula con "
+            "una <b>referencia generica por estrato</b> y NO con los parametros de la "
+            "metodología local de "
             "Barranquilla (aplicarlos seria desinformacion). El metodo principal para propiedad "
             "horizontal terminada es <b>Comparacion de Mercado M1</b>; <b>Capitalizacion de Rentas "
             "M3</b> solo excepcional. ARHIAX opera como <b>asistente de conformidad valuatoria</b>: "
@@ -2859,12 +2913,20 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
             "Determinacion del valor comercial y rango de valor estimado del inmueble. "
             "Para propiedad horizontal terminada el metodo principal es <b>Comparacion de Mercado M1 "
             "(100%)</b>; <b>Capitalizacion de Rentas M3</b> se usa solo en casos excepcionales con "
-            "renta demostrable (practica de la Lonja de Barranquilla). El Metodo de Costo de "
+            "renta demostrable (practica declarada por la metodología local de la corrida). "
+            "El Metodo de Costo de "
             "Reposicion M2 se calibra segun parametros de mercado y costos de construccion vigentes. "
             "ARHIAX opera como <b>asistente de conformidad valuatoria</b>: "
             "sugiere y compara; la seleccion definitiva del metodo, los supuestos, el valor y la firma "
             "son del avaluador inscrito en el RAA. "
-            "<b>[FUENTE: ESTIMACIÓN REFERENCIAL DE MERCADO ARHIAX (AUTOMÁTICA)]</b>"
+            # P5 · PROHIBIDO rotular «AUTOMÁTICA» un valor que se escribe a mano. La tasa
+            # de esta corrida sale de un artefacto local de metodología: se declara su
+            # ORIGEN real y si ese origen habilita (o no) a emitir una cifra.
+            "<b>[FUENTE: ESTIMACIÓN REFERENCIAL DE MERCADO ARHIAX — PARÁMETROS DECLARADOS "
+            "POR LA CORRIDA (ORIGEN: "
+            f"{_origen_mercado.get('origin') or 'NO_DECLARADO'}: "
+            f"{_origen_mercado.get('origin_etiqueta') or 'procedencia no declarada'})"
+            + ("]" if _origen_habilitante else " — NO HABILITA VALORACIÓN]") + "</b>"
         ))
     story.append(Spacer(1, 4))
     
@@ -2937,7 +2999,15 @@ def compile_pdf(db_record: dict, output_pdf_path: str, assets_dir: Path = None):
 
     story.append(Spacer(1, 4))
     story.append(body(
-        "Esta estimacion es referencial y de caracter automatico. <b>No sustituye un avaluo comercial</b> "
+        # P5 · PROHIBIDO decir «de carácter automático» de una estimación cuyos
+        # parámetros se escriben/configuran a mano. Se declara lo que ES: una
+        # estimación referencial construida con parámetros DECLARADOS por la corrida.
+        ("Esta estimacion es referencial y se construye con <b>parámetros declarados por "
+         "la corrida</b> (no con una fuente externa automática verificada). "
+         if not _origen_habilitante else
+         "Esta estimacion es referencial y se construye con parametros de una fuente "
+         "citada por la corrida. ") +
+        "<b>No sustituye un avaluo comercial</b> "
         "elaborado por avaluador inscrito en el RAA conforme a la Ley 1673 de 2013 y la Resolucion "
         "IGAC 941 de 2026 (que deroga la Resolucion 620 de 2008). Los metodos M1/M2/M3 mostrados son "
         "hipotesis de parametrizacion sujetas a validacion del avaluador competente."

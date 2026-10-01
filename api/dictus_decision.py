@@ -57,6 +57,38 @@ NO_EVALUADO = "NOT_EVALUATED"
 ESTADOS_OBSERVACION = (OBSERVADO, NO_MATCH, NO_CONSULTADO, FUENTE_NO_DISPONIBLE_OBS,
                        CONSULTA_FALLIDA, CONFLICTO_OBS, NO_EVALUADO)
 
+# ── §30.B · ESTADO DE LA COMPUERTA · vocabulario CERRADO, ortogonal a la decisión ──
+# `decision` usa el vocabulario de la GRAMÁTICA DE DECISIÓN («NO EMITIR VALORACIÓN»,
+# «NO UTILIZAR ESTE DATO COMO DEFINITIVO», «INFORMACIÓN VERIFICADA»…): dice QUÉ se
+# decidió. `gate_state` responde a UNA sola pregunta con DOS únicos valores: ¿la
+# compuerta AUTORIZA el uso de lo que gobierna?
+#
+#     OPEN   → el dominio de la compuerta se puede usar (con sus condiciones declaradas)
+#     CLOSED → no se autoriza: no se usa el dato / no se emite la cifra
+#
+# Los dos campos CONVIVEN y no se sustituyen: un lector (o un checklist) que exija
+# `CLOSED`/`OPEN` no obliga a mutilar el término de la gramática de decisión.
+ESTADO_COMPUERTA_ABIERTO = "OPEN"
+ESTADO_COMPUERTA_CERRADO = "CLOSED"
+ESTADOS_COMPUERTA = (ESTADO_COMPUERTA_CERRADO, ESTADO_COMPUERTA_ABIERTO)
+
+# Términos del vocabulario de decisión que NO bloquean el uso del dominio. Todo lo
+# demás —NO EMITIR VALORACIÓN, NO UTILIZAR ESTE DATO COMO DEFINITIVO, INFORMACIÓN
+# INSUFICIENTE, REVISIÓN PROFESIONAL REQUERIDA, EVIDENCIA EN CONFLICTO— cierra la
+# compuerta. La tabla NO introduce umbrales nuevos: deriva de la decisión ya tomada.
+DECISIONES_QUE_ABREN_COMPUERTA = frozenset({
+    INFORMACION_VERIFICADA,        # dato verificado: se usa
+    SIN_HALLAZGO_EN_FUENTE,        # fuente revisada sin hallazgo material: no bloquea
+    PROCEDER_CON_CONDICIONES,      # se usa, con las condiciones declaradas
+})
+
+
+def estado_de_compuerta(decision: str) -> str:
+    """`CLOSED`/`OPEN` DERIVADO de la decisión: no es un juicio aparte ni un umbral."""
+    return (ESTADO_COMPUERTA_ABIERTO if decision in DECISIONES_QUE_ABREN_COMPUERTA
+            else ESTADO_COMPUERTA_CERRADO)
+
+
 # ── §30 · compuertas ─────────────────────────────────────────────────────────
 IDENTITY_GATE = "IDENTITY_GATE"
 TITLE_GATE = "TITLE_GATE"
@@ -190,13 +222,18 @@ def recomendacion(texto: str, *, dominio: str, afectados: Sequence[str],
 def compuerta(nombre: str, entradas: Sequence[str], observaciones: Sequence[Dict],
               bloqueos: Sequence[str], decision: str, motivos: Sequence[str],
               evidencia_refs: Sequence[Dict]) -> Dict[str, Any]:
-    """`DecisionGate`: qué puede usarse, qué no, qué está bloqueado y qué requiere revisión."""
+    """`DecisionGate`: qué puede usarse, qué no, qué está bloqueado y qué requiere revisión.
+
+    Declara DOS campos que no se sustituyen: `decision` (vocabulario de la gramática) y
+    `gate_state` (`CLOSED`/`OPEN`, derivado de la decisión con `estado_de_compuerta`).
+    """
     if decision not in VOCABULARIO_DECISION:
         decision = INFORMACION_INSUFICIENTE
     return {"gate": nombre, "inputs": list(entradas),
             "observation_ids": [o["observation_id"] for o in observaciones],
             "observations": list(observaciones),
             "blocking_conditions": list(bloqueos), "decision": decision,
+            "gate_state": estado_de_compuerta(decision),
             "reasons": list(motivos), "evidence_refs": list(evidencia_refs)}
 
 
@@ -515,18 +552,28 @@ def observaciones_de(rs: Dict[str, Any]) -> List[Dict[str, Any]]:
 
     # VALORACIÓN
     aut = bool((val.get("authorization") or {}).get("allowed"))
+    # El `source` de la observación NO es el identificador sellado del artefacto
+    # metodológico: la observación declara QUÉ sostiene la cifra y con qué ORIGEN. El
+    # identificador sellado viaja en su propio campo (`methodology_id`), donde no se
+    # lee como el nombre de una fuente.
+    _origen_val = _v(val.get("origin"), "NO_DECLARADO")
     obs.append(observacion("VALUATION", "Valor estimado y su banda",
-                           _v(mc.get("market_methodology_id"), "metodología de mercado"),
+                           "parámetros de mercado declarados por la corrida",
                            OBSERVADO if aut else NO_EVALUADO,
                            valor={"consolidado": val.get("consolidado"),
                                   "banda_baja": val.get("banda_baja"),
                                   "banda_alta": val.get("banda_alta"),
-                                  "value_m2": val.get("value_m2")},
+                                  "value_m2": val.get("value_m2"),
+                                  "origin": _origen_val,
+                                  "origin_gate": bool(val.get("origin_gate"))},
                            cuando=cuando,
                            detalle=(None if aut else _v(val.get("motivo_no_aplica"),
                                                         "valoración no autorizada")),
                            evidencia_refs=[evidencia("EV-VALOR", "metodología de mercado",
                                                      tipo="VALUATION", when=cuando)]))
+    obs[-1]["methodology_id"] = mc.get("market_methodology_id")
+    obs[-1]["origin"] = _origen_val
+    obs[-1]["origin_gate"] = bool(val.get("origin_gate"))
     return obs
 
 
@@ -709,17 +756,33 @@ def compuertas_de(rs: Dict[str, Any], obs: Sequence[Dict[str, Any]],
                                       tipo="ENVIRONMENT", when=rs.get("generated_at"))]))
 
     # VALUATION_GATE
+    # El `reason` nombra la CAUSA del bloqueo con el vocabulario CERRADO de ORIGEN
+    # (`atribucion_mercado`): un «no autorizado» sin causa obliga al lector a adivinar.
+    # No cambia ningún umbral: solo hace explícito lo que la corrida ya declaró.
     aut = bool((val.get("authorization") or {}).get("allowed"))
     blockers = [b for b in (mc.get("blockers") or []) if isinstance(b, str)]
+    _origen_val = str(val.get("origin") or mc.get("origin") or "NO_DECLARADO")
+    _origen_gate_val = bool(val.get("origin_gate") or mc.get("origin_gate"))
     if aut:
         dec_val, bloques_val = INFORMACION_VERIFICADA, []
-        motivos_val = ["La valoración está autorizada y se imprime con su método y vigencia."]
+        motivos_val = [f"La valoración está autorizada: la tasa se sostiene en "
+                       f"{_origen_val} con procedencia completa y se imprime con su "
+                       f"método y vigencia."]
     else:
         dec_val = NO_EMITIR_VALORACION
         bloques_val = blockers or [_v(val.get("motivo_no_aplica"),
                                       "la corrida no declaró la causa")]
-        motivos_val = ["La valoración NO está autorizada en esta corrida: no se emite cifra "
-                       "y se declaran los bloqueos reales."]
+        if _origen_gate_val:
+            motivos_val = [
+                f"La valoración NO está autorizada en esta corrida: su origen "
+                f"({_origen_val}) sí habilita una cifra, pero hay bloqueos materiales "
+                f"declarados. No se emite valor."]
+        else:
+            motivos_val = [
+                f"La valoración NO está autorizada en esta corrida: el origen de la tasa "
+                f"es {_origen_val} y su procedencia es INSUFICIENTE para autorizar una "
+                f"cifra (se exige fuente externa citada o cálculo de fuentes citadas, con "
+                f"fecha y sha256). No se emite cifra y se declaran los bloqueos reales."]
     gates.append(compuerta(VALUATION_GATE, ["autorización de identidad",
                                             "autorización de contexto de mercado",
                                             "método y vigencia"],

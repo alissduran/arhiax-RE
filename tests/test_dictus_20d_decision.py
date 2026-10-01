@@ -31,6 +31,7 @@ import dictus_ejecutivo as de           # noqa: E402
 import dictus_estado as dse             # noqa: E402
 import dictus_manifiesto as dm          # noqa: E402
 import dictus_secciones as sec          # noqa: E402
+from test_dictus_20c_fidelidad import procedencia_sintetica   # noqa: E402
 
 FOLIO = "TST-000001"
 GOLDEN = ROOT / "docs" / "forensics" / "040-646406"
@@ -100,7 +101,13 @@ def _estado(**over):
                            "market_methodology_id": "lonja_prueba",
                            "market_methodology_version": "0.9-test",
                            "market_rate_source": "Tasa de prueba verificada",
-                           "sector_metodologico": {"matched_sector": "SECTOR DE PRUEBA"},
+                           # La tasa del fixture declara su ORIGEN con procedencia
+                           # COMPLETA: es lo único que habilita la valoración.
+                           "sector_metodologico": {
+                               "matched_sector": "SECTOR DE PRUEBA",
+                               "match_type": "EXACT",
+                               **procedencia_sintetica(
+                                   "tests/test_dictus_20d_decision.py::_estado")},
                            "uso": {"value": "Habitacional", "status": "VERIFIED_OFFICIAL"},
                            "blockers": [],
                            "urban_source_summary": {"campos": {
