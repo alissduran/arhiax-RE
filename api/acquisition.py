@@ -26,6 +26,12 @@ Reglas duras (§1 / §2 / §27 + decisión de producto):
 Determinismo: el hash de CONTENIDO de un snapshot es su sha256; `queried_at`/`run_id` quedan
 FUERA de todo hash de contenido (ver `hash_contenido` y la prueba de reproducibilidad).
 
+Determinismo de la FRESCURA (misma familia de defecto que el `evidence_hash` volátil): la
+edad del dato se ancla en lo que el artefacto DECLARA dentro de su contenido versionado
+(`_capture.queried_at`), nunca en un hecho del empaquetado. La fecha de creación del archivo
+(`git_commit` / `mtime_sin_commit`) cambia al re-commitear un artefacto byte a byte idéntico,
+así que un límite derivado de ella NO puede congelarse: ver `ancla_de_frescura`.
+
 Documentación: `docs/source_pack/ACQUISITION_MODES.md` ·
 matriz computada: `docs/source_pack/SOURCE_ACQUISITION_MATRIX_040-646406.csv` ·
 inventario real: `docs/source_pack/SNAPSHOT_INVENTORY.json`.
@@ -67,8 +73,9 @@ __all__ = [
     "FRESHNESS_DEFAULT", "FAMILIAS_FUENTE",
     # frescura / modos
     "familia_de_fuente", "freshness_de_fuente", "rol_de_fuente", "requisitos_de_rol",
-    "modos_por_fuente", "evaluar_vigencia", "snapshot_para", "modo_efectivo_de_fuente",
-    "fecha_de_referencia",
+    "modos_por_fuente", "evaluar_vigencia", "ancla_de_frescura", "snapshot_para",
+    "modo_efectivo_de_fuente", "fecha_de_referencia",
+    "ANCLA_CAPTURA_DECLARADA", "ANCLA_CREACION_ARCHIVO", "ANCLA_AUSENTE",
     # snapshots reales
     "SNAPSHOTS_DECLARADOS", "RAICES_ESCANEO", "descubrir_snapshots", "inventario_snapshots",
     "escribir_inventario", "hash_archivo", "fecha_de_creacion_de_archivo",
@@ -102,7 +109,27 @@ RUTA_PROBE_GEOPORTAL = DIR_PACK / "raw" / "golden" / "_layers_probe.json"
 # Fecha de referencia de la ventana de congelación. Se DECLARA en el registro
 # (`reference_date`) para que la frescura sea determinista y no dependa del reloj de la
 # máquina: «¿sirve hoy?» significa «¿sirve en la ventana congelada del pack?».
+#
+# DOCTRINA DE ANCLA (corrige un defecto de reproducibilidad de la MISMA familia que el
+# `evidence_hash` volátil). El límite de frescura se deriva de (ancla + días de la familia).
+# El ANCLA tiene que ser una fecha que el CONTENIDO VERSIONADO declare:
+#   1. `_capture.queried_at` del artefacto — cuándo se capturó el DATO.
+#   2. la fecha de creación del archivo (`git_commit` / `mtime_sin_commit`) — un hecho del
+#      EMPAQUETADO, admisible solo como último recurso cuando el artefacto no declara nada.
+#   3. nada → no puede afirmarse frescura: el snapshot NO resuelve.
+# Motivo medido: `docs/source_pack/raw/golden/osm_overpass.json` declara su captura
+# (2026-09-29) y se commiteó el 2026-10-01. Anclando en el commit, la celda congelada
+# `servicios_contexto.provenance` de `SOURCE_ACQUISITION_MATRIX_040-646406.csv` pasaba de
+# «hasta 2026-10-29» a «hasta 2026-10-31» sin que cambiara NADA del dato: el artefacto
+# congelado fingía un contenido que dependía de cuándo se empaquetó. Anclar en la captura
+# declarada devuelve la ventana congelada (2026-10-29) y la hace reproducible antes y
+# después de cualquier corrida. Ver `ancla_de_frescura`.
 REFERENCE_DATE_POR_DEFECTO = "2026-09-29"
+
+# Orígenes del ancla de frescura (vocabulario cerrado).
+ANCLA_CAPTURA_DECLARADA = "fecha_de_captura_declarada"
+ANCLA_CREACION_ARCHIVO = "fecha_de_creacion_del_archivo"
+ANCLA_AUSENTE = "ausente"
 
 # ══════════════════════════════════════════════════════════════════════════════
 # §1 · VOCABULARIO CERRADO DE MODOS DE ADQUISICIÓN
@@ -867,21 +894,69 @@ def escribir_inventario(ruta: Any = RUTA_INVENTARIO, *,
 # ══════════════════════════════════════════════════════════════════════════════
 # Frescura / vigencia de un snapshot
 # ══════════════════════════════════════════════════════════════════════════════
+def ancla_de_frescura(snapshot: Dict[str, Any], *,
+                      registro: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Ancla de la EDAD DEL DATO: primero lo que el artefacto DECLARA, nunca el empaquetado.
+
+    El límite de frescura se deriva del ancla, así que el ancla decide qué puede congelarse.
+    Un artefacto congelado **no puede depender de la fecha de la corrida** (misma familia de
+    defecto que el `evidence_hash` volátil corregido antes). `fecha_de_creacion`
+    (`git_commit` / `mtime_sin_commit`) es un hecho del EMPAQUETADO: cambia al re-commitear
+    un artefacto byte a byte idéntico y, con él, cambiaría el límite congelado sin que cambie
+    nada del dato. Precedencia (declarada, no adivinada):
+
+      1. `fecha_de_captura_declarada` — el contenido versionado dice cuándo se capturó el
+         dato (`_capture.queried_at`). Es la edad REAL del dato y es reproducible.
+      2. `fecha_de_creacion` — fecha del archivo (`git_commit` / `mtime_sin_commit`): solo
+         cuando el artefacto NO declara su captura. Se marca `empaquetado: true` para que
+         nadie la confunda con un dato del proveedor.
+      3. Nada → `ANCLA_AUSENTE`: sin ancla no puede afirmarse frescura (el snapshot no
+         resuelve y se declara).
+
+    Devuelve `{fecha, origen, etiqueta, detalle, empaquetado}`. `fecha` es `date` o `None`.
+    """
+    captura = _a_fecha(snapshot.get("fecha_de_captura_declarada"))
+    if captura is not None:
+        return {"fecha": captura, "origen": ANCLA_CAPTURA_DECLARADA,
+                "etiqueta": "captura declarada por el propio artefacto",
+                "detalle": (f"el artefacto declara su captura "
+                            f"{str(snapshot.get('fecha_de_captura_declarada'))[:10]}: es la "
+                            f"edad del DATO, no la del empaquetado"),
+                "empaquetado": False}
+    creacion = _a_fecha(snapshot.get("fecha_de_creacion"))
+    if creacion is not None:
+        return {"fecha": creacion, "origen": ANCLA_CREACION_ARCHIVO,
+                "etiqueta": "creación del archivo (hecho del EMPAQUETADO)",
+                "detalle": (f"el artefacto no declara su captura: se usa la fecha de "
+                            f"creación del archivo {creacion.isoformat()} "
+                            f"({snapshot.get('fecha_origen') or 'origen no declarado'}), que "
+                            f"es un hecho del empaquetado y NO un dato del proveedor"),
+                "empaquetado": True}
+    return {"fecha": None, "origen": ANCLA_AUSENTE,
+            "etiqueta": "sin ancla declarada",
+            "detalle": ("ni el artefacto declara su captura ni el archivo tiene fecha: no "
+                        "puede afirmarse frescura"),
+            "empaquetado": False}
+
+
 def evaluar_vigencia(snapshot: Dict[str, Any], fecha: Optional[str] = None,
                      *, registro: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """¿Está el snapshot DENTRO de su `freshness_policy` para `fecha`?
 
-    Límite = el MENOR entre (fecha de creación + días de la familia) y la vigencia que el
+    Límite = el MENOR entre (ancla de frescura + días de la familia) y la vigencia que el
     PROPIO artefacto declara (p. ej. el artefacto local de metodología declara
-    `vigencia_hasta`). Un snapshot vencido NO resuelve: el resultado lo declara y la
-    escalera sigue.
+    `vigencia_hasta`). El ancla la decide `ancla_de_frescura`: la captura que el artefacto
+    declara manda, y la fecha de creación del archivo solo se usa si el artefacto no declara
+    nada (un hecho del empaquetado no puede congelar una ventana). Un snapshot vencido NO
+    resuelve: el resultado lo declara y la escalera sigue.
     """
     ref = str(fecha or fecha_de_referencia(registro))[:10]
     familia = snapshot.get("familia") or ""
     dias = snapshot.get("freshness_dias")
     if dias is None and familia in FRESHNESS_DEFAULT:
         dias = FRESHNESS_DEFAULT[familia]["dias"]
-    ancla = _a_fecha(snapshot.get("fecha_de_creacion"))
+    info_ancla = ancla_de_frescura(snapshot, registro=registro)
+    ancla = info_ancla["fecha"]
     limite_familia = (ancla + timedelta(days=int(dias))) if (ancla and dias) else None
     vig = dict(snapshot.get("vigencia_declarada_en_el_artefacto") or {})
     hasta = None
@@ -903,6 +978,11 @@ def evaluar_vigencia(snapshot: Dict[str, Any], fecha: Optional[str] = None,
         "limite_por_artefacto": hasta.isoformat() if hasta else None,
         "vigencia_declarada_en_el_artefacto": vig,
         "dias_restantes": _dias_entre(ref, limite) if limite else None,
+        "ancla_fecha": ancla.isoformat() if ancla else None,
+        "ancla_origen": info_ancla["origen"],
+        "ancla_etiqueta": info_ancla["etiqueta"],
+        "ancla_empaquetado": info_ancla["empaquetado"],
+        "ancla_detalle": info_ancla["detalle"],
         "motivo": "",
     }
     if not snapshot.get("usable"):
@@ -922,12 +1002,14 @@ def evaluar_vigencia(snapshot: Dict[str, Any], fecha: Optional[str] = None,
                               f"VENCIDO ({(consultada - limite).days} días fuera).")
         else:
             base["motivo"] = (f"Fuera de la `freshness_policy` de la familia {familia} "
-                              f"({dias} días desde {ancla.isoformat()}): límite "
+                              f"({dias} días desde el ancla {ancla.isoformat()} — "
+                              f"{info_ancla['etiqueta']}): límite "
                               f"{limite.isoformat()}, corrida {ref} "
                               f"({(consultada - limite).days} días fuera).")
         return base
-    base["motivo"] = (f"Vigente: creado {ancla.isoformat()} y límite {limite.isoformat()} "
-                      f"para la corrida {ref} ({base['dias_restantes']} días de margen).")
+    base["motivo"] = (f"Vigente: ancla {ancla.isoformat()} ({info_ancla['etiqueta']}) y "
+                      f"límite {limite.isoformat()} para la corrida {ref} "
+                      f"({base['dias_restantes']} días de margen).")
     return base
 
 

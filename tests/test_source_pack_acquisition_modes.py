@@ -16,7 +16,10 @@ sonda de vecindad que se declara NO utilizable y caso no-PH declarado.
 
 Reproducibilidad: dos corridas con las MISMAS respuestas crudas producen los MISMOS payloads
 normalizados, los MISMOS bindings, la MISMA precedencia y los MISMOS `content_hash`;
-`queried_at`/`run_id` quedan FUERA de todo hash de contenido.
+`queried_at`/`run_id` quedan FUERA de todo hash de contenido. La ventana de frescura se ancla
+en la fecha de CAPTURA que el propio artefacto declara (nunca en la fecha de commit/mtime, que
+es un hecho del empaquetado): un artefacto congelado no puede llevar un valor derivado de
+cuándo se empaquetó (`TestFrescura` y `TestMatrizDeRoles` lo bloquean).
 
 Nada se modifica en disco: las pruebas leen el registro, la matriz y el inventario versionados.
 """
@@ -454,6 +457,35 @@ class TestFrescura(BaseAdquisicion):
         self.assertEqual(vencidos[0]["limite"], "2020-12-31")
         self.assertFalse(vencidos[0]["resolve"])
 
+    def test_la_frescura_se_ancla_en_la_captura_que_declara_el_artefacto(self):
+        """BLOQUEANTE · la ventana no puede depender de CUÁNDO se empaquetó el artefacto.
+
+        `raw/golden/osm_overpass.json` declara su captura (2026-09-29) y se commiteó el
+        2026-10-01: anclando en la fecha de commit, la celda congelada
+        `servicios_contexto.provenance` pasaba de «hasta 2026-10-29» a «hasta 2026-10-31»
+        sin que cambiara NADA del dato. El ancla declarada por el artefacto manda, y la
+        fecha de creación del archivo (hecho del EMPAQUETADO) no puede desplazarla.
+        """
+        osm = next(s for s in self.inv if s["ruta"].endswith("osm_overpass.json"))
+        captura = str(osm["fecha_de_captura_declarada"])[:10]
+        self.assertEqual(captura, "2026-09-29",
+                         "el artefacto debe declarar la fecha de captura de su dato")
+        ancla = acq.ancla_de_frescura(osm)
+        self.assertEqual(ancla["origen"], acq.ANCLA_CAPTURA_DECLARADA)
+        self.assertFalse(ancla["empaquetado"], "la captura declarada no es un hecho del pack")
+        self.assertEqual(ancla["fecha"].isoformat(), captura)
+        vig = acq.evaluar_vigencia(osm, self.ref, registro=self.reg)
+        self.assertEqual(vig["limite"], "2026-10-29", "captura declarada + CONTEXTO 30 d")
+        self.assertEqual(vig["estado"], acq.SNAPSHOT_VIGENTE)
+        for empaquetado in ("2026-10-01T08:44:20-05:00", "2031-01-01T00:00:00+00:00",
+                            "2026-09-01T00:00:00+00:00"):
+            movido = dict(osm, fecha_de_creacion=empaquetado)
+            igual = acq.evaluar_vigencia(movido, self.ref, registro=self.reg)
+            self.assertEqual(igual["limite"], vig["limite"],
+                             f"el empaquetado {empaquetado} movió la ventana congelada")
+            self.assertEqual(igual["estado"], vig["estado"], empaquetado)
+            self.assertEqual(igual["dias_restantes"], vig["dias_restantes"], empaquetado)
+
     def test_un_snapshot_sin_fecha_no_se_da_por_vigente(self):
         inventado = {"artifact_id": "X", "ruta": "api/data/amenaza_remocion_masa.geojson",
                      "usable": True, "familia": "RIESGO", "freshness_dias": 365,
@@ -635,6 +667,26 @@ class TestMatrizDeRoles(BaseAdquisicion):
             for columna in COLUMNAS_MATRIZ:
                 self.assertEqual(str(a[columna]), str(b.get(columna, "")),
                                  f"{a['domain']}.{columna}")
+
+    def test_la_matriz_congelada_no_depende_de_la_fecha_de_empaquetado(self):
+        """BLOQUEANTE · con el MISMO dato y OTRO commit, la matriz congelada se reproduce.
+
+        Mueve la fecha de creación (commit/mtime) del artefacto que declara su captura y
+        exige las 18 filas × 11 columnas idénticas: un artefacto congelado no puede cargar
+        un valor derivado de la corrida de empaquetado.
+        """
+        en_disco = acq.leer_matriz(RUTA_MATRIZ)
+        for empaquetado in ("2026-10-01T08:44:20-05:00", "2031-01-01T00:00:00+00:00"):
+            movido = [dict(s, fecha_de_creacion=empaquetado)
+                      if s["ruta"].endswith("osm_overpass.json") else s for s in self.inv]
+            filas = acq.matriz_roles(registro=self.reg, fecha=self.ref,
+                                     contexto=self.contexto, inventario=movido,
+                                     golden=self.golden)
+            self.assertEqual(len(filas), len(en_disco))
+            for a, b in zip(en_disco, filas):
+                for columna in COLUMNAS_MATRIZ:
+                    self.assertEqual(str(a[columna]), str(b.get(columna, "")),
+                                     f"{a['domain']}.{columna} con empaquetado {empaquetado}")
 
     def test_la_autoridad_de_cada_fila_es_la_original_y_nunca_se_degrada(self):
         for fila in self.filas:

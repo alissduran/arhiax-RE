@@ -113,9 +113,38 @@ dato del proveedor:
 | `CONTEXTO_IMAGEN` | 30 | Una imagen solo describe el inmueble en su fecha de captura. |
 | `CALCULADA` | 1 | Un resultado calculado vale para la corrida que lo produjo. |
 
-**Límite efectivo = el MENOR entre** (fecha de creación del snapshot + días de la familia) y
-**la vigencia que el propio artefacto declara** (`declaracion.vigencia_hasta`). Sin fecha de
-creación o sin límite, el snapshot **no se da por vigente**.
+**Límite efectivo = el MENOR entre** (ancla de frescura + días de la familia) y **la vigencia
+que el propio artefacto declara** (`declaracion.vigencia_hasta`). Sin ancla o sin límite, el
+snapshot **no se da por vigente**.
+
+### 3.1 Ancla de frescura — la ventana no puede depender del empaquetado
+
+El ancla la decide `api/acquisition.py::ancla_de_frescura` con una precedencia **declarada**:
+
+| Orden | Ancla | Qué es | ¿Congelable? |
+|---|---|---|---|
+| 1 | `_capture.queried_at` del artefacto (`fecha_de_captura_declarada`) | cuándo se capturó el **dato** | **SÍ** — está dentro del contenido versionado |
+| 2 | `fecha_de_creacion` del archivo (`git_commit` / `mtime_sin_commit`) | un hecho del **EMPAQUETADO** | solo si el artefacto no declara nada |
+| 3 | nada | — | **NO**: sin ancla no se afirma frescura (el snapshot no resuelve) |
+
+**Por qué (defecto medido, misma familia que el `evidence_hash` volátil).**
+`docs/source_pack/raw/golden/osm_overpass.json` declara su captura (2026-09-29) y se commiteó
+el 2026-10-01. Anclando en la fecha de commit, la celda congelada
+`servicios_contexto.provenance` de `SOURCE_ACQUISITION_MATRIX_040-646406.csv` pasaba de
+«hasta 2026-10-29» a «hasta 2026-10-31» **sin que cambiara un solo byte del dato**: el
+artefacto congelado fingía un contenido que dependía de cuándo se empaquetó, y la suite del
+Source Pack quedaba verde antes de la corrida y roja después. Con el ancla declarada la ventana
+vuelve a 2026-10-29 y se reproduce igual antes y después de `scripts/dictus_run.py`
+(`TestFrescura::test_la_frescura_se_ancla_en_la_captura_que_declara_el_artefacto` y
+`TestMatrizDeRoles::test_la_matriz_congelada_no_depende_de_la_fecha_de_empaquetado` lo exigen).
+
+**Límite residual declarado (no oculto):** los artefactos que **no** declaran su fecha de
+captura (`api/data/amenaza_remocion_masa.geojson`, `api/data/areas_en_riesgo.geojson`,
+`api/data/barranquilla_adopcion_anexo1.json`) siguen anclados en la fecha de creación del
+archivo, que es su doctrina declarada y probada (`TestFrescura`, límites 2027-09-01 y
+2026-12-19). Sus commits son históricos y estables, así que la matriz congelada se reproduce;
+si alguno se volviera a commitear **sin cambiar su contenido**, su ventana se movería y habría
+que re-sellar la matriz — se declara aquí para que nadie lo descubra por sorpresa.
 
 La fecha de referencia es `reference_date` del registro (**2026-09-29**): la frescura se mide
 contra la ventana congelada del pack, no contra el reloj de la máquina. Así «¿sirve hoy?» es
@@ -232,6 +261,9 @@ tres), de modo que ninguna de las dos semánticas queda oculta.
   del archivo**, no de la corrida.
 * La matriz y el inventario son **calculados**: una prueba recalcula y compara con el archivo
   versionado (nada se escribe a mano).
+* La **ventana de frescura** se ancla en la fecha de captura que el artefacto declara, no en
+  la fecha de commit/mtime (hecho del empaquetado): mover el empaquetado no cambia una sola
+  celda de la matriz congelada (ver §3.1).
 
 ---
 
