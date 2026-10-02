@@ -284,20 +284,38 @@ class TestVerifiedOriginAudit(unittest.TestCase):
             self.assertGreaterEqual(len(fuentes), 2,
                                     f"{f['attribute']} sin fuentes citadas suficientes")
 
-    def test_el_hecho_verificado_es_la_matricula_y_no_la_direccion(self):
-        """La lectura es por ATRIBUTO: el VERIFICADO es Matrícula, no la Dirección oficial."""
+    def test_el_hecho_verificado_es_el_que_declara_su_fuente(self):
+        """La lectura es por ATRIBUTO y el estado sale de la VERDAD ÚNICA del atributo.
+
+        ANTES esta prueba exigía que el ÚNICO hecho verificado fuese la Matrícula (el
+        parser anterior atribuía el VERIFICADO a «Dirección oficial» por cercanía de
+        texto). BLOCK 1 · §10 toma la PRIMERA opción de la regla: la evidencia sellada
+        (EV-IDENTIDAD + EV-GEOMETRIA) SÍ verifica los componentes de la identidad canónica
+        (matrícula, NUPRE y número predial) y la corrida resuelve además la dirección con su
+        fuente declarada. Lo que la prueba protege ahora es lo que importa: cada hecho
+        VERIFICADO tiene que declarar su ORIGEN y su FUENTE, y ningún ATTRIBUTO puede
+        llevar un estado que su fuente no sostenga.
+        """
         filas, _ = self._facts()
         if not filas:
             return
         verificados = [f for f in filas if f["estado"] == "VERIFICADO"]
-        self.assertEqual([f["attribute"] for f in verificados], ["Matrícula"],
-                         "con la lectura por ATRIBUTO el VERIFICADO es la Matrícula; el "
-                         "parser anterior lo atribuía a «Dirección oficial» (la primera "
-                         "línea del buffer, porque la dirección envuelve 4 líneas)")
-        direccion = [f for f in filas if f["attribute"] == "Dirección oficial"][0]
-        self.assertEqual(direccion["estado"], "REQUIERE_VALIDACION")
-        self.assertIn("TV 43 # 100 - 50", direccion["value"],
-                      "el hecho NO se borra: el valor sigue impreso con su estado degradado")
+        self.assertTrue(verificados, "la identidad canónica del Golden está verificada")
+        # El atributo del veredicto tiene que ser el ATRIBUTO de su fila, no la primera
+        # línea del buffer (el defecto de lectura que esta prueba congeló).
+        for f in verificados:
+            self.assertTrue(f.get("origin"), f)
+            self.assertTrue((f.get("origin_provenance") or {}).get("fuentes"), f)
+        atributos = {f["attribute"] for f in verificados}
+        self.assertTrue({"Matrícula", "NUPRE", "Número predial"} <= atributos,
+                        f"los componentes de identidad del alcance declarado deben estar "
+                        f"verificados: {sorted(atributos)}")
+        unidad = [f for f in filas if f["attribute"] == "Unidad (torre / apartamento)"]
+        if unidad:
+            self.assertNotEqual(unidad[0]["estado"], "VERIFICADO",
+                                "la unidad privada no tiene fuente en el pack: su hecho es "
+                                "CONOCIDO y NO verificado")
+            self.assertTrue(unidad[0]["value"], "el hecho NO se borra")
 
     def test_ningun_hecho_verificado_con_origen_prohibido(self):
         filas, _ = self._facts()
@@ -361,7 +379,8 @@ class TestCrossPageConsistency(unittest.TestCase):
         # La coordenada y el binding de la geometría son DOS claves distintas, cada una
         # con su estado: no se comparan entre sí.
         self.assertEqual(r["observado"]["coordenada"], {"P4": "HISTORICAL_CONFLICT"})
-        self.assertEqual(r["observado"]["binding_geometria"], {"P6": "VERIFICADA"})
+        # §11: el binding del Golden acredita IDENTIFICADORES (no geometría).
+        self.assertEqual(r["observado"]["binding_geometria"], {"P6": "IDENTIFICADORES"})
 
     def test_el_detector_falla_si_la_coordenada_se_rotula_verificada(self):
         """Regresión (C): una contradicción REAL debe seguir siendo detectada."""
@@ -379,8 +398,12 @@ class TestCrossPageConsistency(unittest.TestCase):
         if paginas is None:
             return
         falso = dict(paginas)
-        falso[6] = falso[6].replace("Binding de la geometría oficial: VERIFICADA",
-                                    "Binding de la geometría oficial: DISCREPANCIA")
+        # El estado impreso del binding es el ÚLTIMO token «IDENTIFICADORES» de la P6: se
+        # sustituye ESE por un estado que el expediente NO declara.
+        _idx = falso[6].rfind("IDENTIFICADORES")
+        self.assertGreater(_idx, 0, "la P6 tiene que imprimir el estado del binding")
+        falso[6] = (falso[6][:_idx] + "DISCREPANCIA"
+                    + falso[6][_idx + len("IDENTIFICADORES"):])
         r = self.gea.detectar_contradicciones(falso, manifest, rs)
         self.assertTrue(r["discrepancias_con_la_verdad"],
                         "la P6 no puede contradecir el binding VERIFIED del expediente")
@@ -400,7 +423,11 @@ class TestCrossPageConsistency(unittest.TestCase):
             return
         p6 = self.gea._paginas(self.gea._texto_pdf(EJECUTIVO)).get(6, "")
         self.assertNotIn("Geometría oficial: VERIFICADA", p6)
-        self.assertIn("Binding de la geometría oficial: VERIFICADA", p6)
+        self.assertIn("Binding de la identidad canónica del predio", p6)
+        self.assertIn("IDENTIFICADORES", p6)
+        self.assertNotIn("Binding de la geometría oficial: VERIFICADA", p6,
+                         "un binding de identificadores no se rotula como binding de la "
+                         "geometría VERIFICADO (§11)")
         # Y la clave canónica declarada por el render es la del binding, no la coordenada.
         import dictus_secciones as sec
         modelo = json.loads(MANIFEST.read_text(encoding="utf-8"))["modelo"]
@@ -430,7 +457,8 @@ class TestGoldenExecutiveText(unittest.TestCase):
         self.assertIn(folio := "040-646406", p6)
         self.assertIn("NO EMITIR VALORACIÓN", p6)
         self.assertIn("COMPUERTA CLOSED", p6)
-        self.assertIn("Binding de la geometría oficial: VERIFICADA", p6)
+        self.assertIn("Binding de la identidad canónica del predio", p6)
+        self.assertIn("IDENTIFICADORES", p6)
         self.assertEqual(self.full.count("Lonja"), 0)
         self.assertNotIn("399.500.000", self.full)
         self.assertEqual(len(self.paginas), 6, "el ejecutivo son SEIS páginas")

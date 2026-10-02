@@ -31,8 +31,10 @@ from typing import Any, Dict, List, Optional
 
 import dictus_ejecutivo as de
 import dictus_estado as dse
+import dictus_historia as dh
 import dictus_manifiesto as dm
 import dictus_secciones as secciones_mod
+import attribute_truth as at
 
 MAX_PAGINAS_EJECUTIVO = 6
 
@@ -127,6 +129,11 @@ def iniciar_captura() -> Dict[str, Any]:
     return dse.instalar_observadores(captura)
 
 
+def _fecha_corrida(rs: Dict[str, Any]) -> Optional[str]:
+    """Fecha de referencia de la corrida (la que el propio estado declara)."""
+    return str((rs or {}).get("generated_at") or "")[:10] or None
+
+
 def historial_del_caso(folio: str, raiz: Optional[Path] = None) -> Dict[str, Any]:
     """Informe de coherencia histórica versionado del folio, si existe.
 
@@ -193,9 +200,35 @@ def construir_entregables(
                                  generated_at=(generated_at
                                                or (captura.get("receipts") or {}).get("generated_at")),
                                  area=area, tipo_unidad=tipo_unidad)
+    # ── BLOCK 1 · VERDAD ÚNICA POR ATRIBUTO ──────────────────────────────────
+    # 1. El informe de coherencia se recalcula con las SIETE condiciones cuando la matriz
+    #    histórica del folio está disponible (el archivo del expediente NO se reescribe):
+    #    el recuento de conflictos abiertos se deriva SOLO de TRUE_CONFLICT.
+    # 2. Se resuelve la escalera por atributo y se PERSISTE el mínimo auditable
+    #    (`source_attempts`, `source_selected`, `source_authority`, `source_vigency`,
+    #    `acquisition_mode`, `resolution_status`, `fact_status`, `canonical_value`,
+    #    `canonical_reason`, `evidence_id`, `content_hash`, `queried_at`).
+    # 3. La verdad única se aplica al estado: ningún valor queda declarado «verificado»
+    #    sin fuente seleccionada.
+    matriz = dh.cargar_matriz_del_caso(folio_txt)
+    hist = dh.reclasificar_informe(hist, matriz)
     rs["historical_consistency"] = hist
+    registro_atributos = at.resolver_atributos(rs, historial=hist, fecha=_fecha_corrida(rs))
+    at.aplicar_verdad_al_estado(rs, registro_atributos)
+    at.assert_single_truth_per_attribute(registro_atributos)
+    at.assert_reglas_duras(registro_atributos)
+    rs[at.CLAVE_RUN_STATE] = registro_atributos
     dse.agregar_findings_de_coherencia(rs, hist)
-    modelo = dm.construir_documento_maestro(rs, historial=hist, folio=folio_txt)
+    # ── BLOCK 1.1 · B — UNA SOLA VERDAD CANÓNICA DEL RECUENTO ────────────────
+    # El recuento se resuelve UNA vez aquí, con la única función canónica, y se
+    # PERSISTE en el RunState. El modelo de documento y el manifest reciben ESE MISMO
+    # objeto (no vuelven a contar), y el PDF imprime el valor ya resuelto. Así
+    # `runstate_count == manifest_count == model_count == pdf_count` no depende de que
+    # cuatro sitios coincidan: dependen de que solo uno calcule.
+    resumen_conflictos = dh.get_true_conflict_summary(hist)
+    rs["historical_consistency_summary"] = resumen_conflictos
+    modelo = dm.construir_documento_maestro(rs, historial=hist, folio=folio_txt,
+                                            resumen_conflictos=resumen_conflictos)
 
     secciones = secciones_mod.desde_estado(rs, modelo, hist)
     ejecutivo = salida_dir / ARCHIVO_EJECUTIVO.format(folio=folio_txt)
@@ -255,6 +288,13 @@ def construir_entregables(
         "ejecutivo_titulos": auditoria["titulos"],
         "render_budget": presupuesto,
         "modelo": modelo,
+        # BLOCK 1.1 · B — PROYECCIÓN del resumen canónico en el MANIFEST. No es un
+        # segundo cálculo: es el MISMO objeto que el RunState persistió y que el modelo
+        # de documento transporta, expuesto también en la raíz del manifest para que un
+        # revisor lo lea sin abrir el modelo. El manifest NO replica el informe de
+        # coherencia completo (`requieren_revision`, `clasificaciones_conflicto`): su
+        # contrato es `modelo.historical_consistency` + este resumen.
+        "historical_consistency_summary": modelo["historical_consistency_summary"],
     }
     mpath = salida_dir / ARCHIVO_MANIFEST.format(folio=folio_txt)
     mpath.write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")

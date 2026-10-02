@@ -42,6 +42,32 @@ def estado_legible(estado: Optional[str]) -> str:
     return _ESTADO_LEGIBLE.get((estado or "").upper(), (estado or "PENDIENTE"))
 
 
+def _geo_evaluado(geo_eval: Optional[Dict[str, Any]]) -> bool:
+    """¿La corrida EVALUÓ la geometría contra las capas del POT? (§17)
+
+    Compatible con los dos contratos: el evaluador declara `evaluado` (contrato vigente,
+    `api/geospatial_engine.evaluate_predio`) o `evaluated` (variante en inglés); y si el
+    dictamen trae RESULTADO ESPACIAL declarado —intersección `True`/`False` con un nivel,
+    o una relación geométrica explícita— el hecho ESTÁ evaluado aunque la clave no venga.
+    Regla §17: consulta válida + geometría evaluada + fuente válida + resultado espacial
+    ⇒ NO puede quedar `NOT_EVALUATED`.
+    """
+    geo = geo_eval if isinstance(geo_eval, dict) else {}
+    for clave in ("evaluado", "evaluated"):
+        if clave in geo and isinstance(geo[clave], bool):
+            return bool(geo[clave])
+    for capa in ("amenaza_remocion_masa", "areas_en_riesgo"):
+        bloque = geo.get(capa)
+        if isinstance(bloque, dict) and isinstance(bloque.get("intersecta"), bool):
+            # Un veredicto de intersección (True o False) ES un resultado espacial.
+            return True
+    resumen = str(geo.get("resumen_ejecutivo") or "").lower()
+    if resumen and not any(t in resumen for t in ("no evaluado", "no se completó",
+                                                  "pendiente", "sin fuente")):
+        return bool(resumen)
+    return False
+
+
 def build_execution_receipts(
     *,
     ciudad: str,
@@ -121,7 +147,16 @@ def build_execution_receipts(
             "estrato_origen": (_mc.get("official_urban_context") or {}).get("estrato_origen"),
             "urban_source_mode": (_mc.get("urban_source_summary") or {}).get("source_mode"),
         },
-        "geo_evaluado": bool((geo_eval or {}).get("evaluado")),
+        # BLOCK 1 · §17 — `geo_evaluado` tiene que reflejar la resolución espacial que la
+        # corrida REALMENTE obtuvo. Antes leía `bool((geo_eval or {}).get("evaluado"))`
+        # sobre un contrato que NO declaraba esa clave ⇒ `false` SIEMPRE, incluso con
+        # «polígono: intersecta el predio» declarado en dos atributos. Ahora:
+        #   1. se lee la declaración del evaluador (`evaluado`/`evaluated`) si existe;
+        #   2. si el dictamen de la capa trae resultado espacial (intersección declarada
+        #      o un nivel con la relación geométrica), el hecho está EVALUADO aunque el
+        #      evaluador no lo declarara (compatibilidad con contratos antiguos);
+        #   3. nunca se infiere «evaluado» de la ausencia de riesgo.
+        "geo_evaluado": _geo_evaluado(geo_eval),
         # 03F.1: receipt por categoría (status + count). El status respeta la
         # metadata de ejecución (AVAILABLE / NO_MATCH / SOURCE_UNAVAILABLE) si
         # está disponible; sin ella degrada a NO_MATCH (lista vacía).

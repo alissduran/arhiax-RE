@@ -412,6 +412,13 @@ def observaciones_de(rs: Dict[str, Any]) -> List[Dict[str, Any]]:
     cuando = rs.get("generated_at")
     obs: List[Dict[str, Any]] = []
 
+    # El atributo del REGISTRO que corresponde a cada riesgo del estado (los nombres
+    # difieren entre capas: la página dice `amenaza_remocion_masa`, el registro `remocion`).
+    _ATRIBUTO_DE_RIESGO = {"amenaza_remocion_masa": "remocion",
+                           "areas_en_riesgo": "riesgo",
+                           "inundacion": "inundacion",
+                           "riesgo_no_mitigable": "riesgo_no_mitigable"}
+
     # IDENTIDAD
     obs.append(observacion("IDENTITY", "Matrícula inmobiliaria", "SNR / Certificado de "
                          "tradición y libertad", OBSERVADO if pi.get("folio") else NO_MATCH,
@@ -424,15 +431,41 @@ def observaciones_de(rs: Dict[str, Any]) -> List[Dict[str, Any]]:
                            valor={"nupre": pi.get("nupre"),
                                   "predial": pi.get("codigo_catastral")},
                            cuando=cuando, evidencia_refs=_ev_identidad(rs)))
+    # Geometría oficial vs identidad canónica: el estado se lee del ALCANCE REAL del
+    # binding (§11). Un binding de IDENTIFICADORES (`NATIONAL_IDENTIFIERS`) acredita que
+    # el registro es el MISMO predio, NO que ESTA geometría sea la del predio: no se
+    # publica como geometría verificada.
+    binding_info = {}
+    try:
+        import attribute_truth as _at_mod
+        binding_info = _at_mod.binding_geometria(mc)
+    except Exception:  # noqa: BLE001 — el módulo es opcional para el modelo de decisión
+        binding_info = {}
+    geometrico = bool(binding_info.get("es_binding_geometrico"))
     binding = str(mc.get("canonical_binding_status") or "").upper()
+    if geometrico and binding == "VERIFIED":
+        _estado_binding = OBSERVADO
+    elif binding == "MISMATCH":
+        _estado_binding = CONFLICTO_OBS
+    elif binding or binding_info:
+        # El binding existe, pero su alcance no es geométrico: el hecho está CONOCIDO y
+        # su alcance declarado (nunca `NO EVALUADO`: sí se evaluó, con otro alcance).
+        _estado_binding = OBSERVADO
+    else:
+        _estado_binding = NO_EVALUADO
     obs.append(observacion("IDENTITY", "Geometría oficial vs identidad canónica",
                            _v(mc.get("coordinate_source"), "geometría del municipio"),
-                           OBSERVADO if binding == "VERIFIED"
-                           else (CONFLICTO_OBS if binding == "MISMATCH" else NO_EVALUADO),
+                           _estado_binding,
                            valor={"binding": binding or "NO_COMPARABLE",
                                   "fields": mc.get("canonical_binding_fields"),
-                                  "scope": mc.get("coordinate_scope")},
-                           cuando=cuando, detalle=_v(mc.get("coordinate_scope")),
+                                  "scope": mc.get("coordinate_binding_scope")
+                                  or mc.get("canonical_binding_scope"),
+                                  "es_binding_geometrico": geometrico,
+                                  "alcance_acreditado": (binding_info.get("etiqueta")
+                                                         if binding_info else None)},
+                           cuando=cuando,
+                           detalle=(binding_info.get("detalle")
+                                    or _v(mc.get("coordinate_scope"))),
                            evidencia_refs=_ev_identidad(rs)))
 
     # TÍTULOS
@@ -514,13 +547,36 @@ def observaciones_de(rs: Dict[str, Any]) -> List[Dict[str, Any]]:
                              ("inundacion", "Inundación"),
                              ("riesgo_no_mitigable", "Riesgo no mitigable"),
                              ("areas_en_riesgo", "Otras amenazas declaradas")):
+        # ── BLOCK 1 · §17/§18/§19 ─────────────────────────────────────────────
+        # El estado del riesgo NO se deriva solo de la PRESENCIA de una cadena
+        # (`OBSERVADO if _v(risk.get(riesgo)) else NO_EVALUADO`, la regla anterior): se
+        # consulta la VERDAD ÚNICA por atributo de esta corrida (escalera → hecho), que
+        # declara si hubo consulta, fuente, geometría evaluada y resultado espacial. Si el
+        # atributo no está en el registro, se conserva la regla por presencia de valor.
+        estado_reg = None
+        ficha = ((rs.get("attribute_resolution") or {}).get("attributes") or {}).get(
+            _ATRIBUTO_DE_RIESGO.get(riesgo, riesgo))
+        if isinstance(ficha, dict):
+            estado_reg = {
+                "VERIFIED": OBSERVADO, "KNOWN_BUT_UNVERIFIED": OBSERVADO,
+                "CONFLICT": CONFLICTO_OBS, "NOT_EVALUATED": NO_EVALUADO,
+                "NO_DATA": NO_MATCH, "HISTORICAL_ONLY": OBSERVADO,
+                "SOURCE_UNAVAILABLE": FUENTE_NO_DISPONIBLE_OBS,
+                "NOT_SUPPORTED": FUENTE_NO_DISPONIBLE_OBS,
+            }.get(str(ficha.get("fact_status") or ""))
+        estado = estado_reg if estado_reg else (
+            OBSERVADO if _v(risk.get(riesgo)) else NO_EVALUADO)
+        detalle = None
+        if not _v(risk.get(riesgo)):
+            detalle = ("La capa no se evaluó en esta corrida: se declara NO EVALUADO, no "
+                       "«sin riesgo».")
+            if isinstance(ficha, dict) and ficha.get("canonical_reason"):
+                detalle = str(ficha["canonical_reason"])
         obs.append(observacion("ENVIRONMENT", etiqueta,
-                               _fuente_urbana(mc, riesgo), 
-                               OBSERVADO if _v(risk.get(riesgo)) else NO_EVALUADO,
+                               _fuente_urbana(mc, riesgo),
+                               estado,
                                valor=risk.get(riesgo), cuando=cuando,
-                               detalle=(None if _v(risk.get(riesgo)) else
-                                        "La capa no se evaluó en esta corrida: se declara "
-                                        "NO EVALUADO, no «sin riesgo»."),
+                               detalle=detalle,
                                evidencia_refs=[evidencia(f"EV-RIESGO-{riesgo.upper()}",
                                                          "capa POT del municipio",
                                                          tipo="RISK", when=cuando)]))

@@ -501,65 +501,46 @@ def seleccionar_capa_banda(layers: Iterable[Mapping[str, Any]], area_m2: Any
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# 5 · TRANSPORTE — la red vive AQUÍ y sólo aquí (todo lo demás es inyectable)
+# 5 · TRANSPORTE — la red vive AQUÍ (todo lo demás es inyectable)
 # ══════════════════════════════════════════════════════════════════════════════
-@dataclass
-class RawFetch:
-    """Respuesta cruda de una petición. Es el ÚNICO portador de la procedencia."""
+# ── EL TIPO `RawFetch`: DEFINICIÓN ÚNICA, EN `api/acquisition_http.py` ────────
+# Este módulo NO declara su propia clase. Antes había DOS clases homónimas (una aquí y
+# otra derivada en `acquisition_http`) y, además, el mismo archivo era importable como
+# `market_harvest` y como `api.market_harvest`: el MISMO objeto fallaba el `isinstance`
+# del consumidor según por qué camino de importación hubiera entrado, que es el defecto
+# que impedía cerrar la remedición de mercado (`TypeError: fetch_fn debe devolver un
+# RawFetch, no RawFetch`). Con una sola definición, `type(x) is type(y)` para cualquier
+# instancia, sin importar quién la construyó.
+#
+# El import es DIFERIDO a propósito: `acquisition_http` importa este módulo al cargarse
+# (toma de aquí `NAV_HEADERS` y `PROVEEDOR_PORTAL`, que son la única fuente de verdad de
+# las cabeceras), así que importarlo arriba crearía un ciclo que además puede romperse
+# según cuál de los dos módulos se importe primero.
+_CLASE_RAW_FETCH: Any = None
 
-    url: str
-    http_status: Optional[int]
-    body: bytes
-    queried_at: str
-    sha256: Optional[str] = None
-    bytes: int = 0
-    cf_ray: Optional[str] = None
-    server: Optional[str] = None
-    error: Optional[str] = None
-    intentos: int = 1
-    ms: Optional[int] = None
 
-    def __post_init__(self) -> None:
-        if self.body is None:
-            self.body = b""
-        if not isinstance(self.body, (bytes, bytearray)):
-            raise TypeError("RawFetch.body debe ser bytes (payload crudo sin modificar)")
-        self.body = bytes(self.body)
-        if self.sha256 is None and self.http_status is not None:
-            # El hash se calcula sobre los BYTES EXACTOS recibidos. No se recalcula ni se
-            # normaliza el cuerpo antes de hashear.
-            self.sha256 = hashlib.sha256(self.body).hexdigest()
-        self.bytes = len(self.body)
-
-    @property
-    def es_http_200(self) -> bool:
-        return self.http_status == 200
-
-    def json(self) -> Optional[Dict[str, Any]]:
+def tipo_raw_fetch() -> Any:
+    """La clase ÚNICA `RawFetch` (``api/acquisition_http.py``), resuelta una sola vez."""
+    global _CLASE_RAW_FETCH
+    if _CLASE_RAW_FETCH is None:
         try:
-            dato = json.loads(self.body.decode("utf-8"))
-        except Exception:  # noqa: BLE001
-            return None
-        return dato if isinstance(dato, dict) else None
+            from acquisition_http import RawFetch as _cls       # noqa: PLC0415
+        except ImportError:                                     # pragma: no cover
+            from api.acquisition_http import RawFetch as _cls   # noqa: PLC0415,F811
+        _CLASE_RAW_FETCH = _cls
+    return _CLASE_RAW_FETCH
 
-    def provenance(self, *, source_id: str, servicio: str, layer_id: Optional[int],
-                   referencia: Optional[str] = None) -> Dict[str, Any]:
-        """Bloque de procedencia COMPLETA, listo para `clasificar_origen`."""
-        return {
-            "version": VERSION_PROVENANCE,
-            "source_id": source_id,
-            "proveedor": PROVEEDOR_PORTAL,
-            "fecha": (self.queried_at or "")[:10] or None,
-            "referencia": referencia or f"{servicio}" + (
-                f"/MapServer/{layer_id}" if layer_id is not None else "/MapServer"),
-            "url": self.url,
-            "queried_at": self.queried_at,
-            "http_status": self.http_status,
-            "bytes": self.bytes,
-            "sha256": self.sha256,
-            "cf_ray": self.cf_ray,
-            "server": self.server,
-        }
+
+def __getattr__(name: str) -> Any:
+    """``market_harvest.RawFetch`` es EXACTAMENTE ``acquisition_http.RawFetch``.
+
+    PEP 562: el atributo no se re-declara, se resuelve a la definición única. Así los
+    consumidores históricos (``mh.RawFetch``, ``from market_harvest import RawFetch``)
+    siguen funcionando apuntando al MISMO tipo.
+    """
+    if name == "RawFetch":
+        return tipo_raw_fetch()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 def _utcnow() -> str:
@@ -579,7 +560,8 @@ def fetch_raw(url: str, *, timeout: int = 30, intentos: int = 3,
     cabeceras = dict(NAV_HEADERS)
     cabeceras.update(dict(headers or {}))
     abrir = opener or urllib.request.urlopen
-    ultimo: Optional[RawFetch] = None
+    R = tipo_raw_fetch()          # la clase ÚNICA del pack
+    ultimo = None
     for i in range(max(1, intentos)):
         queried_at = _utcnow()
         t0 = time.time()
@@ -587,29 +569,27 @@ def fetch_raw(url: str, *, timeout: int = 30, intentos: int = 3,
             req = urllib.request.Request(url, headers=cabeceras)
             with abrir(req, timeout=timeout) as resp:
                 cuerpo = resp.read()
-                return RawFetch(url=url, http_status=getattr(resp, "status", None),
-                                body=cuerpo, queried_at=queried_at,
-                                cf_ray=(resp.headers.get("cf-ray")
-                                        if resp.headers else None),
-                                server=(resp.headers.get("server")
-                                        if resp.headers else None),
-                                intentos=i + 1, ms=int((time.time() - t0) * 1000))
+                return R(url=url, http_status=getattr(resp, "status", None),
+                         body=cuerpo, queried_at=queried_at,
+                         cf_ray=(resp.headers.get("cf-ray") if resp.headers else None),
+                         server=(resp.headers.get("server") if resp.headers else None),
+                         intentos=i + 1, ms=int((time.time() - t0) * 1000))
         except urllib.error.HTTPError as exc:
             cuerpo = b""
             try:
                 cuerpo = exc.read()
             except Exception:  # noqa: BLE001
                 cuerpo = b""
-            ultimo = RawFetch(url=url, http_status=exc.code, body=cuerpo,
-                              queried_at=queried_at,
-                              cf_ray=((exc.headers or {}).get("cf-ray")),
-                              server=((exc.headers or {}).get("server")),
-                              error=f"HTTPError {exc.code} {exc.reason}",
-                              intentos=i + 1, ms=int((time.time() - t0) * 1000))
+            ultimo = R(url=url, http_status=exc.code, body=cuerpo,
+                       queried_at=queried_at,
+                       cf_ray=((exc.headers or {}).get("cf-ray")),
+                       server=((exc.headers or {}).get("server")),
+                       error=f"HTTPError {exc.code} {exc.reason}",
+                       intentos=i + 1, ms=int((time.time() - t0) * 1000))
         except Exception as exc:  # noqa: BLE001
-            ultimo = RawFetch(url=url, http_status=None, body=b"", queried_at=queried_at,
-                              error=f"{type(exc).__name__}: {exc}", intentos=i + 1,
-                              ms=int((time.time() - t0) * 1000))
+            ultimo = R(url=url, http_status=None, body=b"", queried_at=queried_at,
+                       error=f"{type(exc).__name__}: {exc}", intentos=i + 1,
+                       ms=int((time.time() - t0) * 1000))
         if i + 1 < max(1, intentos):
             sleep(1.5 * (i + 1))
     assert ultimo is not None
@@ -778,12 +758,13 @@ def adquirir_capa(spec: LayerSpec, sujeto: Sujeto, *,
 
     def _traer(url: str) -> RawFetch:
         """Toda causa de red se convierte en un `RawFetch` declarado; NUNCA en excepción."""
+        R = tipo_raw_fetch()      # la clase ÚNICA del pack (no una copia local)
         try:
             obtenido = traer(url, timeout=timeout)
         except Exception as exc:  # noqa: BLE001
-            return RawFetch(url=url, http_status=None, body=b"", queried_at=_utcnow(),
-                            error=f"{type(exc).__name__}: {exc}")
-        if not isinstance(obtenido, RawFetch):
+            return R(url=url, http_status=None, body=b"", queried_at=_utcnow(),
+                     error=f"{type(exc).__name__}: {exc}")
+        if not isinstance(obtenido, R):
             raise TypeError(
                 f"fetch_fn debe devolver un RawFetch, no {type(obtenido).__name__}: "
                 f"un transporte que no declara procedencia no es admisible")

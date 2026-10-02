@@ -112,6 +112,19 @@ def dictus_id(folio: str, fecha_iso: str) -> str:
 
 
 # ── Evidence manifest (§AN) ───────────────────────────────────────────────────
+def _dato(valor: Any) -> bool:
+    """¿El valor declarado es un DATO (no vacío ni centinela)? Mismo criterio que el
+    resto del producto: la ausencia nunca se confunde con un hecho."""
+    if valor is None:
+        return False
+    if isinstance(valor, str):
+        return bool(valor.strip()) and valor.strip().upper() not in (
+            "N/D", "N/A", "NA", "NO DISPONIBLE", "SIN DATO", "NO EVALUADO", "NONE", "NULL")
+    if isinstance(valor, (list, tuple, set, dict)):
+        return any(_dato(x) for x in (valor.values() if isinstance(valor, dict) else valor))
+    return True
+
+
 def _ev(evidence_id: str, tipo: str, source: Optional[str], source_version: Optional[str],
         subject: Optional[str], timestamp: Optional[str], contenido: Any,
         status: str = "SELLADA") -> Dict[str, Any]:
@@ -249,12 +262,32 @@ def construir_evidence_manifest(estado: Dict[str, Any], *,
                       "intentadas": poi.get("sources_attempted"),
                       "exitosas": poi.get("sources_succeeded")},
                      "SELLADA" if poi.get("sources_succeeded") else "FUENTE_NO_DISPONIBLE"))
+    # ── BLOCK 1 · RSK-3: el sello de EV-AMENAZAS se deriva de su CONTENIDO, no de la
+    # disponibilidad del volcán. Antes: `"SELLADA" if vol.get("disponible") else
+    # "FUENTE_NO_DISPONIBLE"` ⇒ la evidencia agregada de amenazas se sellaba
+    # FUENTE_NO_DISPONIBLE mientras `amenaza_remocion_masa` y `areas_en_riesgo` se
+    # imprimían como RIESGO MEDIO con capa, snapshot y sha256 declarados en la MISMA
+    # corrida (la contradicción observable más directa). Ahora el estado declara qué
+    # componentes aportaron resultado espacial y cuáles no, y solo cuando NINGÚN
+    # componente aportó nada se declara la ausencia.
+    _riesgos = e.get("risk_context") or {}
+    _riesgo_obs = {k: _riesgos.get(k) for k in ("amenaza_remocion_masa", "areas_en_riesgo")}
+    _observados = [k for k, v in _riesgo_obs.items() if _dato(v)]
+    _no_evaluados = [k for k in ("inundacion", "riesgo_no_mitigable")
+                     if not _dato(_riesgos.get(k))]
+    _estado_amenazas = ("SELLADA" if _observados
+                        else ("PARCIAL" if vol.get("estado") else "FUENTE_NO_DISPONIBLE"))
     items.append(_ev("EV-AMENAZAS", "AMENAZAS_Y_RIESGO", "servicios municipales y SGC",
                      None, sujeto, ts,
                      {"volcan_estado": vol.get("estado"), "volcan_nivel": vol.get("nivel"),
-                      "amenaza": urb.get("predio_entorno", {}).get("amenaza_remocion_masa")
-                      if isinstance(urb.get("predio_entorno"), dict) else None},
-                     "SELLADA" if vol.get("disponible") else "FUENTE_NO_DISPONIBLE"))
+                      "amenaza": _riesgo_obs.get("amenaza_remocion_masa"),
+                      "riesgo": _riesgo_obs.get("areas_en_riesgo"),
+                      "componentes_observados": _observados,
+                      "componentes_no_evaluados": _no_evaluados,
+                      "nota": ("El sello declara lo que la evidencia contiene: los "
+                               "componentes observados con resultado espacial y los que "
+                               "no se evaluaron, nunca un estado único para todos.")},
+                     _estado_amenazas))
     items.append(_ev("EV-LIBERACION", "RELEASE_GATE", "núcleo de screening sancionado",
                      gate.get("matcher_version"), "documento", ts,
                      {"release_status": gate.get("release_status"),
@@ -392,11 +425,30 @@ def _estado_para_decision(origen: Dict[str, Any], plano: Dict[str, Any]) -> Dict
     }
 
 
+def _resumen_conflictos_canonico(origen: Dict[str, Any], hist: Dict[str, Any],
+                                 resumen: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Resumen canónico del recuento: el recibido, el ya persistido en el estado, o el
+    que resuelve la ÚNICA función canónica (`dictus_historia.get_true_conflict_summary`).
+
+    Import perezoso: `dictus_historia` es la capa de semántica histórica y no debe
+    entrar en el ciclo de importación del manifiesto.
+    """
+    if resumen:
+        return resumen
+    ya_persistido = (origen or {}).get("historical_consistency_summary")
+    if ya_persistido:
+        return ya_persistido
+    import dictus_historia as _dh
+    return _dh.get_true_conflict_summary(hist or {})
+
+
 def construir_documento_maestro(estado: Dict[str, Any], *,
                                 hallazgos: Optional[Iterable[Dict[str, Any]]] = None,
                                 historial: Optional[Dict[str, Any]] = None,
                                 folio: Optional[str] = None,
-                                solar: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+                                solar: Optional[Dict[str, Any]] = None,
+                                resumen_conflictos: Optional[Dict[str, Any]] = None,
+                                ) -> Dict[str, Any]:
     """Modelo canónico del expediente: es la entrada del hash maestro y del render.
 
     Acepta el `DictusRunState` de 2.0B (recomendado) o el estado plano anterior.
@@ -486,6 +538,13 @@ def construir_documento_maestro(estado: Dict[str, Any], *,
             "cambios_explicados": [{"atributo": c.get("atributo"), "detalle": c.get("detalle")}
                                    for c in (hist.get("cambios_explicados") or [])],
         },
+        # BLOCK 1.1 · B — RESUMEN CANÓNICO DEL RECUENTO. Viaja al MODELO (y por tanto al
+        # hash maestro: describe un hecho del expediente, no el render) para que las 6
+        # páginas y el PDF impriman un valor PREVIAMENTE RESUELTO. Se resuelve UNA vez
+        # (`dictus_historia.get_true_conflict_summary`) y se recibe ya construido: este
+        # módulo no cuenta listas ni deriva contadores por su cuenta.
+        "historical_consistency_summary": _resumen_conflictos_canonico(
+            _origen, hist, resumen_conflictos),
     }
     # 2.0D: la cadena de decisión se deriva del estado canónico y entra al modelo (y por
     # tanto al hash maestro). No recalcula motores: organiza lo ya producido.

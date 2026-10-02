@@ -34,6 +34,15 @@ from reportlab.pdfgen import canvas
 
 from dictus_historia import (HISTORICAL_CONFLICT, REQUIERE_VALIDACION, SIN_DATO,
                              VERIFICADO)
+import dictus_historia as dh
+
+
+# BLOCK 1.1 · B — el renderer NO calcula contadores: si el recuento canónico no llegó
+# resuelto, el documento no se emite (fail-closed). Un recuento sustituto —la longitud
+# del panel de divergencias, `len(requieren_revision)`, un contador legacy— imprimiría
+# una métrica con el rótulo de otra.
+class RecuentoNoResuelto(RuntimeError):
+    """El PDF recibió el recuento sin resolver: no se imprime un sustituto."""
 
 # §32/§33 · El contrato de estimación (P1 y P6) y su vocabulario viven en UN solo
 # módulo: `api/estimation_state.py`. El renderizador NO redacta ni deriva ninguno de
@@ -428,7 +437,17 @@ _ESTADOS_VISUALES = {
     "FUENTE_NO_DISPONIBLE": ("grey", "FUENTE NO DISPONIBLE"),
     "RIESGO_ALTO": ("err", "RIESGO ALTO"),
     "RIESGO_MEDIO": ("warn", "RIESGO MEDIO"),
+    # BLOCK 1 · RSK-4: el vocabulario del chip de riesgo no tenía el escalón BAJO: un
+    # nivel «Baja»/«Bajo» declarado por la fuente caía en el `else` y el chip decía
+    # `NO EVALUADO` (no es un estado negativo: es el escalón más bajo de la capa).
+    "RIESGO_BAJO": ("info", "RIESGO BAJO"),
     "SIN_AFECTACION": ("ok", "SIN AFECTACIÓN VERIFICADA"),
+    # Nivel declarado que no es una severidad conocida: el hecho es que la capa SE
+    # EVALUÓ; se declara eso y no un `NO EVALUADO` genérico (§18).
+    "EVALUADO": ("info", "EVALUADO"),
+    # §18/§19: cobertura inexistente vs ausencia declarada — dos hechos distintos, dos
+    # chips distintos (ninguno es «NO EVALUADO»).
+    "NO_SOPORTADO": ("grey", "COBERTURA NO SOPORTADA"),
 }
 
 _ESTADOS_COMPACTOS = {
@@ -440,9 +459,52 @@ _ESTADOS_COMPACTOS = {
     "REQUIERE_REVISION": "REQUIERE REVISIÓN",
 }
 
+# BLOCK 1 · §18/§19 — el estado PROPIO de un atributo sin resultado: no se imprime
+# `NO EVALUADO` como cajón general. Cada ausencia/cobertura tiene su nombre y su chip.
+_CHIP_POR_HECHO = {
+    "NOT_SUPPORTED": "NO_SOPORTADO",
+    "SOURCE_UNAVAILABLE": "FUENTE_NO_DISPONIBLE",
+    "NO_DATA": "SIN_DATO",
+    "NOT_EVALUATED": "NO_EVALUADO",
+}
+
+
+def _chip_de_hecho(estado_hecho: Any) -> str:
+    """Chip de una fila SIN nivel declarado: nombra el estado del hecho, no un genérico."""
+    return _CHIP_POR_HECHO.get(str(estado_hecho or "").upper(), "NO_EVALUADO")
+
+
+def _etiqueta_hecho(estado_hecho: Any) -> str:
+    """Etiqueta legible del estado del hecho (lo que sale impreso junto al tipo)."""
+    return _ESTADOS_VISUALES.get(_chip_de_hecho(estado_hecho),
+                                 ("grey", "NO EVALUADO"))[1]
+
 
 def _estado_legible(estado: str):
     return _ESTADOS_VISUALES.get(estado, ("info", str(estado)))
+
+
+def _chip_de_riesgo(nivel: Any) -> str:
+    """Chip del panel de riesgos a partir del NIVEL que la fuente declara.
+
+    BLOCK 1 · RSK-4: la rama `BAJA`/`BAJO` FALTABA, así que un nivel «Baja»/«Bajo»
+    declarado por la fuente caía en el `else` y el chip decía `NO EVALUADO` mientras el
+    texto imprimía el nivel y su relación con el polígono (la capa SÍ se evaluó). Aquí
+    cada nivel declarado tiene su rama y `NO_EVALUADO` queda SOLO para lo que no declaró
+    nivel (nada evaluado): nunca como cajón general de lo desconocido.
+    """
+    texto = str(nivel or "").upper()
+    if not texto:
+        return "NO_EVALUADO"
+    if any(k in texto for k in ("MUY ALTA", "MUY ALTO", "ALTA", "ALTO")):
+        return "RIESGO_ALTO"
+    if any(k in texto for k in ("MEDIA", "MEDIO")):
+        return "RIESGO_MEDIO"
+    if any(k in texto for k in ("BAJA", "BAJO")):
+        return "RIESGO_BAJO"
+    if any(k in texto for k in ("SIN AFECT", "SIN RIESGO", "NO INTERSECTA")):
+        return "SIN_AFECTACION"
+    return "EVALUADO"
 
 
 def chip_estado(c, x, y, estado: str, size=7.4, h=14):
@@ -919,14 +981,54 @@ class SelloGlobal(Bloque):
         return self.cerrar(x, y, ancho)
 
 
+def _recuento_coherencia(secciones: Dict[str, Any]) -> Dict[str, int]:
+    """Recuento YA RESUELTO por la corrida: el renderer NO cuenta nada.
+
+    (BLOCK 1.1 · B) Antes esta función leía el recuento de las secciones, pero
+    `TarjetaCoherencia` caía a `len(self.atributos)` si no llegaba: la longitud del panel
+    de divergencias (2 conflictos verdaderos + N diferencias materiales explicadas) se
+    imprimía con el rótulo de «conflictos» — el defecto que este bloque cierra. Ahora el
+    valor llega del resumen canónico y su ausencia es un FALLO, no un recuento sustituto.
+    """
+    resumen = (secciones or {}).get("coherencia_resumen") or {}
+    if resumen.get("true_conflict") is None:
+        raise RecuentoNoResuelto(
+            "BLOCK 1.1: el PDF no puede calcular el recuento. `coherencia_resumen."
+            "true_conflict` debe llegar resuelto desde "
+            "`dictus_historia.get_true_conflict_summary` (RunState → modelo de documento).")
+    return {"n_conflictos": int(resumen["true_conflict"] or 0),
+            "n_diferencias_declaradas": int(resumen.get("diferencias_declaradas") or 0),
+            "rotulo_conflicto": str(resumen.get("rotulo_conflicto")
+                                    or dh.ROTULO_CONFLICTO_VERDADERO)}
+
+
 class TarjetaCoherencia(Bloque):
     """UNA tarjeta que agrupa los conflictos de datos (§8) con sus actores (§9)."""
 
     nombre = "tarjeta_coherencia"
 
-    def __init__(self, atributos: Sequence[Dict[str, Any]], pagina: int = 1):
+    def __init__(self, atributos: Sequence[Dict[str, Any]], pagina: int = 1,
+                 n_conflictos: Optional[int] = None,
+                 n_diferencias_declaradas: int = 0,
+                 rotulo_conflicto: Optional[str] = None):
         super().__init__(pagina)
         self.atributos = list(atributos)
+        # BLOCK 1.1 · B: el NÚMERO que se imprime llega RESUELTO (`n_conflictos`), y es
+        # el de conflictos históricos verdaderos (`TRUE_CONFLICT`, las siete
+        # condiciones). El panel puede LISTAR además las diferencias materiales que el
+        # expediente explicó (con su clase declarada): eso se declara aparte y nunca
+        # infla el recuento.
+        #
+        # PROHIBIDO el sustituto legacy `len(self.atributos)`: la longitud del panel de
+        # divergencias NO es un recuento de conflictos (con 2 conflictos verdaderos y 4
+        # diferencias explicadas valía 6). Si el valor no llega, el documento NO se emite.
+        if n_conflictos is None:
+            raise RecuentoNoResuelto(
+                "BLOCK 1.1: `n_conflictos` debe llegar resuelto desde el resumen canónico "
+                "(`get_true_conflict_summary`). El renderer no cuenta atributos.")
+        self.n_conflictos = int(n_conflictos)
+        self.n_diferencias_declaradas = int(n_diferencias_declaradas or 0)
+        self.rotulo_conflicto = str(rotulo_conflicto or dh.ROTULO_CONFLICTO_VERDADERO)
 
     def medir(self, c, ancho):
         self.alto = 80.0
@@ -936,11 +1038,15 @@ class TarjetaCoherencia(Bloque):
         self.medir(c, ancho)
         panel(c, x, y - self.alto, ancho, self.alto, INFO_BG, INFO_BD)
         banda(c, x, y - self.alto, 3, self.alto, GOLD)
-        n = len(self.atributos)
-        txt(c, x + 10, y - 16, f"COHERENCIA DE INFORMACIÓN — {n} atributo(s) requieren "
-                               f"reconciliación histórica" if n else
-            "COHERENCIA DE INFORMACIÓN — sin conflictos entre versiones",
-            FB, 9.4, INK)
+        n = self.n_conflictos
+        # El rótulo canónico distingue esta métrica (conflictos VERDADEROS que requieren
+        # reconciliación) de la de atributos comparados (que NO se rotula aquí).
+        _titulo = (f"COHERENCIA DE INFORMACIÓN — {n} {self.rotulo_conflicto}" if n else
+                   "COHERENCIA DE INFORMACIÓN — sin conflictos entre versiones")
+        if self.n_diferencias_declaradas:
+            _titulo += (f" · +{self.n_diferencias_declaradas} diferencia(s) material(es) "
+                        f"declarada(s) con su clase")
+        txt(c, x + 10, y - 16, _titulo, FB, 9.4, INK)
         actores: List[str] = []
         for a in self.atributos:
             for actor in (a.get("afectados") or []):
@@ -1157,7 +1263,7 @@ def pagina1(c, modelo, secciones):
 
     y = emitir(c, y, [Titulo("COHERENCIA DE LA INFORMACIÓN",
                              "conflictos entre versiones del expediente", 1, size=11.0),
-                      TarjetaCoherencia(coh, pagina=1)])
+                      TarjetaCoherencia(coh, pagina=1, **_recuento_coherencia(secciones))])
 
     # El tablero es la matriz de decisión POR TEMA que ya deduplica el expediente.
     # Antes se le sumaban además los hallazgos sueltos: el mismo hecho salía dos veces.
@@ -1566,29 +1672,28 @@ def pagina4(c, modelo, secciones):
             yt = yy - i * (alto + 2)
             nivel = str(r.get("nivel") or "").upper()
             evaluado = bool(r.get("nivel"))
-            riesgo = any(k in nivel for k in ("ALTA", "ALTO", "MEDIA", "MEDIO"))
+            riesgo = any(k in nivel for k in ("ALTA", "ALTO", "MEDIA", "MEDIO", "BAJA", "BAJO"))
             panel(cc, x, yt - alto, a, alto, CARD, HAIR)
-            # §18: gris para NO EVALUADO · ámbar/rojo para riesgo · verde solo para
+            # §18: gris para lo no evaluado · ámbar/rojo para riesgo · verde solo para
             # afectación verificada sin hallazgo.
             color = (WARN_FG if riesgo else OK_FG) if evaluado else GREY_BD
             banda(cc, x, yt - alto, 3, alto, color)
+            # El texto dice el HECHO: con nivel declarado, el nivel; sin nivel, el estado
+            # PROPIO del atributo (§18/§19: cobertura inexistente o ausencia declarada),
+            # nunca un `NO EVALUADO` genérico de cajón.
             txt(cc, x + 9, yt - 12, f"{_v(r.get('tipo'))}: "
-                                    f"{_v(r.get('nivel'), 'NO EVALUADO')}", FB, 8.8, INK)
+                                    f"{_v(r.get('nivel'), _etiqueta_hecho(r.get('estado_hecho')))}",
+                FB, 8.8, INK)
             _ti, _si = ajustar(cc, _v(r.get("implicacion")), F, 7.8, a - 176)
             txt(cc, x + 9, yt - 22, _ti, F, _si, TEXT_2)
             # §18: el chip dice el HECHO del riesgo, no un estado genérico.
-            if not evaluado:
-                _chip = "NO_EVALUADO"
-            elif any(k in nivel for k in ("ALTA", "ALTO")):
-                _chip = "RIESGO_ALTO"
-            elif any(k in nivel for k in ("MEDIA", "MEDIO")):
-                _chip = "RIESGO_MEDIO"
-            elif any(k in nivel for k in ("SIN AFECT", "SIN RIESGO", "NO INTERSECTA")):
-                _chip = "SIN_AFECTACION"
-            else:
-                _chip = "NO_EVALUADO"
+            # BLOCK 1 · RSK-4: la rama BAJA/BAJO faltaba y caía en `NO_EVALUADO`. La
+            # decisión vive AHORA en `_chip_de_riesgo` (una sola definición, con su
+            # vocabulario declarado y probado), no en un `if` del render; y cuando no hay
+            # nivel, el chip nombra el estado del hecho si el atributo lo declara.
+            _chip = (_chip_de_riesgo(nivel) if evaluado
+                     else _chip_de_hecho(r.get("estado_hecho")))
             caja_estado(cc, x + a - 8 - 150, yt - 17, 150, _chip, 7.0, 13)
-
     y = emitir(c, y, [Titulo("RIESGOS TERRITORIALES", "amenazas y su implicación", 4,
                              size=11.0),
                       PanelLibre("riesgos", len(riesgos[:4]) * 28.0, _dib_riesgos, 4)])

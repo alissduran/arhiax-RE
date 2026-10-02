@@ -535,6 +535,20 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
             return None
         return str(valor).replace("_", " ").title()
 
+    def _detalle_riesgo(bloque):
+        """Procedencia ESPACIAL declarada de un riesgo, sin aplanar ni descartar campos.
+
+        `_nivel_riesgo` conserva el nivel legible; esto conserva lo que la fuente declaró
+        además del nivel (intersección, clase de suelo, área del polígono, objectid y
+        número de coincidencias), que es lo que permite auditar el hecho después.
+        """
+        if not isinstance(bloque, dict):
+            return {}
+        campos = ("nivel", "intersecta", "clase_suelo", "area_poligono_m2", "objectid",
+                  "total_coincidencias")
+        detalle = {c: bloque.get(c) for c in campos if c in bloque}
+        return detalle
+
     anotaciones = analysis.get("anotaciones") or []
     gravamenes = [{"anotacion": a[0], "fecha": a[1], "tipo": a[2], "partes": a[3],
                    "estado": a[4]}
@@ -649,6 +663,28 @@ def construir_run_state(captura: Dict[str, Any], *, run_id: str, folio: str,
                            or _nivel_riesgo(geo.get("inundacion"))),
             "riesgo_no_mitigable": (_nivel_riesgo(ent.get("riesgo_no_mitigable"))
                                     or _nivel_riesgo(geo.get("riesgo_no_mitigable"))),
+            # (BLOCK 1) El riesgo NO se aplana a una cadena: la procedencia se conserva por
+            # atributo (`nivel`, `intersecta`, `clase_suelo`, `area_poligono_m2`, `objectid`,
+            # `total_coincidencias`) porque el estado de la fuente y la relación geométrica
+            # son parte del hecho y antes se perdían aquí.
+            "detalle_por_atributo": {
+                clave: _detalle_riesgo(ent.get(clave) or geo.get(clave))
+                for clave in ("amenaza_remocion_masa", "areas_en_riesgo", "inundacion",
+                              "riesgo_no_mitigable")},
+        },
+        # (BLOCK 1 · §17) ESTADO DE LA EVALUACIÓN ESPACIAL de esta corrida: `evaluado`
+        # declara si el cruce contra las capas del POT se ejecutó y hubo veredicto
+        # espacial. Se PERSISTE en el estado (antes solo viajaba al recibo y el consumidor
+        # leía una clave inexistente ⇒ `false` siempre).
+        "geometry_state": {
+            "evaluado": bool(geo.get("evaluado")),
+            "modo": geo.get("modo"),
+            "layers_available": geo.get("layers_available"),
+            "motivo": geo.get("motivo_evaluado") or (geo.get("evaluacion") or {}).get("motivo"),
+            "coordenadas": geo.get("coordenadas"),
+            "resultado_espacial": {
+                clave: _detalle_riesgo(geo.get(clave))
+                for clave in ("amenaza_remocion_masa", "areas_en_riesgo")},
         },
         "poi_state": normalizar_poi_items(captura.get("poi")),
         "solar_state": {"momentos": (captura.get("solar") or {}).get("momentos") or [],

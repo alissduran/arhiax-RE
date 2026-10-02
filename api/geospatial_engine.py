@@ -75,11 +75,20 @@ def load_geospatial_index():
         _SPATIAL_CACHE = None  # no cachear el fallo
     return _SPATIAL_CACHE
 
-def evaluate_predio(lat: float, lon: float) -> dict:
+def _evaluar_predio_impl(lat: float, lon: float) -> dict:
     """
     Evalúa la posición geográfica (lat, lon) de un predio frente a las capas de Amenaza y Riesgo.
-    
+
     Retorna un diccionario estructurado con los diagnósticos de ambas capas.
+
+    CONTRATO (BLOCK 1 · §17) — la clave `evaluado` es OBLIGATORIA en TODAS las ramas
+    (incluida la de excepción) y significa: «esta corrida cruzó el punto contra las
+    capas del POT y obtuvo un veredicto espacial». Nunca significa «en vivo» (el modo
+    se declara aparte en `modo`) ni «sin afectación». Antes la clave NO existía y el
+    consumidor (`api/receipts.py`) leía `bool(geo.get("evaluado"))` ⇒ `false` SIEMPRE,
+    incluso cuando `amenaza_remocion_masa`/`areas_en_riesgo` ya declaraban «polígono:
+    intersecta el predio». Regla §17: si hubo consulta válida + geometría evaluada +
+    fuente válida + resultado espacial, NO puede quedar `NOT_EVALUATED`.
     """
     cache = load_geospatial_index()
     point = Point(lon, lat)
@@ -178,8 +187,40 @@ def evaluate_predio(lat: float, lon: float) -> dict:
             f"y zonificación de {riesgo_text} según el Plan de Ordenamiento Territorial (POT) de Barranquilla."
         )
 
+    # ── CONTRATO §17: `evaluado` + su motivo, en TODAS las ramas ──────────────
+    # Las capas del POT vienen EMPAQUETADAS (`api/data/*.geojson`) y se cruzan con un
+    # STRtree LOCAL: el modo se declara como tal (`PACKAGED_GEOMETRY_QUERY`) para no
+    # confundir «evaluado» con «consultado en vivo» (el invariante I-NORECORD-NOEVAL de
+    # `api/consistency.py` prohíbe presentar un NO_RECORD como EVALUADO EN VIVO).
+    _capas = bool(cache.get("capas_disponibles"))
+    _punto_valido = (isinstance(lat, (int, float)) and isinstance(lon, (int, float))
+                     and -90.0 <= float(lat) <= 90.0 and -180.0 <= float(lon) <= 180.0)
+    _evaluado = bool(_capas and _punto_valido)
+    if _evaluado:
+        _motivo_evaluado = ("Las capas del POT se consultaron para el punto y devolvieron "
+                            "veredicto espacial (cruce local STRtree sobre las capas "
+                            "empaquetadas): hay resultado espacial, no una ausencia.")
+    elif not _punto_valido:
+        _motivo_evaluado = ("No hay coordenada utilizable: sin punto no se ejecuta el cruce "
+                            "espacial y el resultado queda NO EVALUADO.")
+    else:
+        _motivo_evaluado = ("Las capas empaquetadas del POT no están disponibles: ningún "
+                            "cruce espacial se ejecutó, así que el resultado NO se evalúa "
+                            "(nunca «sin afectación»).")
     return {
         'coordenadas': {'lat': lat, 'lon': lon},
+        # §17 · estado de la EVALUACIÓN (no del riesgo): obligatorio y explícito.
+        'evaluado': _evaluado,
+        'modo': 'PACKAGED_GEOMETRY_QUERY',
+        'layers_available': _capas,
+        'motivo_evaluado': _motivo_evaluado,
+        'evaluacion': {
+            'evaluado': _evaluado,
+            'modo': 'PACKAGED_GEOMETRY_QUERY',
+            'capas_disponibles': _capas,
+            'punto': {'lat': lat, 'lon': lon},
+            'motivo': _motivo_evaluado,
+        },
         'amenaza_remocion_masa': {
             **res_amenaza,
             'color_hex': color_map.get(res_amenaza['nivel'], '#7F8C8D')
@@ -190,6 +231,52 @@ def evaluate_predio(lat: float, lon: float) -> dict:
         },
         'resumen_ejecutivo': summary
     }
+
+
+def evaluate_predio(lat: float, lon: float) -> dict:
+    """Evaluación espacial del predio contra las capas del POT, con estado DECLARADO.
+
+    La rama de EXCEPCIÓN también declara el estado: un fallo del cruce espacial es
+    `evaluado=False` con su motivo exacto, nunca una ausencia silenciosa ni un
+    `NO_MATCH` (regla §27/§18: una ausencia no se convierte en «sin afectación»).
+    """
+    try:
+        if not (isinstance(lat, (int, float)) and isinstance(lon, (int, float))
+                and -90.0 <= float(lat) <= 90.0 and -180.0 <= float(lon) <= 180.0):
+            raise ValueError(f"coordenada no utilizable (lat={lat!r}, lon={lon!r})")
+        return _evaluar_predio_impl(lat, lon)
+    except Exception as exc:  # noqa: BLE001 — el fallo es un ESTADO, no una excepción
+        detalle = f"{type(exc).__name__}: {exc}"
+        _sin_punto = "coordenada no utilizable" in detalle
+        _motivo = ("No hay coordenada utilizable: sin punto no se ejecuta el cruce espacial "
+                   "y el resultado queda NO EVALUADO."
+                   if _sin_punto else
+                   "El cruce espacial no se pudo ejecutar: el resultado queda NO EVALUADO "
+                   "(capa del POT no consultable).")
+        return {
+            'coordenadas': {'lat': lat, 'lon': lon},
+            'evaluado': False,
+            'modo': 'PACKAGED_GEOMETRY_QUERY',
+            'layers_available': False,
+            'motivo_evaluado': _motivo,
+            'error': detalle,
+            'evaluacion': {'evaluado': False, 'modo': 'PACKAGED_GEOMETRY_QUERY',
+                           'capas_disponibles': False,
+                           'punto': {'lat': lat, 'lon': lon},
+                           'motivo': _motivo,
+                           'error': detalle},
+            'amenaza_remocion_masa': {'intersecta': False, 'nivel': None,
+                                      'clase_suelo': 'N/D', 'area_poligono_m2': 0,
+                                      'objectid': None, 'total_coincidencias': 0,
+                                      'detalles': [], 'color_hex': '#7F8C8D'},
+            'areas_en_riesgo': {'intersecta': False, 'nivel': None,
+                                'clase_suelo': 'N/D', 'area_poligono_m2': 0,
+                                'objectid': None, 'total_coincidencias': 0,
+                                'detalles': [], 'color_hex': '#7F8C8D'},
+            'resumen_ejecutivo': (
+                "No se completó la verificación espacial: el cruce contra las capas del POT "
+                f"falló ({detalle}). El resultado debe considerarse NO EVALUADO."),
+        }
 
 if __name__ == "__main__":
     # Test directo al ejecutar el script

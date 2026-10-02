@@ -1,0 +1,2096 @@
+{
+ "registry_version": "arhiax-truth-resolution/attribute-resolution-registry/2.0.0",
+ "audit": "BLOCK 1 · CORRECCIÓN — la escalera se RESUELVE y se PERSISTE por atributo en el RunState (`attribute_resolution`): cada ficha sale de la corrida.",
+ "case": {
+  "fmi": "040-646406",
+  "direccion": "TRANSVERSAL 43 100 50, Torre 8, Apartamento 430",
+  "numero_predial": "080010103000010040001908040002",
+  "nupre": "AFT0005BOHA",
+  "area_m2": 58.75,
+  "regimen": "Propiedad Horizontal"
+ },
+ "run_identity": {
+  "run_id": "137017a8-9d80-4c5b-9eae-957118c3e19a",
+  "dictus_id": "DX-040-646406-20261002",
+  "generated_at": "2026-10-02T16:55:59.367003+00:00",
+  "master_hash": "c790a8f20f3efdf8108ec9cea55aa986eaf7df6cc7090f787dd3132e2c0af3f0",
+  "run_state_version": "dictus-run-state/1.0.0",
+  "master_manifest_version": "dictus-master-manifest/1.2.0",
+  "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+  "run_state_sha256": "0b4f5068e89a8cb7a58e037d0ce873e746a38be067c5b4603c0978bc19b0d90a"
+ },
+ "measured_from": {
+  "run_state": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+  "master_manifest": "docs/forensics/040-646406/dictus_2b/DICTUS_MANIFEST_040-646406.json",
+  "executive_pdf": "docs/forensics/040-646406/dictus_2b/DICTUS_EJECUTIVO_040-646406.pdf",
+  "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+  "clave_del_run_state": "attribute_resolution"
+ },
+ "ficha_fields": [
+  "acquisition_mode",
+  "attribute",
+  "canonical_reason",
+  "canonical_value",
+  "content_hash",
+  "declared_mode",
+  "domain",
+  "evidence_id",
+  "evidence_ids",
+  "fact_status",
+  "geometry_evaluated",
+  "historical_conflict",
+  "ladder_attribute",
+  "persisted_in_run_state",
+  "printed_at",
+  "queried_at",
+  "resolution_status",
+  "source_attempts",
+  "source_authority",
+  "source_selected",
+  "source_vigency",
+  "spatial_result_available"
+ ],
+ "vocabularies": {
+  "resolution_status": [
+   "RESOLVED_PRIMARY",
+   "RESOLVED_FALLBACK",
+   "RESOLVED_SNAPSHOT",
+   "UNRESOLVED",
+   "AMBIGUOUS",
+   "SOURCE_UNAVAILABLE",
+   "NOT_SUPPORTED"
+  ],
+  "fact_status": [
+   "VERIFIED",
+   "KNOWN_BUT_UNVERIFIED",
+   "CONFLICT",
+   "NOT_EVALUATED",
+   "NO_DATA",
+   "HISTORICAL_ONLY",
+   "SOURCE_UNAVAILABLE",
+   "NOT_SUPPORTED"
+  ],
+  "conflict_classification": [
+   "TRUE_CONFLICT",
+   "HISTORICAL_CHANGE",
+   "RESOLVED_BY_PRECEDENCE",
+   "SEMANTIC_DIFFERENCE",
+   "NORMALIZATION_DIFFERENCE",
+   "NOT_A_CONFLICT"
+  ]
+ },
+ "attributes": {
+  "fmi": {
+   "attribute": "fmi",
+   "domain": "IDENTIDAD",
+   "printed_at": "P6",
+   "ladder_attribute": "identidad_nupre",
+   "canonical_value": "040-646406",
+   "resolution_status": "RESOLVED_FALLBACK",
+   "fact_status": "VERIFIED",
+   "source_selected": "CATASTRO_BAQ_PREDIO",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "LIVE_OFFICIAL",
+   "canonical_reason": "La fuente primaria del atributo no aportó valor utilizable: se resolvió con el siguiente escalón autorizado (CATASTRO_BAQ_PREDIO). Fuentes intentadas antes: CATASTRO_BAQ_ADOPCION_ANEXO1.",
+   "evidence_id": "EV-IDENTIDAD",
+   "evidence_ids": [
+    "EV-IDENTIDAD",
+    "EV-GEOMETRIA"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "CATASTRO_BAQ_ADOPCION_ANEXO1",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    },
+    {
+     "source_id": "CATASTRO_BAQ_PREDIO",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    },
+    {
+     "source_id": "CATASTRO_BAQ_TERRENO",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": null,
+   "persisted_in_run_state": true
+  },
+  "matricula": {
+   "attribute": "matricula",
+   "domain": "IDENTIDAD",
+   "printed_at": "P6",
+   "ladder_attribute": "identidad_nupre",
+   "canonical_value": "040-646406",
+   "resolution_status": "RESOLVED_FALLBACK",
+   "fact_status": "VERIFIED",
+   "source_selected": "CATASTRO_BAQ_PREDIO",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "LIVE_OFFICIAL",
+   "canonical_reason": "La fuente primaria del atributo no aportó valor utilizable: se resolvió con el siguiente escalón autorizado (CATASTRO_BAQ_PREDIO). Fuentes intentadas antes: CATASTRO_BAQ_ADOPCION_ANEXO1.",
+   "evidence_id": "EV-IDENTIDAD",
+   "evidence_ids": [
+    "EV-IDENTIDAD",
+    "EV-GEOMETRIA"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "CATASTRO_BAQ_ADOPCION_ANEXO1",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    },
+    {
+     "source_id": "CATASTRO_BAQ_PREDIO",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    },
+    {
+     "source_id": "CATASTRO_BAQ_TERRENO",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "nupre": {
+   "attribute": "nupre",
+   "domain": "IDENTIDAD",
+   "printed_at": "P6",
+   "ladder_attribute": "identidad_nupre",
+   "canonical_value": "AFT0005BOHA",
+   "resolution_status": "RESOLVED_FALLBACK",
+   "fact_status": "VERIFIED",
+   "source_selected": "CATASTRO_BAQ_PREDIO",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "LIVE_OFFICIAL",
+   "canonical_reason": "La fuente primaria del atributo no aportó valor utilizable: se resolvió con el siguiente escalón autorizado (CATASTRO_BAQ_PREDIO). Fuentes intentadas antes: CATASTRO_BAQ_ADOPCION_ANEXO1.",
+   "evidence_id": "EV-IDENTIDAD",
+   "evidence_ids": [
+    "EV-IDENTIDAD",
+    "EV-GEOMETRIA"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "CATASTRO_BAQ_ADOPCION_ANEXO1",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    },
+    {
+     "source_id": "CATASTRO_BAQ_PREDIO",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    },
+    {
+     "source_id": "CATASTRO_BAQ_TERRENO",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "numero_predial": {
+   "attribute": "numero_predial",
+   "domain": "IDENTIDAD",
+   "printed_at": "P6",
+   "ladder_attribute": "identidad_nupre",
+   "canonical_value": "080010103000010040001908040002",
+   "resolution_status": "RESOLVED_FALLBACK",
+   "fact_status": "VERIFIED",
+   "source_selected": "CATASTRO_BAQ_PREDIO",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "LIVE_OFFICIAL",
+   "canonical_reason": "La fuente primaria del atributo no aportó valor utilizable: se resolvió con el siguiente escalón autorizado (CATASTRO_BAQ_PREDIO). Fuentes intentadas antes: CATASTRO_BAQ_ADOPCION_ANEXO1.",
+   "evidence_id": "EV-IDENTIDAD",
+   "evidence_ids": [
+    "EV-IDENTIDAD",
+    "EV-GEOMETRIA"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "CATASTRO_BAQ_ADOPCION_ANEXO1",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    },
+    {
+     "source_id": "CATASTRO_BAQ_PREDIO",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    },
+    {
+     "source_id": "CATASTRO_BAQ_TERRENO",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "direccion": {
+   "attribute": "direccion",
+   "domain": "IDENTIDAD",
+   "printed_at": "P1/P6",
+   "ladder_attribute": "direccion_predio",
+   "canonical_value": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3",
+   "resolution_status": "RESOLVED_PRIMARY",
+   "fact_status": "VERIFIED",
+   "source_selected": "CATASTRO_BAQ_DIRECCION",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "LIVE_OFFICIAL",
+   "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (CATASTRO_BAQ_DIRECCION).",
+   "evidence_id": "EV-IDENTIDAD",
+   "evidence_ids": [
+    "EV-IDENTIDAD",
+    "EV-GEOMETRIA"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "CATASTRO_BAQ_DIRECCION",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    },
+    {
+     "source_id": "CATASTRO_BAQ_PREDIO",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "unidad": {
+   "attribute": "unidad",
+   "domain": "IDENTIDAD",
+   "printed_at": "P6",
+   "ladder_attribute": null,
+   "canonical_value": "APARTAMENTO 430 TORRE 8",
+   "resolution_status": "NOT_SUPPORTED",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "source_selected": null,
+   "source_authority": null,
+   "source_vigency": null,
+   "acquisition_mode": null,
+   "declared_mode": null,
+   "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. La corrida cita como fuente: resolución canónica de identidad de la corrida (torre/apartamento de la nomenclatura oficial) + CTL. No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+   "evidence_id": "EV-IDENTIDAD",
+   "evidence_ids": null,
+   "content_hash": null,
+   "queried_at": null,
+   "source_attempts": [],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "regimen_juridico": {
+   "attribute": "regimen_juridico",
+   "domain": "IDENTIDAD",
+   "printed_at": "P6",
+   "ladder_attribute": null,
+   "canonical_value": "Propiedad Horizontal",
+   "resolution_status": "NOT_SUPPORTED",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "source_selected": null,
+   "source_authority": null,
+   "source_vigency": null,
+   "acquisition_mode": null,
+   "declared_mode": null,
+   "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. La corrida cita como fuente: CTL adjunto (SNR) + clasificación del régimen de la corrida. No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+   "evidence_id": "EV-IDENTIDAD",
+   "evidence_ids": null,
+   "content_hash": null,
+   "queried_at": null,
+   "source_attempts": [],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "property_type": {
+   "attribute": "property_type",
+   "domain": "IDENTIDAD",
+   "printed_at": "P1",
+   "ladder_attribute": null,
+   "canonical_value": "URBANO",
+   "resolution_status": "NOT_SUPPORTED",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "source_selected": null,
+   "source_authority": null,
+   "source_vigency": null,
+   "acquisition_mode": null,
+   "declared_mode": null,
+   "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. La corrida cita como fuente: tipo de predio declarado por el CTL (SNR). No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+   "evidence_id": "EV-IDENTIDAD",
+   "evidence_ids": null,
+   "content_hash": null,
+   "queried_at": null,
+   "source_attempts": [],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": null,
+   "persisted_in_run_state": true
+  },
+  "area": {
+   "attribute": "area",
+   "domain": "IDENTIDAD",
+   "printed_at": "P1/P6",
+   "ladder_attribute": null,
+   "canonical_value": 58.75,
+   "resolution_status": "NOT_SUPPORTED",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "source_selected": null,
+   "source_authority": null,
+   "source_vigency": null,
+   "acquisition_mode": null,
+   "declared_mode": null,
+   "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. La corrida cita como fuente: entrada del caso (área del CTL). No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+   "evidence_id": "EV-IDENTIDAD",
+   "evidence_ids": null,
+   "content_hash": null,
+   "queried_at": null,
+   "source_attempts": [],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "barrio": {
+   "attribute": "barrio",
+   "domain": "URBANO",
+   "printed_at": "P1/P4/P5",
+   "ladder_attribute": "barrio",
+   "canonical_value": "Miramar",
+   "resolution_status": "RESOLVED_PRIMARY",
+   "fact_status": "VERIFIED",
+   "source_selected": "POT_BAQ_BARRIOS",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "LIVE_OFFICIAL",
+   "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_BARRIOS).",
+   "evidence_id": "EV-URBANO",
+   "evidence_ids": [
+    "EV-URBANO"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "POT_BAQ_BARRIOS",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "localidad": {
+   "attribute": "localidad",
+   "domain": "URBANO",
+   "printed_at": "P4/P5",
+   "ladder_attribute": "localidad",
+   "canonical_value": "02",
+   "resolution_status": "RESOLVED_PRIMARY",
+   "fact_status": "VERIFIED",
+   "source_selected": "POT_BAQ_LOCALIDADES",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "LIVE_OFFICIAL",
+   "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_LOCALIDADES).",
+   "evidence_id": "EV-URBANO",
+   "evidence_ids": [
+    "EV-URBANO"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "POT_BAQ_LOCALIDADES",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    },
+    {
+     "source_id": "POT_BAQ_BARRIOS",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "estrato": {
+   "attribute": "estrato",
+   "domain": "URBANO",
+   "printed_at": "P4",
+   "ladder_attribute": "estrato",
+   "canonical_value": "4",
+   "resolution_status": "RESOLVED_FALLBACK",
+   "fact_status": "VERIFIED",
+   "source_selected": "POT_BAQ_ESTRATIFICACION",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "LIVE_OFFICIAL",
+   "canonical_reason": "La fuente primaria del atributo no aportó valor utilizable: se resolvió con el siguiente escalón autorizado (POT_BAQ_ESTRATIFICACION). Fuentes intentadas antes: CATASTRO_BAQ_PREDIO.",
+   "evidence_id": "EV-URBANO",
+   "evidence_ids": [
+    "EV-URBANO"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "CATASTRO_BAQ_PREDIO",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    },
+    {
+     "source_id": "POT_BAQ_ESTRATIFICACION",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "destino_economico": {
+   "attribute": "destino_economico",
+   "domain": "URBANO",
+   "printed_at": "P1/P4/P6",
+   "ladder_attribute": "destino_catastral",
+   "canonical_value": "Habitacional",
+   "resolution_status": "RESOLVED_PRIMARY",
+   "fact_status": "VERIFIED",
+   "source_selected": "CATASTRO_BAQ_DESTINO_ECONOMICO",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "LIVE_OFFICIAL",
+   "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (CATASTRO_BAQ_DESTINO_ECONOMICO).",
+   "evidence_id": "EV-URBANO",
+   "evidence_ids": [
+    "EV-URBANO"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "CATASTRO_BAQ_DESTINO_ECONOMICO",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    },
+    {
+     "source_id": "CATASTRO_BAQ_PREDIO",
+     "status": "NOT_RUN",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "uso_pot": {
+   "attribute": "uso_pot",
+   "domain": "URBANO",
+   "printed_at": "P4",
+   "ladder_attribute": "uso_pot",
+   "canonical_value": null,
+   "resolution_status": "SOURCE_UNAVAILABLE",
+   "fact_status": "SOURCE_UNAVAILABLE",
+   "source_selected": null,
+   "source_authority": null,
+   "source_vigency": null,
+   "acquisition_mode": null,
+   "declared_mode": null,
+   "canonical_reason": "No se ejecutó ninguna consulta para las fuentes del atributo: no puede afirmarse nada sobre el dato. Se declara SOURCE_UNAVAILABLE (nunca NO_MATCH).",
+   "evidence_id": "EV-URBANO",
+   "evidence_ids": [
+    "EV-URBANO"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "POT_BAQ_AREAS_ACTIVIDAD",
+     "status": "NOT_SUPPORTED",
+     "ladder_status": "NOT_RUN",
+     "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+     "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    },
+    {
+     "source_id": "POT_BAQ_POLIGONOS_USO",
+     "status": "NOT_SUPPORTED",
+     "ladder_status": "NOT_RUN",
+     "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+     "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "SEMANTIC_DIFFERENCE",
+    "condicion_que_decide": "2_misma_semantica",
+    "motivo": "los valores declaran SEMÁNTICAS distintas (['CAPA_2_AREAS_ACTIVIDAD'] vs sin marcador): no son el mismo hecho y no compiten"
+   },
+   "persisted_in_run_state": true
+  },
+  "tratamiento": {
+   "attribute": "tratamiento",
+   "domain": "URBANO",
+   "printed_at": "P4",
+   "ladder_attribute": "tratamiento",
+   "canonical_value": "Consolidacion",
+   "resolution_status": "RESOLVED_PRIMARY",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "source_selected": "POT_BAQ_TRATAMIENTO",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "LIVE_OFFICIAL",
+   "canonical_reason": "El expediente declara una DIFERENCIA MATERIAL entre versiones del mismo inmueble (HISTORICAL_CHANGE: las dos versiones evaluaron PUNTOS DISTINTOS (144.7 m): el cambio es CASCADA del cambio de geometría, no un defecto independiente del atributo (contarlo aparte duplicaría un solo defecto)) y la revisión está abierta: el valor está resuelto con fuente declarada, pero no se imprime como verificado. Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_TRATAMIENTO).",
+   "evidence_id": "EV-URBANO",
+   "evidence_ids": [
+    "EV-URBANO"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "POT_BAQ_TRATAMIENTO",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "HISTORICAL_CHANGE",
+    "condicion_que_decide": "3_mismo_objeto",
+    "motivo": "las dos versiones evaluaron PUNTOS DISTINTOS (144.7 m): el cambio es CASCADA del cambio de geometría, no un defecto independiente del atributo (contarlo aparte duplicaría un solo defecto)"
+   },
+   "persisted_in_run_state": true
+  },
+  "altura_normativa": {
+   "attribute": "altura_normativa",
+   "domain": "URBANO",
+   "printed_at": "P4",
+   "ladder_attribute": "edificabilidad_altura_normativa",
+   "canonical_value": "11",
+   "resolution_status": "RESOLVED_SNAPSHOT",
+   "fact_status": "CONFLICT",
+   "source_selected": "POT_BAQ_EDIFICABILIDAD",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "PACKAGED_REFERENCE",
+   "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_EDIFICABILIDAD). las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva",
+   "evidence_id": "EV-URBANO",
+   "evidence_ids": [
+    "EV-URBANO"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "POT_BAQ_EDIFICABILIDAD",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "TRUE_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva"
+   },
+   "persisted_in_run_state": true
+  },
+  "clase_suelo": {
+   "attribute": "clase_suelo",
+   "domain": "URBANO",
+   "printed_at": "P4",
+   "ladder_attribute": null,
+   "canonical_value": null,
+   "resolution_status": "NOT_SUPPORTED",
+   "fact_status": "HISTORICAL_ONLY",
+   "source_selected": null,
+   "source_authority": null,
+   "source_vigency": null,
+   "acquisition_mode": null,
+   "declared_mode": null,
+   "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. La corrida cita como fuente: clase de suelo declarada por versiones anteriores del expediente (no se adopta como vigente). No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+   "evidence_id": "EV-URBANO",
+   "evidence_ids": null,
+   "content_hash": null,
+   "queried_at": null,
+   "source_attempts": [],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "coordenada": {
+   "attribute": "coordenada",
+   "domain": "GEOMETRIA",
+   "printed_at": "P4/P5",
+   "ladder_attribute": null,
+   "canonical_value": {
+    "lat": 11.006055954316363,
+    "lon": -74.8375696549899
+   },
+   "resolution_status": "NOT_SUPPORTED",
+   "fact_status": "CONFLICT",
+   "source_selected": null,
+   "source_authority": null,
+   "source_vigency": null,
+   "acquisition_mode": null,
+   "declared_mode": null,
+   "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra). las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva",
+   "evidence_id": "EV-GEOMETRIA",
+   "evidence_ids": null,
+   "content_hash": null,
+   "queried_at": null,
+   "source_attempts": [],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "TRUE_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva"
+   },
+   "persisted_in_run_state": true
+  },
+  "binding_geometria": {
+   "attribute": "binding_geometria",
+   "domain": "GEOMETRIA",
+   "printed_at": "P6",
+   "ladder_attribute": null,
+   "canonical_value": "Binding de la identidad canónica del predio (NO es la geometría del predio: el alcance declarado es el de IDENTIFICADORES)",
+   "resolution_status": "UNRESOLVED",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "source_selected": "OFFICIAL_PREDIO",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": null,
+   "acquisition_mode": null,
+   "declared_mode": null,
+   "canonical_reason": "Geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación. Fuente: OFFICIAL_PREDIO. El binding acreditado compara solo CADENAS de identificadores (nupre, numero_predial); su alcance declarado es `NATIONAL_IDENTIFIERS`. Un binding de identificadores NO acredita que esta geometría sea la del predio: por eso NO se rotula como binding de geometría. Geometría adoptada: La geometría adoptada es un PUNTO de la capa de DIRECCIÓN (105 · direccion): se ligó al predio por `cr_predio_guid` (6c663607-5509-401f-b57d-384d2beeeac1), no es el polígono del predio. Para un binding GEOMÉTRICO `VERIFIED` falta: (1) El POLÍGONO oficial del predio: la corrida solo tiene un `Point` y la capa del predio (`CATASTRO_BAQ_PREDIO`, capa 100) se declara `esriGeometryNull` (tabla de atributos, sin geometría) en el Source Pack. (2) Una COMPARACIÓN GEOMÉTRICA con criterio de tolerancia declarado (que la geometría caiga dentro del predio identificado por `numero_predial`/NUPRE): el binding actual compara solo CADENAS de identificadores. (3) Una SEGUNDA geometría INDEPENDIENTE de contraste: hoy hay una sola. (4) Las relaciones oficiales a construcción y terreno: la capa 105 · direccion declara `cr_construccion_guid` y `cr_terreno_guid`, y la corrida persiste solo `predio_globalid`. (5) La geometría de la UNIDAD privada (torre/apartamento), que el pack no declara. (6) El CRS/EPSG declarado y el crudo de la capa 105: `CATASTRO_BAQ_DIRECCION` no declara `acquisition_snapshot`. (7) Verificación independiente del vínculo: hoy `link_verificado` es declaración del productor. (8) Una fuente geométrica distinta del punto de dirección (`OFFICIAL_ADOPTION_REGISTRY` no aporta geometría: `geometry_type` «No aplica»; `OFFICIAL_ADOPTION_ADDRESS_GEOCODE` aporta un GEOCODE de dirección, que NUNCA equivale a geometría oficial del predio).",
+   "evidence_id": "EV-GEOMETRIA",
+   "evidence_ids": null,
+   "content_hash": null,
+   "queried_at": null,
+   "source_attempts": [],
+   "geometry_evaluated": true,
+   "spatial_result_available": null,
+   "historical_conflict": null,
+   "persisted_in_run_state": true
+  },
+  "remocion": {
+   "attribute": "remocion",
+   "domain": "RIESGO",
+   "printed_at": "P4",
+   "ladder_attribute": "remocion",
+   "canonical_value": "Media · polígono: intersecta el predio",
+   "resolution_status": "RESOLVED_SNAPSHOT",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "source_selected": "POT_BAQ_REMOCION_2024",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_NORMATIVE",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "PACKAGED_REFERENCE",
+   "canonical_reason": "El expediente declara una DIFERENCIA MATERIAL entre versiones del mismo inmueble (RESOLVED_BY_PRECEDENCE: el producto declara y aplica una regla de precedencia para este atributo: api/geospatial_engine.py::_clave — se elige la coincidencia de MAYOR severidad y, a igualdad, la de MENOR área (el predio cae en varios polígonos de la misma capa: uno de fondo y uno local)) y la revisión está abierta: el valor está resuelto con fuente declarada, pero no se imprime como verificado. Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_REMOCION_2024).",
+   "evidence_id": "EV-AMENAZAS",
+   "evidence_ids": [
+    "EV-AMENAZAS"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "POT_BAQ_REMOCION_2024",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    },
+    {
+     "source_id": "POT_BAQ_REMOCION_HIST",
+     "status": "NOT_SUPPORTED",
+     "ladder_status": "NOT_RUN",
+     "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+     "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": true,
+   "spatial_result_available": true,
+   "historical_conflict": {
+    "veredicto": "RESOLVED_BY_PRECEDENCE",
+    "condicion_que_decide": "7_precedencia_no_resuelve",
+    "motivo": "el producto declara y aplica una regla de precedencia para este atributo: api/geospatial_engine.py::_clave — se elige la coincidencia de MAYOR severidad y, a igualdad, la de MENOR área (el predio cae en varios polígonos de la misma capa: uno de fondo y uno local)"
+   },
+   "persisted_in_run_state": true
+  },
+  "riesgo": {
+   "attribute": "riesgo",
+   "domain": "RIESGO",
+   "printed_at": "P4",
+   "ladder_attribute": "riesgo",
+   "canonical_value": "Medio · polígono: intersecta el predio",
+   "resolution_status": "RESOLVED_SNAPSHOT",
+   "fact_status": "VERIFIED",
+   "source_selected": "POT_BAQ_RIESGO_2024",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_NORMATIVE",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "PACKAGED_REFERENCE",
+   "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_RIESGO_2024).",
+   "evidence_id": "EV-AMENAZAS",
+   "evidence_ids": [
+    "EV-AMENAZAS"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "POT_BAQ_RIESGO_2024",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    },
+    {
+     "source_id": "POT_BAQ_RIESGO_HIST",
+     "status": "NOT_SUPPORTED",
+     "ladder_status": "NOT_RUN",
+     "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+     "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": true,
+   "spatial_result_available": true,
+   "historical_conflict": {
+    "veredicto": "NOT_A_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+   },
+   "persisted_in_run_state": true
+  },
+  "inundacion": {
+   "attribute": "inundacion",
+   "domain": "RIESGO",
+   "printed_at": "P4",
+   "ladder_attribute": "inundacion",
+   "canonical_value": null,
+   "resolution_status": "SOURCE_UNAVAILABLE",
+   "fact_status": "SOURCE_UNAVAILABLE",
+   "source_selected": null,
+   "source_authority": null,
+   "source_vigency": null,
+   "acquisition_mode": null,
+   "declared_mode": null,
+   "canonical_reason": "No se ejecutó ninguna consulta para las fuentes del atributo: no puede afirmarse nada sobre el dato. Se declara SOURCE_UNAVAILABLE (nunca NO_MATCH).",
+   "evidence_id": "EV-AMENAZAS",
+   "evidence_ids": [
+    "EV-AMENAZAS"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "POT_BAQ_INUNDACION_2024",
+     "status": "NOT_SUPPORTED",
+     "ladder_status": "NOT_RUN",
+     "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+     "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    },
+    {
+     "source_id": "POT_BAQ_INUNDACION_HIST",
+     "status": "NOT_SUPPORTED",
+     "ladder_status": "NOT_RUN",
+     "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+     "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+    }
+   ],
+   "geometry_evaluated": true,
+   "spatial_result_available": false,
+   "historical_conflict": null,
+   "persisted_in_run_state": true
+  },
+  "riesgo_no_mitigable": {
+   "attribute": "riesgo_no_mitigable",
+   "domain": "RIESGO",
+   "printed_at": "P4",
+   "ladder_attribute": null,
+   "canonical_value": null,
+   "resolution_status": "NOT_SUPPORTED",
+   "fact_status": "NOT_SUPPORTED",
+   "source_selected": null,
+   "source_authority": null,
+   "source_vigency": null,
+   "acquisition_mode": null,
+   "declared_mode": null,
+   "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+   "evidence_id": "EV-AMENAZAS",
+   "evidence_ids": null,
+   "content_hash": null,
+   "queried_at": null,
+   "source_attempts": [],
+   "geometry_evaluated": true,
+   "spatial_result_available": null,
+   "historical_conflict": null,
+   "persisted_in_run_state": true
+  },
+  "edificabilidad": {
+   "attribute": "edificabilidad",
+   "domain": "URBANO",
+   "printed_at": "ANEXO",
+   "ladder_attribute": "edificabilidad_altura_normativa",
+   "canonical_value": "11",
+   "resolution_status": "RESOLVED_SNAPSHOT",
+   "fact_status": "CONFLICT",
+   "source_selected": "POT_BAQ_EDIFICABILIDAD",
+   "source_authority": "AUTHORITATIVE_OFFICIAL",
+   "source_vigency": "CURRENT_OFFICIAL",
+   "acquisition_mode": "LIVE_QUERY",
+   "declared_mode": "PACKAGED_REFERENCE",
+   "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_EDIFICABILIDAD). las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva",
+   "evidence_id": "EV-URBANO",
+   "evidence_ids": [
+    "EV-URBANO"
+   ],
+   "content_hash": null,
+   "queried_at": "2026-10-02T16:55:59.367003+00:00",
+   "source_attempts": [
+    {
+     "source_id": "POT_BAQ_EDIFICABILIDAD",
+     "status": "AVAILABLE",
+     "ladder_status": null,
+     "declarado_por": null,
+     "rejected_reason": ""
+    }
+   ],
+   "geometry_evaluated": null,
+   "spatial_result_available": null,
+   "historical_conflict": {
+    "veredicto": "TRUE_CONFLICT",
+    "condicion_que_decide": "",
+    "motivo": "las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva"
+   },
+   "persisted_in_run_state": true
+  }
+ },
+ "summary": {
+  "total": 24,
+  "por_resolution_status": {
+   "NOT_SUPPORTED": [
+    "area",
+    "clase_suelo",
+    "coordenada",
+    "property_type",
+    "regimen_juridico",
+    "riesgo_no_mitigable",
+    "unidad"
+   ],
+   "RESOLVED_FALLBACK": [
+    "estrato",
+    "fmi",
+    "matricula",
+    "numero_predial",
+    "nupre"
+   ],
+   "RESOLVED_PRIMARY": [
+    "barrio",
+    "destino_economico",
+    "direccion",
+    "localidad",
+    "tratamiento"
+   ],
+   "RESOLVED_SNAPSHOT": [
+    "altura_normativa",
+    "edificabilidad",
+    "remocion",
+    "riesgo"
+   ],
+   "SOURCE_UNAVAILABLE": [
+    "inundacion",
+    "uso_pot"
+   ],
+   "UNRESOLVED": [
+    "binding_geometria"
+   ]
+  },
+  "por_fact_status": {
+   "CONFLICT": [
+    "altura_normativa",
+    "coordenada",
+    "edificabilidad"
+   ],
+   "HISTORICAL_ONLY": [
+    "clase_suelo"
+   ],
+   "KNOWN_BUT_UNVERIFIED": [
+    "area",
+    "binding_geometria",
+    "property_type",
+    "regimen_juridico",
+    "remocion",
+    "tratamiento",
+    "unidad"
+   ],
+   "NOT_SUPPORTED": [
+    "riesgo_no_mitigable"
+   ],
+   "SOURCE_UNAVAILABLE": [
+    "inundacion",
+    "uso_pot"
+   ],
+   "VERIFIED": [
+    "barrio",
+    "destino_economico",
+    "direccion",
+    "estrato",
+    "fmi",
+    "localidad",
+    "matricula",
+    "numero_predial",
+    "nupre",
+    "riesgo"
+   ]
+  },
+  "sin_source_selected": [
+   "area",
+   "clase_suelo",
+   "coordenada",
+   "inundacion",
+   "property_type",
+   "regimen_juridico",
+   "riesgo_no_mitigable",
+   "unidad",
+   "uso_pot"
+  ],
+  "con_evidencia": [
+   "altura_normativa",
+   "area",
+   "barrio",
+   "binding_geometria",
+   "clase_suelo",
+   "coordenada",
+   "destino_economico",
+   "direccion",
+   "edificabilidad",
+   "estrato",
+   "fmi",
+   "inundacion",
+   "localidad",
+   "matricula",
+   "numero_predial",
+   "nupre",
+   "property_type",
+   "regimen_juridico",
+   "remocion",
+   "riesgo",
+   "riesgo_no_mitigable",
+   "tratamiento",
+   "unidad",
+   "uso_pot"
+  ],
+  "not_evaluated": [],
+  "estados_declarados_degradados": [
+   "uso_pot"
+  ]
+ },
+ "validation": {
+  "verdad_unica_por_atributo": "PASS (assert_single_truth_per_attribute)",
+  "reglas_duras_17_18_19": "PASS (assert_reglas_duras)",
+  "resumen_identidad_10": "PASS (assert_resumen_identidad_cumple)"
+ },
+ "post_correction": {
+  "measured_from_run": {
+   "run_id": "137017a8-9d80-4c5b-9eae-957118c3e19a",
+   "dictus_id": "DX-040-646406-20261002",
+   "generated_at": "2026-10-02T16:55:59.367003+00:00",
+   "master_hash": "c790a8f20f3efdf8108ec9cea55aa986eaf7df6cc7090f787dd3132e2c0af3f0",
+   "run_state_version": "dictus-run-state/1.0.0",
+   "master_manifest_version": "dictus-master-manifest/1.2.0",
+   "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+   "run_state_sha256": "0b4f5068e89a8cb7a58e037d0ce873e746a38be067c5b4603c0978bc19b0d90a"
+  },
+  "note": "Los ocho artefactos se actualizaron con la medición de la corrida CORREGIDA; la auditoría previa se conserva en `audit_baseline`."
+ },
+ "audit_baseline": {
+  "registry_version": "arhiax-truth-resolution/attribute-resolution-registry/2.0.0",
+  "attributes": {
+   "fmi": {
+    "attribute": "fmi",
+    "domain": "IDENTIDAD",
+    "printed_at": "P6",
+    "ladder_attribute": "identidad_nupre",
+    "canonical_value": "040-646406",
+    "resolution_status": "RESOLVED_FALLBACK",
+    "fact_status": "VERIFIED",
+    "source_selected": "CATASTRO_BAQ_PREDIO",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "LIVE_OFFICIAL",
+    "canonical_reason": "La fuente primaria del atributo no aportó valor utilizable: se resolvió con el siguiente escalón autorizado (CATASTRO_BAQ_PREDIO). Fuentes intentadas antes: CATASTRO_BAQ_ADOPCION_ANEXO1.",
+    "evidence_id": "EV-IDENTIDAD",
+    "evidence_ids": [
+     "EV-IDENTIDAD",
+     "EV-GEOMETRIA"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "CATASTRO_BAQ_ADOPCION_ANEXO1",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     },
+     {
+      "source_id": "CATASTRO_BAQ_PREDIO",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     },
+     {
+      "source_id": "CATASTRO_BAQ_TERRENO",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": null,
+    "persisted_in_run_state": true
+   },
+   "matricula": {
+    "attribute": "matricula",
+    "domain": "IDENTIDAD",
+    "printed_at": "P6",
+    "ladder_attribute": "identidad_nupre",
+    "canonical_value": "040-646406",
+    "resolution_status": "RESOLVED_FALLBACK",
+    "fact_status": "VERIFIED",
+    "source_selected": "CATASTRO_BAQ_PREDIO",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "LIVE_OFFICIAL",
+    "canonical_reason": "La fuente primaria del atributo no aportó valor utilizable: se resolvió con el siguiente escalón autorizado (CATASTRO_BAQ_PREDIO). Fuentes intentadas antes: CATASTRO_BAQ_ADOPCION_ANEXO1.",
+    "evidence_id": "EV-IDENTIDAD",
+    "evidence_ids": [
+     "EV-IDENTIDAD",
+     "EV-GEOMETRIA"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "CATASTRO_BAQ_ADOPCION_ANEXO1",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     },
+     {
+      "source_id": "CATASTRO_BAQ_PREDIO",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     },
+     {
+      "source_id": "CATASTRO_BAQ_TERRENO",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "nupre": {
+    "attribute": "nupre",
+    "domain": "IDENTIDAD",
+    "printed_at": "P6",
+    "ladder_attribute": "identidad_nupre",
+    "canonical_value": "AFT0005BOHA",
+    "resolution_status": "RESOLVED_FALLBACK",
+    "fact_status": "VERIFIED",
+    "source_selected": "CATASTRO_BAQ_PREDIO",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "LIVE_OFFICIAL",
+    "canonical_reason": "La fuente primaria del atributo no aportó valor utilizable: se resolvió con el siguiente escalón autorizado (CATASTRO_BAQ_PREDIO). Fuentes intentadas antes: CATASTRO_BAQ_ADOPCION_ANEXO1.",
+    "evidence_id": "EV-IDENTIDAD",
+    "evidence_ids": [
+     "EV-IDENTIDAD",
+     "EV-GEOMETRIA"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "CATASTRO_BAQ_ADOPCION_ANEXO1",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     },
+     {
+      "source_id": "CATASTRO_BAQ_PREDIO",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     },
+     {
+      "source_id": "CATASTRO_BAQ_TERRENO",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "numero_predial": {
+    "attribute": "numero_predial",
+    "domain": "IDENTIDAD",
+    "printed_at": "P6",
+    "ladder_attribute": "identidad_nupre",
+    "canonical_value": "080010103000010040001908040002",
+    "resolution_status": "RESOLVED_FALLBACK",
+    "fact_status": "VERIFIED",
+    "source_selected": "CATASTRO_BAQ_PREDIO",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "LIVE_OFFICIAL",
+    "canonical_reason": "La fuente primaria del atributo no aportó valor utilizable: se resolvió con el siguiente escalón autorizado (CATASTRO_BAQ_PREDIO). Fuentes intentadas antes: CATASTRO_BAQ_ADOPCION_ANEXO1.",
+    "evidence_id": "EV-IDENTIDAD",
+    "evidence_ids": [
+     "EV-IDENTIDAD",
+     "EV-GEOMETRIA"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "CATASTRO_BAQ_ADOPCION_ANEXO1",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     },
+     {
+      "source_id": "CATASTRO_BAQ_PREDIO",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     },
+     {
+      "source_id": "CATASTRO_BAQ_TERRENO",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "direccion": {
+    "attribute": "direccion",
+    "domain": "IDENTIDAD",
+    "printed_at": "P1/P6",
+    "ladder_attribute": "direccion_predio",
+    "canonical_value": "TV 43 # 100 - 50 CONJUNTO RESIDENCIAL NAPOLI APARTAMENTOS ETAPA 3 APARTAMENTO 430 TORRE 8 ETAPA 3",
+    "resolution_status": "RESOLVED_PRIMARY",
+    "fact_status": "VERIFIED",
+    "source_selected": "CATASTRO_BAQ_DIRECCION",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "LIVE_OFFICIAL",
+    "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (CATASTRO_BAQ_DIRECCION).",
+    "evidence_id": "EV-IDENTIDAD",
+    "evidence_ids": [
+     "EV-IDENTIDAD",
+     "EV-GEOMETRIA"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "CATASTRO_BAQ_DIRECCION",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     },
+     {
+      "source_id": "CATASTRO_BAQ_PREDIO",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "unidad": {
+    "attribute": "unidad",
+    "domain": "IDENTIDAD",
+    "printed_at": "P6",
+    "ladder_attribute": null,
+    "canonical_value": "APARTAMENTO 430 TORRE 8",
+    "resolution_status": "NOT_SUPPORTED",
+    "fact_status": "KNOWN_BUT_UNVERIFIED",
+    "source_selected": null,
+    "source_authority": null,
+    "source_vigency": null,
+    "acquisition_mode": null,
+    "declared_mode": null,
+    "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. La corrida cita como fuente: resolución canónica de identidad de la corrida (torre/apartamento de la nomenclatura oficial) + CTL. No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+    "evidence_id": "EV-IDENTIDAD",
+    "evidence_ids": null,
+    "content_hash": null,
+    "queried_at": null,
+    "source_attempts": [],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "regimen_juridico": {
+    "attribute": "regimen_juridico",
+    "domain": "IDENTIDAD",
+    "printed_at": "P6",
+    "ladder_attribute": null,
+    "canonical_value": "Propiedad Horizontal",
+    "resolution_status": "NOT_SUPPORTED",
+    "fact_status": "KNOWN_BUT_UNVERIFIED",
+    "source_selected": null,
+    "source_authority": null,
+    "source_vigency": null,
+    "acquisition_mode": null,
+    "declared_mode": null,
+    "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. La corrida cita como fuente: CTL adjunto (SNR) + clasificación del régimen de la corrida. No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+    "evidence_id": "EV-IDENTIDAD",
+    "evidence_ids": null,
+    "content_hash": null,
+    "queried_at": null,
+    "source_attempts": [],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "property_type": {
+    "attribute": "property_type",
+    "domain": "IDENTIDAD",
+    "printed_at": "P1",
+    "ladder_attribute": null,
+    "canonical_value": "URBANO",
+    "resolution_status": "NOT_SUPPORTED",
+    "fact_status": "KNOWN_BUT_UNVERIFIED",
+    "source_selected": null,
+    "source_authority": null,
+    "source_vigency": null,
+    "acquisition_mode": null,
+    "declared_mode": null,
+    "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. La corrida cita como fuente: tipo de predio declarado por el CTL (SNR). No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+    "evidence_id": "EV-IDENTIDAD",
+    "evidence_ids": null,
+    "content_hash": null,
+    "queried_at": null,
+    "source_attempts": [],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": null,
+    "persisted_in_run_state": true
+   },
+   "area": {
+    "attribute": "area",
+    "domain": "IDENTIDAD",
+    "printed_at": "P1/P6",
+    "ladder_attribute": null,
+    "canonical_value": 58.75,
+    "resolution_status": "NOT_SUPPORTED",
+    "fact_status": "KNOWN_BUT_UNVERIFIED",
+    "source_selected": null,
+    "source_authority": null,
+    "source_vigency": null,
+    "acquisition_mode": null,
+    "declared_mode": null,
+    "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. La corrida cita como fuente: entrada del caso (área del CTL). No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+    "evidence_id": "EV-IDENTIDAD",
+    "evidence_ids": null,
+    "content_hash": null,
+    "queried_at": null,
+    "source_attempts": [],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "barrio": {
+    "attribute": "barrio",
+    "domain": "URBANO",
+    "printed_at": "P1/P4/P5",
+    "ladder_attribute": "barrio",
+    "canonical_value": "Miramar",
+    "resolution_status": "RESOLVED_PRIMARY",
+    "fact_status": "VERIFIED",
+    "source_selected": "POT_BAQ_BARRIOS",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "LIVE_OFFICIAL",
+    "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_BARRIOS).",
+    "evidence_id": "EV-URBANO",
+    "evidence_ids": [
+     "EV-URBANO"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "POT_BAQ_BARRIOS",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "localidad": {
+    "attribute": "localidad",
+    "domain": "URBANO",
+    "printed_at": "P4/P5",
+    "ladder_attribute": "localidad",
+    "canonical_value": "02",
+    "resolution_status": "RESOLVED_PRIMARY",
+    "fact_status": "VERIFIED",
+    "source_selected": "POT_BAQ_LOCALIDADES",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "LIVE_OFFICIAL",
+    "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_LOCALIDADES).",
+    "evidence_id": "EV-URBANO",
+    "evidence_ids": [
+     "EV-URBANO"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "POT_BAQ_LOCALIDADES",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     },
+     {
+      "source_id": "POT_BAQ_BARRIOS",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "estrato": {
+    "attribute": "estrato",
+    "domain": "URBANO",
+    "printed_at": "P4",
+    "ladder_attribute": "estrato",
+    "canonical_value": "4",
+    "resolution_status": "RESOLVED_FALLBACK",
+    "fact_status": "VERIFIED",
+    "source_selected": "POT_BAQ_ESTRATIFICACION",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "LIVE_OFFICIAL",
+    "canonical_reason": "La fuente primaria del atributo no aportó valor utilizable: se resolvió con el siguiente escalón autorizado (POT_BAQ_ESTRATIFICACION). Fuentes intentadas antes: CATASTRO_BAQ_PREDIO.",
+    "evidence_id": "EV-URBANO",
+    "evidence_ids": [
+     "EV-URBANO"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "CATASTRO_BAQ_PREDIO",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     },
+     {
+      "source_id": "POT_BAQ_ESTRATIFICACION",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "destino_economico": {
+    "attribute": "destino_economico",
+    "domain": "URBANO",
+    "printed_at": "P1/P4/P6",
+    "ladder_attribute": "destino_catastral",
+    "canonical_value": "Habitacional",
+    "resolution_status": "RESOLVED_PRIMARY",
+    "fact_status": "VERIFIED",
+    "source_selected": "CATASTRO_BAQ_DESTINO_ECONOMICO",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "LIVE_OFFICIAL",
+    "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (CATASTRO_BAQ_DESTINO_ECONOMICO).",
+    "evidence_id": "EV-URBANO",
+    "evidence_ids": [
+     "EV-URBANO"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "CATASTRO_BAQ_DESTINO_ECONOMICO",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     },
+     {
+      "source_id": "CATASTRO_BAQ_PREDIO",
+      "status": "NOT_RUN",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": "No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "uso_pot": {
+    "attribute": "uso_pot",
+    "domain": "URBANO",
+    "printed_at": "P4",
+    "ladder_attribute": "uso_pot",
+    "canonical_value": null,
+    "resolution_status": "SOURCE_UNAVAILABLE",
+    "fact_status": "SOURCE_UNAVAILABLE",
+    "source_selected": null,
+    "source_authority": null,
+    "source_vigency": null,
+    "acquisition_mode": null,
+    "declared_mode": null,
+    "canonical_reason": "No se ejecutó ninguna consulta para las fuentes del atributo: no puede afirmarse nada sobre el dato. Se declara SOURCE_UNAVAILABLE (nunca NO_MATCH).",
+    "evidence_id": "EV-URBANO",
+    "evidence_ids": [
+     "EV-URBANO"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "POT_BAQ_AREAS_ACTIVIDAD",
+      "status": "NOT_SUPPORTED",
+      "ladder_status": "NOT_RUN",
+      "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+      "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     },
+     {
+      "source_id": "POT_BAQ_POLIGONOS_USO",
+      "status": "NOT_SUPPORTED",
+      "ladder_status": "NOT_RUN",
+      "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+      "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "SEMANTIC_DIFFERENCE",
+     "condicion_que_decide": "2_misma_semantica",
+     "motivo": "los valores declaran SEMÁNTICAS distintas (['CAPA_2_AREAS_ACTIVIDAD'] vs sin marcador): no son el mismo hecho y no compiten"
+    },
+    "persisted_in_run_state": true
+   },
+   "tratamiento": {
+    "attribute": "tratamiento",
+    "domain": "URBANO",
+    "printed_at": "P4",
+    "ladder_attribute": "tratamiento",
+    "canonical_value": "Consolidacion",
+    "resolution_status": "RESOLVED_PRIMARY",
+    "fact_status": "KNOWN_BUT_UNVERIFIED",
+    "source_selected": "POT_BAQ_TRATAMIENTO",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "LIVE_OFFICIAL",
+    "canonical_reason": "El expediente declara una DIFERENCIA MATERIAL entre versiones del mismo inmueble (HISTORICAL_CHANGE: las dos versiones evaluaron PUNTOS DISTINTOS (144.7 m): el cambio es CASCADA del cambio de geometría, no un defecto independiente del atributo (contarlo aparte duplicaría un solo defecto)) y la revisión está abierta: el valor está resuelto con fuente declarada, pero no se imprime como verificado. Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_TRATAMIENTO).",
+    "evidence_id": "EV-URBANO",
+    "evidence_ids": [
+     "EV-URBANO"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "POT_BAQ_TRATAMIENTO",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "HISTORICAL_CHANGE",
+     "condicion_que_decide": "3_mismo_objeto",
+     "motivo": "las dos versiones evaluaron PUNTOS DISTINTOS (144.7 m): el cambio es CASCADA del cambio de geometría, no un defecto independiente del atributo (contarlo aparte duplicaría un solo defecto)"
+    },
+    "persisted_in_run_state": true
+   },
+   "altura_normativa": {
+    "attribute": "altura_normativa",
+    "domain": "URBANO",
+    "printed_at": "P4",
+    "ladder_attribute": "edificabilidad_altura_normativa",
+    "canonical_value": "11",
+    "resolution_status": "RESOLVED_SNAPSHOT",
+    "fact_status": "CONFLICT",
+    "source_selected": "POT_BAQ_EDIFICABILIDAD",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "PACKAGED_REFERENCE",
+    "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_EDIFICABILIDAD). las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva",
+    "evidence_id": "EV-URBANO",
+    "evidence_ids": [
+     "EV-URBANO"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "POT_BAQ_EDIFICABILIDAD",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "TRUE_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva"
+    },
+    "persisted_in_run_state": true
+   },
+   "clase_suelo": {
+    "attribute": "clase_suelo",
+    "domain": "URBANO",
+    "printed_at": "P4",
+    "ladder_attribute": null,
+    "canonical_value": null,
+    "resolution_status": "NOT_SUPPORTED",
+    "fact_status": "HISTORICAL_ONLY",
+    "source_selected": null,
+    "source_authority": null,
+    "source_vigency": null,
+    "acquisition_mode": null,
+    "declared_mode": null,
+    "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. La corrida cita como fuente: clase de suelo declarada por versiones anteriores del expediente (no se adopta como vigente). No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+    "evidence_id": "EV-URBANO",
+    "evidence_ids": null,
+    "content_hash": null,
+    "queried_at": null,
+    "source_attempts": [],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "coordenada": {
+    "attribute": "coordenada",
+    "domain": "GEOMETRIA",
+    "printed_at": "P4/P5",
+    "ladder_attribute": null,
+    "canonical_value": {
+     "lat": 11.006055954316363,
+     "lon": -74.8375696549899
+    },
+    "resolution_status": "NOT_SUPPORTED",
+    "fact_status": "CONFLICT",
+    "source_selected": null,
+    "source_authority": null,
+    "source_vigency": null,
+    "acquisition_mode": null,
+    "declared_mode": null,
+    "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra). las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva",
+    "evidence_id": "EV-GEOMETRIA",
+    "evidence_ids": null,
+    "content_hash": null,
+    "queried_at": null,
+    "source_attempts": [],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "TRUE_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva"
+    },
+    "persisted_in_run_state": true
+   },
+   "binding_geometria": {
+    "attribute": "binding_geometria",
+    "domain": "GEOMETRIA",
+    "printed_at": "P6",
+    "ladder_attribute": null,
+    "canonical_value": "Binding de la identidad canónica del predio (NO es la geometría del predio: el alcance declarado es el de IDENTIFICADORES)",
+    "resolution_status": "UNRESOLVED",
+    "fact_status": "KNOWN_BUT_UNVERIFIED",
+    "source_selected": "OFFICIAL_PREDIO",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": null,
+    "acquisition_mode": null,
+    "declared_mode": null,
+    "canonical_reason": "Geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación. Fuente: OFFICIAL_PREDIO. El binding acreditado compara solo CADENAS de identificadores (nupre, numero_predial); su alcance declarado es `NATIONAL_IDENTIFIERS`. Un binding de identificadores NO acredita que esta geometría sea la del predio: por eso NO se rotula como binding de geometría. Geometría adoptada: La geometría adoptada es un PUNTO de la capa de DIRECCIÓN (105 · direccion): se ligó al predio por `cr_predio_guid` (6c663607-5509-401f-b57d-384d2beeeac1), no es el polígono del predio. Para un binding GEOMÉTRICO `VERIFIED` falta: (1) El POLÍGONO oficial del predio: la corrida solo tiene un `Point` y la capa del predio (`CATASTRO_BAQ_PREDIO`, capa 100) se declara `esriGeometryNull` (tabla de atributos, sin geometría) en el Source Pack. (2) Una COMPARACIÓN GEOMÉTRICA con criterio de tolerancia declarado (que la geometría caiga dentro del predio identificado por `numero_predial`/NUPRE): el binding actual compara solo CADENAS de identificadores. (3) Una SEGUNDA geometría INDEPENDIENTE de contraste: hoy hay una sola. (4) Las relaciones oficiales a construcción y terreno: la capa 105 · direccion declara `cr_construccion_guid` y `cr_terreno_guid`, y la corrida persiste solo `predio_globalid`. (5) La geometría de la UNIDAD privada (torre/apartamento), que el pack no declara. (6) El CRS/EPSG declarado y el crudo de la capa 105: `CATASTRO_BAQ_DIRECCION` no declara `acquisition_snapshot`. (7) Verificación independiente del vínculo: hoy `link_verificado` es declaración del productor. (8) Una fuente geométrica distinta del punto de dirección (`OFFICIAL_ADOPTION_REGISTRY` no aporta geometría: `geometry_type` «No aplica»; `OFFICIAL_ADOPTION_ADDRESS_GEOCODE` aporta un GEOCODE de dirección, que NUNCA equivale a geometría oficial del predio).",
+    "evidence_id": "EV-GEOMETRIA",
+    "evidence_ids": null,
+    "content_hash": null,
+    "queried_at": null,
+    "source_attempts": [],
+    "geometry_evaluated": true,
+    "spatial_result_available": null,
+    "historical_conflict": null,
+    "persisted_in_run_state": true
+   },
+   "remocion": {
+    "attribute": "remocion",
+    "domain": "RIESGO",
+    "printed_at": "P4",
+    "ladder_attribute": "remocion",
+    "canonical_value": "Media · polígono: intersecta el predio",
+    "resolution_status": "RESOLVED_SNAPSHOT",
+    "fact_status": "KNOWN_BUT_UNVERIFIED",
+    "source_selected": "POT_BAQ_REMOCION_2024",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_NORMATIVE",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "PACKAGED_REFERENCE",
+    "canonical_reason": "El expediente declara una DIFERENCIA MATERIAL entre versiones del mismo inmueble (RESOLVED_BY_PRECEDENCE: el producto declara y aplica una regla de precedencia para este atributo: api/geospatial_engine.py::_clave — se elige la coincidencia de MAYOR severidad y, a igualdad, la de MENOR área (el predio cae en varios polígonos de la misma capa: uno de fondo y uno local)) y la revisión está abierta: el valor está resuelto con fuente declarada, pero no se imprime como verificado. Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_REMOCION_2024).",
+    "evidence_id": "EV-AMENAZAS",
+    "evidence_ids": [
+     "EV-AMENAZAS"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "POT_BAQ_REMOCION_2024",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     },
+     {
+      "source_id": "POT_BAQ_REMOCION_HIST",
+      "status": "NOT_SUPPORTED",
+      "ladder_status": "NOT_RUN",
+      "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+      "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": true,
+    "spatial_result_available": true,
+    "historical_conflict": {
+     "veredicto": "RESOLVED_BY_PRECEDENCE",
+     "condicion_que_decide": "7_precedencia_no_resuelve",
+     "motivo": "el producto declara y aplica una regla de precedencia para este atributo: api/geospatial_engine.py::_clave — se elige la coincidencia de MAYOR severidad y, a igualdad, la de MENOR área (el predio cae en varios polígonos de la misma capa: uno de fondo y uno local)"
+    },
+    "persisted_in_run_state": true
+   },
+   "riesgo": {
+    "attribute": "riesgo",
+    "domain": "RIESGO",
+    "printed_at": "P4",
+    "ladder_attribute": "riesgo",
+    "canonical_value": "Medio · polígono: intersecta el predio",
+    "resolution_status": "RESOLVED_SNAPSHOT",
+    "fact_status": "VERIFIED",
+    "source_selected": "POT_BAQ_RIESGO_2024",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_NORMATIVE",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "PACKAGED_REFERENCE",
+    "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_RIESGO_2024).",
+    "evidence_id": "EV-AMENAZAS",
+    "evidence_ids": [
+     "EV-AMENAZAS"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "POT_BAQ_RIESGO_2024",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     },
+     {
+      "source_id": "POT_BAQ_RIESGO_HIST",
+      "status": "NOT_SUPPORTED",
+      "ladder_status": "NOT_RUN",
+      "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+      "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": true,
+    "spatial_result_available": true,
+    "historical_conflict": {
+     "veredicto": "NOT_A_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "sin diferencias comparables entre versiones (dos ausencias no son un cambio)"
+    },
+    "persisted_in_run_state": true
+   },
+   "inundacion": {
+    "attribute": "inundacion",
+    "domain": "RIESGO",
+    "printed_at": "P4",
+    "ladder_attribute": "inundacion",
+    "canonical_value": null,
+    "resolution_status": "SOURCE_UNAVAILABLE",
+    "fact_status": "SOURCE_UNAVAILABLE",
+    "source_selected": null,
+    "source_authority": null,
+    "source_vigency": null,
+    "acquisition_mode": null,
+    "declared_mode": null,
+    "canonical_reason": "No se ejecutó ninguna consulta para las fuentes del atributo: no puede afirmarse nada sobre el dato. Se declara SOURCE_UNAVAILABLE (nunca NO_MATCH).",
+    "evidence_id": "EV-AMENAZAS",
+    "evidence_ids": [
+     "EV-AMENAZAS"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "POT_BAQ_INUNDACION_2024",
+      "status": "NOT_SUPPORTED",
+      "ladder_status": "NOT_RUN",
+      "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+      "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     },
+     {
+      "source_id": "POT_BAQ_INUNDACION_HIST",
+      "status": "NOT_SUPPORTED",
+      "ladder_status": "NOT_RUN",
+      "declarado_por": "REGISTRO_DEL_PACK (failure_semantics)",
+      "rejected_reason": "La fuente está declarada `enabled=false` en el registro vigente del Source Pack: la cobertura de este atributo NO está soportada en esta ventana. El contrato del propio registro declara esa semántica («capa inexistente o fuente deshabilitada → NOT_SUPPORTED») y NO es un NO_MATCH ni una ausencia del predio. No se ejecutó consulta para esta fuente: se declara y se baja al siguiente escalón."
+     }
+    ],
+    "geometry_evaluated": true,
+    "spatial_result_available": false,
+    "historical_conflict": null,
+    "persisted_in_run_state": true
+   },
+   "riesgo_no_mitigable": {
+    "attribute": "riesgo_no_mitigable",
+    "domain": "RIESGO",
+    "printed_at": "P4",
+    "ladder_attribute": null,
+    "canonical_value": null,
+    "resolution_status": "NOT_SUPPORTED",
+    "fact_status": "NOT_SUPPORTED",
+    "source_selected": null,
+    "source_authority": null,
+    "source_vigency": null,
+    "acquisition_mode": null,
+    "declared_mode": null,
+    "canonical_reason": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor existe, queda como hecho CONOCIDO y NO VERIFICADO (el valor nunca se borra).",
+    "evidence_id": "EV-AMENAZAS",
+    "evidence_ids": null,
+    "content_hash": null,
+    "queried_at": null,
+    "source_attempts": [],
+    "geometry_evaluated": true,
+    "spatial_result_available": null,
+    "historical_conflict": null,
+    "persisted_in_run_state": true
+   },
+   "edificabilidad": {
+    "attribute": "edificabilidad",
+    "domain": "URBANO",
+    "printed_at": "ANEXO",
+    "ladder_attribute": "edificabilidad_altura_normativa",
+    "canonical_value": "11",
+    "resolution_status": "RESOLVED_SNAPSHOT",
+    "fact_status": "CONFLICT",
+    "source_selected": "POT_BAQ_EDIFICABILIDAD",
+    "source_authority": "AUTHORITATIVE_OFFICIAL",
+    "source_vigency": "CURRENT_OFFICIAL",
+    "acquisition_mode": "LIVE_QUERY",
+    "declared_mode": "PACKAGED_REFERENCE",
+    "canonical_reason": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_EDIFICABILIDAD). las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva",
+    "evidence_id": "EV-URBANO",
+    "evidence_ids": [
+     "EV-URBANO"
+    ],
+    "content_hash": null,
+    "queried_at": "2026-10-02T16:55:59.367003+00:00",
+    "source_attempts": [
+     {
+      "source_id": "POT_BAQ_EDIFICABILIDAD",
+      "status": "AVAILABLE",
+      "ladder_status": null,
+      "declarado_por": null,
+      "rejected_reason": ""
+     }
+    ],
+    "geometry_evaluated": null,
+    "spatial_result_available": null,
+    "historical_conflict": {
+     "veredicto": "TRUE_CONFLICT",
+     "condicion_que_decide": "",
+     "motivo": "las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva"
+    },
+    "persisted_in_run_state": true
+   }
+  },
+  "summary": {
+   "verdad_unica_por_atributo": "PASS (assert_single_truth_per_attribute)",
+   "reglas_duras_17_18_19": "PASS (assert_reglas_duras)",
+   "resumen_identidad_10": "PASS (assert_resumen_identidad_cumple)"
+  }
+ }
+}

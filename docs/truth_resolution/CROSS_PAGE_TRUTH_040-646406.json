@@ -1,0 +1,329 @@
+{
+ "audit_version": "arhiax-truth-resolution/cross-page-truth/2.0.0",
+ "audit": "BLOCK 1 · CORRECCIÓN — las páginas PROYECTAN la verdad única por atributo; ninguna la recrea.",
+ "case": {
+  "fmi": "040-646406",
+  "nupre": "AFT0005BOHA",
+  "numero_predial": "080010103000010040001908040002"
+ },
+ "artifact_measured": {
+  "run_id": "137017a8-9d80-4c5b-9eae-957118c3e19a",
+  "dictus_id": "DX-040-646406-20261002",
+  "generated_at": "2026-10-02T16:55:59.367003+00:00",
+  "master_hash": "c790a8f20f3efdf8108ec9cea55aa986eaf7df6cc7090f787dd3132e2c0af3f0",
+  "run_state_version": "dictus-run-state/1.0.0",
+  "master_manifest_version": "dictus-master-manifest/1.2.0",
+  "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+  "run_state_sha256": "0b4f5068e89a8cb7a58e037d0ce873e746a38be067c5b4603c0978bc19b0d90a"
+ },
+ "criterion": {
+  "rule": "El mismo hecho debe tener el mismo valor canónico y el mismo estado en P1, P4, P5 y P6, salvo diferencia legítima de nivel de detalle.",
+  "legitimate_detail_differences_accepted": [
+   "P4 imprime la forma canónica del atributo y P5 el rótulo de accesibilidad, siempre que el VALOR coincida",
+   "P6 imprime la fila de identidad con su sufijo de unidad, siempre que el valor base coincida",
+   "la truncación por ancho de celda (P1) no es divergencia de valor, se declara aparte"
+  ],
+  "not_accepted": [
+   "estados distintos para el mismo atributo y el mismo valor",
+   "un estado presente en una página y ausente en otra sin declaración",
+   "lecturas opuestas del mismo objeto (por ejemplo: 'VERIFICADA' frente a 'NO UTILIZAR ESTE DATO COMO DEFINITIVO')",
+   "el mismo rótulo visible apuntando a dos atributos distintos"
+  ]
+ },
+ "attributes": [
+  {
+   "attribute": "barrio",
+   "canonical_value": "Miramar",
+   "fact_status": "VERIFIED",
+   "resolution_status": "RESOLVED_PRIMARY",
+   "source_selected": "POT_BAQ_BARRIOS",
+   "estado_proyectado": "VERIFICADO",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "Miramar (P1, P4, P5)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P1/P4/P5"
+  },
+  {
+   "attribute": "localidad",
+   "canonical_value": "02",
+   "fact_status": "VERIFIED",
+   "resolution_status": "RESOLVED_PRIMARY",
+   "source_selected": "POT_BAQ_LOCALIDADES",
+   "estado_proyectado": "VERIFICADO",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "02 (P1, P4, P5, P6)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P4/P5"
+  },
+  {
+   "attribute": "destino_economico",
+   "canonical_value": "Habitacional",
+   "fact_status": "VERIFIED",
+   "resolution_status": "RESOLVED_PRIMARY",
+   "source_selected": "CATASTRO_BAQ_DESTINO_ECONOMICO",
+   "estado_proyectado": "VERIFICADO",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "Habitacional (P1, P4, P6)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P1/P4/P6"
+  },
+  {
+   "attribute": "uso_pot",
+   "canonical_value": null,
+   "fact_status": "SOURCE_UNAVAILABLE",
+   "resolution_status": "SOURCE_UNAVAILABLE",
+   "source_selected": null,
+   "estado_proyectado": "REQUIERE_VALIDACION",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "",
+   "divergencia_de_valor": false,
+   "impreso_en": "P4"
+  },
+  {
+   "attribute": "tratamiento",
+   "canonical_value": "Consolidacion",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "resolution_status": "RESOLVED_PRIMARY",
+   "source_selected": "POT_BAQ_TRATAMIENTO",
+   "estado_proyectado": "REQUIERE_VALIDACION",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "Consolidacion (P4)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P4"
+  },
+  {
+   "attribute": "altura_normativa",
+   "canonical_value": "11",
+   "fact_status": "CONFLICT",
+   "resolution_status": "RESOLVED_SNAPSHOT",
+   "source_selected": "POT_BAQ_EDIFICABILIDAD",
+   "estado_proyectado": "HISTORICAL_CONFLICT",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "Hasta 11 pisos (P4)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P4"
+  },
+  {
+   "attribute": "estrato",
+   "canonical_value": "4",
+   "fact_status": "VERIFIED",
+   "resolution_status": "RESOLVED_FALLBACK",
+   "source_selected": "POT_BAQ_ESTRATIFICACION",
+   "estado_proyectado": "VERIFICADO",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "4 (P1, P4, P5, P6)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P4"
+  },
+  {
+   "attribute": "coordenada",
+   "canonical_value": {
+    "lat": 11.006055954316363,
+    "lon": -74.8375696549899
+   },
+   "fact_status": "CONFLICT",
+   "resolution_status": "NOT_SUPPORTED",
+   "source_selected": null,
+   "estado_proyectado": "HISTORICAL_CONFLICT",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "11.00606, -74.83757 (P4, P5)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P4/P5"
+  },
+  {
+   "attribute": "remocion",
+   "canonical_value": "Media · polígono: intersecta el predio",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "resolution_status": "RESOLVED_SNAPSHOT",
+   "source_selected": "POT_BAQ_REMOCION_2024",
+   "estado_proyectado": "REQUIERE_VALIDACION",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "Media · polígono: intersecta el predio (P1, P4)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P4"
+  },
+  {
+   "attribute": "riesgo",
+   "canonical_value": "Medio · polígono: intersecta el predio",
+   "fact_status": "VERIFIED",
+   "resolution_status": "RESOLVED_SNAPSHOT",
+   "source_selected": "POT_BAQ_RIESGO_2024",
+   "estado_proyectado": "VERIFICADO",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "Medio · polígono: intersecta el predio (P4)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P4"
+  },
+  {
+   "attribute": "binding_geometria",
+   "canonical_value": "Binding de la identidad canónica del predio (NO es la geometría del predio: el alcance declarado es el de IDENTIFICADORES)",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "resolution_status": "UNRESOLVED",
+   "source_selected": "OFFICIAL_PREDIO",
+   "estado_proyectado": "REQUIERE_VALIDACION",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "Binding de la identidad canónica del predio (NO es la geometría del predio: el alcance declarado es el de IDENTIFICADORES) (P6)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P6"
+  },
+  {
+   "attribute": "matricula",
+   "canonical_value": "040-646406",
+   "fact_status": "VERIFIED",
+   "resolution_status": "RESOLVED_FALLBACK",
+   "source_selected": "CATASTRO_BAQ_PREDIO",
+   "estado_proyectado": "VERIFICADO",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "040-646406 (P1, P4, P5, P6)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P6"
+  },
+  {
+   "attribute": "nupre",
+   "canonical_value": "AFT0005BOHA",
+   "fact_status": "VERIFIED",
+   "resolution_status": "RESOLVED_FALLBACK",
+   "source_selected": "CATASTRO_BAQ_PREDIO",
+   "estado_proyectado": "VERIFICADO",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "AFT0005BOHA (P6)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P6"
+  },
+  {
+   "attribute": "numero_predial",
+   "canonical_value": "080010103000010040001908040002",
+   "fact_status": "VERIFIED",
+   "resolution_status": "RESOLVED_FALLBACK",
+   "source_selected": "CATASTRO_BAQ_PREDIO",
+   "estado_proyectado": "VERIFICADO",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "080010103000010040001908040002 (P6)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P6"
+  },
+  {
+   "attribute": "unidad",
+   "canonical_value": "APARTAMENTO 430 TORRE 8",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "resolution_status": "NOT_SUPPORTED",
+   "source_selected": null,
+   "estado_proyectado": "REQUIERE_VALIDACION",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "APARTAMENTO 430 TORRE 8 (P1, P6)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P6"
+  },
+  {
+   "attribute": "regimen_juridico",
+   "canonical_value": "Propiedad Horizontal",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "resolution_status": "NOT_SUPPORTED",
+   "source_selected": null,
+   "estado_proyectado": "REQUIERE_VALIDACION",
+   "estado_impreso_por_pagina": {
+    "P1": null,
+    "P4": "REQUIERE VALIDACIÓN (P1)",
+    "P5": null,
+    "P6": "VERIFICADO (P1)"
+   },
+   "valor_impreso": "Propiedad Horizontal (P1, P6)",
+   "divergencia_de_valor": false,
+   "impreso_en": "P6"
+  }
+ ],
+ "summary": {
+  "value_divergences": 0,
+  "value_divergences_attributes": [],
+  "status_divergences": 0,
+  "regla": "el estado impreso por cada página es el que la verdad única del atributo declara (`attribute_truth.estado_de_coherencia`); ya no hay dos rutas capaces de decir cosas distintas del mismo atributo",
+  "contrato": "tests/test_cross_page_truth.py · tests/test_single_truth_per_attribute.py"
+ },
+ "post_correction": {
+  "measured_from_run": {
+   "run_id": "137017a8-9d80-4c5b-9eae-957118c3e19a",
+   "dictus_id": "DX-040-646406-20261002",
+   "generated_at": "2026-10-02T16:55:59.367003+00:00",
+   "master_hash": "c790a8f20f3efdf8108ec9cea55aa986eaf7df6cc7090f787dd3132e2c0af3f0",
+   "run_state_version": "dictus-run-state/1.0.0",
+   "master_manifest_version": "dictus-master-manifest/1.2.0",
+   "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+   "run_state_sha256": "0b4f5068e89a8cb7a58e037d0ce873e746a38be067c5b4603c0978bc19b0d90a"
+  }
+ }
+}

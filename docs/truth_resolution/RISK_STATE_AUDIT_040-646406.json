@@ -1,0 +1,171 @@
+{
+ "audit_version": "arhiax-truth-resolution/risk-state-audit/2.0.0",
+ "audit": "BLOCK 1 · CORRECCIÓN — contrato `evaluado` del evaluador espacial, chip con escalón BAJA/BAJO y estados propios por ausencia de cobertura.",
+ "case": {
+  "fmi": "040-646406",
+  "nupre": "AFT0005BOHA",
+  "numero_predial": "080010103000010040001908040002",
+  "coordenada_evaluada": "11.006055954316363, -74.8375696549899 (OFFICIAL_PREDIO)"
+ },
+ "measured_from": {
+  "run_id": "137017a8-9d80-4c5b-9eae-957118c3e19a",
+  "dictus_id": "DX-040-646406-20261002",
+  "generated_at": "2026-10-02T16:55:59.367003+00:00",
+  "master_hash": "c790a8f20f3efdf8108ec9cea55aa986eaf7df6cc7090f787dd3132e2c0af3f0",
+  "run_state_version": "dictus-run-state/1.0.0",
+  "master_manifest_version": "dictus-master-manifest/1.2.0",
+  "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+  "run_state_sha256": "0b4f5068e89a8cb7a58e037d0ce873e746a38be067c5b4603c0978bc19b0d90a"
+ },
+ "the_rule_the_mission_imposes": {
+  "rule": "Si hubo consulta válida + geometría evaluada + resultado espacial, el atributo NO puede quedar NOT_EVALUATED.",
+  "applied_to": [
+   "inundacion",
+   "remocion",
+   "riesgo (areas_en_riesgo)",
+   "riesgo_no_mitigable"
+  ],
+  "test_predicates": {
+   "consulta_valida": "existe una fuente declarada, habilitada (enabled=true) y con modo de adquisición declarado",
+   "geometria_evaluada": "la corrida declara que evaluó el punto adoptado contra la capa (receipts.geo_evaluado, o el propio texto del valor que declara intersección)",
+   "resultado_espacial": "el valor declara relación geométrica explícita ('polígono: intersecta el predio' / 'sin intersección') o la capa devolvió coincidencias"
+  }
+ },
+ "observed_state_matrix": [
+  {
+   "atributo": "remocion",
+   "valor_declarado": "Media · polígono: intersecta el predio",
+   "resultado_espacial": true,
+   "geometria_evaluada": true,
+   "resolution_status": "RESOLVED_SNAPSHOT",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "source_selected": "POT_BAQ_REMOCION_2024",
+   "motivo": "El expediente declara una DIFERENCIA MATERIAL entre versiones del mismo inmueble (RESOLVED_BY_PRECEDENCE: el producto declara y aplica una regla de precedencia para este atributo: api/geospatial_engine.py::_clave — se elige la coincidencia de MAYOR severidad y, a igualdad, la de MENOR área (el predi",
+   "veredicto": "cumple §17 (no queda NOT_EVALUATED con resultado espacial)"
+  },
+  {
+   "atributo": "riesgo",
+   "valor_declarado": "Medio · polígono: intersecta el predio",
+   "resultado_espacial": true,
+   "geometria_evaluada": true,
+   "resolution_status": "RESOLVED_SNAPSHOT",
+   "fact_status": "VERIFIED",
+   "source_selected": "POT_BAQ_RIESGO_2024",
+   "motivo": "Resuelto por la fuente de mayor autoridad y vigencia declarada para el atributo (POT_BAQ_RIESGO_2024).",
+   "veredicto": "cumple §17 (no queda NOT_EVALUATED con resultado espacial)"
+  },
+  {
+   "atributo": "inundacion",
+   "valor_declarado": null,
+   "resultado_espacial": false,
+   "geometria_evaluada": true,
+   "resolution_status": "SOURCE_UNAVAILABLE",
+   "fact_status": "SOURCE_UNAVAILABLE",
+   "source_selected": null,
+   "motivo": "No se ejecutó ninguna consulta para las fuentes del atributo: no puede afirmarse nada sobre el dato. Se declara SOURCE_UNAVAILABLE (nunca NO_MATCH).",
+   "veredicto": "cumple §17 (no queda NOT_EVALUATED con resultado espacial)"
+  },
+  {
+   "atributo": "riesgo_no_mitigable",
+   "valor_declarado": null,
+   "resultado_espacial": false,
+   "geometria_evaluada": true,
+   "resolution_status": "NOT_SUPPORTED",
+   "fact_status": "NOT_SUPPORTED",
+   "source_selected": null,
+   "motivo": "El Source Pack NO declara escalón de resolución para este atributo (`COBERTURA_ATRIBUTOS`): la cobertura es INEXISTENTE para él. No es NO_MATCH (no hubo consulta que contestara), no es un conflicto y NO se declara `NOT_EVALUATED` como cajón general: se declara la cobertura que falta y, si el valor e",
+   "veredicto": "cumple §17 (no queda NOT_EVALUATED con resultado espacial)"
+  }
+ ],
+ "root_causes": [
+  {
+   "id": "RSK-1",
+   "classification": "MODEL_MAPPING_FAILURE",
+   "location": "api/dictus_decision.py:519",
+   "code": "OBSERVADO if _v(risk.get(riesgo)) else NO_EVALUADO",
+   "statement": "El fact_status de LOS CUATRO atributos de riesgo se deriva exclusivamente de la PRESENCIA DE UNA CADENA DE VALOR en risk_context. No consulta: (a) si hubo consulta — todas las observaciones medidas llevan query=null; (b) si la geometría fue evaluada; (c) el estado de la fuente; (d) si el valor proviene de una capa histórica.",
+   "effect": "Convierte un valor en OBSERVED aunque su fuente esté declarada no disponible, y convierte una ausencia en NOT_EVALUATED sin poder distinguir NO_MATCH, QUERY_FAILED ni NOT_SUPPORTED. Las dos direcciones del error son posibles con el mismo operador."
+  },
+  {
+   "id": "RSK-2",
+   "classification": "STATE_PROPAGATION_FAILURE",
+   "location": "api/receipts.py:124",
+   "code": "geo_evaluado = bool((geo_eval or {}).get(\"evaluado\"))",
+   "statement": "La clave 'evaluado' NO EXISTE en el objeto que produce la evaluación espacial. Medido: api/dictamen_data.get_geospatial_evaluation (líneas 1033-1051) devuelve VERBATIM lo que retorna api/geospatial_engine.evaluate_predio, y evaluate_predio devuelve {'coordenadas','amenaza_remocion_masa','areas_en_riesgo','resumen_ejecutivo'} — sin clave 'evaluado'; su rama de excepción (líneas 1047-1051) tampoco la incluye.",
+   "effect": "receipts.geo_evaluado vale FALSE SIEMPRE, incluso cuando las dos capas se cargaron y el punto intersectó polígonos. Medición en el Golden: receipts.geo_evaluado=false coexistiendo con dos atributos cuyo valor declara 'polígono: intersecta el predio'. El flag agregado contradice el hecho impreso.",
+   "alcance_adicional": "El mismo key ausente se consume en api/score_engine.py:131 (_evaluado = geo_eval.get('evaluado')) y api/consistency.py:43 (evaluado = geo.get('evaluado')): el defecto se propaga a la compuerta de consistencia y al motor de puntaje, no solo al recibo."
+  },
+  {
+   "id": "RSK-3",
+   "classification": "ACQUISITION_FAILURE",
+   "location": "evidence_manifest.evidencias[EV-AMENAZAS]",
+   "statement": "La evidencia agregada de amenazas de la propia corrida se sella con status='FUENTE_NO_DISPONIBLE' (= SOURCE_UNAVAILABLE) mientras los dos atributos que la componen se imprimen como RIESGO MEDIO con fuente y snapshot declarados.",
+   "effect": "Un hecho KNOWN_BUT_UNVERIFIED queda respaldado por una evidencia que la misma corrida declara no disponible. Es la contradicción observable más directa entre el sello y el contenido."
+  },
+  {
+   "id": "RSK-4",
+   "classification": "RENDERING_FAILURE",
+   "location": "api/dictus_ejecutivo.py:1580-1589",
+   "code": "if not evaluado: 'NO_EVALUADO' elif ALTA/ALTO: 'RIESGO_ALTO' elif MEDIA/MEDIO: 'RIESGO_MEDIO' elif SIN AFECT/SIN RIESGO/NO INTERSECTA: 'SIN_AFECTACION' else: 'NO_EVALUADO'",
+   "statement": "El chip de riesgo NO TIENE RAMA para BAJA/BAJO. Un nivel que contenga 'Baja'/'Bajo' (y no contenga 'sin afectación' ni 'no intersecta') cae en el else y se rotula NO EVALUADO, mientras el texto de la fila imprime el nivel y la relación con el polígono.",
+   "effect": "Es el mecanismo EXACTO del síntoma descrito «remoción con 'Baja · polígono: intersecta el predio' pero fact_status = NO EVALUADO»: el modelo tiene el hecho (OBSERVED), el render lo rotula NO EVALUADO por ausencia de rama. En la corrida medida el nivel es 'Media' y el chip 'RIESGO MEDIO' es correcto, de modo que el síntoma NO se reproduce HOY, pero es reproducible por construcción en cuanto el nivel sea 'Baja'."
+  },
+  {
+   "id": "RSK-5",
+   "classification": "RESOLUTION_FAILURE",
+   "location": "api/geospatial_engine.py:104-127",
+   "statement": "Un mismo punto puede caer en VARIOS polígonos de la MISMA capa. El código documenta el caso real de ESTE predio (040-646406): un polígono 'Baja' gigante de fondo que cubre la ciudad y uno 'Media' local de 6.046 m². La versión anterior tomaba matches[0] (orden del STRtree) y reportaba 'Baja'; la actual elige la coincidencia de mayor severidad y, a igualdad, la de menor área.",
+   "effect": "Explica la procedencia del literal 'Baja' del síntoma histórico y clasifica la serie 'AMENAZA BAJA' ↔ 'AMENAZA MEDIA' como RESOLVED_BY_PRECEDENCE, no como conflicto irresoluble. Queda como riesgo latente: la elección depende de una tabla de severidad embebida (orden_severidad) y del área del polígono, que NO se persiste en el RunState (no hay objectid, area_poligono_m2 ni total_coincidencias en el estado)."
+  },
+  {
+   "id": "RSK-6",
+   "classification": "STATE_PROPAGATION_FAILURE",
+   "location": "api/dictus_estado.py:642-652",
+   "statement": "risk_context reduce cada riesgo a un STRING con la relación geométrica concatenada (`_nivel_riesgo`: \"f'{nivel} · polígono: {…}'\", api/dictus_estado.py:515-530) y descarta el resto del objeto que geospatial_engine sí produce: 'intersecta' (bool), 'clase_suelo', 'area_poligono_m2', 'objectid', 'total_coincidencias' y 'detalles' (las properties de TODAS las coincidencias).",
+   "effect": "Aguas abajo ya no se puede auditar qué polígono ganó, cuántos coincidieron ni con qué área. Todo el bloque de riesgo del ejecutivo se apoya en una cadena de texto."
+  },
+  {
+   "id": "RSK-7",
+   "classification": "ACQUISITION_FAILURE",
+   "location": "docs/source_pack/barranquilla_sources_v1.json → measurement_window",
+   "statement": "El pack declara la ventana de congelación 2026-09-29 con nota literal: «El geoportal de la Alcaldía devolvió HTTP 403 (Cloudflare) a toda consulta desde esta máquina durante la ventana; se declara en cada fuente afectada».",
+   "effect": "Explica, sin inferir, por qué varias fuentes quedan enabled=false o sin snapshot (inundación layer 77/75, POT_BAQ_AREAS_ACTIVIDAD layer 85, POT_BAQ_POLIGONOS_USO layer 87, EQUIPAMIENTO_18..27). Es contexto declarado de adquisición, no una conclusión de esta auditoría."
+  }
+ ],
+ "not_reproduced_symptoms": {
+  "lectura": "Con la corrida regenerada, el literal «Baja · polígono: intersecta el predio» SÍ aparece (la capa de remoción devuelve el polígono de fondo «Baja» de 67.988.449 m²): el chip imprime RIESGO BAJO, nunca NO EVALUADO.",
+  "nota": "En la corrida AUDITADA (2026-10-01) el nivel medido era «Media» y el síntoma no se reproducía; el mecanismo era reproducible por construcción."
+ },
+ "verdict": {
+  "inundacion": "SOURCE_UNAVAILABLE",
+  "riesgo_no_mitigable": "NOT_SUPPORTED",
+  "remocion": "KNOWN_BUT_UNVERIFIED",
+  "riesgo": "VERIFIED",
+  "regla_17": "cumplida (ningún atributo con resultado espacial queda NOT_EVALUATED)"
+ },
+ "implemented": {
+  "contrato_evaluado": "api/geospatial_engine.evaluate_predio devuelve `evaluado`/`modo`/`layers_available`/`motivo_evaluado` y lo PERSISTE en DICTUS_RUN_STATE.geometry_state (incluida la rama de excepción)",
+  "consumidor": "api/receipts._geo_evaluado (lee `evaluado` y es compatible con el contrato antiguo)",
+  "invariante_consistencia": "api/consistency._inv_norecord_no_evaluado distingue EVALUADO de EVALUADO EN VIVO (modo empaquetado declarado)",
+  "chip": "api/dictus_ejecutivo._chip_de_riesgo (rama BAJA/BAJO) + _chip_de_hecho (§18/§19)",
+  "sello_ev_amenazas": "api/dictus_manifiesto: el sello de EV-AMENAZAS se deriva de los componentes con resultado espacial",
+  "geometria": {
+   "evaluado": true,
+   "modo": "PACKAGED_GEOMETRY_QUERY",
+   "layers_available": true,
+   "motivo": "Las capas del POT se consultaron para el punto y devolvieron veredicto espacial (cruce local STRtree sobre las capas empaquetadas): hay resultado espacial, no una ausencia."
+  }
+ },
+ "post_correction": {
+  "measured_from_run": {
+   "run_id": "137017a8-9d80-4c5b-9eae-957118c3e19a",
+   "dictus_id": "DX-040-646406-20261002",
+   "generated_at": "2026-10-02T16:55:59.367003+00:00",
+   "master_hash": "c790a8f20f3efdf8108ec9cea55aa986eaf7df6cc7090f787dd3132e2c0af3f0",
+   "run_state_version": "dictus-run-state/1.0.0",
+   "master_manifest_version": "dictus-master-manifest/1.2.0",
+   "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+   "run_state_sha256": "0b4f5068e89a8cb7a58e037d0ce873e746a38be067c5b4603c0978bc19b0d90a"
+  }
+ }
+}

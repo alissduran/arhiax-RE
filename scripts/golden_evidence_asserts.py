@@ -75,9 +75,12 @@ _ESTADOS_IMPRESOS = {
     "NO UTILIZAR ESTE DATO COMO DEFINITIVO": "HISTORICAL_CONFLICT",
 }
 
-# Estados del BINDING de la geometría (vocabulario propio de `_geometria_estado`).
+# Estados del BINDING (vocabulario de `attribute_truth.binding_geometria`, BLOCK 1 §11).
+# El binding declara su ALCANCE: un binding de IDENTIFICADORES no se rotula como binding
+# de geometría, así que su estado impreso es `IDENTIFICADORES` (no `VERIFICADA`).
 _ESTADOS_BINDING = {
     "VERIFICADA": "VERIFICADA",
+    "IDENTIFICADORES": "IDENTIFICADORES",
     "DISCREPANCIA": "DISCREPANCIA",
     "NO COMPARABLE": "NO COMPARABLE",
 }
@@ -95,6 +98,9 @@ _ATRIBUTO_POR_ETIQUETA = {
     "TITULARIDAD": "titulares",
     "AMENAZA POR REMOCIÓN EN MASA": "amenaza",
     "BINDING DE LA GEOMETRÍA OFICIAL": "binding_geometria",
+    # BLOCK 1 · §11: el rótulo vigente declara el ALCANCE del binding (identificadores vs
+    # geometría) y sigue siendo el MISMO atributo canónico.
+    "BINDING DE LA IDENTIDAD CANÓNICA DEL PREDIO": "binding_geometria",
     "GEOMETRÍA OFICIAL": "binding_geometria",
 }
 
@@ -243,8 +249,13 @@ def _estado_impreso(texto: str, etiqueta: str) -> str:
         arriba = ln.upper()
         if objetivo in arriba and arriba.startswith(objetivo):
             resto = ln[len(objetivo):]
-            candidatas = ([resto.split(":", 1)[1].strip()] if ":" in resto else
-                          lineas[i + 1:i + 9])
+            # La etiqueta puede llevar un PARÉNTESIS con su alcance antes del estado
+            # («… (NO es la geometría del predio: el alcance declarado es el de
+            # IDENTIFICADORES): IDENTIFICADORES») y el render puede ENVOLVER la línea: se
+            # prueban las dos lecturas de la propia línea y las líneas siguientes.
+            candidatas = ([resto.split(":", 1)[1].strip(),
+                           resto.rsplit(":", 1)[1].strip()] if ":" in resto else [])
+            candidatas += lineas[i + 1:i + 9]
         elif _normalizar(ln) and objetivo.startswith(_normalizar(ln)) \
                 and len(_normalizar(ln)) >= minimo:
             candidatas = lineas[i + 1:i + 9]      # etiqueta RECORTADA con «…»
@@ -269,8 +280,17 @@ def _verdad_unica(manifest: dict, run_state: dict) -> dict:
     mc = (run_state.get("market_context")
           or (manifest.get("modelo") or {}).get("market_context") or {})
     binding = str(mc.get("canonical_binding_status") or "NO_COMPARABLE").upper()
-    verdad["binding_geometria"] = {"VERIFIED": "VERIFICADA", "MISMATCH": "DISCREPANCIA",
-                                   "NOT_COMPARABLE": "NO COMPARABLE"}.get(binding, binding)
+    scope = str(mc.get("canonical_binding_scope") or "").upper()
+    # El estado que el expediente declara para el binding es el MISMO que imprime la P6:
+    # si el alcance acreditado es de identificadores, el binding NO es geométrico.
+    if binding == "VERIFIED" and scope and scope != "NATIONAL_IDENTIFIERS":
+        estado_binding = "VERIFICADA"
+    elif binding == "VERIFIED":
+        estado_binding = "IDENTIFICADORES"
+    else:
+        estado_binding = {"MISMATCH": "DISCREPANCIA",
+                          "NOT_COMPARABLE": "NO COMPARABLE"}.get(binding, binding)
+    verdad["binding_geometria"] = estado_binding
     return verdad
 
 
@@ -279,7 +299,9 @@ def _verdad_unica(manifest: dict, run_state: dict) -> dict:
 _ETIQUETAS_POR_PAGINA = {
     4: ("COORDENADA DEL PREDIO", "ALTURA / EDIFICABILIDAD", "TRATAMIENTO URBANÍSTICO",
         "USO DEL SUELO (POT)", "TITULARIDAD", "AMENAZA POR REMOCIÓN EN MASA"),
-    6: ("BINDING DE LA GEOMETRÍA OFICIAL",),
+    # El rótulo VIGENTE declara el ALCANCE del binding; el anterior se conserva en la lista
+    # para que el detector siga funcionando si un artefacto antiguo lo imprime.
+    6: ("BINDING DE LA IDENTIDAD CANÓNICA DEL PREDIO", "BINDING DE LA GEOMETRÍA OFICIAL"),
 }
 
 

@@ -1,0 +1,257 @@
+{
+ "audit_version": "arhiax-truth-resolution/historical-conflict-audit/2.0.0",
+ "audit": "BLOCK 1 · CORRECCIÓN — el recuento de conflictos abiertos se DERIVA solo de TRUE_CONFLICT y las clasificaciones se persisten.",
+ "case": {
+  "fmi": "040-646406",
+  "nupre": "AFT0005BOHA",
+  "numero_predial": "080010103000010040001908040002"
+ },
+ "generated_from": {
+  "run_id": "137017a8-9d80-4c5b-9eae-957118c3e19a",
+  "dictus_id": "DX-040-646406-20261002",
+  "generated_at": "2026-10-02T16:55:59.367003+00:00",
+  "master_hash": "c790a8f20f3efdf8108ec9cea55aa986eaf7df6cc7090f787dd3132e2c0af3f0",
+  "run_state_version": "dictus-run-state/1.0.0",
+  "master_manifest_version": "dictus-master-manifest/1.2.0",
+  "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+  "run_state_sha256": "0b4f5068e89a8cb7a58e037d0ce873e746a38be067c5b4603c0978bc19b0d90a"
+ },
+ "headline": {
+  "printed_in_pdf": "2 atributo(s) requieren reconciliación histórica",
+  "printed_count_source": "len(historical_consistency.conflictos_abiertos) — que ahora contiene SOLO TRUE_CONFLICT",
+  "printed_count_before": 6,
+  "recomputed_true_conflict": 2,
+  "delta": -4,
+  "recomputed_true_conflict_attributes": [
+   "altura_maxima",
+   "coordenada"
+  ],
+  "downgraded": 4,
+  "downgraded_attributes": [
+   "amenaza",
+   "tratamiento",
+   "uso_pot",
+   "titulares"
+  ],
+  "no_preservation_note": "El recuento NO se preserva por compatibilidad: baja de 6 a 2 al aplicar las siete condiciones de TRUE_CONFLICT con la evidencia medida. Se declara además una banda de sensibilidad (§4) para que el número sea auditable, no opinable.",
+  "printed_count_after_correction": 2,
+  "reclassified_not_conflict": [
+   "amenaza",
+   "planes_parciales",
+   "titulares",
+   "tratamiento",
+   "uso_pot"
+  ],
+  "false_change_none_to_none": "ELIMINADO en la fuente (api/dictus_historia.py)"
+ },
+ "definition_applied": {
+  "source": "Misión BLOCK 1 §9 · definición de CONFLICT/TRUE_CONFLICT",
+  "conditions_all_required": [
+   "1 · mismo atributo",
+   "2 · misma semántica",
+   "3 · mismo objeto",
+   "4 · misma vigencia",
+   "5 · autoridad comparable",
+   "6 · valores incompatibles",
+   "7 · la precedencia NO puede resolver"
+  ],
+  "rules_declared": {
+   "titular_case": "Diferencias de caja en el nombre del titular NO son conflicto.",
+   "vigencia": "Vigente vs histórica NO es conflicto (una capa HISTORICAL_REFERENCE nunca compite con una vigente).",
+   "objetos_distintos": "Destino catastral vs uso POT NO es conflicto (dos objetos distintos).",
+   "no_evidencia_no_conflicto": "Una condición que no se puede verificar con evidencia medida se marca UNDETERMINED y el atributo NO se cuenta como TRUE_CONFLICT; el hueco queda declarado en evidence_gaps."
+  },
+  "operationalizations": {
+   "mismo_atributo": "El nombre del atributo en la matriz histórica debe ser el mismo en las dos versiones comparadas.",
+   "misma_semantica": "Las cadenas de fuente/método DECLARADAS por esas dos versiones para ese atributo deben designar el mismo hecho (no basta que el nombre del atributo coincida).",
+   "mismo_objeto": "El hecho debe predicarse del mismo sujeto por sus identificadores oficiales (FMI 040-646406 / NUPRE AFT0005BOHA / numero_predial 080010103000010040001908040002).",
+   "misma_vigencia": "Ninguna de las dos versiones debe declarar una capa HISTORICAL_REFERENCE para ese atributo.",
+   "autoridad_comparable": "Las cadenas de fuente declaradas por las dos versiones deben ser idénticas (o ambas ausentes) SIENDO el mismo hecho; si una es legacy/demo/geocode y la otra capa oficial, es incomparable.",
+   "valores_incompatibles": "Las formas canónicas deben diferir de manera mutuamente excluyente (para 'altura_maxima' se comparan conjuntos de números de pisos como hace dictus_historia._clave; para 'coordenada', una distancia > 30 m).",
+   "precedencia_no_resuelve": "Ni la escalera declarada en api/source_resolution.py (COBERTURA_ATRIBUTOS) ni una regla de desempate en el código puede elegir entre los dos valores."
+  }
+ },
+ "attribute_evaluations": [
+  {
+   "atributo": "altura_maxima",
+   "veredicto": "TRUE_CONFLICT",
+   "condicion_que_decide": "",
+   "cascada_de_geometria": false,
+   "motivo": "las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva",
+   "pares_comparables": 3
+  },
+  {
+   "atributo": "amenaza",
+   "veredicto": "RESOLVED_BY_PRECEDENCE",
+   "condicion_que_decide": "7_precedencia_no_resuelve",
+   "cascada_de_geometria": false,
+   "motivo": "el producto declara y aplica una regla de precedencia para este atributo: api/geospatial_engine.py::_clave — se elige la coincidencia de MAYOR severidad y, a igualdad, la de MENOR área (el predio cae en varios polígonos de la misma capa: uno de fondo y uno local)",
+   "pares_comparables": 4
+  },
+  {
+   "atributo": "coordenada",
+   "veredicto": "TRUE_CONFLICT",
+   "condicion_que_decide": "",
+   "cascada_de_geometria": false,
+   "motivo": "las siete condiciones se cumplen: mismo atributo, misma semántica, mismo objeto, vigencia y autoridad comparables, valores INCOMPATIBLES (valores distintos sin solape declarado) y ninguna regla de precedencia que los resuelva",
+   "pares_comparables": 4
+  },
+  {
+   "atributo": "planes_parciales",
+   "veredicto": "HISTORICAL_CHANGE",
+   "condicion_que_decide": "4_vigencia_comparable",
+   "cascada_de_geometria": false,
+   "motivo": "la FUENTE declarada cambió entre las versiones («POTECARIO (SNR)» → «GEOJSON POT BARRANQUILLA EMPAQUETADOS EN LA APLI»): la diferencia está EXPLICADA por el cambio de fuente, no es un conflicto sin resolver",
+   "pares_comparables": 1
+  },
+  {
+   "atributo": "titulares",
+   "veredicto": "NORMALIZATION_DIFFERENCE",
+   "condicion_que_decide": "6_valores_incompatibles",
+   "cascada_de_geometria": false,
+   "motivo": "los valores NO son incompatibles: comparten el mismo sujeto (1045718995, ALISSON, BACCA, DURAN); la diferencia es de FORMA",
+   "pares_comparables": 1
+  },
+  {
+   "atributo": "tratamiento",
+   "veredicto": "HISTORICAL_CHANGE",
+   "condicion_que_decide": "3_mismo_objeto",
+   "cascada_de_geometria": true,
+   "motivo": "las dos versiones evaluaron PUNTOS DISTINTOS (144.7 m): el cambio es CASCADA del cambio de geometría, no un defecto independiente del atributo (contarlo aparte duplicaría un solo defecto)",
+   "pares_comparables": 4
+  },
+  {
+   "atributo": "uso_pot",
+   "veredicto": "SEMANTIC_DIFFERENCE",
+   "condicion_que_decide": "2_misma_semantica",
+   "cascada_de_geometria": false,
+   "motivo": "los valores declaran SEMÁNTICAS distintas (['CAPA_2_AREAS_ACTIVIDAD'] vs sin marcador): no son el mismo hecho y no compiten",
+   "pares_comparables": 1
+  }
+ ],
+ "false_change_detector": {
+  "finding": "El informe de coherencia declara «cambios» entre dos AUSENCIAS (None → None). No son cambios y no son conflictos.",
+  "mechanism": "api/dictus_historia.py:374-387 — la guarda de 'sin cambio' exige que AMBAS claves sean no-None (`ka is not None and kb is not None and ka == kb`); si las dos versiones no traen el atributo (va = vb = None), el flujo cae en `if va is None or vb is None:` y declara `cambio: True` con `clase: SOURCE_UNAVAILABLE`.",
+  "measured_examples": [
+   {
+    "atributo": "area",
+    "valores": "[null ×13]",
+    "detalle_declarado": "el valor no está en la versión más reciente",
+    "cambio": {
+     "anterior": null,
+     "actual": null,
+     "clase": "SOURCE_UNAVAILABLE",
+     "explicado": false
+    }
+   },
+   {
+    "atributo": "localidad",
+    "valores": "[null ×13]",
+    "detalle_declarado": "el valor no está en la versión más reciente"
+   },
+   {
+    "atributo": "clase_suelo",
+    "valores": "[null ×5]",
+    "detalle_declarado": "el valor no está en la versión más reciente"
+   }
+  ],
+  "consequence": "Los 17 atributos de requieren_revision incluyen 6 cuyo «cambio» es None→None o aparición/desaparición de extracción (area, barrio, clase_suelo, destino_economico, direccion, estrato, evidencias, gravamenes, localidad, numero_predial, nupre, regimen_juridico, riesgo, screening, unidad, valor_central, valor_m2). Ese conjunto no se publica como conflicto (solo alimenta REQUIERE VALIDACIÓN por fila), pero SÍ degrada ocho filas de la página 6 del ejecutivo — incluidas las cinco que contradicen el chip VERIFICADO de la matrícula.",
+  "not_counted_as_true_conflict": true,
+  "fix": "api/dictus_historia.clasificar_cambio: si `va is None and vb is None` ⇒ `cambio=False` con motivo «dos ausencias no son un cambio».",
+  "measured_after_fix": {
+   "cambios_totales": 187,
+   "cambios_none_a_none": 125
+  }
+ },
+ "recount_detail": {
+  "before": {
+   "count": 6,
+   "source": "historical_consistency.conflictos_abiertos",
+   "class_criterion": "dictus_historia: material == True AND clase == UNEXPLAINED_CONFLICT"
+  },
+  "after": {
+   "criterio": "TRUE_CONFLICT (las siete condiciones)",
+   "total": 2,
+   "atributos": [
+    "altura_maxima",
+    "coordenada"
+   ],
+   "por_clase": {
+    "HISTORICAL_CHANGE": [
+     "planes_parciales",
+     "tratamiento"
+    ],
+    "NORMALIZATION_DIFFERENCE": [
+     "titulares"
+    ],
+    "RESOLVED_BY_PRECEDENCE": [
+     "amenaza"
+    ],
+    "SEMANTIC_DIFFERENCE": [
+     "uso_pot"
+    ],
+    "TRUE_CONFLICT": [
+     "altura_maxima",
+     "coordenada"
+    ]
+   }
+  },
+  "downgrades": [
+   {
+    "atributo": "amenaza",
+    "veredicto": "RESOLVED_BY_PRECEDENCE",
+    "condicion_que_decide": "7_precedencia_no_resuelve",
+    "motivo": "el producto declara y aplica una regla de precedencia para este atributo: api/geospatial_engine.py::_clave — se elige la coincidencia de MAYOR severidad y, a igualdad, la de MENOR área (el predio cae en varios polígonos de la misma capa: uno de fondo y uno local)"
+   },
+   {
+    "atributo": "planes_parciales",
+    "veredicto": "HISTORICAL_CHANGE",
+    "condicion_que_decide": "4_vigencia_comparable",
+    "motivo": "la FUENTE declarada cambió entre las versiones («POTECARIO (SNR)» → «GEOJSON POT BARRANQUILLA EMPAQUETADOS EN LA APLI»): la diferencia está EXPLICADA por el cambio de fuente, no es un conflicto sin resolver"
+   },
+   {
+    "atributo": "titulares",
+    "veredicto": "NORMALIZATION_DIFFERENCE",
+    "condicion_que_decide": "6_valores_incompatibles",
+    "motivo": "los valores NO son incompatibles: comparten el mismo sujeto (1045718995, ALISSON, BACCA, DURAN); la diferencia es de FORMA"
+   },
+   {
+    "atributo": "tratamiento",
+    "veredicto": "HISTORICAL_CHANGE",
+    "condicion_que_decide": "3_mismo_objeto",
+    "motivo": "las dos versiones evaluaron PUNTOS DISTINTOS (144.7 m): el cambio es CASCADA del cambio de geometría, no un defecto independiente del atributo (contarlo aparte duplicaría un solo defecto)"
+   },
+   {
+    "atributo": "uso_pot",
+    "veredicto": "SEMANTIC_DIFFERENCE",
+    "condicion_que_decide": "2_misma_semantica",
+    "motivo": "los valores declaran SEMÁNTICAS distintas (['CAPA_2_AREAS_ACTIVIDAD'] vs sin marcador): no son el mismo hecho y no compiten"
+   }
+  ],
+  "sensitivity_band": {
+   "estricta_TRUE_CONFLICT": 2,
+   "incluyendo_cascadas_de_geometria": 3
+  },
+  "derivado_de": "recuento true conflict implementado (no compatibilidad)"
+ },
+ "answer_to_the_mission": "Antes 6 · después 2 (altura_maxima y coordenada) · delta −4, con las cuatro degradaciones justificadas por condición incumplida y con los huecos de evidencia declarados. El número impreso en el PDF («6 atributo(s) requieren reconciliación histórica») NO cuenta TRUE_CONFLICT: cuenta conflictos abiertos = cambios materiales clasificados UNEXPLAINED_CONFLICT, que es un criterio distinto y más laxo.",
+ "implemented": {
+  "clasificador": "api/dictus_historia.clasificar_conflicto_historico (7 condiciones)",
+  "recuento": "api/dictus_historia.recuento_true_conflict",
+  "reclasificacion_en_la_corrida": "api/dictus_historia.reclasificar_informe",
+  "donde_se_persiste": "DICTUS_RUN_STATE.historical_consistency.clasificaciones_conflicto + .recuento_conflictos + attribute_resolution[*].historical_conflict",
+  "no_se_reescribe": "docs/forensics/** del expediente permanece intacto"
+ },
+ "post_correction": {
+  "measured_from_run": {
+   "run_id": "137017a8-9d80-4c5b-9eae-957118c3e19a",
+   "dictus_id": "DX-040-646406-20261002",
+   "generated_at": "2026-10-02T16:55:59.367003+00:00",
+   "master_hash": "c790a8f20f3efdf8108ec9cea55aa986eaf7df6cc7090f787dd3132e2c0af3f0",
+   "run_state_version": "dictus-run-state/1.0.0",
+   "master_manifest_version": "dictus-master-manifest/1.2.0",
+   "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+   "run_state_sha256": "0b4f5068e89a8cb7a58e037d0ce873e746a38be067c5b4603c0978bc19b0d90a"
+  }
+ }
+}

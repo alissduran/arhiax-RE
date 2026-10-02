@@ -147,12 +147,17 @@ class TestSinContradiccionesEnElGolden(unittest.TestCase):
         cls.paginas = _texto_paginas(RUTA_EJECUTIVO)
 
     def test_ningun_atributo_por_revisar_se_imprime_como_verificado(self):
-        """ESTA ES LA PRUEBA DEL CASO `Estrato 4 — VERIFICADO` (P3).
+        """ESTA ES LA PRUEBA DEL CASO `Estrato 4 — VERIFICADO` (P3), con la regla §10.
 
-        Si el atributo aparece en el informe de coherencia con estado por revisar, su
-        valor no puede ir rotulado VERIFICADO en ninguna página.
+        BLOCK 1 · §10: la verdad del atributo es UNA y la declara su registro de resolución
+        (`attribute_resolution`). Estar listado en `requieren_revision` por una APARICIÓN
+        del atributo en una versión nueva (una nota de cobertura, sin valores rivales) NO
+        degrada el hecho: la evidencia sellada sí lo verifica. Lo que NO puede imprimirse
+        VERIFICADO es un atributo con una DIFERENCIA MATERIAL declarada o con un conflicto
+        abierto, y eso es lo que esta prueba protege.
         """
-        por_revisar = {r["atributo"] for r in (self.hist.get("requieren_revision") or [])}
+        por_revisar = {r["atributo"] for r in (self.hist.get("requieren_revision") or [])
+                       if r.get("diferencia_material")}
         en_conflicto = {c["atributo"] for c in (self.hist.get("conflictos_abiertos") or [])}
         # Atributos con etiqueta impresa legible en el ejecutivo y su texto de la fila.
         etiquetas = {
@@ -476,11 +481,37 @@ class TestGoldenSemantica(unittest.TestCase):
     def test_assert_ningun_atributo_del_ejecutivo_discrepa_de_su_estado(self):
         """P3 sobre el Golden: el estado impreso ES el estado declarado."""
         hist = self.rs["historical_consistency"]
-        por_revisar = {r["atributo"] for r in (hist.get("requieren_revision") or [])}
-        plano = _plano(self.paginas)
-        if "estrato" in por_revisar:
-            self.assertNotIn("ESTRATO 4 VERIFICADO", plano)
-        self.assertNotIn("Estrato 4 VERIFICADO", self.texto_ejecutivo)
+        # BLOCK 1 · §10: solo una DIFERENCIA MATERIAL declarada (o un conflicto abierto)
+        # impide imprimir VERIFICADO; una aparición del atributo en una versión nueva no.
+        por_revisar = {r["atributo"] for r in (hist.get("requieren_revision") or [])
+                       if r.get("diferencia_material")}
+        en_conflicto = {c["atributo"] for c in (hist.get("conflictos_abiertos") or [])}
+        materiales = por_revisar | en_conflicto
+        if "estrato" in materiales:
+            self.assertNotIn("ESTRATO 4 VERIFICADO", _plano(self.paginas))
+        for atributo in ("altura_maxima", "coordenada", "tratamiento", "uso_pot",
+                         "amenaza", "titulares"):
+            if atributo not in materiales:
+                continue
+            # El atributo con diferencia material está LISTADO en la coherencia y su fila
+            # NO puede salir VERIFICADA en ninguna página donde se imprima su etiqueta.
+            etiqueta = {"altura_maxima": "Altura / edificabilidad",
+                        "coordenada": "Coordenada del predio",
+                        "tratamiento": "Tratamiento urbanístico",
+                        "uso_pot": "Uso del suelo (POT)",
+                        "amenaza": "Amenaza por remoción en masa",
+                        "titulares": "Titularidad"}.get(atributo)
+            if not etiqueta:
+                continue
+            for i, pagina in enumerate(self.paginas, start=1):
+                plano = " ".join(pagina.split())
+                pos = plano.find(etiqueta)
+                if pos == -1:
+                    continue
+                ventana = plano[pos:pos + len(etiqueta) + 90].upper()
+                self.assertNotIn("VERIFICADO", ventana,
+                                 f"página {i}: «{atributo}» tiene una diferencia material "
+                                 f"declarada y se imprime VERIFICADO: {ventana!r}")
 
     def test_assert_el_hash_del_ejecutivo_esta_registrado(self):
         sha = hashlib.sha256(RUTA_EJECUTIVO.read_bytes()).hexdigest()

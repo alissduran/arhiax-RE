@@ -56,3 +56,16 @@ docs/forensics/**/sombra_*.png
 
 # Secretos locales de operación (NUNCA se versionan)
 .secrets/
+
+# --- BLOCK 1.1 (cierre) -------------------------------------------------------
+# Sondeos temporales del cierre del Bloque 1: NO son evidencia contractual.
+docs/truth_resolution/scratch/
+# Andamiaje de sondeo de OTRO bloque (source pack / adquisicion, en curso): no
+# forma parte del Bloque 1 y no se versiona en este cierre.
+docs/source_pack/tools/b*.py
+docs/source_pack/raw/phase_b/
+# Temporales de pip con permisos restringidos (rompen \git status\ del arbol).
+docs/source_pack/tools/_piptmp/
+# Motor de re-medicion de mercado: sus UNICOS consumidores son los sondeos
+# b9/b14 del mismo bloque en curso (no lo importa ningun modulo versionado).
+api/core_remeasure.py

@@ -21,8 +21,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Sequence
 
+import attribute_truth as _at
 import dictus_decision as dd
 import dictus_estado as dse
+import dictus_historia as dh
 
 try:  # `api/` está en sys.path cuando el producto importa estos módulos
     import atribucion_mercado as _am
@@ -352,6 +354,34 @@ def _coherencia_detallada(hist: Dict[str, Any], rs: Dict[str, Any],
             "decision": TERMINO_IMPRESO_POR_ESTADO.get(estado, estado),
             "afectados": AFECTADOS_POR_ATRIBUTO.get(atributo, []),
         })
+    # (BLOCK 1 · §6) Una diferencia MATERIAL entre versiones COMPARABLES que el expediente
+    # explica (precedencia declarada, cambio de fuente, cascada del cambio de geometría,
+    # semántica distinta, normalización) NO es un conflicto abierto, pero TAMPOCO es un
+    # hecho verificado: se muestra con SU clase y su motivo. Se excluye lo que solo
+    # «apareció» en una versión nueva (eso no es una diferencia entre dos valores rivales).
+    for r in (hist.get("requieren_revision") or []):
+        if not r.get("diferencia_material"):
+            continue
+        atributo = str(r.get("atributo") or "")
+        if not atributo or any(f["atributo"] == atributo for f in filas):
+            continue
+        actual = _actual_de_atributo(atributo, rs, mc)
+        estado = dse.REQUIERE_VALIDACION
+        filas.append({
+            "atributo": atributo,
+            "titulo": TITULO_ATRIBUTO.get(atributo, atributo.replace("_", " ").title()),
+            "actual": actual.get("valor"),
+            "fuente_actual": actual.get("fuente"),
+            "modo_actual": actual.get("modo"),
+            "historico": list(r.get("valores") or []),
+            "detalle": r.get("detalle"),
+            "estado": estado,
+            "estado_impreso": TERMINO_IMPRESO_POR_ESTADO.get(estado, estado),
+            "decision": TERMINO_IMPRESO_POR_ESTADO.get(estado, estado),
+            "clase_conflicto": r.get("clase_conflicto"),
+            "condicion_que_decide": r.get("condicion_que_decide"),
+            "afectados": AFECTADOS_POR_ATRIBUTO.get(atributo, []),
+        })
     return filas
 
 
@@ -562,6 +592,10 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
     # (o `HISTORICAL_CONFLICT`) es una contradicción INTERNA del documento, no una
     # opinión: aquí se vuelve imposible, porque las filas leen esa única verdad.
     verdad_atributos = verdad_por_atributo(hist)
+    # (B · BLOCK 1 §10) VERDAD ÚNICA POR ATRIBUTO: el registro por atributo de la corrida
+    # (escalera → hecho → estado) es la ÚNICA fuente del estado de cada fila. Las páginas
+    # PROYECTAN esa verdad; no la recrean ni la sustituyen por un default.
+    registro_atributos = rs.get("attribute_resolution") or {}
 
     def _estado_atributo(atributo: str, valor: Any,
                          origen: Optional[Dict[str, Any]] = None) -> str:
@@ -571,23 +605,45 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
         nunca se borra el hecho: el VALOR se sigue imprimiendo con su estado degradado.
         (B) Tampoco se imprime VERIFICADO un hecho cuyo ORIGEN declarado no lo sostiene:
         un origen no habilitante DEGRADA el estado; no lo esconde.
+
+        (BLOCK 1) El `default` fail-open `VERIFICADO` para un atributo del que el informe
+        histórico no dice nada queda acotado: si el atributo está en el REGISTRO de la
+        corrida, su estado sale de ahí (`fact_status` → estado), y si el registro no lo
+        resuelve, el estado es degradado. `VERIFICADO` por defecto solo se conserva para
+        atributos fuera del registro (el registro cubre los 23 auditados).
         """
         if not _dato(valor):
             return dse.SIN_DATO
-        est = verdad_atributos.get(atributo, dse.VERIFICADO)
+        # (BLOCK 1 · §10) El REGISTRO por atributo es la verdad ÚNICA y las páginas la
+        # PROYECTAN. El informe histórico es un INSUMO de esa verdad (el registro ya
+        # incorpora sus conflictos abiertos y sus diferencias materiales declaradas), no
+        # una segunda verdad que cada página pueda aplicar por su cuenta: mantener las dos
+        # rutas era exactamente lo que producía una fila «REQUIERE VALIDACIÓN» al lado de
+        # un resumen «VERIFICADA».
+        est = _at.estado_de_coherencia(registro_atributos, atributo)
+        if est is None:
+            est = verdad_atributos.get(atributo)
+        if est is None:
+            est = dse.VERIFICADO
         if (est == dse.VERIFICADO and isinstance(origen, dict)
                 and not origen.get("origin_gate")):
             return dse.REQUIERE_VALIDACION
         return est
 
     def _nota_atributo(atributo: str, base: Optional[str] = None) -> Optional[str]:
-        est = verdad_atributos.get(atributo)
+        est_hist = verdad_atributos.get(atributo)
+        est = _at.estado_de_coherencia(registro_atributos, atributo) or est_hist
         if est == dse.HISTORICAL_CONFLICT:
             return base or "Distintos entre versiones · ver coherencia abajo."
         # `REQUIERE_VALIDACION` NO lleva nota por fila: el chip ya lo declara y el
         # presupuesto de la página 4 no admite una línea más por atributo. La causa
         # viaja en el MODELO (`historical_consistency.requieren_revision`), que es
         # donde el lector técnico la consulta.
+        # El estado degradado puede venir de la verdad única (fuente/cobertura) y no del
+        # informe: la nota «sin expediente histórico comparado» describe la AUSENCIA de
+        # informe, así que se declara siempre que no haya expediente comparado.
+        if not hist_comparado and est_hist is None:
+            return base or "Sin expediente histórico comparado."
         if est == dse.REQUIERE_VALIDACION:
             return base
         if not hist_comparado:
@@ -595,9 +651,17 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
         return base
 
     def _estado_urb(atributo: str) -> str:
-        if not hist_comparado and atributo not in verdad_atributos:
+        # La verdad única del atributo manda cuando existe (un atributo puede llamarse
+        # `altura_maxima` en la página y `altura_normativa` en el registro: el alias se
+        # resuelve dentro de `attribute_truth`).
+        est = _at.estado_de_coherencia(registro_atributos, atributo)
+        if est is None:
+            est = verdad_atributos.get(atributo)
+        if est is not None:
+            return est
+        if not hist_comparado:
             return dse.REQUIERE_VALIDACION
-        return verdad_atributos.get(atributo, dse.VERIFICADO)
+        return dse.VERIFICADO
 
     def _nota_urb(atributo: str) -> Optional[str]:
         # Nota de UNA línea: el detalle completo vive en el bloque «Coherencia de datos
@@ -624,6 +688,12 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
     sellado = sello_manifiesto.upper() == "SELLADO"
     cadena_cerrada = str(scr.get("evidence_chain_status") or "") == "SEALED"
     coherencia_attrs = _coherencia_detallada(hist, rs, mc)
+    # BLOCK 1.1 · B — el recuento NO se cuenta aquí: se LEE el resumen canónico ya
+    # resuelto por la corrida (RunState → modelo de documento). Solo si la sección se
+    # construye aislada (pruebas de página) se resuelve con la ÚNICA función canónica.
+    resumen_conflictos = ((modelo.get("historical_consistency_summary")
+                           or rs.get("historical_consistency_summary"))
+                          or dh.get_true_conflict_summary(hist))
     # (B) ORIGEN de los hechos de identidad, resuelto UNA vez por corrida desde las
     # evidencias selladas de su propio manifest.
     origen_identidad = _origen_de_hecho(modelo)
@@ -678,15 +748,28 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
                         "accion": fila.get("action")})
     if coherencia_attrs:
         _coh = [f for f in findings if str(f.get("codigo") or "").upper() == "H-COH"]
+        # BLOCK 1.1 · A (caso B) — DOS MÉTRICAS, DOS RÓTULOS. Esta fila declara la métrica
+        # de ATRIBUTOS CON VERSIONES RIVALES COMPARADAS (6 = 2 conflicto(s) verdadero(s) +
+        # 4 diferencia(s) material(es) ya explicadas por su clase). NO es el recuento de
+        # conflictos: por eso NO usa «requieren reconciliación», «conflictos abiertos» ni
+        # «datos incompatibles», y nombra el recuento verdadero para que el lector no
+        # pueda confundirlos. El rótulo sale del resumen canónico, no de un literal local.
+        _n_cmp = int(resumen_conflictos.get("attributes_compared_count") or 0)
+        _n_tc = int(resumen_conflictos.get("true_conflict_count") or 0)
+        # El rótulo se LEE del resumen canónico: ninguna página redacta el suyo propio
+        # (así dos métricas no pueden volver a compartir etiqueta por copia manual).
+        _rot_cmp = ((resumen_conflictos.get("rotulos") or {})
+                    .get("attributes_compared") or dh.ROTULO_ATRIBUTOS_COMPARADOS)
         tablero.append({
             "tema": "POT / CALIDAD DE DATOS",
             "severity": next((f.get("severity") for f in _coh if f.get("severity")), None),
-            "encontro": (f"{len(coherencia_attrs)} atributo(s) con resultados incompatibles "
-                         f"entre versiones del expediente"),
+            "encontro": (f"{_n_cmp} {_rot_cmp} · {_n_tc} conflicto(s) verdadero(s)"
+                         if _n_cmp else "sin atributos con versiones comparadas"),
             "decision": dd.NO_USAR_COMO_DEFINITIVO,
             "afecta": ", ".join(_actores_de_atributos(coherencia_attrs)) or
             "COMPRADOR, INMOBILIARIA, BANCO / FINANCIADOR",
-            "accion": "Reconciliar con la ficha/polígono POT aplicable antes de usar la cifra."})
+            "accion": (f"Cruzar la ficha/polígono POT solo para los {_n_tc} conflicto(s) "
+                       f"verdadero(s).")})
     # los temas no se repiten: el tablero resume la decisión por tema. Si un tema tiene
     # varios hallazgos, la fila declara CUÁNTOS agrupa (nunca los oculta sin decirlo).
     _vistos = {}
@@ -797,6 +880,114 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
     else:
         metodo_txt = _dato(val.get("motivo_no_aplica"), "Metodología no aplicada")
 
+    # ── (BLOCK 1) FILAS DE IDENTIDAD + RESUMEN §10 + BINDING DE GEOMETRÍA §11 ──
+    # Se construyen AQUÍ, antes del modelo, porque el resumen del bloque tiene que
+    # derivarse de los estados REALES de sus componentes (antes leía otra verdad).
+    def _valor_canonico(clave, por_defecto=None):
+        """Valor CANÓNICO del atributo según la verdad única (lo que la escalera resolvió).
+
+        La fila imprime una FORMA (p. ej. «Hasta 11 pisos»); la verdad es el valor. Ambos
+        viajan en la sección para que la auditoría compare verdad contra impresión sin
+        tener que adivinar la transformación del render.
+        """
+        ficha = (registro_atributos.get("attributes") or {}).get(clave) or {}
+        valor = ficha.get("canonical_value")
+        return por_defecto if valor is None else valor
+
+    def _ficha_atributo(clave):
+        return ((registro_atributos.get("attributes") or {}).get(clave) or {})
+
+    def _hecho_riesgo(clave):
+        """Estado del HECHO declarado por la verdad única del atributo de riesgo."""
+        return _ficha_atributo(clave).get("fact_status")
+
+    def _implicacion_riesgo(clave, por_defecto):
+        """Texto de implicación derivado del ESTADO del hecho (§18/§19).
+
+        `NO EVALUADO` deja de ser el texto por defecto de una capa que no respondió: se
+        nombra el estado real —cobertura inexistente o ausencia declarada— con su motivo.
+        """
+        ficha = _ficha_atributo(clave)
+        hecho = str(ficha.get("fact_status") or "")
+        if _ficha_atributo(clave) and hecho == "NOT_SUPPORTED":
+            return ("El Source Pack no declara escalón para este atributo: se declara la "
+                    "cobertura que falta (NOT_SUPPORTED) y nunca un `NO EVALUADO` genérico. "
+                    + str(ficha.get("canonical_reason") or ""))
+        if hecho == "SOURCE_UNAVAILABLE":
+            return ("Ninguna fuente aplicable aportó el dato en esta corrida: se declara la "
+                    "ausencia con su motivo exacto (no es «sin riesgo»). "
+                    + str(ficha.get("canonical_reason") or ""))
+        return por_defecto
+
+    filas_identidad = [
+        {"etiqueta": "Dirección oficial", "atributo_clave": "direccion",
+         "valor_canonico": _valor_canonico("direccion"),
+         "valor": (base_dir + (f" · {sufijo}" if sufijo else "")) if base_dir else None,
+         "estado": _estado_atributo("direccion", base_dir, origen_identidad),
+         "nota": _nota_atributo("direccion"),
+         "origin": origen_identidad},
+        {"etiqueta": "Matrícula", "atributo_clave": "matricula",
+         "valor_canonico": _valor_canonico("matricula"), "valor": pi.get("folio"),
+         # §El certificado adjunto es lo que sostiene la matrícula: sin CTL la
+         # fila NO puede decir VERIFICADO (antes era un literal incondicional).
+         "estado": _estado_atributo(
+             "matricula", pi.get("folio") if ts.get("certificado_adjuntado") else None,
+             origen_identidad),
+         "nota": (None if ts.get("certificado_adjuntado") else
+                  "Sin certificado de tradición y libertad adjunto en esta corrida."),
+         "origin": origen_identidad},
+        {"etiqueta": "NUPRE", "atributo_clave": "nupre",
+         "valor_canonico": _valor_canonico("nupre"), "valor": pi.get("nupre"),
+         "estado": _estado_atributo("nupre", pi.get("nupre"), origen_identidad),
+         "nota": _nota_atributo("nupre"),
+         "origin": origen_identidad},
+        {"etiqueta": "Número predial", "atributo_clave": "numero_predial",
+         "valor_canonico": _valor_canonico("numero_predial"),
+         "valor": pi.get("codigo_catastral"),
+         "estado": _estado_atributo("numero_predial", pi.get("codigo_catastral"),
+                                    origen_identidad),
+         "nota": _nota_atributo("numero_predial"),
+         "origin": origen_identidad},
+        {"etiqueta": "Unidad (torre / apartamento)", "atributo_clave": "unidad",
+         "valor_canonico": _valor_canonico("unidad"),
+         "valor": pi.get("unidad"),
+         "estado": _estado_atributo("unidad", pi.get("unidad"), origen_identidad),
+         "nota": _nota_atributo("unidad"),
+         "origin": origen_identidad},
+        {"etiqueta": "Área", "atributo_clave": "area",
+         "valor_canonico": _valor_canonico("area"), "valor": area_txt,
+         "estado": _estado_atributo("area", urb.get("area"), origen_identidad),
+         "nota": _nota_atributo(
+             "area", None if urb.get("area") else "Sin área declarada en la entrada."),
+         "origin": origen_identidad},
+        {"etiqueta": "Régimen jurídico", "atributo_clave": "regimen_juridico",
+         "valor_canonico": _valor_canonico("regimen_juridico"),
+         "valor": urb.get("condicion_juridica"),
+         "estado": _estado_atributo("regimen_juridico", urb.get("condicion_juridica"),
+                                    origen_identidad),
+         "nota": _nota_atributo("regimen_juridico"),
+         "origin": origen_identidad},
+        {"etiqueta": "Uso (destino catastral)", "atributo_clave": "destino_economico",
+         "valor_canonico": _valor_canonico("destino_economico"),
+         "valor": urb.get("destino_economico"),
+         "estado": _estado_atributo("destino_economico", urb.get("destino_economico"),
+                                    origen_identidad),
+         "nota": _nota_atributo("destino_economico"),
+         "origin": origen_identidad},
+        {"etiqueta": "Tipología", "atributo_clave": "tipologia",
+         "valor": _valor_tipologia(),
+         "estado": _estado_tipologia(),
+         "nota": ("Inferida del régimen/condición registral: la fuente no declara la "
+                  "unidad física. Requiere validación."
+                  if _tipologia_inferida(mc, urb) else None),
+         "origin": origen_identidad},
+    ]
+    _identidad_resumen = _at.resumen_identidad(
+        registro_atributos,
+        {f["atributo_clave"]: f["estado"] for f in filas_identidad},
+        identity_verified=bool(pi.get("identity_verified")))
+    _binding_geom = _at.binding_geometria(mc)
+
     return {
         "decision": {
             "observations": list(modelo.get("observations") or []),
@@ -821,6 +1012,25 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
         "hallazgos": operacion,
         "coherencia": [f for f in findings if str(f.get("codigo") or "").upper() == "H-COH"],
         "coherencia_attrs": coherencia_attrs,
+        # (BLOCK 1.1 · B) El recuento que se IMPRIME sale del RESUMEN CANÓNICO ya
+        # resuelto (`true_conflict_count == len(true_conflicts)`), NUNCA de contar listas
+        # aquí. `attributes_compared` es la métrica DISTINTA (atributos con versiones
+        # rivales comparadas) y viaja con su propio rótulo: ninguna de las dos puede
+        # imprimirse con el rótulo de la otra.
+        "coherencia_resumen": {
+            "true_conflict": int(resumen_conflictos.get("true_conflict_count") or 0),
+            "true_conflict_attributes": list(resumen_conflictos.get("true_conflicts") or []),
+            "attributes_compared": int(resumen_conflictos.get("attributes_compared_count") or 0),
+            "attributes_compared_count": int(
+                resumen_conflictos.get("attributes_compared_count") or 0),
+            "diferencias_declaradas": sum(1 for r in (hist.get("requieren_revision") or [])
+                                          if r.get("diferencia_material")),
+            "criterio": resumen_conflictos.get("criterio"),
+            "rotulo_conflicto": ((resumen_conflictos.get("rotulos") or {})
+                                 .get("true_conflict")),
+            "recuento_persistido": (hist.get("recuento_conflictos") or {}).get("total"),
+            "resumen_canonico": resumen_conflictos,
+        },
         "indicadores": indicadores,
         "ctx": {"area": urb.get("area"), "ciudad": rs.get("ciudad"),
                 "regimen": urb.get("condicion_juridica"),
@@ -902,47 +1112,77 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
               "evidencia trazable, pendiente de sellado.")),
         ],
         "urbano": {"filas": [
-            {"etiqueta": "Destino económico (catastro)",
+            {"etiqueta": "Destino económico (catastro)", "atributo_clave": "destino_economico",
+             "valor_canonico": _valor_canonico("destino_economico"),
              "valor": urb.get("destino_economico"),
              "estado": _estado_atributo("destino_economico", urb.get("destino_economico")),
              "nota": _nota_atributo("destino_economico")},
-            {"etiqueta": "Uso / actividad POT",
+            {"etiqueta": "Uso / actividad POT", "atributo_clave": "uso_pot",
+             "valor_canonico": _valor_canonico("uso_pot"),
              "valor": _dato((mc.get("uso") or {}).get("value")) or urb.get("area_actividad"),
              "estado": _estado_urb("uso_pot"), "nota": _nota_urb("uso_pot")},
-            {"etiqueta": "Tratamiento urbanístico",
+            {"etiqueta": "Tratamiento urbanístico", "atributo_clave": "tratamiento",
+             "valor_canonico": _valor_canonico("tratamiento"),
              "valor": _dato(urb.get("tratamiento")),
              "estado": _estado_urb("tratamiento"), "nota": _nota_urb("tratamiento")},
-            {"etiqueta": "Altura / edificabilidad",
+            {"etiqueta": "Altura / edificabilidad", "atributo_clave": "altura_normativa",
+             "valor_canonico": _valor_canonico("altura_normativa"),
              "valor": (f"Hasta {urb.get('altura_maxima')} pisos"
                        if _dato(urb.get("altura_maxima")) else None),
              "estado": _estado_urb("altura_maxima"), "nota": _nota_urb("altura_maxima")},
-            {"etiqueta": "Clase de suelo", "valor": _dato(urb.get("clase_suelo")),
+            {"etiqueta": "Clase de suelo", "atributo_clave": "clase_suelo",
+             "valor_canonico": _valor_canonico("clase_suelo"),
+             "valor": _dato(urb.get("clase_suelo")),
              "estado": _estado_atributo("clase_suelo", urb.get("clase_suelo")),
              "nota": (None if urb.get("clase_suelo") else
                       "La capa de clase de suelo no viene en las capas POT de esta corrida: "
                       "sin dato de fuente.")},
-            {"etiqueta": "Estrato", "valor": _dato(urb.get("estrato")),
+            {"etiqueta": "Estrato", "atributo_clave": "estrato",
+             "valor_canonico": _valor_canonico("estrato"),
+             "valor": _dato(urb.get("estrato")),
              "estado": _estado_atributo("estrato", urb.get("estrato")),
              "nota": _nota_atributo("estrato")},
-            {"etiqueta": "Barrio", "valor": _dato(urb.get("barrio")),
+            {"etiqueta": "Barrio", "atributo_clave": "barrio",
+             "valor_canonico": _valor_canonico("barrio"),
+             "valor": _dato(urb.get("barrio")),
              "estado": _estado_atributo("barrio", urb.get("barrio")),
              "nota": _nota_atributo("barrio")},
-            {"etiqueta": "Localidad / comuna", "valor": _dato(urb.get("localidad")),
+            {"etiqueta": "Localidad / comuna", "atributo_clave": "localidad",
+             "valor_canonico": _valor_canonico("localidad"),
+             "valor": _dato(urb.get("localidad")),
              "estado": _estado_atributo("localidad", urb.get("localidad")),
              "nota": _nota_atributo("localidad")},
         ]},
+        # ── RIESGOS (§17/§18/§19) ─────────────────────────────────────────────
+        # Cada fila declara su CLAVE CANÓNICA y el HECHO que la verdad única del atributo
+        # sostiene. Antes, la capa no evaluada se anunciaba como «NO EVALUADO» genérico
+        # (cajón general): ahora se nombra el estado propio —cobertura inexistente
+        # (`NOT_SUPPORTED`) o ausencia declarada (`SOURCE_UNAVAILABLE`)— y viaja su motivo.
         "riesgos": [
             {"tipo": "Inundación", "nivel": _dato(risk.get("inundacion")),
-             "implicacion": "La capa de inundación del POT no se evaluó en esta corrida: se "
-                            "declara NO EVALUADO, no «sin riesgo»."},
+             "atributo_clave": "inundacion", "estado_hecho": _hecho_riesgo("inundacion"),
+             "implicacion": _implicacion_riesgo(
+                 "inundacion",
+                 "La capa de inundación del POT no aportó dato en esta corrida: se declara "
+                 "la ausencia con su motivo, no «sin riesgo».")},
             {"tipo": "Remoción en masa / amenaza del POT",
              "nivel": _dato(risk.get("amenaza_remocion_masa")),
-             "implicacion": "Nivel de la capa oficial aplicable al polígono del predio."},
+             "atributo_clave": "remocion", "estado_hecho": _hecho_riesgo("remocion"),
+             "implicacion": _implicacion_riesgo(
+                 "remocion",
+                 "Nivel de la capa oficial aplicable al polígono del predio.")},
             {"tipo": "Riesgo no mitigable", "nivel": _dato(risk.get("riesgo_no_mitigable")),
-             "implicacion": "Un riesgo no mitigable condiciona el uso, la financiación y la "
-                            "póliza: se declara con la fuente que lo establece."},
+             "atributo_clave": "riesgo_no_mitigable",
+             "estado_hecho": _hecho_riesgo("riesgo_no_mitigable"),
+             "implicacion": _implicacion_riesgo(
+                 "riesgo_no_mitigable",
+                 "Un riesgo no mitigable condiciona el uso, la financiación y la póliza: se "
+                 "declara con la fuente que lo establece.")},
             {"tipo": "Otras amenazas declaradas", "nivel": _dato(risk.get("areas_en_riesgo")),
-             "implicacion": "Zonificación de riesgo del POT aplicable al predio."},
+             "atributo_clave": "riesgo", "estado_hecho": _hecho_riesgo("riesgo"),
+             "implicacion": _implicacion_riesgo(
+                 "riesgo",
+                 "Zonificación de riesgo del POT aplicable al predio.")},
         ],
         "entorno": {
             "categorias": [
@@ -959,6 +1199,9 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
             "fuentes_intentadas": poi.get("sources_attempted") or [],
             "consulta": poi.get("queried_at"),
             "total_items": poi.get("item_count"),
+            # Pares (etiqueta, valor): es el contrato que el render consume. La CLAVE
+            # canónica de cada fila viaja aparte, en `accesibilidad_atributos`, para poder
+            # auditar verdad↔impresión sin cambiar la forma que dibuja la página.
             "accesibilidad": [
                 ("Barrio / sector oficial", _dato(urb.get("barrio"))),
                 ("Localidad", _dato(urb.get("localidad"))),
@@ -966,6 +1209,13 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
                  (lambda c: f"{c['lat']:.5f}, {c['lon']:.5f}" if c.get("lat") else None)(
                      mc.get("coordinates") or {})),
                 ("Procedencia de la coordenada", _dato(mc.get("coordinate_source"))),
+            ],
+            "accesibilidad_atributos": [
+                ("Barrio / sector oficial", "barrio", _valor_canonico("barrio")),
+                ("Localidad", "localidad", _valor_canonico("localidad")),
+                ("Coordenada oficial", "coordenada",
+                 _valor_canonico("coordenada")),
+                ("Procedencia de la coordenada", "binding_geometria", None),
             ],
         },
         "solar": solar,
@@ -975,70 +1225,29 @@ def desde_estado(rs: Dict[str, Any], modelo: Dict[str, Any],
             # real (evidencias selladas de esta corrida). Es el mismo contrato que ya
             # exige la valoración: un hecho sin origen no puede imprimirse VERIFICADO.
             "origen": origen_identidad,
-            "filas": [
-                {"etiqueta": "Dirección oficial",
-                 "valor": (base_dir + (f" · {sufijo}" if sufijo else "")) if base_dir else None,
-                 "estado": _estado_atributo("direccion", base_dir, origen_identidad),
-                 "nota": _nota_atributo("direccion"),
-                 "origin": origen_identidad},
-                {"etiqueta": "Matrícula", "valor": pi.get("folio"),
-                 # §El certificado adjunto es lo que sostiene la matrícula: sin CTL la
-                 # fila NO puede decir VERIFICADO (antes era un literal incondicional).
-                 "estado": _estado_atributo(
-                     "matricula", pi.get("folio") if ts.get("certificado_adjuntado") else None,
-                     origen_identidad),
-                 "nota": (None if ts.get("certificado_adjuntado") else
-                          "Sin certificado de tradición y libertad adjunto en esta corrida."),
-                 "origin": origen_identidad},
-                {"etiqueta": "NUPRE", "valor": pi.get("nupre"),
-                 "estado": _estado_atributo("nupre", pi.get("nupre"), origen_identidad),
-                 "nota": _nota_atributo("nupre"),
-                 "origin": origen_identidad},
-                {"etiqueta": "Número predial", "valor": pi.get("codigo_catastral"),
-                 "estado": _estado_atributo("numero_predial", pi.get("codigo_catastral"),
-                                            origen_identidad),
-                 "nota": _nota_atributo("numero_predial"),
-                 "origin": origen_identidad},
-                {"etiqueta": "Unidad (torre / apartamento)", "valor": pi.get("unidad"),
-                 "estado": _estado_atributo("unidad", pi.get("unidad"), origen_identidad),
-                 "nota": _nota_atributo("unidad"),
-                 "origin": origen_identidad},
-                {"etiqueta": "Área", "valor": area_txt,
-                 "estado": _estado_atributo("area", urb.get("area"), origen_identidad),
-                 "nota": _nota_atributo(
-                     "area", None if urb.get("area") else "Sin área declarada en la entrada."),
-                 "origin": origen_identidad},
-                {"etiqueta": "Régimen jurídico", "valor": urb.get("condicion_juridica"),
-                 "estado": _estado_atributo("regimen_juridico", urb.get("condicion_juridica"),
-                                            origen_identidad),
-                 "nota": _nota_atributo("regimen_juridico"),
-                 "origin": origen_identidad},
-                {"etiqueta": "Uso (destino catastral)", "valor": urb.get("destino_economico"),
-                 "estado": _estado_atributo("destino_economico", urb.get("destino_economico"),
-                                            origen_identidad),
-                 "nota": _nota_atributo("destino_economico"),
-                 "origin": origen_identidad},
-                {"etiqueta": "Tipología",
-                 "valor": _valor_tipologia(),
-                 "estado": _estado_tipologia(),
-                 "nota": ("Inferida del régimen/condición registral: la fuente no declara la "
-                          "unidad física. Requiere validación."
-                          if _tipologia_inferida(mc, urb) else None),
-                 "origin": origen_identidad},
-            ],
+            "filas": filas_identidad,
             # §21: identidad y geometría son DOS conceptos; el binding se explica en
             # lenguaje llano en vez de imprimirse como contradicción.
-            "identidad_estado": ("VERIFICADA" if pi.get("identity_verified")
-                                 else "REQUIERE VALIDACIÓN"),
-            "identidad_detalle": ("Matrícula, NUPRE y número predial resueltos y ligados "
-                                  f"entre sí ({_v(pi.get('resolution_method'))})."),
+            # (BLOCK 1 · §10) El resumen «identidad» se DERIVA de su ALCANCE DECLARADO y de
+            # los estados REALES de sus componentes: antes leía una segunda verdad
+            # (`property_identity.identity_verified`) que ninguna ruta confrontaba con las
+            # filas, de modo que la página podía decir «VERIFICADA» con ocho componentes
+            # degradados en la misma página. Ahora, si un componente de su alcance
+            # declarado no está verificado, el resumen se DEGRADA («REQUIERE VALIDACIÓN») y
+            # el motivo nombra el componente.
+            "identidad_resumen": _identidad_resumen,
+            "identidad_estado": _identidad_resumen["estado"],
+            "identidad_detalle": _identidad_resumen["motivo"],
+            "identidad_alcance": _identidad_resumen["alcance_declarado"],
+            "identidad_regla": _identidad_resumen["regla"],
             # (C) La etiqueta nombra el ATRIBUTO EXACTO que el estado describe: el
-            # BINDING de la geometría oficial contra la identidad canónica. NO es el
-            # valor de la coordenada (atributo `coordenada`, con su propio estado en P4).
+            # alcance del binding de la geometría oficial (identificadores vs geometría).
+            # §11: un binding de IDENTIFICADORES no se rotula como binding de geometría.
             "geometria_atributo": ATRIBUTO_GEOMETRIA_BINDING,
-            "geometria_etiqueta": "Binding de la geometría oficial",
-            "geometria_estado": _geometria_estado(mc),
-            "geometria_detalle": _geometria_detalle(mc),
+            "geometria_etiqueta": _binding_geom["etiqueta"],
+            "geometria_estado": _binding_geom["estado"],
+            "geometria_detalle": _binding_geom["detalle"],
+            "geometria_binding": _binding_geom,
         },
         # §32/§33 · ESTIMACIÓN ECONÓMICA (Fase 3): la salida del motor, con su contrato
         # de impresión para la P1 y la P6. Es un hecho DISTINTO del estado de valoración

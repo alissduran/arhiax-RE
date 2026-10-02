@@ -130,12 +130,18 @@ class TestPagina6Presupuesto(unittest.TestCase):
             if len(valor) >= 12:
                 self.assertIn(" ".join(valor.split())[:12], p6,
                               f"fila de identidad ausente en la página 6: {fila}")
-        self.assertIn("Identidad registral y catastral: VERIFICADA", p6)
+        # BLOCK 1 · §10/§11: el resumen de identidad se DERIVA de sus componentes (aquí
+        # degradados por su origen no habilitante ⇒ REQUIERE VALIDACIÓN) y el binding
+        # declara su alcance: con alcance de identificadores NO se rotula como binding de
+        # la geometría VERIFICADO.
+        self.assertIn("Identidad registral y catastral:", p6)
+        self.assertIn("Binding de la identidad canónica del predio", p6)
+        self.assertNotIn("Binding de la geometría oficial: VERIFICADA", p6)
         # (C) Doctrina ACTUALIZADA: la P6 nombra el atributo exacto que su estado
         # describe («Binding de la geometría oficial»), no «Geometría oficial» a secas,
         # que se leía como una afirmación sobre el VALOR de la coordenada —atributo
         # distinto y en conflicto histórico, con su propio estado en la P4—.
-        self.assertIn("Binding de la geometría oficial: VERIFICADA", p6)
+        self.assertIn("IDENTIFICADORES", p6)
         self.assertNotIn("Geometría oficial: VERIFICADA", p6)
         self.assertIn("DECISIÓN DICTUS: INFORMACIÓN VERIFICADA", p6)
         # (A) El estado de la compuerta viaja junto a su decisión, en las dos ramas.

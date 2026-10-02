@@ -59,10 +59,21 @@ def _inv_identity_conflict_no_assert(ctx: Dict[str, Any]) -> Tuple[bool, str]:
 
 
 def _inv_norecord_no_evaluado(ctx: Dict[str, Any]) -> Tuple[bool, str]:
-    """NO_RECORD no puede presentarse como 'EVALUADO EN VIVO'."""
+    """NO_RECORD no puede presentarse como 'EVALUADO EN VIVO'.
+
+    BLOCK 1 · §17: `evaluado` significa «se cruzó la geometría contra las capas del POT y
+    hubo veredicto espacial», NO «se consultó en vivo». El invariante se aplica a su
+    enunciado literal (EVALUADO **EN VIVO**): si el evaluador declara que su modo es
+    EMPAQUETADO (`PACKAGED_*`, p. ej. `PACKAGED_GEOMETRY_QUERY` de las capas POT del
+    repositorio), no hay ninguna afirmación de consulta en vivo que desmentir. Un modo
+    no declarado cuenta como vivo (la comprobación NO se debilita para Pasto/Bogotá/
+    Medellín, cuyas capas sí se consultan en vivo y no declaran `modo`).
+    """
     cid = ctx.get("canonical_identity") or {}
     geo = ctx.get("geo_eval") or {}
-    if cid.get("estado") == "NO_RECORD" and geo.get("evaluado") is True:
+    modo = str(geo.get("modo") or "").upper()
+    evaluado_como_vivo = geo.get("evaluado") is True and "PACKAGED" not in modo
+    if cid.get("estado") == "NO_RECORD" and evaluado_como_vivo:
         return False, "sin predio resuelto (NO_RECORD) pero geo_eval se marca EVALUADO en vivo"
     return True, "coherencia entre identidad resuelta y estado de evaluacion geoespacial"
 

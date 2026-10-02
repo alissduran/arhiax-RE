@@ -405,8 +405,32 @@ class TestSinPerdidaMaterial(unittest.TestCase):
         rótulo vigente nombra ese atributo y deja de fabricar la contradicción.
         """
         p6 = self.paginas[5]
-        self.assertIn("Identidad registral y catastral: VERIFICADA", p6)
-        self.assertIn("Binding de la geometría oficial: VERIFICADA", p6)
+        # BLOCK 1 · §10/§11 — DOS REGLAS QUE ESTA PRUEBA FIJA AHORA:
+        #
+        #  · el resumen «Identidad registral y catastral» se DERIVA de los estados REALES
+        #    de sus componentes (antes leía `identity_verified` por su cuenta y podía
+        #    decir VERIFICADA con filas degradadas en la misma página). En este fixture
+        #    las filas se degradan por su ORIGEN no habilitante, así que el resumen dice
+        #    REQUIERE VALIDACIÓN: lo que se exige es que la ETIQUETA esté y que su estado
+        #    NO contradiga a las filas;
+        #  · el binding de la geometría declara su ALCANCE: con alcance de identificadores
+        #    (o sin binding comparable) NO se rotula «Binding de la geometría oficial:
+        #    VERIFICADA» — un binding de identificadores no acredita la geometría.
+        self.assertIn("Identidad registral y catastral:", p6)
+        resumen = (self.secciones.get("identidad") or {}).get("identidad_resumen") or {}
+        self.assertIn(f"Identidad registral y catastral: {resumen['estado']}", p6)
+        for componente in resumen.get("alcance_declarado") or []:
+            if resumen["estado"].startswith("VERIFICADA"):
+                self.assertEqual(resumen["componentes_del_alcance"].get(componente),
+                                 "VERIFICADO", componente)
+            else:
+                self.assertNotEqual(resumen["componentes_del_alcance"].get(componente),
+                                    "VERIFICADO", componente)
+        self.assertIn("identidad canónica del predio", p6)
+        self.assertIn("IDENTIFICADORES", p6)
+        self.assertNotIn("Binding de la geometría oficial: VERIFICADA", p6,
+                         "un binding de identificadores no puede rotularse como binding de "
+                         "geometría VERIFICADO (§11)")
         self.assertNotIn("Geometría oficial: VERIFICADA", p6,
                          "el rótulo ambiguo (que se lee como el valor de la coordenada) "
                          "no debe volver")

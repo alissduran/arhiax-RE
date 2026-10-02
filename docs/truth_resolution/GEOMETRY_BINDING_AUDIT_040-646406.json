@@ -1,0 +1,307 @@
+{
+ "audit_version": "arhiax-truth-resolution/geometry-binding-audit/2.0.0",
+ "audit": "BLOCK 1 · CORRECCIÓN — el binding declara su ALCANCE y deja de rotularse como binding de geometría cuando solo acredita identificadores.",
+ "case": {
+  "fmi": "040-646406",
+  "nupre": "AFT0005BOHA",
+  "numero_predial": "080010103000010040001908040002",
+  "sujeto": "TRANSVERSAL 43 100 50, Torre 8, Apartamento 430 (unidad en propiedad horizontal)"
+ },
+ "measured_from": {
+  "run_id": "137017a8-9d80-4c5b-9eae-957118c3e19a",
+  "dictus_id": "DX-040-646406-20261002",
+  "generated_at": "2026-10-02T16:55:59.367003+00:00",
+  "master_hash": "c790a8f20f3efdf8108ec9cea55aa986eaf7df6cc7090f787dd3132e2c0af3f0",
+  "run_state_version": "dictus-run-state/1.0.0",
+  "master_manifest_version": "dictus-master-manifest/1.2.0",
+  "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+  "run_state_sha256": "0b4f5068e89a8cb7a58e037d0ce873e746a38be067c5b4603c0978bc19b0d90a"
+ },
+ "adopted_geometry": {
+  "coordinate_source": "OFFICIAL_PREDIO",
+  "coordinate_scope": "geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación",
+  "provenance": {
+   "source_system": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
+   "layer": "105 · direccion",
+   "feature_id": "6c663607-5509-401f-b57d-384d2beeeac1",
+   "feature_id_kind": "cr_predio_guid",
+   "geometry_type": "Point",
+   "resolution_method": "DIRECCION_OFICIAL_LIGADA_POR_GUID",
+   "predio_globalid": "6c663607-5509-401f-b57d-384d2beeeac1",
+   "numero_predial": "080010103000010040001908040002",
+   "nupre": "AFT0005BOHA",
+   "direccion_origen": "Transversal 43 # 100-50 TO 8 AP 430",
+   "link_verificado": true,
+   "canonical_binding_status": "VERIFIED",
+   "canonical_binding_fields": [
+    "nupre",
+    "numero_predial"
+   ],
+   "canonical_binding_scope": "NATIONAL_IDENTIFIERS",
+   "canonical_binding_detail": {
+    "nupre": {
+     "canonical": "AFT0005BOHA",
+     "predio": [
+      "AFT0005BOHA",
+      "AFT0005BOHA"
+     ],
+     "comparable": true
+    },
+    "numero_predial": {
+     "canonical": "080010103000010040001908040002",
+     "predio": [
+      "080010103000010040001908040002",
+      "080010103000010040001908040002"
+     ],
+     "comparable": true
+    }
+   }
+  },
+  "categoria_declarada": "PUNTO_OFICIAL_DE_DIRECCION",
+  "es_geometria_del_predio": false
+ },
+ "geometry_candidate_matrix": [
+  {
+   "candidate": "OFFICIAL_PREDIO",
+   "what_it_is_in_code": "Etiqueta de coordenada que api/market_context.py concede cuando evaluar_geometria_oficial_predio() devuelve eligible=true tras los 8 criterios H-1 + 03I.2B-A. NO es una geometría: es un POINT tomado de la capa de DIRECCIONES.",
+   "present_in_run": true,
+   "adopted": true,
+   "evidence": "coordinate_source='OFFICIAL_PREDIO', coordinate_source_verified=true, provenance.layer='105 · direccion', geometry_type='Point'",
+   "geometry_kind_actually_obtained": "Point (punto de dirección), no polígono del predio",
+   "usable_as_predio_geometry": false
+  },
+  {
+   "candidate": "OFFICIAL_ADOPTION_REGISTRY",
+   "what_it_is_in_code": "Origen declarado por api/barranquilla_adopcion.py: 'identity_source': 'OFFICIAL_ADOPTION_REGISTRY'. Fuente del pack: CATASTRO_BAQ_ADOPCION_ANEXO1, acquisition_mode='AUTHORIZED_FALLBACK', snapshot kind='PACKAGED_REGISTRY', ruta 'api/data/barranquilla_adopcion_anexo1.json', sha256 'eafc828c45be83c55969114fb9b789d876254d96a13e46d209315c0661ee23a3', vigencia VIGENTE (límite 2026-12-19), consulta 'REGISTRO_POR_IDENTIFICADOR', acquisition_snapshot.atributos=['identidad_nupre'].",
+   "present_in_run": false,
+   "adopted": false,
+   "evidence": "property_identity.identity_source = null (medido en RunState y en manifest.modelo.canonical_property_identity). No se cargó ningún registro de adopción para este caso.",
+   "geometry_kind_actually_obtained": "NINGUNA — el registro declara expected_fields ['numero_predial','codigo_homologado','fmi','codigo_registral'] y geometry_type 'No aplica (registro tabla…)': aporta IDENTIDAD, no geometría.",
+   "usable_as_predio_geometry": false,
+   "key_finding": "El rótulo 'OFFICIAL_ADOPTION_REGISTRY' NO es una fuente de geometría del predio. Aun si se hubiese cargado, no habría aportado polígono."
+  },
+  {
+   "candidate": "OFFICIAL_ADOPTION_ADDRESS_GEOCODE",
+   "what_it_is_in_code": "Segunda ruta de market_context.resolve_market_location (líneas 1023-1038): si el registro de adopción aporta una dirección, esa dirección se GEOCODIFICA (Nominatim/OSM, geocoder_source='NOMINATIM/OSM') y la coordenada resultante se etiqueta OFFICIAL_ADOPTION_ADDRESS_GEOCODE con geometry_type='Point', resolution_method='GEOCODE_DIRECCION_OFICIAL_DE_ADOPCION' y link_verificado=None.",
+   "present_in_run": false,
+   "adopted": false,
+   "evidence": "La ruta exige canonical_identity.identity_source == 'OFFICIAL_ADOPTION_REGISTRY'. Medido: identity_source=null; market_context.authoritative_address=null; market_context.address_source=null; market_context.geocoder_source=null; market_context.geocoder_confidence=null.",
+   "geometry_kind_actually_obtained": "NINGUNA",
+   "usable_as_predio_geometry": false,
+   "key_finding": "Aunque estuviera activa, esta ruta produce un GEOCODE DE DIRECCIÓN, que por definición del propio código viaja con link_verificado=None y no es la geometría oficial del predio. Aceptarla como equivalente sería exactamente la escalada de procedencia que market_context documenta como prohibida ('una coordenada preexistente NO se reetiqueta como oficial')."
+  },
+  {
+   "candidate": "CATASTRO_BAQ_PREDIO (capa 100 'Predio')",
+   "what_it_is_in_code": "Fuente del escalón 'identidad_nupre' y 'predio' en api/source_resolution.py (source_priority 20 y 10, binding_fields ['numero_predial_nacional','codigo_homologado','globalid']).",
+   "present_in_run": false,
+   "adopted": false,
+   "geometry_kind_actually_obtained": "NINGUNA — el registro declara geometry_type 'esriGeometryNull (tabla)' y layer_name 'Predio (tabla de atributos, sin geometría)'.",
+   "usable_as_predio_geometry": false,
+   "key_finding": "HALLAZGO DECISIVO: en el Source Pack de Barranquilla la capa del PREDIO es una TABLA SIN GEOMETRÍA. No existe en el pack, tal como está declarado, una fuente que entregue el polígono catastral del predio por numero_predial/NUPRE."
+  },
+  {
+   "candidate": "CATASTRO_BAQ_TERRENO (capa 315 'Terreno')",
+   "what_it_is_in_code": "Fuente declarada del escalón 'predio' (source_priority 20, junto a CATASTRO_BAQ_MANZANA prio 40). Presente en el pack con geometry_type 'esriGeometryPolygon'.",
+   "present_in_run": false,
+   "adopted": false,
+   "evidence": "El RunState no declara provenance alguna que apunte a la capa 315; el único layer citado es '105 · direccion'.",
+   "geometry_kind_actually_obtained": "NINGUNA en esta corrida",
+   "usable_as_predio_geometry": "POTENCIALMENTE SÍ — es el único candidato del pack con polígono y relación catastral con el predio. No fue usado y NO está declarado en la escalera de geometría de api/market_context.py (PREDIO_ORIGENES_ELEGIBLES solo admite 'DIRECCION_OFICIAL_LIGADA_AL_PREDIO' y 'GEOMETRIA_OFICIAL_PREDIO')."
+  }
+ ],
+ "which_geometry_corresponds_to_the_subject": {
+  "determination": "La geometría que la corrida ADOPTA corresponde al PREDIO identificado por el número predial y el NUPRE, por RELACIÓN OFICIAL declarada por la propia fuente: feature_id_kind='cr_predio_guid' con feature_id == predio_globalid == '6c663607-5509-401f-b57d-384d2beeeac1'. El criterio 3 de api/market_context.evaluar_geometria_oficial_predio exige precisamente esa triple igualdad para el origen 'DIRECCION_OFICIAL_LIGADA_AL_PREDIO', y se cumple.",
+  "what_the_relation_proves": "Que el punto pertenece al REGISTRO DE DIRECCIÓN cuya clave foránea apunta al predio 080010103000010040001908040002 / AFT0005BOHA. Es decir: identifica al PREDIO, no a la unidad privada.",
+  "what_the_relation_does_not_prove": [
+   "Que el punto esté DENTRO del polígono del predio (no hay polígono con el que comprobarlo).",
+   "Que el punto corresponda a la Torre 8 / Apartamento 430: es un punto de la capa 105 · direccion, y el propio artefacto lo declara en coordinate_scope.",
+   "Que la geometría sea la del LOTE o EDIFICIO: la capa usada no es la de terreno (315) ni la de construcción (310)."
+  ],
+  "official_relations_available_and_not_persisted": {
+   "declared_by_the_used_layer": "CATASTRO_BAQ_DIRECCION declara expected_fields con TRES relaciones oficiales: 'cr_predio_guid', 'cr_construccion_guid', 'cr_terreno_guid' (además de numero_predio, codigo_postal, nombre_predio).",
+   "persisted_in_the_run": [
+    "cr_predio_guid (como predio_globalid)"
+   ],
+   "not_persisted": [
+    "cr_construccion_guid",
+    "cr_terreno_guid"
+   ],
+   "consequence": "Las dos relaciones que podrían anclar la geometría al EDIFICIO y al TERRENO —es decir a la unidad física y al lote— no viajan en el artefacto. Sin ellas no se puede verificar ni el edificio ni el terreno del sujeto, y por tanto no se puede cerrar un binding geométrico a nivel de unidad."
+  },
+  "address_geocode_is_not_the_predio_geometry": {
+   "statement": "Un geocode de dirección NO se acepta como equivalente a la geometría oficial del predio.",
+   "grounds": [
+    "El propio motor lo separa en dos etiquetas y dos escalones distintos de la allowlist: OFFICIAL_PREDIO (geometría oficial del predio) frente a OFFICIAL_ADOPTION_ADDRESS_GEOCODE y CTL_ADDRESS_GEOCODE (geocodes de dirección). Medido en api/market_context.py:439-453.",
+    "La ruta de geocode declara link_verificado=None y resolution_method='GEOCODE_DIRECCION_OFICIAL_DE_ADOPCION': no hay vínculo verificado entre el punto geocodificado y el predio.",
+    "La ruta de geocode resuelve con un proveedor EXTERNO (geocoder_source='NOMINATIM/OSM'), no con una relación oficial del catastro.",
+    "El docstring del módulo lo declara: 'una coordenada preexistente NO se reetiqueta como oficial'."
+   ]
+  }
+ },
+ "why_the_printed_VERIFIED_is_not_a_geometric_VERIFIED": {
+  "printed": "Binding de la geometría oficial: VERIFICADA (P6)",
+  "what_the_computation_actually_does": "api/market_context._evaluar_binding_canonico compara SOLO cadenas de identificadores: nupre (espacio nacional), numero_predial (espacio nacional) y, cuando existe, clave municipal. Mide igualdad de STRINGS entre canonical_identity y el registro del predio (y la coherencia interna registro↔procedencia). NO lee ni compara coordenadas, puntos, polígonos, áreas ni topología.",
+  "scopes_possible": {
+   "NATIONAL_IDENTIFIERS": "cubre nupre/numero_predial",
+   "MUNICIPAL_KEY": "cubre clave municipal",
+   "NONE": "nada comparable ⇒ NOT_COMPARABLE (que NO es verificación)"
+  },
+  "scope_obtained": "NATIONAL_IDENTIFIERS con fields ['nupre','numero_predial']",
+  "measured_detail": {
+   "nupre": {
+    "canonical": "AFT0005BOHA",
+    "predio": [
+     "AFT0005BOHA",
+     "AFT0005BOHA"
+    ],
+    "comparable": true
+   },
+   "numero_predial": {
+    "canonical": "080010103000010040001908040002",
+    "predio": [
+     "080010103000010040001908040002",
+     "080010103000010040001908040002"
+    ],
+    "comparable": true
+   }
+  },
+  "conclusion": "El binding VERIFIED acreditado es un binding de IDENTIDAD DE PREDIO (mismo predio en los dos lados), no un binding GEOMÉTRICO (esta geometría es la del predio). La etiqueta impresa no distingue los dos alcances; el detalle impreso sí lo matiza mediante coordinate_scope."
+ },
+ "what_is_missing_for_a_VERIFIED_geometry_binding": {
+  "target_definition": "Un binding VERIFIED en sentido geométrico sería: la geometría oficial del predio (polígono del lote/edificio identificado por numero_predial 080010103000010040001908040002 y NUPRE AFT0005BOHA) adoptada en la corrida, con relación oficial verificada al sujeto y comparación geométrica contra esa identidad (punto dentro del polígono, y polígono coincidente con el del registro).",
+  "missing": [
+   {
+    "n": 1,
+    "faltante": "POLÍGONO OFICIAL DEL PREDIO",
+    "detalle": "La corrida solo obtuvo un POINT de la capa 105 · direccion (CATASTRO_BAQ_DIRECCION, esriGeometryPoint). No hay polígono del predio en el artefacto.",
+    "por_que_falta": "CATASTRO_BAQ_PREDIO (capa 100) está declarada en el propio pack como 'esriGeometryNull (tabla)' — 'Predio (tabla de atributos, sin geometría)'. El único candidato con polígono y relación catastral es CATASTRO_BAQ_TERRENO (capa 315) y no fue usado ni está en PREDIO_ORIGENES_ELEGIBLES.",
+    "resoluble_sin_cambiar_el_motor": false,
+    "requiere": "adquirir y adoptar la capa de terreno/construcción con su relación oficial, y declarar el escalón correspondiente"
+   },
+   {
+    "n": 2,
+    "faltante": "COMPARACIÓN GEOMÉTRICA (no de cadenas)",
+    "detalle": "_evaluar_binding_canonico solo compara strings. Un binding geométrico VERIFIED exige comprobar que la geometría cae dentro del predio identificado por numero_predial/NUPRE, o que el polígono adoptado COINCIDE con el del registro canónico.",
+    "resoluble_sin_cambiar_el_motor": false,
+    "requiere": "una función de comparación geométrica y su criterio de tolerancia declarado"
+   },
+   {
+    "n": 3,
+    "faltante": "REGISTRO DE ADOPCIÓN CATASTRAL (OFFICIAL_ADOPTION_REGISTRY)",
+    "detalle": "No se cargó: property_identity.identity_source = null. Y su contenido declarado (numero_predial, codigo_homologado, fmi, codigo_registral) es de IDENTIDAD, no de geometría.",
+    "resoluble_sin_cambiar_el_motor": true,
+    "requiere": "cargar api/data/barranquilla_adopcion_anexo1.json (sha256 eafc828c…23a3, vigencia VIGENTE límite 2026-12-19) — pero NO basta para geometría"
+   },
+   {
+    "n": 4,
+    "faltante": "SEGUNDA GEOMETRÍA INDEPENDIENTE PARA CONTRASTE",
+    "detalle": "Solo hay UNA geometría en la corrida (el punto adoptado). Sin un segundo objeto no hay comparación posible: la ruta OFFICIAL_ADOPTION_ADDRESS_GEOCODE no se activó y no produjo geocode.",
+    "resoluble_sin_cambiar_el_motor": false
+   },
+   {
+    "n": 5,
+    "faltante": "RELACIONES OFICIALES A CONSTRUCCIÓN Y TERRENO",
+    "detalle": "CATASTRO_BAQ_DIRECCION declara cr_predio_guid, cr_construccion_guid y cr_terreno_guid. La corrida persiste SOLO el predio_globalid: no hay anclaje al EDIFICIO (construcción) ni al LOTE (terreno).",
+    "resoluble_sin_cambiar_el_motor": true,
+    "requiere": "persistir y usar cr_construccion_guid y cr_terreno_guid"
+   },
+   {
+    "n": 6,
+    "faltante": "GEOMETRÍA DE LA UNIDAD PRIVADA (Torre 8 / Apartamento 430)",
+    "detalle": "El sujeto auditado es una unidad en propiedad horizontal. El propio coordinate_scope lo declara: 'NO acredita la posición del apartamento dentro de la edificación'. Ningún objeto del artefacto representa la unidad.",
+    "resoluble_sin_cambiar_el_motor": false,
+    "requiere": "una fuente de geometría de unidad privada, que el pack no declara"
+   },
+   {
+    "n": 7,
+    "faltante": "CRS/EPSG DECLARADO Y SNAPSHOT CRUDO DE LA CAPA 105",
+    "detalle": "El artefacto no declara EPSG/CRS. Y la fuente de la que salió el punto (CATASTRO_BAQ_DIRECCION) declara acquisition_snapshot=null: no hay crudo persistido con sha256. El único capture_file del vecindario (docs/source_pack/raw/golden/catastro_baq_predio.json) está declarado DESCARTADO por el propio pack: 'Es un fixture escrito por una prueba, NO una respuesta de servicio: usarlo como evidencia sería fabricar el dato'.",
+    "resoluble_sin_cambiar_el_motor": true
+   },
+   {
+    "n": 8,
+    "faltante": "VERIFICACIÓN INDEPENDIENTE DEL VÍNCULO EFECTIVO DEL PUNTO",
+    "detalle": "link_verificado=true es lo que declaró el PRODUCTOR. No se persiste evidencia del cotejo independiente del GUID contra la respuesta del servicio.",
+    "resoluble_sin_cambiar_el_motor": true
+   }
+  ],
+  "minimum_set_to_close": "Un VERIFIED geométrico requiere al menos: (2) una comparación geométrica con criterio declarado, (1) el polígono oficial del predio (o del terreno) con su relación oficial verificada, y (4) un segundo objeto geométrico independiente para el contraste. Sin (1) y (2) no hay binding geométrico posible: solo hay coincidencia de identificadores."
+ },
+ "historical_state_of_this_binding": {
+  "binary": "NO_COMPARABLE",
+  "artifact": "docs/forensics/040-646406/dictus_2b/DICTUS_2.0B_TEXTO_EJECUTIVO_040-646406.txt",
+  "corrida": "DX-040-646406-20260925 (master_hash 1B8484A8A675…5417)",
+  "literal": "«Geometría oficial del predio y binding predio ↔ identidad canónica: NO_COMPARABLE. Detalle geodésico y CRS en el Anexo F.»",
+  "root_cause_documented_by_the_repo": "docs/forensics/040-646406/dictus_2c/ENTREGA_2.0C.md, tabla «DEL ESTADO, no en el motor»: «Geometría · procedencia de la coordenada oficial, alcance de esa geometría y binding canónico (VERIFIED) — el modelo buscaba las coordenadas dentro del contexto administrativo, donde nunca estuvieron ⇒ la página 6 decía «NO_COMPARABLE» mientras el técnico decía binding='VERIFIED'».",
+  "classification": "MODEL_MAPPING_FAILURE",
+  "mechanism_in_code": "api/dictus_secciones.py:404 — `binding = str(mc.get('canonical_binding_status') or 'NO_COMPARABLE').upper()`: si `market_context` no entra al contexto del modelo, la clave está ausente y se aplica el default negativo NO_COMPARABLE. Y api/dictus_decision.py:430-431 degrada además la observación a NO_EVALUADO cuando el binding no es VERIFIED ni MISMATCH.",
+  "current_state": "En la corrida medida (DX-040-646406-20261001) market_context.canonical_binding_status='VERIFIED' está presente tanto en el RunState como en manifest.modelo.market_context, y P6 imprime 'VERIFICADA': el síntoma NO_COMPARABLE no se reproduce en el PDF del Golden."
+ },
+ "verdict": {
+  "audit_baseline_verdict": {
+   "audit_baseline_verdict": {
+    "audit_baseline_verdict": {
+     "audit_baseline_verdict": {
+      "printed_binding": "VERIFICADA",
+      "binding_nature": "IDENTIFICADOR (scope NATIONAL_IDENTIFIERS: nupre, numero_predial)",
+      "geometric_binding": "NO VERIFICADO — falta la geometría del predio y la comparación geométrica",
+      "symptom_NO_COMPARABLE_in_measured_artifact": "NO se reproduce en el PDF DX-040-646406-20261001; SÍ en el TXT 2.0B DX-040-646406-20260925 del mismo directorio, con causa raíz documentada y clasificada como MODEL_MAPPING_FAILURE",
+      "what_is_needed": "Ver §what_is_missing_for_a_VERIFIED_geometry_binding — mínimo: polígono oficial del predio/terreno + comparación geométrica con criterio declarado + segunda geometría independiente de contraste",
+      "honest_statement_to_print": "«La geometría oficial del PREDIO coincide con la identidad canónica (nupre, numero_predial) — scope NATIONAL_IDENTIFIERS». Decir «binding de la geometría oficial: VERIFICADA» sin calificar el alcance atribuye a la GEOMETRÍA una verificación que se hizo sobre IDENTIFICADORES."
+     },
+     "rotulo_vigente": "Binding de la identidad canónica del predio (NO es la geometría del predio: el alcance declarado es el de IDENTIFICADORES)",
+     "estado_vigente": "IDENTIFICADORES",
+     "fact_status": "KNOWN_BUT_UNVERIFIED",
+     "resolution_status": "UNRESOLVED",
+     "motivo": "Geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación. Fuente: OFFICIAL_PREDIO. El binding acreditado compara solo CADENAS de identificadores (nupre, numero_predial); su alcance declarado es `NATIONAL_IDENTIFIERS`. Un binding de identificadores NO acredita que esta geometría sea la del predio: por eso NO se rotula como binding de geometría. Geometría adoptada: La geometría adoptada es un PUNTO de la capa de DIRECCIÓN (105 · direccion): se ligó al predio por `cr_predio_guid` (6c663607-5509-401f-b57d-384d2beeeac1), no es el polígono del pr"
+    },
+    "rotulo_vigente": "Binding de la identidad canónica del predio (NO es la geometría del predio: el alcance declarado es el de IDENTIFICADORES)",
+    "estado_vigente": "IDENTIFICADORES",
+    "fact_status": "KNOWN_BUT_UNVERIFIED",
+    "resolution_status": "UNRESOLVED",
+    "motivo": "Geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación. Fuente: OFFICIAL_PREDIO. El binding acreditado compara solo CADENAS de identificadores (nupre, numero_predial); su alcance declarado es `NATIONAL_IDENTIFIERS`. Un binding de identificadores NO acredita que esta geometría sea la del predio: por eso NO se rotula como binding de geometría. Geometría adoptada: La geometría adoptada es un PUNTO de la capa de DIRECCIÓN (105 · direccion): se ligó al predio por `cr_predio_guid` (6c663607-5509-401f-b57d-384d2beeeac1), no es el polígono del pr"
+   },
+   "rotulo_vigente": "Binding de la identidad canónica del predio (NO es la geometría del predio: el alcance declarado es el de IDENTIFICADORES)",
+   "estado_vigente": "IDENTIFICADORES",
+   "fact_status": "KNOWN_BUT_UNVERIFIED",
+   "resolution_status": "UNRESOLVED",
+   "motivo": "Geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación. Fuente: OFFICIAL_PREDIO. El binding acreditado compara solo CADENAS de identificadores (nupre, numero_predial); su alcance declarado es `NATIONAL_IDENTIFIERS`. Un binding de identificadores NO acredita que esta geometría sea la del predio: por eso NO se rotula como binding de geometría. Geometría adoptada: La geometría adoptada es un PUNTO de la capa de DIRECCIÓN (105 · direccion): se ligó al predio por `cr_predio_guid` (6c663607-5509-401f-b57d-384d2beeeac1), no es el polígono del pr"
+  },
+  "rotulo_vigente": "Binding de la identidad canónica del predio (NO es la geometría del predio: el alcance declarado es el de IDENTIFICADORES)",
+  "estado_vigente": "IDENTIFICADORES",
+  "fact_status": "KNOWN_BUT_UNVERIFIED",
+  "resolution_status": "UNRESOLVED",
+  "motivo": "Geometría oficial del PREDIO (lote/edificio): NO acredita la posición del apartamento dentro de la edificación. Fuente: OFFICIAL_PREDIO. El binding acreditado compara solo CADENAS de identificadores (nupre, numero_predial); su alcance declarado es `NATIONAL_IDENTIFIERS`. Un binding de identificadores NO acredita que esta geometría sea la del predio: por eso NO se rotula como binding de geometría. Geometría adoptada: La geometría adoptada es un PUNTO de la capa de DIRECCIÓN (105 · direccion): se ligó al predio por `cr_predio_guid` (6c663607-5509-401f-b57d-384d2beeeac1), no es el polígono del pr"
+ },
+ "implemented": {
+  "clasificador": "api/attribute_truth.clasificar_procedencia_geometrica",
+  "binding": "api/attribute_truth.binding_geometria",
+  "etiqueta_impresa": "Binding de la identidad canónica del predio (NO es la geometría del predio: el alcance declarado es el de IDENTIFICADORES)",
+  "estado_impreso": "IDENTIFICADORES",
+  "es_binding_geometrico": false,
+  "regla_geocode": "un GEOCODE de dirección NUNCA se clasifica como OFFICIAL_PREDIO (ni con `coordinate_source_verified=true`)",
+  "faltantes_declarados": [
+   "El POLÍGONO oficial del predio: la corrida solo tiene un `Point` y la capa del predio (`CATASTRO_BAQ_PREDIO`, capa 100) se declara `esriGeometryNull` (tabla de atributos, sin geometría) en el Source Pack.",
+   "Una COMPARACIÓN GEOMÉTRICA con criterio de tolerancia declarado (que la geometría caiga dentro del predio identificado por `numero_predial`/NUPRE): el binding actual compara solo CADENAS de identificadores.",
+   "Una SEGUNDA geometría INDEPENDIENTE de contraste: hoy hay una sola.",
+   "Las relaciones oficiales a construcción y terreno: la capa 105 · direccion declara `cr_construccion_guid` y `cr_terreno_guid`, y la corrida persiste solo `predio_globalid`.",
+   "La geometría de la UNIDAD privada (torre/apartamento), que el pack no declara.",
+   "El CRS/EPSG declarado y el crudo de la capa 105: `CATASTRO_BAQ_DIRECCION` no declara `acquisition_snapshot`.",
+   "Verificación independiente del vínculo: hoy `link_verificado` es declaración del productor.",
+   "Una fuente geométrica distinta del punto de dirección (`OFFICIAL_ADOPTION_REGISTRY` no aporta geometría: `geometry_type` «No aplica»; `OFFICIAL_ADOPTION_ADDRESS_GEOCODE` aporta un GEOCODE de dirección, que NUNCA equivale a geometría oficial del predio)."
+  ],
+  "persistido_en": "attribute_resolution.attributes.binding_geometria = KNOWN_BUT_UNVERIFIED"
+ },
+ "post_correction": {
+  "measured_from_run": {
+   "run_id": "137017a8-9d80-4c5b-9eae-957118c3e19a",
+   "dictus_id": "DX-040-646406-20261002",
+   "generated_at": "2026-10-02T16:55:59.367003+00:00",
+   "master_hash": "c790a8f20f3efdf8108ec9cea55aa986eaf7df6cc7090f787dd3132e2c0af3f0",
+   "run_state_version": "dictus-run-state/1.0.0",
+   "master_manifest_version": "dictus-master-manifest/1.2.0",
+   "executive_pdf_sha256": "3893e9225167d8b3737ff68189f896bb125eeb48975ca976801038ce4e4f6d12",
+   "run_state_sha256": "0b4f5068e89a8cb7a58e037d0ce873e746a38be067c5b4603c0978bc19b0d90a"
+  }
+ }
+}
