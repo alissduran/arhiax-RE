@@ -396,11 +396,22 @@ scripts docs public`) el mismo test **falla idéntico** (`1 failed`, exit 1) ant
 
 ### 12.3 Verificación post-commit (re-ejecución de las suites bloqueantes)
 
-Ejecutada **después de los 3 commits**, sobre el árbol versionado: mismo
-`true_conflict_count = 2`, mismas `true_conflict_attributes = ["altura_maxima","coordenada"]`,
-mismo resultado semántico del PDF (misma línea de la página 1), `golden_evidence_asserts` 11/11
-PASS, exit 0 en las cuatro suites. Sin cambios de artefactos: los `sha256` del índice siguen
-coincidiendo.
+Ejecutada **después de los commits**, sobre el árbol versionado:
+
+| Comprobación | Resultado |
+|---|---|
+| Suite 1 (Bloque 1, 7 pruebas) | **74 passed**, exit **0** |
+| Suite 2 (`test_conflict_count_single_truth.py`) | **9 passed**, exit **0** |
+| Suite 3 (`test_dictus_canonical_artifact.py`) | **5 passed**, exit **0** |
+| Suite 4 (`scripts/golden_evidence_asserts.py`) | **11/11 PASS**, exit **0** |
+| `true_conflict_count` RUNSTATE / MANIFEST / MODEL | `2` / `2` / `2` (idénticos) |
+| `true_conflict_attributes` RUNSTATE / MANIFEST / MODEL | `["altura_maxima","coordenada"]` ×3 (idénticos) |
+| Resultado semántico del PDF | misma línea canónica en la página 1; frase legacy ausente; 6 páginas |
+| `sha256` del índice vs disco (`executive_pdf`, `technical_pdf`, `run_state`, `manifest`, `acceptance_pack`) | **MATCH** en los 5 |
+| `legacy` | `sha256_preservado = true` en los 3 artefactos (8 ficheros) |
+| Ejecutivos en la raíz | exactamente **1**: `DICTUS_EJECUTIVO_040-646406.pdf` |
+
+Sin cambios de artefactos: los `sha256` del índice siguen coincidiendo.
 
 ---
 
@@ -410,8 +421,9 @@ coincidiendo.
 |---|---|---|---|
 | 1 | `92f5f91b77f1f204730d53ebc1681ddf63420e97` | `feat(truth-resolution): add canonical attribute resolution` | 34 ficheros: `api/attribute_truth.py`, `api/acquisition_http.py`, correcciones de causas raíz en `api/`, 7 pruebas nuevas, 4 pruebas adaptadas, `scripts/golden_evidence_asserts.py`, los 8 artefactos de `docs/truth_resolution/`, `.gitignore` |
 | 2 | `97b771faa5ad1a75efb799ce6830235a20683829` | `fix(dictus): persist canonical conflict summary` | 7 ficheros: `tests/test_conflict_count_single_truth.py` + RunState, manifest, aceptación y texto del ejecutivo regenerados + manifest publicado |
-| 3 | *(este commit)* | `chore(forensics): canonicalize golden artifact set` | `legacy/` (3 artefactos, bytes preservados), `ARTIFACT_INDEX_040-646406.json`, `scripts/dictus_artifact_index.py`, `scripts/dictus_legacy_canonicalize.py`, `tests/test_dictus_canonical_artifact.py`, este documento |
-| — | *(no es del Bloque 1)* | artefactos de estimación ya modificados en el árbol | `docs/estimation/**` — refresco de artefactos **pre-existente** (ligado al run `b680793e…`, no al canónico). **No se modificó una sola línea del motor de estimación** |
+| 3 | `880dd7dabf182b2541bedb34528dd9fdc84bb858` | `chore(forensics): canonicalize golden artifact set` | 14 ficheros: `legacy/` (3 artefactos, bytes preservados; git detecta los 2 ficheros movidos como **R100**), `ARTIFACT_INDEX_040-646406.json`, `scripts/dictus_artifact_index.py`, `scripts/dictus_legacy_canonicalize.py`, `tests/test_dictus_canonical_artifact.py`, este documento |
+| 4 | `50e332daf883b0a5599275535593d3d1b45dc5bd` | `chore(estimation): version refreshed estimation artifacts (run-bound)` | `docs/estimation/**` (7 ficheros): refresco **pre-existente** de artefactos ligados al run `b680793e…`, no al canónico. **No se modificó una sola línea del motor de estimación** |
+| 5 | *(este commit)* | `docs(truth-resolution): record closure SHAs and post-commit verification` | Resuelve los SHA del cierre y registra la evidencia post-commit y el hallazgo de auditoría §14.5 |
 
 ### 13.1 Separación de los commits 1 y 2: límite real y su trazabilidad
 
@@ -426,8 +438,18 @@ artefactos que **persisten** el resumen canónico). Los hunks de 1.1 quedan iden
 
 ### 13.2 Push
 
-`git ls-remote origin refs/heads/main` verificado (ver informe de entrega). El aviso
-`sh.exe … Win32 error 5` es inocuo.
+```
+$ git push origin main
+   565a46e..50e332d  main -> main                      (exit 0)
+
+$ git ls-remote origin refs/heads/main
+50e332daf883b0a5599275535593d3d1b45dc5bd	refs/heads/main
+```
+
+El `refs/heads/main` remoto coincide con `HEAD` local. El aviso
+`sh.exe (…): fatal error - couldn't create signal pipe, Win32 error 5` es **inocuo**
+(lo emite el `sh` de MSYS que invoca git para el credential helper; el push devolvió
+exit 0 y la referencia remota quedó actualizada).
 
 ---
 
@@ -461,6 +483,9 @@ en `.gitignore` con su motivo:
   `secret|password|api_key|hmac_key|token` de ≥24 caracteres) → **0 hallazgos**. Ningún secreto real
   ⇒ no se activó el STOP. El PDF ejecutivo además pasa el control de fugas técnicas de
   `auditar_ejecutivo` (`§8 PATRONES_PROHIBIDOS`, incluido `ARHIAX_EVIDENCE_HMAC_KEY`).
+  Barrido adicional sobre **todo el árbol versionado**
+  (`git grep -E "gho_…|ghp_…|github_pat_" <commit>`): **sin coincidencias** ⇒ ninguna credencial
+  quedó versionada (ver §14.5).
 * **Temporales/cachés:** los ficheros de trabajo propios (`_*.py`, `_smoke_out/`) se eliminaron; los
   temporales preexistentes quedan ignorados.
 * **Evidencia contractual:** no se borró ningún artefacto. Los tres desplazados a `legacy/`
@@ -475,7 +500,30 @@ artefacto**, no una modificación de adquisición, screening, solar ni de ningú
 código, con red completa, reproduce el harvest. Se declara para que el revisor no lo interprete
 como una pérdida de contenido introducida por este bloque.
 
-### 14.5 VEREDICTO
+### 14.5 HALLAZGO DE AUDITORÍA — credencial real en `.git/config` (ACCIÓN REQUERIDA)
+
+La auditoría de secretos detectó una **credencial real** (token OAuth de GitHub, prefijo `gho_`)
+embebida en la URL del remote:
+
+```
+.git/config:9   url = https://<usuario>:gho_…@github.com/alissduran/arhiax-RE.git
+```
+
+**No es una fuga de este bloque y no afecta al veredicto:**
+
+* `.git/config` **no está versionado** y git lo excluye por diseño
+  (`git ls-files --error-unmatch .git/config` → `did not match any file(s) known to git`).
+* `git grep` sobre el commit publicado buscando `gho_…`/`ghp_…`/`github_pat_` → **0 coincidencias**:
+  la credencial **no** viajó a ningún commit, ni a `docs/`, ni a los artefactos.
+* El barrido de los ficheros preparados dio 0 hallazgos: **no se commitó ningún secreto**, por lo
+  que no se activó el STOP.
+
+**Acción recomendada (fuera del alcance del Bloque 1, decisión del titular):**
+rotar `gho_WdTD…` en GitHub (Settings → Developer settings → Tokens) y sustituir la URL con
+credencial embebida por un credential helper (`git config --global credential.helper manager`) o por
+SSH, para que el token no quede en claro en el disco ni en `.git/config`.
+
+### 14.6 VEREDICTO
 
 ```
 BLOCK 1 — TRUTH RESOLUTION CLOSED
