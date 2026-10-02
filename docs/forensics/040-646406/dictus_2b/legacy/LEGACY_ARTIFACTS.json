@@ -1,0 +1,62 @@
+{
+ "folio": "040-646406",
+ "convencion": "la raíz de dictus_2b/ contiene SOLO los artefactos de la corrida vigente; los de corridas anteriores viven en legacy/ sin reescribirse (bytes preservados)",
+ "legacy_artifacts": [
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/legacy/DICTUS_2.0B_TEXTO_EJECUTIVO_040-646406.txt",
+   "original_path": "docs/forensics/040-646406/dictus_2b/DICTUS_2.0B_TEXTO_EJECUTIVO_040-646406.txt",
+   "run_id": "DX-040-646406-20260925",
+   "generated_at": "2026-09-25",
+   "status": "HISTORICAL_ONLY",
+   "motivo": "Texto del ejecutivo de la corrida 2.0B (DICTUS ID DX-040-646406-20260925). La corrida vigente es DX-040-646406-20261002.",
+   "sha256_before": {
+    "": "2b8406aa92f73f7ba20c1d2b568156847346cbe983d6ec732afa750804812739"
+   },
+   "sha256_after": {
+    "": "2b8406aa92f73f7ba20c1d2b568156847346cbe983d6ec732afa750804812739"
+   },
+   "sha256_preservado": true
+  },
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/legacy/ENTREGA_2.0B_R1.md",
+   "original_path": "docs/forensics/040-646406/dictus_2b/ENTREGA_2.0B_R1.md",
+   "run_id": "DX-040-646406-20260925",
+   "generated_at": "2026-09-25",
+   "status": "HISTORICAL_ONLY",
+   "motivo": "Entregable documental de la fase 2.0B-R1: describe una arquitectura y un juego de artefactos anteriores a la corrida vigente.",
+   "sha256_before": {
+    "": "924bb7723bf119b2d6f64e5267f4f44d00c1718ae83617b5eb4fc00605d4b314"
+   },
+   "sha256_after": {
+    "": "924bb7723bf119b2d6f64e5267f4f44d00c1718ae83617b5eb4fc00605d4b314"
+   },
+   "sha256_preservado": true
+  },
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/legacy/paginas_2.0B_20260925",
+   "original_path": "docs/forensics/040-646406/dictus_2b/paginas",
+   "run_id": "DX-040-646406-20260925",
+   "generated_at": "2026-09-25",
+   "status": "HISTORICAL_ONLY",
+   "motivo": "Páginas rasterizadas del ejecutivo 2.0B (6 PNG, 25/09/2026). No corresponden a la corrida vigente; se regeneran con scripts/dictus_render_ejecutivo.py.",
+   "sha256_before": {
+    "ejecutivo_p1.png": "94945648636e4364523ed7a86ca74deb152e6d1b5dd0ea1cd18c6d8a70ec903b",
+    "ejecutivo_p2.png": "f926c480b8a38b8cf9fdb654a7b8bbed77cac4bd6207f64c694ecdd78d29358c",
+    "ejecutivo_p3.png": "1adac690c03237165592a05c926e0bfab43492fc8cc0d197f29911fd622b9a0e",
+    "ejecutivo_p4.png": "cbaafce54c82affde7cd7d331e5f01cce8b24a962662e74a6a477bcecb8aea97",
+    "ejecutivo_p5.png": "18d165d194292e364a0d116f52244e567f0aef9163b82305d0b4001db5d5dc74",
+    "ejecutivo_p6.png": "733b9cd2bbc206115b671a8747d291f7ea62a2d9791de0e3cc9a7b13e6d6a903"
+   },
+   "sha256_after": {
+    "ejecutivo_p1.png": "94945648636e4364523ed7a86ca74deb152e6d1b5dd0ea1cd18c6d8a70ec903b",
+    "ejecutivo_p2.png": "f926c480b8a38b8cf9fdb654a7b8bbed77cac4bd6207f64c694ecdd78d29358c",
+    "ejecutivo_p3.png": "1adac690c03237165592a05c926e0bfab43492fc8cc0d197f29911fd622b9a0e",
+    "ejecutivo_p4.png": "cbaafce54c82affde7cd7d331e5f01cce8b24a962662e74a6a477bcecb8aea97",
+    "ejecutivo_p5.png": "18d165d194292e364a0d116f52244e567f0aef9163b82305d0b4001db5d5dc74",
+    "ejecutivo_p6.png": "733b9cd2bbc206115b671a8747d291f7ea62a2d9791de0e3cc9a7b13e6d6a903"
+   },
+   "sha256_preservado": true
+  }
+ ],
+ "sha256_preservados_todos": true
+}

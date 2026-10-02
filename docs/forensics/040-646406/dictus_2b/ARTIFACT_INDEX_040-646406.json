@@ -1,0 +1,129 @@
+{
+ "indice_version": "dictus-artifact-index/1.0.0",
+ "folio": "040-646406",
+ "convencion": "la raíz de dictus_2b/ contiene SOLO los artefactos de la corrida canónica; los de corridas anteriores viven en legacy/ con status HISTORICAL_ONLY y sus bytes preservados",
+ "canonical_run_id": "04b364d4-7131-48b9-b81c-bd5a737fe3df",
+ "canonical_generated_at": "2026-10-02T21:12:09.433884+00:00",
+ "canonical_dictus_id": "DX-040-646406-20261002",
+ "canonical_master_hash": "ddacf899bc59d8419a02e4fdba80a04545715719fd61204cfccf8bbae1cf0794",
+ "canonical_run_state_version": "dictus-run-state/1.0.0",
+ "canonical_true_conflict_count": 2,
+ "canonical_true_conflict_attributes": [
+  "altura_maxima",
+  "coordenada"
+ ],
+ "executive_pdf": {
+  "path": "docs/forensics/040-646406/dictus_2b/DICTUS_EJECUTIVO_040-646406.pdf",
+  "bytes": 187311,
+  "sha256": "6d2c0aa36d9164cee90629a6e598be006648f0655ba39e0e01082da6278062eb"
+ },
+ "technical_pdf": {
+  "path": "docs/forensics/040-646406/dictus_2b/DICTUS_TECNICO_040-646406.pdf",
+  "bytes": 252762,
+  "sha256": "d0dd6413ad423175a3e77ac96225dfe41295881c0705c7607044fa95d4eecaaa"
+ },
+ "run_state": {
+  "path": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
+  "bytes": 392732,
+  "sha256": "249fef88b7da55f0ee08098bdbdf44659bbc190b1461417874174c5455c34215"
+ },
+ "manifest": {
+  "path": "docs/forensics/040-646406/dictus_2b/DICTUS_MANIFEST_040-646406.json",
+  "bytes": 178611,
+  "sha256": "448ea52fde4b7a8dad3fa10c5538c0e27e7aad7b5c674966d5cc4f77cbad80ee"
+ },
+ "acceptance_pack": {
+  "path": "docs/forensics/040-646406/dictus_2b/ACEPTACION_040-646406.json",
+  "bytes": 1469,
+  "sha256": "416d479731bb71ed1363bd7efb40def7dae0459281f032fa772889bd69d0ab14"
+ },
+ "auxiliares": [
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/ACEPTACION_040-646406.md",
+   "bytes": 1767,
+   "sha256": "f45d15b65f6828f253da14ac05bb7a97a8a26425e57f2e87c817713853c6733b"
+  },
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/DICTUS_2.0C_TEXTO_EJECUTIVO_040-646406.txt",
+   "bytes": 19672,
+   "sha256": "9f7405e35cb116cb6a63d560faf50ca2bd60011a838adfd5e0ba62a46db3c6e9"
+  },
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/poi_map.png",
+   "bytes": 94326,
+   "sha256": "a8bdd952b880aebe4409fdbd8e90e826e562a465acf8b1391ffea5e5e219f2fe"
+  },
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/poi_map.html",
+   "bytes": 6411,
+   "sha256": "09ec4d44a37824487fddb4814568b64730714d21b5961cf39cadccc0db44aa78"
+  },
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/sombra_9am.png",
+   "bytes": 29995,
+   "sha256": "5c3c361f075ee60e48011a5ad26b000f781b5accdfa1430075251f8d51cd5e50"
+  },
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/sombra_3pm.png",
+   "bytes": 29714,
+   "sha256": "c91a0995a63039d018162eefcdb1e87974f3b1a542374844bc73f54c096ccc0c"
+  }
+ ],
+ "legacy_artifacts": [
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/legacy/DICTUS_2.0B_TEXTO_EJECUTIVO_040-646406.txt",
+   "original_path": "docs/forensics/040-646406/dictus_2b/DICTUS_2.0B_TEXTO_EJECUTIVO_040-646406.txt",
+   "run_id": "DX-040-646406-20260925",
+   "generated_at": "2026-09-25",
+   "status": "HISTORICAL_ONLY",
+   "sha256_before": {
+    "": "2b8406aa92f73f7ba20c1d2b568156847346cbe983d6ec732afa750804812739"
+   },
+   "sha256_after": {
+    "": "2b8406aa92f73f7ba20c1d2b568156847346cbe983d6ec732afa750804812739"
+   },
+   "sha256_preservado": true,
+   "motivo": "Texto del ejecutivo de la corrida 2.0B (DICTUS ID DX-040-646406-20260925). La corrida vigente es DX-040-646406-20261002."
+  },
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/legacy/ENTREGA_2.0B_R1.md",
+   "original_path": "docs/forensics/040-646406/dictus_2b/ENTREGA_2.0B_R1.md",
+   "run_id": "DX-040-646406-20260925",
+   "generated_at": "2026-09-25",
+   "status": "HISTORICAL_ONLY",
+   "sha256_before": {
+    "": "924bb7723bf119b2d6f64e5267f4f44d00c1718ae83617b5eb4fc00605d4b314"
+   },
+   "sha256_after": {
+    "": "924bb7723bf119b2d6f64e5267f4f44d00c1718ae83617b5eb4fc00605d4b314"
+   },
+   "sha256_preservado": true,
+   "motivo": "Entregable documental de la fase 2.0B-R1: describe una arquitectura y un juego de artefactos anteriores a la corrida vigente."
+  },
+  {
+   "path": "docs/forensics/040-646406/dictus_2b/legacy/paginas_2.0B_20260925",
+   "original_path": "docs/forensics/040-646406/dictus_2b/paginas",
+   "run_id": "DX-040-646406-20260925",
+   "generated_at": "2026-09-25",
+   "status": "HISTORICAL_ONLY",
+   "sha256_before": {
+    "ejecutivo_p1.png": "94945648636e4364523ed7a86ca74deb152e6d1b5dd0ea1cd18c6d8a70ec903b",
+    "ejecutivo_p2.png": "f926c480b8a38b8cf9fdb654a7b8bbed77cac4bd6207f64c694ecdd78d29358c",
+    "ejecutivo_p3.png": "1adac690c03237165592a05c926e0bfab43492fc8cc0d197f29911fd622b9a0e",
+    "ejecutivo_p4.png": "cbaafce54c82affde7cd7d331e5f01cce8b24a962662e74a6a477bcecb8aea97",
+    "ejecutivo_p5.png": "18d165d194292e364a0d116f52244e567f0aef9163b82305d0b4001db5d5dc74",
+    "ejecutivo_p6.png": "733b9cd2bbc206115b671a8747d291f7ea62a2d9791de0e3cc9a7b13e6d6a903"
+   },
+   "sha256_after": {
+    "ejecutivo_p1.png": "94945648636e4364523ed7a86ca74deb152e6d1b5dd0ea1cd18c6d8a70ec903b",
+    "ejecutivo_p2.png": "f926c480b8a38b8cf9fdb654a7b8bbed77cac4bd6207f64c694ecdd78d29358c",
+    "ejecutivo_p3.png": "1adac690c03237165592a05c926e0bfab43492fc8cc0d197f29911fd622b9a0e",
+    "ejecutivo_p4.png": "cbaafce54c82affde7cd7d331e5f01cce8b24a962662e74a6a477bcecb8aea97",
+    "ejecutivo_p5.png": "18d165d194292e364a0d116f52244e567f0aef9163b82305d0b4001db5d5dc74",
+    "ejecutivo_p6.png": "733b9cd2bbc206115b671a8747d291f7ea62a2d9791de0e3cc9a7b13e6d6a903"
+   },
+   "sha256_preservado": true,
+   "motivo": "Páginas rasterizadas del ejecutivo 2.0B (6 PNG, 25/09/2026). No corresponden a la corrida vigente; se regeneran con scripts/dictus_render_ejecutivo.py."
+  }
+ ]
+}
