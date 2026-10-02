@@ -15,10 +15,10 @@
   "verified_market_evidence_gate_state": "CLOSED",
   "evidence_quality_level": "INDICATIVE",
   "folio": "040-646406",
-  "run_id": "761fa4c2-fa76-4137-8238-2845ee325055",
-  "master_hash": "4fa480d0fdb245a7c0dcdd0b5e0bebd2f6589a8d56ee180c5e019fdb94851608",
-  "corrida_generada_en": "2026-09-30T21:34:05.166625+00:00",
-  "referencia_temporal_de_la_estimacion": "2026-09-30",
+  "run_id": "b680793e-df16-464c-bae9-6e2df4733083",
+  "master_hash": "988e4aa6eebe05d6102bb0358407bf3e21d5b6422f559beb158c3c9321814c47",
+  "corrida_generada_en": "2026-10-02T16:54:30.576839+00:00",
+  "referencia_temporal_de_la_estimacion": "2026-10-02",
   "gate": {
     "state": "OPEN_WITH_LIMITATIONS",
     "reasons": [

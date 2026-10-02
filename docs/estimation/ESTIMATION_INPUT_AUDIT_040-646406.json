@@ -3,14 +3,14 @@
   "fase": "DICTUS ESTIMATION ENGINE v1.0 · FASE 1 (auditoría + contratos)",
   "folio": "040-646406",
   "ciudad": "barranquilla",
-  "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
+  "run_id": "9095748b-af18-4b77-a054-809f30490710",
   "generado_por": "scripts/estimation_input_audit.py",
   "golden_leido": {
     "run_state": "docs\\forensics\\040-646406\\dictus_2b\\DICTUS_RUN_STATE_040-646406.json",
-    "run_state_sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
+    "run_state_sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
     "manifest": "docs\\forensics\\040-646406\\dictus_2b\\DICTUS_MANIFEST_040-646406.json",
-    "manifest_sha256": "3a2241baca4153f7c1ff934c0a1ccbb4955bed47315cedaca65691d3d3b8e7d1",
-    "master_hash": "6ff21c3055d1cde5bf11afc43b53caab3ac75ef66330853fe8f1879594fce474"
+    "manifest_sha256": "889a5d859a86c8512e48be7b8f8fff2c4adeb36b86894eb8469605494447fe45",
+    "master_hash": "60d0ff6df332d5c77d2c4e4ebdc5205e1eb0d382f0185fea319f916cd1d30e49"
   },
   "vocabulario_source_class": [
     "AUTHORITATIVE_OFFICIAL",
@@ -273,12 +273,12 @@
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "SNR + geoportal municipal",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -288,10 +288,10 @@
         "evidencia": "EV-IDENTIDAD",
         "evidencia_sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "Identidad de la unidad VERIFICADA (MATCH_BY_NUPRE, EXACT, VERIFIED_UNIT_IDENTITY): sin saber QUÉ se estima no hay estimación. Es insumo de estimación por ser descriptor del sujeto verificado."
@@ -302,12 +302,12 @@
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "SNR + geoportal municipal",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": "22-01-2024",
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -318,8 +318,8 @@
         "certificado_adjuntado": true,
         "fuente": "Certificado de tradición y libertad (SNR)",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_MANIFEST_040-646406.json",
-        "sha256": "3a2241baca4153f7c1ff934c0a1ccbb4955bed47315cedaca65691d3d3b8e7d1",
-        "master_hash": "6ff21c3055d1cde5bf11afc43b53caab3ac75ef66330853fe8f1879594fce474"
+        "sha256": "889a5d859a86c8512e48be7b8f8fff2c4adeb36b86894eb8469605494447fe45",
+        "master_hash": "60d0ff6df332d5c77d2c4e4ebdc5205e1eb0d382f0185fea319f916cd1d30e49"
       },
       "usable_for_estimation": true,
       "reason": "Matrícula 040-646406 verificada contra el CTL aportado. Es el vínculo al folio del sujeto estimado; sin ella la estimación no es atribuible."
@@ -330,12 +330,12 @@
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "CATASTRO_BAQ_ADOPCION_ANEXO1",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -346,10 +346,10 @@
         "resolution_status": "EXACT",
         "evidencia": "EV-IDENTIDAD",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "NUPRE verificado: es la llave con la que se resuelve y se ata el sujeto. Insumo de estimación como identificador del sujeto."
@@ -360,12 +360,12 @@
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -379,10 +379,10 @@
         "canonical_binding_status": "VERIFIED",
         "evidencia": "EV-GEOMETRIA",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "Número predial verificado y ligado por GUID a la geometría oficial del predio: ata la estimación al predio correcto."
@@ -393,12 +393,12 @@
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "SNR + geoportal municipal",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -408,10 +408,10 @@
         "campo_golden": "urban_context.area",
         "nota": "Área privada de la unidad: es el multiplicador del valor de mercado; el área catastral del TERRENO no es comparable",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "Área privada de la unidad declarada por la corrida con procedencia COMPUTED_FROM_SOURCES; es el multiplicador de cualquier valor por m²."
@@ -422,12 +422,12 @@
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "SNR + geoportal municipal",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -437,10 +437,10 @@
         "status": "VERIFIED_REGISTRAL",
         "campo_golden": "urban_context.condicion_juridica",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "Régimen Propiedad Horizontal VERIFIED_REGISTRAL: define el universo de comparables admisibles (unidad PH, no lote)."
@@ -451,12 +451,12 @@
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "SNR + geoportal municipal",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -470,10 +470,10 @@
           "source": "CTL + registro oficial"
         },
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "Tipología «Unidad En Propiedad Horizontal» VERIFIED_REGISTRAL: segmenta el mercado del sujeto. Insumo de estimación."
@@ -484,12 +484,12 @@
       "origin": null,
       "source_id": null,
       "source_class": "NOT_DECLARED",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -498,8 +498,10 @@
       "provenance": {
         "market_context.uso": {
           "value": "Habitacional",
-          "status": "VERIFIED_OFFICIAL",
-          "source": null
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null,
+          "status_declarado_por_la_corrida": "VERIFIED_OFFICIAL",
+          "status_motivo": "El estado declarado era «VERIFIED_OFFICIAL» sin fuente seleccionada por la escalera del Source Pack: se degrada a «SOURCE_UNAVAILABLE» y el valor queda como `declared_value` (no canónico). No se ejecutó ninguna consulta para las fuentes del atributo: no puede afirmarse nada sobre el dato. Se declara SOURCE_UNAVAILABLE (nunca NO_MATCH)."
         },
         "urban_context.destino_economico": "Habitacional",
         "traza_aplicada_segun_urban_render_provenance": [
@@ -514,10 +516,10 @@
         ],
         "contradiccion_detectada": "`market_context.uso.source` es null (ni el barrio, localidad, estrato, tratamiento, altura, pieza urbana ni manzana trazan el destino en urban_render_provenance), mientras la matriz de cobertura del pack marca 07-destino = SOURCE_UNAVAILABLE y 08-uso_pot = NOT_SUPPORTED",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": false,
       "reason": "El Golden estampa el destino como VERIFIED_OFFICIAL pero NO declara fuente para él (`source: null`) y el pack declara ese dominio SOURCE_UNAVAILABLE / NOT_SUPPORTED. Por la regla vigente del producto («un contexto sin origen declarado NO habilita»), NO se admite como insumo de estimación: el valor existe y se transcribe, la procedencia no. Se reporta como contradicción abierta, no se rellena."
@@ -528,12 +530,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "official_urban_layer",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -548,10 +550,10 @@
           "estado": "RESUELTO"
         },
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "Barrio Miramar VERIFIED_OFFICIAL en vivo: es la unidad de segmentación de mercado del sujeto."
@@ -562,12 +564,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "official_urban_layer",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -577,10 +579,10 @@
         "status": "OK",
         "modo": "LIVE_OFFICIAL",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "Localidad 02 declarada por la capa urbana oficial en vivo: descriptor de estratificación del sujeto (agrupa por encima del barrio)."
@@ -591,12 +593,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "official_urban_layer",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -612,10 +614,10 @@
           "estado": "RESUELTO"
         },
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "Estrato 4 VERIFIED_OFFICIAL: estratifica la comparación y llavea la tasa de capitalización. Es insumo descriptivo; NO es una tasa de mercado."
@@ -629,12 +631,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -663,10 +665,10 @@
         "resolution_method": "DIRECCION_OFICIAL_LIGADA_POR_GUID",
         "source_system": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "Coordenada de geometría OFICIAL DEL PREDIO verificada por GUID. Sin punto del sujeto no hay distancia a comparables, luego es insumo de estimación. Su alcance (lote/edificio, no la posición del apartamento) queda declarado."
@@ -677,16 +679,16 @@
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "official_urban_layer",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": "2026-05-08",
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
         "queried_at": "2026-05-08",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
-        "dias_desde_consulta": 145,
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
+        "dias_desde_consulta": 147,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
-        "motivo": "145 día(s) entre la consulta y la corrida"
+        "motivo": "147 día(s) entre la consulta y la corrida"
       },
       "provenance": {
         "input_barrio": "Miramar",
@@ -708,10 +710,10 @@
           "origin_gate": false
         },
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": true,
       "reason": "El SECTOR Miramar RESUELVE por EXACT: lookup determinista del barrio verificado (official_urban_layer) contra la tabla versionada — derivación COMPUTED_FROM_SOURCES de dos fuentes citadas, auditable y repetible. Es insumo de estimación como SELECTOR de comparables. AVISO: el mapeo es insumo; el VALOR por m² de ese sector NO lo es — ver `precio_m2_mercado_declarado` (origin=MANUAL_CONFIG, VENCIDA)."
@@ -728,7 +730,7 @@
         "regla": "una ausencia no tiene frescura",
         "estado": "SIN_DATO",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no existe ninguna observación que fechar"
       },
@@ -755,7 +757,7 @@
         "regla": "una ausencia no tiene frescura",
         "estado": "SIN_DATO",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no hay precio observado que fechar"
       },
@@ -778,7 +780,7 @@
         "regla": "una ausencia no tiene frescura",
         "estado": "SIN_DATO",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no hay transacción que fechar"
       },
@@ -955,7 +957,7 @@
         "regla": "una ausencia no tiene frescura",
         "estado": "SIN_DATO",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no hay renta que fechar"
       },
@@ -994,7 +996,7 @@
         "regla": "una ausencia no tiene frescura",
         "estado": "SIN_DATO",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no hay costo que fechar"
       },
@@ -1016,11 +1018,11 @@
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
         "queried_at": "2026-05-08",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
-        "dias_desde_consulta": 145,
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
+        "dias_desde_consulta": 147,
         "vigencia_hasta": "2026-08-31",
         "estado": "VENCIDA",
-        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después): el valor NO se presenta como vigente"
+        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-10-02 (32 día(s) después): el valor NO se presenta como vigente"
       },
       "provenance": {
         "fuente_declarada": "Precio de venta verificado en la constructora del proyecto (unidades ~58 m2 terminadas, 2026) — parámetros declarados por la corrida (sin fuente externa automática verificada)",
@@ -1044,7 +1046,7 @@
         }
       },
       "usable_for_estimation": false,
-      "reason": "Valor 6800000 declarado a mano (origin=MANUAL_CONFIG, origin_gate=false): NO es una fuente y NO sostiene cifra. Además su vigencia declarada termina el 2026-08-31 y la corrida es del 2026-09-30: VENCIDA. Dos causas independientes de NO uso."
+      "reason": "Valor 6800000 declarado a mano (origin=MANUAL_CONFIG, origin_gate=false): NO es una fuente y NO sostiene cifra. Además su vigencia declarada termina el 2026-08-31 y la corrida es del 2026-10-02: VENCIDA. Dos causas independientes de NO uso."
     },
     {
       "attribute": "banda_precio_m2_declarada",
@@ -1060,11 +1062,11 @@
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
         "queried_at": "2026-05-08",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
-        "dias_desde_consulta": 145,
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
+        "dias_desde_consulta": 147,
         "vigencia_hasta": "2026-08-31",
         "estado": "VENCIDA",
-        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después): el valor NO se presenta como vigente"
+        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-10-02 (32 día(s) después): el valor NO se presenta como vigente"
       },
       "provenance": {
         "valor_declarado_en": "valor_suelo_por_sector.Miramar.rango_min_m2/rango_max_m2",
@@ -1102,11 +1104,11 @@
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
         "queried_at": "2026-09-29T21:44:17.418249+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
-        "dias_desde_consulta": 1,
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
+        "dias_desde_consulta": 3,
         "vigencia_hasta": "2026-08-31",
         "estado": "VENCIDA",
-        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después): el valor NO se presenta como vigente"
+        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-10-02 (32 día(s) después): el valor NO se presenta como vigente"
       },
       "provenance": {
         "artefacto": "motor_tma_lonja_baq_v1.0/motor_tma_lonja_baq_v1.0/lonja_layer/lonja_baq_metodologia.yaml",
@@ -1127,11 +1129,11 @@
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
         "queried_at": "2026-09-29T21:44:17.418249+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
-        "dias_desde_consulta": 1,
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
+        "dias_desde_consulta": 3,
         "vigencia_hasta": "2026-08-31",
         "estado": "VENCIDA",
-        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después): el valor NO se presenta como vigente"
+        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-10-02 (32 día(s) después): el valor NO se presenta como vigente"
       },
       "provenance": {
         "procedencia": {
@@ -1180,11 +1182,11 @@
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
         "queried_at": "2026-05-08",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
-        "dias_desde_consulta": 145,
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
+        "dias_desde_consulta": 147,
         "vigencia_hasta": "2026-08-31",
         "estado": "VENCIDA",
-        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después): el valor NO se presenta como vigente"
+        "motivo": "la entrada declara vigencia hasta 2026-08-31 y la corrida es del 2026-10-02 (32 día(s) después): el valor NO se presenta como vigente"
       },
       "provenance": {
         "regla": "api/market_sources.py::evaluar_vigencia — corrida > effective_to ⇒ VENCIDA",
@@ -1206,7 +1208,7 @@
         }
       },
       "usable_for_estimation": false,
-      "reason": "VENCIDA: la tabla declara vigencia hasta 2026-08-31 y la corrida es del 2026-09-30 (30 día(s) después). Aun con origen habilitante, un dato vencido no se presenta como vigente."
+      "reason": "VENCIDA: la tabla declara vigencia hasta 2026-08-31 y la corrida es del 2026-10-02 (32 día(s) después). Aun con origen habilitante, un dato vencido no se presenta como vigente."
     },
     {
       "attribute": "cap_rate",
@@ -1214,13 +1216,13 @@
       "origin": "MODEL_PRIOR",
       "source_id": "api/dictamen_data.py::get_valuation",
       "source_class": "MODEL_PRIOR",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "un default codificado no tiene vigencia de mercado",
         "estado": "NO_APLICA",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no es un dato fechado: es una constante del código"
       },
@@ -1247,10 +1249,10 @@
           "value_m2"
         ],
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": false,
       "reason": "Tasa de capitalización con origin=MODEL_PRIOR y origin_gate=false. El Golden publica el ORIGEN y no la cifra: queda declarado como supuesto codificado del modelo, nunca como dato. No sostiene la M3."
@@ -1261,13 +1263,13 @@
       "origin": "MODEL_PRIOR",
       "source_id": "api/dictamen_data.py::get_valuation",
       "source_class": "MODEL_PRIOR",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "un default codificado no tiene vigencia de mercado",
         "estado": "NO_APLICA",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no es un dato fechado: es una constante del código"
       },
@@ -1275,10 +1277,10 @@
         "campo_golden": "valuation_state.origins.factor_costos",
         "nota": "el run state declara el ORIGEN (MODEL_PRIOR) y no imprime la cifra: no se transcribe una cifra que el Golden no publica",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": false,
       "reason": "Factor de actualización de costos con origin=MODEL_PRIOR: es un supuesto codificado, no un índice de costos citado. No sostiene la M2."
@@ -1289,13 +1291,13 @@
       "origin": "MODEL_PRIOR",
       "source_id": "api/dictamen_data.py::get_valuation",
       "source_class": "MODEL_PRIOR",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "un default codificado no tiene vigencia de mercado",
         "estado": "NO_APLICA",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no es un dato fechado: es una constante del código"
       },
@@ -1303,10 +1305,10 @@
         "campo_golden": "valuation_state.origins.costo_construccion_base",
         "nota": "el Golden declara el origen y no imprime la cifra",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": false,
       "reason": "Costo base de construcción «multifamiliar típico» codificado (MODEL_PRIOR): no hay tabla de costos citada. No sostiene la M2."
@@ -1317,13 +1319,13 @@
       "origin": "MODEL_PRIOR",
       "source_id": "api/dictamen_data.py::get_valuation",
       "source_class": "MODEL_PRIOR",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "un default codificado no tiene vigencia de mercado",
         "estado": "NO_APLICA",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no es un dato fechado: es una constante del código"
       },
@@ -1331,10 +1333,10 @@
         "campo_golden": "valuation_state.origins.canon_renta_pct",
         "nota": "el Golden declara el origen y no imprime la cifra",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": false,
       "reason": "Porcentaje de canon de renta implícito codificado (MODEL_PRIOR): es un supuesto, no una renta observada. No sostiene la M3."
@@ -1345,13 +1347,13 @@
       "origin": "MODEL_PRIOR",
       "source_id": "api/dictamen_data.py::get_valuation",
       "source_class": "MODEL_PRIOR",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "un default codificado no tiene vigencia de mercado",
         "estado": "NO_APLICA",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no es un dato fechado: es una constante del código"
       },
@@ -1359,10 +1361,10 @@
         "campo_golden": "valuation_state.origins.participacion_lote",
         "nota": "el Golden declara el origen y no imprime la cifra",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": false,
       "reason": "Participación del lote en el valor (MODEL_PRIOR) codificada: no hay coeficiente de copropiedad citado del reglamento de PH."
@@ -1373,23 +1375,23 @@
       "origin": "MODEL_PRIOR",
       "source_id": "api/dictamen_data.py::FALLBACK_ESTRATO_M2",
       "source_class": "MODEL_PRIOR",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "un fallback codificado no tiene vigencia de mercado",
         "estado": "NO_APLICA",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "no es un dato fechado: es una constante del código"
       },
       "provenance": {
         "nota": "api/dictamen_data.py declara FALLBACK_ESTRATO_M2 como «HARDCODE DE RESPALDO POR ESTRATO — MODEL_PRIOR · FALLBACK LEGACY NO PRODUCTIVO» y exige allow_legacy_reference=True, que NO abre la compuerta de valoración",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": false,
       "reason": "Fallback genérico por estrato (MODEL_PRIOR): la propia corrida declara que es un fallback NO productivo que no autoriza ninguna cifra."
@@ -1407,23 +1409,23 @@
       "origin": "MODEL_PRIOR",
       "source_id": "api/dictamen_data.py::get_valuation · valuation_state.origins",
       "source_class": "MODEL_PRIOR",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "los priors no tienen vigencia de mercado",
         "estado": "NO_APLICA",
         "dias_desde_consulta": null,
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "vigencia_hasta": null,
         "motivo": "son constantes del código, no datos fechados"
       },
       "provenance": {
         "campo_golden": "valuation_state.origins",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": false,
       "reason": "Los 5 parámetros distintos de la tasa están declarados con origin=MODEL_PRIOR y ninguno es una fuente externa. Se inventarían todos y se declaran TODOS como no utilizables."
@@ -1431,44 +1433,40 @@
     {
       "attribute": "referencias_historicas",
       "value": {
-        "version": "dictus-historical-consistency/1.0.0",
+        "version": "dictus-historical-consistency/1.1.0",
         "versiones_comparadas": 14,
-        "generado_en": "2026-09-24T21:40:49.033019+00:00",
+        "generado_en": "2026-10-02T16:53:07.693605+00:00",
         "conflictos_abiertos": [
           "altura_maxima",
-          "amenaza",
-          "coordenada",
-          "titulares",
-          "tratamiento",
-          "uso_pot"
+          "coordenada"
         ]
       },
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "expediente histórico del mismo inmueble",
       "source_class": "COMPUTED",
-      "queried_at": "2026-09-24T21:40:49.033019+00:00",
-      "effective_date": "2026-09-24T21:40:49.033019+00:00",
+      "queried_at": "2026-10-02T16:53:07.693605+00:00",
+      "effective_date": "2026-10-02T16:53:07.693605+00:00",
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-24T21:40:49.033019+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
-        "dias_desde_consulta": 6,
+        "queried_at": "2026-10-02T16:53:07.693605+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
+        "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
-        "motivo": "6 día(s) entre la consulta y la corrida"
+        "motivo": "0 día(s) entre la consulta y la corrida"
       },
       "provenance": {
         "evidencia": "EV-COHERENCIA",
-        "evidencia_sha256": "71b4f2e88a62ab0073ccfba218a8fce5389ea4d6a161ce3ead9aa0fcf0aa86a3",
+        "evidencia_sha256": "7b1b53308444001dda6ecbd4b87c9774b1faec2f36fa4e146800574ef5496e5a",
         "estado_evidencia": "CONFLICTO_ABIERTO",
         "documento": "docs/forensics/040-646406/dictus_2b/DICTUS_RUN_STATE_040-646406.json",
-        "sha256": "ad736ea0296f5a329b9317b29d665242f05b95d1ddd85a4608ac585c3a7369e0",
-        "run_id": "ad0d6bfa-603b-41e4-a44d-8ec476f7c49c",
-        "dictus_id": "DX-040-646406-20260930",
-        "generado_at": "2026-09-30T21:32:26.538601+00:00"
+        "sha256": "ff30d46c93df3cd7d25609ad72a0f9455892538eb1b66e21f6fcd0f7306db491",
+        "run_id": "9095748b-af18-4b77-a054-809f30490710",
+        "dictus_id": "DX-040-646406-20261002",
+        "generado_at": "2026-10-02T16:53:04.370155+00:00"
       },
       "usable_for_estimation": false,
-      "reason": "El expediente tiene 6 conflictos abiertos (altura 8 vs 11, amenaza en 3 valores) marcados UNEXPLAINED_CONFLICT. Sirven para CAUTELA y trazabilidad; no son evidencia de mercado ni un precio observado."
+      "reason": "El expediente tiene 2 conflictos abiertos (altura 8 vs 11, amenaza en 3 valores) marcados UNEXPLAINED_CONFLICT. Sirven para CAUTELA y trazabilidad; no son evidencia de mercado ni un precio observado."
     },
     {
       "attribute": "uso_pot",
@@ -1476,12 +1474,12 @@
       "origin": null,
       "source_id": "POT_BAQ_POLIGONOS_USO",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1502,12 +1500,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "POT_BAQ_TRATAMIENTO",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1528,12 +1526,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "POT_BAQ_TRATAMIENTO",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1551,12 +1549,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "POT_BAQ_EDIFICABILIDAD",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1577,12 +1575,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "official_urban_layer",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1600,12 +1598,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "POT_BAQ_REMOCION_2024",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1625,12 +1623,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "POT_BAQ_RIESGO_2024",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1650,12 +1648,12 @@
       "origin": null,
       "source_id": "POT_BAQ_INUNDACION_2024",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1675,12 +1673,12 @@
       "origin": null,
       "source_id": "POT_BAQ_RIESGO_2024",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1698,17 +1696,17 @@
       "attribute": "equipamiento_contexto",
       "value": {
         "items": 12,
-        "queried_at": "2026-09-30T21:32:28.508974+00:00"
+        "queried_at": "2026-10-02T16:53:07.566112+00:00"
       },
       "origin": "EXTERNAL_SOURCE",
       "source_id": "OSM_OVERPASS",
       "source_class": "CONTEXTUAL_EXTERNAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1717,7 +1715,7 @@
       "provenance": {
         "valor_golden": {
           "items": 12,
-          "queried_at": "2026-09-30T21:32:28.508974+00:00"
+          "queried_at": "2026-10-02T16:53:07.566112+00:00"
         }
       },
       "usable_for_estimation": false,
@@ -1729,22 +1727,22 @@
         "momentos": [
           {
             "hora": "09:00 COT",
-            "azimut": "105.19°",
-            "elevacion": "45.82°",
+            "azimut": "106.32°",
+            "elevacion": "45.72°",
             "estado": "Sol Directo",
-            "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 4.8°."
+            "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 3.7°."
           },
           {
             "hora": "12:00 COT",
-            "azimut": "191.4°",
-            "elevacion": "76.25°",
+            "azimut": "191.45°",
+            "elevacion": "75.46°",
             "estado": "Sol Directo",
             "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 81.4°."
           },
           {
             "hora": "15:00 COT",
-            "azimut": "256.93°",
-            "elevacion": "40.66°",
+            "azimut": "256.02°",
+            "elevacion": "40.27°",
             "estado": "Sombra (Orientación)",
             "descripcion": "El sol está detrás del inmueble (fachada opuesta)."
           }
@@ -1757,12 +1755,12 @@
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "SOLAR_ENGINE+SHADOW_FACADE_EXPOSURE",
       "source_class": "COMPUTED",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1773,22 +1771,22 @@
           "momentos": [
             {
               "hora": "09:00 COT",
-              "azimut": "105.19°",
-              "elevacion": "45.82°",
+              "azimut": "106.32°",
+              "elevacion": "45.72°",
               "estado": "Sol Directo",
-              "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 4.8°."
+              "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 3.7°."
             },
             {
               "hora": "12:00 COT",
-              "azimut": "191.4°",
-              "elevacion": "76.25°",
+              "azimut": "191.45°",
+              "elevacion": "75.46°",
               "estado": "Sol Directo",
               "descripcion": "Exposición directa a la radiación solar. Ángulo de incidencia: 81.4°."
             },
             {
               "hora": "15:00 COT",
-              "azimut": "256.93°",
-              "elevacion": "40.66°",
+              "azimut": "256.02°",
+              "elevacion": "40.27°",
               "estado": "Sombra (Orientación)",
               "descripcion": "El sol está detrás del inmueble (fachada opuesta)."
             }
@@ -1813,12 +1811,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "SNR",
       "source_class": "AUTHORITATIVE_OFFICIAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1845,12 +1843,12 @@
       "origin": "EXTERNAL_SOURCE",
       "source_id": "núcleo de screening sancionado",
       "source_class": "AUTHORITATIVE_CONTRACTUAL",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1876,12 +1874,12 @@
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "núcleo de screening sancionado",
       "source_class": "COMPUTED",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
@@ -1899,23 +1897,23 @@
     },
     {
       "attribute": "master_hash",
-      "value": "6ff21c3055d1cde5bf11afc43b53caab3ac75ef66330853fe8f1879594fce474",
+      "value": "60d0ff6df332d5c77d2c4e4ebdc5205e1eb0d382f0185fea319f916cd1d30e49",
       "origin": "COMPUTED_FROM_SOURCES",
       "source_id": "dictus-manifiesto",
       "source_class": "COMPUTED",
-      "queried_at": "2026-09-30T21:32:26.538601+00:00",
+      "queried_at": "2026-10-02T16:53:04.370155+00:00",
       "effective_date": null,
       "freshness": {
         "regla": "antigüedad en días entre la consulta y la fecha de referencia de la corrida; si la entrada declara vigencia_hasta, se evalúa contra ella",
-        "queried_at": "2026-09-30T21:32:26.538601+00:00",
-        "referencia": "2026-09-30T21:32:26.538601+00:00",
+        "queried_at": "2026-10-02T16:53:04.370155+00:00",
+        "referencia": "2026-10-02T16:53:04.370155+00:00",
         "dias_desde_consulta": 0,
         "vigencia_hasta": null,
         "estado": "VIGENTE",
         "motivo": "0 día(s) entre la consulta y la corrida"
       },
       "provenance": {
-        "valor_golden": "6ff21c3055d1cde5bf11afc43b53caab3ac75ef66330853fe8f1879594fce474"
+        "valor_golden": "60d0ff6df332d5c77d2c4e4ebdc5205e1eb0d382f0185fea319f916cd1d30e49"
       },
       "usable_for_estimation": false,
       "reason": "Sello de integridad del expediente: sirve para verificar, no para estimar. Por eso es contexto de decisión y su usable_for_estimation es false pese a estar verificado."

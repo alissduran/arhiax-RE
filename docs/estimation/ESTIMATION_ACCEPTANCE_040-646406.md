@@ -1,8 +1,8 @@
 # DICTUS ESTIMATION ENGINE v1.0 — ACEPTACIÓN · folio 040-646406
 
 - **Motor:** `dictus-estimation-engine/1.0.0` · integración `dictus-estimation-integration/1.0.0` · golden `dictus-estimation-golden/1.0.0`
-- **Corrida del Golden:** `run_id = 761fa4c2-fa76-4137-8238-2845ee325055` · `generated_at = 2026-09-30T21:34:05.166625+00:00` · `referencia temporal de la estimación = 2026-09-30`
-- **DICTUS_MASTER_HASH:** `4fa480d0fdb245a7c0dcdd0b5e0bebd2f6589a8d56ee180c5e019fdb94851608`
+- **Corrida del Golden:** `run_id = b680793e-df16-464c-bae9-6e2df4733083` · `generated_at = 2026-10-02T16:54:30.576839+00:00` · `referencia temporal de la estimación = 2026-10-02`
+- **DICTUS_MASTER_HASH:** `988e4aa6eebe05d6102bb0358407bf3e21d5b6422f559beb158c3c9321814c47`
 - **VEREDICTO:** `DICTUS ESTIMATION ENGINE — INDICATIVE ESTIMATE PRODUCED`
 
 > El éxito de esta fase NO es «NO EMITIR VALORACIÓN = true». Es: no se inventó ninguna fuente, no se usó ningún parámetro escrito a mano, se auditó toda la evidencia, se intentó estimar y —si no se pudo— se demostró POR QUÉ con la evidencia que falta.
@@ -79,7 +79,7 @@ Resultado literal: los métodos se evaluaron TODOS y su estado quedó registrado
 
 ## E · Si estimó, rango reproducible
 
-`RANGO = [130000000, 490000000]` · `central = 310000000` · ancho `±58.06%` · fórmula `dictus-range-width/1.0.0` · `clamp = DENTRO_DE_BANDA` · dispersión usada = `M5_AGGREGATED_MARKET_REFERENCE` · `hash_payload = 1dd745d4b6612142399c53718edba93f3708b36f259ef0ef9ecffca74d548529`. Reproducible: el rango se deriva de la entrada con fecha de referencia fija (2026-09-30).
+`RANGO = [130000000, 490000000]` · `central = 310000000` · ancho `±58.06%` · fórmula `dictus-range-width/1.0.0` · `clamp = DENTRO_DE_BANDA` · dispersión usada = `M5_AGGREGATED_MARKET_REFERENCE` · `hash_payload = 1dd745d4b6612142399c53718edba93f3708b36f259ef0ef9ecffca74d548529`. Reproducible: el rango se deriva de la entrada con fecha de referencia fija (2026-10-02).
 
 **El rango es la salida primaria.** La referencia central es secundaria y va redondeada a la precisión que el ancho permite (paso = $10.000.000) — nunca una cifra fina sobre evidencia agregada.
 
@@ -225,14 +225,14 @@ OK - Test de boundary de avaluo: PASADO
 [PDF][GATE] ok=True bloqueantes=0 advertencias=0
 SUCCESS: PDF GENERADO: C:\Users\aliss\.gemini\antigravity-ide\scratch\20260825_DeepSeek_Harness_Web\arhiax-RE\docs\forensics\040-646406\dictus_2b\DICTUS_TECNICO_040-646406.pdf
   Folio: 040-646406
-  Sello de ejecucion SHA-256: 46eae57485fc54c66c6d0da1f4cbb66b3644a6abb1bf78f92eb49bada0147aa2
-  Hash del archivo emitido SHA-256: b8433436c7229ac9d27c4c1e55717b3a1c2d7026032670bbf9368606bdd954a7
-  Timestamp: 2026-09-30T21:33:14.969103+00:00
+  Sello de ejecucion SHA-256: d51e19e5028e03f90c8cfea08714ccc3eda5ffa26d6dc8f3bb0ecc633b6a366c
+  Hash del archivo emitido SHA-256: c13b83b1413e8b719e9dce8fbb4dd87852458fd4dc7585714862dd391e4fe863
+  Timestamp: 2026-10-02T16:53:37.921989+00:00
 [PDF][NOTIF] correo de pendientes enviado=False n=2 -> ['hipoteca', 'afectacion']
-[run] 761fa4c2 · DX-040-646406-20260930 · master hash 4fa480d0fdb245a7…
-[run] PRINCIPAL DICTUS_EJECUTIVO_040-646406.pdf · 6 páginas · sha256 610222b22d55…
+[run] b680793e · DX-040-646406-20261002 · master hash 988e4aa6eebe05d6…
+[run] PRINCIPAL DICTUS_EJECUTIVO_040-646406.pdf · 6 páginas · sha256 0e2a87c15d60…
 [run]           arquitectura: P1 DECISIÓN DEL INMUEBLE → P2 DECISIÓN JURÍDICA → P3 DECISIÓN DE CONTRAPARTES → P4 DECISIÓN TERRITORIAL Y URBANÍSTICA → P5 ENTORNO, EQUIPAMIENTO, ASOLEAMIENTO Y SOMBRAS → P6 IDENTIDAD, MERCADO Y VALOR
-[run] ANEXO     DICTUS_TECNICO_040-646406.pdf · 17 páginas · sha256 b8433436c722…
+[run] ANEXO     DICTUS_TECNICO_040-646406.pdf · 17 páginas · sha256 c13b83b1413e…
 [run] evidencias 10 (PARCIAL_CON_DECLARACIONES) · verificación MATCH · retícula OK
 [run] POI en el estado: 12 ítems · distancias sí
 ```
@@ -241,9 +241,9 @@ SUCCESS: PDF GENERADO: C:\Users\aliss\.gemini\antigravity-ide\scratch\20260825_D
 
 ```
 [exit code: 0]
-        atributos comparados por clave canónica = 7 · contradicciones entre páginas = 0 · discrepancias con la verdad única del expediente = 0
+        atributos comparados por clave canónica = 6 · contradicciones entre páginas = 0 · discrepancias con la verdad única del expediente = 0
         
-          claves y estados impresos: altura_maxima: P4=HISTORICAL_CONFLICT; amenaza: P4=HISTORICAL_CONFLICT; binding_geometria: P6=VERIFICADA; coordenada: P4=HISTORICAL_CONFLICT; titulares: P4=HISTORICAL_CONFLICT; tratamiento: P4=HISTORICAL_CONFLICT; uso_pot: P4=HISTORICAL_CONFLICT
+          claves y estados impresos: altura_maxima: P4=HISTORICAL_CONFLICT; amenaza: P4=REQUIERE_VALIDACION; coordenada: P4=HISTORICAL_CONFLICT; titulares: P4=REQUIERE_VALIDACION; tratamiento: P4=REQUIERE_VALIDACION; uso_pot: P4=REQUIERE_VALIDACION
 [PASS] manual_market_input_cannot_open_valuation_gate()
         origin=MANUAL_CONFIG · origin_gate=False
         blockers=['origen MANUAL_CONFIG no habilita la valoración (valor declarado a mano por la corrida (sin fuente externa automática))']
@@ -267,12 +267,12 @@ TOTAL = 11 · PASS = 11 · FAIL = 0 · NO EVALUABLE = 0
 .............                                                            [100%]
 ============================== warnings summary ===============================
 ..\..\..\..\..\AppData\Roaming\Python\Python314\site-packages\_pytest\cacheprovider.py:469
-  C:\Users\aliss\AppData\Roaming\Python\Python314\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path C:\Users\aliss\.gemini\antigravity-ide\scratch\20260825_DeepSeek_Harness_Web\arhiax-RE\.pytest_cache\v\cache\nodeids: [WinError 5] Acceso denegado: 'C:\\Users\\aliss\\.gemini\\antigravity-ide\\scratch\\20260825_DeepSeek_Harness_Web\\arhiax-RE\\pytest-cache-files-d_gkt9qy'
+  C:\Users\aliss\AppData\Roaming\Python\Python314\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path C:\Users\aliss\.gemini\antigravity-ide\scratch\20260825_DeepSeek_Harness_Web\arhiax-RE\.pytest_cache\v\cache\nodeids: [WinError 5] Acceso denegado: 'C:\\Users\\aliss\\.gemini\\antigravity-ide\\scratch\\20260825_DeepSeek_Harness_Web\\arhiax-RE\\pytest-cache-files-elm12f85'
     config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-228 passed, 1 xfailed, 1 warning in 2.48s
+228 passed, 1 xfailed, 1 warning in 4.84s
 ```
 
 
-Generado por `scripts/estimation_golden.py` · `2026-09-30`
+Generado por `scripts/estimation_golden.py` · `2026-10-02`

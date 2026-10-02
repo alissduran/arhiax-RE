@@ -286,7 +286,7 @@
     }
   },
   "hash_payload": "1dd745d4b6612142399c53718edba93f3708b36f259ef0ef9ecffca74d548529",
-  "generated_at": "2026-09-30T21:34:05.166625+00:00",
+  "generated_at": "2026-10-02T16:54:30.576839+00:00",
   "contadores": {
     "market_observations_count": 1,
     "market_observations_detail": {
@@ -423,7 +423,7 @@
       "MÉTODO": "REFERENCIA AGREGADA OFICIAL POR LOCALIDAD Y BANDA DE ÁREA · BAQ_OBS_VALORESM2_AREA · banda oficial $ 2.222.222–$ 8.190.568 COP/m²",
       "EVIDENCIA UTILIZADA": "1 fuente(s) con procedencia completa: Alcaldía Distrital de Barranquilla — geoportal miciudad (servidor ArcGIS REST)",
       "LIMITACIONES": "La base es una referencia AGREGADA de nivel 3 (agrega por sector y banda de área): NO acredita la unidad. El rango es la salida y la referencia central es el centro de la banda declarada por la fuente, no un valor de mercado de esta unidad.",
-      "TRAZABILIDAD": "TRAZABILIDAD · Fuentes: BAQ_OBS_VALORESM2_AREA · Consulta: 2026-09-30 · motor dictus-estimation-engine/1.0.0",
+      "TRAZABILIDAD": "TRAZABILIDAD · Fuentes: BAQ_OBS_VALORESM2_AREA · Consulta: 2026-10-02 · motor dictus-estimation-engine/1.0.0",
       "NOTA": "Estimación automatizada de DICTUS basada en la información disponible para esta corrida. No constituye un avalúo comercial certificado cuando este sea legal o contractualmente requerido.",
       "METODOLOGIA": "Metodología: fuentes disponibles + análisis técnico automatizado + metodología versionada · detalle completo en el informe técnico.",
       "cosecha": {

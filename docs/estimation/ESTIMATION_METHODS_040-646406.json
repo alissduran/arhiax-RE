@@ -523,13 +523,13 @@
       "fuentes": [
         {
           "proveedor": "SNR + geoportal municipal",
-          "fecha": "2026-09-30",
+          "fecha": "2026-10-02",
           "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
           "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
         },
         {
           "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
-          "fecha": "2026-09-30",
+          "fecha": "2026-10-02",
           "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
           "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
         }
@@ -552,13 +552,13 @@
       "fuentes": [
         {
           "proveedor": "SNR + geoportal municipal",
-          "fecha": "2026-09-30",
+          "fecha": "2026-10-02",
           "referencia": "EV-IDENTIDAD · IDENTIDAD_CANONICA",
           "sha256": "e2ed9dac35bbd509289186ccfa529f99ee604ca8857026a6a1d5376fbd7defbf"
         },
         {
           "proveedor": "CATASTRO_MUNICIPAL_BARRANQUILLA_ARCGIS",
-          "fecha": "2026-09-30",
+          "fecha": "2026-10-02",
           "referencia": "EV-GEOMETRIA · GEOMETRIA_OFICIAL",
           "sha256": "95dca1e34ffeba3f61f035bc3991e02314a9d2c3674f056d3b687a427c79b41c"
         }
